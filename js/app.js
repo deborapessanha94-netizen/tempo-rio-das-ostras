@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function setupEventListeners() {
   const refreshMobile = document.getElementById('btn-refresh-data');
   const refreshDesktop = document.getElementById('btn-refresh-desktop');
+  const refreshInea = document.getElementById('btn-refresh-inea');
 
   const triggerRefresh = async () => {
     await loadAllRioDasOstrasData(false);
@@ -56,6 +57,7 @@ function setupEventListeners() {
 
   if (refreshMobile) refreshMobile.addEventListener('click', triggerRefresh);
   if (refreshDesktop) refreshDesktop.addEventListener('click', triggerRefresh);
+  if (refreshInea) refreshInea.addEventListener('click', triggerRefresh);
 
   // Filtros de Projeção Temporal (Hoje, +24h, +48h, +72h, +96h)
   const projButtons = document.querySelectorAll('.projection-btn');
@@ -128,7 +130,11 @@ async function loadAllRioDasOstrasData(isSilent = false) {
   state.isSyncing = true;
 
   const statusEl = document.getElementById('status-live-indicator');
-  const refreshBtns = [document.getElementById('btn-refresh-data'), document.getElementById('btn-refresh-desktop')];
+  const refreshBtns = [
+    document.getElementById('btn-refresh-data'), 
+    document.getElementById('btn-refresh-desktop'),
+    document.getElementById('btn-refresh-inea')
+  ];
 
   if (!isSilent) {
     if (statusEl) statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-spin"></span> Sincronizando...`;
@@ -137,9 +143,11 @@ async function loadAllRioDasOstrasData(isSilent = false) {
 
   try {
     const prevAlertCount = Array.isArray(state.inmetAlerts) ? state.inmetAlerts.length : 0;
-    const prevRiverStatus = Array.isArray(state.ineaCheias) 
-      ? (state.ineaCheias.find(s => s.eh_rio_das_ostras)?.status || '') 
-      : '';
+    const prevRiverStation = Array.isArray(state.ineaCheias) 
+      ? state.ineaCheias.find(s => s.eh_rio_das_ostras) 
+      : null;
+    const prevRiverStatus = prevRiverStation ? (prevRiverStation.status || '') : '';
+    const prevRiverLevel = prevRiverStation ? (prevRiverStation.nivel_rio || '') : '';
 
     const [weatherRes, inmetPrevRes, inmetAvisosRes, ineaRes] = await Promise.allSettled([
       getRioDasOstrasWeatherData(),
@@ -174,9 +182,16 @@ async function loadAllRioDasOstrasData(isSilent = false) {
     const newAlertCount = Array.isArray(state.inmetAlerts) ? state.inmetAlerts.length : 0;
     const newRiverStation = Array.isArray(state.ineaCheias) ? state.ineaCheias.find(s => s.eh_rio_das_ostras) : null;
     const newRiverStatus = newRiverStation ? (newRiverStation.status || '') : '';
+    const newRiverLevel = newRiverStation ? (newRiverStation.nivel_rio || '') : '';
 
-    if (isSilent && ((newAlertCount !== prevAlertCount) || (newRiverStatus !== prevRiverStatus && prevRiverStatus !== ''))) {
-      showSyncNotification(`Atualização oficial recebida: Status Rio Jundiá (${newRiverStatus || 'Normal'}), ${newAlertCount} avisos INMET ativos.`);
+    if (isSilent) {
+      if (newRiverLevel !== prevRiverLevel && prevRiverLevel !== '') {
+        showSyncNotification(`Telemetria INEA: Nível do Rio Jundiá atualizado para ${newRiverLevel}m (Status: ${newRiverStatus}).`);
+      } else if (newRiverStatus !== prevRiverStatus && prevRiverStatus !== '') {
+        showSyncNotification(`Alerta Hidrológico INEA: Status Rio Jundiá alterado para ${newRiverStatus}.`);
+      } else if (newAlertCount !== prevAlertCount) {
+        showSyncNotification(`Atualização oficial INMET: ${newAlertCount} avisos meteorológicos ativos.`);
+      }
     }
 
     const h = String(state.lastSyncTime.getHours()).padStart(2, '0');
@@ -188,9 +203,9 @@ async function loadAllRioDasOstrasData(isSilent = false) {
       statusEl.innerHTML = `
         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span class="font-semibold text-emerald-300">Ao Vivo: ${timeFormatted}</span>
-        <span class="text-[10px] text-emerald-400/80 font-mono hidden sm:inline">• Sincronizado</span>
+        <span class="text-[10px] text-emerald-400/80 font-mono hidden sm:inline">• Cotas a cada 5 min</span>
       `;
-      statusEl.title = `Sincronização contínua a cada 60s. Última checagem: ${timeFormatted}`;
+      statusEl.title = `Monitoramento ativo. Cotas telemétricas e dados oficiais checados a cada 5 min. Última checagem: ${timeFormatted}`;
     }
   } catch (error) {
     console.error('Erro ao sincronizar Rio das Ostras:', error);
@@ -404,10 +419,17 @@ function renderHeroAndTurnos() {
     const statusEl = document.getElementById('hero-river-status');
     const riverRainEl = document.getElementById('hero-river-rain');
 
-    if (levelEl) levelEl.textContent = `${ostrasStation.nivel_rio || '--'} m`;
-    if (statusEl) statusEl.textContent = `${ostrasStation.status || 'Vigilância'} (Alerta: ${ostrasStation.cota_alerta || '2.50m'})`;
+    const formattedLevel = ostrasStation.nivel_rio && !isNaN(parseFloat(ostrasStation.nivel_rio))
+      ? `${parseFloat(ostrasStation.nivel_rio).toFixed(2)} m`
+      : `${ostrasStation.nivel_rio || '--'} m`;
+
+    if (levelEl) levelEl.textContent = formattedLevel;
+    if (statusEl) {
+      statusEl.innerHTML = `<span class="text-emerald-300 font-semibold">${ostrasStation.status || 'Vigilância'}</span> <span class="text-slate-400 text-[10px]">(Alerta: ${ostrasStation.cota_alerta || '2.50m'})</span>`;
+    }
     if (riverRainEl) {
       riverRainEl.textContent = `Pluviômetro: ${ostrasStation.chuva_1h || '0'}mm (1h) / ${ostrasStation.chuva_24h || '0'}mm (24h)`;
+      riverRainEl.title = `Última medição telemétrica INEA: ${ostrasStation.ultima_leitura || '--'} (atualizada a cada 5 min)`;
     }
   }
 
@@ -796,7 +818,7 @@ function renderIneaTable() {
 
   tbody.innerHTML = state.ineaCheias.map(st => {
     const isOstras = st.eh_rio_das_ostras;
-    const rowBg = isOstras ? 'bg-sky-500/10 font-medium border-l-4 border-l-sky-500' : 'hover:bg-slate-800/40';
+    const rowBg = isOstras ? 'bg-sky-500/15 font-medium border-l-4 border-l-sky-400' : 'hover:bg-slate-800/40';
     const statusBadges = {
       'VIGILÂNCIA': 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
       'VIGILANCIA': 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
@@ -807,24 +829,32 @@ function renderIneaTable() {
     };
     const badgeCls = statusBadges[st.status] || 'bg-slate-700 text-slate-300';
 
+    const formattedNivel = st.nivel_rio && !isNaN(parseFloat(st.nivel_rio))
+      ? `${parseFloat(st.nivel_rio).toFixed(2)} m`
+      : (st.nivel_rio && st.nivel_rio !== '-' ? `${st.nivel_rio} m` : '--');
+
     return `
       <tr class="${rowBg} transition-colors">
         <td class="p-3">
-          <div class="font-bold text-white flex items-center gap-1.5">
-            ${isOstras ? '<span class="w-2 h-2 rounded-full bg-sky-400"></span>' : ''}
-            ${st.municipio}
+          <div class="font-bold text-white flex items-center gap-1.5 flex-wrap">
+            ${isOstras ? '<span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>' : ''}
+            <span>${st.municipio}</span>
+            ${isOstras ? '<span class="px-1.5 py-0.5 rounded text-[9px] bg-sky-500/25 text-sky-200 border border-sky-400/40 font-bold">📍 Rio das Ostras</span>' : ''}
           </div>
           <span class="text-[11px] text-slate-400">${st.curso_dagua}</span>
         </td>
         <td class="p-3 font-medium text-slate-200">${st.nome_estacao}</td>
-        <td class="p-3 text-[11px] text-slate-400 font-mono">${st.ultima_leitura || '--'}</td>
+        <td class="p-3 text-[11px] font-mono">
+          <span class="text-slate-200 font-semibold block">${st.ultima_leitura || '--'}</span>
+          <span class="text-[9px] text-emerald-400 font-sans block">⏱️ ciclo 5 min</span>
+        </td>
         <td class="p-3 text-center">
           <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${badgeCls}">
             ${st.status || 'VIGILÂNCIA'}
           </span>
         </td>
         <td class="p-3 text-center font-mono font-bold text-sky-300 text-sm">
-          ${st.nivel_rio ? st.nivel_rio + ' m' : '--'}
+          ${formattedNivel}
         </td>
         <td class="p-3 text-center font-mono text-amber-300 text-xs">
           ${st.cota_atencao || '2.00 m'}

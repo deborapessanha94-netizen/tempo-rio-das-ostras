@@ -82,14 +82,15 @@ export async function getRioDasOstrasWeatherData() {
  * Obtém a previsão oficial do INMET para Rio das Ostras (3304524)
  */
 export async function getInmetForecast() {
+  const ts = Date.now();
   try {
-    const res = await fetch('/api/inmet/previsao');
+    const res = await fetch(`/api/inmet/previsao?t=${ts}`, { cache: 'no-store' });
     if (res.ok) return await res.json();
     throw new Error('API local indisponível');
   } catch (error) {
     // Fallback para arquivo sincronizado na nuvem (GitHub Pages / 24/7)
     try {
-      const dataRes = await fetch('./data/inmet_previsao.json');
+      const dataRes = await fetch(`./data/inmet_previsao.json?t=${ts}`, { cache: 'no-store' });
       if (dataRes.ok) return await dataRes.json();
     } catch (e) {}
 
@@ -106,14 +107,15 @@ export async function getInmetForecast() {
  * Obtém os avisos meteorológicos ativos do INMET filtrados para Rio das Ostras / RJ
  */
 export async function getInmetAlerts() {
+  const ts = Date.now();
   try {
-    const res = await fetch('/api/inmet/avisos');
+    const res = await fetch(`/api/inmet/avisos?t=${ts}`, { cache: 'no-store' });
     if (res.ok) return await res.json();
     throw new Error('API local indisponível');
   } catch (error) {
     // Fallback para dados sincronizados na nuvem (GitHub Pages / 24/7)
     try {
-      const dataRes = await fetch('./data/inmet_avisos.json');
+      const dataRes = await fetch(`./data/inmet_avisos.json?t=${ts}`, { cache: 'no-store' });
       if (dataRes.ok) return await dataRes.json();
     } catch (e) {}
     return [];
@@ -122,16 +124,18 @@ export async function getInmetAlerts() {
 
 /**
  * Obtém os dados telemétricos das réguas de cheias e rios de Rio das Ostras e Macaé (INEA)
+ * Atualizado a cada 5 minutos
  */
 export async function getIneaCheias() {
+  const ts = Date.now();
   try {
-    const res = await fetch('/api/inea/cheias');
+    const res = await fetch(`/api/inea/cheias?t=${ts}`, { cache: 'no-store' });
     if (res.ok) return await res.json();
     throw new Error('API local indisponível');
   } catch (error) {
     // Fallback para telemetria sincronizada na nuvem (GitHub Pages / 24/7)
     try {
-      const dataRes = await fetch('./data/inea_cheias.json');
+      const dataRes = await fetch(`./data/inea_cheias.json?t=${ts}`, { cache: 'no-store' });
       if (dataRes.ok) return await dataRes.json();
     } catch (e) {}
     return [];

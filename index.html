@@ -267,7 +267,7 @@
                   <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                   <span>Rio Jundiá (INEA)</span>
                 </div>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono">Telemetria</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold" title="Cotas telemétricas verificadas a cada 5 minutos">⏱️ A cada 5 min</span>
               </div>
               <div id="hero-river-level" class="text-lg font-bold text-white">1.36 m</div>
               <div id="hero-river-status" class="text-[11px] text-emerald-300">Cota Segura</div>
@@ -428,20 +428,29 @@
     <div class="glass-card p-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-800">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30">INEA Alerta de Cheias</span>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              INEA Alerta de Cheias • Atualização de 5 em 5 min
+            </span>
             <h2 class="text-lg font-bold text-white flex items-center gap-2">
               Monitoramento Hidrológico & Cotas de Transbordamento (Rio Jundiá e Bacia)
             </h2>
           </div>
           <p class="text-xs text-slate-400 mt-1">
-            Telemetria oficial em tempo real com Nível Atual, Cota de Atenção, Cota de Alerta e Cota de Transbordamento
+            Telemetria oficial em tempo real atualizada a cada 5 minutos com Nível Atual, Cota de Atenção, Cota de Alerta e Cota de Transbordamento (INEA)
           </p>
         </div>
-        <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition self-start sm:self-auto">
-          <span>Abrir Alerta de Cheias INEA</span>
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-        </a>
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="btn-refresh-inea" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold shadow-md transition" title="Checar cotas e telemetria INEA agora">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-400"></i>
+            <span>Verificar Cotas Agora</span>
+          </button>
+          <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition self-start sm:self-auto">
+            <span>Abrir Portal INEA</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+          </a>
+        </div>
       </div>
 
       <!-- Tabela com Cotas Explícitas -->
