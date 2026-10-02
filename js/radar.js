@@ -91,7 +91,9 @@ async function loadRadarFrames() {
     const tileUrl = `${host}${frame.path}/256/{z}/{x}/{y}/2/1_1.png`;
     const layer = L.tileLayer(tileUrl, {
       opacity: 0,
-      zIndex: 10 + idx
+      zIndex: 10 + idx,
+      maxNativeZoom: 7,
+      maxZoom: 18
     });
     layer.addTo(map);
     radarLayers.push({ layer, time: frame.time });
