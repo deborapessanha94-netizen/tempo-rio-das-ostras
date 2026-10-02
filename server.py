@@ -1,0 +1,270 @@
+import http.server
+import socket
+import socketserver
+import urllib.request
+import json
+import re
+import os
+import sys
+import time
+import html as html_lib
+
+PORT = int(os.environ.get('PORT', 8080))
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+
+CACHE = {
+    'inmet_forecast': {'data': None, 'time': 0},
+    'inmet_alerts': {'data': None, 'time': 0},
+    'inea_cheias': {'data': None, 'time': 0},
+}
+CACHE_TTL = 45 # Segundos de cache inteligente para atualização contínua sem bloqueio
+
+def format_date_br(d_str, h_str):
+    if not d_str: return ''
+    date_part = str(d_str).split('T')[0]
+    parts = date_part.split('-')
+    if len(parts) == 3:
+        formatted = f'{parts[2]}/{parts[1]}/{parts[0]}'
+    else:
+        formatted = date_part
+    return f'{formatted} às {h_str}' if h_str else formatted
+
+def fetch_inmet_forecast():
+    """Busca a previsão oficial do INMET para Rio das Ostras (código IBGE: 3304524) com cache de 45s"""
+    now = time.time()
+    if CACHE['inmet_forecast']['data'] is not None and (now - CACHE['inmet_forecast']['time'] < CACHE_TTL):
+        return CACHE['inmet_forecast']['data']
+
+    url = "https://apiprevmet3.inmet.gov.br/previsao/3304524"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=6) as res:
+            data = json.loads(res.read().decode('utf-8'))
+            CACHE['inmet_forecast']['data'] = data
+            CACHE['inmet_forecast']['time'] = now
+            return data
+    except Exception as e:
+        if CACHE['inmet_forecast']['data'] is not None:
+            return CACHE['inmet_forecast']['data']
+        return {"error": f"Não foi possível carregar INMET: {str(e)}"}
+
+def fetch_inmet_alerts():
+    """Busca os avisos meteorológicos ativos do INMET, deduplica e estrutura com padrão de cores e vigência com cache de 45s"""
+    now = time.time()
+    if CACHE['inmet_alerts']['data'] is not None and (now - CACHE['inmet_alerts']['time'] < CACHE_TTL):
+        return CACHE['inmet_alerts']['data']
+
+    url = "https://apiprevmet3.inmet.gov.br/avisos/ativos"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=6) as res:
+            data = json.loads(res.read().decode('utf-8'))
+        
+        seen = set()
+        unique = []
+        for cat in ['hoje', 'futuro']:
+            for a in data.get(cat, []):
+                aid = a.get('id')
+                if aid in seen:
+                    continue
+                
+                estados = str(a.get('estados', '') or '')
+                geocodes = str(a.get('geocodes', '') or '')
+                municipios = str(a.get('municipios', '') or '')
+                
+                eh_direto = ('3304524' in geocodes) or ('Rio das Ostras' in municipios)
+                eh_rj = ('Rio de Janeiro' in estados) or ('RJ' in estados)
+
+                if eh_direto or eh_rj:
+                    seen.add(aid)
+                    dt_inicio = format_date_br(a.get('data_inicio'), a.get('hora_inicio'))
+                    dt_fim = format_date_br(a.get('data_fim'), a.get('hora_fim'))
+                    sev = a.get('severidade', 'Perigo Potencial')
+                    
+                    # Padronização rigorosa de cores oficiais do INMET
+                    cor_inmet = '#EAB308' # Amarelo (Perigo Potencial)
+                    if sev == 'Perigo':
+                        cor_inmet = '#F97316' # Laranja (Perigo)
+                    elif sev == 'Grande Perigo':
+                        cor_inmet = '#EF4444' # Vermelho (Grande Perigo)
+
+                    unique.append({
+                        'id': aid,
+                        'descricao': a.get('descricao', 'Alerta Meteorológico'),
+                        'severidade': sev,
+                        'cor_inmet': cor_inmet,
+                        'eh_direto_ostras': eh_direto,
+                        'inicio_formatado': dt_inicio,
+                        'fim_formatado': dt_fim,
+                        'riscos': a.get('riscos', []),
+                        'instrucoes': a.get('instrucoes', []),
+                        'estados': estados
+                    })
+        
+        # Ordena: alertas diretos de Rio das Ostras primeiro, depois por severidade (Grande Perigo > Perigo > Perigo Potencial)
+        def alert_rank(item):
+            score = 0
+            if item['eh_direto_ostras']: score += 10
+            if item['severidade'] == 'Grande Perigo': score += 5
+            elif item['severidade'] == 'Perigo': score += 3
+            return score
+
+        unique.sort(key=alert_rank, reverse=True)
+        CACHE['inmet_alerts']['data'] = unique
+        CACHE['inmet_alerts']['time'] = now
+        return unique
+    except Exception as e:
+        if CACHE['inmet_alerts']['data'] is not None:
+            return CACHE['inmet_alerts']['data']
+        return [{"error": f"Falha ao obter avisos INMET: {str(e)}"}]
+
+# Cotas de Referência Oficiais (metros) para monitoramento do INEA
+COTAS_REFERENCIA = {
+    'Jundiá': {'atencao': 2.00, 'alerta': 2.50, 'transborda': 3.00},
+    'Glicério': {'atencao': 2.40, 'alerta': 3.00, 'transborda': 3.50},
+    'São Pedro': {'atencao': 1.20, 'alerta': 1.80, 'transborda': 2.40},
+    'Severina': {'atencao': 1.80, 'alerta': 2.30, 'transborda': 2.80}
+}
+
+def fetch_inea_cheias():
+    """Extrai em tempo real os dados telemétricos de rios, chuvas e cotas oficiais de transbordamento (INEA) com cache de 45s"""
+    now = time.time()
+    if CACHE['inea_cheias']['data'] is not None and (now - CACHE['inea_cheias']['time'] < CACHE_TTL):
+        return CACHE['inea_cheias']['data']
+
+    url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        with urllib.request.urlopen(req, timeout=8) as res:
+            raw_bytes = res.read()
+            try:
+                html_doc = raw_bytes.decode('utf-8')
+            except Exception:
+                html_doc = raw_bytes.decode('latin1', errors='replace')
+        
+        rows = re.findall(r'<tr[^>]*>.*?</tr>', html_doc, re.DOTALL)
+        stations = []
+        for r in rows:
+            cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
+            if len(cells) >= 14:
+                muni = cells[0].strip()
+                curso = cells[1].strip()
+                estacao = cells[2].strip()
+                leitura = cells[4].strip()
+                status = cells[5].strip()
+                chuva_1h = cells[7].strip()
+                chuva_4h = cells[8].strip()
+                chuva_24h = cells[9].strip()
+                chuva_96h = cells[10].strip()
+                chuva_30d = cells[11].strip()
+                nivel_rio = cells[12].strip()
+                
+                eh_ostras = 'Ostras' in muni or 'Jundi' in curso or 'Jundi' in estacao
+
+                # Busca as cotas de referência
+                cota_atencao = '2.00 m'
+                cota_alerta = '2.50 m'
+                cota_transborda = '3.00 m'
+                porcentagem_calha = 45
+
+                for k, v in COTAS_REFERENCIA.items():
+                    if k.lower() in estacao.lower() or k.lower() in curso.lower():
+                        cota_atencao = f"{v['atencao']:.2f} m"
+                        cota_alerta = f"{v['alerta']:.2f} m"
+                        cota_transborda = f"{v['transborda']:.2f} m"
+                        try:
+                            val_float = float(nivel_rio.replace(',', '.'))
+                            porcentagem_calha = min(100, max(5, int((val_float / v['transborda']) * 100)))
+                        except:
+                            pass
+                        break
+
+                stations.append({
+                    'municipio': muni,
+                    'curso_dagua': curso,
+                    'nome_estacao': estacao,
+                    'ultima_leitura': leitura,
+                    'status': status,
+                    'chuva_1h': chuva_1h,
+                    'chuva_4h': chuva_4h,
+                    'chuva_24h': chuva_24h,
+                    'chuva_96h': chuva_96h,
+                    'chuva_30d': chuva_30d,
+                    'nivel_rio': nivel_rio,
+                    'cota_atencao': cota_atencao,
+                    'cota_alerta': cota_alerta,
+                    'cota_transborda': cota_transborda,
+                    'porcentagem_calha': porcentagem_calha,
+                    'eh_rio_das_ostras': eh_ostras
+                })
+        CACHE['inea_cheias']['data'] = stations
+        CACHE['inea_cheias']['time'] = now
+        return stations
+    except Exception as e:
+        if CACHE['inea_cheias']['data'] is not None:
+            return CACHE['inea_cheias']['data']
+        return [{"error": f"Falha ao obter INEA Cheias: {str(e)}"}]
+
+class MeteoServerHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=DIRECTORY, **kwargs)
+
+    def do_GET(self):
+        try:
+            # API: Previsão Oficial INMET Rio das Ostras
+            if self.path == '/api/inmet/previsao':
+                data = fetch_inmet_forecast()
+                self.send_json_response(data)
+                return
+
+            # API: Avisos Meteorológicos Ativos INMET
+            if self.path == '/api/inmet/avisos':
+                data = fetch_inmet_alerts()
+                self.send_json_response(data)
+                return
+
+            # API: Alerta de Cheias e Nível de Rios INEA (Rio das Ostras e Macaé)
+            if self.path == '/api/inea/cheias':
+                data = fetch_inea_cheias()
+                self.send_json_response(data)
+                return
+
+            # Garante rota para /index.html
+            if self.path in ('/', ''):
+                self.path = '/index.html'
+
+            return super().do_GET()
+        except Exception as e:
+            self.send_json_response({"error": str(e)}, status=500)
+
+    def send_json_response(self, data, status=200):
+        body = json.dumps(data, ensure_ascii=False).encode('utf-8')
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def end_headers(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
+        super().end_headers()
+
+def run():
+    httpd = http.server.ThreadingHTTPServer(('', PORT), MeteoServerHandler)
+    url_local = f"http://localhost:{PORT}"
+    url_ip = f"http://127.0.0.1:{PORT}"
+    print("============================================================")
+    print("  Portal Meteorologico Especializado - RIO DAS OSTRAS (RJ)")
+    print(f"  Servidor Ativo em:")
+    print(f"  -> {url_local}")
+    print(f"  -> {url_ip}")
+    print("============================================================")
+    sys.stdout.flush()
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nServidor finalizado.")
+
+if __name__ == "__main__":
+    run()
