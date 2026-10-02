@@ -84,17 +84,21 @@ export async function getRioDasOstrasWeatherData() {
 export async function getInmetForecast() {
   try {
     const res = await fetch('/api/inmet/previsao');
-    if (!res.ok) throw new Error('API local INMET indisponível');
-    return await res.json();
+    if (res.ok) return await res.json();
+    throw new Error('API local indisponível');
   } catch (error) {
-    console.warn('Fallback INMET previsão:', error);
-    // Tenta direto se falhar local
+    // Fallback para arquivo sincronizado na nuvem (GitHub Pages / 24/7)
+    try {
+      const dataRes = await fetch('./data/inmet_previsao.json');
+      if (dataRes.ok) return await dataRes.json();
+    } catch (e) {}
+
+    // Fallback direto API INMET
     try {
       const direct = await fetch('https://apiprevmet3.inmet.gov.br/previsao/3304524');
-      return await direct.json();
-    } catch (e) {
-      return null;
-    }
+      if (direct.ok) return await direct.json();
+    } catch (e) {}
+    return null;
   }
 }
 
@@ -104,10 +108,14 @@ export async function getInmetForecast() {
 export async function getInmetAlerts() {
   try {
     const res = await fetch('/api/inmet/avisos');
-    if (!res.ok) throw new Error('API local Avisos indisponível');
-    return await res.json();
+    if (res.ok) return await res.json();
+    throw new Error('API local indisponível');
   } catch (error) {
-    console.warn('Fallback INMET avisos:', error);
+    // Fallback para dados sincronizados na nuvem (GitHub Pages / 24/7)
+    try {
+      const dataRes = await fetch('./data/inmet_avisos.json');
+      if (dataRes.ok) return await dataRes.json();
+    } catch (e) {}
     return [];
   }
 }
@@ -118,10 +126,14 @@ export async function getInmetAlerts() {
 export async function getIneaCheias() {
   try {
     const res = await fetch('/api/inea/cheias');
-    if (!res.ok) throw new Error('API local INEA indisponível');
-    return await res.json();
+    if (res.ok) return await res.json();
+    throw new Error('API local indisponível');
   } catch (error) {
-    console.warn('Fallback INEA cheias:', error);
+    // Fallback para telemetria sincronizada na nuvem (GitHub Pages / 24/7)
+    try {
+      const dataRes = await fetch('./data/inea_cheias.json');
+      if (dataRes.ok) return await dataRes.json();
+    } catch (e) {}
     return [];
   }
 }
