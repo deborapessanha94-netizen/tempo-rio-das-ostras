@@ -167,16 +167,29 @@ export function parseIneaTableHtml(htmlText) {
         let cota_transborda = '2.84 m';
         let porcentagem_calha = 45;
 
+        let ref = null;
         for (const [k, v] of Object.entries(COTAS_INEA_OFICIAIS)) {
-          if (estacao.toLowerCase().includes(k.toLowerCase()) || curso.toLowerCase().includes(k.toLowerCase())) {
-            cota_atencao = `${v.atencao.toFixed(2)} m`;
-            cota_alerta = `${v.alerta.toFixed(2)} m`;
-            cota_transborda = `${v.transborda.toFixed(2)} m`;
-            const valFloat = parseFloat(nivel_rio.replace(',', '.'));
-            if (!isNaN(valFloat)) {
-              porcentagem_calha = Math.min(100, Math.max(5, Math.round((valFloat / v.transborda) * 100)));
-            }
+          if (estacao.toLowerCase().includes(k.toLowerCase())) {
+            ref = v;
             break;
+          }
+        }
+        if (!ref) {
+          for (const [k, v] of Object.entries(COTAS_INEA_OFICIAIS)) {
+            if (curso.toLowerCase().includes(k.toLowerCase())) {
+              ref = v;
+              break;
+            }
+          }
+        }
+
+        if (ref) {
+          cota_atencao = `${ref.atencao.toFixed(2)} m`;
+          cota_alerta = `${ref.alerta.toFixed(2)} m`;
+          cota_transborda = `${ref.transborda.toFixed(2)} m`;
+          const valFloat = parseFloat(nivel_rio.replace(',', '.'));
+          if (!isNaN(valFloat)) {
+            porcentagem_calha = Math.min(100, Math.max(5, Math.round((valFloat / ref.transborda) * 100)));
           }
         }
 

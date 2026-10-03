@@ -139,22 +139,31 @@ def sync_inea_cheias():
                 
                 eh_ostras = 'Ostras' in muni or 'Jundi' in curso or 'Jundi' in estacao
 
-                cota_atencao = '2.00 m'
-                cota_alerta = '2.50 m'
-                cota_transborda = '3.00 m'
+                cota_atencao = '1.99 m'
+                cota_alerta = '2.27 m'
+                cota_transborda = '2.84 m'
                 porcentagem_calha = 45
 
+                ref = None
                 for k, v in COTAS_REFERENCIA.items():
-                    if k.lower() in estacao.lower() or k.lower() in curso.lower():
-                        cota_atencao = f"{v['atencao']:.2f} m"
-                        cota_alerta = f"{v['alerta']:.2f} m"
-                        cota_transborda = f"{v['transborda']:.2f} m"
-                        try:
-                            val_float = float(nivel_rio.replace(',', '.'))
-                            porcentagem_calha = min(100, max(5, int((val_float / v['transborda']) * 100)))
-                        except:
-                            pass
+                    if k.lower() in estacao.lower():
+                        ref = v
                         break
+                if not ref:
+                    for k, v in COTAS_REFERENCIA.items():
+                        if k.lower() in curso.lower():
+                            ref = v
+                            break
+
+                if ref:
+                    cota_atencao = f"{ref['atencao']:.2f} m"
+                    cota_alerta = f"{ref['alerta']:.2f} m"
+                    cota_transborda = f"{ref['transborda']:.2f} m"
+                    try:
+                        val_float = float(nivel_rio.replace(',', '.'))
+                        porcentagem_calha = min(100, max(5, int((val_float / ref['transborda']) * 100)))
+                    except:
+                        pass
 
                 stations.append({
                     'municipio': muni,
