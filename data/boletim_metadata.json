@@ -1,9 +1,9 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "03/10 (Sábado) a 05/10 (Segunda-feira)",
-  "emissao": "03/10/2026 às 19:58h",
-  "informe_alerta": "ALERTA MÁXIMO HIDROLÓGICO (INEA) para o Rio Jundiá, que atingiu 2.44 m (cota de transbordo é 2,20 m / calha a 2,84 m). Aviso de Vento Forte e Mar Agitado na orla marítima (rajadas atingindo até 48 km/h e mar com ondas de até 2,5 m). Acumulado total de chuva previsto para o ciclo de 3 dias: 51.1 mm com temperatura máxima alcançando 30°C.",
-  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 03/10 (Sábado) a 05/10 (Segunda-feira) é regida pela passagem e atuação de sistemas frontais acoplados à circulação marítima pós-frontal. Na rodada meteorológica atual, o padrão sinótico projeta um acumulado pluviométrico total de 51.1 mm nos próximos 3 dias, com amplitudes térmicas oscilando entre 19°C e máxima atingindo 30°C.\n\nNa bacia hidrográfica municipal, a estação telemétrica do Rio Jundiá (INEA 2241036) registra cota de 2.44 m (Status: ALERTA MÁXIMO). Na faixa litorânea, o escoamento de ventos atinge rajadas de até 48 km/h com ondulação marítima de até 2,5 m na Área Delta da Marinha do Brasil, exigindo cautela de banhistas e navegantes.\n\nAs condições meteorológicas atualizam automaticamente a cada nova rodada numérica dos modelos globais (ECMWF, GFS e COSMO/INMET) e da rede de telemetria estadual do INEA.",
+  "emissao": "03/10/2026 às 23:01h",
+  "informe_alerta": "ALERTA MÁXIMO HIDROLÓGICO (INEA) para o Rio Jundiá, que atingiu 2.40 m (cota de transbordo é 2,20 m / calha a 2,84 m). Aviso de Vento Forte e Mar Agitado na orla marítima (rajadas atingindo até 48 km/h e mar com ondas de até 2,5 m). Acumulado total de chuva previsto para o ciclo de 3 dias: 51.1 mm com temperatura máxima alcançando 30°C.",
+  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 03/10 (Sábado) a 05/10 (Segunda-feira) é regida pela passagem e atuação de sistemas frontais acoplados à circulação marítima pós-frontal. Na rodada meteorológica atual, o padrão sinótico projeta um acumulado pluviométrico total de 51.1 mm nos próximos 3 dias, com amplitudes térmicas oscilando entre 19°C e máxima atingindo 30°C.\n\nNa bacia hidrográfica municipal, a estação telemétrica do Rio Jundiá (INEA 2241036) registra cota de 2.40 m (Status: ALERTA MÁXIMO). Na faixa litorânea, o escoamento de ventos atinge rajadas de até 48 km/h com ondulação marítima de até 2,5 m na Área Delta da Marinha do Brasil, exigindo cautela de banhistas e navegantes.\n\nAs condições meteorológicas atualizam automaticamente a cada nova rodada numérica dos modelos globais (ECMWF, GFS e COSMO/INMET) e da rede de telemetria estadual do INEA.",
   "glossario": [
     {
       "termo": "Frente Fria / Estacionária",
@@ -155,7 +155,7 @@
       "risco_sab": "MÁXIMO",
       "risco_dom": "OBS",
       "risco_seg": "OBS",
-      "impactos": "Monitoramento da calha do Rio Jundiá (2.44 m); risco de refluxo pluvial em ruas ribeirinhas durante maré alta e picos de chuva.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (2.40 m); risco de refluxo pluvial em ruas ribeirinhas durante maré alta e picos de chuva.",
       "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
     },
     {
@@ -192,7 +192,7 @@
     }
   ],
   "kpis": {
-    "jundia_nivel": "2.44 m",
+    "jundia_nivel": "2.40 m",
     "jundia_status": "ALERTA MÁXIMO",
     "chuva_3d": "51.1 mm",
     "aviso_marinha": "FORÇA 7",
