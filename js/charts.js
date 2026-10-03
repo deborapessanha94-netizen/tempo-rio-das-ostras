@@ -389,7 +389,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           x: getXAxisConfig(),
           y: {
             min: 16,
-            max: 30,
+            max: 32,
             ticks: { stepSize: 2, color: '#94a3b8' },
             grid: { color: 'rgba(255, 255, 255, 0.06)' },
             title: { display: true, text: 'Temperatura (°C)', color: '#94a3b8' }
@@ -516,7 +516,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           x: getXAxisConfig(),
           y: {
             min: 0,
-            max: 50,
+            max: 55,
             ticks: { stepSize: 10, color: '#94a3b8' },
             grid: { color: 'rgba(255, 255, 255, 0.06)' },
             title: { display: true, text: 'Velocidade (km/h)', color: '#94a3b8' }
@@ -548,8 +548,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           x: getXAxisConfig(),
           y: {
             min: 0,
-            max: 25,
-            ticks: { stepSize: 5, color: '#94a3b8' },
+            max: 40,
+            ticks: { stepSize: 10, color: '#94a3b8' },
             grid: { color: 'rgba(255, 255, 255, 0.06)' },
             title: { display: true, text: 'Volume Previsto (mm)', color: '#94a3b8' }
           }

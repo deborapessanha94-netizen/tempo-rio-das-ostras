@@ -245,6 +245,16 @@ class MeteoServerHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json_response(data)
                 return
 
+            # API: Sincronização Sob Demanda do Boletim Oficial
+            if parsed_path == '/api/sync/boletim':
+                try:
+                    from scripts.sync_boletim import sync_bulletin
+                    sync_bulletin()
+                    self.send_json_response({"status": "ok", "message": "Boletim da Defesa Civil sincronizado com sucesso!"})
+                except Exception as ex:
+                    self.send_json_response({"status": "error", "message": str(ex)}, status=500)
+                return
+
             # Garante rota para /index.html
             if parsed_path in ('/', ''):
                 self.path = '/index.html'
@@ -266,7 +276,30 @@ class MeteoServerHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
         super().end_headers()
 
+def start_boletim_watcher():
+    def watcher_loop():
+        import time
+        # Sincroniza imediatamente na inicialização
+        try:
+            from scripts.sync_boletim import sync_bulletin
+            sync_bulletin()
+        except Exception as e:
+            print(f"[Watcher Boletim] Aviso inicial: {e}")
+
+        while True:
+            time.sleep(60) # Verifica novos boletins a cada 60s
+            try:
+                from scripts.sync_boletim import sync_bulletin
+                sync_bulletin()
+            except Exception as e:
+                pass
+
+    import threading
+    t = threading.Thread(target=watcher_loop, daemon=True)
+    t.start()
+
 def run():
+    start_boletim_watcher()
     httpd = http.server.ThreadingHTTPServer(('', PORT), MeteoServerHandler)
     url_local = f"http://localhost:{PORT}"
     url_ip = f"http://127.0.0.1:{PORT}"

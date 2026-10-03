@@ -164,6 +164,10 @@ async function loadAllApplicationData() {
       state.weatherData = openMeteo.value;
     }
 
+    if (state.boletimMetadata || (state.boletimData && state.boletimData.length > 0)) {
+      renderBulletinDOM(state.boletimMetadata, state.boletimData);
+    }
+
     // Atualiza o gráfico do boletim se a aba de gráficos estiver visível
     updateBulletinChart();
 
@@ -173,6 +177,257 @@ async function loadAllApplicationData() {
     state.isSyncing = false;
     if (window.lucide) window.lucide.createIcons();
   }
+}
+
+/**
+ * Renderiza dinamicamente todo o Boletim Oficial (Cards da População, Tabela de Turnos, PLANCON e Sinóptica)
+ */
+function renderBulletinDOM(meta, rows) {
+  if (!meta && (!rows || rows.length === 0)) return;
+
+  // 1. Período e Emissão
+  if (meta?.periodo) {
+    const popPer = document.getElementById('meta-periodo-pop');
+    const tecPer = document.getElementById('meta-periodo-tec');
+    if (popPer) popPer.textContent = meta.periodo;
+    if (tecPer) tecPer.textContent = meta.periodo;
+  }
+
+  if (meta?.emissao) {
+    const popEmi = document.getElementById('meta-emissao-pop');
+    const tecEmi = document.getElementById('meta-emissao-tec');
+    if (popEmi) popEmi.textContent = meta.emissao;
+    if (tecEmi) tecEmi.textContent = meta.emissao;
+  }
+
+  // 2. Informe de Alerta Oficial
+  if (meta?.informe_alerta) {
+    const alertaEl = document.getElementById('informe-alerta-texto');
+    if (alertaEl) {
+      alertaEl.innerHTML = `<strong class="text-white">Alertas Oficiais em Vigor:</strong> ${escapeHtml(meta.informe_alerta)}`;
+    }
+  }
+
+  // 3. Cards Diários da População (Aba 1)
+  if (meta?.dias_resumo && Array.isArray(meta.dias_resumo) && meta.dias_resumo.length > 0) {
+    const gridEl = document.getElementById('populacao-cards-grid');
+    if (gridEl) {
+      gridEl.innerHTML = meta.dias_resumo.map(d => {
+        let badgeClass = 'bg-[#0C1527] text-slate-300 font-semibold text-[10px] border border-[#1D2C48]';
+        if (d.badge_tipo === 'danger') {
+          badgeClass = 'bg-red-950/80 text-red-300 font-semibold text-[10px] border border-red-800/80';
+        } else if (d.badge_tipo === 'warning') {
+          badgeClass = 'bg-amber-950/80 text-amber-300 font-semibold text-[10px] border border-amber-800/80';
+        }
+
+        const pilares = d.pilares || {};
+        const pilarKeys = Object.keys(pilares);
+
+        const pilaresHtml = pilarKeys.map(k => {
+          const p = pilares[k];
+          return `
+            <div class="p-2 rounded-lg bg-[#0C1527] border border-[#1D2C48] flex items-center gap-2">
+              <i data-lucide="${p.icon || 'circle'}" class="w-3.5 h-3.5 text-sky-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[8px] uppercase font-semibold text-slate-400 block">${p.label || k}</span>
+                <span class="text-[11px] font-bold text-slate-100 truncate block">${p.val || '—'}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="glass-card p-4 border-[#1D2C48] bg-[#111C33] space-y-3">
+            <div class="flex items-center justify-between gap-2 border-b border-[#1D2C48] pb-2">
+              <div>
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Previsão Oficial</span>
+                <h3 class="text-sm font-bold text-white">${d.dia}</h3>
+                <p class="text-[11px] text-slate-400">${d.subtitulo || ''}</p>
+              </div>
+              <span class="px-2 py-0.5 rounded ${badgeClass} shrink-0">
+                ${d.badge || 'OFICIAL'}
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-300 leading-relaxed">
+              ${d.descricao}
+            </p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+              ${pilaresHtml}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // 4. Panorama Sinótico Geral
+  if (meta?.sinopse_geral) {
+    const sinopseEl = document.getElementById('sinopse-content');
+    if (sinopseEl) {
+      const paragraphs = meta.sinopse_geral.split('\n\n').filter(p => p.trim().length > 0);
+      sinopseEl.innerHTML = paragraphs.map(p => {
+        if (p.includes('Cenário de Alerta Máximo') || p.includes('Alerta Máximo de Inundação')) {
+          return `<p class="p-2.5 rounded-lg bg-[#0C1527] border-l-2 border-l-red-500 border border-[#1D2C48] text-slate-300">${p}</p>`;
+        }
+        return `<p>${p}</p>`;
+      }).join('');
+    }
+  }
+
+  // 5. Glossário Operacional
+  if (meta?.glossario && Array.isArray(meta.glossario)) {
+    const glossEl = document.getElementById('glossario-container');
+    if (glossEl) {
+      glossEl.innerHTML = meta.glossario.map(g => `
+        <div class="p-2 rounded bg-[#0C1527] border border-[#1D2C48]">
+          <strong class="text-slate-200 block">• ${g.termo}:</strong>
+          <span class="text-slate-400">${g.def}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  // 6. Tabela de 12 Turnos por Dia
+  if (rows && Array.isArray(rows) && rows.length > 0) {
+    const containerEl = document.getElementById('tabela-turnos-container');
+    if (containerEl) {
+      const grouped = {};
+      rows.forEach(r => {
+        const dia = r.dia_semana || 'Período';
+        if (!grouped[dia]) grouped[dia] = [];
+        grouped[dia].push(r);
+      });
+
+      const daysHtml = Object.keys(grouped).map(dia => {
+        const dayRows = grouped[dia];
+        const dataFormatada = dayRows[0]?.data_iso ? formatIsoDate(dayRows[0].data_iso) : '';
+        const somaChuva = dayRows.reduce((acc, curr) => acc + (parseFloat(curr.chuva_media || curr.chuva_provavel_mm) || 0), 0);
+
+        const rowsHtml = dayRows.map((r, idx) => {
+          const bgClass = idx % 2 === 0 ? 'bg-[#111C33]' : 'bg-[#0C1527]';
+          const tMin = r.temp_min !== undefined ? r.temp_min : '—';
+          const tMax = r.temp_max !== undefined ? r.temp_max : '—';
+          const uMin = r.umid_min !== undefined ? r.umid_min : '—';
+          const uMax = r.umid_max !== undefined ? r.umid_max : '—';
+          const pressao = r.pressao_hpa ? `${r.pressao_hpa} hPa` : '—';
+          const ventoDir = r.vento_dir || '';
+          const ventoVel = r.vento_vel_media !== undefined ? `${r.vento_vel_media} km/h` : `${Math.round(((r.vento_vel_min || 0) + (r.vento_vel_max || 0)) / 2)} km/h`;
+          const rajada = r.rajada_max ? ` (Raj: ${r.rajada_max} km/h)` : '';
+          const chuvaVal = r.chuva_media !== undefined ? parseFloat(r.chuva_media).toFixed(1) : (r.chuva_provavel_mm ? parseFloat(r.chuva_provavel_mm).toFixed(1) : '0.0');
+          const chuvaProb = r.chuva_prob ? ` (${r.chuva_prob}%)` : '';
+          const marOndas = r.mar_ondas || '1.0 a 2.0 m';
+          const marCond = r.mar_condicao || '';
+
+          return `
+            <tr class="${bgClass} hover:bg-[#14223E] transition">
+              <td class="py-2 px-3 font-sans font-semibold text-white">${r.turno}</td>
+              <td class="py-2 px-3 text-slate-200">${tMin}° a ${tMax}°C</td>
+              <td class="py-2 px-3 text-slate-300">${uMin}% a ${uMax}%</td>
+              <td class="py-2 px-3 text-slate-400">${pressao}</td>
+              <td class="py-2 px-3 text-slate-300">${ventoDir} ${ventoVel}${rajada}</td>
+              <td class="py-2 px-3 text-slate-200 font-bold">${chuvaVal} mm${chuvaProb}</td>
+              <td class="py-2 px-3 text-slate-300 font-sans">${marOndas} ${marCond ? `(${marCond})` : ''}</td>
+            </tr>
+          `;
+        }).join('');
+
+        return `
+          <div class="space-y-1.5 pt-1.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold text-slate-200">${dia} ${dataFormatada ? `— ${dataFormatada}` : ''}</span>
+              <span class="text-[10px] text-slate-400">Volume Oficial: ${somaChuva.toFixed(1)} mm</span>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-[#1D2C48]">
+              <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-[#0C1527] text-slate-300 uppercase text-[10px] font-semibold border-b border-[#1D2C48]">
+                  <tr>
+                    <th class="py-2 px-3">Turno</th>
+                    <th class="py-2 px-3">Temperatura</th>
+                    <th class="py-2 px-3">Umidade</th>
+                    <th class="py-2 px-3">Pressão</th>
+                    <th class="py-2 px-3">Vento & Rajadas</th>
+                    <th class="py-2 px-3">Precipitação</th>
+                    <th class="py-2 px-3">Estado do Mar</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-[#1D2C48] font-mono text-[11px]">
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      containerEl.innerHTML = daysHtml;
+    }
+  }
+
+  // 7. PLANCON - Levantamento de Impactos por Bairro
+  if (meta?.impactos_bairros && Array.isArray(meta.impactos_bairros)) {
+    const planconBody = document.getElementById('plancon-table-body');
+    if (planconBody) {
+      planconBody.innerHTML = meta.impactos_bairros.map((item, idx) => {
+        const bgClass = idx % 2 === 0 ? 'bg-[#111C33]' : 'bg-[#0C1527]';
+
+        function getBadge(val) {
+          const v = String(val).toUpperCase();
+          if (v.includes('MÁXIMO') || v.includes('MAXIMO')) {
+            return `<span class="px-2 py-0.5 rounded bg-red-900/80 text-white font-bold text-[10px] border border-red-700">MÁXIMO</span>`;
+          }
+          if (v.includes('ALERTA')) {
+            return `<span class="px-2 py-0.5 rounded bg-red-950/70 text-red-300 font-semibold text-[10px] border border-red-800/60">ALERTA</span>`;
+          }
+          if (v.includes('ATENÇÃO') || v.includes('ATENCAO')) {
+            return `<span class="px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 font-medium text-[10px] border border-amber-800/60">ATENÇÃO</span>`;
+          }
+          return `<span class="px-2 py-0.5 rounded bg-[#0C1527] text-slate-400 font-medium text-[10px] border border-[#1D2C48]">${val || 'OBS'}</span>`;
+        }
+
+        return `
+          <tr class="${bgClass} hover:bg-[#14223E] transition">
+            <td class="py-2.5 px-3 font-semibold text-white">
+              ${item.setor}
+            </td>
+            <td class="py-2.5 px-2 text-center">
+              ${getBadge(item.risco_sab)}
+            </td>
+            <td class="py-2.5 px-2 text-center">
+              ${getBadge(item.risco_dom)}
+            </td>
+            <td class="py-2.5 px-2 text-center">
+              ${getBadge(item.risco_seg)}
+            </td>
+            <td class="py-2.5 px-3 text-slate-300 leading-snug">
+              ${item.impactos}
+            </td>
+            <td class="py-2.5 px-3 text-slate-300 leading-snug">
+              ${item.acoes}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+}
+
+function formatIsoDate(isoStr) {
+  if (!isoStr) return '';
+  const parts = isoStr.split('-');
+  if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return isoStr;
 }
 
 /**
