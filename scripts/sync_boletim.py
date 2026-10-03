@@ -23,10 +23,21 @@ DOCS_DIR = BASE_DIR / "docs"
 DATA_DIR.mkdir(exist_ok=True)
 DOCS_DIR.mkdir(exist_ok=True)
 
+def strip_markup(text):
+    if not isinstance(text, str):
+        return text
+    # Remove typst directives like #text(...) [...]
+    cleaned = re.sub(r'#text\([^)]*\)\[(.*?)\]', r'\1', text, flags=re.DOTALL)
+    cleaned = re.sub(r'#text\([^)]*\)', '', cleaned)
+    cleaned = re.sub(r'\[(.*?)\]', r'\1', cleaned)
+    cleaned = re.sub(r'[\*\_\\\#]', '', cleaned)
+    return re.sub(r'\s+', ' ', cleaned).strip()
+
 def clean_text(t):
     if not isinstance(t, str):
         return t
-    return t.replace('\ufffds', 'às').replace('**', '').strip()
+    t = strip_markup(t)
+    return t.replace('\ufffds', 'às').strip()
 
 def get_search_directories():
     dirs = [DOWNLOADS_DIR, DESKTOP_DIR, FALLBACK_DOWNLOADS, BRAIN_DEFESA_CIVIL]

@@ -286,7 +286,18 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
   return {};
 }
 
+function isLightMode() {
+  return document.documentElement.classList.contains('theme-light') || !document.documentElement.classList.contains('theme-dark');
+}
+
 function getCommonOptions(yTitle) {
+  const isLight = isLightMode();
+  const textColor = isLight ? '#334155' : '#cbd5e1';
+  const gridColor = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.06)';
+  const tooltipBg = isLight ? '#ffffff' : 'rgba(15, 23, 42, 0.95)';
+  const tooltipText = isLight ? '#0f172a' : '#f8fafc';
+  const tooltipBorder = isLight ? '#cbd5e1' : 'rgba(255, 255, 255, 0.15)';
+
   return {
     responsive: true,
     maintainAspectRatio: false,
@@ -298,17 +309,17 @@ function getCommonOptions(yTitle) {
       legend: {
         position: 'top',
         labels: {
-          color: '#cbd5e1',
-          font: { family: "'Plus Jakarta Sans', sans-serif", size: 12 },
+          color: textColor,
+          font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' },
           usePointStyle: true,
           boxWidth: 8
         }
       },
       tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-        titleColor: '#f8fafc',
-        bodyColor: '#e2e8f0',
-        borderColor: 'rgba(255, 255, 255, 0.1)',
+        backgroundColor: tooltipBg,
+        titleColor: tooltipText,
+        bodyColor: textColor,
+        borderColor: tooltipBorder,
         borderWidth: 1,
         padding: 10,
         boxPadding: 4,
@@ -319,18 +330,21 @@ function getCommonOptions(yTitle) {
     scales: {
       x: getXAxisConfig(),
       y: {
-        title: { display: !!yTitle, text: yTitle, color: '#94a3b8' },
-        grid: { color: 'rgba(255, 255, 255, 0.06)' },
-        ticks: { color: '#94a3b8', font: { size: 11 } }
+        title: { display: !!yTitle, text: yTitle, color: textColor },
+        grid: { color: gridColor },
+        ticks: { color: textColor, font: { size: 11, family: "'JetBrains Mono', monospace" } }
       }
     }
   };
 }
 
 function getXAxisConfig() {
+  const isLight = isLightMode();
+  const textColor = isLight ? '#475569' : '#94a3b8';
+  const gridColor = isLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.04)';
   return {
-    grid: { color: 'rgba(255, 255, 255, 0.04)' },
-    ticks: { color: '#94a3b8', maxRotation: 0, font: { size: 11 } }
+    grid: { color: gridColor },
+    ticks: { color: textColor, maxRotation: 0, font: { size: 11, family: "'JetBrains Mono', monospace" } }
   };
 }
 
