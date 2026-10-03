@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v4';
+const CACHE_NAME = 'meteo-ostras-v5';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -11,8 +11,6 @@ const STATIC_ASSETS = [
   './js/weather-codes.js',
   './img/logo.png',
   './img/logo-full.png',
-  './img/logo_prefeitura.png',
-  './img/logo_defesa_civil.png',
   './img/icon-192.png',
   './img/icon-512.png',
   './data/inea_cheias.json',
