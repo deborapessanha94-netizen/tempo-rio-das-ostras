@@ -55,11 +55,11 @@ function setupNavigationTabs() {
 
       // Atualiza botões
       tabButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E3A8A]', 'text-white', 'border-blue-600/50', 'shadow-sm');
-        b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-[#111C33]');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#1E3A8A]', 'text-white', 'shadow-sm');
+        b.classList.add('text-[#94B5D6]', 'hover:text-white', 'hover:bg-[#0A254A]');
       });
-      btn.classList.add('active', 'bg-[#1E3A8A]', 'text-white', 'border-blue-600/50', 'shadow-sm');
-      btn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-[#111C33]');
+      btn.classList.add('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold', 'shadow-sm');
+      btn.classList.remove('text-[#94B5D6]', 'hover:text-white', 'hover:bg-[#0A254A]');
 
       // Exibe aba correspondente
       tabPanes.forEach(pane => {
@@ -94,11 +94,11 @@ function setupBulletinChartTabs() {
   chartButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       chartButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E3A8A]', 'text-white', 'font-medium');
-        b.classList.add('text-slate-400', 'hover:text-white');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#1E3A8A]', 'text-white', 'font-medium', 'font-semibold');
+        b.classList.add('text-[#94B5D6]', 'hover:text-white');
       });
-      btn.classList.add('active', 'bg-[#1E3A8A]', 'text-white', 'font-medium');
-      btn.classList.remove('text-slate-400', 'hover:text-white');
+      btn.classList.add('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold');
+      btn.classList.remove('text-[#94B5D6]', 'hover:text-white');
 
       state.activeMetric = btn.getAttribute('data-metric') || 'temperature';
       updateBulletinChart();
@@ -209,15 +209,16 @@ function renderBulletinDOM(meta, rows) {
   }
 
   // 3. Cards Diários da População (Aba 1)
+  // 3. Cards Diários da População (Aba 1)
   if (meta?.dias_resumo && Array.isArray(meta.dias_resumo) && meta.dias_resumo.length > 0) {
     const gridEl = document.getElementById('populacao-cards-grid');
     if (gridEl) {
       gridEl.innerHTML = meta.dias_resumo.map(d => {
-        let badgeClass = 'bg-[#0C1527] text-slate-300 font-semibold text-[10px] border border-[#1D2C48]';
+        let badgeClass = 'bg-[#051833] text-[#94B5D6] font-semibold text-[10px] border border-[#133A66]';
         if (d.badge_tipo === 'danger') {
-          badgeClass = 'bg-red-950/80 text-red-300 font-semibold text-[10px] border border-red-800/80';
+          badgeClass = 'bg-red-950/80 text-red-300 font-semibold text-[10px] border border-red-800';
         } else if (d.badge_tipo === 'warning') {
-          badgeClass = 'bg-amber-950/80 text-amber-300 font-semibold text-[10px] border border-amber-800/80';
+          badgeClass = 'bg-amber-950/80 text-amber-300 font-semibold text-[10px] border border-amber-800';
         }
 
         const pilares = d.pilares || {};
@@ -226,30 +227,30 @@ function renderBulletinDOM(meta, rows) {
         const pilaresHtml = pilarKeys.map(k => {
           const p = pilares[k];
           return `
-            <div class="p-2 rounded-lg bg-[#0C1527] border border-[#1D2C48] flex items-center gap-2">
-              <i data-lucide="${p.icon || 'circle'}" class="w-3.5 h-3.5 text-sky-400 shrink-0"></i>
+            <div class="p-2.5 rounded bg-[#051833] border border-[#10325A] flex items-center gap-2">
+              <i data-lucide="${p.icon || 'circle'}" class="w-3.5 h-3.5 text-[#1E88E5] shrink-0"></i>
               <div class="min-w-0">
-                <span class="text-[8px] uppercase font-semibold text-slate-400 block">${p.label || k}</span>
-                <span class="text-[11px] font-bold text-slate-100 truncate block">${p.val || '—'}</span>
+                <span class="text-[9px] uppercase font-semibold text-[#8DA4C4] block">${p.label || k}</span>
+                <span class="text-xs font-bold text-white truncate block">${p.val || '—'}</span>
               </div>
             </div>
           `;
         }).join('');
 
         return `
-          <div class="glass-card p-4 border-[#1D2C48] bg-[#111C33] space-y-3">
-            <div class="flex items-center justify-between gap-2 border-b border-[#1D2C48] pb-2">
+          <div class="cemaden-card p-4 bg-[#071F3D] border border-[#133A66] rounded-lg space-y-3">
+            <div class="flex items-center justify-between gap-2 border-b border-[#133A66] pb-2">
               <div>
-                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Previsão Oficial</span>
+                <span class="text-[10px] font-bold text-[#8DA4C4] uppercase tracking-wider">Previsão Oficial</span>
                 <h3 class="text-sm font-bold text-white">${d.dia}</h3>
-                <p class="text-[11px] text-slate-400">${d.subtitulo || ''}</p>
+                <p class="text-[11px] text-[#94B5D6]">${d.subtitulo || ''}</p>
               </div>
               <span class="px-2 py-0.5 rounded ${badgeClass} shrink-0">
                 ${d.badge || 'OFICIAL'}
               </span>
             </div>
 
-            <p class="text-xs text-slate-300 leading-relaxed">
+            <p class="text-xs text-slate-200 leading-relaxed">
               ${d.descricao}
             </p>
 
@@ -269,9 +270,9 @@ function renderBulletinDOM(meta, rows) {
       const paragraphs = meta.sinopse_geral.split('\n\n').filter(p => p.trim().length > 0);
       sinopseEl.innerHTML = paragraphs.map(p => {
         if (p.includes('Cenário de Alerta Máximo') || p.includes('Alerta Máximo de Inundação')) {
-          return `<p class="p-2.5 rounded-lg bg-[#0C1527] border-l-2 border-l-red-500 border border-[#1D2C48] text-slate-300">${p}</p>`;
+          return `<p class="p-3 rounded-lg bg-[#051833] border-l-4 border-l-red-500 border border-[#133A66] text-slate-200 leading-relaxed">${p}</p>`;
         }
-        return `<p>${p}</p>`;
+        return `<p class="text-slate-200 leading-relaxed">${p}</p>`;
       }).join('');
     }
   }
@@ -281,9 +282,9 @@ function renderBulletinDOM(meta, rows) {
     const glossEl = document.getElementById('glossario-container');
     if (glossEl) {
       glossEl.innerHTML = meta.glossario.map(g => `
-        <div class="p-2 rounded bg-[#0C1527] border border-[#1D2C48]">
-          <strong class="text-slate-200 block">• ${g.termo}:</strong>
-          <span class="text-slate-400">${g.def}</span>
+        <div class="p-2.5 rounded bg-[#051833] border border-[#133A66]">
+          <strong class="text-white block text-[11px]">• ${g.termo}:</strong>
+          <span class="text-[#94B5D6] text-[10px]">${g.def}</span>
         </div>
       `).join('');
     }
@@ -306,7 +307,7 @@ function renderBulletinDOM(meta, rows) {
         const somaChuva = dayRows.reduce((acc, curr) => acc + (parseFloat(curr.chuva_media || curr.chuva_provavel_mm) || 0), 0);
 
         const rowsHtml = dayRows.map((r, idx) => {
-          const bgClass = idx % 2 === 0 ? 'bg-[#111C33]' : 'bg-[#0C1527]';
+          const bgClass = idx % 2 === 0 ? 'bg-[#071F3D]' : 'bg-[#051833]';
           const tMin = r.temp_min !== undefined ? r.temp_min : '—';
           const tMax = r.temp_max !== undefined ? r.temp_max : '—';
           const uMin = r.umid_min !== undefined ? r.umid_min : '—';
@@ -321,39 +322,39 @@ function renderBulletinDOM(meta, rows) {
           const marCond = r.mar_condicao || '';
 
           return `
-            <tr class="${bgClass} hover:bg-[#14223E] transition">
-              <td class="py-2 px-3 font-sans font-semibold text-white">${r.turno}</td>
-              <td class="py-2 px-3 text-slate-200">${tMin}° a ${tMax}°C</td>
-              <td class="py-2 px-3 text-slate-300">${uMin}% a ${uMax}%</td>
-              <td class="py-2 px-3 text-slate-400">${pressao}</td>
-              <td class="py-2 px-3 text-slate-300">${ventoDir} ${ventoVel}${rajada}</td>
-              <td class="py-2 px-3 text-slate-200 font-bold">${chuvaVal} mm${chuvaProb}</td>
-              <td class="py-2 px-3 text-slate-300 font-sans">${marOndas} ${marCond ? `(${marCond})` : ''}</td>
+            <tr class="${bgClass} hover:bg-[#0B2A52] transition">
+              <td class="py-2.5 px-3 font-sans font-semibold text-white">${r.turno}</td>
+              <td class="py-2.5 px-3 text-slate-100 font-mono">${tMin}° a ${tMax}°C</td>
+              <td class="py-2.5 px-3 text-[#94B5D6] font-mono">${uMin}% a ${uMax}%</td>
+              <td class="py-2.5 px-3 text-[#6C8EA8] font-mono">${pressao}</td>
+              <td class="py-2.5 px-3 text-slate-200">${ventoDir} ${ventoVel}${rajada}</td>
+              <td class="py-2.5 px-3 text-white font-bold font-mono">${chuvaVal} mm${chuvaProb}</td>
+              <td class="py-2.5 px-3 text-[#94B5D6] font-sans">${marOndas} ${marCond ? `(${marCond})` : ''}</td>
             </tr>
           `;
         }).join('');
 
         return `
           <div class="space-y-1.5 pt-1.5">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-semibold text-slate-200">${dia} ${dataFormatada ? `— ${dataFormatada}` : ''}</span>
-              <span class="text-[10px] text-slate-400">Volume Oficial: ${somaChuva.toFixed(1)} mm</span>
+            <div class="flex items-center justify-between text-xs px-1">
+              <span class="font-bold text-white">${dia} ${dataFormatada ? `— ${dataFormatada}` : ''}</span>
+              <span class="text-[11px] text-[#94B5D6]">Volume Oficial: <strong class="text-white font-mono">${somaChuva.toFixed(1)} mm</strong></span>
             </div>
 
-            <div class="overflow-x-auto rounded-lg border border-[#1D2C48]">
-              <table class="w-full text-left text-xs text-slate-300">
-                <thead class="bg-[#0C1527] text-slate-300 uppercase text-[10px] font-semibold border-b border-[#1D2C48]">
+            <div class="overflow-x-auto rounded-lg border border-[#133A66]">
+              <table class="w-full text-left text-xs text-slate-200">
+                <thead class="bg-[#051833] text-[#8DA4C4] uppercase text-[10px] font-semibold border-b border-[#133A66]">
                   <tr>
-                    <th class="py-2 px-3">Turno</th>
-                    <th class="py-2 px-3">Temperatura</th>
-                    <th class="py-2 px-3">Umidade</th>
-                    <th class="py-2 px-3">Pressão</th>
-                    <th class="py-2 px-3">Vento & Rajadas</th>
-                    <th class="py-2 px-3">Precipitação</th>
-                    <th class="py-2 px-3">Estado do Mar</th>
+                    <th class="py-2.5 px-3">Turno</th>
+                    <th class="py-2.5 px-3">Temperatura</th>
+                    <th class="py-2.5 px-3">Umidade</th>
+                    <th class="py-2.5 px-3">Pressão</th>
+                    <th class="py-2.5 px-3">Vento & Rajadas</th>
+                    <th class="py-2.5 px-3">Precipitação</th>
+                    <th class="py-2.5 px-3">Estado do Mar</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-[#1D2C48] font-mono text-[11px]">
+                <tbody class="divide-y divide-[#133A66] font-mono text-[11px]">
                   ${rowsHtml}
                 </tbody>
               </table>
@@ -371,24 +372,24 @@ function renderBulletinDOM(meta, rows) {
     const planconBody = document.getElementById('plancon-table-body');
     if (planconBody) {
       planconBody.innerHTML = meta.impactos_bairros.map((item, idx) => {
-        const bgClass = idx % 2 === 0 ? 'bg-[#111C33]' : 'bg-[#0C1527]';
+        const bgClass = idx % 2 === 0 ? 'bg-[#071F3D]' : 'bg-[#051833]';
 
         function getBadge(val) {
           const v = String(val).toUpperCase();
           if (v.includes('MÁXIMO') || v.includes('MAXIMO')) {
-            return `<span class="px-2 py-0.5 rounded bg-red-900/80 text-white font-bold text-[10px] border border-red-700">MÁXIMO</span>`;
+            return `<span class="px-2 py-0.5 rounded bg-red-900 text-white font-bold text-[10px] border border-red-700">MÁXIMO</span>`;
           }
           if (v.includes('ALERTA')) {
-            return `<span class="px-2 py-0.5 rounded bg-red-950/70 text-red-300 font-semibold text-[10px] border border-red-800/60">ALERTA</span>`;
+            return `<span class="px-2 py-0.5 rounded bg-red-950 text-red-300 font-semibold text-[10px] border border-red-800">ALERTA</span>`;
           }
           if (v.includes('ATENÇÃO') || v.includes('ATENCAO')) {
-            return `<span class="px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 font-medium text-[10px] border border-amber-800/60">ATENÇÃO</span>`;
+            return `<span class="px-2 py-0.5 rounded bg-amber-950 text-amber-300 font-medium text-[10px] border border-amber-800">ATENÇÃO</span>`;
           }
-          return `<span class="px-2 py-0.5 rounded bg-[#0C1527] text-slate-400 font-medium text-[10px] border border-[#1D2C48]">${val || 'OBS'}</span>`;
+          return `<span class="px-2 py-0.5 rounded bg-[#051833] text-[#94B5D6] font-medium text-[10px] border border-[#133A66]">${val || 'OBS'}</span>`;
         }
 
         return `
-          <tr class="${bgClass} hover:bg-[#14223E] transition">
+          <tr class="${bgClass} hover:bg-[#0B2A52] transition">
             <td class="py-2.5 px-3 font-semibold text-white">
               ${item.setor}
             </td>
@@ -401,10 +402,10 @@ function renderBulletinDOM(meta, rows) {
             <td class="py-2.5 px-2 text-center">
               ${getBadge(item.risco_seg)}
             </td>
-            <td class="py-2.5 px-3 text-slate-300 leading-snug">
+            <td class="py-2.5 px-3 text-slate-200 leading-snug">
               ${item.impactos}
             </td>
-            <td class="py-2.5 px-3 text-slate-300 leading-snug">
+            <td class="py-2.5 px-3 text-slate-200 leading-snug">
               ${item.acoes}
             </td>
           </tr>
@@ -462,6 +463,11 @@ function renderJundiaTelemetry(stations) {
     const rain96h = document.getElementById('jundia-rain-96h');
     const rain30d = document.getElementById('jundia-rain-30d');
 
+    const kpiJundia = document.getElementById('kpi-jundia-val');
+    if (kpiJundia && jundia.nivel_rio) {
+      kpiJundia.textContent = `${jundia.nivel_rio} m`;
+    }
+
     if (levelEl) levelEl.textContent = `${jundia.nivel_rio} m`;
     if (readingEl) readingEl.textContent = `Última leitura: ${jundia.ultima_leitura || 'Hoje'}`;
     if (percentEl) percentEl.textContent = `${jundia.porcentagem_calha}% da Cota de Transbordo (${jundia.cota_transborda || '2.84 m'})`;
@@ -473,13 +479,13 @@ function renderJundiaTelemetry(stations) {
     if (statusBadge) {
       statusBadge.textContent = jundia.status || 'ALERTA MÁXIMO';
       if (jundia.status === 'TRANSBORDAMENTO' || jundia.status === 'ALERTA MÁXIMO') {
-        statusBadge.className = 'px-2.5 py-0.5 rounded bg-red-950/80 text-red-300 font-bold text-xs border border-red-800/80';
+        statusBadge.className = 'px-2.5 py-1 rounded bg-red-950 text-red-300 font-bold text-xs border border-red-800';
       } else if (jundia.status === 'ALERTA') {
-        statusBadge.className = 'px-2.5 py-0.5 rounded bg-orange-950/80 text-orange-300 font-bold text-xs border border-orange-800/80';
+        statusBadge.className = 'px-2.5 py-1 rounded bg-orange-950 text-orange-300 font-bold text-xs border border-orange-800';
       } else if (jundia.status === 'ATENÇÃO') {
-        statusBadge.className = 'px-2.5 py-0.5 rounded bg-amber-950/80 text-amber-300 font-medium text-xs border border-amber-800/80';
+        statusBadge.className = 'px-2.5 py-1 rounded bg-amber-950 text-amber-300 font-medium text-xs border border-amber-800';
       } else {
-        statusBadge.className = 'px-2.5 py-0.5 rounded bg-[#0C1527] text-slate-300 font-medium text-xs border border-[#1D2C48]';
+        statusBadge.className = 'px-2.5 py-1 rounded bg-[#051833] text-[#94B5D6] font-medium text-xs border border-[#133A66]';
       }
     }
 
@@ -495,25 +501,25 @@ function renderJundiaTelemetry(stations) {
   if (otherGrid) {
     const others = stations.filter(s => s !== jundia);
     otherGrid.innerHTML = others.map(st => {
-      let badgeBg = 'bg-[#111C33] text-slate-400 border-[#1D2C48]';
-      if (st.status === 'TRANSBORDAMENTO') badgeBg = 'bg-red-950/70 text-red-300 border-red-800/60 font-semibold';
-      else if (st.status === 'ALERTA' || st.status === 'ALERTA MÁXIMO') badgeBg = 'bg-red-950/70 text-red-300 border-red-800/60 font-semibold';
-      else if (st.status === 'ATENÇÃO') badgeBg = 'bg-amber-950/70 text-amber-300 border-amber-800/60 font-medium';
-      else if (st.status === 'NORMAL') badgeBg = 'bg-[#111C33] text-slate-400 border-[#1D2C48]';
+      let badgeBg = 'bg-[#051833] text-[#94B5D6] border-[#133A66]';
+      if (st.status === 'TRANSBORDAMENTO') badgeBg = 'bg-red-950 text-red-300 border-red-800 font-semibold';
+      else if (st.status === 'ALERTA' || st.status === 'ALERTA MÁXIMO') badgeBg = 'bg-red-950 text-red-300 border-red-800 font-semibold';
+      else if (st.status === 'ATENÇÃO') badgeBg = 'bg-amber-950 text-amber-300 border-amber-800 font-medium';
+      else if (st.status === 'NORMAL') badgeBg = 'bg-[#051833] text-[#94B5D6] border-[#133A66]';
 
       return `
-        <div class="p-3 rounded-lg bg-[#0C1527] border border-[#1D2C48] space-y-1.5 hover:border-[#2b4066] transition">
+        <div class="p-3 rounded-lg bg-[#051833] border border-[#133A66] space-y-1.5 hover:border-[#1E528E] transition">
           <div class="flex items-center justify-between">
             <span class="font-bold text-white text-xs">${st.nome_estacao} (${st.municipio})</span>
             <span class="px-1.5 py-0.5 rounded text-[9px] border ${badgeBg}">${st.status}</span>
           </div>
-          <div class="flex items-center justify-between text-xs text-slate-400">
-            <span>Rio: <strong class="text-slate-300">${st.curso_dagua}</strong></span>
-            <span>Nível: <strong class="text-slate-100 font-mono">${st.nivel_rio} m</strong></span>
+          <div class="flex items-center justify-between text-xs text-[#94B5D6]">
+            <span>Rio: <strong class="text-white">${st.curso_dagua}</strong></span>
+            <span>Nível: <strong class="text-white font-mono">${st.nivel_rio} m</strong></span>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-[#1D2C48] pt-1">
+          <div class="flex items-center justify-between text-[11px] text-[#6C8EA8] border-t border-[#133A66] pt-1">
             <span>Transbordo: ${st.cota_transborda || '—'}</span>
-            <span>Chuva 24h: <strong class="text-slate-300">${st.chuva_24h} mm</strong></span>
+            <span>Chuva 24h: <strong class="text-white">${st.chuva_24h} mm</strong></span>
           </div>
         </div>
       `;
