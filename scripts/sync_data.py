@@ -194,4 +194,13 @@ if __name__ == '__main__':
     sync_inmet_forecast()
     sync_inmet_alerts()
     sync_inea_cheias()
+    try:
+        try:
+            from scripts.auto_bulletin import run_auto_bulletin_pipeline
+        except ImportError:
+            from auto_bulletin import run_auto_bulletin_pipeline
+        run_auto_bulletin_pipeline()
+    except Exception as e:
+        print(f"Aviso ao executar motor autônomo de boletins: {e}")
     print("Sincronização concluída com sucesso!")
+

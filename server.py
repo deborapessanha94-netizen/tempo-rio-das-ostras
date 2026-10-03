@@ -245,12 +245,12 @@ class MeteoServerHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_json_response(data)
                 return
 
-            # API: Sincronização Sob Demanda do Boletim Oficial
+            # API: Sincronização Sob Demanda do Boletim e Previsão
             if parsed_path == '/api/sync/boletim':
                 try:
-                    from scripts.sync_boletim import sync_bulletin
-                    sync_bulletin()
-                    self.send_json_response({"status": "ok", "message": "Boletim da Defesa Civil sincronizado com sucesso!"})
+                    from scripts.auto_bulletin import run_auto_bulletin_pipeline
+                    run_auto_bulletin_pipeline()
+                    self.send_json_response({"status": "ok", "message": "Boletim e dados atualizados com sucesso a partir das fontes oficiais!"})
                 except Exception as ex:
                     self.send_json_response({"status": "error", "message": str(ex)}, status=500)
                 return
@@ -281,16 +281,16 @@ def start_boletim_watcher():
         import time
         # Sincroniza imediatamente na inicialização
         try:
-            from scripts.sync_boletim import sync_bulletin
-            sync_bulletin()
+            from scripts.auto_bulletin import run_auto_bulletin_pipeline
+            run_auto_bulletin_pipeline()
         except Exception as e:
-            print(f"[Watcher Boletim] Aviso inicial: {e}")
+            print(f"[Watcher Auto-Bulletin] Aviso inicial: {e}")
 
         while True:
-            time.sleep(60) # Verifica novos boletins a cada 60s
+            time.sleep(300) # Roda a cada 5 minutos
             try:
-                from scripts.sync_boletim import sync_bulletin
-                sync_bulletin()
+                from scripts.auto_bulletin import run_auto_bulletin_pipeline
+                run_auto_bulletin_pipeline()
             except Exception as e:
                 pass
 

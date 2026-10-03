@@ -26,7 +26,7 @@ DOCS_DIR.mkdir(exist_ok=True)
 def clean_text(t):
     if not isinstance(t, str):
         return t
-    return t.replace('s', 'às').replace('', '').replace('**', '').strip()
+    return t.replace('\ufffds', 'às').replace('**', '').strip()
 
 def get_search_directories():
     dirs = [DOWNLOADS_DIR, DESKTOP_DIR, FALLBACK_DOWNLOADS, BRAIN_DEFESA_CIVIL]
