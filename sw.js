@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v2';
+const CACHE_NAME = 'meteo-ostras-v3';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -11,11 +11,17 @@ const STATIC_ASSETS = [
   './js/weather-codes.js',
   './img/logo.png',
   './img/logo-full.png',
+  './img/logo_prefeitura.png',
+  './img/logo_defesa_civil.png',
   './img/icon-192.png',
   './img/icon-512.png',
   './data/inea_cheias.json',
   './data/inmet_avisos.json',
-  './data/inmet_previsao.json'
+  './data/inmet_previsao.json',
+  './data/boletim_oficial.json',
+  './data/boletim_metadata.json',
+  './docs/boletim_operacional.pdf',
+  './docs/informativo_populacao.pdf'
 ];
 
 // Instalação do Service Worker e pré-cache dos arquivos essenciais

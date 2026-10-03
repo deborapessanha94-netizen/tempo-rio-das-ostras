@@ -331,3 +331,28 @@ export function getLocalHourIndex(times) {
   });
   return closestIdx;
 }
+
+/**
+ * Obtém os dados tabulados por turnos do Boletim Meteorológico Operacional Oficial
+ */
+export async function getBoletimOficialData() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/boletim_oficial.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
+}
+
+/**
+ * Obtém os metadados, sinopse, glossário e PLANCON do Boletim Meteorológico
+ */
+export async function getBoletimMetadata() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/boletim_metadata.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+

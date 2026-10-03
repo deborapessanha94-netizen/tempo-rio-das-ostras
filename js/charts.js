@@ -333,3 +333,233 @@ function getXAxisConfig() {
     ticks: { color: '#94a3b8', maxRotation: 0, font: { size: 11 } }
   };
 }
+
+let activeBulletinChart = null;
+
+export function renderBulletinChart(canvas, metric, bulletinRows) {
+  if (!canvas || !bulletinRows || bulletinRows.length === 0) return;
+
+  if (activeBulletinChart) {
+    activeBulletinChart.destroy();
+    activeBulletinChart = null;
+  }
+
+  const ctx = canvas.getContext('2d');
+  const labels = bulletinRows.map(r => `${r.dia_semana.substring(0, 3)} ${r.turno}`);
+
+  let config = null;
+
+  if (metric === 'temperature') {
+    const tMax = bulletinRows.map(r => r.temp_max);
+    const tMin = bulletinRows.map(r => r.temp_min);
+
+    config = {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Máxima (°C)',
+            data: tMax,
+            borderColor: '#dc2626',
+            backgroundColor: 'rgba(220, 38, 38, 0.15)',
+            borderWidth: 2.5,
+            tension: 0.3,
+            fill: '+1',
+            pointBackgroundColor: '#dc2626',
+            pointRadius: 5
+          },
+          {
+            label: 'Mínima (°C)',
+            data: tMin,
+            borderColor: '#0284c7',
+            backgroundColor: 'rgba(2, 132, 199, 0.05)',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            tension: 0.3,
+            fill: false,
+            pointBackgroundColor: '#0284c7',
+            pointRadius: 4
+          }
+        ]
+      },
+      options: {
+        ...getCommonOptions('Temperatura (°C)'),
+        scales: {
+          x: getXAxisConfig(),
+          y: {
+            min: 16,
+            max: 30,
+            ticks: { stepSize: 2, color: '#94a3b8' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+            title: { display: true, text: 'Temperatura (°C)', color: '#94a3b8' }
+          }
+        }
+      }
+    };
+  } else if (metric === 'humidity') {
+    const uMax = bulletinRows.map(r => r.umid_max);
+    const uMin = bulletinRows.map(r => r.umid_min);
+
+    config = {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Umidade Máx (%)',
+            data: uMax,
+            borderColor: '#15803d',
+            backgroundColor: 'rgba(21, 128, 61, 0.15)',
+            borderWidth: 2.5,
+            tension: 0.3,
+            fill: '+1',
+            pointBackgroundColor: '#15803d',
+            pointRadius: 5
+          },
+          {
+            label: 'Umidade Mín (%)',
+            data: uMin,
+            borderColor: '#22c55e',
+            borderWidth: 2,
+            borderDash: [4, 4],
+            tension: 0.3,
+            fill: false,
+            pointBackgroundColor: '#22c55e',
+            pointRadius: 4
+          }
+        ]
+      },
+      options: {
+        ...getCommonOptions('Umidade (%)'),
+        scales: {
+          x: getXAxisConfig(),
+          y: {
+            min: 50,
+            max: 100,
+            ticks: { stepSize: 10, color: '#94a3b8' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+            title: { display: true, text: 'Umidade (%)', color: '#94a3b8' }
+          }
+        }
+      }
+    };
+  } else if (metric === 'pressure') {
+    const pVal = bulletinRows.map(r => r.pressao_hpa);
+
+    config = {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Pressão ao Nível Médio do Mar (hPa)',
+            data: pVal,
+            borderColor: '#0f766e',
+            backgroundColor: 'rgba(15, 118, 110, 0.15)',
+            borderWidth: 2.5,
+            tension: 0.25,
+            fill: true,
+            pointBackgroundColor: '#0d9488',
+            pointRadius: 6
+          }
+        ]
+      },
+      options: {
+        ...getCommonOptions('Pressão (hPa)'),
+        scales: {
+          x: getXAxisConfig(),
+          y: {
+            min: 1010,
+            max: 1022,
+            ticks: { stepSize: 2, color: '#94a3b8' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+            title: { display: true, text: 'Pressão (hPa)', color: '#94a3b8' }
+          }
+        }
+      }
+    };
+  } else if (metric === 'wind') {
+    const vMed = bulletinRows.map(r => Math.round((r.vento_vel_min + r.vento_vel_max) / 2));
+    const vRaj = bulletinRows.map(r => r.rajada_max);
+
+    config = {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            type: 'bar',
+            label: 'Vento Médio (km/h)',
+            data: vMed,
+            backgroundColor: 'rgba(185, 28, 28, 0.75)',
+            borderColor: '#b91c1c',
+            borderWidth: 1.5,
+            borderRadius: 6
+          },
+          {
+            type: 'line',
+            label: 'Rajada Máxima (km/h)',
+            data: vRaj,
+            borderColor: '#ef4444',
+            borderWidth: 2,
+            pointBackgroundColor: '#b91c1c',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            fill: false
+          }
+        ]
+      },
+      options: {
+        ...getCommonOptions('Velocidade (km/h)'),
+        scales: {
+          x: getXAxisConfig(),
+          y: {
+            min: 0,
+            max: 50,
+            ticks: { stepSize: 10, color: '#94a3b8' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+            title: { display: true, text: 'Velocidade (km/h)', color: '#94a3b8' }
+          }
+        }
+      }
+    };
+  } else if (metric === 'precipitation') {
+    const chTot = bulletinRows.map(r => r.chuva_media);
+
+    config = {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Precipitação Prevista (mm)',
+            data: chTot,
+            backgroundColor: 'rgba(37, 99, 235, 0.8)',
+            borderColor: '#1d4ed8',
+            borderWidth: 1.5,
+            borderRadius: 6
+          }
+        ]
+      },
+      options: {
+        ...getCommonOptions('Chuva (mm)'),
+        scales: {
+          x: getXAxisConfig(),
+          y: {
+            min: 0,
+            max: 25,
+            ticks: { stepSize: 5, color: '#94a3b8' },
+            grid: { color: 'rgba(255, 255, 255, 0.06)' },
+            title: { display: true, text: 'Volume Previsto (mm)', color: '#94a3b8' }
+          }
+        }
+      }
+    };
+  }
+
+  if (config) {
+    activeBulletinChart = new Chart(ctx, config);
+  }
+}
+

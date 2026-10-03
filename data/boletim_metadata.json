@@ -1,0 +1,222 @@
+{
+  "municipio": "Rio das Ostras - RJ",
+  "periodo": "03/10 (Sábado) a 04/10/2026 (Domingo)",
+  "emissao": "02/10/2026 às 17:00h",
+  "orgaos_fontes": "CPTEC/INPE (WRF), INMET (COSMO 7x7 km), ECMWF (Windy), INEA (Alerta de Cheias RH-VIII) e Marinha do Brasil (CHM)",
+  "informe_alerta": "Atenção máxima para o SÁBADO (03/10) com atuação de frente semi-estacionária, chuva volumosa (45 a 70 mm previstos, nominal 55 mm), mar agitado (até 2,4 m sob Avisos nº 727 e 729 da Marinha) e ALERTA CEMADEN para a bacia do Rio Jundiá (nível atual 1,37 m e subindo para cota de atenção 1,60 m). No DOMINGO (04/10), chuviscos residuais pela manhã (3,5 mm) e retorno do sol à tarde com recuperação das temperaturas até 27°C. Volume total acumulado previsto de 50 a 82 mm.",
+  "sinopse_geral": "O padrão meteorológico regional sobre o município de Rio das Ostras para o período de 03/10 a 04/10/2026 é condicionado pela atuação de uma frente fria semi-estacionária sobre o litoral norte fluminense, acoplada à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida sobre o oceano adjacente. Esse bloqueio atmosférico impulsiona um escoamento constante de ventos marítimos de sudeste e leste carregados de umidade em direção à costa fluminense (convergência de umidade marítima), mantendo o tempo totalmente fechado, frio úmido (mínima de 19°C e máxima não passando de 21°C) e chuvas contínuas e volumosas ao longo de todo o sábado (03/10), projetando acumulados entre 45 e 70 mm (nominal de 55,0 mm).\n\nEssa configuração meteorológica deflagra Risco Crítico de Inundação e Cheias na Bacia Hidrográfica do Rio Jundiá: a estação telemétrica municipal registrou nível de 1,37 m e tendência de subida contínua na tarde desta sexta-feira (02/10), com solo saturado por 25,0 mm nos últimos 4 dias e 7,8 mm nas últimas 24h. O volume previsto para sábado elevará a calha do rio rapidamente em direção à cota de atenção (1,60 m), com iminente ameaça à cota de transbordo (2,20 m), atingindo diretamente os bairros Âncora e Cláudio Ribeiro (Alerta Laranja do INMET, Alerta Especial do INEA e Monitoramento CEMADEN).\n\nNo domingo (04/10), o centro de alta pressão migra para alto-mar, desconfigurando a convergência úmida e permitindo a rotação dos ventos para quadrante Nordeste/Norte. Chuviscos residuais na madrugada e início da manhã (3,5 mm) cessam ao longo do dia, dando lugar a aberturas de sol, diminuição da umidade e acentuada recuperação térmica, com máximas atingindo 26°C a 27°C. O volume acumulado total para o período de 2 dias situa-se entre 50 e 82 mm (nominal 62,5 mm).",
+  "glossario": [
+    {
+      "termo": "Frente Semi-Estacionária",
+      "def": "Bloqueio que mantém bandas de chuva sobre a mesma região por dias."
+    },
+    {
+      "termo": "Alta Pós-Frontal",
+      "def": "Centro anticiclônico que injeta vento marítimo e ar frio contra a costa."
+    },
+    {
+      "termo": "Cota de Transbordo",
+      "def": "Nível d’água em que o rio extravasa a calha principal (2,20 m / 2,84 m no Jundiá)."
+    },
+    {
+      "termo": "Estado do Mar (Escala Douglas)",
+      "def": "Norma oficial (CHM): Agitado (1,25 a 2,5 m) e Muito Agitado (> 2,5 m)."
+    },
+    {
+      "termo": "Área Delta (Marinha do Brasil)",
+      "def": "Setor costeiro oficial delimitado pelo CHM que engloba a orla local."
+    },
+    {
+      "termo": "Convergência de Umidade",
+      "def": "Encontro de fluxos de ar que força a ascensão contínua e gera chuva volumosa."
+    }
+  ],
+  "dias_resumo": [
+    {
+      "dia": "Sábado — 03/10/2026",
+      "subtitulo": "Frente Semi-Estacionária, Chuva Volumosa e Risco de Cheias no Rio Jundiá",
+      "badge": "ALERTA CEMADEN / CHEIAS",
+      "badge_tipo": "danger",
+      "descricao": "Neste sábado, o tempo segue totalmente fechado, frio e úmido sob atuação de uma frente semi-estacionária combinada com fluxo marítimo de umidade. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo encharcado e risco elevado de cheias (acumulados previstos de 45 a 70 mm, nominal 55 mm). Temperaturas variam entre mínima de 19°C e máxima não passando de 21°C (mínima amplitude térmica da semana). Na região rural, oscilam entre 17°C e 20°C. A umidade relativa do ar oscila entre 90% no período da tarde e 98% na madrugada (Ar Saturado / Solo Encharcado). Ventos moderados de Leste/Nordeste com rajadas de até 35-38 km/h na orla (Avisos nº 727 e 729 da Marinha, Alerta Amarelo do INMET e Alerta CEMADEN).",
+      "pilares": {
+        "ceu": {
+          "label": "CÉU",
+          "val": "Chuvoso e frio",
+          "icon": "cloud-rain"
+        },
+        "temp": {
+          "label": "TEMPERATURA",
+          "val": "19° a 21°C",
+          "cor": "text-sky-400",
+          "icon": "thermometer"
+        },
+        "umid": {
+          "label": "UMIDADE",
+          "val": "90% a 98%",
+          "cor": "text-emerald-400",
+          "icon": "droplets"
+        },
+        "vento": {
+          "label": "VENTO & RAJADAS",
+          "val": "Rajadas até 38 km/h",
+          "cor": "text-purple-400",
+          "icon": "wind"
+        },
+        "chuva": {
+          "label": "CHUVA",
+          "val": "Volumosa (45-70 mm)",
+          "cor": "text-blue-400",
+          "icon": "cloud-rain"
+        },
+        "mar": {
+          "label": "MAR E PRAIA",
+          "val": "Agitado (2,0-2,4 m)",
+          "cor": "text-amber-400",
+          "icon": "waves"
+        }
+      }
+    },
+    {
+      "dia": "Domingo — 04/10/2026",
+      "subtitulo": "Instabilidade Residual Pela Manhã e Retorno do Sol com Calor à Tarde",
+      "badge": "INSTABILIDADE RESIDUAL",
+      "badge_tipo": "success",
+      "descricao": "Neste domingo, o sol volta a aparecer entre nuvens a partir do fim da manhã com gradual estabilização atmosférica e temperaturas em recuperação. Previsão de chuva fraca residual na madrugada e início da manhã, cessando gradativamente à tarde (acumulados previstos de 5 a 12 mm, nominal 7,5 mm). Temperaturas variam entre mínima de 19°C e máxima de 27°C (retorno do calor à tarde). Na região rural, oscilam entre 18°C e 25°C. A umidade relativa do ar oscila entre 65% nas horas mais quentes e 96% na madrugada (Ar Úmido). Ventos moderados de Nordeste/Norte com rajadas de até 38 a 42 km/h na orla marítima durante o período da tarde.",
+      "pilares": {
+        "ceu": {
+          "label": "CÉU",
+          "val": "Sol entre nuvens",
+          "icon": "cloud-sun"
+        },
+        "temp": {
+          "label": "TEMPERATURA",
+          "val": "19° a 27°C",
+          "cor": "text-amber-400",
+          "icon": "thermometer"
+        },
+        "umid": {
+          "label": "UMIDADE",
+          "val": "65% a 96%",
+          "cor": "text-emerald-400",
+          "icon": "droplets"
+        },
+        "vento": {
+          "label": "VENTO & RAJADAS",
+          "val": "Rajadas até 42 km/h",
+          "cor": "text-purple-400",
+          "icon": "wind"
+        },
+        "chuva": {
+          "label": "CHUVA",
+          "val": "Fraca (5-12 mm)",
+          "cor": "text-blue-400",
+          "icon": "cloud-drizzle"
+        },
+        "mar": {
+          "label": "MAR E PRAIA",
+          "val": "Moderado (1,4-1,7 m)",
+          "cor": "text-teal-400",
+          "icon": "waves"
+        }
+      }
+    }
+  ],
+  "impactos_bairros": [
+    {
+      "setor": "Costazul, Tartaruga, Boca da Barra e Mar do Norte (Orla)",
+      "risco_sab": "ALERTA",
+      "cor_sab": "bg-red-500/20 text-red-400 border-red-500/40",
+      "risco_dom": "ATENÇÃO",
+      "cor_dom": "bg-amber-500/20 text-amber-400 border-amber-500/40",
+      "impactos": "Mar agitado no sábado (1.8 a 2.4 m); projeção de areia e ondas no calçadão; no domingo mar abranda para 1.5 m com rajadas de até 42 km/h de NE.",
+      "acoes": "Bandeiramento vermelho no sábado; suspensão da pesca artesanal; monitoramento contínuo da faixa de areia e calçadões."
+    },
+    {
+      "setor": "Bosque, Village, Extensão do Bosque e Nova Aliança",
+      "risco_sab": "ALERTA",
+      "cor_sab": "bg-red-500/20 text-red-400 border-red-500/40",
+      "risco_dom": "OBSERVAÇÃO",
+      "cor_dom": "bg-slate-700/40 text-slate-300 border-slate-600/40",
+      "impactos": "Solo saturado; risco de lâmina d’água em vias arteriais; rajadas de vento até 38 km/h com risco pontual sobre fiação aérea.",
+      "acoes": "Desobstrução de canaletas; canal direto com a Enel para rápida recomposição de energia; patrulha urbana da Defesa Civil."
+    },
+    {
+      "setor": "Cidade Praiana, Parque Mariléa, Jardim Mariléa e Beira Mar",
+      "risco_sab": "ALERTA MÁXIMO",
+      "cor_sab": "bg-red-600/30 text-red-300 border-red-500 font-extrabold animate-pulse",
+      "risco_dom": "ATENÇÃO",
+      "cor_dom": "bg-amber-500/20 text-amber-400 border-amber-500/40",
+      "impactos": "Chuva volumosa de 55 mm sobre lençol freático já elevado; alagamentos crônicos em ruas sem pavimentação e retenção de fluxo na RJ-106.",
+      "acoes": "Acionamento de caminhões vac-all e motobombas; desobstrução preventiva de bueiros; isolamento de vias intransitáveis."
+    },
+    {
+      "setor": "Âncora, Cláudio Ribeiro, Nova Esperança e Bacia do Jundiá",
+      "risco_sab": "ALERTA MÁXIMO",
+      "cor_sab": "bg-red-600/30 text-red-300 border-red-500 font-extrabold animate-pulse",
+      "risco_dom": "ATENÇÃO",
+      "cor_dom": "bg-amber-500/20 text-amber-400 border-amber-500/40",
+      "impactos": "Estação telemétrica Jundiá em 1.37 m (subindo). Projeção de alcance da cota de atenção (1.60 m) e risco de transbordo (2.20 m).",
+      "acoes": "Monitoramento telemétrico ininterrupto; alerta sonoro comunitário; sobreaviso de equipes para evacuação preventiva e abrigo PLANCON."
+    },
+    {
+      "setor": "Cantagalo, Rocha Leão, Califórnia e Zona Rural",
+      "risco_sab": "ALERTA",
+      "cor_sab": "bg-red-500/20 text-red-400 border-red-500/40",
+      "risco_dom": "OBSERVAÇÃO",
+      "cor_dom": "bg-slate-700/40 text-slate-300 border-slate-600/40",
+      "impactos": "Frio úmido e chuva contínua; formação de lamaçais, pequenos escorregamentos de taludes e cortes de estradas vicinais (GeoRisk CEMADEN).",
+      "acoes": "Patrulha mecanizada com retroescavadeira e caminhão basculante em prontidão operacional para desobstrução de vias vicinais."
+    }
+  ],
+  "orientacoes_populacao": [
+    {
+      "titulo": "Alagamentos e Subida do Rio Jundiá (Sábado)",
+      "texto": "Com nível telemétrico em elevação e previsão de mais 55 mm de chuva, moradores do Âncora, Cláudio Ribeiro e Cidade Praiana devem levantar móveis e acionar a Defesa Civil (199) em caso de inundação.",
+      "icone": "alert-triangle",
+      "cor": "amber"
+    },
+    {
+      "titulo": "Segurança na Orla e Mar (Sábado e Domingo)",
+      "texto": "Respeite o bandeiramento vermelho nos postos de salvamento. Pescadores e praticantes de esportes marítimos devem evitar navegar devido a ondas de até 2,4 m e rajadas de vento na orla.",
+      "icone": "waves",
+      "cor": "sky"
+    },
+    {
+      "titulo": "Frio Úmido e Sensação Térmica Baixa (Sábado)",
+      "texto": "Máximas de apenas 21°C com chuva contínua e vento úmido exigem proteção térmica e agasalho adequado para crianças e idosos.",
+      "icone": "thermometer-snowflake",
+      "cor": "blue"
+    },
+    {
+      "titulo": "Retorno do Sol e Vento Nordeste (Domingo)",
+      "texto": "Atenção a rajadas de até 42 km/h na orla durante a tarde; evite estacionar veículos sob árvores e estruturas frágeis.",
+      "icone": "wind",
+      "cor": "purple"
+    }
+  ],
+  "avisos_oficiais": {
+    "marinha": {
+      "titulo": "Marinha do Brasil — Avisos Oficiais Vigentes",
+      "itens": [
+        "Avisos nº 727 e 729/2026 (Área Delta e Bravo): Vento de SE/E Força 7 (50 a 61 km/h em alto-mar com rajadas na orla de 38-42 km/h).",
+        "Estado do Mar: Ondas de 1.8 a 2.4 m gerando mar agitado na faixa costeira de Rio das Ostras, com restrição à navegação de pequeno porte e bandeiramento na orla."
+      ]
+    },
+    "inmet_inea_cemaden": {
+      "titulo": "INMET, INEA e CEMADEN — Alertas Oficiais Vigentes",
+      "itens": [
+        "INMET Alerta Laranja/Amarelo: Chuvas intensas de 30 a 60 mm/h ou 50 a 100 mm/dia e declínio térmico acentuado.",
+        "INEA Boletim Especial 01/2026: Impacto Hidrológico ALTO para Bacias dos Rios Macaé e das Ostras (RH-VIII).",
+        "CEMADEN / Estação Jundiá: Nível atual em monitoramento crítico com solo saturado e risco de transbordamento nas áreas baixas."
+      ]
+    }
+  },
+  "contatos_emergencia": {
+    "defesa_civil_plantao": "199",
+    "bombeiros": "193",
+    "telefone_geral": "(22) 2760-8360",
+    "whatsapp_emergencia": "(22) 99245-5678",
+    "orgao": "Defesa Civil Municipal de Rio das Ostras",
+    "setor": "Setor de Monitoramento e Alerta Meteorológico 24h"
+  }
+}

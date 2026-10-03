@@ -251,3 +251,46 @@ body {
 .glow-animation {
   animation: pulseGlow 3s infinite ease-in-out;
 }
+
+/* Tipografia de Cabeçalho Institucional dos Boletins */
+.font-masthead {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.font-brand-serif {
+  font-family: 'Times New Roman', 'Merriweather', Georgia, serif;
+}
+
+/* Estilos de Impressão A4 Oficiais (Padrão Typst / Quarto) */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    padding: 0 !important;
+  }
+
+  header, nav, #btn-install-desktop, #btn-install-mobile, .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .glass-card, .bg-slate-900, .bg-slate-950 {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+
+  table {
+    page-break-inside: avoid;
+  }
+
+  @page {
+    margin: 1cm;
+    size: A4 portrait;
+  }
+}
+

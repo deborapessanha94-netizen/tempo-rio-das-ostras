@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TEMPO em Rio das Ostras — Sistema Meteorológico & Defesa Civil</title>
+  <title>TEMPO em Rio das Ostras — Boletim Meteorológico & Defesa Civil</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   
   <!-- Progressive Web App (PWA) 24/7 -->
@@ -30,6 +30,13 @@
               500: '#0ea5e9',
               600: '#0284c7',
               900: '#0c4a6e',
+              950: '#082f49'
+            },
+            defesa: {
+              navy: '#1e3a8a',
+              dark: '#0f172a',
+              amber: '#f59e0b',
+              red: '#dc2626'
             }
           }
         }
@@ -54,989 +61,997 @@
 </head>
 <body class="antialiased selection:bg-sky-500 selection:text-white pb-16">
 
-  <!-- Barra de Navegação Superior Oficial -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/90 border-b border-slate-800/80 px-4 lg:px-8 py-3">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+  <!-- CABEÇALHO INSTITUCIONAL OFICIAL (Padrão dos Boletins da Defesa Civil e Prefeitura) -->
+  <header class="bg-slate-950/95 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md px-3 sm:px-6 py-2.5 shadow-xl">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
       
-      <!-- Marca / Identificação Municipal com Logo Oficial -->
-      <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
-        <a href="./" class="flex items-center gap-3 group">
-          <div class="h-12 sm:h-14 rounded-xl overflow-hidden border border-slate-700/80 shadow-md shadow-sky-950/40 bg-[#283964] flex items-center justify-center p-1 transition group-hover:border-sky-500/50">
-            <img src="img/logo.png" alt="TEMPO em Rio das Ostras" class="h-full w-auto object-contain">
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 border border-sky-500/30">IBGE 3304524</span>
-              <span class="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Oficial</span>
-            </div>
-            <p class="text-[11px] text-slate-400 font-medium mt-0.5">Previsões até 5 dias • Alertas INMET • Cotas INEA</p>
-          </div>
-        </a>
+      <!-- Brasões e Títulos Oficiais Institucionais -->
+      <div class="flex items-center gap-3 sm:gap-4 w-full md:w-auto justify-between md:justify-start">
+        
+        <!-- Brasão Prefeitura Municipal de Rio das Ostras -->
+        <div class="h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-white/10 p-1 flex items-center justify-center shrink-0 border border-slate-700/80 shadow-md">
+          <img src="img/logo_prefeitura.png" alt="Prefeitura Municipal de Rio das Ostras" class="h-full w-full object-contain">
+        </div>
 
-        <div class="flex items-center gap-2 md:hidden">
-          <button id="btn-install-mobile" class="px-2.5 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center gap-1 shadow-md shadow-sky-500/20 transition cursor-pointer" title="Instalar aplicativo no celular">
-            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
-            <span>Instalar</span>
-          </button>
-          <button id="btn-refresh-data" class="p-2 rounded-lg bg-slate-800 text-sky-400" title="Atualizar dados">
-            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-          </button>
+        <!-- Textos Institucionais Oficiais -->
+        <div class="text-center md:text-left min-w-0">
+          <p class="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-slate-400">ESTADO DO RIO DE JANEIRO</p>
+          <h1 class="text-xs sm:text-sm font-extrabold text-white tracking-wide leading-tight">PREFEITURA MUNICIPAL DE RIO DAS OSTRAS</h1>
+          <div class="flex items-center justify-center md:justify-start gap-1.5 mt-0.5">
+            <span class="text-[11px] font-bold text-sky-400">SUBSECRETARIA DE DEFESA CIVIL</span>
+            <span class="text-[9px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-semibold border border-sky-500/30">MONITORAMENTO 24H</span>
+          </div>
+          <p class="text-[10px] text-slate-400 font-medium truncate">Setor de Monitoramento & Alerta Meteorológico • IBGE 3304524</p>
+        </div>
+
+        <!-- Brasão Defesa Civil Rio das Ostras -->
+        <div class="h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-white/10 p-1 flex items-center justify-center shrink-0 border border-slate-700/80 shadow-md">
+          <img src="img/logo_defesa_civil.png" alt="Defesa Civil Rio das Ostras" class="h-full w-full object-contain">
         </div>
       </div>
 
-      <!-- Links Rápidos dos Órgãos Oficiais -->
-      <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 text-xs">
-        <a href="https://previsao.inmet.gov.br/3304524" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-sky-400 flex items-center gap-1 transition whitespace-nowrap">
-          <span class="w-1.5 h-1.5 rounded-full bg-sky-400"></span> INMET 3304524
-        </a>
-        <a href="https://vime.inmet.gov.br/SE" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-teal-400 flex items-center gap-1 transition whitespace-nowrap">
-          <span class="w-1.5 h-1.5 rounded-full bg-teal-400"></span> VIME Sudeste
-        </a>
-        <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-emerald-400 flex items-center gap-1 transition whitespace-nowrap">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> INEA Cheias & Cotas
-        </a>
-        <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-300 hover:text-indigo-400 flex items-center gap-1 transition whitespace-nowrap">
-          <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span> Marinha CHM
-        </a>
-        <a href="#hub-orgaos" class="px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 font-semibold flex items-center gap-1 transition whitespace-nowrap">
-          <i data-lucide="layers" class="w-3.5 h-3.5"></i> 17 Portais
-        </a>
-      </div>
-
-      <!-- Status e Controles -->
-      <div class="flex items-center gap-2.5">
-        <button id="btn-install-desktop" class="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-sky-500/20 transition cursor-pointer" title="Instalar App no seu celular ou computador">
-          <i data-lucide="smartphone" class="w-4 h-4"></i>
+      <!-- Barra de Ações Rápidas (Downloads de PDFs, Impressão, Instalar e Atualizar) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center md:justify-end text-xs">
+        
+        <!-- Botão Instalar App -->
+        <button id="btn-install-desktop" class="px-2.5 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-sky-500/20 transition cursor-pointer" title="Instalar aplicativo no celular ou computador">
+          <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
           <span>Instalar App</span>
         </button>
-        <button id="btn-refresh-desktop" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-sky-400 transition" title="Atualizar Dados Agora">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+
+        <!-- Botão Baixar Informativo População (PDF) -->
+        <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white flex items-center gap-1.5 transition" title="Baixar PDF do Informativo à População">
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-sky-400"></i>
+          <span class="hidden sm:inline">Informativo</span> <span>(PDF)</span>
+        </a>
+
+        <!-- Botão Baixar Boletim Técnico (PDF) -->
+        <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 hover:text-white flex items-center gap-1.5 transition" title="Baixar PDF do Boletim Meteorológico Operacional Completo">
+          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span class="hidden sm:inline">Boletim</span> <span>(PDF)</span>
+        </a>
+
+        <!-- Botão Imprimir / Gerar Relatório -->
+        <button id="btn-print-bulletin" class="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-white flex items-center gap-1 transition cursor-pointer" title="Imprimir versão formatada em A4">
+          <i data-lucide="printer" class="w-3.5 h-3.5"></i>
         </button>
-        <div id="status-live-indicator" class="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-full shadow-sm" title="Sincronização contínua com fontes oficiais">
+
+        <!-- Botão Atualizar -->
+        <button id="btn-refresh-desktop" class="p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 hover:text-sky-400 flex items-center gap-1 transition cursor-pointer" title="Atualizar dados em tempo real">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+        </button>
+
+        <!-- Indicador Ao Vivo 24/7 -->
+        <div id="status-live-indicator" class="flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full shadow-sm" title="Sincronização 24/7 ativa">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="font-medium text-emerald-300">Ao Vivo</span>
+          <span class="font-medium text-emerald-300 text-[11px]">24/7</span>
         </div>
+
       </div>
 
     </div>
   </header>
 
-  <!-- Container Principal -->
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-5 space-y-6">
+  <!-- CONTAINER PRINCIPAL -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 mt-4 space-y-5">
 
-    <!-- Faixa Informativa Geográfica de Rio das Ostras -->
-    <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900/60 border border-slate-800/80 text-xs text-slate-400">
-      <div class="flex items-center gap-2">
-        <i data-lucide="map-pin" class="w-4 h-4 text-sky-400"></i>
-        <span><strong>Localidade Oficial:</strong> Rio das Ostras / RJ — Baixadas Litorâneas / Norte Fluminense</span>
-      </div>
-      <div class="flex items-center gap-4">
-        <span><strong>Coordenadas:</strong> -22.5269° S, -41.9453° O</span>
-        <span>•</span>
-        <span><strong>Bacia:</strong> Rios Macaé e das Ostras</span>
-        <span>•</span>
-        <span><strong>Marinha:</strong> Área Charlie / Subárea Delta</span>
-      </div>
-    </div>
-
-    <!-- SEÇÃO DE AVISOS E ALERTAS OFICIAIS PADRÃO INMET (CORES LARANJA / VERMELHO / AMARELO) -->
-    <div>
-      <div class="flex items-center justify-between mb-2.5">
-        <div class="flex items-center gap-2">
-          <i data-lucide="shield-alert" class="w-5 h-5 text-amber-400"></i>
-          <h2 class="text-base font-extrabold text-white">Quadro Oficial de Alertas Meteorológicos & Defesa Civil</h2>
+    <!-- FAIXA DA MARCA OFICIAL E IDENTIFICAÇÃO DO SISTEMA -->
+    <div class="glass-card p-3 sm:p-4 border-slate-800 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="h-10 sm:h-12 rounded-lg bg-[#283964] border border-slate-700 p-1 flex items-center justify-center shrink-0">
+          <img src="img/logo.png" alt="TEMPO em Rio das Ostras" class="h-full w-auto object-contain">
         </div>
-        <span class="text-xs text-slate-400 font-medium">Padrão Oficial INMET & CEMADEN</span>
-      </div>
-
-      <!-- Container de Alertas Renderizados Dinamicamente (Grid Compacto e Organizado) -->
-      <div id="official-alerts-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-        <!-- Injetado dinamicamente via JS com padrão INMET -->
-      </div>
-    </div>
-
-    <!-- FILTRO DE PROJEÇÃO TEMPORAL (HOJE, +24h, +48h, +72h, +96h) -->
-    <div class="glass-card p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-sky-500/30 bg-slate-900/70">
-      <div class="flex items-center gap-2">
-        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-sky-400"></i>
-        <span class="text-xs font-bold text-white uppercase tracking-wider">Escolha a Projeção de Previsão:</span>
-      </div>
-      <div class="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 sm:pb-0" id="projection-filters-container">
-        <button class="projection-btn active px-3.5 py-1.5 text-xs font-bold rounded-lg bg-sky-500 text-white shadow-md transition whitespace-nowrap" data-horizon="0">
-          Hoje (Tempo Real)
-        </button>
-        <button class="projection-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition whitespace-nowrap" data-horizon="24">
-          +24 Horas
-        </button>
-        <button class="projection-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition whitespace-nowrap" data-horizon="48">
-          +48 Horas
-        </button>
-        <button class="projection-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition whitespace-nowrap" data-horizon="72">
-          +72 Horas
-        </button>
-        <button class="projection-btn px-3.5 py-1.5 text-xs font-bold rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition whitespace-nowrap" data-horizon="96">
-          +96 Horas
-        </button>
-      </div>
-    </div>
-
-    <!-- HERO PRINCIPAL: DATA COMPLETA, CONDIÇÃO ATUAL & RESUMO DE RIO DAS OSTRAS -->
-    <div class="glass-card p-6 relative overflow-hidden">
-      <div class="absolute -right-20 -top-20 w-96 h-96 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-        
-        <!-- Temperatura, Data Completa e Condição Atual -->
         <div>
-          <!-- Tag de Data Explícita e Legível -->
-          <div class="flex flex-wrap items-center gap-2 mb-2">
-            <span class="px-3 py-1 rounded-lg bg-sky-500/20 text-sky-300 font-bold text-xs border border-sky-500/30 flex items-center gap-1.5">
-              <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-              <span id="hero-current-date">Hoje — Quinta-feira, 01 de Outubro de 2026</span>
-            </span>
-            <span class="px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 text-xs font-mono" id="hero-current-time">
-              🕒 23:55 (Horário de Brasília)
-            </span>
-          </div>
-
-          <div class="flex items-baseline gap-4 mt-1">
-            <span id="current-temp" class="text-6xl lg:text-7xl font-extrabold text-white tracking-tighter">--°C</span>
-            <div class="space-y-1">
-              <span id="current-condition-text" class="text-xl font-medium text-slate-200 block">Carregando dados oficiais...</span>
-              <div class="flex items-center gap-2 text-xs text-slate-400">
-                <span>Sensação térmica: <strong id="current-feels-like" class="text-slate-200">--°</strong></span>
-                <span>•</span>
-                <span>Mín: <strong id="today-min-temp" class="text-sky-300">--°</strong> / Máx: <strong id="today-max-temp" class="text-amber-400">--°</strong></span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Resumo Oficial INMET Rio das Ostras (Turnos do Dia) -->
-          <div id="inmet-periods-container" class="mt-4 pt-3 border-t border-slate-800/80 flex flex-wrap gap-4 text-xs text-slate-300">
-            <!-- Manhã, Tarde, Noite INMET -->
-          </div>
-        </div>
-
-        <!-- MINI MÉTRICAS FUNDAMENTAIS -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80 shrink-0">
-          
-          <!-- Precipitação -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-xs text-sky-400 font-medium mb-1">
-                <div class="flex items-center gap-1.5">
-                  <i data-lucide="cloud-rain" class="w-3.5 h-3.5"></i>
-                  <span id="hero-precip-title">Chuva Agora</span>
-                </div>
-                <span id="hero-precip-badge" class="text-[9px] px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300 font-mono">Tempo Real</span>
-              </div>
-              <div id="hero-precip-sum" class="text-lg font-bold text-white leading-tight">0.0 mm/h</div>
-              <div id="hero-precip-prob" class="text-[11px] text-slate-400 mt-0.5">Sem chuva no momento</div>
-            </div>
-            <div id="hero-precip-projection" class="text-[10px] text-amber-300 font-mono mt-1 pt-1 border-t border-slate-700/40">
-              Projeção Modelo 24h: 50.4 mm
-            </div>
-          </div>
-
-          <!-- Água Precipitável VIME -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50">
-            <div class="flex items-center gap-1.5 text-xs text-cyan-400 font-medium mb-1">
-              <i data-lucide="droplet" class="w-3.5 h-3.5"></i>
-              <span>Água Precipitável</span>
-            </div>
-            <div id="hero-pw-val" class="text-lg font-bold text-white">-- mm</div>
-            <div id="hero-pw-status" class="text-[11px] text-slate-400">VIME INMET</div>
-          </div>
-
-          <!-- Ventos & Rajadas -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50">
-            <div class="flex items-center gap-1.5 text-xs text-teal-400 font-medium mb-1">
-              <i data-lucide="wind" class="w-3.5 h-3.5"></i>
-              <span>Vento & Rajada</span>
-            </div>
-            <div id="hero-wind-speed" class="text-lg font-bold text-white">-- km/h</div>
-            <div id="hero-wind-gusts" class="text-[11px] text-rose-300">Rajadas: -- km/h</div>
-          </div>
-
-          <!-- Pressão Atmosférica -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50">
-            <div class="flex items-center gap-1.5 text-xs text-purple-400 font-medium mb-1">
-              <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
-              <span>Pressão (PNM)</span>
-            </div>
-            <div id="hero-pressure" class="text-lg font-bold text-white">-- hPa</div>
-            <div id="hero-pressure-status" class="text-[11px] text-slate-400">Normal</div>
-          </div>
-
-          <!-- Umidade Relativa -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50">
-            <div class="flex items-center gap-1.5 text-xs text-blue-400 font-medium mb-1">
-              <i data-lucide="droplets" class="w-3.5 h-3.5"></i>
-              <span>Umidade Ar</span>
-            </div>
-            <div id="hero-humidity" class="text-lg font-bold text-white">--%</div>
-            <div id="hero-dewpoint" class="text-[11px] text-slate-400">P.O. --°C</div>
-          </div>
-
-          <!-- Nível Rio Jundiá (INEA) -->
-          <div class="p-3 rounded-xl bg-slate-800/40 border border-slate-700/50 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center justify-between text-xs text-emerald-400 font-medium mb-1">
-                <div class="flex items-center gap-1.5">
-                  <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                  <span>Rio Jundiá (INEA)</span>
-                </div>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold" title="Cotas telemétricas verificadas a cada 5 minutos">⏱️ A cada 5 min</span>
-              </div>
-              <div id="hero-river-level" class="text-lg font-bold text-white">-- m</div>
-              <div id="hero-river-status" class="text-[11px] text-slate-300">Consultando telemetria...</div>
-            </div>
-            <div id="hero-river-rain" class="text-[10px] text-sky-300 font-mono mt-1 pt-1 border-t border-slate-700/40">
-              Pluviômetro: Carregando...
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- Linha do Tempo Horária com Datas Claras e Projeção de Volume -->
-      <div class="mt-6 pt-5 border-t border-slate-800/70">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
-          <div>
-            <h3 class="text-sm font-bold text-slate-200 flex items-center gap-2">
-              <i data-lucide="clock" class="w-4 h-4 text-sky-400"></i>
-              Linha do Tempo Horária — Previsão para as Próximas 24 Horas (a partir de Agora)
-            </h3>
-            <p class="text-[11px] text-slate-400">Projeção hora a hora do modelo numérico WRF/ECMWF iniciando no horário atual e avançando 24h</p>
-          </div>
-          <div class="flex items-center gap-2.5 flex-wrap">
-            <div class="px-3 py-1.5 rounded-lg bg-sky-500/20 text-sky-300 border border-sky-500/40 text-xs font-bold flex items-center gap-1.5 shadow-sm">
-              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-sky-400"></i>
-              <span>Projeção Modelo (Próximas 24h): <strong id="timeline-accum-volume" class="text-white text-sm">0.0 mm</strong></span>
-            </div>
-            <span class="text-[11px] text-slate-500 hidden md:inline">Deslize horizontalmente →</span>
-          </div>
-        </div>
-
-        <!-- Banner Explicativo de Transparência Meteorológica -->
-        <div class="mb-3 px-3.5 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-sm">
-          <div class="flex items-center gap-2">
-            <i data-lucide="info" class="w-4 h-4 text-sky-400 shrink-0"></i>
-            <span><strong>Como são calculados estes dados?</strong> Os cards abaixo mostram a <em>previsão futura hora a hora</em> do modelo numérico para Rio das Ostras. Para a chuva física já medida em solo, consulte a telemetria oficial do INEA (Estação Jundiá: <strong>0.4 mm na última 1h</strong> / <strong>4.2 mm em 24h</strong>).</span>
-          </div>
-          <a href="#hub-orgaos" class="text-sky-400 hover:text-sky-300 underline shrink-0 whitespace-nowrap text-[11px] font-semibold flex items-center gap-1">
-            Fontes Oficiais <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
-        </div>
-
-        <div id="hourly-forecast-container" class="hourly-scroll">
-          <!-- Cards horários preenchidos dinamicamente -->
-        </div>
-      </div>
-
-    </div>
-
-    <!-- SEÇÃO DESTAQUE: PAINEL VIME INMET — MODELOS NUMÉRICOS (SUDESTE / RIO DAS OSTRAS) -->
-    <div class="glass-card p-6 border-teal-500/30 bg-slate-900/40 relative overflow-hidden">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5 border-b border-slate-800/80 pb-4">
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 rounded-md bg-teal-500/20 text-teal-300 font-bold text-xs border border-teal-500/30">VIME INMET SE</span>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              Visualizador de Modelos Numéricos (VIME) — Rio das Ostras
-            </h2>
-          </div>
-          <p class="text-xs text-slate-400 mt-1">
-            Precipitação, Água Precipitável, Ventos, Rajadas, Pressão, Temperatura e Umidade
-          </p>
-        </div>
-        <a href="https://vime.inmet.gov.br/SE" target="_blank" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-semibold shadow-lg shadow-teal-500/20 transition self-start md:self-auto">
-          <span>Abrir Portal VIME/SE</span>
-          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-        </a>
-      </div>
-
-      <!-- Grade dos 8 Parâmetros do VIME -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        
-        <!-- 1. Precipitação Modelada -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Precipitação (24h)</span>
-            <i data-lucide="cloud-rain" class="w-4 h-4 text-sky-400"></i>
-          </div>
-          <div id="vime-precip" class="text-2xl font-extrabold text-white">0.0 mm</div>
-          <p id="vime-precip-desc" class="text-[11px] text-slate-400 mt-1">Volume acumulado modelado</p>
-        </div>
-
-        <!-- 2. Água Precipitável -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Água Precipitável</span>
-            <i data-lucide="droplet" class="w-4 h-4 text-cyan-400"></i>
-          </div>
-          <div id="vime-pw" class="text-2xl font-extrabold text-cyan-300">-- mm</div>
-          <p id="vime-pw-desc" class="text-[11px] text-slate-400 mt-1">Vapor condensável na coluna</p>
-        </div>
-
-        <!-- 3. Ventos a 10m -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Vento a 10m</span>
-            <i data-lucide="wind" class="w-4 h-4 text-teal-400"></i>
-          </div>
-          <div id="vime-wind" class="text-2xl font-extrabold text-teal-300">-- km/h</div>
-          <p id="vime-wind-knots" class="text-[11px] text-slate-400 mt-1">-- nós (knots)</p>
-        </div>
-
-        <!-- 4. Rajadas de Vento -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Rajadas de Vento</span>
-            <i data-lucide="zap" class="w-4 h-4 text-rose-400"></i>
-          </div>
-          <div id="vime-gusts" class="text-2xl font-extrabold text-rose-300">-- km/h</div>
-          <p id="vime-gusts-desc" class="text-[11px] text-slate-400 mt-1">Picos máximos previstos</p>
-        </div>
-
-        <!-- 5. Pressão ao Nível do Mar -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Pressão ao Nível do Mar</span>
-            <i data-lucide="gauge" class="w-4 h-4 text-purple-400"></i>
-          </div>
-          <div id="vime-pressure" class="text-2xl font-extrabold text-purple-300">-- hPa</div>
-          <p id="vime-pressure-desc" class="text-[11px] text-slate-400 mt-1">Superfície oceânica/litoral</p>
-        </div>
-
-        <!-- 6. Temperatura a 2m -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Temperatura a 2m</span>
-            <i data-lucide="thermometer" class="w-4 h-4 text-orange-400"></i>
-          </div>
-          <div id="vime-temp" class="text-2xl font-extrabold text-orange-300">--°C</div>
-          <p id="vime-temp-feels" class="text-[11px] text-slate-400 mt-1">Sensação: --°C</p>
-        </div>
-
-        <!-- 7. Umidade Relativa a 2m -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Umidade Relativa</span>
-            <i data-lucide="droplets" class="w-4 h-4 text-blue-400"></i>
-          </div>
-          <div id="vime-humidity" class="text-2xl font-extrabold text-blue-300">--%</div>
-          <p id="vime-dew-desc" class="text-[11px] text-slate-400 mt-1">Ponto de Orvalho: --°C</p>
-        </div>
-
-        <!-- 8. Nebulosidade & Cobertura -->
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60">
-          <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Cobertura de Nuvens</span>
-            <i data-lucide="cloud" class="w-4 h-4 text-slate-300"></i>
-          </div>
-          <div id="vime-clouds" class="text-2xl font-extrabold text-slate-200">--%</div>
-          <p id="vime-clouds-desc" class="text-[11px] text-slate-400 mt-1">Densidade da camada</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- SEÇÃO TELEMETRIA AO VIVO COM COTAS OFICIAIS DO INEA (RIO JUNDIÁ & MACAÉ) -->
-    <div class="glass-card p-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-800">
-        <div>
-          <div class="flex items-center gap-2 flex-wrap">
-            <span class="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-bold text-xs border border-emerald-500/30 flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              INEA Alerta de Cheias • Atualização de 5 em 5 min
-            </span>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              Monitoramento Hidrológico & Cotas de Transbordamento (Rio Jundiá e Bacia)
-            </h2>
-          </div>
-          <p class="text-xs text-slate-400 mt-1">
-            Telemetria oficial em tempo real atualizada a cada 5 minutos com Nível Atual, Cota de Atenção, Cota de Alerta e Cota de Transbordamento (INEA)
-          </p>
-        </div>
-        <div class="flex items-center gap-2 flex-wrap">
-          <button id="btn-refresh-inea" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold shadow-md transition" title="Checar cotas e telemetria INEA agora">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-emerald-400"></i>
-            <span>Verificar Cotas Agora</span>
-          </button>
-          <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md transition self-start sm:self-auto">
-            <span>Abrir Portal INEA</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </a>
-        </div>
-      </div>
-
-      <!-- Tabela com Cotas Explícitas -->
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs border-collapse">
-          <thead>
-            <tr class="bg-slate-900/90 text-slate-300 border-b border-slate-800">
-              <th class="p-3 font-semibold">Município / Rio</th>
-              <th class="p-3 font-semibold">Estação</th>
-              <th class="p-3 font-semibold">Data / Hora Leitura</th>
-              <th class="p-3 font-semibold text-center">Status</th>
-              <th class="p-3 font-semibold text-center text-sky-400">Nível Atual</th>
-              <th class="p-3 font-semibold text-center text-amber-400">Cota Atenção</th>
-              <th class="p-3 font-semibold text-center text-orange-400">Cota Alerta</th>
-              <th class="p-3 font-semibold text-center text-rose-400">Cota Transborda</th>
-              <th class="p-3 font-semibold text-center">Chuva (1h / 24h)</th>
-              <th class="p-3 font-semibold text-center">Nível da Calha</th>
-            </tr>
-          </thead>
-          <tbody id="inea-stations-tbody" class="divide-y divide-slate-800/60 text-slate-300">
-            <tr>
-              <td colspan="10" class="p-4 text-center text-slate-400">Consultando réguas telemétricas e cotas do INEA...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- SEÇÃO DOS 5 PILARES METEOROLÓGICOS DETALHADOS -->
-    <div>
-      <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <i data-lucide="bar-chart-2" class="w-5 h-5 text-sky-400"></i>
-            Diagnóstico Técnico dos 5 Pilares Meteorológicos
+          <h2 class="text-base sm:text-lg font-bold text-white tracking-tight flex items-center gap-2">
+            <span>Sistema Municipal de Meteorologia & Defesa Civil</span>
           </h2>
-          <p class="text-xs text-slate-400">Análise sinótica e física detalhada para Rio das Ostras</p>
+          <p class="text-xs text-slate-400">Previsões Oficiais • Alertas INMET • Bacia do Rio Jundiá (INEA) • Marinha CHM</p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-        <!-- 1. PREVISÃO DE PRECIPITAÇÃO -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-sky-500/15 border border-sky-500/30 flex items-center justify-center text-sky-400">
-                <i data-lucide="cloud-rain" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Previsão de Precipitação</h3>
-                <p class="text-xs text-slate-400">Acumulado, Probabilidade & Bacia</p>
-              </div>
-            </div>
-            <span id="precip-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">
-              Sem chuva
-            </span>
-          </div>
-
-          <div class="my-4">
-            <div class="flex items-baseline gap-2">
-              <span id="precip-volume" class="text-4xl font-extrabold text-white">0.0</span>
-              <span class="text-base text-slate-400 font-medium">mm/h nesta hora</span>
-            </div>
-            <div class="mt-3 space-y-1.5 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800">
-              <div class="text-xs flex items-center justify-between text-slate-300">
-                <span>Volume Acumulado do Dia:</span>
-                <strong id="precip-today-sum" class="text-sky-300 font-bold text-sm">0.0 mm</strong>
-              </div>
-              <div class="text-xs flex items-center justify-between text-slate-400">
-                <span>Probabilidade de Chuva:</span>
-                <strong id="precip-prob" class="text-slate-200">0%</strong>
-              </div>
-              <div class="text-xs flex items-center justify-between text-cyan-300">
-                <span>Água Precipitável (VIME):</span>
-                <strong id="precip-pw-ref">-- mm</strong>
-              </div>
-            </div>
-          </div>
-
-          <div class="space-y-1.5 pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400">
-              <span>Status do Rio Jundiá (INEA):</span>
-              <span id="precip-river-status" class="font-semibold text-emerald-400">VIGILÂNCIA</span>
-            </div>
-            <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-              <div id="precip-bar" class="bg-gradient-to-r from-sky-400 to-blue-600 h-2 rounded-full transition-all duration-500" style="width: 10%"></div>
-            </div>
-            <p id="precip-advice" class="text-[11px] text-slate-400 italic">Condições hidrológicas normais sem indicativo de enchente no momento.</p>
-          </div>
+      <!-- Plantão de Emergência Rápido -->
+      <div class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-xl">
+        <i data-lucide="phone-call" class="w-4 h-4 text-amber-400 animate-bounce"></i>
+        <div class="text-xs">
+          <span class="text-slate-400">Plantão de Emergência:</span>
+          <a href="tel:199" class="font-extrabold text-amber-400 hover:text-amber-300 ml-1 text-sm">199</a>
+          <span class="text-slate-500 mx-1">|</span>
+          <span class="text-slate-400">Bombeiros:</span>
+          <a href="tel:193" class="font-bold text-red-400 hover:text-red-300 ml-1">193</a>
         </div>
-
-        <!-- 2. PREVISÃO DE VENTOS & MAR -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-teal-500/15 border border-teal-500/30 flex items-center justify-center text-teal-400">
-                <i data-lucide="wind" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Previsão de Ventos & Mar</h3>
-                <p class="text-xs text-slate-400">Velocidade, Rajadas & Orla Marítima</p>
-              </div>
-            </div>
-            <span id="wind-scale-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20">
-              Brisa Leve
-            </span>
-          </div>
-
-          <div class="my-4 flex items-center justify-between gap-4">
-            <div>
-              <div class="flex items-baseline gap-2">
-                <span id="wind-speed" class="text-4xl font-extrabold text-white">--</span>
-                <span class="text-base text-slate-400 font-medium">km/h</span>
-              </div>
-              <div class="mt-2 text-sm text-slate-300">
-                Rajadas até: <strong id="wind-gusts" class="text-rose-400">-- km/h</strong>
-              </div>
-              <div class="mt-1 text-xs text-slate-400">
-                Direção: <strong id="wind-direction-cardinal" class="text-slate-200">Nordeste (NE)</strong>
-              </div>
-            </div>
-
-            <!-- Bússola Giratória Animada -->
-            <div class="compass-dial shrink-0">
-              <span class="compass-cardinal compass-n">N</span>
-              <span class="compass-cardinal compass-s">S</span>
-              <span class="compass-cardinal compass-e">L</span>
-              <span class="compass-cardinal compass-w">O</span>
-              <div class="compass-center"></div>
-              <div id="compass-needle" class="compass-needle" style="transform: rotate(45deg);">
-                <div class="needle-north"></div>
-                <div class="needle-south"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Marinha (Área Delta - Cabo Frio a Campos):</span>
-              <span id="wind-marine-status" class="font-semibold text-teal-300">Normal</span>
-            </div>
-            <p id="beaufort-desc" class="text-[11px] text-slate-400 leading-relaxed">
-              Vento moderado na Praia de Costazul e Tartaruga. Condições regulares para banho e pesca esportiva.
-            </p>
-          </div>
-        </div>
-
-        <!-- 3. PREVISÃO DE PRESSÃO & CARTAS SINÓTICAS (CHM) -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                <i data-lucide="gauge" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Pressão Atmosférica</h3>
-                <p class="text-xs text-slate-400">Barômetro & Cartas Sinóticas CHM</p>
-              </div>
-            </div>
-            <a href="https://www.marinha.mil.br/chm/cartassinoticas" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 hover:bg-purple-500/20 transition flex items-center gap-1">
-              Cartas CHM <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
-          </div>
-
-          <div class="my-4">
-            <div class="flex items-baseline gap-2">
-              <span id="pressure-value" class="text-4xl font-extrabold text-white">1015</span>
-              <span class="text-base text-slate-400 font-medium">hPa</span>
-              <span id="pressure-mmhg" class="text-xs text-slate-500">(761 mmHg)</span>
-            </div>
-            <div class="mt-2 text-sm text-slate-300 flex items-center gap-1.5">
-              <i data-lucide="trending-up" id="pressure-trend-icon" class="w-4 h-4 text-emerald-400"></i>
-              <span id="pressure-trend-text">Tendência: Estável</span>
-            </div>
-
-            <!-- Barômetro Visual -->
-            <div class="mt-4">
-              <div class="flex justify-between text-[10px] text-slate-400 font-medium mb-1">
-                <span>980 (Tempestade/Ciclone)</span>
-                <span>1013 (Normal)</span>
-                <span>1035 (Anticiclone)</span>
-              </div>
-              <div class="pressure-bar-container">
-                <div id="pressure-indicator" class="pressure-indicator" style="left: 55%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Diagnóstico Sinótico Costeiro:</span>
-              <span id="pressure-status-name" class="font-semibold text-purple-300">Anticiclone Subtropical</span>
-            </div>
-            <p id="pressure-desc" class="text-[11px] text-slate-400 leading-relaxed">
-              Atmosfera em equilíbrio relativo sobre a costa leste do estado do Rio de Janeiro.
-            </p>
-          </div>
-        </div>
-
-        <!-- 4. PREVISÃO DE UMIDADE DO AR & DEFESA CIVIL (REDEC 1) -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                <i data-lucide="droplets" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Previsão de Umidade</h3>
-                <p class="text-xs text-slate-400">Higrometria & Ponto de Orvalho</p>
-              </div>
-            </div>
-            <span id="humidity-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              Faixa Ideal
-            </span>
-          </div>
-
-          <div class="my-4">
-            <div class="flex items-baseline gap-2">
-              <span id="humidity-value" class="text-4xl font-extrabold text-white">--</span>
-              <span class="text-base text-slate-400 font-medium">%</span>
-            </div>
-            <div class="mt-2 text-sm text-slate-300">
-              Ponto de Orvalho: <strong id="dew-point-value" class="text-cyan-300">--°C</strong>
-            </div>
-            <div class="mt-1 text-xs text-slate-400">
-              Sensação Litorânea: <strong id="humidity-comfort" class="text-slate-200">Agradável</strong>
-            </div>
-
-            <div class="mt-3">
-              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                <div id="humidity-bar" class="bg-gradient-to-r from-amber-400 via-emerald-400 to-blue-500 h-2 rounded-full transition-all duration-500" style="width: 65%"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Orientação Defesa Civil (REDEC 1):</span>
-              <span id="humidity-status-title" class="font-semibold text-emerald-400">Sem Restrições</span>
-            </div>
-            <p id="humidity-desc" class="text-[11px] text-slate-400 leading-relaxed">
-              Índice adequado para as vias respiratórias e atividades físicas ao ar livre.
-            </p>
-          </div>
-        </div>
-
-        <!-- 5. PREVISÃO DE TEMPERATURA -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
-                <i data-lucide="thermometer" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Previsão de Temperatura</h3>
-                <p class="text-xs text-slate-400">Curva Térmica & Turnos INMET</p>
-              </div>
-            </div>
-            <span id="temp-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">
-              Ameno
-            </span>
-          </div>
-
-          <div class="my-4">
-            <div class="flex items-baseline gap-2">
-              <span id="temp-current-val" class="text-4xl font-extrabold text-white">--°C</span>
-              <span class="text-base text-slate-400 font-medium">atual</span>
-            </div>
-            <div class="mt-2 text-sm text-slate-300">
-              Sensação térmica: <strong id="temp-feels-val" class="text-amber-300">--°C</strong>
-            </div>
-            <div class="mt-1 text-xs text-slate-400 flex items-center gap-3">
-              <span>Mínima: <strong id="temp-min-val" class="text-sky-300">--°C</strong></span>
-              <span>•</span>
-              <span>Máxima: <strong id="temp-max-val" class="text-orange-400">--°C</strong></span>
-            </div>
-
-            <div class="mt-3 flex items-center gap-2 text-xs text-slate-400">
-              <span>Amplitude:</span>
-              <span id="temp-range-val" class="font-semibold text-slate-200">--°C</span>
-              <div class="flex-1 bg-slate-800 rounded-full h-2 overflow-hidden">
-                <div class="bg-gradient-to-r from-sky-400 via-amber-400 to-rose-500 h-2 rounded-full w-full"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Classificação Térmica:</span>
-              <span id="temp-comfort-status" class="font-semibold text-amber-400">Confortável</span>
-            </div>
-            <p id="temp-comfort-desc" class="text-[11px] text-slate-400 leading-relaxed">
-              Clima típico e agradável para a orla de Rio das Ostras.
-            </p>
-          </div>
-        </div>
-
-        <!-- 6. ÍNDICE UV, RESTINGA & QUEIMADAS (INPE) -->
-        <div class="glass-card p-5 flex flex-col justify-between">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                <i data-lucide="sun" class="w-5 h-5"></i>
-              </div>
-              <div>
-                <h3 class="font-bold text-white text-base">Radiação Solar & Queimadas</h3>
-                <p class="text-xs text-slate-400">Índice UV & Risco de Fogo INPE</p>
-              </div>
-            </div>
-            <a href="https://data.inpe.br/queimadas/situacao_atual/" target="_blank" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 transition flex items-center gap-1">
-              INPE Queimadas <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
-          </div>
-
-          <div class="my-4">
-            <div class="flex items-baseline gap-2">
-              <span id="uv-max-value" class="text-4xl font-extrabold text-white">--</span>
-              <span class="text-base text-slate-400 font-medium">máx UV hoje</span>
-            </div>
-            <div class="mt-2 text-sm text-slate-300">
-              Nascer: <strong id="sunrise-time" class="text-amber-300">05:30</strong> • Pôr do Sol: <strong id="sunset-time" class="text-orange-300">17:48</strong>
-            </div>
-            <div class="mt-1 text-xs text-slate-400">
-              Risco Fogo (Restinga de Jurubatiba): <strong class="text-emerald-400">Baixo / Moderado</strong>
-            </div>
-
-            <div class="mt-3">
-              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
-                <div id="uv-bar" class="bg-gradient-to-r from-emerald-400 via-amber-400 via-rose-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 35%"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800">
-            <div class="flex justify-between text-xs text-slate-400 mb-1">
-              <span>Proteção na Orla:</span>
-              <span id="uv-protection-level" class="font-semibold text-amber-300">FPS 30+ Recomendado</span>
-            </div>
-            <p class="text-[11px] text-slate-400 leading-relaxed">
-              Use óculos escuros e proteção solar na faixa de areia entre 10h e 16h.
-            </p>
-          </div>
-        </div>
-
       </div>
     </div>
 
-    <!-- SEÇÃO DE GRÁFICOS INTERATIVOS -->
-    <div class="glass-card p-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <i data-lucide="line-chart" class="w-5 h-5 text-sky-400"></i>
-            Gráficos Meteorológicos de Rio das Ostras (24 Horas)
-          </h2>
-          <p class="text-xs text-slate-400">Evolução temporal das variáveis modeladas</p>
-        </div>
+    <!-- NAVEGAÇÃO PRINCIPAL EM ABAS (ESTRUTURA COMPLETA DOS BOLETINS) -->
+    <nav class="flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-slate-900/90 border border-slate-800 overflow-x-auto text-xs sm:text-sm font-semibold scrollbar-none shadow-md">
+      <button class="nav-tab-btn active px-3.5 py-2 rounded-xl flex items-center gap-2 transition whitespace-nowrap bg-sky-500 text-slate-950 font-bold shadow-md shadow-sky-500/20" data-tab="tab-populacao">
+        <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+        <span>Informativo à População</span>
+      </button>
 
-        <!-- Abas Seletoras de Métrica -->
-        <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800 overflow-x-auto max-w-full">
-          <button class="chart-tab-btn active px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-500 text-white transition whitespace-nowrap" data-metric="temperature">
-            Temperatura
-          </button>
-          <button class="chart-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="precipitation">
-            Precipitação & Água Precipitável
-          </button>
-          <button class="chart-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="wind">
-            Ventos & Rajadas
-          </button>
-          <button class="chart-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="pressure">
-            Pressão Barométrica
-          </button>
-          <button class="chart-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="humidity">
-            Umidade do Ar
-          </button>
+      <button class="nav-tab-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800" data-tab="tab-tecnico">
+        <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+        <span>Boletim Técnico Operacional</span>
+      </button>
+
+      <button class="nav-tab-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800" data-tab="tab-graficos">
+        <i data-lucide="trending-up" class="w-4 h-4 text-purple-400"></i>
+        <span>Gráficos de Tendência (5 Variáveis)</span>
+      </button>
+
+      <button class="nav-tab-btn px-3.5 py-2 rounded-xl flex items-center gap-2 transition whitespace-nowrap text-slate-300 hover:text-white hover:bg-slate-800" data-tab="tab-aovivo">
+        <i data-lucide="radar" class="w-4 h-4 text-amber-400"></i>
+        <span>Radar & Telemetria ao Vivo</span>
+      </button>
+    </nav>
+
+    <!-- ========================================================================= -->
+    <!-- ABA 1: INFORMATIVO METEOROLÓGICO À POPULAÇÃO (MODELO PREVISAO_POPULACAO)  -->
+    <!-- ========================================================================= -->
+    <section id="tab-populacao" class="tab-pane space-y-4">
+      
+      <!-- Masthead do Informativo à População -->
+      <div class="p-3 sm:p-4 rounded-xl bg-slate-900/80 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+        <div>
+          <span class="text-[10px] uppercase font-bold text-sky-400 tracking-wider">COMUNICAÇÃO SOCIAL E ATENDIMENTO À COMUNIDADE</span>
+          <h3 class="text-sm sm:text-base font-extrabold text-white">INFORMATIVO METEOROLÓGICO À POPULAÇÃO</h3>
+          <p class="text-slate-400 italic text-[11px]">Previsão Operacional Simplificada — Rio das Ostras / RJ</p>
+        </div>
+        <div class="flex items-center gap-3 text-slate-400 text-[11px] sm:text-right">
+          <div><strong>Localidade:</strong> Rio das Ostras - RJ</div>
+          <span>•</span>
+          <div><strong>Período:</strong> 03/10 a 04/10/2026</div>
+          <span>•</span>
+          <div><strong>Emissão:</strong> 02/10 às 17h</div>
         </div>
       </div>
 
-      <div class="w-full h-72 sm:h-80 relative">
-        <canvas id="meteorology-chart"></canvas>
+      <!-- BOX DE ALERTA GERAL (INFORME DE ALERTA OFICIAL) -->
+      <div class="rounded-xl border border-red-500/50 bg-red-950/20 p-4 shadow-lg shadow-red-950/20">
+        <div class="flex items-start gap-3">
+          <div class="px-2.5 py-1 rounded bg-red-600 text-white font-extrabold text-[11px] tracking-wider uppercase shrink-0 mt-0.5">
+            INFORME DE ALERTA
+          </div>
+          <div class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+            <strong class="text-white">Alertas Oficiais em Vigor:</strong> 
+            Atenção máxima para o <strong class="text-red-400">SÁBADO (03/10)</strong> com atuação de frente semi-estacionária, chuva volumosa (<strong class="text-white">45 a 70 mm previstos, nominal 55 mm</strong>), mar agitado (<strong class="text-white">até 2,4 m sob Avisos nº 727 e 729 da Marinha</strong>) e <strong class="text-amber-400">ALERTA CEMADEN para a bacia do Rio Jundiá</strong> (nível atual 1,37 m e subindo para cota de atenção 1,60 m / transbordo 2,84 m). No <strong class="text-emerald-400">DOMINGO (04/10)</strong>, chuviscos residuais pela manhã (3,5 mm) e retorno do sol à tarde com recuperação das temperaturas até 27°C. Volume total acumulado previsto de <strong class="text-white">50 a 82 mm</strong>.
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- SEÇÃO DUPLA: RADAR METEOROLÓGICO AO VIVO + PREVISÃO ESTENDIDA 5 DIAS -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- CARDS DIÁRIOS COM OS 6 PILARES OFICIAIS -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-      <!-- RADAR METEOROLÓGICO CENTRADO EM RIO DAS OSTRAS (7 Colunas) -->
-      <div class="lg:col-span-7 glass-card p-5 flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-3">
+        <!-- CARD SÁBADO (03/10/2026) -->
+        <div class="glass-card p-4 sm:p-5 border-slate-800 hover:border-red-500/40 transition space-y-3.5">
+          <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
             <div>
-              <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <i data-lucide="radar" class="w-5 h-5 text-sky-400 animate-spin" style="animation-duration: 8s;"></i>
-                Radar de Precipitação em Rio das Ostras
-              </h2>
-              <p class="text-xs text-slate-400">Massas de chuva ao vivo (RainViewer + Radar INEA Macaé)</p>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Previsão Operacional</span>
+              <h4 class="text-sm sm:text-base font-extrabold text-white">SÁBADO — 03/10/2026</h4>
+              <p class="text-xs text-slate-400">Frente Semi-Estacionária, Chuva Volumosa e Risco de Cheias no Rio Jundiá</p>
             </div>
+            <span class="px-2.5 py-1 rounded bg-red-500/20 text-red-300 font-extrabold text-[11px] border border-red-500/40 shrink-0">
+              ALERTA CEMADEN / CHEIAS
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Neste sábado, o tempo segue totalmente fechado, frio e úmido sob atuação de uma frente semi-estacionária combinada com fluxo marítimo de umidade. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo encharcado e risco elevado de cheias (acumulados de <strong>45 a 70 mm, nominal 55 mm</strong>). Temperaturas variam entre mínima de <strong>19°C e máxima não passando de 21°C</strong> (mínima amplitude térmica). Na região rural, oscilam entre 17°C e 20°C. Umidade relativa entre 90% e 98% (ar saturado). Rajadas de até <strong>35-38 km/h</strong> na orla.
+          </p>
+
+          <!-- OS 6 PILARES OFICIAIS DO INFORMATIVO -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2">
             
-            <div id="radar-time-label" class="text-xs font-semibold text-slate-300 bg-slate-900/90 border border-slate-800 px-3 py-1 rounded-lg">
-              Carregando radar...
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="cloud-rain" class="w-4 h-4 text-sky-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">CÉU</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">Chuvoso e frio</span>
+              </div>
             </div>
-          </div>
 
-          <div class="relative rounded-xl overflow-hidden border border-slate-800 shadow-inner">
-            <div id="radar-map"></div>
-            <div class="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-900/60 z-10">
-              <div id="radar-progress" class="h-full bg-sky-500 transition-all duration-300" style="width: 100%"></div>
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="thermometer" class="w-4 h-4 text-sky-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">TEMPERATURA</span>
+                <span class="text-xs font-extrabold text-sky-400 truncate block">19° a 21°C</span>
+              </div>
             </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="droplets" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">UMIDADE</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">90% a 98%</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="wind" class="w-4 h-4 text-purple-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">VENTO & RAJADAS</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">Rajadas até 38 km/h</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="cloud-rain" class="w-4 h-4 text-blue-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">CHUVA</span>
+                <span class="text-xs font-extrabold text-blue-400 truncate block">Volumosa (45-70 mm)</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="waves" class="w-4 h-4 text-amber-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">MAR E PRAIA</span>
+                <span class="text-xs font-bold text-amber-400 truncate block">Agitado (2,0-2,4 m)</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <button id="radar-prev-btn" class="p-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Quadro anterior">
-              <i data-lucide="chevron-left" class="w-4 h-4"></i>
-            </button>
-            <button id="radar-play-btn" class="p-2 px-3 rounded-lg bg-sky-500 hover:bg-sky-400 text-white font-semibold flex items-center gap-1.5 transition">
-              <i data-lucide="play" class="w-4 h-4"></i>
-              <span class="text-xs">Animar Chuva</span>
-            </button>
-            <button id="radar-next-btn" class="p-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700 transition" title="Próximo quadro">
-              <i data-lucide="chevron-right" class="w-4 h-4"></i>
-            </button>
+        <!-- CARD DOMINGO (04/10/2026) -->
+        <div class="glass-card p-4 sm:p-5 border-slate-800 hover:border-emerald-500/40 transition space-y-3.5">
+          <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+            <div>
+              <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Previsão Operacional</span>
+              <h4 class="text-sm sm:text-base font-extrabold text-white">DOMINGO — 04/10/2026</h4>
+              <p class="text-xs text-slate-400">Instabilidade Residual Pela Manhã e Retorno do Sol com Calor à Tarde</p>
+            </div>
+            <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-300 font-extrabold text-[11px] border border-emerald-500/40 shrink-0">
+              INSTABILIDADE RESIDUAL
+            </span>
           </div>
 
-          <div class="flex items-center gap-2">
-            <a href="https://radartool.inea.rj.gov.br/radar-tool/" target="_blank" class="text-[11px] text-teal-400 hover:underline flex items-center gap-1">
-              <i data-lucide="external-link" class="w-3 h-3"></i> Radar INEA Tool
-            </a>
-            <span class="text-slate-600">•</span>
-            <a href="https://www.cptec.inpe.br/dsat/" target="_blank" class="text-[11px] text-sky-400 hover:underline flex items-center gap-1">
-              <i data-lucide="external-link" class="w-3 h-3"></i> CPTEC DSAT Satélite
-            </a>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Neste domingo, o sol volta a aparecer entre nuvens a partir do fim da manhã com gradual estabilização atmosférica e temperaturas em franca recuperação. Chuva fraca residual na madrugada e início da manhã, cessando gradativamente à tarde (acumulados de <strong>5 a 12 mm, nominal 7,5 mm</strong>). Temperaturas variam entre mínima de <strong>19°C e máxima de 27°C</strong> (retorno do calor à tarde). Na região rural, oscilam entre 18°C e 25°C. Umidade relativa de 65% a 96%. Rajadas de <strong>38 a 42 km/h</strong> de Nordeste/Norte.
+          </p>
+
+          <!-- OS 6 PILARES OFICIAIS DO INFORMATIVO -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2">
+            
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="cloud-sun" class="w-4 h-4 text-amber-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">CÉU</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">Sol entre nuvens</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="thermometer" class="w-4 h-4 text-amber-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">TEMPERATURA</span>
+                <span class="text-xs font-extrabold text-amber-400 truncate block">19° a 27°C</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="droplets" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">UMIDADE</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">65% a 96%</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="wind" class="w-4 h-4 text-purple-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">VENTO & RAJADAS</span>
+                <span class="text-xs font-bold text-slate-100 truncate block">Rajadas até 42 km/h</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="cloud-drizzle" class="w-4 h-4 text-blue-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">CHUVA</span>
+                <span class="text-xs font-bold text-blue-400 truncate block">Fraca (5-12 mm)</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center gap-2.5">
+              <i data-lucide="waves" class="w-4 h-4 text-teal-400 shrink-0"></i>
+              <div class="min-w-0">
+                <span class="text-[9px] uppercase font-bold text-slate-400 block">MAR E PRAIA</span>
+                <span class="text-xs font-bold text-teal-400 truncate block">Moderado (1,4-1,7 m)</span>
+              </div>
+            </div>
+
           </div>
+        </div>
+
+      </div>
+
+      <!-- SEÇÃO DE ORIENTAÇÕES OFICIAIS DA DEFESA CIVIL À POPULAÇÃO -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-3.5">
+        <div class="flex items-center gap-2 border-b border-slate-800 pb-2.5">
+          <i data-lucide="shield-check" class="w-5 h-5 text-sky-400"></i>
+          <h3 class="text-sm sm:text-base font-extrabold text-white">ORIENTAÇÕES DA DEFESA CIVIL À POPULAÇÃO</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-amber-500/30 space-y-1.5">
+            <div class="flex items-center gap-2 text-amber-400 font-bold">
+              <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+              <span>Alagamentos e Subida do Rio Jundiá (Sábado)</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+              Com nível telemétrico em elevação e previsão de mais 55 mm de chuva, moradores do <strong>Âncora, Cláudio Ribeiro e Cidade Praiana</strong> devem levantar móveis e acionar imediatamente a Defesa Civil em caso de inundação.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-sky-500/30 space-y-1.5">
+            <div class="flex items-center gap-2 text-sky-400 font-bold">
+              <i data-lucide="waves" class="w-4 h-4"></i>
+              <span>Segurança na Orla e Mar (Sábado e Domingo)</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+              Respeite rigorosamente o <strong>bandeiramento vermelho</strong> nos postos de salvamento. Pescadores e praticantes de esportes marítimos devem evitar navegar devido a ondas de até 2,4 m e rajadas de vento na orla.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-blue-500/30 space-y-1.5">
+            <div class="flex items-center gap-2 text-blue-400 font-bold">
+              <i data-lucide="thermometer-snowflake" class="w-4 h-4"></i>
+              <span>Frio Úmido e Sensação Térmica Baixa (Sábado)</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+              Máximas de apenas 21°C com chuva contínua e vento úmido exigem proteção térmica e agasalho adequado para crianças e idosos.
+            </p>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-slate-900/80 border border-purple-500/30 space-y-1.5">
+            <div class="flex items-center gap-2 text-purple-400 font-bold">
+              <i data-lucide="wind" class="w-4 h-4"></i>
+              <span>Retorno do Sol e Vento Nordeste (Domingo)</span>
+            </div>
+            <p class="text-slate-300 leading-relaxed">
+              Atenção a rajadas de até 42 km/h na orla marítima durante a tarde; evite estacionar veículos sob árvores e estruturas frágeis.
+            </p>
+          </div>
+
         </div>
       </div>
 
-      <!-- PREVISÃO ESTENDIDA DE 5 DIAS (5 Colunas) -->
-      <div class="lg:col-span-5 glass-card p-5">
-        <div class="flex items-center justify-between mb-4">
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- ABA 2: BOLETIM METEOROLÓGICO OPERACIONAL (MODELO BOLETIM.QMD / PLANCON)  -->
+    <!-- ========================================================================= -->
+    <section id="tab-tecnico" class="tab-pane hidden space-y-5">
+      
+      <!-- Masthead do Boletim Operacional -->
+      <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
           <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-              <i data-lucide="calendar" class="w-5 h-5 text-sky-400"></i>
-              Previsão de 5 Dias — Rio das Ostras
-            </h2>
-            <p class="text-xs text-slate-400">Janela sinótica de alta precisão com datas explícitas</p>
+            <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">DEFESA CIVIL MUNICIPAL • SETOR DE MONITORAMENTO 24H</span>
+            <h3 class="text-base sm:text-lg font-black text-white tracking-widest font-masthead">B O L E T I M   M E T E O R O L Ó G I C O   O P E R A C I O N A L</h3>
           </div>
-          <a href="https://meteograma.inmet.gov.br/3304524/dinamico" target="_blank" class="text-xs text-sky-400 hover:underline flex items-center gap-1">
-            <span>Meteograma INMET</span>
-            <i data-lucide="external-link" class="w-3 h-3"></i>
-          </a>
+          <div class="text-xs text-slate-400 sm:text-right">
+            <div><strong>Validade:</strong> 03/10/2026 a 04/10/2026</div>
+            <div><strong>Emissão Oficial:</strong> 02/10/2026 às 17:00h</div>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400">
+          <strong>Fontes Integradas:</strong> CPTEC/INPE (WRF), INMET (COSMO 7x7 km), ECMWF (Windy), INEA (Alerta de Cheias RH-VIII) e Marinha do Brasil (CHM).
+        </p>
+      </div>
+
+      <!-- 1. PANORAMA SINÓTICO GERAL -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-3">
+        <h4 class="text-sm font-extrabold text-white flex items-center gap-2 border-b border-slate-800 pb-2">
+          <i data-lucide="compass" class="w-4 h-4 text-sky-400"></i>
+          <span>1. Panorama Sinótico Geral</span>
+        </h4>
+
+        <div class="text-xs text-slate-300 space-y-2.5 leading-relaxed">
+          <p>
+            O padrão meteorológico regional sobre o município de Rio das Ostras para o período de <strong>03/10 a 04/10/2026</strong> é condicionado pela atuação de uma <strong>frente fria semi-estacionária</strong> sobre o litoral norte fluminense, acoplada à circulação anticiclônica de uma <strong>alta pressão pós-frontal (1022 hPa)</strong> estabelecida sobre o oceano adjacente. Esse bloqueio atmosférico impulsiona um escoamento constante de ventos marítimos de sudeste e leste carregados de umidade em direção à costa fluminense (<strong>convergência de umidade marítima</strong>), mantendo o tempo totalmente fechado, frio úmido (<strong>mínima de 19°C e máxima não passando de 21°C</strong>) e chuvas contínuas e volumosas ao longo de todo o sábado (03/10), projetando acumulados entre <strong>45 e 70 mm (nominal de 55,0 mm)</strong>.
+          </p>
+          <p class="p-3 rounded-lg bg-red-950/30 border border-red-500/30 text-red-200">
+            <strong>Risco Crítico de Inundação e Cheias na Bacia Hidrográfica do Rio Jundiá:</strong> a estação telemétrica municipal registrou nível de <strong>1,37 m e tendência de subida contínua</strong>, com solo saturado por 25,0 mm nos últimos 4 dias e 7,8 mm nas últimas 24h. O volume previsto para sábado elevará a calha do rio rapidamente em direção à cota de atenção (<strong>1,60 m / 1,99 m</strong>), com iminente ameaça à cota de transbordo (<strong>2,20 m / 2,84 m</strong>), atingindo diretamente os bairros Âncora e Cláudio Ribeiro (Alerta Laranja do INMET, Alerta Especial do INEA e Monitoramento CEMADEN).
+          </p>
+          <p>
+            No domingo (04/10), o centro de alta pressão migra para alto-mar, desconfigurando a convergência úmida e permitindo a rotação dos ventos para quadrante Nordeste/Norte. Chuviscos residuais na madrugada e início da manhã (3,5 mm) cessam ao longo do dia, dando lugar a aberturas de sol, diminuição da umidade e acentuada recuperação térmica, com máximas atingindo <strong>26°C a 27°C</strong>. O volume acumulado total para o período de 2 dias situa-se entre <strong>50 e 82 mm (nominal 62,5 mm)</strong>.
+          </p>
         </div>
 
-        <div id="daily-forecast-container" class="space-y-2.5">
-          <!-- Linhas de cada dia com data completa DD/MM/AAAA inseridas dinamicamente -->
+        <!-- GLOSSÁRIO OPERACIONAL OFICIAL DO BOLETIM -->
+        <div class="mt-4 pt-3 border-t border-slate-800 space-y-2">
+          <span class="text-xs font-bold text-slate-200 block">Glossário Operacional:</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-[11px]">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Frente Semi-Estacionária:</strong>
+              <span class="text-slate-400">Bloqueio que mantém bandas de chuva sobre a mesma região por dias.</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Alta Pós-Frontal:</strong>
+              <span class="text-slate-400">Centro anticiclônico que injeta vento marítimo e ar frio contra a costa.</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Cota de Transbordo:</strong>
+              <span class="text-slate-400">Nível d’água em que o rio extravasa a calha principal (2,84 m oficial no Jundiá).</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Estado do Mar (Escala Douglas):</strong>
+              <span class="text-slate-400">Norma oficial (CHM): Agitado (1,25 a 2,5 m) e Muito Agitado (> 2,5 m).</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Área Delta (Marinha do Brasil):</strong>
+              <span class="text-slate-400">Setor costeiro oficial delimitado pelo CHM que engloba a orla local.</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <strong class="text-sky-400 block">• Convergência de Umidade:</strong>
+              <span class="text-slate-400">Encontro de fluxos de ar que força ascensão contínua e gera chuva volumosa.</span>
+            </div>
+          </div>
         </div>
       </div>
 
-    </div>
-
-    <!-- SEÇÃO COMPACTA: ACESSO RÁPIDO AOS 17 PORTAIS OFICIAIS (LAYOUT ENXUTO) -->
-    <div id="hub-orgaos" class="glass-card p-4 bg-slate-950/60 border-slate-800">
-      <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-800/80">
-        <div class="flex items-center gap-2">
-          <i data-lucide="link" class="w-4 h-4 text-sky-400"></i>
-          <h2 class="text-sm font-bold text-white uppercase tracking-wider">Acesso Rápido aos 17 Portais e Órgãos Oficiais</h2>
+      <!-- 2. TABELA DE PREVISÃO E CONDIÇÕES MARÍTIMAS POR TURNOS -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-4">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
+          <h4 class="text-sm font-extrabold text-white flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-emerald-400"></i>
+            <span>2. Previsão do Tempo e Condições Marítimas por Turnos</span>
+          </h4>
+          <span class="text-xs text-slate-400 font-medium">Oficial Defesa Civil</span>
         </div>
-        <span class="text-[11px] text-slate-400">Clique para abrir na fonte oficial</span>
+
+        <!-- Sábado (03/10/2026) -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-200">Sábado — 03/10/2026 (Frente Semi-Estacionária e Chuva Volumosa)</span>
+            <span class="text-[10px] text-red-400 font-semibold">Total Sábado: 55,0 mm</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-[#1e3a8a] text-white uppercase text-[10px] font-bold">
+                <tr>
+                  <th class="py-2.5 px-3">Turno</th>
+                  <th class="py-2.5 px-3">Temperatura</th>
+                  <th class="py-2.5 px-3">Umidade</th>
+                  <th class="py-2.5 px-3">Pressão</th>
+                  <th class="py-2.5 px-3">Vento e Rajadas</th>
+                  <th class="py-2.5 px-3">Precipitação</th>
+                  <th class="py-2.5 px-3">Estado do Mar</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+                <tr class="bg-slate-900/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Madrugada</td>
+                  <td class="py-2.5 px-3 text-sky-400">19° a 20°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">94% a 98%</td>
+                  <td class="py-2.5 px-3">1017 hPa (Alta)</td>
+                  <td class="py-2.5 px-3 text-slate-200">E-SE 14 km/h | <span class="text-red-400 font-bold">Raj: 28 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-400 font-bold">12.0 mm (90%)</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-sans">2.0 a 2.4 m (Agitado)</td>
+                </tr>
+                <tr class="bg-slate-950/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Manhã</td>
+                  <td class="py-2.5 px-3 text-sky-400">20° a 21°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">92% a 96%</td>
+                  <td class="py-2.5 px-3">1019 hPa (Alta)</td>
+                  <td class="py-2.5 px-3 text-slate-200">E-NE 16 km/h | <span class="text-red-400 font-bold">Raj: 32 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-400 font-bold">15.0 mm (95%)</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-sans">2.0 a 2.3 m (Agitado)</td>
+                </tr>
+                <tr class="bg-slate-900/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Tarde</td>
+                  <td class="py-2.5 px-3 text-sky-400">20° a 21°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">90% a 95%</td>
+                  <td class="py-2.5 px-3">1018 hPa (Alta)</td>
+                  <td class="py-2.5 px-3 text-slate-200">E-NE 20 km/h | <span class="text-red-400 font-bold">Raj: 38 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-400 font-bold">18.0 mm (95%)</td>
+                  <td class="py-2.5 px-3 text-red-400 font-sans font-bold">1.9 a 2.2 m (Agitado - Risco Cheias)</td>
+                </tr>
+                <tr class="bg-slate-950/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Noite</td>
+                  <td class="py-2.5 px-3 text-sky-400">19° a 20°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">94% a 98%</td>
+                  <td class="py-2.5 px-3">1019 hPa (Alta)</td>
+                  <td class="py-2.5 px-3 text-slate-200">E-NE 16 km/h | <span class="text-red-400 font-bold">Raj: 30 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-400 font-bold">10.0 mm (85%)</td>
+                  <td class="py-2.5 px-3 text-amber-400 font-sans">1.8 a 2.1 m (Agitado)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Domingo (04/10/2026) -->
+        <div class="space-y-2 pt-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-200">Domingo — 04/10/2026 (Instabilidade Residual Pela Manhã e Retorno do Sol)</span>
+            <span class="text-[10px] text-emerald-400 font-semibold">Total Domingo: 7,5 mm</span>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs text-slate-300">
+              <thead class="bg-[#1e3a8a] text-white uppercase text-[10px] font-bold">
+                <tr>
+                  <th class="py-2.5 px-3">Turno</th>
+                  <th class="py-2.5 px-3">Temperatura</th>
+                  <th class="py-2.5 px-3">Umidade</th>
+                  <th class="py-2.5 px-3">Pressão</th>
+                  <th class="py-2.5 px-3">Vento e Rajadas</th>
+                  <th class="py-2.5 px-3">Precipitação</th>
+                  <th class="py-2.5 px-3">Estado do Mar</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 font-mono text-[11px]">
+                <tr class="bg-slate-900/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Madrugada</td>
+                  <td class="py-2.5 px-3 text-sky-400">19° a 20°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">92% a 96%</td>
+                  <td class="py-2.5 px-3">1019 hPa (Alta)</td>
+                  <td class="py-2.5 px-3 text-slate-200">NE 14 km/h | <span class="text-red-400 font-bold">Raj: 28 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-300">3.5 mm (60%)</td>
+                  <td class="py-2.5 px-3 text-teal-400 font-sans">1.6 a 1.9 m (Moderado)</td>
+                </tr>
+                <tr class="bg-slate-950/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Manhã</td>
+                  <td class="py-2.5 px-3 text-amber-400">20° a 23°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">80% a 90%</td>
+                  <td class="py-2.5 px-3">1017 hPa (Normal)</td>
+                  <td class="py-2.5 px-3 text-slate-200">NE-N 18 km/h | <span class="text-red-400 font-bold">Raj: 32 km/h</span></td>
+                  <td class="py-2.5 px-3 text-blue-300">3.5 mm (40%)</td>
+                  <td class="py-2.5 px-3 text-teal-400 font-sans">1.5 a 1.7 m (Moderado)</td>
+                </tr>
+                <tr class="bg-slate-900/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Tarde</td>
+                  <td class="py-2.5 px-3 text-amber-500 font-bold">24° a 27°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">65% a 78%</td>
+                  <td class="py-2.5 px-3">1014 hPa (Normal)</td>
+                  <td class="py-2.5 px-3 text-slate-200">N-NE 22 km/h | <span class="text-red-400 font-bold">Raj: 42 km/h</span></td>
+                  <td class="py-2.5 px-3 text-slate-400">0.5 mm (20%)</td>
+                  <td class="py-2.5 px-3 text-teal-400 font-sans">1.4 a 1.6 m (Moderado)</td>
+                </tr>
+                <tr class="bg-slate-950/60 hover:bg-slate-800/60 transition">
+                  <td class="py-2.5 px-3 font-sans font-bold text-white">Noite</td>
+                  <td class="py-2.5 px-3 text-amber-400">22° a 24°C</td>
+                  <td class="py-2.5 px-3 text-emerald-400">78% a 88%</td>
+                  <td class="py-2.5 px-3">1015 hPa (Normal)</td>
+                  <td class="py-2.5 px-3 text-slate-200">NE 18 km/h | <span class="text-red-400 font-bold">Raj: 30 km/h</span></td>
+                  <td class="py-2.5 px-3 text-slate-500">0.0 mm (10%)</td>
+                  <td class="py-2.5 px-3 text-teal-400 font-sans">1.3 a 1.5 m (Moderado)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Categorias Compactas de Links em Pílulas -->
-      <div class="space-y-2 text-xs">
+      <!-- LEVANTAMENTO DE IMPACTOS POR BAIRROS — PLANCON 2025/2026 -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-3.5">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-red-400 tracking-wider">DEFESA CIVIL MUNICIPAL</span>
+            <h4 class="text-sm sm:text-base font-extrabold text-white">Levantamento de Impactos por Bairros — PLANCON 2025/2026</h4>
+          </div>
+          <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-300 font-semibold border border-slate-700">5 Setores Operacionais</span>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-slate-800">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-[#1e3a8a] text-white uppercase text-[10px] font-bold">
+              <tr>
+                <th class="py-2.5 px-3">Setor e Bairros</th>
+                <th class="py-2.5 px-2.5 text-center">Risco Sáb (03/10)</th>
+                <th class="py-2.5 px-2.5 text-center">Risco Dom (04/10)</th>
+                <th class="py-2.5 px-3">Impactos Esperados (PLANCON)</th>
+                <th class="py-2.5 px-3">Ações Operacionais Imediatas</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800 text-xs">
+              
+              <!-- Setor 1: Orla -->
+              <tr class="bg-slate-900/70 hover:bg-slate-800/70 transition">
+                <td class="py-3 px-3 font-semibold text-white">
+                  Costazul, Tartaruga, Boca da Barra e Mar do Norte (Orla)
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-extrabold text-[10px] border border-red-500/40">ALERTA</span>
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/40">ATENÇÃO</span>
+                </td>
+                <td class="py-3 px-3 text-slate-300 leading-snug">
+                  Mar agitado no sábado (1.8 a 2.4 m); projeção de areia e ondas no calçadão; no domingo mar abranda para 1.5 m com rajadas de até 42 km/h de NE.
+                </td>
+                <td class="py-3 px-3 text-sky-300 leading-snug">
+                  Bandeiramento vermelho no sábado; suspensão da pesca artesanal; monitoramento contínuo da faixa de areia e calçadões.
+                </td>
+              </tr>
+
+              <!-- Setor 2: Bosque -->
+              <tr class="bg-slate-950/70 hover:bg-slate-800/70 transition">
+                <td class="py-3 px-3 font-semibold text-white">
+                  Bosque, Village, Extensão do Bosque e Nova Aliança
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-extrabold text-[10px] border border-red-500/40">ALERTA</span>
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-slate-700/40 text-slate-300 font-semibold text-[10px] border border-slate-600/40">OBSERVAÇÃO</span>
+                </td>
+                <td class="py-3 px-3 text-slate-300 leading-snug">
+                  Solo saturado; risco de lâmina d’água em vias arteriais; rajadas de vento até 38 km/h com risco pontual sobre fiação aérea.
+                </td>
+                <td class="py-3 px-3 text-sky-300 leading-snug">
+                  Desobstrução de canaletas; canal direto com a Enel para rápida recomposição de energia; patrulha urbana da Defesa Civil.
+                </td>
+              </tr>
+
+              <!-- Setor 3: Cidade Praiana -->
+              <tr class="bg-slate-900/70 hover:bg-slate-800/70 transition">
+                <td class="py-3 px-3 font-semibold text-white">
+                  Cidade Praiana, Parque Mariléa, Jardim Mariléa e Beira Mar
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-red-600/30 text-red-300 font-black text-[10px] border border-red-500 animate-pulse">ALERTA MÁXIMO</span>
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/40">ATENÇÃO</span>
+                </td>
+                <td class="py-3 px-3 text-slate-300 leading-snug">
+                  Chuva volumosa de 55 mm sobre lençol freático já elevado; alagamentos crônicos em ruas sem pavimentação e retenção de fluxo na RJ-106.
+                </td>
+                <td class="py-3 px-3 text-sky-300 leading-snug">
+                  Acionamento de caminhões vac-all e motobombas; desobstrução preventiva de bueiros; isolamento de vias intransitáveis.
+                </td>
+              </tr>
+
+              <!-- Setor 4: Bacia do Jundiá -->
+              <tr class="bg-slate-950/70 hover:bg-slate-800/70 transition">
+                <td class="py-3 px-3 font-semibold text-white">
+                  Âncora, Cláudio Ribeiro, Nova Esperança e Bacia do Jundiá
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-red-600/30 text-red-300 font-black text-[10px] border border-red-500 animate-pulse">ALERTA MÁXIMO</span>
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/40">ATENÇÃO</span>
+                </td>
+                <td class="py-3 px-3 text-slate-300 leading-snug">
+                  Estação telemétrica Jundiá em 1.37 m (subindo). Projeção de alcance da cota de atenção (1.60 m) e risco de transbordo (2.20 m / 2.84 m).
+                </td>
+                <td class="py-3 px-3 text-sky-300 leading-snug">
+                  Monitoramento telemétrico ininterrupto; alerta sonoro comunitário; sobreaviso de equipes para evacuação preventiva e abrigo PLANCON.
+                </td>
+              </tr>
+
+              <!-- Setor 5: Zona Rural -->
+              <tr class="bg-slate-900/70 hover:bg-slate-800/70 transition">
+                <td class="py-3 px-3 font-semibold text-white">
+                  Cantagalo, Rocha Leão, Califórnia e Zona Rural
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-red-500/20 text-red-400 font-extrabold text-[10px] border border-red-500/40">ALERTA</span>
+                </td>
+                <td class="py-3 px-2.5 text-center">
+                  <span class="px-2 py-0.5 rounded bg-slate-700/40 text-slate-300 font-semibold text-[10px] border border-slate-600/40">OBSERVAÇÃO</span>
+                </td>
+                <td class="py-3 px-3 text-slate-300 leading-snug">
+                  Frio úmido e chuva contínua; formação de lamaçais, pequenos escorregamentos de taludes e cortes de estradas vicinais (GeoRisk CEMADEN).
+                </td>
+                <td class="py-3 px-3 text-sky-300 leading-snug">
+                  Patrulha mecanizada com retroescavadeira e caminhão basculante em prontidão operacional para desobstrução de vias vicinais.
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. AVISOS METEOROLÓGICOS E OCEANOGRÁFICOS OFICIAIS (BOX DUPLO) -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        <!-- Categoria 1: INMET & Modelos -->
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="px-2 py-0.5 rounded bg-sky-950/60 text-sky-300 font-bold text-[10px] uppercase border border-sky-800/40 shrink-0">Meteorologia:</span>
-          <a href="https://avisos.inmet.gov.br/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>1. INMET Avisos</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://meteograma.inmet.gov.br/3304524/dinamico" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>2. Meteograma 3304524</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://previsao.inmet.gov.br/3304524" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>3. Previsão INMET</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://vime.inmet.gov.br/SE" target="_blank" class="px-2.5 py-1 rounded-md bg-teal-950/40 hover:bg-teal-900/50 border border-teal-700/50 text-teal-300 hover:text-white transition flex items-center gap-1 font-semibold">
-            <span>4. VIME Sudeste</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-teal-400"></i>
-          </a>
-          <a href="https://www.cptec.inpe.br/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>5. CPTEC/INPE</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://tempo.inmet.gov.br/CondicoesRegistradas" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>11. INMET Estações</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
+        <div class="glass-card p-4 sm:p-5 border-sky-500/30 space-y-2.5">
+          <div class="flex items-center gap-2 text-sky-400 font-bold border-b border-slate-800 pb-2">
+            <i data-lucide="anchor" class="w-4 h-4"></i>
+            <h5 class="text-xs uppercase">Marinha do Brasil — Avisos Oficiais Vigentes</h5>
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li><strong>Avisos nº 727 e 729/2026 (Área Delta e Bravo):</strong> Vento de SE/E Força 7 (50 a 61 km/h em alto-mar com rajadas na orla costeira de até 38-42 km/h).</li>
+            <li><strong>Estado do Mar:</strong> Ondas de 1.8 a 2.4 m gerando mar agitado na faixa costeira de Rio das Ostras, com restrição à navegação de pequeno porte e bandeiramento na orla.</li>
+          </ul>
         </div>
 
-        <!-- Categoria 2: Marinha do Brasil -->
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="px-2 py-0.5 rounded bg-indigo-950/60 text-indigo-300 font-bold text-[10px] uppercase border border-indigo-800/40 shrink-0">Marinha do Brasil:</span>
-          <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-indigo-300 hover:text-white transition flex items-center gap-1">
-            <span>6. CHM Avisos de Mau Tempo (Área Delta)</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://www.marinha.mil.br/chm/cartassinoticas" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>7. Cartas Sinóticas de Superfície</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-        </div>
-
-        <!-- Categoria 3: Rios, Cheias & Defesa Civil -->
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 font-bold text-[10px] uppercase border border-emerald-800/40 shrink-0">Cheias & Defesa Civil:</span>
-          <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="px-2.5 py-1 rounded-md bg-emerald-950/40 hover:bg-emerald-900/50 border border-emerald-700/50 text-emerald-300 hover:text-white transition flex items-center gap-1 font-semibold">
-            <span>10. INEA Alerta de Cheias & Cotas</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-emerald-400"></i>
-          </a>
-          <a href="https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-rose-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>8. CEMADEN Riscos</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>9. CEMADEN-RJ Mapa</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://www.gov.br/cemaden/pt-br/assuntos/briefing-cemaden-cenad" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>14. CENAD Briefing</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/redec.php?action=1" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>15. Defesa Civil REDEC 1</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://www.inea.rj.gov.br/rio-das-ostras/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white transition flex items-center gap-1">
-            <span>16. INEA Rio das Ostras</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-        </div>
-
-        <!-- Categoria 4: Radares & Satélites -->
-        <div class="flex flex-wrap items-center gap-1.5">
-          <span class="px-2 py-0.5 rounded bg-purple-950/60 text-purple-300 font-bold text-[10px] uppercase border border-purple-800/40 shrink-0">Radares & Satélites:</span>
-          <a href="https://radartool.inea.rj.gov.br/radar-tool/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-teal-500/40 text-teal-300 hover:text-white transition flex items-center gap-1">
-            <span>12. INEA Radar Tool</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://www.cptec.inpe.br/dsat/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-sky-300 hover:text-white transition flex items-center gap-1">
-            <span>17. CPTEC DSAT Satélite</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
-          <a href="https://data.inpe.br/queimadas/situacao_atual/" target="_blank" class="px-2.5 py-1 rounded-md bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-orange-500/40 text-orange-300 hover:text-white transition flex items-center gap-1">
-            <span>13. INPE Queimadas</span> <i data-lucide="external-link" class="w-2.5 h-2.5 text-slate-500"></i>
-          </a>
+        <div class="glass-card p-4 sm:p-5 border-red-500/30 space-y-2.5">
+          <div class="flex items-center gap-2 text-red-400 font-bold border-b border-slate-800 pb-2">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+            <h5 class="text-xs uppercase">INMET, INEA e CEMADEN — Alertas Oficiais Vigentes</h5>
+          </div>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc list-inside">
+            <li><strong>INMET Alerta Laranja/Amarelo:</strong> Chuvas intensas de 30 a 60 mm/h ou 50 a 100 mm/dia e declínio térmico acentuado.</li>
+            <li><strong>INEA Boletim Especial 01/2026:</strong> Impacto Hidrológico ALTO para as bacias dos rios Macaé e das Ostras (RH-VIII).</li>
+            <li><strong>CEMADEN / Estação Jundiá:</strong> Nível em monitoramento crítico com solo saturado e risco iminente de transbordo nas áreas baixas.</li>
+          </ul>
         </div>
 
       </div>
-    </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- ABA 3: GRÁFICOS DE TENDÊNCIA POR VARIÁVEL (AS 5 VARIÁVEIS OFICIAIS)       -->
+    <!-- ========================================================================= -->
+    <section id="tab-graficos" class="tab-pane hidden space-y-4">
+      
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-4">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-purple-400 tracking-wider">ANÁLISE DE ALTA RESOLUÇÃO</span>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">3. Gráficos de Tendência Meteorológica por Variável</h3>
+            <p class="text-xs text-slate-400">Evolução dos 8 Turnos Operacionais (03/10 a 04/10/2026) — Padrão Oficial do Boletim</p>
+          </div>
+
+          <!-- Seletor das 5 Variáveis Oficiais do Boletim -->
+          <div class="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto max-w-full">
+            <button class="bulletin-tab-btn active px-2.5 py-1.5 rounded-lg bg-sky-500 text-slate-950 font-bold transition whitespace-nowrap" data-metric="temperature">
+              🌡️ Temperatura
+            </button>
+            <button class="bulletin-tab-btn px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="humidity">
+              💧 Umidade
+            </button>
+            <button class="bulletin-tab-btn px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="pressure">
+              ⏱️ Pressão
+            </button>
+            <button class="bulletin-tab-btn px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="wind">
+              💨 Vento & Rajadas
+            </button>
+            <button class="bulletin-tab-btn px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition whitespace-nowrap" data-metric="precipitation">
+              🌧️ Precipitação (mm)
+            </button>
+          </div>
+        </div>
+
+        <!-- Canvas do Gráfico Oficial do Boletim -->
+        <div class="relative w-full h-[280px] sm:h-[340px] pt-2">
+          <canvas id="bulletin-chart"></canvas>
+        </div>
+
+        <!-- Sínteses Técnicas Oficiais do Boletim abaixo do gráfico -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-slate-800 text-xs text-slate-300">
+          
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+            <strong class="text-white block flex items-center gap-1.5">
+              <i data-lucide="info" class="w-4 h-4 text-sky-400"></i> Síntese Higrotérmica e Barométrica:
+            </strong>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              O sábado apresenta amplitude térmica quase nula (19°C a 21°C) sob saturação atmosférica contínua (90% a 98%), caracterizando o padrão clássico de frente semi-estacionária e frio úmido. No domingo, o aquecimento solar eleva a temperatura para 27°C e a umidade recua para 65% nas horas mais quentes. A pressão atinge o pico anticiclônico de 1019 hPa no sábado e recua gradualmente para 1014-1015 hPa no domingo.
+            </p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1.5">
+            <strong class="text-white block flex items-center gap-1.5">
+              <i data-lucide="wind" class="w-4 h-4 text-purple-400"></i> Dinâmica Eólica, Marítima e Pluviométrica:
+            </strong>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              No sábado, o vento sopra de Leste/Nordeste com rajadas de até 38 km/h, gerando mar agitado (ondas de 1,9 a 2,4 m sob Avisos nº 727 e 729 da Marinha). No domingo, com o giro para Nordeste/Norte, as rajadas atingem 42 km/h à tarde, enquanto o mar se acalma para 1,4 a 1,7 m. A maior concentração de chuvas ocorre no sábado (55 mm nominais), totalizando 62,5 mm no evento.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- ABA 4: RADAR METEOROLÓGICO & TELEMETRIA AO VIVO (ESTAÇÃO JUNDIÁ 2241036) -->
+    <!-- ========================================================================= -->
+    <section id="tab-aovivo" class="tab-pane hidden space-y-5">
+      
+      <!-- MONITORAMENTO TELEMÉTRICO AO VIVO: BACIA DO RIO JUNDIÁ (ESTAÇÃO INEA 2241036) -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-4">
+        
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+              <span class="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">TELEMETRIA EM TEMPO REAL OFICIAL INEA</span>
+            </div>
+            <h3 class="text-sm sm:text-base font-extrabold text-white">Rio Jundiá — Estação Telemétrica Municipal (Código INEA 2241036)</h3>
+            <p class="text-xs text-slate-400">Monitoramento Contínuo de Cheias • Bacia dos Rios Macaé e das Ostras (RH-VIII)</p>
+          </div>
+
+          <div class="text-right">
+            <span id="jundia-status-badge" class="px-3 py-1 rounded-full bg-red-600/30 text-red-300 font-extrabold text-xs border border-red-500 animate-pulse">
+              ALERTA MÁXIMO
+            </span>
+          </div>
+        </div>
+
+        <!-- Indicador Visual do Nível e Calha do Rio Jundiá -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+          
+          <!-- Medidor Principal do Nível -->
+          <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-center space-y-1">
+            <span class="text-xs font-bold text-slate-400 uppercase">Nível Atual do Rio</span>
+            <div class="text-3xl sm:text-4xl font-black text-red-400 font-mono" id="jundia-current-level">2.34 m</div>
+            <span class="text-[11px] text-slate-400" id="jundia-last-reading">Última leitura: Hoje às 12:30h</span>
+          </div>
+
+          <!-- Porcentagem da Calha e Barra de Transbordo -->
+          <div class="md:col-span-2 p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-300">Ocupação da Calha do Rio:</span>
+              <span class="font-extrabold text-red-400 text-sm" id="jundia-percentage">82% da Cota de Transbordo</span>
+            </div>
+
+            <!-- Barra Progressiva -->
+            <div class="w-full h-4 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
+              <div id="jundia-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 via-amber-500 to-red-500 rounded-full transition-all duration-700" style="width: 82%;"></div>
+            </div>
+
+            <!-- As 3 Cotas Oficiais do INEA para o Rio Jundiá -->
+            <div class="grid grid-cols-3 gap-2 text-center text-[10px] pt-1">
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <span class="text-amber-400 font-bold block">Atenção</span>
+                <span class="font-mono text-slate-300 font-bold">1.99 m</span>
+              </div>
+              <div class="p-1.5 rounded bg-slate-950 border border-slate-800">
+                <span class="text-orange-400 font-bold block">Alerta</span>
+                <span class="font-mono text-slate-300 font-bold">2.27 m</span>
+              </div>
+              <div class="p-1.5 rounded bg-slate-950 border border-red-500/50">
+                <span class="text-red-400 font-bold block">Transbordo</span>
+                <span class="font-mono text-white font-extrabold">2.84 m</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Chuva Acumulada Registrada na Régua 2241036 -->
+        <div class="pt-2 border-t border-slate-800">
+          <span class="text-xs font-bold text-slate-300 mb-2 block">Chuva Acumulada na Régua Telemétrica (INEA):</span>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block">Última 1h</span>
+              <span class="font-mono font-bold text-sky-400 text-sm" id="jundia-rain-1h">12.2 mm</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block">Últimas 4h</span>
+              <span class="font-mono font-bold text-sky-400 text-sm" id="jundia-rain-4h">17.2 mm</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block">Últimas 24h</span>
+              <span class="font-mono font-extrabold text-blue-400 text-sm" id="jundia-rain-24h">104.6 mm</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block">Últimas 96h</span>
+              <span class="font-mono font-bold text-purple-400 text-sm" id="jundia-rain-96h">125.6 mm</span>
+            </div>
+            <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800">
+              <span class="text-[10px] text-slate-400 block">Acumulado 30 Dias</span>
+              <span class="font-mono font-bold text-slate-200 text-sm" id="jundia-rain-30d">268.0 mm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demais Estações da Bacia (Macaé, Glicério, São Pedro) -->
+        <div class="pt-3 border-t border-slate-800 space-y-2">
+          <span class="text-xs font-bold text-slate-300 block">Outras Estações de Monitoramento na Bacia Hidrográfica (RH-VIII):</span>
+          <div id="other-stations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 text-xs">
+            <!-- Inserido dinamicamente via JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RADAR METEOROLÓGICO INTERATIVO RAINVIEWER AO VIVO -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-3">
+        <div class="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-teal-400 tracking-wider">REFLETIVIDADE DE CHUVA EM TEMPO REAL</span>
+            <h4 class="text-sm sm:text-base font-extrabold text-white">Radar Meteorológico & Satélite (Litoral Norte Fluminense)</h4>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="radar-play-btn" class="px-3 py-1 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold text-xs flex items-center gap-1 shadow transition">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i> <span>Animar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Container do Mapa Leaflet -->
+        <div class="relative w-full h-[360px] sm:h-[450px] rounded-xl overflow-hidden border border-slate-800">
+          <div id="radar-map" class="w-full h-full z-0"></div>
+          
+          <!-- Controle Flutuante de Timestamp do Radar -->
+          <div class="absolute bottom-3 left-3 z-10 bg-slate-950/90 border border-slate-700/80 px-3 py-1.5 rounded-lg text-xs font-mono text-slate-200 shadow-lg">
+            <span class="text-slate-400 text-[10px] block">Horário da Varredura:</span>
+            <span id="radar-time-display">Carregando satélite...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HUB DE ACESSO RÁPIDO AOS 17 PORTAIS OFICIAIS -->
+      <div class="glass-card p-4 sm:p-5 border-slate-800 space-y-3">
+        <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+          <i data-lucide="layers" class="w-4 h-4 text-sky-400"></i>
+          <h4 class="text-xs uppercase font-extrabold text-white">Hub de Monitoramento — 17 Portais e Sistemas Oficiais</h4>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+          <a href="https://previsao.inmet.gov.br/3304524" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>INMET Rio das Ostras</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://vime.inmet.gov.br/SE" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-teal-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>VIME Sudeste INMET</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>INEA Cheias & Cotas</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-indigo-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>Marinha CHM Mau Tempo</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-amber-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>CEMADEN-RJ Mapa</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://radartool.inea.rj.gov.br/radar-tool/" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-teal-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>INEA Radar Tool</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://www.cptec.inpe.br/dsat/" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-sky-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>CPTEC DSAT Satélite</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+          <a href="https://data.inpe.br/queimadas/situacao_atual/" target="_blank" class="p-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:border-orange-500/40 text-slate-300 hover:text-white transition flex items-center justify-between">
+            <span>INPE Queimadas</span> <i data-lucide="external-link" class="w-3 h-3 text-slate-500"></i>
+          </a>
+        </div>
+      </div>
+
+    </section>
 
   </main>
 
-  <!-- Rodapé Oficial com Logo -->
-  <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-10 pt-6 border-t border-slate-800/80 text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div class="h-10 rounded-lg overflow-hidden border border-slate-700/80 bg-[#283964] flex items-center justify-center p-1">
-        <img src="img/logo.png" alt="TEMPO em Rio das Ostras" class="h-full w-auto object-contain">
+  <!-- RODAPÉ INSTITUCIONAL OFICIAL (PADRÃO TYPST) -->
+  <footer class="max-w-7xl mx-auto px-3 sm:px-6 mt-12 pt-6 border-t border-slate-800/80 text-xs text-slate-400">
+    <div class="glass-card p-5 border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <div class="flex items-center gap-3">
+        <div class="h-12 w-12 rounded-xl bg-white/10 p-1 flex items-center justify-center shrink-0 border border-slate-700">
+          <img src="img/logo_defesa_civil.png" alt="Defesa Civil" class="h-full w-full object-contain">
+        </div>
+        <div>
+          <h4 class="font-extrabold text-white text-sm">Defesa Civil Municipal de Rio das Ostras</h4>
+          <p class="text-slate-400 text-[11px]">Setor de Monitoramento e Alerta Meteorológico 24h</p>
+          <p class="text-slate-500 text-[10px] mt-0.5">Prefeitura Municipal de Rio das Ostras • Estado do Rio de Janeiro</p>
+        </div>
       </div>
-      <div>
-        <p class="font-bold text-slate-200">TEMPO em Rio das Ostras</p>
-        <p class="text-[11px] text-slate-400">Sistema Especializado de Meteorologia & Defesa Civil (RJ)</p>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-right">
+        <div>
+          <span class="text-xs uppercase font-extrabold text-amber-400 block tracking-wider">PLANTÃO DE EMERGÊNCIA: 199</span>
+          <span class="text-slate-300 text-[11px] block mt-0.5">Telefone Geral: (22) 2760-8360 / (22) 99245-5678</span>
+          <span class="text-slate-400 text-[10px] block">Corpo de Bombeiros Militar: 193</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a href="docs/informativo_populacao.pdf" target="_blank" download class="px-3 py-1.5 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 border border-sky-500/40 text-sky-300 font-semibold text-xs transition">
+            PDF Informativo
+          </a>
+          <a href="docs/boletim_operacional.pdf" target="_blank" download class="px-3 py-1.5 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 font-semibold text-xs transition">
+            PDF Boletim
+          </a>
+        </div>
       </div>
-    </div>
-    <div class="flex items-center gap-3 text-slate-400 text-[11px] flex-wrap justify-center">
-      <span>INMET</span> • <span>INEA</span> • <span>CEMADEN</span> • <span>CPTEC/INPE</span> • <span>Marinha do Brasil</span>
+
     </div>
   </footer>
 
-  <!-- Modal de Orientação para Instalação no Celular -->
+  <!-- MODAL DE ORIENTAÇÃO PARA INSTALAÇÃO NO CELULAR (PWA) -->
   <div id="modal-install-guide" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
       <button id="btn-close-install-modal" class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer" title="Fechar">
@@ -1044,12 +1059,12 @@
       </button>
 
       <div class="flex items-center gap-3 mb-4">
-        <div class="w-12 h-12 rounded-xl bg-[#283964] border border-slate-700 p-1 flex items-center justify-center shrink-0">
-          <img src="img/logo.png" alt="Logo" class="h-full w-auto object-contain">
+        <div class="w-12 h-12 rounded-xl bg-white/10 border border-slate-700 p-1 flex items-center justify-center shrink-0">
+          <img src="img/logo_defesa_civil.png" alt="Logo Defesa Civil" class="h-full w-auto object-contain">
         </div>
         <div>
-          <h3 class="text-base font-bold text-white">Instalar TEMPO Rio das Ostras</h3>
-          <p class="text-xs text-slate-400">Funciona direto na tela do seu celular 24/7</p>
+          <h3 class="text-base font-bold text-white">Instalar App no Celular</h3>
+          <p class="text-xs text-slate-400">TEMPO em Rio das Ostras 24/7</p>
         </div>
       </div>
 
@@ -1059,8 +1074,8 @@
             <i data-lucide="check-circle-2" class="w-4 h-4"></i>
           </div>
           <div>
-            <p class="font-semibold text-white">Não precisa do computador ligado</p>
-            <p class="text-slate-400 mt-0.5">O aplicativo roda diretamente na nuvem e atualiza continuamente com dados oficiais do INMET, INEA e Radares.</p>
+            <p class="font-semibold text-white">Funciona com o computador desligado</p>
+            <p class="text-slate-400 mt-0.5">O app atualiza automaticamente na nuvem com os dados oficiais do INEA, INMET e radares.</p>
           </div>
         </div>
 
@@ -1069,8 +1084,8 @@
             <i data-lucide="apple" class="w-4 h-4"></i> No iPhone (Safari):
           </p>
           <ol class="list-decimal list-inside space-y-1 text-slate-300">
-            <li>Toque no botão <strong>Compartilhar</strong> (ícone do quadrado com seta para cima <i data-lucide="share" class="inline w-3 h-3 text-sky-400"></i>).</li>
-            <li>Role a lista para baixo e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+            <li>Toque no botão <strong>Compartilhar</strong> (quadrado com seta para cima <i data-lucide="share" class="inline w-3 h-3 text-sky-400"></i>).</li>
+            <li>Role a lista e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
             <li>Toque em <strong>"Adicionar"</strong> no canto superior direito.</li>
           </ol>
         </div>
@@ -1080,7 +1095,7 @@
             <i data-lucide="smartphone" class="w-4 h-4"></i> No Android (Chrome):
           </p>
           <ol class="list-decimal list-inside space-y-1 text-slate-300">
-            <li>Toque no botão <strong>"Instalar Agora"</strong> abaixo ou no menu de <strong>3 pontinhos (⋮)</strong> no navegador.</li>
+            <li>Toque no botão <strong>"Instalar Agora"</strong> abaixo ou no menu de <strong>3 pontinhos (⋮)</strong>.</li>
             <li>Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</li>
           </ol>
         </div>
@@ -1094,7 +1109,7 @@
     </div>
   </div>
 
-  <!-- Scripts da Aplicação -->
+  <!-- SCRIPTS DA APLICAÇÃO -->
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
