@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg-gradient: linear-gradient(135deg, #090d16 0%, #0f172a 50%, #111827 100%);
-  --card-bg: rgba(255, 255, 255, 0.04);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --card-hover-border: rgba(56, 189, 248, 0.3);
+  --bg-color: #0b1325;
+  --card-bg: #111c33;
+  --card-border: #1d2c48;
+  --card-hover-border: #2b4066;
+  --defesa-navy: #1e3a8a;
+  --defesa-orange: #ea580c;
+  --meteo-blue: #0284c7;
 }
 
 * {
@@ -13,35 +16,26 @@
 }
 
 body {
-  background: #090d16;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: #f1f5f9;
+  background-color: #0b1325;
+  color: #e2e8f0;
   min-height: 100vh;
 }
 
-/* Glassmorphism Cards */
+/* Minimalist Institutional Cards */
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
-  border-radius: 1.25rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1rem;
+  transition: border-color 0.2s ease;
 }
 
 .glass-card:hover {
   border-color: var(--card-hover-border);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .glass-pill {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Bússola Interativa de Vento */
@@ -80,11 +74,11 @@ body {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 45px solid #f43f5e;
+  border-bottom: 45px solid #ea580c;
   position: absolute;
   top: 0;
   left: -4px;
-  filter: drop-shadow(0 0 4px rgba(244, 63, 94, 0.6));
+  filter: drop-shadow(0 0 3px rgba(234, 88, 12, 0.5));
 }
 
 .needle-south {
@@ -92,7 +86,7 @@ body {
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 45px solid #94a3b8;
+  border-top: 45px solid #64748b;
   position: absolute;
   bottom: 0;
   left: -4px;
@@ -105,16 +99,16 @@ body {
   color: #94a3b8;
 }
 
-.compass-n { top: 4px; color: #f43f5e; }
+.compass-n { top: 4px; color: #ea580c; }
 .compass-s { bottom: 4px; }
 .compass-e { right: 8px; }
 .compass-w { left: 8px; }
 
 /* Barra de Pressão Atmosférica Barômetro */
 .pressure-bar-container {
-  height: 10px;
+  height: 8px;
   border-radius: 9999px;
-  background: linear-gradient(90deg, #f43f5e 0%, #38bdf8 45%, #10b981 70%, #6366f1 100%);
+  background: linear-gradient(90deg, #1e3a8a 0%, #0284c7 50%, #38bdf8 100%);
   position: relative;
 }
 

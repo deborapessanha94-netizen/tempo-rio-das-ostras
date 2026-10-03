@@ -55,11 +55,11 @@ function setupNavigationTabs() {
 
       // Atualiza botões
       tabButtons.forEach(b => {
-        b.classList.remove('active', 'bg-sky-500', 'text-slate-950', 'font-bold', 'shadow-md', 'shadow-sky-500/20');
-        b.classList.add('text-slate-300', 'hover:bg-slate-800');
+        b.classList.remove('active', 'bg-[#1E3A8A]', 'text-white', 'border-blue-600/50', 'shadow-sm');
+        b.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-[#111C33]');
       });
-      btn.classList.add('active', 'bg-sky-500', 'text-slate-950', 'font-bold', 'shadow-md', 'shadow-sky-500/20');
-      btn.classList.remove('text-slate-300', 'hover:bg-slate-800');
+      btn.classList.add('active', 'bg-[#1E3A8A]', 'text-white', 'border-blue-600/50', 'shadow-sm');
+      btn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-[#111C33]');
 
       // Exibe aba correspondente
       tabPanes.forEach(pane => {
@@ -94,10 +94,10 @@ function setupBulletinChartTabs() {
   chartButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       chartButtons.forEach(b => {
-        b.classList.remove('active', 'bg-sky-500', 'text-slate-950', 'font-bold');
+        b.classList.remove('active', 'bg-[#1E3A8A]', 'text-white', 'font-medium');
         b.classList.add('text-slate-400', 'hover:text-white');
       });
-      btn.classList.add('active', 'bg-sky-500', 'text-slate-950', 'font-bold');
+      btn.classList.add('active', 'bg-[#1E3A8A]', 'text-white', 'font-medium');
       btn.classList.remove('text-slate-400', 'hover:text-white');
 
       state.activeMetric = btn.getAttribute('data-metric') || 'temperature';
@@ -218,13 +218,13 @@ function renderJundiaTelemetry(stations) {
     if (statusBadge) {
       statusBadge.textContent = jundia.status || 'ALERTA MÁXIMO';
       if (jundia.status === 'TRANSBORDAMENTO' || jundia.status === 'ALERTA MÁXIMO') {
-        statusBadge.className = 'px-3 py-1 rounded-full bg-red-600/30 text-red-300 font-extrabold text-xs border border-red-500 animate-pulse';
+        statusBadge.className = 'px-2.5 py-0.5 rounded bg-red-950/80 text-red-300 font-bold text-xs border border-red-800/80';
       } else if (jundia.status === 'ALERTA') {
-        statusBadge.className = 'px-3 py-1 rounded-full bg-orange-500/30 text-orange-300 font-extrabold text-xs border border-orange-500';
+        statusBadge.className = 'px-2.5 py-0.5 rounded bg-orange-950/80 text-orange-300 font-bold text-xs border border-orange-800/80';
       } else if (jundia.status === 'ATENÇÃO') {
-        statusBadge.className = 'px-3 py-1 rounded-full bg-amber-500/30 text-amber-300 font-bold text-xs border border-amber-500';
+        statusBadge.className = 'px-2.5 py-0.5 rounded bg-amber-950/80 text-amber-300 font-medium text-xs border border-amber-800/80';
       } else {
-        statusBadge.className = 'px-3 py-1 rounded-full bg-emerald-500/30 text-emerald-300 font-bold text-xs border border-emerald-500';
+        statusBadge.className = 'px-2.5 py-0.5 rounded bg-[#0C1527] text-slate-300 font-medium text-xs border border-[#1D2C48]';
       }
     }
 
@@ -240,25 +240,25 @@ function renderJundiaTelemetry(stations) {
   if (otherGrid) {
     const others = stations.filter(s => s !== jundia);
     otherGrid.innerHTML = others.map(st => {
-      let badgeBg = 'bg-slate-800 text-slate-300 border-slate-700';
-      if (st.status === 'TRANSBORDAMENTO') badgeBg = 'bg-red-600/30 text-red-300 border-red-500 font-extrabold animate-pulse';
-      else if (st.status === 'ALERTA' || st.status === 'ALERTA MÁXIMO') badgeBg = 'bg-red-500/20 text-red-400 border-red-500/40 font-bold';
-      else if (st.status === 'ATENÇÃO') badgeBg = 'bg-amber-500/20 text-amber-400 border-amber-500/40 font-bold';
-      else if (st.status === 'NORMAL') badgeBg = 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40';
+      let badgeBg = 'bg-[#111C33] text-slate-400 border-[#1D2C48]';
+      if (st.status === 'TRANSBORDAMENTO') badgeBg = 'bg-red-950/70 text-red-300 border-red-800/60 font-semibold';
+      else if (st.status === 'ALERTA' || st.status === 'ALERTA MÁXIMO') badgeBg = 'bg-red-950/70 text-red-300 border-red-800/60 font-semibold';
+      else if (st.status === 'ATENÇÃO') badgeBg = 'bg-amber-950/70 text-amber-300 border-amber-800/60 font-medium';
+      else if (st.status === 'NORMAL') badgeBg = 'bg-[#111C33] text-slate-400 border-[#1D2C48]';
 
       return `
-        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1.5 hover:border-slate-700 transition">
+        <div class="p-3 rounded-lg bg-[#0C1527] border border-[#1D2C48] space-y-1.5 hover:border-[#2b4066] transition">
           <div class="flex items-center justify-between">
             <span class="font-bold text-white text-xs">${st.nome_estacao} (${st.municipio})</span>
             <span class="px-1.5 py-0.5 rounded text-[9px] border ${badgeBg}">${st.status}</span>
           </div>
           <div class="flex items-center justify-between text-xs text-slate-400">
             <span>Rio: <strong class="text-slate-300">${st.curso_dagua}</strong></span>
-            <span>Nível: <strong class="text-sky-400 font-mono">${st.nivel_rio} m</strong></span>
+            <span>Nível: <strong class="text-slate-100 font-mono">${st.nivel_rio} m</strong></span>
           </div>
-          <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/80 pt-1">
+          <div class="flex items-center justify-between text-[11px] text-slate-500 border-t border-[#1D2C48] pt-1">
             <span>Transbordo: ${st.cota_transborda || '—'}</span>
-            <span>Chuva 24h: <strong class="text-blue-400">${st.chuva_24h} mm</strong></span>
+            <span>Chuva 24h: <strong class="text-slate-300">${st.chuva_24h} mm</strong></span>
           </div>
         </div>
       `;

@@ -361,13 +361,13 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Máxima (°C)',
             data: tMax,
-            borderColor: '#dc2626',
-            backgroundColor: 'rgba(220, 38, 38, 0.15)',
-            borderWidth: 2.5,
+            borderColor: '#ea580c',
+            backgroundColor: 'rgba(234, 88, 12, 0.1)',
+            borderWidth: 2,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#dc2626',
-            pointRadius: 5
+            pointBackgroundColor: '#ea580c',
+            pointRadius: 4
           },
           {
             label: 'Mínima (°C)',
@@ -375,7 +375,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             borderColor: '#0284c7',
             backgroundColor: 'rgba(2, 132, 199, 0.05)',
             borderWidth: 2,
-            borderDash: [5, 5],
+            borderDash: [4, 4],
             tension: 0.3,
             fill: false,
             pointBackgroundColor: '#0284c7',
@@ -409,24 +409,24 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Umidade Máx (%)',
             data: uMax,
-            borderColor: '#15803d',
-            backgroundColor: 'rgba(21, 128, 61, 0.15)',
-            borderWidth: 2.5,
+            borderColor: '#0284c7',
+            backgroundColor: 'rgba(2, 132, 199, 0.12)',
+            borderWidth: 2,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#15803d',
-            pointRadius: 5
+            pointBackgroundColor: '#0284c7',
+            pointRadius: 4
           },
           {
             label: 'Umidade Mín (%)',
             data: uMin,
-            borderColor: '#22c55e',
-            borderWidth: 2,
+            borderColor: '#38bdf8',
+            borderWidth: 1.5,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#22c55e',
-            pointRadius: 4
+            pointBackgroundColor: '#38bdf8',
+            pointRadius: 3.5
           }
         ]
       },
@@ -455,13 +455,13 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Pressão ao Nível Médio do Mar (hPa)',
             data: pVal,
-            borderColor: '#0f766e',
-            backgroundColor: 'rgba(15, 118, 110, 0.15)',
-            borderWidth: 2.5,
+            borderColor: '#64748b',
+            backgroundColor: 'rgba(100, 116, 139, 0.12)',
+            borderWidth: 2,
             tension: 0.25,
             fill: true,
-            pointBackgroundColor: '#0d9488',
-            pointRadius: 6
+            pointBackgroundColor: '#94a3b8',
+            pointRadius: 4
           }
         ]
       },
@@ -492,20 +492,20 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'bar',
             label: 'Vento Médio (km/h)',
             data: vMed,
-            backgroundColor: 'rgba(185, 28, 28, 0.75)',
-            borderColor: '#b91c1c',
-            borderWidth: 1.5,
-            borderRadius: 6
+            backgroundColor: 'rgba(30, 58, 138, 0.8)',
+            borderColor: '#2563eb',
+            borderWidth: 1,
+            borderRadius: 4
           },
           {
             type: 'line',
             label: 'Rajada Máxima (km/h)',
             data: vRaj,
-            borderColor: '#ef4444',
+            borderColor: '#ea580c',
             borderWidth: 2,
-            pointBackgroundColor: '#b91c1c',
-            pointRadius: 6,
-            pointHoverRadius: 8,
+            pointBackgroundColor: '#ea580c',
+            pointRadius: 4,
+            pointHoverRadius: 6,
             fill: false
           }
         ]
@@ -535,10 +535,10 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Precipitação Prevista (mm)',
             data: chTot,
-            backgroundColor: 'rgba(37, 99, 235, 0.8)',
-            borderColor: '#1d4ed8',
-            borderWidth: 1.5,
-            borderRadius: 6
+            backgroundColor: 'rgba(2, 132, 199, 0.75)',
+            borderColor: '#0284c7',
+            borderWidth: 1,
+            borderRadius: 4
           }
         ]
       },
