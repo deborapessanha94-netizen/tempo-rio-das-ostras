@@ -16,11 +16,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data')
 os.makedirs(DATA_DIR, exist_ok=True)
 
+# Cotas de Referência Oficiais (metros) extraídas dos hidrogramas e cotagramas do INEA
 COTAS_REFERENCIA = {
-    'Jundiá': {'atencao': 2.00, 'alerta': 2.50, 'transborda': 3.00},
-    'Glicério': {'atencao': 2.40, 'alerta': 3.00, 'transborda': 3.50},
-    'São Pedro': {'atencao': 1.20, 'alerta': 1.80, 'transborda': 2.40},
-    'Severina': {'atencao': 1.80, 'alerta': 2.30, 'transborda': 2.80}
+    'Jundiá': {'atencao': 1.99, 'alerta': 2.27, 'transborda': 2.84},
+    'São Pedro': {'atencao': 1.69, 'alerta': 1.93, 'transborda': 2.41},
+    'Glicério': {'atencao': 3.86, 'alerta': 4.42, 'transborda': 5.52},
+    'Macaé de Cima': {'atencao': 3.43, 'alerta': 3.92, 'transborda': 4.90},
+    'Lagoa de Imboassica': {'atencao': 2.03, 'alerta': 2.32, 'transborda': 2.90},
+    'Barra do Sana': {'atencao': 2.62, 'alerta': 2.99, 'transborda': 3.74},
+    'São Romão': {'atencao': 2.04, 'alerta': 2.34, 'transborda': 2.92},
+    'Galdinópolis': {'atencao': 1.90, 'alerta': 2.18, 'transborda': 2.72},
+    'Piller': {'atencao': 3.10, 'alerta': 3.54, 'transborda': 4.42},
+    'Ponte do Baião': {'atencao': 1.12, 'alerta': 1.28, 'transborda': 1.60}
 }
 
 def format_date_br(d_str, h_str):

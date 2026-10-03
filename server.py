@@ -118,12 +118,18 @@ def fetch_inmet_alerts():
             return CACHE['inmet_alerts']['data']
         return [{"error": f"Falha ao obter avisos INMET: {str(e)}"}]
 
-# Cotas de Referência Oficiais (metros) para monitoramento do INEA
+# Cotas de Referência Oficiais (metros) extraídas dos hidrogramas e cotagramas do INEA
 COTAS_REFERENCIA = {
-    'Jundiá': {'atencao': 2.00, 'alerta': 2.50, 'transborda': 3.00},
-    'Glicério': {'atencao': 2.40, 'alerta': 3.00, 'transborda': 3.50},
-    'São Pedro': {'atencao': 1.20, 'alerta': 1.80, 'transborda': 2.40},
-    'Severina': {'atencao': 1.80, 'alerta': 2.30, 'transborda': 2.80}
+    'Jundiá': {'atencao': 1.99, 'alerta': 2.27, 'transborda': 2.84},
+    'São Pedro': {'atencao': 1.69, 'alerta': 1.93, 'transborda': 2.41},
+    'Glicério': {'atencao': 3.86, 'alerta': 4.42, 'transborda': 5.52},
+    'Macaé de Cima': {'atencao': 3.43, 'alerta': 3.92, 'transborda': 4.90},
+    'Lagoa de Imboassica': {'atencao': 2.03, 'alerta': 2.32, 'transborda': 2.90},
+    'Barra do Sana': {'atencao': 2.62, 'alerta': 2.99, 'transborda': 3.74},
+    'São Romão': {'atencao': 2.04, 'alerta': 2.34, 'transborda': 2.92},
+    'Galdinópolis': {'atencao': 1.90, 'alerta': 2.18, 'transborda': 2.72},
+    'Piller': {'atencao': 3.10, 'alerta': 3.54, 'transborda': 4.42},
+    'Ponte do Baião': {'atencao': 1.12, 'alerta': 1.28, 'transborda': 1.60}
 }
 
 def fetch_inea_cheias():
@@ -211,26 +217,27 @@ class MeteoServerHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         try:
+            parsed_path = self.path.split('?')[0]
             # API: Previsão Oficial INMET Rio das Ostras
-            if self.path == '/api/inmet/previsao':
+            if parsed_path == '/api/inmet/previsao':
                 data = fetch_inmet_forecast()
                 self.send_json_response(data)
                 return
 
             # API: Avisos Meteorológicos Ativos INMET
-            if self.path == '/api/inmet/avisos':
+            if parsed_path == '/api/inmet/avisos':
                 data = fetch_inmet_alerts()
                 self.send_json_response(data)
                 return
 
             # API: Alerta de Cheias e Nível de Rios INEA (Rio das Ostras e Macaé)
-            if self.path == '/api/inea/cheias':
+            if parsed_path == '/api/inea/cheias':
                 data = fetch_inea_cheias()
                 self.send_json_response(data)
                 return
 
             # Garante rota para /index.html
-            if self.path in ('/', ''):
+            if parsed_path in ('/', ''):
                 self.path = '/index.html'
 
             return super().do_GET()

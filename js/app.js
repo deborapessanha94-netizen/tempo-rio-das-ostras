@@ -425,7 +425,17 @@ function renderHeroAndTurnos() {
 
     if (levelEl) levelEl.textContent = formattedLevel;
     if (statusEl) {
-      statusEl.innerHTML = `<span class="text-emerald-300 font-semibold">${ostrasStation.status || 'Vigilância'}</span> <span class="text-slate-400 text-[10px]">(Alerta: ${ostrasStation.cota_alerta || '2.50m'})</span>`;
+      const stText = ostrasStation.status || 'Vigilância';
+      const isMaxAlert = stText.includes('MÁXIMO') || stText.includes('MAXIMO');
+      const isOverflow = stText.includes('TRANSBORDA');
+      const isAlert = stText.includes('ALERTA');
+      const isAttention = stText.includes('ATEN');
+
+      const statusColor = (isMaxAlert || isOverflow) ? 'text-rose-400 font-extrabold animate-pulse' :
+                          isAlert ? 'text-orange-400 font-bold' :
+                          isAttention ? 'text-amber-400 font-bold' : 'text-emerald-300 font-semibold';
+
+      statusEl.innerHTML = `<span class="${statusColor}">${stText}</span> <span class="text-slate-400 text-[10px]">(Transbordo: ${ostrasStation.cota_transborda || '2.84 m'})</span>`;
     }
     if (riverRainEl) {
       riverRainEl.textContent = `Pluviômetro: ${ostrasStation.chuva_1h || '0'}mm (1h) / ${ostrasStation.chuva_24h || '0'}mm (24h)`;
@@ -737,7 +747,17 @@ function renderThe5Pillars() {
   }
 
   if (ostrasStation) {
-    document.getElementById('precip-river-status').textContent = ostrasStation.status || 'VIGILÂNCIA';
+    const riverStatusEl = document.getElementById('precip-river-status');
+    if (riverStatusEl) {
+      const st = ostrasStation.status || 'VIGILÂNCIA';
+      riverStatusEl.textContent = st;
+      const isMaxAlert = st.includes('MÁXIMO') || st.includes('MAXIMO') || st.includes('TRANSBORDA');
+      const isAlert = st.includes('ALERTA');
+      const isAttention = st.includes('ATEN');
+      riverStatusEl.className = isMaxAlert ? 'font-extrabold text-rose-400 animate-pulse' :
+                                isAlert ? 'font-bold text-orange-400' :
+                                isAttention ? 'font-bold text-amber-400' : 'font-semibold text-emerald-400';
+    }
   }
 
   // 2. Ventos & Mar
@@ -825,7 +845,9 @@ function renderIneaTable() {
       'ATENÇÃO': 'bg-amber-500/15 text-amber-400 border-amber-500/30',
       'ATENCAO': 'bg-amber-500/15 text-amber-400 border-amber-500/30',
       'ALERTA': 'bg-orange-500/15 text-orange-400 border-orange-500/30',
-      'TRANSBORDAMENTO': 'bg-rose-500/20 text-rose-400 border-rose-500/40 animate-pulse'
+      'ALERTA MÁXIMO': 'bg-rose-500/25 text-rose-300 border-rose-500/50 font-extrabold animate-pulse',
+      'ALERTA MAXIMO': 'bg-rose-500/25 text-rose-300 border-rose-500/50 font-extrabold animate-pulse',
+      'TRANSBORDAMENTO': 'bg-rose-600 text-white border-rose-400 font-extrabold animate-pulse shadow-md'
     };
     const badgeCls = statusBadges[st.status] || 'bg-slate-700 text-slate-300';
 
