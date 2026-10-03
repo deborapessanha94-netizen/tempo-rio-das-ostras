@@ -6,6 +6,15 @@
   <title>TEMPO em Rio das Ostras — Sistema Meteorológico & Defesa Civil</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   
+  <!-- Progressive Web App (PWA) 24/7 -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0B132B">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tempo RO">
+  <link rel="apple-touch-icon" href="img/icon-192.png">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -64,9 +73,15 @@
           </div>
         </a>
 
-        <button id="btn-refresh-data" class="md:hidden p-2 rounded-lg bg-slate-800 text-sky-400" title="Atualizar dados">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-        </button>
+        <div class="flex items-center gap-2 md:hidden">
+          <button id="btn-install-mobile" class="px-2.5 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center gap-1 shadow-md shadow-sky-500/20 transition cursor-pointer" title="Instalar aplicativo no celular">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
+            <span>Instalar</span>
+          </button>
+          <button id="btn-refresh-data" class="p-2 rounded-lg bg-slate-800 text-sky-400" title="Atualizar dados">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+        </div>
       </div>
 
       <!-- Links Rápidos dos Órgãos Oficiais -->
@@ -90,6 +105,10 @@
 
       <!-- Status e Controles -->
       <div class="flex items-center gap-2.5">
+        <button id="btn-install-desktop" class="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-md shadow-sky-500/20 transition cursor-pointer" title="Instalar App no seu celular ou computador">
+          <i data-lucide="smartphone" class="w-4 h-4"></i>
+          <span>Instalar App</span>
+        </button>
         <button id="btn-refresh-desktop" class="p-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-sky-400 transition" title="Atualizar Dados Agora">
           <i data-lucide="refresh-cw" class="w-4 h-4"></i>
         </button>
@@ -1016,6 +1035,64 @@
       <span>INMET</span> • <span>INEA</span> • <span>CEMADEN</span> • <span>CPTEC/INPE</span> • <span>Marinha do Brasil</span>
     </div>
   </footer>
+
+  <!-- Modal de Orientação para Instalação no Celular -->
+  <div id="modal-install-guide" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <button id="btn-close-install-modal" class="absolute top-4 right-4 p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition cursor-pointer" title="Fechar">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-xl bg-[#283964] border border-slate-700 p-1 flex items-center justify-center shrink-0">
+          <img src="img/logo.png" alt="Logo" class="h-full w-auto object-contain">
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white">Instalar TEMPO Rio das Ostras</h3>
+          <p class="text-xs text-slate-400">Funciona direto na tela do seu celular 24/7</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-300">
+        <div class="p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 flex items-start gap-3">
+          <div class="p-2 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <p class="font-semibold text-white">Não precisa do computador ligado</p>
+            <p class="text-slate-400 mt-0.5">O aplicativo roda diretamente na nuvem e atualiza continuamente com dados oficiais do INMET, INEA e Radares.</p>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <p class="font-bold text-sky-400 flex items-center gap-1.5">
+            <i data-lucide="apple" class="w-4 h-4"></i> No iPhone (Safari):
+          </p>
+          <ol class="list-decimal list-inside space-y-1 text-slate-300">
+            <li>Toque no botão <strong>Compartilhar</strong> (ícone do quadrado com seta para cima <i data-lucide="share" class="inline w-3 h-3 text-sky-400"></i>).</li>
+            <li>Role a lista para baixo e toque em <strong>"Adicionar à Tela de Início"</strong>.</li>
+            <li>Toque em <strong>"Adicionar"</strong> no canto superior direito.</li>
+          </ol>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+          <p class="font-bold text-emerald-400 flex items-center gap-1.5">
+            <i data-lucide="smartphone" class="w-4 h-4"></i> No Android (Chrome):
+          </p>
+          <ol class="list-decimal list-inside space-y-1 text-slate-300">
+            <li>Toque no botão <strong>"Instalar Agora"</strong> abaixo ou no menu de <strong>3 pontinhos (⋮)</strong> no navegador.</li>
+            <li>Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <button id="btn-install-prompt-trigger" class="w-full py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer">
+          <i data-lucide="download" class="w-4 h-4"></i> Instalar Agora
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts da Aplicação -->
   <script type="module" src="js/app.js"></script>

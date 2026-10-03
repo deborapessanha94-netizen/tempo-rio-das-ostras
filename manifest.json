@@ -1,0 +1,27 @@
+{
+  "name": "TEMPO em Rio das Ostras",
+  "short_name": "Tempo RO",
+  "description": "Sistema Especializado de Meteorologia, Alertas da Defesa Civil e Telemetria de Rios de Rio das Ostras (RJ)",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0B132B",
+  "theme_color": "#0B132B",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["weather", "utilities"]
+}

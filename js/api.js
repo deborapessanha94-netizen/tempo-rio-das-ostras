@@ -83,24 +83,27 @@ export async function getRioDasOstrasWeatherData() {
  */
 export async function getInmetForecast() {
   const ts = Date.now();
-  try {
-    const res = await fetch(`/api/inmet/previsao?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-    throw new Error('API local indisponível');
-  } catch (error) {
-    // Fallback para arquivo sincronizado na nuvem (GitHub Pages / 24/7)
-    try {
-      const dataRes = await fetch(`./data/inmet_previsao.json?t=${ts}`, { cache: 'no-store' });
-      if (dataRes.ok) return await dataRes.json();
-    } catch (e) {}
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-    // Fallback direto API INMET
+  if (isLocal) {
     try {
-      const direct = await fetch('https://apiprevmet3.inmet.gov.br/previsao/3304524');
-      if (direct.ok) return await direct.json();
-    } catch (e) {}
-    return null;
+      const res = await fetch(`/api/inmet/previsao?t=${ts}`, { cache: 'no-store' });
+      if (res.ok) return await res.json();
+    } catch (error) {}
   }
+
+  // Fallback para arquivo sincronizado na nuvem (GitHub Pages / 24/7)
+  try {
+    const dataRes = await fetch(`./data/inmet_previsao.json?t=${ts}`, { cache: 'no-store' });
+    if (dataRes.ok) return await dataRes.json();
+  } catch (e) {}
+
+  // Fallback direto API INMET
+  try {
+    const direct = await fetch('https://apiprevmet3.inmet.gov.br/previsao/3304524');
+    if (direct.ok) return await direct.json();
+  } catch (e) {}
+  return null;
 }
 
 /**
@@ -108,18 +111,21 @@ export async function getInmetForecast() {
  */
 export async function getInmetAlerts() {
   const ts = Date.now();
-  try {
-    const res = await fetch(`/api/inmet/avisos?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-    throw new Error('API local indisponível');
-  } catch (error) {
-    // Fallback para dados sincronizados na nuvem (GitHub Pages / 24/7)
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  if (isLocal) {
     try {
-      const dataRes = await fetch(`./data/inmet_avisos.json?t=${ts}`, { cache: 'no-store' });
-      if (dataRes.ok) return await dataRes.json();
-    } catch (e) {}
-    return [];
+      const res = await fetch(`/api/inmet/avisos?t=${ts}`, { cache: 'no-store' });
+      if (res.ok) return await res.json();
+    } catch (error) {}
   }
+
+  // Fallback para dados sincronizados na nuvem (GitHub Pages / 24/7)
+  try {
+    const dataRes = await fetch(`./data/inmet_avisos.json?t=${ts}`, { cache: 'no-store' });
+    if (dataRes.ok) return await dataRes.json();
+  } catch (e) {}
+  return [];
 }
 
 // Cotas Oficiais do INEA extraídas dos hidrogramas e cotagramas oficiais
@@ -227,14 +233,18 @@ export function parseIneaTableHtml(htmlText) {
  */
 export async function getIneaCheias() {
   const ts = Date.now();
-  // 1. Tenta API local do servidor Python (se estiver em execução)
-  try {
-    const res = await fetch(`/api/inea/cheias?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) return data;
-    }
-  } catch (error) {}
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  // 1. Tenta API local do servidor Python (se estiver em localhost)
+  if (isLocal) {
+    try {
+      const res = await fetch(`/api/inea/cheias?t=${ts}`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) return data;
+      }
+    } catch (error) {}
+  }
 
   // 2. Consulta em tempo real diretamente do portal do INEA via proxy CORS de alta velocidade
   try {

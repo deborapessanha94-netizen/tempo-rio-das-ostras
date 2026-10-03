@@ -42,6 +42,7 @@ const state = {
 
 document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
+  setupPWA();
   loadAllRioDasOstrasData();
   startAutoSync();
 });
@@ -1077,3 +1078,96 @@ function updateChart() {
     renderHourlyChart(canvas, state.activeMetric, state.weatherData.hourly);
   }
 }
+
+// PWA Service Worker Registration & Installation Prompt Handling
+let deferredPrompt = null;
+
+function setupPWA() {
+  // 1. Registra o Service Worker para funcionamento 24/7 e suporte offline
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => {
+          console.info('Service Worker registrado com sucesso (PWA 24/7):', reg.scope);
+        })
+        .catch(err => {
+          console.warn('Falha ao registrar Service Worker:', err);
+        });
+    });
+  }
+
+  const btnDesktop = document.getElementById('btn-install-desktop');
+  const btnMobile = document.getElementById('btn-install-mobile');
+  const modalGuide = document.getElementById('modal-install-guide');
+  const btnCloseGuide = document.getElementById('btn-close-install-modal');
+  const btnTrigger = document.getElementById('btn-install-prompt-trigger');
+
+  // Verifica se já está rodando instalado como App (standalone)
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (window.navigator.standalone === true);
+  if (isStandalone) {
+    if (btnDesktop) btnDesktop.classList.add('hidden');
+    if (btnMobile) btnMobile.classList.add('hidden');
+  }
+
+  // Captura o evento nativo de instalação do Chrome / Edge / Android
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+  });
+
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      try {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+          if (btnDesktop) btnDesktop.classList.add('hidden');
+          if (btnMobile) btnMobile.classList.add('hidden');
+          if (modalGuide) {
+            modalGuide.classList.add('hidden');
+            modalGuide.classList.remove('flex');
+          }
+        }
+        deferredPrompt = null;
+      } catch (e) {
+        console.warn('Erro ao acionar prompt nativo:', e);
+      }
+    } else {
+      // Abre o modal informativo com os passos para iPhone ou Android
+      if (modalGuide) {
+        modalGuide.classList.remove('hidden');
+        modalGuide.classList.add('flex');
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+  };
+
+  if (btnDesktop) btnDesktop.addEventListener('click', handleInstallClick);
+  if (btnMobile) btnMobile.addEventListener('click', handleInstallClick);
+  if (btnTrigger) btnTrigger.addEventListener('click', handleInstallClick);
+
+  if (btnCloseGuide && modalGuide) {
+    btnCloseGuide.addEventListener('click', () => {
+      modalGuide.classList.add('hidden');
+      modalGuide.classList.remove('flex');
+    });
+
+    modalGuide.addEventListener('click', (e) => {
+      if (e.target === modalGuide) {
+        modalGuide.classList.add('hidden');
+        modalGuide.classList.remove('flex');
+      }
+    });
+  }
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    if (btnDesktop) btnDesktop.classList.add('hidden');
+    if (btnMobile) btnMobile.classList.add('hidden');
+    if (modalGuide) {
+      modalGuide.classList.add('hidden');
+      modalGuide.classList.remove('flex');
+    }
+  });
+}
+
