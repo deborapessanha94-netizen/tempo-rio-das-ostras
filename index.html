@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=7">
+  <link rel="stylesheet" href="css/styles.css?v=8">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -49,21 +49,27 @@
         <img src="img/logo.png" alt="TEMPO em Rio das Ostras" class="h-11 w-11 sm:h-12 sm:w-12 object-contain shrink-0">
         <div class="min-w-0">
           <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight">TEMPO em Rio das Ostras</h1>
-            <span class="text-[9px] px-1.5 py-0.5 rounded bg-black/30 text-[#94b5d6] font-semibold border border-white/10 uppercase">24H</span>
+            <h1 class="text-base sm:text-lg font-bold tracking-tight theme-header-title">TEMPO em Rio das Ostras</h1>
+            <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold uppercase theme-header-badge">24H</span>
           </div>
-          <p class="text-[11px] text-[#94b5d6]">Sistema de Monitoramento Meteorológico & Alerta Hidrológico • Defesa Civil</p>
+          <p class="text-[11px] theme-header-sub">Sistema de Monitoramento Meteorológico & Alerta Hidrológico • Defesa Civil</p>
         </div>
       </div>
 
       <!-- Barra de Ações Rápidas -->
       <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center md:justify-end text-xs">
         
-        <!-- Botão Alternar Tema: Modo Claro (Boletim A4) / Modo Escuro -->
-        <button id="theme-toggle-btn" class="btn-theme-toggle" title="Alternar entre Modo Claro (Papel/Boletim) e Modo Escuro (Cemaden 24h)">
-          <i data-lucide="moon" class="w-3.5 h-3.5" id="theme-toggle-icon"></i>
-          <span id="theme-toggle-text">Modo Escuro</span>
-        </button>
+        <!-- Seletor Segmentado de Tema: Modo Claro / Modo Escuro -->
+        <div class="theme-switch-container" title="Escolha o tema: Modo Claro (Boletim A4) ou Modo Escuro (Cemaden 24h)">
+          <button id="btn-theme-light" class="theme-switch-btn active" title="Ativar Modo Claro (Documento/Boletim)">
+            <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500"></i>
+            <span>Modo Claro</span>
+          </button>
+          <button id="btn-theme-dark" class="theme-switch-btn" title="Ativar Modo Escuro (Cemaden 24h)">
+            <i data-lucide="moon" class="w-3.5 h-3.5 text-blue-400"></i>
+            <span>Modo Escuro</span>
+          </button>
+        </div>
 
         <!-- Botão Baixar Informativo População (PDF) -->
         <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="btn-cemaden-outline px-2.5 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Informativo à População">
@@ -810,6 +816,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=7"></script>
+  <script type="module" src="js/app.js?v=8"></script>
 </body>
 </html>

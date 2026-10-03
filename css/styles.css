@@ -5,11 +5,14 @@
 /* ========================================================================= */
 :root, html.theme-light {
   color-scheme: light;
-  --bg-page: #f1f5f9;              /* Slate institucional suave de fundo */
-  --header-bg: #071f3d;            /* Cabeçalho azul marinho institucional */
-  --header-border: #0c2d54;
-  --header-text: #ffffff;
-  --header-sub: #94b5d6;
+  --bg-page: #f8fafc;              /* Slate suave de papel timbrado */
+  --header-bg: #ffffff;            /* Topo branco limpo como documento oficial */
+  --header-border: #cbd5e1;
+  --header-text: #0f172a;
+  --header-sub: #475569;
+  --header-badge-bg: #f1f5f9;
+  --header-badge-text: #0284c7;
+  --header-badge-border: #cbd5e1;
 
   --nav-bg: #ffffff;              /* Barra de abas limpa */
   --nav-border: #cbd5e1;
@@ -75,6 +78,9 @@ html.theme-dark {
   --header-border: #133a66;
   --header-text: #ffffff;
   --header-sub: #94b5d6;
+  --header-badge-bg: #051833;
+  --header-badge-text: #94b5d6;
+  --header-badge-border: #133a66;
 
   --nav-bg: #071f3d;
   --nav-border: #133a66;
@@ -244,7 +250,58 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-color: var(--card-hover-border);
 }
 
-/* Botão de Alternância de Tema (Modo Claro / Modo Escuro) */
+.theme-header-title {
+  color: var(--header-text) !important;
+}
+
+.theme-header-sub {
+  color: var(--header-sub) !important;
+}
+
+.theme-header-badge {
+  background-color: var(--header-badge-bg) !important;
+  color: var(--header-badge-text) !important;
+  border-color: var(--header-badge-border) !important;
+}
+
+/* Seletor Segmentado de Tema (Pill Switcher com 2 botões) */
+.theme-switch-container {
+  background-color: var(--tile-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0.5rem;
+  padding: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.theme-switch-btn {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s ease;
+}
+
+.theme-switch-btn:hover {
+  color: var(--text-main);
+}
+
+.theme-switch-btn.active {
+  background-color: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border-color: var(--card-border) !important;
+}
+
+/* Botão de Alternância de Tema Legado */
 .btn-theme-toggle {
   background-color: var(--btn-outline-bg);
   border: 1px solid var(--btn-outline-border);

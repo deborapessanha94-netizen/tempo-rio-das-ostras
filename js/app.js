@@ -49,12 +49,28 @@ function initTheme() {
   const initialTheme = saved === 'dark' ? 'dark' : 'light';
   applyTheme(initialTheme);
 
+  const btnLight = document.getElementById('btn-theme-light');
+  const btnDark = document.getElementById('btn-theme-dark');
   const toggleBtn = document.getElementById('theme-toggle-btn');
+
+  if (btnLight) {
+    btnLight.addEventListener('click', () => {
+      applyTheme('light');
+      updateBulletinChart();
+    });
+  }
+
+  if (btnDark) {
+    btnDark.addEventListener('click', () => {
+      applyTheme('dark');
+      updateBulletinChart();
+    });
+  }
+
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
       const isCurrentLight = document.documentElement.classList.contains('theme-light') || !document.documentElement.classList.contains('theme-dark');
-      const newTheme = isCurrentLight ? 'dark' : 'light';
-      applyTheme(newTheme);
+      applyTheme(isCurrentLight ? 'dark' : 'light');
       updateBulletinChart();
     });
   }
@@ -62,6 +78,8 @@ function initTheme() {
 
 function applyTheme(theme) {
   const root = document.documentElement;
+  const btnLight = document.getElementById('btn-theme-light');
+  const btnDark = document.getElementById('btn-theme-dark');
   const toggleIcon = document.getElementById('theme-toggle-icon');
   const toggleText = document.getElementById('theme-toggle-text');
 
@@ -69,12 +87,16 @@ function applyTheme(theme) {
     root.classList.remove('theme-light');
     root.classList.add('theme-dark');
     localStorage.setItem('meteo_theme', 'dark');
+    if (btnLight) btnLight.classList.remove('active');
+    if (btnDark) btnDark.classList.add('active');
     if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'sun');
     if (toggleText) toggleText.textContent = 'Modo Claro';
   } else {
     root.classList.remove('theme-dark');
     root.classList.add('theme-light');
     localStorage.setItem('meteo_theme', 'light');
+    if (btnLight) btnLight.classList.add('active');
+    if (btnDark) btnDark.classList.remove('active');
     if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'moon');
     if (toggleText) toggleText.textContent = 'Modo Escuro';
   }
