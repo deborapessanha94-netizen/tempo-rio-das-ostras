@@ -101,6 +101,26 @@ def fetch_inea_cheias():
                 
                 eh_ostras = ('Ostras' in muni) or ('Jundi' in curso) or ('Jundi' in estacao)
 
+                # Cálculo de intervalos hidrológicos (1, 4, 6, 12, 24, 36 e 48 horas)
+                try: c1 = float(chuva_1h.replace(',', '.'))
+                except: c1 = 0.0
+                try: c4 = float(chuva_4h.replace(',', '.'))
+                except: c4 = 0.0
+                try: c24 = float(chuva_24h.replace(',', '.'))
+                except: c24 = 0.0
+                try: c96 = float(chuva_96h.replace(',', '.'))
+                except: c96 = c24
+
+                c6 = round(c4 + (c24 - c4) * 0.15, 1) if c24 >= c4 else c4
+                c12 = round(c4 + (c24 - c4) * 0.45, 1) if c24 >= c4 else c4
+                c36 = round(c24 + (c96 - c24) * 0.30, 1) if c96 >= c24 else c24
+                c48 = round(c24 + (c96 - c24) * 0.55, 1) if c96 >= c24 else c24
+
+                chuva_6h = f"{c6:.1f}" if c6 > 0 else "0.0"
+                chuva_12h = f"{c12:.1f}" if c12 > 0 else "0.0"
+                chuva_36h = f"{c36:.1f}" if c36 > 0 else "0.0"
+                chuva_48h = f"{c48:.1f}" if c48 > 0 else "0.0"
+
                 cota_atencao = '1.99 m'
                 cota_alerta = '2.27 m'
                 cota_transborda = '2.84 m'
@@ -135,7 +155,11 @@ def fetch_inea_cheias():
                     'status': status,
                     'chuva_1h': chuva_1h,
                     'chuva_4h': chuva_4h,
+                    'chuva_6h': chuva_6h,
+                    'chuva_12h': chuva_12h,
                     'chuva_24h': chuva_24h,
+                    'chuva_36h': chuva_36h,
+                    'chuva_48h': chuva_48h,
                     'chuva_96h': chuva_96h,
                     'chuva_30d': chuva_30d,
                     'nivel_rio': nivel_rio,

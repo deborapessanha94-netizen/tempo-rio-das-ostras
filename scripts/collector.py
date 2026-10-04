@@ -122,18 +122,36 @@ def collect_all_stations():
                 hourly = h_data["observations"]
                 if len(hourly) > 0:
                     stat_entry["online"] = True
-                    # Inverte para termos do mais recente para o mais antigo
-                    rev = list(reversed(hourly))
+                    # Ordena observações cronologicamente
+                    sorted_obs = sorted(hourly, key=lambda x: x.get("obsTimeLocal", ""))
+                    buckets = []
+                    prev_day = None
+                    prev_val = 0.0
+                    for o in sorted_obs:
+                        t_str = o.get("obsTimeLocal", "")
+                        if not t_str: continue
+                        try:
+                            dt = datetime.strptime(t_str, "%Y-%m-%d %H:%M:%S")
+                        except Exception:
+                            continue
+                        day_str = dt.strftime("%Y-%m-%d")
+                        tot = safe_float(o.get("metric", {}).get("precipTotal"), 0.0)
+                        if prev_day != day_str:
+                            inc = tot
+                        else:
+                            inc = max(0.0, tot - prev_val)
+                        buckets.append((dt, inc))
+                        prev_day = day_str
+                        prev_val = tot
 
+                    # Ponto de referência: o momento da previsão / dia da previsão
+                    # A contagem é feita retroativa (1, 4, 6, 12, 24, 36, 48 e 96 horas antes)
+                    ref_dt = buckets[-1][0] if buckets else datetime.now()
+                    
                     def calc_accum(hours_count):
-                        total = 0.0
-                        limit = min(hours_count, len(rev))
-                        for i in range(limit):
-                            rate = rev[i].get("metric", {}).get("precipRate", 0.0)
-                            if rate is not None and rate > 0:
-                                total += float(rate)
-                        # Alternativa: diferença entre precipTotal diário se acumulado
-                        return round(total, 1)
+                        window_sec = hours_count * 3600
+                        val = sum(inc for dt, inc in buckets if 0 <= (ref_dt - dt).total_seconds() <= window_sec)
+                        return round(val, 1)
 
                     stat_entry["chuva_1h"] = calc_accum(1)
                     stat_entry["chuva_4h"] = calc_accum(4)
@@ -143,18 +161,6 @@ def collect_all_stations():
                     stat_entry["chuva_36h"] = calc_accum(36)
                     stat_entry["chuva_48h"] = calc_accum(48)
                     stat_entry["chuva_96h"] = calc_accum(96)
-
-                    # Se o cálculo horário der zero por limitação de taxa, usa o precipTotal do dia se houver
-                    if stat_entry["chuva_24h"] == 0.0 and stat_entry.get("chuva_hoje", 0.0) > 0:
-                        hoje = float(stat_entry["chuva_hoje"])
-                        stat_entry["chuva_24h"] = hoje
-                        stat_entry["chuva_1h"] = round(hoje * 0.1, 1)
-                        stat_entry["chuva_4h"] = round(hoje * 0.4, 1)
-                        stat_entry["chuva_6h"] = round(hoje * 0.55, 1)
-                        stat_entry["chuva_12h"] = round(hoje * 0.8, 1)
-                        stat_entry["chuva_36h"] = hoje
-                        stat_entry["chuva_48h"] = hoje
-                        stat_entry["chuva_96h"] = hoje
         except Exception as e:
             pass
 
@@ -170,11 +176,11 @@ def collect_all_stations():
         "rajada_atual": None,
         "umidade_atual": None,
         "chuva_1h": 0.0,
-        "chuva_4h": 0.0,
-        "chuva_6h": 5.0,
-        "chuva_12h": 10.0,
-        "chuva_24h": 48.8,
-        "chuva_36h": 75.0,
+        "chuva_4h": 0.2,
+        "chuva_6h": 0.6,
+        "chuva_12h": 5.8,
+        "chuva_24h": 44.6,
+        "chuva_36h": 73.6,
         "chuva_48h": 102.6,
         "chuva_96h": 141.2,
         "ultima_leitura": "Hoje",
@@ -216,15 +222,15 @@ def collect_all_stations():
         "vento_atual": None,
         "rajada_atual": None,
         "umidade_atual": None,
-        "chuva_1h": 0.0,
-        "chuva_4h": 0.0,
-        "chuva_6h": 12.0,
+        "chuva_1h": 1.4,
+        "chuva_4h": 1.6,
+        "chuva_6h": 8.5,
         "chuva_12h": 22.0,
-        "chuva_24h": 108.2,
-        "chuva_36h": 115.0,
-        "chuva_48h": 120.4,
-        "chuva_96h": 128.0,
-        "nivel_rio": "2,40 m",
+        "chuva_24h": 53.8,
+        "chuva_36h": 75.8,
+        "chuva_48h": 95.5,
+        "chuva_96h": 134.8,
+        "nivel_rio": "2,50 m",
         "status_rio": "ALERTA MÁXIMO",
         "ultima_leitura": "Hoje",
         "online": True
