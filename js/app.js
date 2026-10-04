@@ -481,11 +481,44 @@ function renderBulletinDOM(meta, rows) {
 
   // 7. PLANCON - Levantamento de Impactos por Bairro
   if (meta?.impactos_bairros && Array.isArray(meta.impactos_bairros)) {
+    const thD0 = document.getElementById('plancon-th-d0');
+    const thD1 = document.getElementById('plancon-th-d1');
+    const thD2 = document.getElementById('plancon-th-d2');
+
+    let d0Label = 'D+0';
+    let d1Label = 'D+1';
+    let d2Label = 'D+2';
+
+    if (meta?.dias_resumo && meta.dias_resumo.length >= 3) {
+      const getAbrev = (str) => {
+        if (!str) return '';
+        const m = str.match(/^(DOMINGO|SEGUNDA|TERÇA|TERCA|QUARTA|QUINTA|SEXTA|SÁBADO|SABADO)/i);
+        if (m) {
+          const w = m[1].toUpperCase();
+          if (w.startsWith('DOM')) return 'Dom';
+          if (w.startsWith('SEG')) return 'Seg';
+          if (w.startsWith('TER')) return 'Ter';
+          if (w.startsWith('QUA')) return 'Qua';
+          if (w.startsWith('QUI')) return 'Qui';
+          if (w.startsWith('SEX')) return 'Sex';
+          if (w.startsWith('SÁB') || w.startsWith('SAB')) return 'Sáb';
+        }
+        return str.substring(0, 3);
+      };
+      d0Label = getAbrev(meta.dias_resumo[0]?.dia) || 'D+0';
+      d1Label = getAbrev(meta.dias_resumo[1]?.dia) || 'D+1';
+      d2Label = getAbrev(meta.dias_resumo[2]?.dia) || 'D+2';
+    }
+
+    if (thD0) thD0.textContent = d0Label;
+    if (thD1) thD1.textContent = d1Label;
+    if (thD2) thD2.textContent = d2Label;
+
     const planconBody = document.getElementById('plancon-table-body');
     if (planconBody) {
       planconBody.innerHTML = meta.impactos_bairros.map(item => {
         function getBadge(val) {
-          const v = String(val).toUpperCase();
+          const v = String(val || 'OBS').toUpperCase();
           if (v.includes('MÁXIMO') || v.includes('MAXIMO')) {
             return `<span class="badge-danger-theme">MÁXIMO</span>`;
           }
@@ -498,19 +531,23 @@ function renderBulletinDOM(meta, rows) {
           return `<span class="badge-neutral-theme">${val || 'OBS'}</span>`;
         }
 
+        const r0 = item.risco_d0 ?? item.risco_sab ?? item.risco_dom ?? item.risco_seg ?? 'OBS';
+        const r1 = item.risco_d1 ?? item.risco_dom ?? item.risco_seg ?? 'OBS';
+        const r2 = item.risco_d2 ?? item.risco_seg ?? item.risco_ter ?? 'OBS';
+
         return `
           <tr>
             <td class="font-semibold theme-text-main">
               ${cleanBulletinText(item.setor)}
             </td>
             <td class="text-center">
-              ${getBadge(item.risco_sab)}
+              ${getBadge(r0)}
             </td>
             <td class="text-center">
-              ${getBadge(item.risco_dom)}
+              ${getBadge(r1)}
             </td>
             <td class="text-center">
-              ${getBadge(item.risco_seg)}
+              ${getBadge(r2)}
             </td>
             <td class="theme-text-body leading-snug">
               ${cleanBulletinText(item.impactos)}
