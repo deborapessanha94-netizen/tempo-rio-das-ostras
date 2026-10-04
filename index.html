@@ -883,23 +883,252 @@
     <!-- ========================================================================= -->
     <section id="tab-aovivo" class="tab-pane hidden space-y-4">
       
-      <!-- Card Radar ao Vivo -->
-      <div class="theme-card p-4 sm:p-5 space-y-3">
-        <div class="flex items-center justify-between border-b theme-border pb-2">
-          <div class="flex items-center gap-2">
-            <i data-lucide="radar" class="w-4 h-4 text-[#1E88E5]"></i>
-            <h3 class="text-sm font-bold theme-text-main">Radar Meteorológico & Cobertura de Nuvens em Tempo Real</h3>
+      <!-- Card Principal: Estação de Radar & Monitoramento Multivariáveis RJ -->
+      <div class="theme-card p-4 sm:p-5 space-y-4">
+        
+        <!-- Topo: Título, Status e Alternador de Modo -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b theme-border pb-3">
+          <div class="space-y-0.5">
+            <div class="flex items-center gap-2">
+              <i data-lucide="radar" class="w-5 h-5 text-[#1E88E5]"></i>
+              <h3 class="text-sm sm:text-base font-bold theme-text-main">
+                Estação Meteorológica Multivariáveis & Radar — Estado do Rio de Janeiro
+              </h3>
+              <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                AO VIVO
+              </span>
+            </div>
+            <p class="text-xs theme-text-muted">
+              Cobertura contínua de precipitação, ventos com rajadas, pressão atmosférica e ecos de radar Doppler cobrindo o Estado do RJ e Bacias Litorâneas.
+            </p>
           </div>
-          <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            AO VIVO
-          </span>
+
+          <!-- Seletor de Modo de Visualização -->
+          <div class="flex items-center gap-1.5 p-1 rounded-lg theme-tile self-start lg:self-auto shrink-0">
+            <button id="btn-mode-multivariable" class="px-2.5 py-1.5 rounded text-xs font-bold transition-all bg-[#1E88E5] text-white shadow-xs flex items-center gap-1.5" data-viewer-mode="windy">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              <span>Multivariáveis RJ</span>
+            </button>
+            <button id="btn-mode-doppler" class="px-2.5 py-1.5 rounded text-xs font-medium theme-text-muted transition-all hover:theme-text-main flex items-center gap-1.5" data-viewer-mode="doppler">
+              <i data-lucide="radar" class="w-3.5 h-3.5"></i>
+              <span>Radar Doppler HD</span>
+            </button>
+          </div>
         </div>
 
-        <div id="radar-map" class="overflow-hidden border theme-border"></div>
-        <p class="text-[11px] theme-text-muted">
-          Exibindo ecos de radar de precipitação e cobertura de satélite sobre a Baixada Litorânea e Bacia dos Rios Macaé e Ostras.
-        </p>
+        <!-- Barra de Controle de Camadas e Enquadramento -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 bg-black/5 dark:bg-white/5 p-2 rounded-lg border theme-border">
+          
+          <!-- Botões de Variáveis (Precipitação, Vento, Pressão, Radar, Satélite) -->
+          <div class="flex flex-wrap items-center gap-1.5">
+            <span class="text-[10px] font-bold uppercase tracking-wider theme-text-dim mr-1 hidden sm:inline">Camadas:</span>
+            
+            <button class="layer-switch-btn active px-2.5 py-1 rounded text-xs font-semibold bg-[#1E88E5] text-white flex items-center gap-1" data-layer="radar">
+              <i data-lucide="radio" class="w-3.5 h-3.5"></i>
+              <span>Radar Chuva</span>
+            </button>
+
+            <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="rain">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-blue-500"></i>
+              <span>Precipitação</span>
+            </button>
+
+            <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="wind">
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-cyan-500"></i>
+              <span>Vento & Rajadas</span>
+            </button>
+
+            <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="pressure">
+              <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-500"></i>
+              <span>Pressão & Isobaras</span>
+            </button>
+
+            <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="satellite">
+              <i data-lucide="satellite" class="w-3.5 h-3.5 text-indigo-500"></i>
+              <span>Satélite GOES-16</span>
+            </button>
+
+            <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="waves">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-teal-500"></i>
+              <span>Ondas (Área Delta)</span>
+            </button>
+          </div>
+
+          <!-- Botões de Zoom / Enquadramento Geográfico -->
+          <div class="flex items-center gap-1 self-end sm:self-auto shrink-0 border-t sm:border-t-0 sm:border-l theme-border pt-1.5 sm:pt-0 sm:pl-2.5">
+            <button id="btn-scope-rj" class="px-2 py-1 rounded text-[11px] font-bold bg-[#1E88E5]/15 text-[#1E88E5] hover:bg-[#1E88E5]/25 transition-all flex items-center gap-1" title="Ver todo o Estado do RJ">
+              <i data-lucide="map" class="w-3.5 h-3.5"></i>
+              <span>Estado do RJ</span>
+            </button>
+            <button id="btn-scope-ro" class="px-2 py-1 rounded text-[11px] font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" title="Focar em Rio das Ostras">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+              <span>Rio das Ostras</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CONTAINER 1: VISUALIZADOR MULTICAMADAS RJ (WINDY - ECMWF / GFS / RADAR) -->
+        <div id="windy-wrapper" class="relative w-full rounded-xl overflow-hidden border theme-border shadow-xs bg-slate-950">
+          <iframe id="windy-iframe" 
+            src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=8&overlay=radar&product=radar&level=surface&lat=-22.50&lon=-42.80&detailLat=-22.527&detailLon=-41.945&marker=true&pressure=true&message=true"
+            class="w-full h-[460px] sm:h-[520px] border-0" 
+            loading="lazy"
+            allowfullscreen>
+          </iframe>
+          
+          <!-- Banner de Status da Camada Atual -->
+          <div class="absolute top-2 left-2 pointer-events-none z-10 hidden sm:flex items-center gap-2 bg-slate-900/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-700/60 text-white text-[11px] shadow-lg">
+            <span id="active-layer-indicator" class="font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+              <span id="active-layer-title">Radar Meteorológico (Ecos de Chuva RJ)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- CONTAINER 2: RADAR DOPPLER NATIVO (LEAFLET RAINVIEWER COM CONTROLES FRAME A FRAME) -->
+        <div id="leaflet-wrapper" class="hidden relative w-full space-y-2">
+          <div id="radar-map" class="overflow-hidden border theme-border rounded-xl h-[460px] sm:h-[520px]"></div>
+
+          <!-- Barra de Controle Player de Radar -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-lg theme-tile border theme-border">
+            <div class="flex items-center gap-2">
+              <button id="radar-prev-btn" class="p-2 rounded hover:bg-black/10 dark:hover:bg-white/10 theme-text-main transition-colors" title="Quadro Anterior">
+                <i data-lucide="skip-back" class="w-4 h-4"></i>
+              </button>
+              <button id="radar-play-btn" class="p-2 rounded bg-[#1E88E5] text-white hover:bg-blue-600 transition-colors shadow-xs" title="Reproduzir Animação">
+                <i data-lucide="play" class="w-4 h-4"></i>
+              </button>
+              <button id="radar-next-btn" class="p-2 rounded hover:bg-black/10 dark:hover:bg-white/10 theme-text-main transition-colors" title="Próximo Quadro">
+                <i data-lucide="skip-forward" class="w-4 h-4"></i>
+              </button>
+              <span id="radar-time-label" class="text-xs font-mono font-bold theme-text-main ml-2 flex items-center">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span> Carregando radar...
+              </span>
+            </div>
+
+            <!-- Barra de Progresso da Linha do Tempo -->
+            <div class="w-full sm:w-1/2 flex items-center gap-2">
+              <span class="text-[10px] theme-text-dim font-bold shrink-0">-2h</span>
+              <div class="w-full bg-black/10 dark:bg-white/10 rounded-full h-2 overflow-hidden flex-1">
+                <div id="radar-progress" class="bg-[#1E88E5] h-2 rounded-full transition-all duration-300" style="width: 100%;"></div>
+              </div>
+              <span class="text-[10px] text-emerald-600 font-bold shrink-0">AGORA</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Legenda Oficial das Variáveis Monitoradas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+          <!-- Refletividade / Chuva -->
+          <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold theme-text-main text-[11px] flex items-center gap-1.5">
+                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-blue-500"></i>
+                <span>Escala de Precipitação & dBZ</span>
+              </span>
+              <span class="text-[9px] font-mono theme-text-muted">dBZ / mm/h</span>
+            </div>
+            <div class="h-2 rounded-full bg-gradient-to-r from-cyan-400 via-green-400 via-yellow-400 via-red-500 to-purple-600"></div>
+            <div class="flex justify-between text-[9px] theme-text-dim font-mono">
+              <span>Fraca (&lt;1mm)</span>
+              <span>Moderada (5mm)</span>
+              <span>Forte (20mm)</span>
+              <span>Severa (&gt;50mm)</span>
+            </div>
+          </div>
+
+          <!-- Ventos e Rajadas -->
+          <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold theme-text-main text-[11px] flex items-center gap-1.5">
+                <i data-lucide="wind" class="w-3.5 h-3.5 text-cyan-500"></i>
+                <span>Intensidade dos Ventos</span>
+              </span>
+              <span class="text-[9px] font-mono theme-text-muted">km/h (Beaufort)</span>
+            </div>
+            <div class="h-2 rounded-full bg-gradient-to-r from-blue-300 via-teal-400 via-amber-400 to-red-600"></div>
+            <div class="flex justify-between text-[9px] theme-text-dim font-mono">
+              <span>Brisa (&lt;20)</span>
+              <span>Moderado (30)</span>
+              <span>Forte (50)</span>
+              <span>Vendaval (&gt;65)</span>
+            </div>
+          </div>
+
+          <!-- Pressão Atmosférica -->
+          <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold theme-text-main text-[11px] flex items-center gap-1.5">
+                <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-500"></i>
+                <span>Campo de Pressão (hPa)</span>
+              </span>
+              <span class="text-[9px] font-mono theme-text-muted">Nível do Mar</span>
+            </div>
+            <div class="h-2 rounded-full bg-gradient-to-r from-purple-400 via-blue-400 via-emerald-400 to-orange-400"></div>
+            <div class="flex justify-between text-[9px] theme-text-dim font-mono">
+              <span>Baixa (&lt;1008)</span>
+              <span>Padrão (1013)</span>
+              <span>Alta Pressão (&gt;1022)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rede de Radares Oficiais que cobrem o Estado do Rio de Janeiro -->
+        <div class="pt-2 border-t theme-border space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold uppercase tracking-wider theme-text-main flex items-center gap-1.5">
+              <i data-lucide="tower-control" class="w-4 h-4 text-[#1E88E5]"></i>
+              <span>Radares Meteorológicos Oficiais que Cobrem o Estado do RJ</span>
+            </h4>
+            <span class="text-[10px] theme-text-muted">DECEA / REDEMET • INEA • AlertaRio</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+            <!-- 1. Radar Pico do Couto -->
+            <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold theme-text-main text-[11px]">Radar Pico do Couto (Petrópolis)</span>
+                <span class="badge-success-theme text-[9px]">ATIVO 24/7</span>
+              </div>
+              <div class="text-[10px] theme-text-muted font-mono">
+                Banda S (Doppler) • Alcance: 400 km • Alt: 1.770 m
+              </div>
+              <p class="text-[10px] theme-text-body leading-snug">
+                Principal radar do Estado do RJ (FAB / DECEA). Cobertura em 100% dos municípios fluminenses, Região Serrana, Metropolitana e Baixada Litorânea.
+              </p>
+            </div>
+
+            <!-- 2. Radar de Macaé -->
+            <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold theme-text-main text-[11px]">Radar de Macaé (Norte Fluminense)</span>
+                <span class="badge-success-theme text-[9px]">ATIVO 24/7</span>
+              </div>
+              <div class="text-[10px] theme-text-muted font-mono">
+                Banda X/C • Alcance: 120 km • Foco Litoral Norte
+              </div>
+              <p class="text-[10px] theme-text-body leading-snug">
+                Vigilância microclimática direta da Bacia dos Rios Macaé e Ostras, Rio Jundiá, orla e bacia petrolífera da Área Delta.
+              </p>
+            </div>
+
+            <!-- 3. Radar de Guaratiba / Sumaré -->
+            <div class="p-2.5 rounded-lg theme-tile border theme-border space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold theme-text-main text-[11px]">Radar Sumaré / Guaratiba (Rio)</span>
+                <span class="badge-success-theme text-[9px]">ATIVO 24/7</span>
+              </div>
+              <div class="text-[10px] theme-text-muted font-mono">
+                Banda C (Doppler) • Alcance: 250 km • AlertaRio
+              </div>
+              <p class="text-[10px] theme-text-body leading-snug">
+                Monitoramento de frentes frias subindo pela Costa Verde, Baixada Fluminense, Baía de Guanabara e aproximação ao Norte.
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Widget Detalhado da Régua do Rio Jundiá -->
@@ -1044,6 +1273,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=14"></script>
+  <script type="module" src="js/app.js?v=15"></script>
 </body>
 </html>

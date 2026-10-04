@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupBulletinChartTabs();
   setupActionButtons();
   setupPWA();
+  initRadarMap('radar-map');
   loadAllApplicationData();
   startAutoSync();
 });
