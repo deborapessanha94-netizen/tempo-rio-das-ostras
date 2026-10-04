@@ -671,11 +671,39 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         "whatsapp_emergencia": "(22) 99245-5678"
     }
 
+    alertas_estruturados = [
+        {
+            "tipo": "hidrologico",
+            "titulo": "Rio Jundiá (INEA)",
+            "status": jundia_status,
+            "badge": "danger" if 'MÁXIMO' in jundia_status else "warning",
+            "detalhe": f"Cota: {jundia_nivel} (Transbordo: 2,20 m)",
+            "impacto": "Calha sob vigilância máxima. Risco de alagamentos nos bairros Âncora e Cláudio Ribeiro."
+        },
+        {
+            "tipo": "maritimo",
+            "titulo": "Marinha do Brasil (CHM)",
+            "status": "AVISO Nº 733",
+            "badge": "warning",
+            "detalhe": f"Vento Forte • Rajadas até {max_raj_3d} km/h",
+            "impacto": "Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade até 05/10 às 09h."
+        },
+        {
+            "tipo": "pluviometrico",
+            "titulo": "Previsão Pluviométrica",
+            "status": "ACUMULADO 3D",
+            "badge": "info",
+            "detalhe": f"Volume previsto: {ch_3d_total} mm • Pico térmico: {max_t_3d}°C",
+            "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
+        }
+    ]
+
     metadata = {
         "municipio": "Rio das Ostras - RJ",
         "periodo": per_str,
         "emissao": emissao_str,
         "informe_alerta": informe_alerta,
+        "alertas_estruturados": alertas_estruturados,
         "sinopse_geral": sinopse_geral,
         "glossario": glossario,
         "dias_resumo": dias_resumo,

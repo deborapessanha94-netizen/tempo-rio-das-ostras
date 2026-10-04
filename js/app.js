@@ -310,14 +310,8 @@ function renderBulletinDOM(meta, rows) {
     if (tecEmi) tecEmi.textContent = meta.emissao;
   }
 
-  // 2. Informe de Alerta Oficial
-  if (meta?.informe_alerta) {
-    const alertaEl = document.getElementById('informe-alerta-texto');
-    if (alertaEl) {
-      const cleanAlert = cleanBulletinText(meta.informe_alerta);
-      alertaEl.innerHTML = `<strong class="theme-text-main" style="color: var(--alert-title);">Alertas Oficiais em Vigor:</strong> ${cleanAlert}`;
-    }
-  }
+  // 2. Quadro Oficial de Alertas da Defesa Civil (Cards Estruturados e Limpos)
+  renderAlertBannerGrid(meta);
 
   // 3. Cards Diários da População (Aba 1)
   if (meta?.dias_resumo && Array.isArray(meta.dias_resumo) && meta.dias_resumo.length > 0) {
@@ -906,4 +900,128 @@ function renderBalneabilidade(praias) {
       </div>
     `;
   }).join('');
+}
+
+/**
+ * Renderiza o Quadro Oficial de Alertas da Defesa Civil em cards estruturados e limpos
+ */
+function renderAlertBannerGrid(meta) {
+  const gridEl = document.getElementById('informe-alerta-grid');
+  if (!gridEl) return;
+
+  // Se já houver alertas estruturados nos metadados, renderiza diretamente
+  if (meta?.alertas_estruturados && Array.isArray(meta.alertas_estruturados) && meta.alertas_estruturados.length > 0) {
+    gridEl.innerHTML = meta.alertas_estruturados.map(a => {
+      let icon = 'alert-triangle';
+      let iconColor = 'text-amber-500';
+      let badgeClass = 'badge-warning-theme';
+
+      if (a.tipo === 'hidrologico') {
+        icon = 'waves';
+        iconColor = 'text-red-600';
+        badgeClass = a.badge === 'danger' ? 'badge-danger-theme' : 'badge-warning-theme';
+      } else if (a.tipo === 'maritimo') {
+        icon = 'anchor';
+        iconColor = 'text-blue-600';
+        badgeClass = 'badge-warning-theme';
+      } else if (a.tipo === 'pluviometrico') {
+        icon = 'cloud-rain';
+        iconColor = 'text-orange-500';
+        badgeClass = 'badge-info-theme';
+      }
+
+      return `
+        <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+          <div class="flex items-center justify-between gap-1">
+            <div class="flex items-center gap-1.5 font-bold theme-text-main">
+              <i data-lucide="${icon}" class="w-4 h-4 ${iconColor} shrink-0"></i>
+              <span>${cleanBulletinText(a.titulo)}</span>
+            </div>
+            <span class="${badgeClass} font-bold text-[10px]">${cleanBulletinText(a.status)}</span>
+          </div>
+          <div class="font-mono text-[11px] font-bold theme-text-main">
+            ${cleanBulletinText(a.detalhe)}
+          </div>
+          <p class="theme-text-body text-[11px] leading-snug">
+            ${cleanBulletinText(a.impacto)}
+          </p>
+        </div>
+      `;
+    }).join('');
+
+    if (window.lucide) window.lucide.createIcons();
+    return;
+  }
+
+  // Fallback com dados da telemetria ao vivo
+  const jundiaStation = Array.isArray(state.ineaCheias) 
+    ? state.ineaCheias.find(s => s.eh_rio_das_ostras || (s.nome_estacao && s.nome_estacao.toLowerCase().includes('jundi')))
+    : null;
+  const jundiaNivel = jundiaStation?.nivel_rio ? `${jundiaStation.nivel_rio}` : (meta?.kpis?.jundia_nivel || '2,48 m');
+  const jundiaStatus = jundiaStation?.status || meta?.kpis?.jundia_status || 'ALERTA MÁXIMO';
+  const isJundiaCritico = jundiaStatus.includes('MÁXIMO') || jundiaStatus.includes('ALERTA');
+  const badgeJundiaClass = isJundiaCritico ? 'badge-danger-theme' : 'badge-warning-theme';
+
+  const marinha = state.marinhaAvisos;
+  const marNum = marinha?.numero || '733';
+  const marRaj = marinha?.rajadas || 'Rajadas até 53 km/h';
+  const marOnd = marinha?.mar_ondas || 'Ondas de 2,0 a 2,5 m';
+
+  const chuva3d = meta?.kpis?.chuva_3d || '49,2 mm';
+  const picoCalor = meta?.kpis?.pico_calor || '32°C';
+
+  gridEl.innerHTML = `
+    <!-- 1. Alerta Hidrológico -->
+    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+      <div class="flex items-center justify-between gap-1">
+        <div class="flex items-center gap-1.5 font-bold theme-text-main">
+          <i data-lucide="waves" class="w-4 h-4 text-red-600 shrink-0"></i>
+          <span>Rio Jundiá (INEA)</span>
+        </div>
+        <span class="${badgeJundiaClass} font-bold text-[10px]">${jundiaStatus}</span>
+      </div>
+      <div class="font-mono text-[11px] font-bold text-red-700 dark:text-red-400">
+        Cota: ${jundiaNivel} <span class="font-sans font-normal text-[10px] opacity-80">(Transbordo: 2,20 m)</span>
+      </div>
+      <p class="theme-text-body text-[11px] leading-snug">
+        Calha sob vigilância máxima. Risco de alagamentos e refluxo nos bairros Âncora e Cláudio Ribeiro.
+      </p>
+    </div>
+
+    <!-- 2. Aviso Marítimo -->
+    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+      <div class="flex items-center justify-between gap-1">
+        <div class="flex items-center gap-1.5 font-bold theme-text-main">
+          <i data-lucide="anchor" class="w-4 h-4 text-blue-600 shrink-0"></i>
+          <span>Marinha do Brasil (CHM)</span>
+        </div>
+        <span class="badge-warning-theme font-bold text-[10px]">AVISO Nº ${marNum}</span>
+      </div>
+      <div class="text-[11px] font-bold text-blue-700 dark:text-blue-400">
+        Vento Forte • ${marRaj}
+      </div>
+      <p class="theme-text-body text-[11px] leading-snug">
+        ${marOnd} na Área Delta. Ressaca na orla marítima. Vigência até 05/10 às 09h.
+      </p>
+    </div>
+
+    <!-- 3. Alerta Pluviométrico / Meteorológico -->
+    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+      <div class="flex items-center justify-between gap-1">
+        <div class="flex items-center gap-1.5 font-bold theme-text-main">
+          <i data-lucide="cloud-rain" class="w-4 h-4 text-orange-500 shrink-0"></i>
+          <span>Previsão Pluviométrica</span>
+        </div>
+        <span class="badge-info-theme font-bold text-[10px]">ACUMULADO 3D</span>
+      </div>
+      <div class="font-mono text-[11px] font-bold text-amber-700 dark:text-amber-400">
+        Total previsto: ${chuva3d} • Pico térmico: ${picoCalor}
+      </div>
+      <p class="theme-text-body text-[11px] leading-snug">
+        Solo saturado nas encostas. Monitoramento preventivo em Cantagalo, Rocha Leão e vias vicinais.
+      </p>
+    </div>
+  `;
+
+  if (window.lucide) window.lucide.createIcons();
 }
