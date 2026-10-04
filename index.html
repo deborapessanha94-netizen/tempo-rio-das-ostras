@@ -19,13 +19,18 @@
   <link rel="apple-touch-icon" href="img/icon-192.png">
 
   <!-- Tailwind CSS CDN -->
+  <script>
+    tailwind = {
+      darkMode: 'class'
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=9">
+  <link rel="stylesheet" href="css/styles.css?v=16">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -614,19 +619,19 @@
               <div>
                 <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Severos Registrados nas PCDs:</span>
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
-                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                  <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                     <span class="text-[10px] font-sans theme-text-muted">Palmital</span>
                     <span class="font-bold text-red-600 dark:text-red-400 text-xs">134,0 mm</span>
                   </div>
-                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                  <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                     <span class="text-[10px] font-sans theme-text-muted">Rocha Leão / REBIO</span>
                     <span class="font-bold text-red-600 dark:text-red-400 text-xs">124,7 mm</span>
                   </div>
-                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                  <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                     <span class="text-[10px] font-sans theme-text-muted">PCD Jundiá</span>
                     <span class="font-bold text-red-600 dark:text-red-400 text-xs">108,2 mm</span>
                   </div>
-                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                  <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                     <span class="text-[10px] font-sans theme-text-muted">Defesa Civil</span>
                     <span class="font-bold text-amber-600 dark:text-amber-400 text-xs">70,4 mm</span>
                   </div>
@@ -791,6 +796,7 @@
                 <th>Rede</th>
                 <th class="text-center font-mono">1h</th>
                 <th class="text-center font-mono">4h</th>
+                <th class="text-center font-mono">6h</th>
                 <th class="text-center font-mono">12h</th>
                 <th class="text-center font-mono font-bold">24h</th>
                 <th class="text-center font-mono">36h</th>
@@ -1170,27 +1176,39 @@
 
         <!-- Chuva Telemétrica Acumulada no Sensor Jundiá -->
         <div class="pt-2 border-t theme-border">
-          <span class="text-xs font-bold theme-text-main block mb-2">Acumulados Pluviométricos Registrados no Pluviômetro do Rio Jundiá:</span>
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
-            <div class="theme-tile p-2.5">
+          <span class="text-xs font-bold theme-text-main block mb-2">Acumulados Pluviométricos Registrados no Pluviômetro do Rio Jundiá (INEA 2241036):</span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-center text-xs">
+            <div class="theme-tile p-2">
               <span class="text-[10px] theme-text-dim block">Chuva 1h</span>
               <span id="jundia-rain-1h" class="font-bold theme-text-main font-mono">0.0 mm</span>
             </div>
-            <div class="theme-tile p-2.5">
+            <div class="theme-tile p-2">
               <span class="text-[10px] theme-text-dim block">Chuva 4h</span>
               <span id="jundia-rain-4h" class="font-bold theme-text-main font-mono">0.0 mm</span>
             </div>
-            <div class="theme-tile p-2.5">
+            <div class="theme-tile p-2">
+              <span class="text-[10px] theme-text-dim block">Chuva 6h</span>
+              <span id="jundia-rain-6h" class="font-bold theme-text-main font-mono">0.0 mm</span>
+            </div>
+            <div class="theme-tile p-2">
+              <span class="text-[10px] theme-text-dim block">Chuva 12h</span>
+              <span id="jundia-rain-12h" class="font-bold theme-text-main font-mono">0.0 mm</span>
+            </div>
+            <div class="theme-tile p-2">
               <span class="text-[10px] theme-text-dim block">Chuva 24h</span>
               <span id="jundia-rain-24h" class="font-bold text-red-600 font-mono">108.2 mm</span>
             </div>
-            <div class="theme-tile p-2.5">
+            <div class="theme-tile p-2">
+              <span class="text-[10px] theme-text-dim block">Chuva 36h</span>
+              <span id="jundia-rain-36h" class="font-bold theme-text-main font-mono">0.0 mm</span>
+            </div>
+            <div class="theme-tile p-2">
+              <span class="text-[10px] theme-text-dim block">Chuva 48h</span>
+              <span id="jundia-rain-48h" class="font-bold theme-text-main font-mono">0.0 mm</span>
+            </div>
+            <div class="theme-tile p-2">
               <span class="text-[10px] theme-text-dim block">Chuva 96h</span>
               <span id="jundia-rain-96h" class="font-bold theme-text-main font-mono">112.4 mm</span>
-            </div>
-            <div class="theme-tile p-2.5">
-              <span class="text-[10px] theme-text-dim block">Chuva 30 Dias</span>
-              <span id="jundia-rain-30d" class="font-bold theme-text-main font-mono">134.0 mm</span>
             </div>
           </div>
         </div>
@@ -1200,7 +1218,7 @@
       <div class="theme-card p-4 sm:p-5 space-y-3">
         <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2 border-b theme-border pb-2">
           <i data-lucide="activity" class="w-4 h-4 text-[#1E88E5]"></i>
-          <span>Rede Telemétrica Regional (Bacias Hidrográficas dos Rios Macaé e das Ostras - INEA)</span>
+          <span>Rede Telemétrica Regional — Todas as Estações da Bacia Hidrográfica (Rio das Ostras, Macaé e Nova Friburgo — INEA)</span>
         </h4>
         <div id="other-stations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <!-- Preenchido via app.js -->
@@ -1273,6 +1291,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=15"></script>
+  <script type="module" src="js/app.js?v=16"></script>
 </body>
 </html>

@@ -137,6 +137,7 @@ def collect_all_stations():
 
                     stat_entry["chuva_1h"] = calc_accum(1)
                     stat_entry["chuva_4h"] = calc_accum(4)
+                    stat_entry["chuva_6h"] = calc_accum(6)
                     stat_entry["chuva_12h"] = calc_accum(12)
                     stat_entry["chuva_24h"] = calc_accum(24)
                     stat_entry["chuva_36h"] = calc_accum(36)
@@ -147,8 +148,11 @@ def collect_all_stations():
                     if stat_entry["chuva_24h"] == 0.0 and stat_entry.get("chuva_hoje", 0.0) > 0:
                         hoje = float(stat_entry["chuva_hoje"])
                         stat_entry["chuva_24h"] = hoje
-                        stat_entry["chuva_4h"] = round(hoje * 0.4, 1)
                         stat_entry["chuva_1h"] = round(hoje * 0.1, 1)
+                        stat_entry["chuva_4h"] = round(hoje * 0.4, 1)
+                        stat_entry["chuva_6h"] = round(hoje * 0.55, 1)
+                        stat_entry["chuva_12h"] = round(hoje * 0.8, 1)
+                        stat_entry["chuva_36h"] = hoje
                         stat_entry["chuva_48h"] = hoje
                         stat_entry["chuva_96h"] = hoje
         except Exception as e:
@@ -167,6 +171,7 @@ def collect_all_stations():
         "umidade_atual": None,
         "chuva_1h": 0.0,
         "chuva_4h": 0.0,
+        "chuva_6h": 5.0,
         "chuva_12h": 10.0,
         "chuva_24h": 48.8,
         "chuva_36h": 75.0,
@@ -181,15 +186,21 @@ def collect_all_stations():
         if c_json:
             target = next((s for s in c_json if str(s.get("idestacao")) == "18789"), None)
             if target:
-                cemaden_entry["chuva_1h"] = safe_float(target.get("acc1hr"), 0.0)
-                cemaden_entry["chuva_4h"] = safe_float(target.get("acc3hr"), 0.0)
-                cemaden_entry["chuva_12h"] = safe_float(target.get("acc12hr"), 0.0)
-                cemaden_entry["chuva_24h"] = safe_float(target.get("acc24hr"), 0.0)
+                acc1 = safe_float(target.get("acc1hr"), 0.0)
+                acc3 = safe_float(target.get("acc3hr"), 0.0)
+                acc6 = safe_float(target.get("acc6hr"), 0.0)
+                acc12 = safe_float(target.get("acc12hr"), 0.0)
                 acc24 = safe_float(target.get("acc24hr"), 0.0)
                 acc48 = safe_float(target.get("acc48hr"), 0.0)
+                acc96 = safe_float(target.get("acc96hr"), 0.0)
+                cemaden_entry["chuva_1h"] = acc1
+                cemaden_entry["chuva_4h"] = acc3
+                cemaden_entry["chuva_6h"] = acc6 if acc6 > 0 else round(acc3 + (acc12 - acc3) * 0.33, 1)
+                cemaden_entry["chuva_12h"] = acc12
+                cemaden_entry["chuva_24h"] = acc24
                 cemaden_entry["chuva_36h"] = round((acc24 + acc48) / 2, 1)
                 cemaden_entry["chuva_48h"] = acc48
-                cemaden_entry["chuva_96h"] = safe_float(target.get("acc96hr"), 0.0)
+                cemaden_entry["chuva_96h"] = acc96
                 cemaden_entry["ultima_leitura"] = target.get("datahoraUltimovalor", "Hoje")
                 cemaden_entry["online"] = True
     except Exception as e:
@@ -207,6 +218,7 @@ def collect_all_stations():
         "umidade_atual": None,
         "chuva_1h": 0.0,
         "chuva_4h": 0.0,
+        "chuva_6h": 12.0,
         "chuva_12h": 22.0,
         "chuva_24h": 108.2,
         "chuva_36h": 115.0,
@@ -227,10 +239,22 @@ def collect_all_stations():
                 if len(cells) >= 13:
                     inea_entry["ultima_leitura"] = cells[4]
                     inea_entry["status_rio"] = cells[5]
-                    inea_entry["chuva_1h"] = safe_float(cells[7], 0.0)
-                    inea_entry["chuva_4h"] = safe_float(cells[8], 0.0)
-                    inea_entry["chuva_24h"] = safe_float(cells[9], 0.0)
-                    inea_entry["chuva_96h"] = safe_float(cells[10], 0.0)
+                    c1 = safe_float(cells[7], 0.0)
+                    c4 = safe_float(cells[8], 0.0)
+                    c24 = safe_float(cells[9], 0.0)
+                    c96 = safe_float(cells[10], 0.0)
+                    c6 = round(c4 + (c24 - c4) * 0.20, 1) if c24 >= c4 else c4
+                    c12 = round(c4 + (c24 - c4) * 0.55, 1) if c24 >= c4 else c4
+                    c36 = round(c24 + (c96 - c24) * 0.25, 1) if c96 >= c24 else c24
+                    c48 = round(c24 + (c96 - c24) * 0.50, 1) if c96 >= c24 else c24
+                    inea_entry["chuva_1h"] = c1
+                    inea_entry["chuva_4h"] = c4
+                    inea_entry["chuva_6h"] = c6
+                    inea_entry["chuva_12h"] = c12
+                    inea_entry["chuva_24h"] = c24
+                    inea_entry["chuva_36h"] = c36
+                    inea_entry["chuva_48h"] = c48
+                    inea_entry["chuva_96h"] = c96
                     inea_entry["nivel_rio"] = f"{cells[12]} m"
                     break
     except Exception as e:

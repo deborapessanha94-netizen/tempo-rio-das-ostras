@@ -92,14 +92,14 @@ function applyTheme(theme) {
 
   if (theme === 'dark') {
     root.classList.remove('theme-light');
-    root.classList.add('theme-dark');
+    root.classList.add('theme-dark', 'dark');
     localStorage.setItem('meteo_theme', 'dark');
     if (btnLight) btnLight.classList.remove('active');
     if (btnDark) btnDark.classList.add('active');
     if (toggleIcon) toggleIcon.setAttribute('data-lucide', 'sun');
     if (toggleText) toggleText.textContent = 'Modo Claro';
   } else {
-    root.classList.remove('theme-dark');
+    root.classList.remove('theme-dark', 'dark');
     root.classList.add('theme-light');
     localStorage.setItem('meteo_theme', 'light');
     if (btnLight) btnLight.classList.add('active');
@@ -588,7 +588,11 @@ function renderJundiaTelemetry(stations) {
 
     const rain1h = document.getElementById('jundia-rain-1h');
     const rain4h = document.getElementById('jundia-rain-4h');
+    const rain6h = document.getElementById('jundia-rain-6h');
+    const rain12h = document.getElementById('jundia-rain-12h');
     const rain24h = document.getElementById('jundia-rain-24h');
+    const rain36h = document.getElementById('jundia-rain-36h');
+    const rain48h = document.getElementById('jundia-rain-48h');
     const rain96h = document.getElementById('jundia-rain-96h');
     const rain30d = document.getElementById('jundia-rain-30d');
 
@@ -620,34 +624,102 @@ function renderJundiaTelemetry(stations) {
 
     if (rain1h) rain1h.textContent = `${jundia.chuva_1h || '0.0'} mm`;
     if (rain4h) rain4h.textContent = `${jundia.chuva_4h || '0.0'} mm`;
+    if (rain6h) rain6h.textContent = `${jundia.chuva_6h || '0.0'} mm`;
+    if (rain12h) rain12h.textContent = `${jundia.chuva_12h || '0.0'} mm`;
     if (rain24h) rain24h.textContent = `${jundia.chuva_24h || '0.0'} mm`;
+    if (rain36h) rain36h.textContent = `${jundia.chuva_36h || '0.0'} mm`;
+    if (rain48h) rain48h.textContent = `${jundia.chuva_48h || '0.0'} mm`;
     if (rain96h) rain96h.textContent = `${jundia.chuva_96h || '0.0'} mm`;
     if (rain30d) rain30d.textContent = `${jundia.chuva_30d || '0.0'} mm`;
   }
 
-  // Renderiza as demais estações da Bacia Hidrográfica
+  // Renderiza TODAS as estações monitoradas da Bacia Hidrográfica (incluindo Rio das Ostras em destaque prioritário)
   const otherGrid = document.getElementById('other-stations-grid');
   if (otherGrid) {
-    const others = stations.filter(s => s !== jundia);
-    otherGrid.innerHTML = others.map(st => {
+    const sortedStations = [...stations].sort((a, b) => {
+      const aOstras = a.eh_rio_das_ostras || (a.municipio && a.municipio.toLowerCase().includes('ostras')) || a.nome_estacao.toLowerCase().includes('jundi');
+      const bOstras = b.eh_rio_das_ostras || (b.municipio && b.municipio.toLowerCase().includes('ostras')) || b.nome_estacao.toLowerCase().includes('jundi');
+      if (aOstras && !bOstras) return -1;
+      if (!aOstras && bOstras) return 1;
+      return 0;
+    });
+
+    otherGrid.innerHTML = sortedStations.map(st => {
+      const isOstras = st.eh_rio_das_ostras || (st.municipio && st.municipio.toLowerCase().includes('ostras')) || st.nome_estacao.toLowerCase().includes('jundi');
       let badgeBg = 'badge-neutral-theme';
       if (st.status === 'TRANSBORDAMENTO' || st.status === 'ALERTA MÁXIMO') badgeBg = 'badge-danger-theme';
       else if (st.status === 'ALERTA') badgeBg = 'badge-danger-theme';
       else if (st.status === 'ATENÇÃO') badgeBg = 'badge-warning-theme';
 
+      function fmtVal(v) {
+        if (v === undefined || v === null || v === '') return '0.0';
+        const num = parseFloat(String(v).replace(',', '.'));
+        return isNaN(num) ? '0.0' : num.toFixed(1);
+      }
+
+      const c1 = fmtVal(st.chuva_1h);
+      const c4 = fmtVal(st.chuva_4h);
+      const c6 = fmtVal(st.chuva_6h);
+      const c12 = fmtVal(st.chuva_12h);
+      const c24 = fmtVal(st.chuva_24h);
+      const c36 = fmtVal(st.chuva_36h);
+      const c48 = fmtVal(st.chuva_48h);
+
+      const n24 = parseFloat(c24);
+      const n48 = parseFloat(c48);
+
       return `
-        <div class="theme-tile p-3 space-y-1.5 hover:border-[#1E528E] transition">
-          <div class="flex items-center justify-between">
-            <span class="font-bold theme-text-main text-xs">${st.nome_estacao} (${st.municipio})</span>
-            <span class="${badgeBg}">${st.status}</span>
+        <div class="theme-tile p-3.5 space-y-2.5 transition rounded-lg ${isOstras ? 'border-2 border-red-500 shadow-md ring-2 ring-red-500/20' : 'border theme-border hover:border-[#1E528E]'}">
+          <div class="flex items-center justify-between gap-2 border-b theme-tile-border pb-1.5">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-bold theme-text-main text-xs">${cleanBulletinText(st.nome_estacao)} (${cleanBulletinText(st.municipio)})</span>
+              ${isOstras ? '<span class="text-[9px] font-extrabold uppercase bg-red-600 text-white px-1.5 py-0.5 rounded shadow-sm">Rio das Ostras</span>' : ''}
+            </div>
+            <span class="${badgeBg} text-[10px] font-bold">${cleanBulletinText(st.status)}</span>
           </div>
-          <div class="flex items-center justify-between text-xs theme-text-muted">
-            <span>Rio: <strong class="theme-text-main">${st.curso_dagua}</strong></span>
-            <span>Nível: <strong class="theme-text-main font-mono">${st.nivel_rio} m</strong></span>
+
+          <div class="grid grid-cols-2 gap-1.5 text-xs theme-text-muted">
+            <div>Rio: <strong class="theme-text-main">${cleanBulletinText(st.curso_dagua)}</strong></div>
+            <div class="text-right">Nível: <strong class="theme-text-main font-mono text-sm">${cleanBulletinText(st.nivel_rio)}${st.nivel_rio && st.nivel_rio !== '-' ? ' m' : ''}</strong></div>
+            <div>Transbordo: <span class="font-mono theme-text-body">${cleanBulletinText(st.cota_transborda || '—')}</span></div>
+            <div class="text-right">Alerta: <span class="font-mono theme-text-body">${cleanBulletinText(st.cota_alerta || '—')}</span></div>
           </div>
-          <div class="flex items-center justify-between text-[11px] theme-text-dim border-t theme-tile-border pt-1">
-            <span>Transbordo: ${st.cota_transborda || '—'}</span>
-            <span>Chuva 24h: <strong class="theme-text-main">${st.chuva_24h} mm</strong></span>
+
+          <div class="pt-2 border-t theme-tile-border space-y-1.5">
+            <div class="text-[10px] font-bold uppercase tracking-wider theme-text-dim flex items-center justify-between">
+              <span>Acumulados de Chuva:</span>
+              <span class="text-[9px] font-normal lowercase theme-text-muted">Leitura: ${cleanBulletinText(st.ultima_leitura || 'Recente')}</span>
+            </div>
+            <div class="grid grid-cols-4 sm:grid-cols-7 gap-1 font-mono text-center">
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">1h</span>
+                <span class="font-bold text-[11px] theme-text-main">${c1}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">4h</span>
+                <span class="font-bold text-[11px] theme-text-main">${c4}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">6h</span>
+                <span class="font-bold text-[11px] theme-text-main">${c6}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">12h</span>
+                <span class="font-bold text-[11px] ${parseFloat(c12) > 0 ? 'text-amber-600' : 'theme-text-main'}">${c12}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans font-bold">24h</span>
+                <span class="font-bold text-[11px] ${n24 >= 50 ? 'text-red-600 font-extrabold' : (n24 >= 20 ? 'text-amber-600' : 'theme-text-main')}">${c24}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">36h</span>
+                <span class="font-bold text-[11px] ${parseFloat(c36) >= 50 ? 'text-red-600 font-extrabold' : 'theme-text-main'}">${c36}</span>
+              </div>
+              <div class="p-1 rounded bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10">
+                <span class="block text-[9px] theme-text-muted font-sans">48h</span>
+                <span class="font-bold text-[11px] ${n48 >= 50 ? 'text-red-600 font-extrabold' : 'theme-text-main'}">${c48}</span>
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -784,6 +856,7 @@ function renderEstacoesTable(estacoes) {
         </td>
         <td class="text-center font-mono">${fmtRain(e.chuva_1h)}</td>
         <td class="text-center font-mono">${fmtRain(e.chuva_4h)}</td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_6h)}</td>
         <td class="text-center font-mono">${fmtRain(e.chuva_12h)}</td>
         <td class="text-center font-mono font-bold bg-black/5">${fmtRain(e.chuva_24h)}</td>
         <td class="text-center font-mono">${fmtRain(e.chuva_36h)}</td>
@@ -1027,14 +1100,14 @@ function renderSinopseContent(meta) {
   if (meta?.sinopse_estruturada) {
     const s = meta.sinopse_estruturada;
     const estacoesHtml = (s.hidrologia?.estacoes || []).map(est => `
-      <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+      <div class="p-2 rounded theme-tile border theme-border flex flex-col">
         <span class="text-[10px] font-sans theme-text-muted">${cleanBulletinText(est.nome)}</span>
         <span class="font-bold text-red-600 dark:text-red-400 text-xs">${cleanBulletinText(est.valor)}</span>
       </div>
     `).join('');
 
     const evolucaoHtml = (s.evolucao || []).map(ev => `
-      <div class="p-2.5 rounded bg-white/70 dark:bg-slate-900/50 border theme-border space-y-1">
+      <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
         <div class="flex items-center justify-between">
           <strong class="theme-text-main text-[11px]">${cleanBulletinText(ev.dia)}</strong>
           <span class="badge-neutral-theme text-[9px]">${cleanBulletinText(ev.badge || 'PREVISÃO')}</span>
@@ -1189,19 +1262,19 @@ function renderSinopseContent(meta) {
           <div>
             <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Severos Registrados nas PCDs:</span>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
-              <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                 <span class="text-[10px] font-sans theme-text-muted">Palmital</span>
                 <span class="font-bold text-red-600 dark:text-red-400 text-xs">134,0 mm</span>
               </div>
-              <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                 <span class="text-[10px] font-sans theme-text-muted">Rocha Leão / REBIO</span>
                 <span class="font-bold text-red-600 dark:text-red-400 text-xs">124,7 mm</span>
               </div>
-              <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                 <span class="text-[10px] font-sans theme-text-muted">PCD Jundiá</span>
                 <span class="font-bold text-red-600 dark:text-red-400 text-xs">108,2 mm</span>
               </div>
-              <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
                 <span class="text-[10px] font-sans theme-text-muted">Defesa Civil</span>
                 <span class="font-bold text-amber-600 dark:text-amber-400 text-xs">70,4 mm</span>
               </div>
@@ -1247,14 +1320,14 @@ function renderSinopseContent(meta) {
           <span class="badge-neutral-theme text-[10px]">DIAS SEGUINTES</span>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-          <div class="p-2.5 rounded bg-white/70 dark:bg-slate-900/50 border theme-border space-y-1">
+          <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
             <div class="flex items-center justify-between">
               <strong class="theme-text-main text-[11px]">${cleanBulletinText(d1.dia)}</strong>
               <span class="badge-warning-theme text-[9px]">${cleanBulletinText(d1.badge || 'ATENÇÃO')}</span>
             </div>
             <p class="theme-text-body leading-snug text-[11px]">${cleanBulletinText(d1.descricao || '')}</p>
           </div>
-          <div class="p-2.5 rounded bg-white/70 dark:bg-slate-900/50 border theme-border space-y-1">
+          <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
             <div class="flex items-center justify-between">
               <strong class="theme-text-main text-[11px]">${cleanBulletinText(d2.dia)}</strong>
               <span class="badge-info-theme text-[9px]">${cleanBulletinText(d2.badge || 'OBS')}</span>
