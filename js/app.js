@@ -334,11 +334,11 @@ function renderBulletinDOM(meta, rows) {
         const pilaresHtml = pilarKeys.map(k => {
           const p = pilares[k];
           return `
-            <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2">
-              <i data-lucide="${p.icon || 'circle'}" class="w-3.5 h-3.5 text-[#1E88E5] shrink-0 mt-0.5"></i>
+            <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
+              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${p.label || k}</span>
-                <span class="text-xs font-bold theme-text-main block leading-tight break-words">${cleanBulletinText(p.val || '—')}</span>
+                <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">${cleanBulletinText(p.val || '—')}</span>
               </div>
             </div>
           `;
@@ -746,6 +746,7 @@ function setupPWA() {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('./sw.js')
         .then(reg => {
+          reg.update();
           console.info('Service Worker ativo 24/7:', reg.scope);
         })
         .catch(err => {

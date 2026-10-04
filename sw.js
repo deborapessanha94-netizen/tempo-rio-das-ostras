@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v17';
+const CACHE_NAME = 'meteo-ostras-v18';
 const STATIC_ASSETS = [
   './',
   './index.html',

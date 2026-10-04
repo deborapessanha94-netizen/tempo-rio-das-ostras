@@ -560,6 +560,32 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             badge_nome = "OBSERVAÇÃO"
             badge_t = "info"
 
+        def formatar_ceu_pilar(desc):
+            if not desc:
+                return "Nublado"
+            dl = desc.lower().strip()
+            if 'trovoada' in dl or 'tempestade' in dl:
+                return "Pancadas e Trovoadas"
+            if 'pancada' in dl:
+                return "Pancadas de Chuva"
+            if 'chuva fraca' in dl or 'garoa' in dl or 'chuvisco' in dl:
+                return "Chuva Fraca / Garoa"
+            if 'chuva forte' in dl:
+                return "Chuva Forte"
+            if 'chuva' in dl:
+                return "Chuvoso"
+            if 'muitas nuvens' in dl and 'sol' in dl:
+                return "Sol entre Nuvens"
+            if 'muitas nuvens' in dl:
+                return "Muitas Nuvens"
+            if 'encoberto' in dl:
+                return "Encoberto"
+            if 'nublado' in dl:
+                return "Nublado"
+            if 'claro' in dl or 'ensolarado' in dl:
+                return "Céu Limpo"
+            return desc.strip()
+
         dias_resumo.append({
             "dia": f"{dia_semana.upper()} — {d_curr.strftime('%d/%m/%Y')}",
             "subtitulo": f"{resumo_dia} • Máxima de {t_max_base}°C e Chuva de {ch_tot_dia} mm",
@@ -569,7 +595,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             "pilares": {
                 "ceu": {
                     "label": "CÉU",
-                    "val": resumo_dia[:22],
+                    "val": formatar_ceu_pilar(resumo_dia),
                     "icon": day_turnos[2]['tempo_icone']
                 },
                 "temp": {
