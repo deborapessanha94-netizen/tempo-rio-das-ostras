@@ -1,9 +1,86 @@
 {
   "municipio": "Rio das Ostras - RJ",
-  "periodo": "04/10 (Domingo) a 06/10 (Terça-feira)",
-  "emissao": "04/10/2026 às 00:41h",
-  "informe_alerta": "ALERTA MÁXIMO HIDROLÓGICO (INEA) para o Rio Jundiá, que atingiu 2.5 m (cota de transbordo é 2,20 m / calha a 2,84 m). Aviso de Vento Forte e Mar Agitado na orla marítima (rajadas atingindo até 53 km/h e mar com ondas de até 2,5 m). Acumulado total de chuva previsto para o ciclo de 3 dias: 3.0 mm com temperatura máxima alcançando 32°C.",
-  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Domingo) a 06/10 (Terça-feira) é regida pela passagem e atuação de sistemas frontais acoplados à circulação marítima pós-frontal. Na rodada meteorológica atual, o padrão sinótico projeta um acumulado pluviométrico total de 3.0 mm nos próximos 3 dias, com amplitudes térmicas oscilando entre 20°C e máxima atingindo 32°C.\n\nNa bacia hidrográfica municipal, a estação telemétrica do Rio Jundiá (INEA 2241036) registra cota de 2.5 m (Status: ALERTA MÁXIMO). Na faixa litorânea, o escoamento de ventos atinge rajadas de até 53 km/h com ondulação marítima de até 2,5 m na Área Delta da Marinha do Brasil, exigindo cautela de banhistas e navegantes.\n\nAs condições meteorológicas atualizam automaticamente a cada nova rodada numérica dos modelos globais (ECMWF, GFS e COSMO/INMET) e da rede de telemetria estadual do INEA.",
+  "periodo": "04/10 (Dom) a 06/10 (Ter)",
+  "emissao": "04/10/2026 às 17:00h",
+  "informe_alerta": "ALERTA METEOROLÓGICO E HIDROLÓGICO (Defesa Civil / INEA / Marinha): Rio Jundiá registrando 2.48 m (Status: ALERTA MÁXIMO). Aviso da Marinha com vento e rajadas até 53 km/h na Área Delta (mar com ondas até 2,5 m). Acumulado previsto para os 3 dias: 27.6 mm com pico de calor atingindo 30°C.",
+  "alertas_estruturados": [
+    {
+      "tipo": "hidrologico",
+      "titulo": "Rio Jundiá (INEA)",
+      "status": "ALERTA MÁXIMO",
+      "badge": "danger",
+      "detalhe": "Cota: 2.48 m (Transbordo: 2,20 m)",
+      "impacto": "Calha sob vigilância máxima. Risco de alagamentos nos bairros Âncora e Cláudio Ribeiro."
+    },
+    {
+      "tipo": "maritimo",
+      "titulo": "Marinha do Brasil (CHM)",
+      "status": "AVISO Nº 733",
+      "badge": "warning",
+      "detalhe": "Vento Forte • Rajadas até 53 km/h",
+      "impacto": "Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade até 05/10 às 09h."
+    },
+    {
+      "tipo": "pluviometrico",
+      "titulo": "Previsão Pluviométrica",
+      "status": "ACUMULADO 3D",
+      "badge": "info",
+      "detalhe": "Volume previsto: 27.6 mm • Pico térmico: 30°C",
+      "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
+    }
+  ],
+  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Dom) a 06/10 (Ter) é modulada pela passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal. Na rodada oficial das 17:00, o modelo numérico consolida um acumulado pluviométrico total de 27.6 mm ao longo dos 3 dias, com variação térmica entre 20°C e máxima alcançando 30°C.\n\nNa rede de bacias municipais, a estação telemétrica do Rio Jundiá (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Na orla, os ventos litorâneos sustentam rajadas de até 53 km/h e mar com ondas de até 2,5 m na Área Delta da Marinha do Brasil.\n\nOs dados são atualizados pontualmente a cada ciclo diário das 17:00 e telemetria contínua 24h na nuvem, mesmo com o computador pessoal desligado.",
+  "sinopse_estruturada": {
+    "sistemas": {
+      "titulo": "Configuração Sinótica & Sistemas Atuantes",
+      "badge": "CIRCULAÇÃO COSTEIRA",
+      "dinamica": "Passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal no Atlântico Sul.",
+      "transporte": "Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de 20°C a 30°C com 27.6 mm no ciclo."
+    },
+    "hidrologia": {
+      "titulo": "Bacia Hidrográfica do Rio Jundiá & Precipitação Severa",
+      "badge": "ALERTA MÁXIMO • COTA 2.48 m",
+      "cota": "2.48 m",
+      "status": "ALERTA MÁXIMO",
+      "descricao": "A estação telemétrica municipal (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Monitoramento prioritário da calha e zonas de refluxo nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha.",
+      "estacoes": [
+        {
+          "nome": "Palmital",
+          "valor": "134,0 mm"
+        },
+        {
+          "nome": "Rocha Leão / REBIO",
+          "valor": "124,7 mm"
+        },
+        {
+          "nome": "PCD Jundiá",
+          "valor": "108,2 mm"
+        },
+        {
+          "nome": "Defesa Civil",
+          "valor": "70,4 mm"
+        }
+      ]
+    },
+    "maritimo": {
+      "titulo": "Condições Marítimas na Faixa Costeira (Área Delta)",
+      "badge": "AVISO Nº 733/2026 (CHM)",
+      "vento": "Ventos de quadrante litorâneo com rajadas de até 53 km/h na orla marítima.",
+      "mar": "Ondas de 2,0 a 2,5 m na Área Delta da Marinha do Brasil, represando drenagens e gerando risco na praia."
+    },
+    "evolucao": [
+      {
+        "dia": "SEGUNDA-FEIRA — 05/10/2026",
+        "badge": "AVISO / ATENÇÃO",
+        "desc": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h."
+      },
+      {
+        "dia": "TERÇA-FEIRA — 06/10/2026",
+        "badge": "AVISO / ATENÇÃO",
+        "desc": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h."
+      }
+    ]
+  },
   "glossario": [
     {
       "termo": "Frente Fria / Estacionária",
@@ -33,24 +110,24 @@
   "dias_resumo": [
     {
       "dia": "DOMINGO — 04/10/2026",
-      "subtitulo": "Nublado • Máxima de 26°C e Chuva de 1.9 mm",
-      "badge": "ALERTA MÁXIMO / CHEIAS",
-      "badge_tipo": "danger",
-      "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 26°C. Volume pluviométrico diário estimado em 1.9 mm com rajadas de vento de até 53 km/h na faixa litorânea.",
+      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 28°C e Chuva de 13.0 mm",
+      "badge": "AVISO / ATENÇÃO",
+      "badge_tipo": "warning",
+      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Moderada",
-          "icon": "cloud-drizzle"
+          "val": "Muitas nuvens com poss",
+          "icon": "cloud-rain"
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "20° a 26°C",
+          "val": "20° a 28°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "74% a 95%",
+          "val": "75% a 98%",
           "icon": "droplets"
         },
         "vento": {
@@ -60,90 +137,90 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "1.9 mm",
-          "icon": "cloud-drizzle"
+          "val": "13.0 mm",
+          "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.0 a 1.0 m",
+          "val": "2.0 a 2.5 m",
           "icon": "waves"
         }
       }
     },
     {
       "dia": "SEGUNDA-FEIRA — 05/10/2026",
-      "subtitulo": "Nublado • Máxima de 32°C e Chuva de 0.5 mm",
-      "badge": "OBSERVAÇÃO",
-      "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 32°C. Volume pluviométrico diário estimado em 0.5 mm com rajadas de vento de até 41 km/h na faixa litorânea.",
+      "subtitulo": "Encoberto • Máxima de 30°C e Chuva de 1.6 mm",
+      "badge": "AVISO / ATENÇÃO",
+      "badge_tipo": "warning",
+      "descricao": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Fraca",
-          "icon": "cloud-drizzle"
+          "val": "Encoberto",
+          "icon": "sun"
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 32°C",
+          "val": "21° a 30°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "54% a 94%",
+          "val": "60% a 98%",
           "icon": "droplets"
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Rajadas 41 km/h",
+          "val": "Rajadas 53 km/h",
           "icon": "wind"
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "0.5 mm",
+          "val": "1.6 mm",
           "icon": "cloud-drizzle"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.1 a 1.3 m",
+          "val": "2.0 a 2.5 m",
           "icon": "waves"
         }
       }
     },
     {
       "dia": "TERÇA-FEIRA — 06/10/2026",
-      "subtitulo": "Nublado • Máxima de 29°C e Chuva de 0.6 mm",
-      "badge": "OBSERVAÇÃO",
-      "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 29°C. Volume pluviométrico diário estimado em 0.6 mm com rajadas de vento de até 33 km/h na faixa litorânea.",
+      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 28°C e Chuva de 13.0 mm",
+      "badge": "AVISO / ATENÇÃO",
+      "badge_tipo": "warning",
+      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Fraca",
-          "icon": "cloud-drizzle"
+          "val": "Muitas nuvens com poss",
+          "icon": "cloud-rain"
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 29°C",
+          "val": "22° a 28°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "67% a 93%",
+          "val": "75% a 98%",
           "icon": "droplets"
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Rajadas 33 km/h",
+          "val": "Rajadas 53 km/h",
           "icon": "wind"
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "0.6 mm",
-          "icon": "cloud-drizzle"
+          "val": "13.0 mm",
+          "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.0 a 1.0 m",
+          "val": "1.0 a 1.4 m",
           "icon": "waves"
         }
       }
@@ -152,31 +229,43 @@
   "impactos_bairros": [
     {
       "setor": "Âncora, Cláudio Ribeiro, Nova Esperança e Ilha",
-      "risco_sab": "MÁXIMO",
-      "risco_dom": "OBS",
-      "risco_seg": "OBS",
-      "impactos": "Monitoramento da calha do Rio Jundiá (2.5 m); risco de refluxo pluvial em ruas ribeirinhas durante maré alta e picos de chuva.",
-      "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
+      "risco_d0": "ALERTA",
+      "risco_d1": "ALERTA",
+      "risco_d2": "ALERTA",
+      "risco_sab": "ALERTA",
+      "risco_dom": "ALERTA",
+      "risco_seg": "ALERTA",
+      "impactos": "Monitoramento da calha do Rio Jundiá (2.48 m); risco de refluxo pluvial em ruas ribeirinhas durante maré alta e picos de chuva.",
+      "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, prontidão 24h e suporte da Defesa Civil."
     },
     {
       "setor": "Costazul, Tartaruga, Remanso e Mar do Norte (Orla)",
+      "risco_d0": "ALERTA",
+      "risco_d1": "ALERTA",
+      "risco_d2": "ATENÇÃO",
       "risco_sab": "ALERTA",
       "risco_dom": "ALERTA",
       "risco_seg": "ATENÇÃO",
-      "impactos": "Ventos com rajadas de até 53 km/h e mar com ondas de até 2,5 m; avanço da ressaca em costões e praias abertas.",
+      "impactos": "Ventos com rajadas de até 53 km/h e mar com ondas de até 2,5 m; avanço de ressacas em costões e praias desprotegidas.",
       "acoes": "Bandeiramento nos postos de salvamento e fiscalização das condições de navegação e orla."
     },
     {
       "setor": "Cidade Praiana, Parque Mariléa, Beira Mar e Jardim Mariléa",
-      "risco_sab": "OBS",
+      "risco_d0": "ALERTA",
+      "risco_d1": "ALERTA",
+      "risco_d2": "ALERTA",
+      "risco_sab": "ALERTA",
       "risco_dom": "OBS",
       "risco_seg": "OBS",
-      "impactos": "Lençol freático elevado em áreas sem drenagem profunda; retenção de água em depressões nas margens da RJ-106.",
-      "acoes": "Prontidão de equipamentos de sucção e desobstrução das principais vias de acesso."
+      "impactos": "Lençol freático elevado em áreas com deficiência de escoamento profundo; retenção de água em depressões nas margens da RJ-106.",
+      "acoes": "Prontidão de equipamentos de sucção e desobstrução das principais vias de tráfego."
     },
     {
       "setor": "Bosque, Extensão do Bosque, Nova Aliança e Centro",
-      "risco_sab": "OBS",
+      "risco_d0": "ALERTA",
+      "risco_d1": "ALERTA",
+      "risco_d2": "ALERTA",
+      "risco_sab": "ALERTA",
       "risco_dom": "OBS",
       "risco_seg": "OBS",
       "impactos": "Escoamento lento de galerias pluviais no Centro comercial e canal da Praça da Baleia durante chuvas rápidas.",
@@ -184,20 +273,23 @@
     },
     {
       "setor": "Cantagalo, Rocha Leão, Califórnia e Região Rural",
-      "risco_sab": "OBS",
+      "risco_d0": "ALERTA",
+      "risco_d1": "ALERTA",
+      "risco_d2": "ALERTA",
+      "risco_sab": "ALERTA",
       "risco_dom": "OBS",
       "risco_seg": "OBS",
       "impactos": "Solo saturado nas encostas com risco residual de escorregamento de taludes em estradas vicinais rurais.",
-      "acoes": "Equipe com retroescavadeira em prontidão para desobstrução de vias e vistorias preventivas."
+      "acoes": "Equipe com maquinário pesado em prontidão para desobstrução de estradas e vistorias preventivas."
     }
   ],
   "kpis": {
     "jundia_nivel": "2.5 m",
     "jundia_status": "ALERTA MÁXIMO",
-    "chuva_3d": "3.0 mm",
-    "aviso_marinha": "FORÇA 7",
-    "pico_calor": "32°C",
-    "plancon_status": "ALERTA"
+    "chuva_3d": "27.6 mm",
+    "aviso_marinha": "FORÇA 7 BEAUFORT",
+    "pico_calor": "30°C",
+    "plancon_status": "ALERTA MÁXIMO"
   },
   "contatos_emergencia": {
     "defesa_civil_plantao": "199",
