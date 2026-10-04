@@ -134,9 +134,30 @@ def build_metadata_from_qmd(qmd_b, qmd_p, records):
     )
 
     sinopse = (
-        "O padrão meteorológico regional sobre o município de Rio das Ostras para o período de 03/10 a 05/10/2026 é condicionado pela atuação de uma frente fria semi-estacionária sobre o litoral norte fluminense e sul do Espírito Santo, acoplada à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsionou intenso transporte marítimo de umidade em direção à costa (convergência de umidade marítima), gerando céu totalmente encoberto, frio úmido (mínima de 20°C e máxima de 21°C) e chuvas contínuas e volumosas ao longo de todo o sábado (03/10), registrando acumulados pluviométricos severos em 24h: 134,0 mm em Palmital, 124,7 mm em Rocha Leão / REBIO União, 108,2 mm na estação telemétrica Jundiá e 70,4 mm na Defesa Civil.\n\n"
-        "Essa precipitação excepcional deflagrou Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá: a estação telemétrica municipal (INEA 2241036) registrou nível de 2,40 m às 16:45h (Status: ALERTA MÁXIMO), após ultrapassar a cota de atenção (1,60 m) e a cota de transbordo (2,20 m), atingindo diretamente vias e residências nos bairros Âncora e Cláudio Ribeiro. Em paralelo, a Marinha do Brasil mantém o Aviso nº 733/2026 de Vento Forte (Área Delta), com ventos de E/NE Força 7 Beaufort (rajadas de até 47 km/h) e mar agitado (ondas de 2,0 a 2,5 m), dificultando o escoamento das águas pluviais no litoral.\n\n"
-        "No domingo (04/10), a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (12,9 mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo 28°C à tarde, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na segunda-feira (05/10), instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo 30°C). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva com trovoadas à tarde (3,3 mm, pontuais de 5 mm), antecedendo uma nova frente fria em formação no Sul do país."
+        "A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 03/10 (Sáb) a 05/10 (Seg) "
+        "é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, "
+        "acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). "
+        "Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, "
+        "mantendo céu predominantemente encoberto e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem "
+        "para gradual afastamento da instabilidade e rápida elevação térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução "
+        "(ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de 101,0 mm a 108,2 mm ao longo dos 3 dias, "
+        "com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de 19°C a 20°C na madrugada e 21°C no litoral) "
+        "e o subsequente aquecimento pré-frontal, alcançando máximas de até 28°C no domingo e 30°C a 32°C na segunda-feira.\n\n"
+        "Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, "
+        "onde a estação telemétrica municipal (INEA 2241036) acusa cota de 2,48 m (superando a cota de atenção de 1,60 m "
+        "e a cota de transbordo da calha de 2,20 m), consolidando o status de ALERTA MÁXIMO HIDROLÓGICO com extravasamento da lâmina d'água "
+        "e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. "
+        "Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; Rocha Leão / REBIO União: 124,7 mm; "
+        "PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
+        "monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da Marinha do Brasil (Área Delta), "
+        "com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até 53 km/h e mar muito agitado com ondas de até 2,5 m, "
+        "impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais.\n\n"
+        "Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam "
+        "com infraestrutura de telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo "
+        "com terminais locais desligados, com sincronização automática e redundante das redes oficiais INEA, INMET e CEMADEN. "
+        "A Subsecretaria de Defesa Civil de Rio das Ostras mantém equipes operacionais e patrulhas mecanizadas em nível de prontidão permanente "
+        "no Centro de Operações (PLANCON), mobilizadas para vistorias técnicas de campo e pronta resposta comunitária, "
+        "com canais de emergência ininterruptos disponíveis à população pelo telefone 199 e Corpo de Bombeiros (193)."
     )
 
     if qmd_b and qmd_b.exists():

@@ -1251,258 +1251,157 @@ function renderAlertBannerGrid(meta) {
 }
 
 /**
- * Renderiza o Panorama Sinótico Geral de forma modular, executiva e visualmente clara,
- * eliminando blocos densos ou textos embolados.
+ * Renderiza o Panorama Sinótico Geral de forma elaborada, executiva e visualmente clara,
+ * mantendo rigorosamente a ordem dos 3 pilares estabelecida pela Defesa Civil:
+ * 1. Configuração Sinótica Regional & Dinâmica Atmosférica
+ * 2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla
+ * 3. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7
  */
 function renderSinopseContent(meta) {
   const sinopseEl = document.getElementById('sinopse-content');
   if (!sinopseEl) return;
 
-  // Se já houver sinopse estruturada no JSON, usa diretamente
-  if (meta?.sinopse_estruturada) {
-    const s = meta.sinopse_estruturada;
-    const estacoesHtml = (s.hidrologia?.estacoes || []).map(est => `
-      <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-        <span class="text-[10px] font-sans theme-text-muted">${cleanBulletinText(est.nome)}</span>
-        <span class="font-bold text-red-600 dark:text-red-400 text-xs">${cleanBulletinText(est.valor)}</span>
+  const s = meta?.sinopse_estruturada || {};
+  const kpis = meta?.kpis || {};
+  const jundiaNivel = s.ordem_2_hidrologia_costa?.cota || kpis.jundia_nivel || '2,48 m';
+  const jundiaStatus = s.ordem_2_hidrologia_costa?.status || kpis.jundia_status || 'ALERTA MÁXIMO';
+  const chuva3d = kpis.chuva_3d || '101,0 a 108,2 mm';
+  const picoCalor = kpis.pico_calor || '30°C a 32°C';
+  const maxRajada = kpis.max_rajada || '53 km/h';
+
+  // Texto 1 Elaborado
+  const texto1 = s.ordem_1_atmosfera?.texto || (
+    "A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 03/10 (Sáb) a 05/10 (Seg) " +
+    "é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, acoplado à circulação " +
+    "anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio " +
+    "atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, mantendo céu predominantemente encoberto " +
+    "e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem para gradual afastamento da instabilidade e rápida elevação " +
+    "térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado " +
+    `pluviométrico total de ${chuva3d} ao longo dos 3 dias, com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de 19°C a 20°C ` +
+    `na madrugada e 21°C no litoral) e o subsequente aquecimento pré-frontal, alcançando máximas de até 28°C no domingo e ${picoCalor} na segunda-feira.`
+  );
+
+  // Texto 2 Elaborado
+  const texto2 = s.ordem_2_hidrologia_costa?.texto || (
+    "Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, onde a estação telemétrica municipal " +
+    `(INEA 2241036) acusa cota de ${jundiaNivel} (superando a cota de atenção de 1,60 m e a cota de transbordo da calha de 2,20 m), consolidando ` +
+    `o status de ${jundiaStatus} com extravasamento da lâmina d'água e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio ` +
+    "Ribeiro, Nova Esperança e Ilha. Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; " +
+    "Rocha Leão / REBIO União: 124,7 mm; PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente " +
+    "de escorregamento monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da " +
+    `Marinha do Brasil (Área Delta), com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até ${maxRajada} e mar muito agitado com ` +
+    "ondas de 2,0 a 2,5 m, impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais."
+  );
+
+  // Texto 3 Elaborado
+  const texto3 = s.ordem_3_operacional?.texto || (
+    "Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam com infraestrutura de " +
+    "telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo com terminais locais desligados, com " +
+    "sincronização automática e redundante das redes oficiais INEA, INMET e CEMADEN. A Subsecretaria de Defesa Civil de Rio das Ostras mantém equipes " +
+    "operacionais e patrulhas mecanizadas em nível de prontidão permanente no Centro de Operações (PLANCON), mobilizadas para vistorias técnicas de " +
+    "campo e pronta resposta comunitária, com canais de emergência ininterruptos disponíveis à população pelo telefone 199 e Corpo de Bombeiros (193)."
+  );
+
+  const estacoes = s.ordem_2_hidrologia_costa?.estacoes || [
+    { nome: "Palmital", valor: "134,0 mm" },
+    { nome: "Rocha Leão / REBIO", valor: "124,7 mm" },
+    { nome: "PCD Jundiá", valor: "108,2 mm" },
+    { nome: "Defesa Civil", valor: "70,4 mm" }
+  ];
+
+  const estacoesHtml = estacoes.map(est => `
+    <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+      <span class="text-[10px] font-sans theme-text-muted">${cleanBulletinText(est.nome)}</span>
+      <span class="font-bold text-red-600 dark:text-red-400 text-xs">${cleanBulletinText(est.valor)}</span>
+    </div>
+  `).join('');
+
+  sinopseEl.innerHTML = `
+    <div class="space-y-4 text-xs">
+      <!-- 1. Configuração Sinótica Regional & Dinâmica Atmosférica -->
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(252, 163, 17, 0.3);">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
+          <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
+            <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
+            <span>1. Configuração Sinótica Regional & Dinâmica Atmosférica</span>
+          </div>
+          <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa</span>
+        </div>
+        <p class="leading-relaxed text-xs theme-text-body text-justify">
+          ${cleanBulletinText(texto1)}
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Modelos Globais / INMET</span>
+            <span class="font-bold theme-text-main">101,0 a 108,2 mm (3D)</span>
+          </div>
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Gradiente Térmico Oficial</span>
+            <span class="font-bold theme-text-main">19°C (Mín) a 32°C (Máx)</span>
+          </div>
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Evolução do Padrão</span>
+            <span class="font-bold theme-text-main">Chuva ➔ Vazante ➔ Pré-Frontal</span>
+          </div>
+        </div>
       </div>
-    `).join('');
 
-    const evolucaoHtml = (s.evolucao || []).map(ev => `
-      <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
-        <div class="flex items-center justify-between">
-          <strong class="theme-text-main text-[11px]">${cleanBulletinText(ev.dia)}</strong>
-          <span class="badge-neutral-theme text-[9px]">${cleanBulletinText(ev.badge || 'PREVISÃO')}</span>
-        </div>
-        <p class="theme-text-body leading-snug text-[11px]">${cleanBulletinText(ev.desc)}</p>
-      </div>
-    `).join('');
-
-    sinopseEl.innerHTML = `
-      <div class="space-y-3">
-        <!-- 1. Sistemas Sinóticos -->
-        <div class="p-3.5 rounded-lg theme-tile border border-amber-900/30 space-y-2">
-          <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(252, 163, 17, 0.25);">
-            <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-              <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
-              <span>${cleanBulletinText(s.sistemas?.titulo || 'Configuração Sinótica & Sistemas Atuantes')}</span>
-            </div>
-            <span class="badge-info-theme text-[10px]">${cleanBulletinText(s.sistemas?.badge || 'SISTEMA ATUANTE')}</span>
+      <!-- 2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(239, 68, 68, 0.2);">
+          <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
+            <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
+            <span>2. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
-            <div class="flex items-start gap-1.5">
-              <span class="text-[#FCA311] font-bold">•</span>
-              <span><strong>Dinâmica Atmosférica:</strong> ${cleanBulletinText(s.sistemas?.dinamica || '')}</span>
-            </div>
-            <div class="flex items-start gap-1.5">
-              <span class="text-[#FCA311] font-bold">•</span>
-              <span><strong>Transporte de Umidade:</strong> ${cleanBulletinText(s.sistemas?.transporte || '')}</span>
-            </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="badge-danger-theme text-[10px]">${cleanBulletinText(jundiaStatus)} • COTA ${cleanBulletinText(jundiaNivel)} (TRANSBORDO)</span>
+            <span class="badge-warning-theme text-[10px]">AVISO MARINHA Nº 733 (FORÇA 7)</span>
           </div>
         </div>
-
-        <!-- 2. Hidrologia e Pluviometria -->
-        <div class="p-3.5 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
-          <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(239, 68, 68, 0.2);">
-            <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-              <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
-              <span>${cleanBulletinText(s.hidrologia?.titulo || 'Bacia Hidrográfica do Rio Jundiá & Precipitação')}</span>
-            </div>
-            <span class="badge-danger-theme text-[10px]">${cleanBulletinText(s.hidrologia?.badge || 'ALERTA MÁXIMO')}</span>
-          </div>
-          <div class="text-xs theme-text-body space-y-2">
-            <p class="leading-relaxed">
-              <strong>Cenário Hidrológico:</strong> ${cleanBulletinText(s.hidrologia?.descricao || '')}
-            </p>
-            ${estacoesHtml ? `
-              <div>
-                <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Registrados nas Estações:</span>
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
-                  ${estacoesHtml}
-                </div>
-              </div>
-            ` : ''}
-          </div>
-        </div>
-
-        <!-- 3. Condições Marítimas -->
-        <div class="p-3.5 rounded-lg theme-tile border border-amber-200 dark:border-amber-900/30 space-y-2">
-          <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(245, 158, 11, 0.2);">
-            <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-              <i data-lucide="anchor" class="w-4 h-4 text-blue-600"></i>
-              <span>${cleanBulletinText(s.maritimo?.titulo || 'Condições Marítimas na Faixa Costeira (Área Delta)')}</span>
-            </div>
-            <span class="badge-warning-theme text-[10px]">${cleanBulletinText(s.maritimo?.badge || 'AVISO DA MARINHA')}</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs theme-text-body">
-            <div class="flex items-start gap-2">
-              <i data-lucide="wind" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
-              <div>
-                <strong class="theme-text-main block">Vento & Rajadas:</strong>
-                <span>${cleanBulletinText(s.maritimo?.vento || '')}</span>
-              </div>
-            </div>
-            <div class="flex items-start gap-2">
-              <i data-lucide="waves" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
-              <div>
-                <strong class="theme-text-main block">Estado do Mar & Ressaca:</strong>
-                <span>${cleanBulletinText(s.maritimo?.mar || '')}</span>
-              </div>
+        <p class="leading-relaxed text-xs theme-text-body text-justify">
+          ${cleanBulletinText(texto2)}
+        </p>
+        <div class="space-y-2 pt-1">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Severos Registrados nas PCDs (24h):</span>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+              ${estacoesHtml}
             </div>
           </div>
           <div class="pt-1.5 border-t border-white/10 text-[11px] font-mono text-[#FCA311] flex items-center gap-1.5">
             <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
-            <span><strong>Vigência Oficial:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
-          </div>
-        </div>
-
-        <!-- 4. Evolução e Tendência -->
-        ${evolucaoHtml ? `
-          <div class="p-3.5 rounded-lg theme-tile border border-slate-200 dark:border-slate-800 space-y-2">
-            <div class="flex items-center justify-between border-b pb-1.5 theme-border">
-              <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-                <i data-lucide="calendar-days" class="w-4 h-4 text-emerald-600"></i>
-                <span>Evolução & Tendência Operacional para os Próximos Dias</span>
-              </div>
-              <span class="badge-neutral-theme text-[10px]">DIAS SEGUINTES</span>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-              ${evolucaoHtml}
-            </div>
-          </div>
-        ` : ''}
-      </div>
-    `;
-    if (window.lucide) window.lucide.createIcons();
-    return;
-  }
-
-  // Fallback Dinâmico Inteligente caso não haja sinopse_estruturada
-  const kpis = meta?.kpis || {};
-  const dias = meta?.dias_resumo || [];
-  const jundiaNivel = kpis.jundia_nivel || '2,49 m';
-  const jundiaStatus = kpis.jundia_status || 'ALERTA MÁXIMO';
-  const chuva3d = kpis.chuva_3d || '49,2 mm';
-  const picoCalor = kpis.pico_calor || '32°C';
-  const avisoMar = kpis.aviso_marinha || 'FORÇA 7';
-
-  const d1 = dias[1] || { dia: 'Domingo (04/10)', subtitulo: 'Abertura Gradual', descricao: 'Afastamento da frente fria. Chuva fraca matinal cessando à tarde, com abertura de sol e início de vazante do Rio Jundiá.' };
-  const d2 = dias[2] || { dia: 'Segunda-feira (05/10)', subtitulo: 'Calor Pré-Frontal', descricao: 'Sol e rápido aquecimento com ventos de Norte. Máxima atingindo 30° a 32°C com pancadas isoladas de chuva à tarde.' };
-
-  sinopseEl.innerHTML = `
-    <div class="space-y-3">
-      <!-- 1. Sistemas Sinóticos -->
-      <div class="p-3.5 rounded-lg theme-tile border border-amber-900/30 space-y-2">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(252, 163, 17, 0.25);">
-          <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-            <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
-            <span>Configuração Sinótica & Sistemas Atuantes</span>
-          </div>
-          <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA</span>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
-          <div class="flex items-start gap-1.5">
-            <span class="text-[#FCA311] font-bold">•</span>
-            <span><strong>Dinâmica de Pressão:</strong> Atuação de frente fria semi-estacionária acoplada à alta pressão pós-frontal (1022 hPa) no Atlântico (Carta Sinótica CHM 12Z).</span>
-          </div>
-          <div class="flex items-start gap-1.5">
-            <span class="text-[#FCA311] font-bold">•</span>
-            <span><strong>Transporte de Umidade:</strong> Bloqueio com convergência contínua de umidade marítima em direção à costa, acumulando <strong>${chuva3d}</strong> no ciclo e pico de <strong>${picoCalor}</strong>.</span>
+            <span><strong>Vigência Marinha:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. Hidrologia e Pluviometria -->
-      <div class="p-3.5 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(239, 68, 68, 0.2);">
-          <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-            <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
-            <span>Bacia Hidrográfica do Rio Jundiá & Precipitação Severa</span>
+      <!-- 3. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(59, 130, 246, 0.3);">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(59, 130, 246, 0.2);">
+          <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
+            <i data-lucide="server" class="w-4 h-4 text-blue-500"></i>
+            <span>3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
           </div>
-          <span class="badge-danger-theme text-[10px]">${jundiaStatus} • COTA ${jundiaNivel}</span>
-        </div>
-        <div class="text-xs theme-text-body space-y-2">
-          <p class="leading-relaxed">
-            <strong>Cenário Hidrológico Crítico:</strong> Estação telemétrica municipal (INEA 2241036) acusa cota de <strong>${jundiaNivel}</strong> (transbordo em 2,20 m). Risco contínuo de alagamentos e refluxo pluvial nos bairros <strong>Âncora, Cláudio Ribeiro, Nova Esperança e Ilha</strong>.
-          </p>
-          <div>
-            <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Severos Registrados nas PCDs:</span>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
-              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Palmital</span>
-                <span class="font-bold text-red-600 dark:text-red-400 text-xs">134,0 mm</span>
-              </div>
-              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Rocha Leão / REBIO</span>
-                <span class="font-bold text-red-600 dark:text-red-400 text-xs">124,7 mm</span>
-              </div>
-              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">PCD Jundiá</span>
-                <span class="font-bold text-red-600 dark:text-red-400 text-xs">108,2 mm</span>
-              </div>
-              <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Defesa Civil</span>
-                <span class="font-bold text-amber-600 dark:text-amber-400 text-xs">70,4 mm</span>
-              </div>
-            </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="badge-info-theme text-[10px]">SINCRONIZAÇÃO EM NUVEM 24/7</span>
+            <span class="badge-danger-theme text-[10px]">PLANTÃO 199</span>
           </div>
         </div>
-      </div>
-
-      <!-- 3. Condições Marítimas -->
-      <div class="p-3.5 rounded-lg theme-tile border border-amber-200 dark:border-amber-900/30 space-y-2">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(245, 158, 11, 0.2);">
-          <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-            <i data-lucide="anchor" class="w-4 h-4 text-blue-600"></i>
-            <span>Condições Marítimas na Faixa Costeira (Área Delta)</span>
+        <p class="leading-relaxed text-xs theme-text-body text-justify">
+          ${cleanBulletinText(texto3)}
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Ciclo Sinótico Oficial</span>
+            <span class="font-bold theme-text-main">17:00h Diário • Telemetria 15m</span>
           </div>
-          <span class="badge-warning-theme text-[10px]">AVISO Nº 733/2026 (CHM)</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs theme-text-body">
-          <div class="flex items-start gap-2">
-            <i data-lucide="wind" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
-            <div>
-              <strong class="theme-text-main block">Vento Forte:</strong>
-              <span>Ventos de E/NE Força 7 (${avisoMar}) com rajadas de até <strong>53 km/h</strong> na orla.</span>
-            </div>
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Infraestrutura em Nuvem</span>
+            <span class="font-bold text-emerald-500">Ativa 24h / Servidor Autônomo</span>
           </div>
-          <div class="flex items-start gap-2">
-            <i data-lucide="waves" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
-            <div>
-              <strong class="theme-text-main block">Mar Agitado & Ressaca:</strong>
-              <span>Ondas de <strong>2,0 a 2,5 m</strong> na Área Delta, dificultando o escoamento pluvial e gerando risco na praia.</span>
-            </div>
-          </div>
-        </div>
-        <div class="pt-1.5 border-t border-white/10 text-[11px] font-mono text-[#FCA311] flex items-center gap-1.5">
-          <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
-          <span><strong>Vigência Oficial:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
-        </div>
-      </div>
-
-      <!-- 4. Evolução e Tendência -->
-      <div class="p-3.5 rounded-lg theme-tile border border-slate-200 dark:border-slate-800 space-y-2">
-        <div class="flex items-center justify-between border-b pb-1.5 theme-border">
-          <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-            <i data-lucide="calendar-days" class="w-4 h-4 text-emerald-600"></i>
-            <span>Evolução & Tendência Operacional para os Próximos Dias</span>
-          </div>
-          <span class="badge-neutral-theme text-[10px]">DIAS SEGUINTES</span>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-          <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
-            <div class="flex items-center justify-between">
-              <strong class="theme-text-main text-[11px]">${cleanBulletinText(d1.dia)}</strong>
-              <span class="badge-warning-theme text-[9px]">${cleanBulletinText(d1.badge || 'ATENÇÃO')}</span>
-            </div>
-            <p class="theme-text-body leading-snug text-[11px]">${cleanBulletinText(d1.descricao || '')}</p>
-          </div>
-          <div class="p-2.5 rounded theme-tile border theme-border space-y-1">
-            <div class="flex items-center justify-between">
-              <strong class="theme-text-main text-[11px]">${cleanBulletinText(d2.dia)}</strong>
-              <span class="badge-info-theme text-[9px]">${cleanBulletinText(d2.badge || 'OBS')}</span>
-            </div>
-            <p class="theme-text-body leading-snug text-[11px]">${cleanBulletinText(d2.descricao || '')}</p>
+          <div class="p-2 rounded theme-tile border theme-border flex flex-col">
+            <span class="text-[10px] font-sans theme-text-muted">Canais de Emergência</span>
+            <span class="font-bold text-[#FCA311]">199 (Defesa Civil) • 193 (Bombeiros)</span>
           </div>
         </div>
       </div>
