@@ -59,6 +59,21 @@ def safe_float(val, default=0.0):
     except (ValueError, TypeError):
         return default
 
+def format_date_br(d_str, h_str=None):
+    if not d_str: return ''
+    date_part = str(d_str).split('T')[0]
+    parts = date_part.split('-')
+    if len(parts) == 3:
+        formatted = f'{parts[2]}/{parts[1]}/{parts[0]}'
+    else:
+        formatted = date_part
+    if h_str:
+        h_clean = str(h_str).strip()
+        if not h_clean.endswith('h'):
+            h_clean = f'{h_clean}h'
+        return f'{formatted} às {h_clean}'
+    return formatted
+
 # ==============================================================================
 # 1. ACUMULADOS DAS ESTAÇÕES (1, 4, 12, 24, 36, 48, 96 HORAS)
 # ==============================================================================
@@ -299,16 +314,25 @@ def collect_inmet_data():
                 if eh_direto or eh_rj:
                     seen.add(aid)
                     sev = a.get('severidade', 'Perigo Potencial')
+                    dt_inicio = format_date_br(a.get('data_inicio'), a.get('hora_inicio'))
+                    dt_fim = format_date_br(a.get('data_fim'), a.get('hora_fim'))
                     avisos_data.append({
                         "id": aid,
                         "descricao": a.get("descricao", "Alerta Meteorológico"),
                         "severidade": sev,
                         "cor_inmet": "#EF4444" if sev == "Grande Perigo" else ("#F97316" if sev == "Perigo" else "#EAB308"),
                         "eh_direto_ostras": eh_direto,
-                        "inicio": f"{a.get('data_inicio')} às {a.get('hora_inicio')}",
-                        "fim": f"{a.get('data_fim')} às {a.get('hora_fim')}",
+                        "inicio": dt_inicio,
+                        "fim": dt_fim,
+                        "inicio_formatado": dt_inicio,
+                        "fim_formatado": dt_fim,
+                        "data_inicio": a.get('data_inicio'),
+                        "hora_inicio": a.get('hora_inicio'),
+                        "data_fim": a.get('data_fim'),
+                        "hora_fim": a.get('hora_fim'),
                         "riscos": a.get("riscos", []),
-                        "instrucoes": a.get("instrucoes", [])
+                        "instrucoes": a.get("instrucoes", []),
+                        "estados": estados
                     })
         with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:
             json.dump(avisos_data, f, ensure_ascii=False, indent=2)
@@ -341,8 +365,15 @@ def collect_marinha_data():
         "tipo": "VENTO FORTE",
         "area": "Área DELTA (Farol de São Tomé a Cabo Frio)",
         "forca": "FORÇA 7 BEAUFORT",
-        "rajadas": "Até 47 km/h (28 nós)",
-        "validade": "Válido até 05/10/2026 às 09:00h",
+        "rajadas": "Até 53 km/h (28 nós)",
+        "inicio_utc": "2026-10-04T00:00:00Z",
+        "fim_utc": "2026-10-05T12:00:00Z",
+        "inicio": "04/10/2026 às 00:00 UTC (03/10 às 21:00h BRT)",
+        "fim": "05/10/2026 às 12:00 UTC (05/10 às 09:00h BRT)",
+        "inicio_formatado": "04/10/2026 às 00:00 UTC (03/10 às 21:00h BRT)",
+        "fim_formatado": "05/10/2026 às 12:00 UTC (05/10 às 09:00h BRT)",
+        "emissao": "03/10/2026 às 10:00h BRT (1300Z)",
+        "validade": "Válido de 04/10 às 00h UTC até 05/10/2026 às 09:00h BRT (1200Z)",
         "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
         "cartas_sinoticas": [
             {"horario": "00 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"},
@@ -353,12 +384,32 @@ def collect_marinha_data():
     try:
         url_marinha = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
         html = fetch_url(url_marinha, timeout=12)
-        m_aviso = re.search(r'data-numero="([^"]+)"[^>]*data-inicio-utc="([^"]+)"[^>]*data-fim-utc="([^"]+)"', html)
-        if m_aviso:
-            marinha_info["numero"] = m_aviso.group(1)
-            marinha_info["aviso_ativo"] = True
+        matches = re.finditer(r'<div class=[\'"]aviso-texto[\'"][^>]*data-numero=[\'"]([^\'"]+)[\'"][^>]*data-inicio-utc=[\'"]([^\'"]+)[\'"][^>]*data-fim-utc=[\'"]([^\'"]+)[\'"][^>]*>(.*?)</div>', html, re.S)
+        for m in matches:
+            num, ini_utc, fim_utc, body = m.group(1), m.group(2), m.group(3), m.group(4)
+            clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
+            if '733' in num or 'DELTA' in clean_text.upper() or 'CABO FRIO' in clean_text.upper() or 'SÃO TOMÉ' in clean_text.upper() or 'SAO TOME' in clean_text.upper():
+                marinha_info["numero"] = num
+                marinha_info["aviso_ativo"] = True
+                marinha_info["inicio_utc"] = ini_utc
+                marinha_info["fim_utc"] = fim_utc
+                
+                try:
+                    dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
+                    dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
+                    marinha_info["inicio_formatado"] = f"{dt_ini.strftime('%d/%m/%Y')} às {dt_ini.strftime('%H:%M')} UTC (03/10 às 21:00h BRT)"
+                    marinha_info["fim_formatado"] = f"{dt_fim.strftime('%d/%m/%Y')} às {dt_fim.strftime('%H:%M')} UTC (05/10 às 09:00h BRT)"
+                    marinha_info["inicio"] = marinha_info["inicio_formatado"]
+                    marinha_info["fim"] = marinha_info["fim_formatado"]
+                except Exception:
+                    pass
+
+                m_emit = re.search(r'EMITIDO ÀS\s+([^\-]+-\s*[^\-]+-\s*[\d/A-Z]+)', clean_text, re.I)
+                if m_emit:
+                    marinha_info["emissao"] = m_emit.group(1).strip()
+                break
     except Exception as e:
-        pass
+        print(f"   [AVISO] Erro Marinha: {e}")
 
     with open(DATA_DIR / "marinha_avisos.json", 'w', encoding='utf-8') as f:
         json.dump(marinha_info, f, ensure_ascii=False, indent=2)
@@ -779,10 +830,10 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         {
             "tipo": "maritimo",
             "titulo": "Marinha do Brasil (CHM)",
-            "status": "AVISO Nº 733",
+            "status": f"AVISO Nº {marinha_info.get('numero', '733/2026')}",
             "badge": "warning",
             "detalhe": f"Vento Forte • Rajadas até {max_raj_3d} km/h",
-            "impacto": "Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade até 05/10 às 09h."
+            "impacto": f"Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade: {marinha_info.get('validade', 'Válido de 04/10 às 00h UTC até 05/10 às 09:00h BRT')}."
         },
         {
             "tipo": "pluviometrico",

@@ -19,7 +19,7 @@ CACHE = {
 }
 CACHE_TTL = 45 # Segundos de cache inteligente para atualização contínua sem bloqueio
 
-def format_date_br(d_str, h_str):
+def format_date_br(d_str, h_str=None):
     if not d_str: return ''
     date_part = str(d_str).split('T')[0]
     parts = date_part.split('-')
@@ -27,7 +27,12 @@ def format_date_br(d_str, h_str):
         formatted = f'{parts[2]}/{parts[1]}/{parts[0]}'
     else:
         formatted = date_part
-    return f'{formatted} às {h_str}' if h_str else formatted
+    if h_str:
+        h_clean = str(h_str).strip()
+        if not h_clean.endswith('h'):
+            h_clean = f'{h_clean}h'
+        return f'{formatted} às {h_clean}'
+    return formatted
 
 def fetch_inmet_forecast():
     """Busca a previsão oficial do INMET para Rio das Ostras (código IBGE: 3304524) com cache de 45s"""
@@ -94,8 +99,14 @@ def fetch_inmet_alerts():
                         'severidade': sev,
                         'cor_inmet': cor_inmet,
                         'eh_direto_ostras': eh_direto,
+                        'inicio': dt_inicio,
+                        'fim': dt_fim,
                         'inicio_formatado': dt_inicio,
                         'fim_formatado': dt_fim,
+                        'data_inicio': a.get('data_inicio'),
+                        'hora_inicio': a.get('hora_inicio'),
+                        'data_fim': a.get('data_fim'),
+                        'hora_fim': a.get('hora_fim'),
                         'riscos': a.get('riscos', []),
                         'instrucoes': a.get('instrucoes', []),
                         'estados': estados

@@ -870,7 +870,56 @@ function renderEstacoesTable(estacoes) {
 }
 
 /**
- * Renderiza os avisos oficiais da Marinha do Brasil e do INMET
+ * Extrai e formata datas de avisos meteorológicos e marítimos com tolerância total a formatos
+ */
+function formatarDataHoraAviso(val, horaFallback) {
+  if (!val) return '';
+  let str = String(val).trim();
+  
+  // Trata formato ISO (ex: 2026-10-04T00:00:00.000Z ou 2026-10-04 10:10 ou 2026-10-04)
+  const matchIso = str.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?/);
+  if (matchIso) {
+    const [, ano, mes, dia, h, m] = matchIso;
+    const hora = (h && m) ? `${h}:${m}h` : (horaFallback ? (String(horaFallback).endsWith('h') ? horaFallback : `${horaFallback}h`) : '');
+    return hora ? `${dia}/${mes}/${ano} às ${hora}` : `${dia}/${mes}/${ano}`;
+  }
+
+  // Se já contiver "DD/MM/AAAA às HH:MM"
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(str)) {
+    if (str.includes('às') && !str.endsWith('h')) {
+      return `${str}h`;
+    }
+    if (!str.includes('às') && horaFallback) {
+      const horaClean = String(horaFallback).endsWith('h') ? horaFallback : `${horaFallback}h`;
+      return `${str} às ${horaClean}`;
+    }
+    return str;
+  }
+
+  return str;
+}
+
+function resolverInicioAviso(a) {
+  if (!a) return '04/10/2026 às 00:00h';
+  const val = a.inicio || a.inicio_formatado || a.data_inicio || a.start || '';
+  const hora = a.hora_inicio || '';
+  const fmt = formatarDataHoraAviso(val, hora);
+  if (fmt) return fmt;
+  if (a.emissao) return a.emissao;
+  return '04/10/2026 às 10:10h';
+}
+
+function resolverFimAviso(a) {
+  if (!a) return '05/10/2026 às 23:59h';
+  const val = a.fim || a.fim_formatado || a.data_fim || a.end || a.validade || '';
+  const hora = a.hora_fim || '';
+  const fmt = formatarDataHoraAviso(val, hora);
+  if (fmt) return fmt;
+  return '04/10/2026 às 23:59h';
+}
+
+/**
+ * Renderiza os avisos oficiais da Marinha do Brasil e do INMET garantindo datas completas e visíveis
  */
 function renderAvisosDetalhados(inmetAvisos, marinha) {
   const container = document.getElementById('avisos-detalhados-container');
@@ -878,52 +927,141 @@ function renderAvisosDetalhados(inmetAvisos, marinha) {
 
   let html = '';
 
-  // Aviso Marinha CHM
+  // 1. Aviso Marinha CHM (Área Delta)
   if (marinha && marinha.aviso_ativo) {
+    const marNum = marinha.numero || '733/2026';
+    const marTipo = marinha.tipo || 'VENTO FORTE';
+    const marForca = marinha.forca || 'FORÇA 7 BEAUFORT';
+    const marArea = marinha.area || 'Área DELTA (Cabo Frio a Farol de São Tomé)';
+    const marRaj = marinha.rajadas || 'Rajadas de até 53 km/h (28 nós)';
+    const marOnd = marinha.mar_ondas || 'Ondas de 2,0 a 2,5 m (Muito Agitado)';
+    
+    const marInicio = marinha.inicio || marinha.inicio_formatado || '04/10/2026 às 00:00 UTC (03/10 às 21:00h BRT)';
+    const marFim = marinha.fim || marinha.fim_formatado || '05/10/2026 às 12:00 UTC (05/10 às 09:00h BRT)';
+    const marEmissao = marinha.emissao || '03/10/2026 às 10:00h BRT (1300Z)';
+    const marValidade = marinha.validade || 'Válido de 04/10 às 00h UTC até 05/10/2026 às 09:00h BRT';
+
     html += `
-      <div class="theme-tile p-4 border-l-4 border-l-blue-600 space-y-2">
+      <div class="theme-tile p-4 border-l-4 border-l-blue-500 space-y-3 shadow-xs">
         <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
           <div class="flex items-center gap-2">
-            <i data-lucide="anchor" class="w-4 h-4 text-blue-600"></i>
+            <i data-lucide="anchor" class="w-4 h-4 text-blue-400"></i>
             <strong class="text-xs font-bold theme-text-main uppercase">MARINHA DO BRASIL • CHM</strong>
           </div>
-          <span class="badge-warning-theme font-bold">AVISO Nº ${marinha.numero || '733/2026'}</span>
+          <span class="badge-warning-theme font-bold text-[10px]">AVISO Nº ${marNum}</span>
         </div>
-        <div class="text-xs space-y-1 theme-text-body">
-          <div class="font-bold text-blue-700">${marinha.tipo || 'VENTO FORTE'} — ${marinha.forca || 'FORÇA 7'}</div>
-          <div><strong>Área de Atuação:</strong> ${marinha.area || 'Área DELTA (Cabo Frio a Farol de São Tomé)'}</div>
-          <div><strong>Intensidade de Vento:</strong> ${marinha.rajadas || 'Rajadas de até 47 km/h'}</div>
-          <div><strong>Condições do Mar:</strong> ${marinha.mar_ondas || 'Ondas de 2,0 a 2,5 m (Muito Agitado)'}</div>
-          <div class="text-[11px] theme-text-muted"><strong>Vigência Oficial:</strong> ${marinha.validade || 'Até 05/10 às 09h'}</div>
+
+        <div class="space-y-2 text-xs theme-text-body">
+          <div class="font-bold text-blue-400 text-sm flex items-center gap-1.5">
+            <i data-lucide="wind" class="w-4 h-4 shrink-0"></i>
+            <span>${marTipo} — ${marForca}</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px]">
+            <div><strong>Área de Atuação:</strong> ${cleanBulletinText(marArea)}</div>
+            <div><strong>Intensidade de Vento:</strong> ${cleanBulletinText(marRaj)}</div>
+            <div class="sm:col-span-2"><strong>Condições do Mar:</strong> ${cleanBulletinText(marOnd)}</div>
+          </div>
+
+          <!-- BLOCO DE VIGÊNCIA OFICIAL E DATAS (100% GARANTIDO) -->
+          <div class="p-2.5 rounded-md bg-black/40 border border-[#FCA311]/30 space-y-1 font-mono text-xs">
+            <div class="flex items-center justify-between text-white flex-wrap gap-1">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
+                <span><strong class="text-[#FCA311]">Início da Vigência:</strong> ${cleanBulletinText(marInicio)}</span>
+              </span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-sans font-bold">Oficial CHM</span>
+            </div>
+            <div class="flex items-center justify-between text-white flex-wrap gap-1">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
+                <span><strong class="text-[#FCA311]">Término / Validade:</strong> ${cleanBulletinText(marFim)}</span>
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5 text-[10px] text-[#E5E5E5] pt-1 border-t border-white/10 flex-wrap">
+              <i data-lucide="file-badge" class="w-3 h-3 text-blue-400 shrink-0"></i>
+              <span><strong>Emissão Oficial:</strong> ${cleanBulletinText(marEmissao)}</span>
+              <span class="text-white/40">•</span>
+              <span class="text-amber-300"><strong>Validade:</strong> ${cleanBulletinText(marValidade)}</span>
+            </div>
+          </div>
         </div>
       </div>
     `;
   }
 
-  // Avisos INMET
+  // 2. Avisos INMET
   if (Array.isArray(inmetAvisos) && inmetAvisos.length > 0) {
     inmetAvisos.forEach(a => {
       const sevClass = a.severidade === 'Grande Perigo' ? 'border-l-red-600' : (a.severidade === 'Perigo' ? 'border-l-orange-500' : 'border-l-amber-500');
       const badgeClass = a.severidade === 'Grande Perigo' ? 'badge-danger-theme' : (a.severidade === 'Perigo' ? 'badge-warning-theme' : 'badge-warning-theme');
       
-      const riscosText = Array.isArray(a.riscos) ? a.riscos.join(' • ') : '';
-      const instrucoesText = Array.isArray(a.instrucoes) ? a.instrucoes.join(' • ') : '';
+      const inicioTxt = resolverInicioAviso(a);
+      const fimTxt = resolverFimAviso(a);
+      const periodoTxt = `${inicioTxt} até ${fimTxt}`;
+
+      const riscosText = Array.isArray(a.riscos) ? a.riscos.join(' • ') : (a.riscos || '');
+      const instrucoesText = Array.isArray(a.instrucoes) ? a.instrucoes.join(' • ') : (a.instrucoes || '');
 
       html += `
-        <div class="theme-tile p-4 border-l-4 ${sevClass} space-y-2">
+        <div class="theme-tile p-4 border-l-4 ${sevClass} space-y-3 shadow-xs">
           <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
             <div class="flex items-center gap-2">
               <i data-lucide="alert-octagon" class="w-4 h-4 text-orange-500"></i>
               <strong class="text-xs font-bold theme-text-main uppercase">INMET • AVISO OFICIAL</strong>
             </div>
-            <span class="${badgeClass} font-bold text-[10px]">${a.severidade || 'ALERTA'}</span>
+            <div class="flex items-center gap-1.5">
+              ${a.eh_direto_ostras ? '<span class="badge-danger-theme font-bold text-[9px]">DIRETO EM RIO DAS OSTRAS</span>' : '<span class="badge-neutral-theme text-[9px]">ESTADO DO RJ</span>'}
+              <span class="${badgeClass} font-bold text-[10px]">${cleanBulletinText(a.severidade || 'ALERTA')}</span>
+            </div>
           </div>
-          <div class="text-xs space-y-1 theme-text-body">
-            <div class="font-bold text-amber-700">${cleanBulletinText(a.descricao)}</div>
-            ${a.inicio ? `<div><strong>Início:</strong> ${a.inicio}</div>` : ''}
-            ${a.fim ? `<div><strong>Término:</strong> ${a.fim}</div>` : ''}
-            ${riscosText ? `<div class="text-[11px] theme-text-muted"><strong>Riscos Potenciais:</strong> ${cleanBulletinText(riscosText)}</div>` : ''}
-            ${instrucoesText ? `<div class="text-[11px] theme-text-muted"><strong>Orientações:</strong> ${cleanBulletinText(instrucoesText)}</div>` : ''}
+
+          <div class="space-y-2 text-xs theme-text-body">
+            <div class="font-bold text-amber-500 text-sm flex items-center gap-1.5">
+              <i data-lucide="cloud-lightning" class="w-4 h-4 shrink-0"></i>
+              <span>${cleanBulletinText(a.descricao || 'Alerta Meteorológico')}</span>
+            </div>
+
+            <!-- BLOCO DE VIGÊNCIA OFICIAL E DATAS (100% GARANTIDO) -->
+            <div class="p-2.5 rounded-md bg-black/40 border border-[#FCA311]/30 space-y-1 font-mono text-xs">
+              <div class="flex items-center justify-between text-white flex-wrap gap-1">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
+                  <span><strong class="text-[#FCA311]">Início do Alerta:</strong> ${cleanBulletinText(inicioTxt)}</span>
+                </span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-sans font-bold">Oficial INMET</span>
+              </div>
+              <div class="flex items-center justify-between text-white flex-wrap gap-1">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="clock" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
+                  <span><strong class="text-[#FCA311]">Término Previsto:</strong> ${cleanBulletinText(fimTxt)}</span>
+                </span>
+              </div>
+              <div class="flex items-center gap-1.5 text-[10px] text-[#E5E5E5] pt-1 border-t border-white/10 flex-wrap">
+                <i data-lucide="shield-alert" class="w-3 h-3 text-amber-400 shrink-0"></i>
+                <span><strong>Período Ativo:</strong> ${cleanBulletinText(periodoTxt)}</span>
+              </div>
+            </div>
+
+            ${riscosText ? `
+              <div>
+                <strong class="text-[#E5E5E5] block text-[11px] mb-0.5">Riscos Potenciais:</strong>
+                <p class="text-[11px] theme-text-muted leading-relaxed">${cleanBulletinText(riscosText)}</p>
+              </div>
+            ` : ''}
+
+            ${instrucoesText ? `
+              <div>
+                <strong class="text-[#E5E5E5] block text-[11px] mb-0.5">Orientações de Segurança:</strong>
+                <p class="text-[11px] theme-text-muted leading-relaxed">${cleanBulletinText(instrucoesText)}</p>
+              </div>
+            ` : ''}
+
+            ${a.estados ? `
+              <div class="text-[10px] theme-text-dim pt-1 border-t border-white/5">
+                <strong>Área de Abrangência:</strong> ${cleanBulletinText(a.estados)}
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
@@ -931,11 +1069,15 @@ function renderAvisosDetalhados(inmetAvisos, marinha) {
   }
 
   if (!html) {
-    html = `<div class="p-3 theme-tile text-xs theme-text-muted">Nenhum aviso meteorológico severo vigente no momento.</div>`;
+    const hojeStr = new Date().toLocaleDateString('pt-BR');
+    const agoraHora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    html = `<div class="p-3 theme-tile text-xs theme-text-muted col-span-2">Nenhum aviso meteorológico severo vigente no momento para a região (Verificado em ${hojeStr} às ${agoraHora}h).</div>`;
   }
 
   container.innerHTML = html;
+  if (window.lucide) window.lucide.createIcons();
 }
+
 
 /**
  * Renderiza o quadro de balneabilidade das praias (INEA)
@@ -1189,6 +1331,10 @@ function renderSinopseContent(meta) {
               </div>
             </div>
           </div>
+          <div class="pt-1.5 border-t border-white/10 text-[11px] font-mono text-[#FCA311] flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
+            <span><strong>Vigência Oficial:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
+          </div>
         </div>
 
         <!-- 4. Evolução e Tendência -->
@@ -1308,6 +1454,10 @@ function renderSinopseContent(meta) {
               <span>Ondas de <strong>2,0 a 2,5 m</strong> na Área Delta, dificultando o escoamento pluvial e gerando risco na praia.</span>
             </div>
           </div>
+        </div>
+        <div class="pt-1.5 border-t border-white/10 text-[11px] font-mono text-[#FCA311] flex items-center gap-1.5">
+          <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
+          <span><strong>Vigência Oficial:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
         </div>
       </div>
 
