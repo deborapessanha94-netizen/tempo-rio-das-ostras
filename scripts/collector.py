@@ -617,8 +617,10 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             dl = desc.lower().strip()
             if 'trovoada' in dl or 'tempestade' in dl:
                 return "Pancadas e Trovoadas"
-            if 'pancada' in dl:
+            if 'panc' in dl:
                 return "Pancadas de Chuva"
+            if 'poss' in dl:
+                return "Muitas Nuvens / Chuvisco"
             if 'chuva fraca' in dl or 'garoa' in dl or 'chuvisco' in dl:
                 return "Chuva Fraca / Garoa"
             if 'chuva forte' in dl:

@@ -129,6 +129,52 @@ export function cleanBulletinText(str) {
 }
 
 /**
+ * Formata os valores dos 6 pilares de previsão para termos concisos e completos,
+ * garantindo 100% de legibilidade sem nenhum corte ou quebra truncada na UI.
+ */
+export function formatPilarValue(label, val) {
+  if (!val || val === '—') return '—';
+  let str = String(val).trim();
+  const lLabel = String(label || '').toLowerCase();
+
+  if (lLabel.includes('céu') || lLabel.includes('ceu')) {
+    const lVal = str.toLowerCase();
+    // Se veio cortado de versões antigas ("panc" ou "poss") ou frases prolixas do INMET:
+    if (lVal.includes('trovoada') || lVal.includes('tempestade')) return 'Pancadas e Trovoadas';
+    if (lVal.includes('panc')) return 'Pancadas de Chuva';
+    if (lVal.includes('poss')) return 'Muitas Nuvens / Chuvisco';
+    if (lVal.includes('chuva fraca') || lVal.includes('garoa') || lVal.includes('chuvisco')) return 'Chuva Fraca / Garoa';
+    if (lVal.includes('chuva forte') || lVal.includes('volumosa')) return 'Chuva Forte';
+    if (lVal.includes('chuv')) return 'Chuvoso';
+    if (lVal.includes('muitas nuvens') && (lVal.includes('sol') || lVal.includes('calor') || lVal.includes('abertura'))) return 'Sol entre Nuvens';
+    if (lVal.includes('sol e calor') || (lVal.includes('sol') && lVal.includes('calor'))) return 'Sol e Calor';
+    if (lVal.includes('muitas nuvens') || lVal.includes('nublado')) return 'Muitas Nuvens';
+    if (lVal.includes('encoberto')) return 'Encoberto e Frio';
+    if (lVal.includes('limpo') || lVal.includes('claro') || lVal.includes('ensolarado')) return 'Céu Limpo';
+    return str;
+  }
+
+  if (lLabel.includes('mar') || lLabel.includes('onda')) {
+    const lVal = str.toLowerCase();
+    if (lVal.includes('mto')) return str.replace(/mto/i, 'Muito');
+    if (lVal.includes('muito agitado') || lVal.includes('ressaca')) return 'Muito Agitado (2,5 m)';
+    if (lVal.includes('agitado')) return 'Agitado (1,6-2,0 m)';
+    if (lVal.includes('moderado')) return 'Moderado (1,0-1,5 m)';
+    return str;
+  }
+
+  if (lLabel.includes('vento')) {
+    const lVal = str.toLowerCase();
+    if (lVal.includes('rajada') && !lVal.includes('rajadas')) {
+      return str.replace(/rajada/i, 'Rajadas');
+    }
+    return str;
+  }
+
+  return str;
+}
+
+/**
  * Configura as Abas Principais do Sistema (Informativo, Boletim, Gráficos, Radar)
  */
 function setupNavigationTabs() {
@@ -352,12 +398,13 @@ function renderBulletinDOM(meta, rows) {
 
         const pilaresHtml = pilarKeys.map(k => {
           const p = pilares[k];
+          const formattedVal = formatPilarValue(p.label || k, p.val);
           return `
-            <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
+            <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[62px] h-auto">
               <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${p.label || k}</span>
-                <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">${cleanBulletinText(p.val || '—')}</span>
+                <span class="text-[11px] sm:text-xs font-bold theme-text-main block leading-tight break-words whitespace-normal">${cleanBulletinText(formattedVal || '—')}</span>
               </div>
             </div>
           `;

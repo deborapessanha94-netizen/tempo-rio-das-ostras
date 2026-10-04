@@ -201,6 +201,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 0.5rem;
   transition: all 0.15s ease;
   overflow: visible !important;
+  min-height: 58px;
+  height: auto;
 }
 
 .theme-tile span,
