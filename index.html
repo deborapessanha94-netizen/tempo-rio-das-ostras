@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=23">
+  <link rel="stylesheet" href="css/styles.css?v=24">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -597,30 +597,193 @@
               <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa</span>
             </div>
             <p class="leading-relaxed text-xs theme-text-body text-justify">
-              A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de <strong>03/10 (Sáb) a 05/10 (Seg)</strong> é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, mantendo céu predominantemente encoberto e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem para gradual afastamento da instabilidade e rápida elevação térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de <strong>101,0 mm a 108,2 mm</strong> ao longo dos 3 dias, com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de <strong>19°C a 20°C</strong> na madrugada e 21°C no litoral) e o subsequente aquecimento pré-frontal, alcançando máximas de até <strong>28°C</strong> no domingo e <strong>30°C a 32°C</strong> na segunda-feira.
+              A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de <strong>03/10 (Sáb) a 05/10 (Seg)</strong> é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, mantendo céu predominantemente encoberto e frio úmido no 1º dia (Sábado 03/10), com chuvas contínuas e volumosas que evoluem para gradual afastamento da instabilidade e início da vazante no 2º dia (Domingo 04/10), culminando em rápida elevação térmica e convecção pré-frontal no 3º dia (Segunda 05/10). Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de <strong>101,0 mm a 108,2 mm</strong> ao longo dos 3 dias da previsão, com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de <strong>19°C a 20°C</strong> na madrugada e 21°C no litoral) e o subsequente aquecimento diurno, alcançando pico térmico de até <strong>30°C a 32°C</strong>.
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
               <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Modelos Globais / INMET</span>
-                <span class="font-bold theme-text-main">101,0 a 108,2 mm (3D)</span>
+                <span class="text-[10px] font-sans theme-text-muted">Modelos Globais / INMET (3 Dias)</span>
+                <span class="font-bold theme-text-main">101,0 a 108,2 mm (72h)</span>
               </div>
               <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Gradiente Térmico Oficial</span>
+                <span class="text-[10px] font-sans theme-text-muted">Gradiente Térmico Oficial (3 Dias)</span>
                 <span class="font-bold theme-text-main">19°C (Mín) a 32°C (Máx)</span>
               </div>
               <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-                <span class="text-[10px] font-sans theme-text-muted">Evolução do Padrão</span>
-                <span class="font-bold theme-text-main">Chuva ➔ Vazante ➔ Pré-Frontal</span>
+                <span class="text-[10px] font-sans theme-text-muted">Trajetória Sinótica dos 3 Dias</span>
+                <span class="font-bold theme-text-main">Sáb: Chuva ➔ Dom: Vazante ➔ Seg: Calor</span>
               </div>
             </div>
           </div>
 
-          <!-- 2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
+          <!-- 2. Evolução e Tendência Diária dos 3 Dias da Previsão Oficial (3 Cards Dedicados) -->
+          <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-3" style="border-color: rgba(252, 163, 17, 0.3);">
+            <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
+              <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
+                <i data-lucide="calendar-days" class="w-4 h-4 text-[#FCA311]"></i>
+                <span>2. Evolução & Tendência Diária dos 3 Dias da Previsão Oficial</span>
+              </div>
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="badge-neutral-theme text-[10px] font-bold">CICLO COMPLETO DE 3 DIAS</span>
+                <span class="badge-info-theme text-[10px]">D+0 • D+1 • D+2</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <!-- Card D+0 (Dia 1) -->
+              <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-[#FCA311]">
+                <div>
+                  <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
+                    <span class="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#FCA311] border border-[#FCA311]/30">DIA 1 • D+0</span>
+                    <span class="badge-danger-theme text-[10px] font-bold">ALERTA MÁXIMO / CHEIAS</span>
+                  </div>
+                  <div class="mt-1.5">
+                    <h5 class="text-xs font-bold theme-text-main">Sábado — 03/10/2026</h5>
+                    <span class="text-[10px] theme-text-muted block leading-snug mt-0.5">Frente Semi-Estacionária, Chuva Volumosa e Alerta Máximo no Rio Jundiá</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
+                    <span class="font-bold theme-text-main flex items-center gap-1">
+                      <i data-lucide="thermometer" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>20° a 21°C</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
+                    <span class="font-bold text-blue-400 flex items-center gap-1">
+                      <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-400 shrink-0"></i>
+                      <span>88,7 mm</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
+                    <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
+                      <i data-lucide="cloud-rain" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span class="truncate">Encoberto e frio</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
+                    <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
+                      <i data-lucide="wind" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>Rajadas 48 km/h</span>
+                    </span>
+                  </div>
+                </div>
+
+                <p class="text-[11px] theme-text-body leading-relaxed text-justify pt-1.5 border-t theme-tile-border">
+                  Neste sábado, o tempo segue totalmente encoberto, frio e chuvoso sob atuação de frente fria semi-estacionária combinada ao transporte de umidade marítima. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo 100% saturado e transbordo na calha do Rio Jundiá (acumulado oficial de 88,7 mm a 108,2 mm).
+                </p>
+              </div>
+
+              <!-- Card D+1 (Dia 2) -->
+              <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-[#FCA311]">
+                <div>
+                  <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
+                    <span class="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#FCA311] border border-[#FCA311]/30">DIA 2 • D+1</span>
+                    <span class="badge-warning-theme text-[10px] font-bold">AVISO 733 / VENTO FORTE</span>
+                  </div>
+                  <div class="mt-1.5">
+                    <h5 class="text-xs font-bold theme-text-main">Domingo — 04/10/2026</h5>
+                    <span class="text-[10px] theme-text-muted block leading-snug mt-0.5">Chuva na Madrugada/Manhã e Retorno do Sol com Aquecimento à Tarde</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
+                    <span class="font-bold theme-text-main flex items-center gap-1">
+                      <i data-lucide="thermometer" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>20° a 28°C</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
+                    <span class="font-bold text-blue-400 flex items-center gap-1">
+                      <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-400 shrink-0"></i>
+                      <span>12,9 mm</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
+                    <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
+                      <i data-lucide="cloud-sun" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span class="truncate">Sol entre nuvens</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
+                    <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
+                      <i data-lucide="wind" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>Rajadas 47 km/h</span>
+                    </span>
+                  </div>
+                </div>
+
+                <p class="text-[11px] theme-text-body leading-relaxed text-justify pt-1.5 border-t theme-tile-border">
+                  Neste domingo, a frente fria se afasta para o oceano, permitindo a abertura gradual do tempo com períodos de sol e aquecimento acentuado a partir da tarde. Previsão de chuva fraca a moderada na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12,9 mm no dia, vazante lenta do Rio Jundiá).
+                </p>
+              </div>
+
+              <!-- Card D+2 (Dia 3) -->
+              <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-[#FCA311]">
+                <div>
+                  <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
+                    <span class="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#FCA311] border border-[#FCA311]/30">DIA 3 • D+2</span>
+                    <span class="badge-info-theme text-[10px] font-bold">CALOR E PANCADAS</span>
+                  </div>
+                  <div class="mt-1.5">
+                    <h5 class="text-xs font-bold theme-text-main">Segunda-Feira — 05/10/2026</h5>
+                    <span class="text-[10px] theme-text-muted block leading-snug mt-0.5">Predomínio de Sol, Calor Pré-Frontal de 30°C e Pancadas Isoladas à Tarde</span>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
+                    <span class="font-bold theme-text-main flex items-center gap-1">
+                      <i data-lucide="thermometer" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>21° a 30°C</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
+                    <span class="font-bold text-blue-400 flex items-center gap-1">
+                      <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-400 shrink-0"></i>
+                      <span>3,3 mm</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
+                    <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
+                      <i data-lucide="sun" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span class="truncate">Sol e calor à tarde</span>
+                    </span>
+                  </div>
+                  <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+                    <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
+                    <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
+                      <i data-lucide="wind" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+                      <span>Rajadas 40 km/h</span>
+                    </span>
+                  </div>
+                </div>
+
+                <p class="text-[11px] theme-text-body leading-relaxed text-justify pt-1.5 border-t theme-tile-border">
+                  Nesta segunda-feira, o sol predomina pela manhã com rápido aquecimento térmico pré-frontal sob escoamento de ventos quentes de Nordeste e Norte. Previsão de aumento da nebulosidade a partir da tarde com formação de pancadas isoladas de chuva acompanhadas de trovoadas (acumulados de 3,3 mm, pontuais de até 5 mm).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
           <div class="p-3.5 sm:p-4 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
             <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(239, 68, 68, 0.2);">
               <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
                 <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
-                <span>2. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
+                <span>3. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
               </div>
               <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="badge-danger-theme text-[10px]">ALERTA MÁXIMO • COTA 2,48 m (TRANSBORDO)</span>
@@ -659,12 +822,12 @@
             </div>
           </div>
 
-          <!-- 3. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
+          <!-- 4. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
           <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(59, 130, 246, 0.3);">
             <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(59, 130, 246, 0.2);">
               <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
                 <i data-lucide="server" class="w-4 h-4 text-blue-500"></i>
-                <span>3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
+                <span>4. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
               </div>
               <div class="flex items-center gap-1.5 flex-wrap">
                 <span class="badge-info-theme text-[10px]">SINCRONIZAÇÃO EM NUVEM 24/7</span>
@@ -1374,6 +1537,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=23"></script>
+  <script type="module" src="js/app.js?v=24"></script>
 </body>
 </html>

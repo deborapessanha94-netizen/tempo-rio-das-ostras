@@ -305,16 +305,158 @@ def build_metadata_from_qmd(qmd_b, qmd_p, records):
         }
     }
 
+    d0_nome = dias_resumo[0]['dia'].split('—')[0].strip() if dias_resumo else "D+0"
+    d1_nome = dias_resumo[1]['dia'].split('—')[0].strip() if len(dias_resumo) > 1 else "D+1"
+    d2_nome = dias_resumo[2]['dia'].split('—')[0].strip() if len(dias_resumo) > 2 else "D+2"
+    evol_3d_str = f"{d0_nome}: Chuva/Encoberto ➔ {d1_nome}: Vazante/Sol ➔ {d2_nome}: Calor/Pancadas"
+
+    sinopse_estruturada = {
+        "periodo": periodo,
+        "evolucao_3_dias": [
+            {
+                "dia_offset": "D+0",
+                "dia_ordem": 1,
+                "dia_rotulo": dias_resumo[0]['dia'],
+                "subtitulo": dias_resumo[0]['subtitulo'],
+                "badge": dias_resumo[0]['badge'],
+                "badge_tipo": dias_resumo[0]['badge_tipo'],
+                "descricao": dias_resumo[0]['descricao'],
+                "pilares": dias_resumo[0]['pilares']
+            },
+            {
+                "dia_offset": "D+1",
+                "dia_ordem": 2,
+                "dia_rotulo": dias_resumo[1]['dia'],
+                "subtitulo": dias_resumo[1]['subtitulo'],
+                "badge": dias_resumo[1]['badge'],
+                "badge_tipo": dias_resumo[1]['badge_tipo'],
+                "descricao": dias_resumo[1]['descricao'],
+                "pilares": dias_resumo[1]['pilares']
+            },
+            {
+                "dia_offset": "D+2",
+                "dia_ordem": 3,
+                "dia_rotulo": dias_resumo[2]['dia'],
+                "subtitulo": dias_resumo[2]['subtitulo'],
+                "badge": dias_resumo[2]['badge'],
+                "badge_tipo": dias_resumo[2]['badge_tipo'],
+                "descricao": dias_resumo[2]['descricao'],
+                "pilares": dias_resumo[2]['pilares']
+            }
+        ],
+        "ordem_1_atmosfera": {
+            "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
+            "badge": "FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa",
+            "texto": (
+                f"A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de {periodo} "
+                f"é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, "
+                f"acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). "
+                f"Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, "
+                f"mantendo céu predominantemente encoberto e frio úmido no 1º dia ({d0_nome}), com chuvas contínuas e volumosas que evoluem "
+                f"para gradual afastamento da instabilidade e início da vazante no 2º dia ({d1_nome}), culminando em rápida elevação térmica e convecção "
+                f"pré-frontal no 3º dia ({d2_nome}). Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado "
+                f"pluviométrico total de 101,0 mm a 108,2 mm ao longo dos 3 dias da previsão, com acentuada amplitude térmica entre a massa de ar fria inicial "
+                f"(mínima de 19°C a 20°C na madrugada e 21°C no litoral) e o subsequente aquecimento diurno, alcançando máximas de até 28°C a 32°C."
+            ),
+            "pilares": [
+                {"label": "Modelos Numéricos (3 Dias)", "val": "ECMWF, GFS e COSMO (101,0 a 108,2 mm em 72h)"},
+                {"label": "Gradiente Térmico Oficial", "val": "Mínima de 19°C até Máxima de 32°C"},
+                {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
+            ]
+        },
+        "ordem_2_hidrologia_costa": {
+            "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
+            "badge": "ALERTA MÁXIMO • COTA 2,48 m (TRANSBORDO)",
+            "badge_mar": "AVISO MARINHA Nº 733 (FORÇA 7)",
+            "cota": "2,48 m",
+            "status": "ALERTA MÁXIMO",
+            "texto": (
+                "Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, "
+                "onde a estação telemétrica municipal (INEA 2241036) acusa cota de 2,48 m (superando a cota de atenção de 1,60 m "
+                "e a cota de transbordo da calha de 2,20 m), consolidando o status de ALERTA MÁXIMO HIDROLÓGICO com extravasamento da lâmina d'água "
+                "e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. "
+                "Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; Rocha Leão / REBIO União: 124,7 mm; "
+                "PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
+                "monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da Marinha do Brasil (Área Delta), "
+                "com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até 53 km/h e mar muito agitado com ondas de até 2,5 m, "
+                "impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais."
+            ),
+            "estacoes": [
+                {"nome": "Palmital", "valor": "134,0 mm"},
+                {"nome": "Rocha Leão / REBIO", "valor": "124,7 mm"},
+                {"nome": "PCD Jundiá", "valor": "108,2 mm"},
+                {"nome": "Defesa Civil", "valor": "70,4 mm"}
+            ]
+        },
+        "ordem_3_operacional": {
+            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
+            "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
+            "badge_emergencia": "EMERGÊNCIA 199",
+            "texto": (
+                "Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam "
+                "com infraestrutura de telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo "
+                "com terminais locais desligados, com sincronização automática e redundante das redes oficiais INEA, INMET e CEMADEN. "
+                "A Subsecretaria de Defesa Civil de Rio das Ostras mantém equipes operacionais e patrulhas mecanizadas em nível de prontidão permanente "
+                "no Centro de Operações (PLANCON), mobilizadas para vistorias técnicas de campo e pronta resposta comunitária, "
+                "com canais de emergência ininterruptos disponíveis à população pelo telefone 199 e Corpo de Bombeiros (193)."
+            ),
+            "pilares": [
+                {"label": "Ciclo Sinótico Oficial", "val": "Consolidação diária das 17:00h e telemetria telemétrica a cada 15 min"},
+                {"label": "Nuvem Autônoma 24/7", "val": "Processamento redundante em nuvem independente de hardware local ligado"},
+                {"label": "Canais de Emergência", "val": "Defesa Civil 199 • Bombeiros 193 • Telefone Geral (22) 2760-8360"}
+            ]
+        }
+    }
+
+    alertas_estruturados = [
+        {
+            "tipo": "hidrologico",
+            "titulo": "Rio Jundiá (INEA)",
+            "status": "ALERTA MÁXIMO",
+            "badge": "danger",
+            "detalhe": "Cota: 2,48 m (Transbordo: 2,20 m)",
+            "impacto": "Calha sob vigilância máxima. Risco de alagamentos nos bairros Âncora e Cláudio Ribeiro."
+        },
+        {
+            "tipo": "maritimo",
+            "titulo": "Marinha do Brasil (CHM)",
+            "status": "AVISO Nº 733/2026",
+            "badge": "warning",
+            "detalhe": "Vento Forte • Rajadas até 53 km/h",
+            "impacto": "Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade até 05/10 às 09:00h BRT."
+        },
+        {
+            "tipo": "pluviometrico",
+            "titulo": "Previsão Pluviométrica",
+            "status": "ACUMULADO 3D",
+            "badge": "info",
+            "detalhe": "Volume previsto: 101,0 a 108,2 mm • Pico térmico: 32°C",
+            "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
+        }
+    ]
+
+    kpis = {
+        "jundia_nivel": "2,48 m",
+        "jundia_status": "ALERTA MÁXIMO",
+        "chuva_3d": "101,0 a 108,2 mm",
+        "pico_calor": "30°C a 32°C",
+        "max_rajada": "53 km/h",
+        "plancon_status": "ALERTA MÁXIMO"
+    }
+
     return {
         "municipio": "Rio das Ostras - RJ",
         "periodo": periodo,
         "emissao": emissao,
         "informe_alerta": informe_alerta,
+        "alertas_estruturados": alertas_estruturados,
         "sinopse_geral": sinopse,
+        "sinopse_estruturada": sinopse_estruturada,
         "glossario": glossario,
         "dias_resumo": dias_resumo,
         "impactos_bairros": impactos_bairros,
         "avisos_oficiais": avisos_oficiais,
+        "kpis": kpis,
         "contatos_emergencia": {
             "defesa_civil_plantao": "199",
             "bombeiros": "193",

@@ -1298,11 +1298,12 @@ function renderAlertBannerGrid(meta) {
 }
 
 /**
- * Renderiza o Panorama Sinótico Geral de forma elaborada, executiva e visualmente clara,
- * mantendo rigorosamente a ordem dos 3 pilares estabelecida pela Defesa Civil:
- * 1. Configuração Sinótica Regional & Dinâmica Atmosférica
- * 2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla
- * 3. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7
+ * Renderiza o Panorama Sinótico Geral cobrindo INTEGRALMENTE os 3 dias da previsão oficial,
+ * mantendo rigorosamente a ordem temática executiva estabelecida pela Defesa Civil:
+ * 1. Configuração Sinótica Regional & Dinâmica Atmosférica (Visão Geral dos 3 Dias)
+ * 2. Evolução & Tendência Diária dos 3 Dias da Previsão Oficial (3 Cards lado a lado: D+0, D+1, D+2)
+ * 3. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla
+ * 4. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7
  */
 function renderSinopseContent(meta) {
   const sinopseEl = document.getElementById('sinopse-content');
@@ -1310,25 +1311,93 @@ function renderSinopseContent(meta) {
 
   const s = meta?.sinopse_estruturada || {};
   const kpis = meta?.kpis || {};
+
+  // Extrai sempre os 3 dias de previsão
+  let dias = (meta?.dias_resumo && Array.isArray(meta.dias_resumo) && meta.dias_resumo.length > 0)
+    ? meta.dias_resumo
+    : (s.evolucao_3_dias && Array.isArray(s.evolucao_3_dias) ? s.evolucao_3_dias.map(ed => ({
+        dia: ed.dia_rotulo,
+        subtitulo: ed.subtitulo,
+        badge: ed.badge,
+        badge_tipo: ed.badge_tipo,
+        descricao: ed.descricao,
+        pilares: ed.pilares
+      })) : []);
+
+  // Fallback garantido para sempre ter 3 dias caso ocorra array vazia
+  if (!dias || dias.length === 0) {
+    dias = [
+      {
+        dia: "Sábado — 03/10/2026",
+        subtitulo: "Frente Semi-Estacionária, Chuva Volumosa e Alerta Máximo no Rio Jundiá",
+        badge: "ALERTA MÁXIMO / CHEIAS",
+        badge_tipo: "danger",
+        descricao: "Neste sábado, o tempo segue totalmente encoberto, frio e chuvoso sob atuação de frente fria semi-estacionária combinada ao transporte de umidade marítima. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo 100% saturado e transbordo na calha do Rio Jundiá (acumulado oficial de 88,7 mm a 108,2 mm). Temperaturas variam entre mínima de 20°C e máxima de 21°C.",
+        pilares: {
+          temp: { val: "20° a 21°C" },
+          chuva: { val: "88,7 mm" },
+          ceu: { val: "Encoberto e frio", icon: "cloud-rain" },
+          vento: { val: "Rajadas até 48 km/h" }
+        }
+      },
+      {
+        dia: "Domingo — 04/10/2026",
+        subtitulo: "Chuva na Madrugada/Manhã e Retorno do Sol com Aquecimento à Tarde",
+        badge: "AVISO 733 / VENTO FORTE",
+        badge_tipo: "warning",
+        descricao: "Neste domingo, a frente fria se afasta para o oceano, permitindo a abertura gradual do tempo com períodos de sol e aquecimento acentuado a partir da tarde. Previsão de chuva fraca a moderada na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12,9 mm no dia, vazante lenta do Rio Jundiá). Temperaturas entre 20°C e 28°C.",
+        pilares: {
+          temp: { val: "20° a 28°C" },
+          chuva: { val: "12,9 mm" },
+          ceu: { val: "Sol entre nuvens", icon: "cloud-sun" },
+          vento: { val: "Rajadas até 47 km/h" }
+        }
+      },
+      {
+        dia: "Segunda-Feira — 05/10/2026",
+        subtitulo: "Predomínio de Sol, Calor Pré-Frontal de 30°C e Pancadas Isoladas à Tarde",
+        badge: "CALOR E PANCADAS",
+        badge_tipo: "info",
+        descricao: "Nesta segunda-feira, o sol predomina pela manhã com rápido aquecimento térmico pré-frontal sob escoamento de ventos quentes de Nordeste e Norte. Previsão de aumento da nebulosidade a partir da tarde com formação de pancadas isoladas de chuva acompanhadas de trovoadas (acumulados de 3,3 mm, pontuais de até 5 mm). Temperaturas entre 21°C e 30°C.",
+        pilares: {
+          temp: { val: "21° a 30°C" },
+          chuva: { val: "3,3 mm" },
+          ceu: { val: "Sol e calor à tarde", icon: "sun" },
+          vento: { val: "Rajadas até 40 km/h" }
+        }
+      }
+    ];
+  }
+
+  const d0 = dias[0] || null;
+  const d1 = dias[1] || null;
+  const d2 = dias[2] || null;
+
+  const d0Nome = d0 ? (d0.dia || 'D+0').split('—')[0].trim() : 'Sábado (03/10)';
+  const d1Nome = d1 ? (d1.dia || 'D+1').split('—')[0].trim() : 'Domingo (04/10)';
+  const d2Nome = d2 ? (d2.dia || 'D+2').split('—')[0].trim() : 'Segunda-feira (05/10)';
+
+  const perStr = meta?.periodo || s.periodo || `${d0Nome} a ${d2Nome}`;
   const jundiaNivel = s.ordem_2_hidrologia_costa?.cota || kpis.jundia_nivel || '2,48 m';
   const jundiaStatus = s.ordem_2_hidrologia_costa?.status || kpis.jundia_status || 'ALERTA MÁXIMO';
   const chuva3d = kpis.chuva_3d || '101,0 a 108,2 mm';
   const picoCalor = kpis.pico_calor || '30°C a 32°C';
   const maxRajada = kpis.max_rajada || '53 km/h';
 
-  // Texto 1 Elaborado
+  // Texto 1 Elaborado (cobrindo a dinâmica dos 3 dias em sequência)
   const texto1 = s.ordem_1_atmosfera?.texto || (
-    "A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 03/10 (Sáb) a 05/10 (Seg) " +
-    "é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, acoplado à circulação " +
-    "anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio " +
-    "atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, mantendo céu predominantemente encoberto " +
-    "e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem para gradual afastamento da instabilidade e rápida elevação " +
-    "térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado " +
-    `pluviométrico total de ${chuva3d} ao longo dos 3 dias, com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de 19°C a 20°C ` +
-    `na madrugada e 21°C no litoral) e o subsequente aquecimento pré-frontal, alcançando máximas de até 28°C no domingo e ${picoCalor} na segunda-feira.`
+    `A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de ${perStr} ` +
+    `é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, acoplado à circulação ` +
+    `anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio ` +
+    `atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, mantendo céu predominantemente encoberto ` +
+    `e frio úmido no 1º dia (${d0Nome}), com chuvas contínuas e volumosas que evoluem para gradual afastamento da instabilidade e início ` +
+    `da vazante no 2º dia (${d1Nome}), culminando em rápida elevação térmica e convecção pré-frontal no 3º dia (${d2Nome}). ` +
+    `Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de ` +
+    `${chuva3d} ao longo dos 3 dias da previsão, com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de 19°C a 20°C ` +
+    `na madrugada e 21°C no litoral) e o subsequente aquecimento diurno, alcançando pico térmico de até ${picoCalor}.`
   );
 
-  // Texto 2 Elaborado
+  // Texto 2 Elaborado (Hidrologia e Costa nos 3 dias)
   const texto2 = s.ordem_2_hidrologia_costa?.texto || (
     "Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, onde a estação telemétrica municipal " +
     `(INEA 2241036) acusa cota de ${jundiaNivel} (superando a cota de atenção de 1,60 m e a cota de transbordo da calha de 2,20 m), consolidando ` +
@@ -1340,7 +1409,7 @@ function renderSinopseContent(meta) {
     "ondas de 2,0 a 2,5 m, impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais."
   );
 
-  // Texto 3 Elaborado
+  // Texto 3 Elaborado (Regime Operacional 24/7)
   const texto3 = s.ordem_3_operacional?.texto || (
     "Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam com infraestrutura de " +
     "telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo com terminais locais desligados, com " +
@@ -1363,9 +1432,93 @@ function renderSinopseContent(meta) {
     </div>
   `).join('');
 
+  // Pills de resumo dos 3 dias
+  const evolucaoPill = s.ordem_1_atmosfera?.pilares?.find(p => p.label && p.label.toLowerCase().includes('evolu'))?.val
+    || `${d0Nome}: Chuva ➔ ${d1Nome}: Vazante ➔ ${d2Nome}: Calor`;
+  const modelosPill = s.ordem_1_atmosfera?.pilares?.find(p => p.label && p.label.toLowerCase().includes('model'))?.val
+    || `${chuva3d} (Previsão 72h)`;
+  const gradientePill = s.ordem_1_atmosfera?.pilares?.find(p => p.label && (p.label.toLowerCase().includes('gradiente') || p.label.toLowerCase().includes('amplit'))?.val)
+    || `19°C (Mín) a ${picoCalor} (Máx)`;
+
+  // GERAÇÃO DOS 3 CARDS LADO A LADO DA EVOLUÇÃO DIÁRIA (100% GARANTIDO 3 DIAS)
+  const evolucao3dCardsHtml = [
+    { offset: 'D+0', num: 1, d: d0 },
+    { offset: 'D+1', num: 2, d: d1 },
+    { offset: 'D+2', num: 3, d: d2 }
+  ].map(({ offset, num, d }) => {
+    if (!d) return '';
+    let badgeClass = 'badge-neutral-theme';
+    const bType = String(d.badge_tipo || '').toLowerCase();
+    const bTxt = String(d.badge || '').toUpperCase();
+    if (bType === 'danger' || bTxt.includes('MÁXIMO') || bTxt.includes('MAXIMO') || bTxt.includes('ALERTA MÁXIMO')) {
+      badgeClass = 'badge-danger-theme';
+    } else if (bType === 'warning' || bTxt.includes('AVISO') || bTxt.includes('ATENÇÃO') || bTxt.includes('ATENCAO') || bTxt.includes('VENTO')) {
+      badgeClass = 'badge-warning-theme';
+    } else if (bType === 'info' || bTxt.includes('CALOR') || bTxt.includes('PANCADAS')) {
+      badgeClass = 'badge-info-theme';
+    }
+
+    const pilares = d.pilares || {};
+    const tempVal = pilares.temp?.val || '—';
+    const chuvaVal = pilares.chuva?.val || '—';
+    const ceuVal = pilares.ceu?.val || '—';
+    const ceuIcon = pilares.ceu?.icon || 'cloud';
+    const ventoVal = pilares.vento?.val || '—';
+
+    return `
+      <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-[#FCA311]">
+        <div>
+          <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
+            <span class="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#FCA311] border border-[#FCA311]/30">DIA ${num} • ${offset}</span>
+            <span class="${badgeClass} text-[10px] font-bold">${cleanBulletinText(d.badge || 'OFICIAL')}</span>
+          </div>
+          <div class="mt-1.5">
+            <h5 class="text-xs font-bold theme-text-main">${cleanBulletinText(d.dia || `Dia ${num}`)}</h5>
+            <span class="text-[10px] theme-text-muted block leading-snug mt-0.5">${cleanBulletinText(d.subtitulo || '')}</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
+          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
+            <span class="font-bold theme-text-main flex items-center gap-1">
+              <i data-lucide="thermometer" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <span>${cleanBulletinText(tempVal)}</span>
+            </span>
+          </div>
+          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
+            <span class="font-bold text-blue-400 flex items-center gap-1">
+              <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-400 shrink-0"></i>
+              <span>${cleanBulletinText(chuvaVal)}</span>
+            </span>
+          </div>
+          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
+            <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
+              <i data-lucide="${ceuIcon}" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <span class="truncate">${cleanBulletinText(ceuVal)}</span>
+            </span>
+          </div>
+          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
+            <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
+              <i data-lucide="wind" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <span>${cleanBulletinText(ventoVal)}</span>
+            </span>
+          </div>
+        </div>
+
+        <p class="text-[11px] theme-text-body leading-relaxed text-justify pt-1.5 border-t theme-tile-border">
+          ${cleanBulletinText(d.descricao || '')}
+        </p>
+      </div>
+    `;
+  }).join('');
+
   sinopseEl.innerHTML = `
     <div class="space-y-4 text-xs">
-      <!-- 1. Configuração Sinótica Regional & Dinâmica Atmosférica -->
+      <!-- 1. Configuração Sinótica Regional & Dinâmica Atmosférica (Visão Geral dos 3 Dias) -->
       <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(252, 163, 17, 0.3);">
         <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
@@ -1379,26 +1532,44 @@ function renderSinopseContent(meta) {
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 font-mono text-[11px]">
           <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-            <span class="text-[10px] font-sans theme-text-muted">Modelos Globais / INMET</span>
-            <span class="font-bold theme-text-main">101,0 a 108,2 mm (3D)</span>
+            <span class="text-[10px] font-sans theme-text-muted">Modelos Globais / INMET (3 Dias)</span>
+            <span class="font-bold theme-text-main">${cleanBulletinText(modelosPill)}</span>
           </div>
           <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-            <span class="text-[10px] font-sans theme-text-muted">Gradiente Térmico Oficial</span>
-            <span class="font-bold theme-text-main">19°C (Mín) a 32°C (Máx)</span>
+            <span class="text-[10px] font-sans theme-text-muted">Gradiente Térmico Oficial (3 Dias)</span>
+            <span class="font-bold theme-text-main">${cleanBulletinText(gradientePill)}</span>
           </div>
           <div class="p-2 rounded theme-tile border theme-border flex flex-col">
-            <span class="text-[10px] font-sans theme-text-muted">Evolução do Padrão</span>
-            <span class="font-bold theme-text-main">Chuva ➔ Vazante ➔ Pré-Frontal</span>
+            <span class="text-[10px] font-sans theme-text-muted">Trajetória Sinótica dos 3 Dias</span>
+            <span class="font-bold theme-text-main">${cleanBulletinText(evolucaoPill)}</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
+      <!-- 2. Evolução e Tendência Diária dos 3 Dias da Previsão Oficial (3 Cards Dedicados) -->
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-3" style="border-color: rgba(252, 163, 17, 0.3);">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
+          <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
+            <i data-lucide="calendar-days" class="w-4 h-4 text-[#FCA311]"></i>
+            <span>2. Evolução & Tendência Diária dos 3 Dias da Previsão Oficial</span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="badge-neutral-theme text-[10px] font-bold">CICLO COMPLETO DE 3 DIAS</span>
+            <span class="badge-info-theme text-[10px]">D+0 • D+1 • D+2</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          ${evolucao3dCardsHtml}
+        </div>
+      </div>
+
+      <!-- 3. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
       <div class="p-3.5 sm:p-4 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
         <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(239, 68, 68, 0.2);">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
             <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
-            <span>2. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
+            <span>3. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
             <span class="badge-danger-theme text-[10px]">${cleanBulletinText(jundiaStatus)} • COTA ${cleanBulletinText(jundiaNivel)} (TRANSBORDO)</span>
@@ -1422,12 +1593,12 @@ function renderSinopseContent(meta) {
         </div>
       </div>
 
-      <!-- 3. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
+      <!-- 4. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
       <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(59, 130, 246, 0.3);">
         <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(59, 130, 246, 0.2);">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
             <i data-lucide="server" class="w-4 h-4 text-blue-500"></i>
-            <span>3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
+            <span>4. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
             <span class="badge-info-theme text-[10px]">SINCRONIZAÇÃO EM NUVEM 24/7</span>

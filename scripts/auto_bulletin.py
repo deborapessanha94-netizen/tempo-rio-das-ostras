@@ -567,12 +567,117 @@ def run_auto_bulletin_pipeline():
         { "termo": "Convecção Diurna", "def": "Pancadas de chuva formadas pelo aquecimento do solo e evaporação nas horas quentes." }
     ]
 
+    d0_nome = dias_resumo[0]['dia'].split('—')[0].strip() if dias_resumo else "D+0"
+    d1_nome = dias_resumo[1]['dia'].split('—')[0].strip() if len(dias_resumo) > 1 else "D+1"
+    d2_nome = dias_resumo[2]['dia'].split('—')[0].strip() if len(dias_resumo) > 2 else "D+2"
+    evol_3d_str = f"{d0_nome}: Chuva/Encoberto ➔ {d1_nome}: Vazante/Sol ➔ {d2_nome}: Calor/Pancadas"
+
+    sinopse_estruturada = {
+        "periodo": periodo_str,
+        "evolucao_3_dias": [
+            {
+                "dia_offset": "D+0",
+                "dia_ordem": 1,
+                "dia_rotulo": dias_resumo[0]['dia'],
+                "subtitulo": dias_resumo[0]['subtitulo'],
+                "badge": dias_resumo[0]['badge'],
+                "badge_tipo": dias_resumo[0]['badge_tipo'],
+                "descricao": dias_resumo[0]['descricao'],
+                "pilares": dias_resumo[0]['pilares']
+            },
+            {
+                "dia_offset": "D+1",
+                "dia_ordem": 2,
+                "dia_rotulo": dias_resumo[1]['dia'],
+                "subtitulo": dias_resumo[1]['subtitulo'],
+                "badge": dias_resumo[1]['badge'],
+                "badge_tipo": dias_resumo[1]['badge_tipo'],
+                "descricao": dias_resumo[1]['descricao'],
+                "pilares": dias_resumo[1]['pilares']
+            },
+            {
+                "dia_offset": "D+2",
+                "dia_ordem": 3,
+                "dia_rotulo": dias_resumo[2]['dia'],
+                "subtitulo": dias_resumo[2]['subtitulo'],
+                "badge": dias_resumo[2]['badge'],
+                "badge_tipo": dias_resumo[2]['badge_tipo'],
+                "descricao": dias_resumo[2]['descricao'],
+                "pilares": dias_resumo[2]['pilares']
+            }
+        ],
+        "ordem_1_atmosfera": {
+            "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
+            "badge": "FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa",
+            "texto": sinopse_geral.split('\n\n')[0] if '\n\n' in sinopse_geral else sinopse_geral,
+            "pilares": [
+                {"label": "Modelos Numéricos (3 Dias)", "val": f"ECMWF, GFS e COSMO ({chuva_total_3d:.1f} mm em 72h)"},
+                {"label": "Gradiente Térmico Oficial", "val": f"Mínima de {min_t_val:.0f}°C até Máxima de {pico_calor:.0f}°C"},
+                {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
+            ]
+        },
+        "ordem_2_hidrologia_costa": {
+            "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
+            "badge": f"{jundia_status_txt} • COTA {jundia_nivel_txt} m (TRANSBORDO)",
+            "badge_mar": "AVISO MARINHA Nº 733 (FORÇA 7)",
+            "cota": f"{jundia_nivel_txt} m",
+            "status": jundia_status_txt,
+            "texto": sinopse_geral.split('\n\n')[1] if '\n\n' in sinopse_geral and len(sinopse_geral.split('\n\n')) > 1 else "",
+            "estacoes": [
+                {"nome": "Palmital", "valor": "134,0 mm"},
+                {"nome": "Rocha Leão / REBIO", "valor": "124,7 mm"},
+                {"nome": "PCD Jundiá", "valor": "108,2 mm"},
+                {"nome": "Defesa Civil", "valor": "70,4 mm"}
+            ]
+        },
+        "ordem_3_operacional": {
+            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
+            "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
+            "badge_emergencia": "EMERGÊNCIA 199",
+            "texto": sinopse_geral.split('\n\n')[2] if '\n\n' in sinopse_geral and len(sinopse_geral.split('\n\n')) > 2 else "",
+            "pilares": [
+                {"label": "Ciclo Sinótico Oficial", "val": "Consolidação diária das 17:00h e telemetria telemétrica a cada 15 min"},
+                {"label": "Nuvem Autônoma 24/7", "val": "Processamento redundante em nuvem independente de hardware local ligado"},
+                {"label": "Canais de Emergência", "val": "Defesa Civil 199 • Bombeiros 193 • Telefone Geral (22) 2760-8360"}
+            ]
+        }
+    }
+
+    alertas_estruturados = [
+        {
+            "tipo": "hidrologico",
+            "titulo": "Rio Jundiá (INEA)",
+            "status": jundia_status_txt,
+            "badge": "danger" if 'MÁXIMO' in jundia_status_txt or 'ALERTA' in jundia_status_txt else "warning",
+            "detalhe": f"Cota: {jundia_nivel_txt} m (Transbordo: 2,20 m)",
+            "impacto": "Calha sob vigilância máxima. Risco de alagamentos nos bairros Âncora e Cláudio Ribeiro."
+        },
+        {
+            "tipo": "maritimo",
+            "titulo": "Marinha do Brasil (CHM)",
+            "status": "AVISO Nº 733/2026",
+            "badge": "warning",
+            "detalhe": f"Vento Forte • Rajadas até {max_rajada_geral:.0f} km/h",
+            "impacto": "Ondas de 2,0 a 2,5 m na Área Delta. Ressaca na orla. Validade até 05/10 às 09:00h BRT."
+        },
+        {
+            "tipo": "pluviometrico",
+            "titulo": "Previsão Pluviométrica",
+            "status": "ACUMULADO 3D",
+            "badge": "info",
+            "detalhe": f"Volume previsto: {chuva_total_3d:.1f} mm • Pico térmico: {pico_calor:.0f}°C",
+            "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
+        }
+    ]
+
     metadata = {
         "municipio": "Rio das Ostras - RJ",
         "periodo": periodo_str,
         "emissao": emissao_str,
         "informe_alerta": informe_alerta,
+        "alertas_estruturados": alertas_estruturados,
         "sinopse_geral": sinopse_geral,
+        "sinopse_estruturada": sinopse_estruturada,
         "glossario": glossario,
         "dias_resumo": dias_resumo,
         "impactos_bairros": impactos_bairros,

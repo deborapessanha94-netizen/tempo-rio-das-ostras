@@ -725,7 +725,45 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         f"com canais de emergência ininterruptos disponíveis à população pelo telefone 199 e Corpo de Bombeiros (193)."
     )
 
+    d0_nome = dias_resumo[0]['dia'].split('—')[0].strip() if dias_resumo else "D+0"
+    d1_nome = dias_resumo[1]['dia'].split('—')[0].strip() if len(dias_resumo) > 1 else "D+1"
+    d2_nome = dias_resumo[2]['dia'].split('—')[0].strip() if len(dias_resumo) > 2 else "D+2"
+    evol_3d_str = f"{d0_nome}: Chuva/Encoberto ➔ {d1_nome}: Vazante/Sol ➔ {d2_nome}: Calor/Pancadas"
+
     sinopse_estruturada = {
+        "periodo": per_str,
+        "evolucao_3_dias": [
+            {
+                "dia_offset": "D+0",
+                "dia_ordem": 1,
+                "dia_rotulo": dias_resumo[0]['dia'],
+                "subtitulo": dias_resumo[0]['subtitulo'],
+                "badge": dias_resumo[0]['badge'],
+                "badge_tipo": dias_resumo[0]['badge_tipo'],
+                "descricao": dias_resumo[0]['descricao'],
+                "pilares": dias_resumo[0]['pilares']
+            },
+            {
+                "dia_offset": "D+1",
+                "dia_ordem": 2,
+                "dia_rotulo": dias_resumo[1]['dia'],
+                "subtitulo": dias_resumo[1]['subtitulo'],
+                "badge": dias_resumo[1]['badge'],
+                "badge_tipo": dias_resumo[1]['badge_tipo'],
+                "descricao": dias_resumo[1]['descricao'],
+                "pilares": dias_resumo[1]['pilares']
+            },
+            {
+                "dia_offset": "D+2",
+                "dia_ordem": 3,
+                "dia_rotulo": dias_resumo[2]['dia'],
+                "subtitulo": dias_resumo[2]['subtitulo'],
+                "badge": dias_resumo[2]['badge'],
+                "badge_tipo": dias_resumo[2]['badge_tipo'],
+                "descricao": dias_resumo[2]['descricao'],
+                "pilares": dias_resumo[2]['pilares']
+            }
+        ],
         "ordem_1_atmosfera": {
             "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
             "badge": "FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa",
@@ -734,16 +772,16 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
                 f"é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, "
                 f"acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). "
                 f"Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, "
-                f"mantendo céu predominantemente encoberto e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem "
-                f"para gradual afastamento da instabilidade e rápida elevação térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução "
-                f"(ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de {ch_3d_total} mm ao longo dos 3 dias, "
-                f"com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de {min_t_3d}°C na madrugada e 21°C no litoral) "
-                f"e o subsequente aquecimento pré-frontal, alcançando máximas de até {max_t_3d}°C."
+                f"mantendo céu predominantemente encoberto e frio úmido no 1º dia ({d0_nome}), com chuvas contínuas e volumosas que evoluem "
+                f"para gradual afastamento da instabilidade e início da vazante no 2º dia ({d1_nome}), culminando em rápida elevação térmica e convecção "
+                f"pré-frontal no 3º dia ({d2_nome}). Nas rodadas numéricas oficiais de alta resolução (ECMWF, GFS e COSMO/INMET), consolida-se um acumulado "
+                f"pluviométrico total de {ch_3d_total} mm ao longo dos 3 dias da previsão, com acentuada amplitude térmica entre a massa de ar fria inicial "
+                f"(mínima de {min_t_3d}°C na madrugada e 21°C no litoral) e o subsequente aquecimento diurno, alcançando máximas de até {max_t_3d}°C."
             ),
             "pilares": [
-                {"label": "Modelos Numéricos", "val": f"ECMWF, GFS e COSMO ({ch_3d_total} mm em 3 dias)"},
-                {"label": "Amplitude Térmica", "val": f"Mínima de {min_t_3d}°C até Máxima de {max_t_3d}°C"},
-                {"label": "Evolução Sinótica", "val": "Sábado encoberto/chuvoso ➔ Domingo vazante ➔ Segunda calor e pancadas"}
+                {"label": "Modelos Numéricos (3 Dias)", "val": f"ECMWF, GFS e COSMO ({ch_3d_total} mm em 72h)"},
+                {"label": "Gradiente Térmico Oficial", "val": f"Mínima de {min_t_3d}°C até Máxima de {max_t_3d}°C"},
+                {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
             ]
         },
         "ordem_2_hidrologia_costa": {
