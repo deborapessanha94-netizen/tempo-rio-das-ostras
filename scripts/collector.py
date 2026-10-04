@@ -353,12 +353,15 @@ def run_daily_collection():
     marinha = collect_marinha_data()
     balnear = collect_balneabilidade()
 
-    # Executa a consolidação oficial do boletim
+    # Executa a consolidação oficial do boletim se disponível localmente
     try:
-        from scripts.sync_boletim import sync_bulletin
-    except ImportError:
-        from sync_boletim import sync_bulletin
-    sync_bulletin()
+        try:
+            from scripts.sync_boletim import sync_bulletin
+        except ImportError:
+            from sync_boletim import sync_bulletin
+        sync_bulletin()
+    except Exception as e:
+        print(f"   [INFO] Sincronização local opcional de boletim não executada na nuvem ({e}).")
 
     print("====================================================================")
     print(">> COLETA DIÁRIA DAS 17:00 FINALIZADA COM SUCESSO!")
