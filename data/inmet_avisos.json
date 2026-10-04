@@ -1,11 +1,11 @@
 [
   {
-    "id": 55940,
+    "id": 55946,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_inmet": "#EAB308",
     "eh_direto_ostras": true,
-    "inicio_formatado": "04/10/2026 às 00:01",
+    "inicio_formatado": "04/10/2026 às 10:10",
     "fim_formatado": "04/10/2026 às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
@@ -15,25 +15,7 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Tocantins,Mato Grosso,São Paulo,Espírito Santo,Pará,Mato Grosso do Sul,Maranhão,Rio de Janeiro,Bahia,Distrito Federal"
-  },
-  {
-    "id": 55938,
-    "descricao": "Tempestade",
-    "severidade": "Perigo Potencial",
-    "cor_inmet": "#EAB308",
-    "eh_direto_ostras": true,
-    "inicio_formatado": "05/10/2026 às 00:00",
-    "fim_formatado": "05/10/2026 às 23:59",
-    "riscos": [
-      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
-    ],
-    "instrucoes": [
-      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
-      "Evite usar aparelhos eletrônicos ligados à tomada. ",
-      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
-    ],
-    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Mato Grosso,São Paulo,Mato Grosso do Sul,Rio de Janeiro,Distrito Federal"
+    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Pará,Tocantins,Maranhão,Mato Grosso,São Paulo,Espírito Santo,Mato Grosso do Sul,Rondônia,Roraima,Amazonas,Rio de Janeiro,Piauí,Bahia,Distrito Federal,Rio Grande do Sul"
   },
   {
     "id": 55944,
@@ -70,5 +52,23 @@
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
     "estados": "Goiás,Minas Gerais,Paraná,Mato Grosso,São Paulo,Santa Catarina,Mato Grosso do Sul,Rio de Janeiro,Rio Grande do Sul"
+  },
+  {
+    "id": 55950,
+    "descricao": "Chuvas Intensas",
+    "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
+    "eh_direto_ostras": false,
+    "inicio_formatado": "05/10/2026 às 00:00",
+    "fim_formatado": "05/10/2026 às 23:59",
+    "riscos": [
+      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h). Baixo risco de corte de energia elétrica, queda de galhos de árvores, alagamentos e de descargas elétricas."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Evite usar aparelhos eletrônicos ligados à tomada. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Tocantins,Mato Grosso,Acre,São Paulo,Pará,Mato Grosso do Sul,Rio Grande do Sul,Rondônia,Roraima,Amazonas,Rio de Janeiro,Distrito Federal"
   }
 ]

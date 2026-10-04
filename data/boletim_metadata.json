@@ -2,7 +2,7 @@
   "municipio": "Rio das Ostras - RJ",
   "periodo": "04/10 (Dom) a 06/10 (Ter)",
   "emissao": "04/10/2026 às 17:00h",
-  "informe_alerta": "ALERTA METEOROLÓGICO E HIDROLÓGICO (Defesa Civil / INEA / Marinha): Rio Jundiá registrando 2.48 m (Status: ALERTA MÁXIMO). Aviso da Marinha com vento e rajadas até 53 km/h na Área Delta (mar com ondas até 2,5 m). Acumulado previsto para os 3 dias: 27.6 mm com pico de calor atingindo 30°C.",
+  "informe_alerta": "ALERTA METEOROLÓGICO E HIDROLÓGICO (Defesa Civil / INEA / Marinha): Rio Jundiá registrando 2.48 m (Status: ALERTA MÁXIMO). Aviso da Marinha com vento e rajadas até 53 km/h na Área Delta (mar com ondas até 2,5 m). Acumulado previsto para os 3 dias: 66.5 mm com pico de calor atingindo 30°C.",
   "alertas_estruturados": [
     {
       "tipo": "hidrologico",
@@ -25,17 +25,17 @@
       "titulo": "Previsão Pluviométrica",
       "status": "ACUMULADO 3D",
       "badge": "info",
-      "detalhe": "Volume previsto: 27.6 mm • Pico térmico: 30°C",
+      "detalhe": "Volume previsto: 66.5 mm • Pico térmico: 30°C",
       "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
     }
   ],
-  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Dom) a 06/10 (Ter) é modulada pela passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal. Na rodada oficial das 17:00, o modelo numérico consolida um acumulado pluviométrico total de 27.6 mm ao longo dos 3 dias, com variação térmica entre 19°C e máxima alcançando 30°C.\n\nNa rede de bacias municipais, a estação telemétrica do Rio Jundiá (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Na orla, os ventos litorâneos sustentam rajadas de até 53 km/h e mar com ondas de até 2,5 m na Área Delta da Marinha do Brasil.\n\nOs dados são atualizados pontualmente a cada ciclo diário das 17:00 e telemetria contínua 24h na nuvem, mesmo com o computador pessoal desligado.",
+  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Dom) a 06/10 (Ter) é modulada pela passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal. Na rodada oficial das 17:00, o modelo numérico consolida um acumulado pluviométrico total de 66.5 mm ao longo dos 3 dias, com variação térmica entre 19°C e máxima alcançando 30°C.\n\nNa rede de bacias municipais, a estação telemétrica do Rio Jundiá (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Na orla, os ventos litorâneos sustentam rajadas de até 53 km/h e mar com ondas de até 2,5 m na Área Delta da Marinha do Brasil.\n\nOs dados são atualizados pontualmente a cada ciclo diário das 17:00 e telemetria contínua 24h na nuvem, mesmo com o computador pessoal desligado.",
   "sinopse_estruturada": {
     "sistemas": {
       "titulo": "Configuração Sinótica & Sistemas Atuantes",
       "badge": "CIRCULAÇÃO COSTEIRA",
       "dinamica": "Passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal no Atlântico Sul.",
-      "transporte": "Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de 19°C a 30°C com 27.6 mm no ciclo."
+      "transporte": "Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de 19°C a 30°C com 66.5 mm no ciclo."
     },
     "hidrologia": {
       "titulo": "Bacia Hidrográfica do Rio Jundiá & Precipitação Severa",
@@ -72,7 +72,7 @@
       {
         "dia": "SEGUNDA-FEIRA — 05/10/2026",
         "badge": "AVISO / ATENÇÃO",
-        "desc": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h."
+        "desc": "Previsão de muitas nuvens com pancadas de chuva sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 40.5 mm com rajadas de até 53 km/h."
       },
       {
         "dia": "TERÇA-FEIRA — 06/10/2026",
@@ -149,15 +149,15 @@
     },
     {
       "dia": "SEGUNDA-FEIRA — 05/10/2026",
-      "subtitulo": "Encoberto • Máxima de 30°C e Chuva de 1.6 mm",
+      "subtitulo": "Muitas nuvens com pancadas de chuva • Máxima de 30°C e Chuva de 40.5 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h.",
+      "descricao": "Previsão de muitas nuvens com pancadas de chuva sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 40.5 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Encoberto",
-          "icon": "sun"
+          "val": "Muitas nuvens com panc",
+          "icon": "cloud-rain"
         },
         "temp": {
           "label": "TEMPERATURA",
@@ -176,8 +176,8 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "1.6 mm",
-          "icon": "cloud-drizzle"
+          "val": "40.5 mm",
+          "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
@@ -286,7 +286,7 @@
   "kpis": {
     "jundia_nivel": "2.5 m",
     "jundia_status": "ALERTA MÁXIMO",
-    "chuva_3d": "27.6 mm",
+    "chuva_3d": "66.5 mm",
     "aviso_marinha": "FORÇA 7 BEAUFORT",
     "pico_calor": "30°C",
     "plancon_status": "ALERTA MÁXIMO"
