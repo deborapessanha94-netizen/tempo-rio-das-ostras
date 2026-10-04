@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v8';
+const CACHE_NAME = 'meteo-ostras-v9';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -18,6 +18,9 @@ const STATIC_ASSETS = [
   './data/inmet_previsao.json',
   './data/boletim_oficial.json',
   './data/boletim_metadata.json',
+  './data/acumulados_estacoes.json',
+  './data/balneabilidade.json',
+  './data/marinha_avisos.json',
   './docs/boletim_operacional.pdf',
   './docs/informativo_populacao.pdf'
 ];

@@ -1,0 +1,39 @@
+[
+  {
+    "praia": "Praia da Tartaruga",
+    "status": "PRÓPRIA",
+    "badge": "success"
+  },
+  {
+    "praia": "Praia do Centro",
+    "status": "PRÓPRIA",
+    "badge": "success"
+  },
+  {
+    "praia": "Praia do Bosque",
+    "status": "PRÓPRIA",
+    "badge": "success"
+  },
+  {
+    "praia": "Praia de Costazul",
+    "status": "PRÓPRIA",
+    "badge": "success"
+  },
+  {
+    "praia": "Praia do Remanso",
+    "status": "PRÓPRIA",
+    "badge": "success"
+  },
+  {
+    "praia": "Praia de Mariléa",
+    "status": "IMPRÓPRIA",
+    "badge": "danger",
+    "obs": "Evitar banho até 24h após chuvas intensas devido à drenagem pluvial"
+  },
+  {
+    "praia": "Foz do Rio Jundiá",
+    "status": "IMPRÓPRIA",
+    "badge": "danger",
+    "obs": "Transbordo e correnteza forte"
+  }
+]

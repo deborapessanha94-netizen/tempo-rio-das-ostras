@@ -3,7 +3,10 @@
     "id": 55933,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
     "eh_direto_ostras": true,
+    "inicio": "2026-10-03T00:00:00.000Z às 08:25",
+    "fim": "2026-10-03T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -17,7 +20,10 @@
     "id": 55935,
     "descricao": "Acumulado de Chuva",
     "severidade": "Perigo",
+    "cor_inmet": "#F97316",
     "eh_direto_ostras": true,
+    "inicio": "2026-10-03T00:00:00.000Z às 08:30",
+    "fim": "2026-10-03T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 30 a 60 mm/h ou 50 a 100 mm/dia. Risco de alagamentos, deslizamentos de encostas, transbordamentos de rios, em cidades com tais áreas de risco."
     ],
@@ -33,7 +39,10 @@
     "id": 55937,
     "descricao": "Acumulado de Chuva",
     "severidade": "Grande Perigo",
+    "cor_inmet": "#EF4444",
     "eh_direto_ostras": true,
+    "inicio": "2026-10-03T00:00:00.000Z às 08:30",
+    "fim": "2026-10-03T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva superior a 60 mm/h ou acima de 100 mm/dia. Grande risco de grandes alagamentos e transbordamentos de rios, grandes deslizamentos de encostas,   em cidades com tais áreas de risco."
     ],
@@ -49,7 +58,10 @@
     "id": 55943,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
     "eh_direto_ostras": false,
+    "inicio": "2026-10-06T00:00:00.000Z às 00:00",
+    "fim": "2026-10-06T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -63,7 +75,10 @@
     "id": 55938,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
     "eh_direto_ostras": true,
+    "inicio": "2026-10-05T00:00:00.000Z às 00:00",
+    "fim": "2026-10-05T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -77,7 +92,10 @@
     "id": 55940,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
     "eh_direto_ostras": true,
+    "inicio": "2026-10-04T00:00:00.000Z às 00:01",
+    "fim": "2026-10-04T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -91,7 +109,10 @@
     "id": 55944,
     "descricao": "Tempestade",
     "severidade": "Perigo",
+    "cor_inmet": "#F97316",
     "eh_direto_ostras": false,
+    "inicio": "2026-10-06T00:00:00.000Z às 00:00",
+    "fim": "2026-10-06T00:00:00.000Z às 23:59",
     "riscos": [
       "Chuva entre 30 e 60 mm/h ou 50 e 100 mm/dia, ventos intensos (60-100 km/h), e queda de granizo. Risco de corte de energia elétrica, estragos em plantações,  queda de árvores e de alagamentos."
     ],

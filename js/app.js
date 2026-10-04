@@ -10,6 +10,9 @@ import {
   getIneaCheias,
   getBoletimOficialData,
   getBoletimMetadata,
+  getAcumuladosEstacoes,
+  getBalneabilidade,
+  getMarinhaAvisos,
   COTAS_INEA_OFICIAIS,
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js';
@@ -23,6 +26,9 @@ const state = {
   boletimMetadata: null,
   ineaCheias: [],
   inmetAlerts: [],
+  marinhaAvisos: null,
+  acumuladosEstacoes: [],
+  balneabilidade: [],
   weatherData: null,
   activeMetric: 'temperature',
   activeTab: 'tab-populacao',
@@ -217,12 +223,15 @@ async function loadAllApplicationData() {
   state.isSyncing = true;
 
   try {
-    const [boletimRows, boletimMeta, ineaStations, alerts, openMeteo] = await Promise.allSettled([
+    const [boletimRows, boletimMeta, ineaStations, alerts, openMeteo, estacoes, balnear, marinha] = await Promise.allSettled([
       getBoletimOficialData(),
       getBoletimMetadata(),
       getIneaCheias(),
       getInmetAlerts(),
-      getRioDasOstrasWeatherData()
+      getRioDasOstrasWeatherData(),
+      getAcumuladosEstacoes(),
+      getBalneabilidade(),
+      getMarinhaAvisos()
     ]);
 
     if (boletimRows.status === 'fulfilled' && Array.isArray(boletimRows.value) && boletimRows.value.length > 0) {
@@ -241,6 +250,22 @@ async function loadAllApplicationData() {
     if (alerts.status === 'fulfilled' && Array.isArray(alerts.value)) {
       state.inmetAlerts = alerts.value;
     }
+
+    if (marinha.status === 'fulfilled' && marinha.value) {
+      state.marinhaAvisos = marinha.value;
+    }
+
+    if (estacoes.status === 'fulfilled' && Array.isArray(estacoes.value)) {
+      state.acumuladosEstacoes = estacoes.value;
+      renderEstacoesTable(state.acumuladosEstacoes);
+    }
+
+    if (balnear.status === 'fulfilled' && Array.isArray(balnear.value)) {
+      state.balneabilidade = balnear.value;
+      renderBalneabilidade(state.balneabilidade);
+    }
+
+    renderAvisosDetalhados(state.inmetAlerts, state.marinhaAvisos);
 
     if (openMeteo.status === 'fulfilled' && openMeteo.value) {
       state.weatherData = openMeteo.value;
@@ -702,4 +727,146 @@ function setupPWA() {
       modalGuide.classList.remove('flex');
     }
   });
+}
+
+/**
+ * Renderiza a tabela da Rede Municipal de Estações e Acumulados de Chuva (1h a 96h)
+ */
+function renderEstacoesTable(estacoes) {
+  const tbody = document.getElementById('estacoes-table-body');
+  if (!tbody || !Array.isArray(estacoes) || estacoes.length === 0) return;
+
+  tbody.innerHTML = estacoes.map(e => {
+    const isOnline = e.online;
+    const statusBadge = isOnline 
+      ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>ONLINE</span>`
+      : `<span class="inline-flex items-center gap-1 text-[10px] font-medium text-slate-500 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded">OFF</span>`;
+
+    function fmtRain(val) {
+      if (val === undefined || val === null || val === '') return '-';
+      const num = parseFloat(val);
+      if (isNaN(num)) return '-';
+      if (num >= 50) return `<strong class="text-red-600 font-bold font-mono">${num.toFixed(1)} mm</strong>`;
+      if (num >= 20) return `<span class="text-amber-600 font-semibold font-mono">${num.toFixed(1)} mm</span>`;
+      return `<span class="font-mono">${num.toFixed(1)} mm</span>`;
+    }
+
+    return `
+      <tr>
+        <td class="font-mono font-bold theme-text-main text-[11px] whitespace-nowrap">
+          ${cleanBulletinText(e.codigo)}
+        </td>
+        <td class="font-medium theme-text-main">
+          ${cleanBulletinText(e.nome)}
+        </td>
+        <td class="theme-text-muted text-[10px] whitespace-nowrap">
+          ${cleanBulletinText(e.rede)}
+        </td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_1h)}</td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_4h)}</td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_12h)}</td>
+        <td class="text-center font-mono font-bold bg-black/5">${fmtRain(e.chuva_24h)}</td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_36h)}</td>
+        <td class="text-center font-mono">${fmtRain(e.chuva_48h)}</td>
+        <td class="text-center font-mono font-bold">${fmtRain(e.chuva_96h)}</td>
+        <td class="text-center whitespace-nowrap">${statusBadge}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+/**
+ * Renderiza os avisos oficiais da Marinha do Brasil e do INMET
+ */
+function renderAvisosDetalhados(inmetAvisos, marinha) {
+  const container = document.getElementById('avisos-detalhados-container');
+  if (!container) return;
+
+  let html = '';
+
+  // Aviso Marinha CHM
+  if (marinha && marinha.aviso_ativo) {
+    html += `
+      <div class="theme-tile p-4 border-l-4 border-l-blue-600 space-y-2">
+        <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
+          <div class="flex items-center gap-2">
+            <i data-lucide="anchor" class="w-4 h-4 text-blue-600"></i>
+            <strong class="text-xs font-bold theme-text-main uppercase">MARINHA DO BRASIL • CHM</strong>
+          </div>
+          <span class="badge-warning-theme font-bold">AVISO Nº ${marinha.numero || '733/2026'}</span>
+        </div>
+        <div class="text-xs space-y-1 theme-text-body">
+          <div class="font-bold text-blue-700">${marinha.tipo || 'VENTO FORTE'} — ${marinha.forca || 'FORÇA 7'}</div>
+          <div><strong>Área de Atuação:</strong> ${marinha.area || 'Área DELTA (Cabo Frio a Farol de São Tomé)'}</div>
+          <div><strong>Intensidade de Vento:</strong> ${marinha.rajadas || 'Rajadas de até 47 km/h'}</div>
+          <div><strong>Condições do Mar:</strong> ${marinha.mar_ondas || 'Ondas de 2,0 a 2,5 m (Muito Agitado)'}</div>
+          <div class="text-[11px] theme-text-muted"><strong>Vigência Oficial:</strong> ${marinha.validade || 'Até 05/10 às 09h'}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Avisos INMET
+  if (Array.isArray(inmetAvisos) && inmetAvisos.length > 0) {
+    inmetAvisos.forEach(a => {
+      const sevClass = a.severidade === 'Grande Perigo' ? 'border-l-red-600' : (a.severidade === 'Perigo' ? 'border-l-orange-500' : 'border-l-amber-500');
+      const badgeClass = a.severidade === 'Grande Perigo' ? 'badge-danger-theme' : (a.severidade === 'Perigo' ? 'badge-warning-theme' : 'badge-warning-theme');
+      
+      const riscosText = Array.isArray(a.riscos) ? a.riscos.join(' • ') : '';
+      const instrucoesText = Array.isArray(a.instrucoes) ? a.instrucoes.join(' • ') : '';
+
+      html += `
+        <div class="theme-tile p-4 border-l-4 ${sevClass} space-y-2">
+          <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="alert-octagon" class="w-4 h-4 text-orange-500"></i>
+              <strong class="text-xs font-bold theme-text-main uppercase">INMET • AVISO OFICIAL</strong>
+            </div>
+            <span class="${badgeClass} font-bold text-[10px]">${a.severidade || 'ALERTA'}</span>
+          </div>
+          <div class="text-xs space-y-1 theme-text-body">
+            <div class="font-bold text-amber-700">${cleanBulletinText(a.descricao)}</div>
+            ${a.inicio ? `<div><strong>Início:</strong> ${a.inicio}</div>` : ''}
+            ${a.fim ? `<div><strong>Término:</strong> ${a.fim}</div>` : ''}
+            ${riscosText ? `<div class="text-[11px] theme-text-muted"><strong>Riscos Potenciais:</strong> ${cleanBulletinText(riscosText)}</div>` : ''}
+            ${instrucoesText ? `<div class="text-[11px] theme-text-muted"><strong>Orientações:</strong> ${cleanBulletinText(instrucoesText)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  if (!html) {
+    html = `<div class="p-3 theme-tile text-xs theme-text-muted">Nenhum aviso meteorológico severo vigente no momento.</div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+/**
+ * Renderiza o quadro de balneabilidade das praias (INEA)
+ */
+function renderBalneabilidade(praias) {
+  const container = document.getElementById('balneabilidade-container');
+  if (!container || !Array.isArray(praias) || praias.length === 0) return;
+
+  container.innerHTML = praias.map(p => {
+    const isPropria = p.status === 'PRÓPRIA';
+    const badge = isPropria 
+      ? `<span class="badge-neutral-theme bg-emerald-50 text-emerald-700 border-emerald-300 font-bold text-[10px] px-2 py-0.5 rounded">PRÓPRIA</span>`
+      : `<span class="badge-danger-theme font-bold text-[10px] px-2 py-0.5 rounded">IMPRÓPRIA</span>`;
+
+    return `
+      <div class="theme-tile p-3 space-y-1.5 flex flex-col justify-between">
+        <div class="space-y-0.5">
+          <span class="text-xs font-bold theme-text-main block">${cleanBulletinText(p.praia)}</span>
+          ${p.obs ? `<span class="text-[10px] theme-text-muted block leading-tight">${cleanBulletinText(p.obs)}</span>` : ''}
+        </div>
+        <div class="pt-1.5 border-t theme-tile-border flex justify-between items-center">
+          <span class="text-[9px] uppercase theme-text-dim font-bold">Condição:</span>
+          ${badge}
+        </div>
+      </div>
+    `;
+  }).join('');
 }

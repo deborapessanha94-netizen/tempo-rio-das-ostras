@@ -356,3 +356,39 @@ export async function getBoletimMetadata() {
   return null;
 }
 
+/**
+ * Obtém a rede de monitoramento de estações com acumulados de 1h a 96h
+ */
+export async function getAcumuladosEstacoes() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/acumulados_estacoes.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
+}
+
+/**
+ * Obtém os dados de balneabilidade das praias de Rio das Ostras (INEA)
+ */
+export async function getBalneabilidade() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/balneabilidade.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return [];
+}
+
+/**
+ * Obtém os avisos de mau tempo da Marinha do Brasil (Área Delta)
+ */
+export async function getMarinhaAvisos() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/marinha_avisos.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
