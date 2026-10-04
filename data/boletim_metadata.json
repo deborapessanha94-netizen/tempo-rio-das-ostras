@@ -29,13 +29,13 @@
       "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
     }
   ],
-  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Dom) a 06/10 (Ter) é modulada pela passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal. Na rodada oficial das 17:00, o modelo numérico consolida um acumulado pluviométrico total de 27.6 mm ao longo dos 3 dias, com variação térmica entre 20°C e máxima alcançando 30°C.\n\nNa rede de bacias municipais, a estação telemétrica do Rio Jundiá (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Na orla, os ventos litorâneos sustentam rajadas de até 53 km/h e mar com ondas de até 2,5 m na Área Delta da Marinha do Brasil.\n\nOs dados são atualizados pontualmente a cada ciclo diário das 17:00 e telemetria contínua 24h na nuvem, mesmo com o computador pessoal desligado.",
+  "sinopse_geral": "A atmosfera regional sobre o município de Rio das Ostras para o período de 04/10 (Dom) a 06/10 (Ter) é modulada pela passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal. Na rodada oficial das 17:00, o modelo numérico consolida um acumulado pluviométrico total de 27.6 mm ao longo dos 3 dias, com variação térmica entre 19°C e máxima alcançando 30°C.\n\nNa rede de bacias municipais, a estação telemétrica do Rio Jundiá (INEA 2241036) acusa cota de 2.48 m (Status: ALERTA MÁXIMO). Na orla, os ventos litorâneos sustentam rajadas de até 53 km/h e mar com ondas de até 2,5 m na Área Delta da Marinha do Brasil.\n\nOs dados são atualizados pontualmente a cada ciclo diário das 17:00 e telemetria contínua 24h na nuvem, mesmo com o computador pessoal desligado.",
   "sinopse_estruturada": {
     "sistemas": {
       "titulo": "Configuração Sinótica & Sistemas Atuantes",
       "badge": "CIRCULAÇÃO COSTEIRA",
       "dinamica": "Passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal no Atlântico Sul.",
-      "transporte": "Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de 20°C a 30°C com 27.6 mm no ciclo."
+      "transporte": "Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de 19°C a 30°C com 27.6 mm no ciclo."
     },
     "hidrologia": {
       "titulo": "Bacia Hidrográfica do Rio Jundiá & Precipitação Severa",
@@ -72,12 +72,12 @@
       {
         "dia": "SEGUNDA-FEIRA — 05/10/2026",
         "badge": "AVISO / ATENÇÃO",
-        "desc": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h."
+        "desc": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h."
       },
       {
         "dia": "TERÇA-FEIRA — 06/10/2026",
         "badge": "AVISO / ATENÇÃO",
-        "desc": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h."
+        "desc": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h."
       }
     ]
   },
@@ -110,10 +110,10 @@
   "dias_resumo": [
     {
       "dia": "DOMINGO — 04/10/2026",
-      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 28°C e Chuva de 13.0 mm",
+      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 27°C e Chuva de 13.0 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
+      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 19°C e máxima de 27°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
@@ -122,7 +122,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "20° a 28°C",
+          "val": "19° a 27°C",
           "icon": "thermometer"
         },
         "umid": {
@@ -152,7 +152,7 @@
       "subtitulo": "Encoberto • Máxima de 30°C e Chuva de 1.6 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h.",
+      "descricao": "Previsão de encoberto sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 1.6 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
@@ -161,7 +161,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "21° a 30°C",
+          "val": "22° a 30°C",
           "icon": "thermometer"
         },
         "umid": {
@@ -188,10 +188,10 @@
     },
     {
       "dia": "TERÇA-FEIRA — 06/10/2026",
-      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 28°C e Chuva de 13.0 mm",
+      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada • Máxima de 30°C e Chuva de 13.0 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 28°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
+      "descricao": "Previsão de muitas nuvens com possibilidade de chuva isolada sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 30°C. Volume pluviométrico estimado em 13.0 mm com rajadas de até 53 km/h.",
       "pilares": {
         "ceu": {
           "label": "CÉU",
@@ -200,12 +200,12 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 28°C",
+          "val": "22° a 30°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "75% a 98%",
+          "val": "60% a 98%",
           "icon": "droplets"
         },
         "vento": {
