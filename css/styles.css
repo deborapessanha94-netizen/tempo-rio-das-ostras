@@ -3,140 +3,153 @@
 /* ========================================================================= */
 /* VARIÁVEIS DE TEMA: MODO CLARO (PADRÃO / BOLETIM A4) & MODO ESCURO (24H)   */
 /* ========================================================================= */
+:root {
+  /* Paleta Oficial Black and Gold Elegance */
+  --palette-white: #FFFFFF;
+  --palette-platinum: #E5E5E5;
+  --palette-gold: #FCA311;
+  --palette-navy: #14213D;
+  --palette-black: #000000;
+}
+
 :root, html.theme-light {
   color-scheme: light;
-  --bg-page: #f8fafc;              /* Slate suave de papel timbrado */
-  --header-bg: #ffffff;            /* Topo branco limpo como documento oficial */
-  --header-border: #cbd5e1;
-  --header-text: #0f172a;
-  --header-sub: #475569;
-  --header-badge-bg: #f1f5f9;
-  --header-badge-text: #0284c7;
-  --header-badge-border: #cbd5e1;
+  --bg-page: #f4f6fa;
+  --header-bg: #14213D;
+  --header-border: #0d1629;
+  --header-text: #FFFFFF;
+  --header-sub: #E5E5E5;
+  --header-badge-bg: #0d1629;
+  --header-badge-text: #FCA311;
+  --header-badge-border: #FCA311;
 
-  --nav-bg: #ffffff;              /* Barra de abas limpa */
-  --nav-border: #cbd5e1;
-  --nav-btn-text: #334155;
+  --nav-bg: #FFFFFF;
+  --nav-border: #E5E5E5;
+  --nav-btn-text: #14213D;
   --nav-btn-hover: #f1f5f9;
-  --nav-btn-active-bg: #1e88e5;
-  --nav-btn-active-text: #ffffff;
+  --nav-btn-active-bg: #FCA311;
+  --nav-btn-active-text: #000000;
 
-  --card-bg: #ffffff;              /* Cartão papel branco puro */
-  --card-border: #cbd5e1;          /* Borda nítida de documento técnico */
-  --card-hover-border: #94a3b8;
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --card-bg: #FFFFFF;
+  --card-border: #E5E5E5;
+  --card-hover-border: #FCA311;
+  --card-shadow: 0 2px 10px 0 rgba(20, 33, 61, 0.08);
 
-  --tile-bg: #f8fafc;              /* Fundo de células e pilares */
-  --tile-border: #e2e8f0;
+  --tile-bg: #f8fafc;
+  --tile-border: #E5E5E5;
 
-  --text-main: #0f172a;            /* Preto azulado / Máxima legibilidade */
-  --text-body: #334155;            /* Texto de leitura nítido */
-  --text-muted: #64748b;           /* Legendas e subtítulos */
+  --text-main: #14213D;
+  --text-body: #334155;
+  --text-muted: #64748b;
   --text-dim: #94a3b8;
 
-  --btn-outline-bg: #ffffff;
-  --btn-outline-border: #cbd5e1;
-  --btn-outline-text: #1e293b;
-  --btn-outline-hover-bg: #f1f5f9;
+  --btn-outline-bg: #FFFFFF;
+  --btn-outline-border: #14213D;
+  --btn-outline-text: #14213D;
+  --btn-outline-hover-bg: #14213D;
+  --btn-outline-hover-text: #FFFFFF;
 
-  --table-head-bg: #f1f5f9;
-  --table-head-text: #334155;
-  --table-row-hover: #f8fafc;
+  --table-head-bg: #14213D;
+  --table-head-text: #FFFFFF;
+  --table-row-hover: #f1f5f9;
   --table-row-alt: #fcfcfc;
-  --table-border: #e2e8f0;
-  --table-cell-text: #0f172a;
+  --table-border: #E5E5E5;
+  --table-cell-text: #14213D;
 
-  --alert-bg: #fff7ed;             /* Laranja suave oficial da Defesa Civil */
-  --alert-border: #ea580c;
-  --alert-title: #9a3412;
-  --alert-text: #431407;
+  --alert-bg: #fffbeb;
+  --alert-border: #FCA311;
+  --alert-title: #b45309;
+  --alert-text: #78350f;
 
   --badge-danger-bg: #fee2e2;
   --badge-danger-text: #991b1b;
   --badge-danger-border: #f87171;
 
   --badge-warning-bg: #fef3c7;
-  --badge-warning-text: #92400e;
-  --badge-warning-border: #f59e0b;
+  --badge-warning-text: #b45309;
+  --badge-warning-border: #FCA311;
 
   --badge-info-bg: #e0f2fe;
   --badge-info-text: #0369a1;
   --badge-info-border: #38bdf8;
 
-  --badge-neutral-bg: #f1f5f9;
-  --badge-neutral-text: #475569;
+  --badge-neutral-bg: #E5E5E5;
+  --badge-neutral-text: #14213D;
   --badge-neutral-border: #cbd5e1;
 
-  --accent-blue: #1e88e5;
-  --accent-orange: #ea580c;
+  --accent-gold: #FCA311;
+  --accent-blue: #FCA311;
+  --accent-orange: #FCA311;
 }
 
 html.theme-dark {
   color-scheme: dark;
-  --bg-page: #061830;
-  --header-bg: #071f3d;
-  --header-border: #133a66;
-  --header-text: #ffffff;
-  --header-sub: #94b5d6;
-  --header-badge-bg: #051833;
-  --header-badge-text: #94b5d6;
-  --header-badge-border: #133a66;
+  --bg-page: #000000;              /* Fundo Preto Absoluto da Paleta */
+  --header-bg: #14213D;            /* Deep Navy #14213D */
+  --header-border: #1e3158;
+  --header-text: #FFFFFF;          /* Branco #FFFFFF */
+  --header-sub: #E5E5E5;           /* Platinado #E5E5E5 */
+  --header-badge-bg: #0c1527;
+  --header-badge-text: #FCA311;     /* Dourado #FCA311 */
+  --header-badge-border: #FCA311;
 
-  --nav-bg: #071f3d;
-  --nav-border: #133a66;
-  --nav-btn-text: #94b5d6;
-  --nav-btn-hover: #0a254a;
-  --nav-btn-active-bg: #1e88e5;
-  --nav-btn-active-text: #ffffff;
+  --nav-bg: #14213D;
+  --nav-border: #1e3158;
+  --nav-btn-text: #E5E5E5;
+  --nav-btn-hover: #1b2c52;
+  --nav-btn-active-bg: #FCA311;     /* Dourado #FCA311 */
+  --nav-btn-active-text: #000000;   /* Texto em Preto para alto contraste */
 
-  --card-bg: #071f3d;
-  --card-border: #133a66;
-  --card-hover-border: #1e528e;
-  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --card-bg: #14213D;              /* Superfície Nobre Deep Navy #14213D */
+  --card-border: #1f3259;
+  --card-hover-border: #FCA311;     /* Realce Dourado Elegance */
+  --card-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.7);
 
-  --tile-bg: #051833;
-  --tile-border: #10325a;
+  --tile-bg: #0c1527;              /* Deep Navy Escuro para células de dados */
+  --tile-border: #1b2a47;
 
-  --text-main: #f8fafc;
-  --text-body: #e2e8f0;
-  --text-muted: #94b5d6;
-  --text-dim: #6c8ea8;
+  --text-main: #FFFFFF;            /* Branco puro para títulos e métricas */
+  --text-body: #E5E5E5;            /* Platinado para textos corridos */
+  --text-muted: #a3b4cc;           /* Azul-acinzentado elegante */
+  --text-dim: #72849e;
 
-  --btn-outline-bg: rgba(10, 37, 74, 0.6);
-  --btn-outline-border: #133a66;
-  --btn-outline-text: #94b5d6;
-  --btn-outline-hover-bg: #0d2c54;
+  --btn-outline-bg: #14213D;
+  --btn-outline-border: #FCA311;
+  --btn-outline-text: #FCA311;
+  --btn-outline-hover-bg: #FCA311;
+  --btn-outline-hover-text: #000000;
 
-  --table-head-bg: #051833;
-  --table-head-text: #8da4c4;
-  --table-row-hover: #0b2a52;
-  --table-row-alt: #071f3d;
-  --table-border: #133a66;
-  --table-cell-text: #e2e8f0;
+  --table-head-bg: #0c1527;
+  --table-head-text: #FCA311;       /* Dourado nas colunas */
+  --table-row-hover: #1a2a47;
+  --table-row-alt: #0f192e;
+  --table-border: #1b2d4f;
+  --table-cell-text: #E5E5E5;
 
-  --alert-bg: #071f3d;
-  --alert-border: #ea580c;
-  --alert-title: #fb923c;
-  --alert-text: #e2e8f0;
+  --alert-bg: #14213D;
+  --alert-border: #FCA311;
+  --alert-title: #FCA311;
+  --alert-text: #FFFFFF;
 
-  --badge-danger-bg: rgba(127, 29, 29, 0.5);
+  --badge-danger-bg: rgba(220, 38, 38, 0.25);
   --badge-danger-text: #fca5a5;
-  --badge-danger-border: #991b1b;
+  --badge-danger-border: #ef4444;
 
-  --badge-warning-bg: rgba(120, 53, 15, 0.5);
-  --badge-warning-text: #fcd34d;
-  --badge-warning-border: #92400e;
+  --badge-warning-bg: rgba(252, 163, 17, 0.2);
+  --badge-warning-text: #FCA311;
+  --badge-warning-border: #FCA311;
 
-  --badge-info-bg: rgba(7, 89, 133, 0.5);
-  --badge-info-text: #7dd3fc;
-  --badge-info-border: #0369a1;
+  --badge-info-bg: rgba(20, 33, 61, 0.9);
+  --badge-info-text: #93c5fd;
+  --badge-info-border: #3b82f6;
 
-  --badge-neutral-bg: #051833;
-  --badge-neutral-text: #94b5d6;
-  --badge-neutral-border: #133a66;
+  --badge-neutral-bg: #0c1527;
+  --badge-neutral-text: #E5E5E5;
+  --badge-neutral-border: #1f3259;
 
-  --accent-blue: #1e88e5;
-  --accent-orange: #ea580c;
+  --accent-gold: #FCA311;
+  --accent-blue: #FCA311;
+  --accent-orange: #FCA311;
 }
 
 /* ========================================================================= */
@@ -225,18 +238,21 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Botões Institucionais */
 .btn-cemaden-primary {
-  background-color: var(--accent-blue);
-  color: #ffffff !important;
-  font-weight: 600;
+  background-color: var(--accent-gold);
+  color: #000000 !important;
+  font-weight: 700;
   border-radius: 0.375rem;
-  transition: background-color 0.15s ease, transform 0.05s ease;
+  transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 6px rgba(252, 163, 17, 0.25);
 }
 
 .btn-cemaden-primary:hover {
-  background-color: #1565c0;
+  background-color: #e5920b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(252, 163, 17, 0.4);
 }
 
 .btn-cemaden-primary:active {
@@ -247,7 +263,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-color: var(--btn-outline-bg);
   border: 1px solid var(--btn-outline-border);
   color: var(--btn-outline-text) !important;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 0.375rem;
   transition: all 0.15s ease;
   display: inline-flex;
@@ -256,8 +272,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-cemaden-outline:hover {
-  background-color: var(--tile-bg);
-  border-color: var(--card-hover-border);
+  background-color: var(--btn-outline-hover-bg);
+  color: var(--btn-outline-hover-text) !important;
+  border-color: var(--accent-gold);
 }
 
 .theme-header-title {
@@ -329,8 +346,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-theme-toggle:hover {
-  border-color: var(--accent-blue);
-  color: var(--accent-blue);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
 }
 
 /* Badges Responsivos ao Tema */

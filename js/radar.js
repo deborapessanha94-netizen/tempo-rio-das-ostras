@@ -16,7 +16,7 @@ const RJ_RADARS = [
     nome: 'Radar Pico do Couto (REDEMET / DECEA)',
     coords: [-22.463, -43.298],
     alcanceKm: 250,
-    cor: '#1E88E5',
+    cor: '#FCA311',
     detalhes: 'Banda S • 100% de cobertura do Estado do RJ, Região Serrana e Baixada'
   },
   {
@@ -74,9 +74,9 @@ function setupInteractiveControls() {
     btnModeMulti.dataset.bound = 'true';
     btnModeMulti.addEventListener('click', () => {
       currentMode = 'windy';
-      btnModeMulti.classList.add('bg-[#1E88E5]', 'text-white', 'font-bold', 'shadow-xs');
-      btnModeMulti.classList.remove('theme-text-muted', 'font-medium');
-      btnModeDoppler.classList.remove('bg-[#1E88E5]', 'text-white', 'font-bold', 'shadow-xs');
+      btnModeMulti.classList.add('bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
+      btnModeMulti.classList.remove('bg-[#1E88E5]', 'text-white', 'theme-text-muted', 'font-medium');
+      btnModeDoppler.classList.remove('bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'shadow-xs');
       btnModeDoppler.classList.add('theme-text-muted', 'font-medium');
 
       if (windyWrapper) windyWrapper.classList.remove('hidden');
@@ -89,9 +89,9 @@ function setupInteractiveControls() {
     btnModeDoppler.dataset.bound = 'true';
     btnModeDoppler.addEventListener('click', () => {
       currentMode = 'doppler';
-      btnModeDoppler.classList.add('bg-[#1E88E5]', 'text-white', 'font-bold', 'shadow-xs');
-      btnModeDoppler.classList.remove('theme-text-muted', 'font-medium');
-      btnModeMulti.classList.remove('bg-[#1E88E5]', 'text-white', 'font-bold', 'shadow-xs');
+      btnModeDoppler.classList.add('bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
+      btnModeDoppler.classList.remove('bg-[#1E88E5]', 'text-white', 'theme-text-muted', 'font-medium');
+      btnModeMulti.classList.remove('bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'shadow-xs');
       btnModeMulti.classList.add('theme-text-muted', 'font-medium');
 
       if (leafletWrapper) leafletWrapper.classList.remove('hidden');
@@ -117,10 +117,10 @@ function setupInteractiveControls() {
 
       // Atualiza botões
       layerButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold');
         b.classList.add('theme-text-muted', 'font-medium');
       });
-      btn.classList.add('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold');
+      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
       btn.classList.remove('theme-text-muted', 'font-medium');
 
       // Se estiver no modo Doppler e selecionar uma camada que não é radar de chuva,
@@ -141,9 +141,9 @@ function setupInteractiveControls() {
     btnScopeRj.dataset.bound = 'true';
     btnScopeRj.addEventListener('click', () => {
       currentScope = 'rj';
-      btnScopeRj.classList.add('bg-[#1E88E5]/15', 'text-[#1E88E5]', 'font-bold');
-      btnScopeRj.classList.remove('theme-text-muted', 'font-medium');
-      btnScopeRo.classList.remove('bg-[#1E88E5]/15', 'text-[#1E88E5]', 'font-bold');
+      btnScopeRj.classList.add('bg-[#FCA311]/20', 'text-[#FCA311]', 'font-bold', 'border', 'border-[#FCA311]/40');
+      btnScopeRj.classList.remove('bg-[#1E88E5]/15', 'theme-text-muted', 'font-medium');
+      btnScopeRo.classList.remove('bg-[#FCA311]/20', 'text-[#FCA311]', 'border', 'border-[#FCA311]/40');
       btnScopeRo.classList.add('theme-text-muted', 'font-medium');
 
       if (map) map.setView([RJ_CENTER.lat, RJ_CENTER.lon], RJ_CENTER.zoom);
@@ -155,9 +155,9 @@ function setupInteractiveControls() {
     btnScopeRo.dataset.bound = 'true';
     btnScopeRo.addEventListener('click', () => {
       currentScope = 'ro';
-      btnScopeRo.classList.add('bg-[#1E88E5]/15', 'text-[#1E88E5]', 'font-bold');
-      btnScopeRo.classList.remove('theme-text-muted', 'font-medium');
-      btnScopeRj.classList.remove('bg-[#1E88E5]/15', 'text-[#1E88E5]', 'font-bold');
+      btnScopeRo.classList.add('bg-[#FCA311]/20', 'text-[#FCA311]', 'font-bold', 'border', 'border-[#FCA311]/40');
+      btnScopeRo.classList.remove('bg-[#1E88E5]/15', 'theme-text-muted', 'font-medium');
+      btnScopeRj.classList.remove('bg-[#FCA311]/20', 'text-[#FCA311]', 'border', 'border-[#FCA311]/40');
       btnScopeRj.classList.add('theme-text-muted', 'font-medium');
 
       if (map) map.setView([RO_CENTER.lat, RO_CENTER.lon], RO_CENTER.zoom);
@@ -273,8 +273,8 @@ async function initLeafletRadar(containerId = 'radar-map') {
     const customIconRO = L.divIcon({
       className: 'radar-city-marker',
       html: `<div class="relative flex items-center justify-center">
-              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-blue-500 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-4 w-4 bg-[#1E88E5] border-2 border-white shadow-lg"></span>
+              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-[#FCA311] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-[#FCA311] border-2 border-black shadow-lg"></span>
              </div>`,
       iconSize: [32, 32],
       iconAnchor: [16, 16]
@@ -283,17 +283,17 @@ async function initLeafletRadar(containerId = 'radar-map') {
     markerRO = L.marker([RIO_DAS_OSTRAS_COORDS.lat, RIO_DAS_OSTRAS_COORDS.lon], { icon: customIconRO }).addTo(map);
     markerRO.bindPopup(`
       <div class="text-xs space-y-1">
-        <strong class="text-sm font-bold block text-blue-700">Rio das Ostras - RJ</strong>
-        <p class="text-slate-600">Centro de Monitoramento Hidrológico da Bacia do Rio Jundiá e Costa Marítima.</p>
-        <span class="inline-block bg-blue-100 text-blue-800 text-[10px] font-bold px-1.5 py-0.5 rounded">DEFESA CIVIL ATIVA</span>
+        <strong class="text-sm font-bold block text-amber-500">Rio das Ostras - RJ</strong>
+        <p class="text-slate-200">Centro de Monitoramento Hidrológico da Bacia do Rio Jundiá e Costa Marítima.</p>
+        <span class="inline-block bg-[#FCA311]/20 text-[#FCA311] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#FCA311]/40">DEFESA CIVIL ATIVA</span>
       </div>
     `);
 
     // Raio municipal de vigilância de Rio das Ostras (20 km)
     L.circle([RIO_DAS_OSTRAS_COORDS.lat, RIO_DAS_OSTRAS_COORDS.lon], {
-      color: '#1E88E5',
-      fillColor: '#1E88E5',
-      fillOpacity: 0.08,
+      color: '#FCA311',
+      fillColor: '#FCA311',
+      fillOpacity: 0.1,
       weight: 1.5,
       dashArray: '4, 4',
       radius: 20000

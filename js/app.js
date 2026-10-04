@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function initTheme() {
   const saved = localStorage.getItem('meteo_theme');
-  // Padrão: Modo Claro (documento/boletim técnico limpo)
-  const initialTheme = saved === 'dark' ? 'dark' : 'light';
+  // Padrão: Modo "Black and Gold Elegance" (#000000, #14213D, #FCA311)
+  const initialTheme = saved === 'light' ? 'light' : 'dark';
   applyTheme(initialTheme);
 
   const btnLight = document.getElementById('btn-theme-light');
@@ -144,10 +144,10 @@ function setupNavigationTabs() {
 
       // Atualiza botões
       tabButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'text-white', 'shadow-sm');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'shadow-sm', 'shadow-md');
         b.classList.add('theme-text-muted');
       });
-      btn.classList.add('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold', 'shadow-sm');
+      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-md');
       btn.classList.remove('theme-text-muted');
 
       // Exibe aba correspondente
@@ -183,10 +183,10 @@ function setupBulletinChartTabs() {
   chartButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       chartButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold');
         b.classList.add('theme-text-muted');
       });
-      btn.classList.add('active', 'bg-[#1E88E5]', 'text-white', 'font-semibold');
+      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-sm');
       btn.classList.remove('theme-text-muted');
 
       state.activeMetric = btn.getAttribute('data-metric') || 'temperature';
@@ -335,7 +335,7 @@ function renderBulletinDOM(meta, rows) {
           const p = pilares[k];
           return `
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${p.label || k}</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">${cleanBulletinText(p.val || '—')}</span>
@@ -1120,21 +1120,21 @@ function renderSinopseContent(meta) {
     sinopseEl.innerHTML = `
       <div class="space-y-3">
         <!-- 1. Sistemas Sinóticos -->
-        <div class="p-3.5 rounded-lg theme-tile border border-blue-200 dark:border-blue-900/40 space-y-2">
-          <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(30, 136, 229, 0.2);">
+        <div class="p-3.5 rounded-lg theme-tile border border-amber-900/30 space-y-2">
+          <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(252, 163, 17, 0.25);">
             <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-              <i data-lucide="compass" class="w-4 h-4 text-[#1E88E5]"></i>
+              <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
               <span>${cleanBulletinText(s.sistemas?.titulo || 'Configuração Sinótica & Sistemas Atuantes')}</span>
             </div>
             <span class="badge-info-theme text-[10px]">${cleanBulletinText(s.sistemas?.badge || 'SISTEMA ATUANTE')}</span>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
             <div class="flex items-start gap-1.5">
-              <span class="text-[#1E88E5] font-bold">•</span>
+              <span class="text-[#FCA311] font-bold">•</span>
               <span><strong>Dinâmica Atmosférica:</strong> ${cleanBulletinText(s.sistemas?.dinamica || '')}</span>
             </div>
             <div class="flex items-start gap-1.5">
-              <span class="text-[#1E88E5] font-bold">•</span>
+              <span class="text-[#FCA311] font-bold">•</span>
               <span><strong>Transporte de Umidade:</strong> ${cleanBulletinText(s.sistemas?.transporte || '')}</span>
             </div>
           </div>
@@ -1227,21 +1227,21 @@ function renderSinopseContent(meta) {
   sinopseEl.innerHTML = `
     <div class="space-y-3">
       <!-- 1. Sistemas Sinóticos -->
-      <div class="p-3.5 rounded-lg theme-tile border border-blue-200 dark:border-blue-900/40 space-y-2">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(30, 136, 229, 0.2);">
+      <div class="p-3.5 rounded-lg theme-tile border border-amber-900/30 space-y-2">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(252, 163, 17, 0.25);">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-            <i data-lucide="compass" class="w-4 h-4 text-[#1E88E5]"></i>
+            <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
             <span>Configuração Sinótica & Sistemas Atuantes</span>
           </div>
           <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
           <div class="flex items-start gap-1.5">
-            <span class="text-[#1E88E5] font-bold">•</span>
+            <span class="text-[#FCA311] font-bold">•</span>
             <span><strong>Dinâmica de Pressão:</strong> Atuação de frente fria semi-estacionária acoplada à alta pressão pós-frontal (1022 hPa) no Atlântico (Carta Sinótica CHM 12Z).</span>
           </div>
           <div class="flex items-start gap-1.5">
-            <span class="text-[#1E88E5] font-bold">•</span>
+            <span class="text-[#FCA311] font-bold">•</span>
             <span><strong>Transporte de Umidade:</strong> Bloqueio com convergência contínua de umidade marítima em direção à costa, acumulando <strong>${chuva3d}</strong> no ciclo e pico de <strong>${picoCalor}</strong>.</span>
           </div>
         </div>

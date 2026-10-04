@@ -375,24 +375,24 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Máxima (°C)',
             data: tMax,
-            borderColor: '#ea580c',
-            backgroundColor: 'rgba(234, 88, 12, 0.1)',
-            borderWidth: 2,
+            borderColor: '#FCA311',
+            backgroundColor: 'rgba(252, 163, 17, 0.15)',
+            borderWidth: 2.5,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#ea580c',
+            pointBackgroundColor: '#FCA311',
             pointRadius: 4
           },
           {
             label: 'Mínima (°C)',
             data: tMin,
-            borderColor: '#0284c7',
-            backgroundColor: 'rgba(2, 132, 199, 0.05)',
+            borderColor: '#E5E5E5',
+            backgroundColor: 'rgba(229, 229, 229, 0.05)',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#0284c7',
+            pointBackgroundColor: '#E5E5E5',
             pointRadius: 4
           }
         ]
@@ -549,9 +549,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Precipitação Prevista (mm)',
             data: chTot,
-            backgroundColor: 'rgba(2, 132, 199, 0.75)',
-            borderColor: '#0284c7',
-            borderWidth: 1,
+            backgroundColor: 'rgba(252, 163, 17, 0.75)',
+            borderColor: '#FCA311',
+            borderWidth: 1.5,
             borderRadius: 4
           }
         ]

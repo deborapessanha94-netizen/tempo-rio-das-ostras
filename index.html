@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="theme-light">
+<html lang="pt-BR" class="theme-dark dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,7 @@
   
   <!-- Progressive Web App (PWA) 24/7 -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#071F3D">
+  <meta name="theme-color" content="#14213D">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=18">
+  <link rel="stylesheet" href="css/styles.css?v=19">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -41,7 +41,7 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
-<body class="antialiased selection:bg-[#1E88E5] selection:text-white pb-16">
+<body class="antialiased selection:bg-[#FCA311] selection:text-black pb-16">
 
   <!-- ========================================================================= -->
   <!-- TOPO INSTITUCIONAL (PADRÃO GOVERNAMENTAL & CONTROLE DE TEMA)              -->
@@ -64,27 +64,27 @@
       <!-- Barra de Ações Rápidas -->
       <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-center md:justify-end text-xs">
         
-        <!-- Seletor Segmentado de Tema: Modo Claro / Modo Escuro -->
-        <div class="theme-switch-container" title="Escolha o tema: Modo Claro (Boletim A4) ou Modo Escuro (Cemaden 24h)">
-          <button id="btn-theme-light" class="theme-switch-btn active" title="Ativar Modo Claro (Documento/Boletim)">
+        <!-- Seletor Segmentado de Tema: Modo Claro / Modo Black & Gold Elegance -->
+        <div class="theme-switch-container" title="Escolha o tema: Modo Claro ou Modo Black & Gold Elegance">
+          <button id="btn-theme-light" class="theme-switch-btn" title="Ativar Modo Claro (Documento/Boletim)">
             <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500"></i>
             <span>Modo Claro</span>
           </button>
-          <button id="btn-theme-dark" class="theme-switch-btn" title="Ativar Modo Escuro (Cemaden 24h)">
-            <i data-lucide="moon" class="w-3.5 h-3.5 text-blue-400"></i>
-            <span>Modo Escuro</span>
+          <button id="btn-theme-dark" class="theme-switch-btn active" title="Ativar Modo Black & Gold Elegance">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#FCA311]"></i>
+            <span>Black & Gold</span>
           </button>
         </div>
 
         <!-- Botão Baixar Informativo População (PDF) -->
         <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="btn-cemaden-outline px-2.5 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Informativo à População">
-          <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#1E88E5]"></i>
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#FCA311]"></i>
           <span class="hidden sm:inline">Informativo</span> <span>(PDF)</span>
         </a>
 
         <!-- Botão Baixar Boletim Técnico (PDF) -->
         <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-cemaden-outline px-2.5 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Boletim Meteorológico Operacional Completo">
-          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-[#1E88E5]"></i>
+          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-[#FCA311]"></i>
           <span class="hidden sm:inline">Boletim</span> <span>(PDF)</span>
         </a>
 
@@ -124,7 +124,7 @@
   <!-- NAVEGAÇÃO PRINCIPAL EM ABAS -->
   <nav class="sticky top-[61px] z-40 px-3 sm:px-6 py-1.5 transition-colors border-b" style="background-color: var(--nav-bg); border-color: var(--nav-border);">
     <div class="max-w-7xl mx-auto flex items-center gap-1.5 sm:gap-2 overflow-x-auto text-xs sm:text-sm font-medium scrollbar-none">
-      <button class="nav-tab-btn active px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap bg-[#1E88E5] text-white font-semibold shadow-sm" data-tab="tab-populacao">
+      <button class="nav-tab-btn active px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap bg-[#FCA311] text-black font-bold shadow-md" data-tab="tab-populacao">
         <i data-lucide="clipboard-list" class="w-4 h-4"></i>
         <span>Informativo à População</span>
       </button>
@@ -141,7 +141,7 @@
 
       <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap theme-text-muted hover:bg-black/5" data-tab="tab-aovivo">
         <i data-lucide="radar" class="w-4 h-4"></i>
-        <span>Radar & Telemetria ao Vivo</span>
+        <span>Radar e Telemetria Ao Vivo</span>
       </button>
     </div>
   </nav>
@@ -150,7 +150,7 @@
   <main class="max-w-7xl mx-auto px-3 sm:px-6 mt-4 space-y-4">
 
     <!-- CABEÇALHO DE DOCUMENTO OFICIAL (ESTILO BOLETIM TÉCNICO A4) -->
-    <div class="theme-card p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-3 border-l-4 border-l-[#1E88E5]">
+    <div class="theme-card p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-3 border-l-4 border-l-[#FCA311]">
       <div class="space-y-1 text-center md:text-left">
         <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest theme-text-dim block">
           ESTADO DO RIO DE JANEIRO • PREFEITURA MUNICIPAL DE RIO DAS OSTRAS • SUBSECRETARIA DE DEFESA CIVIL
@@ -334,42 +334,42 @@
           <!-- OS 6 PILARES -->
           <div class="grid grid-cols-2 gap-2 pt-2">
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CÉU</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Encoberto e frio</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="thermometer" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="thermometer" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">TEMPERATURA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">20° a 21°C</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="droplets" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="droplets" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">UMIDADE</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">90% a 100%</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="wind" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="wind" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">VENTO & RAJADAS</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Rajadas 48 km/h</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CHUVA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Volumosa (88,7 mm)</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="waves" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="waves" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">MAR E PRAIA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Mto Agitado (2,5 m)</span>
@@ -398,42 +398,42 @@
           <!-- OS 6 PILARES -->
           <div class="grid grid-cols-2 gap-2 pt-2">
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="cloud-sun" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="cloud-sun" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CÉU</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Sol entre nuvens</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="thermometer" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="thermometer" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">TEMPERATURA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">20° a 28°C</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="droplets" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="droplets" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">UMIDADE</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">70% a 98%</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="wind" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="wind" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">VENTO & RAJADAS</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Rajadas 47 km/h</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="cloud-drizzle" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="cloud-drizzle" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CHUVA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Fraca (12,9 mm)</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="waves" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="waves" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">MAR E PRAIA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Agitado (1,6-2,0 m)</span>
@@ -462,42 +462,42 @@
           <!-- OS 6 PILARES -->
           <div class="grid grid-cols-2 gap-2 pt-2">
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="sun" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="sun" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CÉU</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Sol e calor</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="thermometer" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="thermometer" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">TEMPERATURA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">21° a 30°C</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="droplets" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="droplets" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">UMIDADE</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">60% a 95%</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="wind" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="wind" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">VENTO & RAJADAS</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Rajadas 40 km/h</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="cloud-rain" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">CHUVA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Pancadas (3,3 mm)</span>
               </div>
             </div>
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[58px]">
-              <i data-lucide="waves" class="w-4 h-4 text-[#1E88E5] shrink-0 mt-0.5"></i>
+              <i data-lucide="waves" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">MAR E PRAIA</span>
                 <span class="text-xs font-bold theme-text-main block leading-snug break-words whitespace-normal">Moderado (1,0-1,5 m)</span>
@@ -577,7 +577,7 @@
       <!-- 1. Panorama Sinótico Geral -->
       <div class="theme-card p-4 sm:p-5 space-y-3">
         <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2 border-b theme-border pb-2">
-          <i data-lucide="compass" class="w-4 h-4 text-[#1E88E5]"></i>
+          <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
           <span>1. Panorama Sinótico Geral</span>
         </h4>
 
@@ -586,18 +586,18 @@
           <div class="p-3.5 rounded-lg theme-tile border border-blue-200 dark:border-blue-900/40 space-y-2">
             <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(30, 136, 229, 0.2);">
               <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
-                <i data-lucide="compass" class="w-4 h-4 text-[#1E88E5]"></i>
+                <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
                 <span>Configuração Sinótica & Sistemas Atuantes</span>
               </div>
               <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
               <div class="flex items-start gap-1.5">
-                <span class="text-[#1E88E5] font-bold">•</span>
+                <span class="text-[#FCA311] font-bold">•</span>
                 <span><strong>Dinâmica de Pressão:</strong> Atuação de frente fria semi-estacionária acoplada à alta pressão pós-frontal (1022 hPa) no Atlântico (Carta Sinótica CHM 12Z).</span>
               </div>
               <div class="flex items-start gap-1.5">
-                <span class="text-[#1E88E5] font-bold">•</span>
+                <span class="text-[#FCA311] font-bold">•</span>
                 <span><strong>Transporte de Umidade:</strong> Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo céu encoberto e frio úmido (18° a 21°C).</span>
               </div>
             </div>
@@ -735,7 +735,7 @@
       <div class="theme-card p-4 sm:p-5 space-y-3.5">
         <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
           <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="clock" class="w-4 h-4 text-[#1E88E5]"></i>
+            <i data-lucide="clock" class="w-4 h-4 text-[#FCA311]"></i>
             <span>2. Previsão do Tempo e Condições Marítimas por Turnos (12 Turnos)</span>
           </h4>
           <span class="text-[11px] theme-text-muted font-medium">Oficial Defesa Civil</span>
@@ -779,7 +779,7 @@
       <div class="theme-card p-4 sm:p-5 space-y-3">
         <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
           <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="gauge" class="w-4 h-4 text-[#1E88E5]"></i>
+            <i data-lucide="gauge" class="w-4 h-4 text-[#FCA311]"></i>
             <span>4. Rede Municipal de Estações e Acumulados de Chuva (1h a 96h)</span>
           </h4>
           <span class="text-[11px] theme-text-muted font-mono">INEA • CEMADEN • PWS</span>
@@ -858,7 +858,7 @@
 
           <!-- Seletor de Variável -->
           <div class="flex items-center gap-1.5 flex-wrap">
-            <button class="bulletin-tab-btn active px-3 py-1.5 rounded-md text-xs font-semibold bg-[#1E88E5] text-white transition" data-metric="temperature">
+            <button class="bulletin-tab-btn active px-3 py-1.5 rounded-md text-xs font-bold bg-[#FCA311] text-black shadow-sm transition" data-metric="temperature">
               Temperatura
             </button>
             <button class="bulletin-tab-btn px-3 py-1.5 rounded-md text-xs font-medium theme-text-muted hover:bg-black/5 transition" data-metric="humidity">
@@ -896,7 +896,7 @@
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b theme-border pb-3">
           <div class="space-y-0.5">
             <div class="flex items-center gap-2">
-              <i data-lucide="radar" class="w-5 h-5 text-[#1E88E5]"></i>
+              <i data-lucide="radar" class="w-5 h-5 text-[#FCA311]"></i>
               <h3 class="text-sm sm:text-base font-bold theme-text-main">
                 Estação Meteorológica Multivariáveis & Radar — Estado do Rio de Janeiro
               </h3>
@@ -912,7 +912,7 @@
 
           <!-- Seletor de Modo de Visualização -->
           <div class="flex items-center gap-1.5 p-1 rounded-lg theme-tile self-start lg:self-auto shrink-0">
-            <button id="btn-mode-multivariable" class="px-2.5 py-1.5 rounded text-xs font-bold transition-all bg-[#1E88E5] text-white shadow-xs flex items-center gap-1.5" data-viewer-mode="windy">
+            <button id="btn-mode-multivariable" class="px-2.5 py-1.5 rounded text-xs font-bold transition-all bg-[#FCA311] text-black shadow-xs flex items-center gap-1.5" data-viewer-mode="windy">
               <i data-lucide="layers" class="w-3.5 h-3.5"></i>
               <span>Multivariáveis RJ</span>
             </button>
@@ -930,40 +930,40 @@
           <div class="flex flex-wrap items-center gap-1.5">
             <span class="text-[10px] font-bold uppercase tracking-wider theme-text-dim mr-1 hidden sm:inline">Camadas:</span>
             
-            <button class="layer-switch-btn active px-2.5 py-1 rounded text-xs font-semibold bg-[#1E88E5] text-white flex items-center gap-1" data-layer="radar">
+            <button class="layer-switch-btn active px-2.5 py-1 rounded text-xs font-bold bg-[#FCA311] text-black shadow-xs flex items-center gap-1" data-layer="radar">
               <i data-lucide="radio" class="w-3.5 h-3.5"></i>
               <span>Radar Chuva</span>
             </button>
 
             <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="rain">
-              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-blue-500"></i>
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-blue-400"></i>
               <span>Precipitação</span>
             </button>
 
             <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="wind">
-              <i data-lucide="wind" class="w-3.5 h-3.5 text-cyan-500"></i>
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-cyan-400"></i>
               <span>Vento & Rajadas</span>
             </button>
 
             <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="pressure">
-              <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-500"></i>
+              <i data-lucide="gauge" class="w-3.5 h-3.5 text-amber-400"></i>
               <span>Pressão & Isobaras</span>
             </button>
 
             <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="satellite">
-              <i data-lucide="satellite" class="w-3.5 h-3.5 text-indigo-500"></i>
+              <i data-lucide="satellite" class="w-3.5 h-3.5 text-indigo-400"></i>
               <span>Satélite GOES-16</span>
             </button>
 
             <button class="layer-switch-btn px-2.5 py-1 rounded text-xs font-medium theme-text-muted hover:theme-text-main hover:bg-black/5 dark:hover:bg-white/10 transition-all flex items-center gap-1" data-layer="waves">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-teal-500"></i>
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-teal-400"></i>
               <span>Ondas (Área Delta)</span>
             </button>
           </div>
 
           <!-- Botões de Zoom / Enquadramento Geográfico -->
           <div class="flex items-center gap-1 self-end sm:self-auto shrink-0 border-t sm:border-t-0 sm:border-l theme-border pt-1.5 sm:pt-0 sm:pl-2.5">
-            <button id="btn-scope-rj" class="px-2 py-1 rounded text-[11px] font-bold bg-[#1E88E5]/15 text-[#1E88E5] hover:bg-[#1E88E5]/25 transition-all flex items-center gap-1" title="Ver todo o Estado do RJ">
+            <button id="btn-scope-rj" class="px-2 py-1 rounded text-[11px] font-bold bg-[#FCA311]/20 text-[#FCA311] border border-[#FCA311]/40 hover:bg-[#FCA311]/30 transition-all flex items-center gap-1" title="Ver todo o Estado do RJ">
               <i data-lucide="map" class="w-3.5 h-3.5"></i>
               <span>Estado do RJ</span>
             </button>
@@ -1002,7 +1002,7 @@
               <button id="radar-prev-btn" class="p-2 rounded hover:bg-black/10 dark:hover:bg-white/10 theme-text-main transition-colors" title="Quadro Anterior">
                 <i data-lucide="skip-back" class="w-4 h-4"></i>
               </button>
-              <button id="radar-play-btn" class="p-2 rounded bg-[#1E88E5] text-white hover:bg-blue-600 transition-colors shadow-xs" title="Reproduzir Animação">
+              <button id="radar-play-btn" class="p-2 rounded bg-[#FCA311] text-black hover:bg-[#e5920b] transition-colors shadow-xs" title="Reproduzir Animação">
                 <i data-lucide="play" class="w-4 h-4"></i>
               </button>
               <button id="radar-next-btn" class="p-2 rounded hover:bg-black/10 dark:hover:bg-white/10 theme-text-main transition-colors" title="Próximo Quadro">
@@ -1017,7 +1017,7 @@
             <div class="w-full sm:w-1/2 flex items-center gap-2">
               <span class="text-[10px] theme-text-dim font-bold shrink-0">-2h</span>
               <div class="w-full bg-black/10 dark:bg-white/10 rounded-full h-2 overflow-hidden flex-1">
-                <div id="radar-progress" class="bg-[#1E88E5] h-2 rounded-full transition-all duration-300" style="width: 100%;"></div>
+                <div id="radar-progress" class="bg-[#FCA311] h-2 rounded-full transition-all duration-300" style="width: 100%;"></div>
               </div>
               <span class="text-[10px] text-emerald-600 font-bold shrink-0">AGORA</span>
             </div>
@@ -1084,7 +1084,7 @@
         <div class="pt-2 border-t theme-border space-y-2">
           <div class="flex items-center justify-between">
             <h4 class="text-xs font-bold uppercase tracking-wider theme-text-main flex items-center gap-1.5">
-              <i data-lucide="tower-control" class="w-4 h-4 text-[#1E88E5]"></i>
+              <i data-lucide="tower-control" class="w-4 h-4 text-[#FCA311]"></i>
               <span>Radares Meteorológicos Oficiais que Cobrem o Estado do RJ</span>
             </h4>
             <span class="text-[10px] theme-text-muted">DECEA / REDEMET • INEA • AlertaRio</span>
@@ -1217,7 +1217,7 @@
       <!-- Outras Estações da Bacia Macaé e Rio das Ostras -->
       <div class="theme-card p-4 sm:p-5 space-y-3">
         <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2 border-b theme-border pb-2">
-          <i data-lucide="activity" class="w-4 h-4 text-[#1E88E5]"></i>
+          <i data-lucide="activity" class="w-4 h-4 text-[#FCA311]"></i>
           <span>Rede Telemétrica Regional — Todas as Estações da Bacia Hidrográfica (Rio das Ostras, Macaé e Nova Friburgo — INEA)</span>
         </h4>
         <div id="other-stations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -1264,7 +1264,7 @@
     <div class="theme-card max-w-md w-full p-5 space-y-4 shadow-2xl">
       <div class="flex items-center justify-between border-b theme-border pb-3">
         <div class="flex items-center gap-2">
-          <i data-lucide="smartphone" class="w-5 h-5 text-[#1E88E5]"></i>
+          <i data-lucide="smartphone" class="w-5 h-5 text-[#FCA311]"></i>
           <h3 class="font-bold theme-text-main text-sm">Instalar Aplicativo Oficial</h3>
         </div>
         <button id="btn-close-install-modal" class="p-1 rounded hover:bg-black/10 theme-text-muted">
@@ -1291,6 +1291,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=18"></script>
+  <script type="module" src="js/app.js?v=19"></script>
 </body>
 </html>
