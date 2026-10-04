@@ -138,7 +138,7 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Chuvoso",
+          "val": "Muitas Nuvens / Chuvisco",
           "icon": "cloud-rain"
         },
         "temp": {
@@ -216,7 +216,7 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Chuvoso",
+          "val": "Muitas Nuvens / Chuvisco",
           "icon": "cloud-rain"
         },
         "temp": {
