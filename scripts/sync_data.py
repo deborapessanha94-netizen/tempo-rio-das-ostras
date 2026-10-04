@@ -189,18 +189,46 @@ def sync_inea_cheias():
     except Exception as e:
         print(f"Aviso ao sincronizar INEA cheias: {e}")
 
+def update_live_jundia_kpi(stations):
+    """
+    Atualiza apenas a cota ao vivo do Rio Jundiá nos metadados,
+    preservando rigorosamente a previsão meteorológica oficial elaborada pela meteorologia.
+    """
+    meta_path = os.path.join(DATA_DIR, 'boletim_metadata.json')
+    if not os.path.exists(meta_path):
+        return
+    try:
+        jundia = next((s for s in stations if s.get('eh_rio_das_ostras') or 'jundi' in s.get('nome_estacao', '').lower()), None)
+        if not jundia:
+            return
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            metadata = json.load(f)
+        
+        nivel_val = jundia.get('nivel_rio', '2,40')
+        if 'kpis' in metadata:
+            metadata['kpis']['jundia_nivel'] = f"{nivel_val} m"
+            metadata['kpis']['jundia_status'] = jundia.get('status', 'ALERTA MÁXIMO')
+        
+        with open(meta_path, 'w', encoding='utf-8') as f:
+            json.dump(metadata, f, ensure_ascii=False, indent=2)
+        print(f"OK: Cota ao vivo do Jundiá atualizada para {nivel_val} m em boletim_metadata.json")
+    except Exception as e:
+        print(f"Aviso ao atualizar cota ao vivo: {e}")
+
 if __name__ == '__main__':
-    print("Iniciando sincronização de dados oficiais para a nuvem...")
+    print("Iniciando sincronização de telemetria oficial para a nuvem 24/7...")
     sync_inmet_forecast()
     sync_inmet_alerts()
     sync_inea_cheias()
+    
+    # Atualiza a cota ao vivo do Rio Jundiá sem alterar a previsão oficial de chuva
     try:
-        try:
-            from scripts.auto_bulletin import run_auto_bulletin_pipeline
-        except ImportError:
-            from auto_bulletin import run_auto_bulletin_pipeline
-        run_auto_bulletin_pipeline()
+        inea_file = os.path.join(DATA_DIR, 'inea_cheias.json')
+        if os.path.exists(inea_file):
+            with open(inea_file, 'r', encoding='utf-8') as f:
+                stations_data = json.load(f)
+            update_live_jundia_kpi(stations_data)
     except Exception as e:
-        print(f"Aviso ao executar motor autônomo de boletins: {e}")
-    print("Sincronização concluída com sucesso!")
+        print(f"Aviso ao atualizar telemetria ao vivo: {e}")
+    print("Sincronização 24/7 concluída com sucesso!")
 

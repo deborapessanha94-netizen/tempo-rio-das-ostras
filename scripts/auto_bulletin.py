@@ -184,11 +184,23 @@ def fetch_inmet_alerts():
         return []
 
 def run_auto_bulletin_pipeline():
-    print(">> [Auto-Bulletin] Iniciando rodada meteorológica automática...")
+    print(">> [Auto-Bulletin] Iniciando rodada meteorológica...")
     now_dt = datetime.now()
     emissao_str = now_dt.strftime("%d/%m/%Y às %H:%Mh")
 
-    # 1. Busca previsões numéricas em alta resolução
+    # 0. Prioridade Absoluta: Tenta sincronizar os arquivos oficiais locais (R/Quarto/Downloads/Desktop)
+    try:
+        try:
+            from scripts.sync_boletim import sync_bulletin
+        except ImportError:
+            from sync_boletim import sync_bulletin
+        if sync_bulletin():
+            print(">> [Auto-Bulletin] Boletim Oficial da Defesa Civil preservado com sucesso!")
+            return True
+    except Exception as e:
+        print(f"   [AVISO] Sincronização de boletim oficial local não disponível ({e}), avaliando fallback numérico...")
+
+    # Se não houver nenhum boletim oficial na máquina, busca modelos numéricos globais:
     url_om = (
         f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}"
         "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,precipitation,"
