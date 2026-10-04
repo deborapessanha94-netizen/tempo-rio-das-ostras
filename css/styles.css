@@ -291,6 +291,50 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-color: var(--header-badge-border) !important;
 }
 
+/* ========================================================================= */
+/* CABEÇALHO E NAVEGAÇÃO EM ABAS STICKY UNIFICADOS                         */
+/* ========================================================================= */
+#site-header {
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  transition: all 0.2s ease;
+}
+
+#header-top-bar {
+  transition: padding 0.2s ease, opacity 0.2s ease;
+}
+
+#header-top-bar.header-compact {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+#header-top-bar.header-compact img {
+  height: 1.75rem !important;
+  width: 1.75rem !important;
+}
+
+#header-top-bar.header-compact h1 {
+  font-size: 0.875rem !important;
+}
+
+#header-top-bar.header-compact .theme-header-sub {
+  display: none !important;
+}
+
+#main-nav-tabs {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-tab-btn {
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.nav-tab-btn:hover:not(.active) {
+  background-color: var(--nav-btn-hover) !important;
+  color: var(--text-main) !important;
+}
+
 /* Seletor Segmentado de Tema (Pill Switcher com 2 botões) */
 .theme-switch-container {
   background-color: var(--tile-bg);

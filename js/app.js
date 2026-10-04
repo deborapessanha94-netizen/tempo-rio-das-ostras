@@ -134,6 +134,20 @@ export function cleanBulletinText(str) {
 function setupNavigationTabs() {
   const tabButtons = document.querySelectorAll('.nav-tab-btn');
   const tabPanes = document.querySelectorAll('.tab-pane');
+  const topBar = document.getElementById('header-top-bar');
+
+  // Compacta suavemente o cabeçalho ao rolar para dar mais área visual ao conteúdo
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      if (topBar && !topBar.classList.contains('header-compact')) {
+        topBar.classList.add('header-compact');
+      }
+    } else {
+      if (topBar && topBar.classList.contains('header-compact')) {
+        topBar.classList.remove('header-compact');
+      }
+    }
+  }, { passive: true });
 
   tabButtons.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -141,6 +155,11 @@ function setupNavigationTabs() {
       if (!targetId) return;
 
       state.activeTab = targetId;
+
+      // Se o usuário alternar de aba enquanto estiver no meio da página, sobe suavemente ao topo
+      if (window.scrollY > 80) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 
       // Atualiza botões
       tabButtons.forEach(b => {
