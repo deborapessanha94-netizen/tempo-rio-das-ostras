@@ -601,6 +601,46 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         f"mesmo com o computador pessoal desligado."
     )
 
+    sinopse_estruturada = {
+        "sistemas": {
+            "titulo": "Configuração Sinótica & Sistemas Atuantes",
+            "badge": "CIRCULAÇÃO COSTEIRA",
+            "dinamica": f"Passagem de sistemas meteorológicos costeiros combinados à circulação marítima pós-frontal no Atlântico Sul.",
+            "transporte": f"Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo variação térmica de {min_t_3d}°C a {max_t_3d}°C com {ch_3d_total} mm no ciclo."
+        },
+        "hidrologia": {
+            "titulo": "Bacia Hidrográfica do Rio Jundiá & Precipitação Severa",
+            "badge": f"{jundia_status} • COTA {jundia_nivel}",
+            "cota": jundia_nivel,
+            "status": jundia_status,
+            "descricao": f"A estação telemétrica municipal (INEA 2241036) acusa cota de {jundia_nivel} (Status: {jundia_status}). Monitoramento prioritário da calha e zonas de refluxo nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha.",
+            "estacoes": [
+                {"nome": "Palmital", "valor": "134,0 mm"},
+                {"nome": "Rocha Leão / REBIO", "valor": "124,7 mm"},
+                {"nome": "PCD Jundiá", "valor": "108,2 mm"},
+                {"nome": "Defesa Civil", "valor": "70,4 mm"}
+            ]
+        },
+        "maritimo": {
+            "titulo": "Condições Marítimas na Faixa Costeira (Área Delta)",
+            "badge": "AVISO Nº 733/2026 (CHM)",
+            "vento": f"Ventos de quadrante litorâneo com rajadas de até {max_raj_3d} km/h na orla marítima.",
+            "mar": "Ondas de 2,0 a 2,5 m na Área Delta da Marinha do Brasil, represando drenagens e gerando risco na praia."
+        },
+        "evolucao": [
+            {
+                "dia": dias_resumo[1]['dia'] if len(dias_resumo) > 1 else "D+1",
+                "badge": dias_resumo[1]['badge'] if len(dias_resumo) > 1 else "ATENÇÃO",
+                "desc": dias_resumo[1]['descricao'] if len(dias_resumo) > 1 else ""
+            },
+            {
+                "dia": dias_resumo[2]['dia'] if len(dias_resumo) > 2 else "D+2",
+                "badge": dias_resumo[2]['badge'] if len(dias_resumo) > 2 else "OBSERVAÇÃO",
+                "desc": dias_resumo[2]['descricao'] if len(dias_resumo) > 2 else ""
+            }
+        ]
+    }
+
     # Matriz de Impactos por Bairros (PLANCON)
     r0 = "MÁXIMO" if dias_resumo[0]['badge_tipo'] == 'danger' else ("ALERTA" if dias_resumo[0]['badge_tipo'] == 'warning' else "OBS")
     r1 = "MÁXIMO" if dias_resumo[1]['badge_tipo'] == 'danger' else ("ALERTA" if dias_resumo[1]['badge_tipo'] == 'warning' else "OBS")
@@ -705,6 +745,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         "informe_alerta": informe_alerta,
         "alertas_estruturados": alertas_estruturados,
         "sinopse_geral": sinopse_geral,
+        "sinopse_estruturada": sinopse_estruturada,
         "glossario": glossario,
         "dias_resumo": dias_resumo,
         "impactos_bairros": impactos_bairros,

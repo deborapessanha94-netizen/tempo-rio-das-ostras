@@ -576,16 +576,122 @@
           <span>1. Panorama Sinótico Geral</span>
         </h4>
 
-        <div id="sinopse-content" class="text-xs theme-text-body space-y-2.5 leading-relaxed">
-          <p>
-            O padrão meteorológico regional sobre o município de Rio das Ostras para o período de <strong>03/10 a 05/10/2026</strong> é condicionado pela atuação de uma <strong>frente fria semi-estacionária</strong> sobre o litoral norte fluminense e sul do Espírito Santo, acoplada à circulação anticiclônica de uma <strong>alta pressão pós-frontal (1022 hPa)</strong> estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsionou intenso transporte marítimo de umidade em direção à costa, gerando céu totalmente encoberto, frio úmido (<strong>mínima de 20°C e máxima de 21°C</strong>) e chuvas contínuas e volumosas ao longo de todo o sábado (03/10).
-          </p>
-          <p class="p-3.5 rounded-lg theme-tile border-l-4 border-l-red-500 theme-text-main leading-relaxed">
-            <strong>Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá:</strong> a estação telemétrica municipal (INEA 2241036) registrou nível de <strong>2,40 m às 16:45h (Status: ALERTA MÁXIMO)</strong>, após ultrapassar a cota de atenção (<strong>1,60 m</strong>) e a cota de transbordo (<strong>2,20 m</strong>), atingindo diretamente vias e residências nos bairros Âncora e Cláudio Ribeiro. Em paralelo, a Marinha do Brasil mantém o <strong>Aviso nº 733/2026 de Vento Forte (Área Delta)</strong>, com ventos de E/NE Força 7 Beaufort (rajadas de até 47 km/h) e mar agitado (ondas de 2,0 a 2,5 m).
-          </p>
-          <p>
-            No <strong>domingo (04/10)</strong>, a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (<strong>12,9 mm acumulados</strong>) cessam gradualmente, propiciando o início da vazante do Rio Jundiá. Na <strong>segunda-feira (05/10)</strong>, instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (<strong>máxima de 30°C</strong>) com pancadas isoladas de chuva à tarde (<strong>3,3 mm</strong>).
-          </p>
+        <div id="sinopse-content" class="text-xs space-y-3">
+          <!-- 1. Sistemas Sinóticos -->
+          <div class="p-3.5 rounded-lg theme-tile border border-blue-200 dark:border-blue-900/40 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(30, 136, 229, 0.2);">
+              <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
+                <i data-lucide="compass" class="w-4 h-4 text-[#1E88E5]"></i>
+                <span>Configuração Sinótica & Sistemas Atuantes</span>
+              </div>
+              <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs theme-text-body">
+              <div class="flex items-start gap-1.5">
+                <span class="text-[#1E88E5] font-bold">•</span>
+                <span><strong>Dinâmica de Pressão:</strong> Atuação de frente fria semi-estacionária acoplada à alta pressão pós-frontal (1022 hPa) no Atlântico (Carta Sinótica CHM 12Z).</span>
+              </div>
+              <div class="flex items-start gap-1.5">
+                <span class="text-[#1E88E5] font-bold">•</span>
+                <span><strong>Transporte de Umidade:</strong> Bloqueio com convergência contínua de umidade marítima em direção à costa, mantendo céu encoberto e frio úmido (18° a 21°C).</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Hidrologia e Pluviometria -->
+          <div class="p-3.5 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(239, 68, 68, 0.2);">
+              <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
+                <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
+                <span>Bacia Hidrográfica do Rio Jundiá & Precipitação Severa</span>
+              </div>
+              <span class="badge-danger-theme text-[10px]">ALERTA MÁXIMO • COTA 2,49 m</span>
+            </div>
+            <div class="text-xs theme-text-body space-y-2">
+              <p class="leading-relaxed">
+                <strong>Cenário Hidrológico Crítico:</strong> Estação telemétrica municipal (INEA 2241036) acusa cota de <strong>2,49 m</strong>, superando a cota de atenção (1,60 m) e a cota de transbordo (2,20 m). Risco iminente de alagamentos e refluxo pluvial nos bairros <strong>Âncora, Cláudio Ribeiro, Nova Esperança e Ilha</strong>.
+              </p>
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider block mb-1 theme-text-dim">Acumulados Pluviométricos Severos Registrados nas PCDs:</span>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono text-[11px]">
+                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                    <span class="text-[10px] font-sans theme-text-muted">Palmital</span>
+                    <span class="font-bold text-red-600 dark:text-red-400 text-xs">134,0 mm</span>
+                  </div>
+                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                    <span class="text-[10px] font-sans theme-text-muted">Rocha Leão / REBIO</span>
+                    <span class="font-bold text-red-600 dark:text-red-400 text-xs">124,7 mm</span>
+                  </div>
+                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                    <span class="text-[10px] font-sans theme-text-muted">PCD Jundiá</span>
+                    <span class="font-bold text-red-600 dark:text-red-400 text-xs">108,2 mm</span>
+                  </div>
+                  <div class="p-2 rounded bg-white/80 dark:bg-slate-900/60 border theme-border flex flex-col">
+                    <span class="text-[10px] font-sans theme-text-muted">Defesa Civil</span>
+                    <span class="font-bold text-amber-600 dark:text-amber-400 text-xs">70,4 mm</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Condições Marítimas -->
+          <div class="p-3.5 rounded-lg theme-tile border border-amber-200 dark:border-amber-900/30 space-y-2">
+            <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-1.5" style="border-color: rgba(245, 158, 11, 0.2);">
+              <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
+                <i data-lucide="anchor" class="w-4 h-4 text-blue-600"></i>
+                <span>Condições Marítimas na Faixa Costeira (Área Delta)</span>
+              </div>
+              <span class="badge-warning-theme text-[10px]">AVISO Nº 733/2026 (CHM)</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs theme-text-body">
+              <div class="flex items-start gap-2">
+                <i data-lucide="wind" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="theme-text-main block">Vento Forte:</strong>
+                  <span>Ventos de E/NE Força 7 com rajadas de até <strong>53 km/h</strong> na orla marítima.</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-2">
+                <i data-lucide="waves" class="w-4 h-4 text-blue-500 shrink-0 mt-0.5"></i>
+                <div>
+                  <strong class="theme-text-main block">Mar Agitado & Ressaca:</strong>
+                  <span>Ondas de <strong>2,0 a 2,5 m</strong> na Área Delta, represando drenagens e gerando risco na praia.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Evolução e Tendência -->
+          <div class="p-3.5 rounded-lg theme-tile border border-slate-200 dark:border-slate-800 space-y-2">
+            <div class="flex items-center justify-between border-b pb-1.5 theme-border">
+              <div class="flex items-center gap-2 font-bold theme-text-main text-xs">
+                <i data-lucide="calendar-days" class="w-4 h-4 text-emerald-600"></i>
+                <span>Evolução & Tendência Operacional para os Próximos Dias</span>
+              </div>
+              <span class="badge-neutral-theme text-[10px]">DIAS SEGUINTES</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <div class="p-2.5 rounded bg-white/70 dark:bg-slate-900/50 border theme-border space-y-1">
+                <div class="flex items-center justify-between">
+                  <strong class="theme-text-main text-[11px]">DOMINGO (04/10)</strong>
+                  <span class="badge-warning-theme text-[9px]">ABERTURA GRADUAL</span>
+                </div>
+                <p class="theme-text-body leading-snug text-[11px]">
+                  Frente fria se afasta para o oceano. Chuva fraca na madrugada/manhã (<strong>12,9 mm</strong>), dando lugar a aberturas de sol, máxima de <strong>28°C</strong> e início da vazante do Rio Jundiá.
+                </p>
+              </div>
+              <div class="p-2.5 rounded bg-white/70 dark:bg-slate-900/50 border theme-border space-y-1">
+                <div class="flex items-center justify-between">
+                  <strong class="theme-text-main text-[11px]">SEGUNDA-FEIRA (05/10)</strong>
+                  <span class="badge-info-theme text-[9px]">CALOR PRÉ-FRONTAL</span>
+                </div>
+                <p class="theme-text-body leading-snug text-[11px]">
+                  Padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (<strong>30° a 32°C</strong>). Pancadas de chuva com trovoadas no fim da tarde (<strong>3,3 mm a 5 mm</strong>).
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Glossário Operacional -->
@@ -938,6 +1044,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=13"></script>
+  <script type="module" src="js/app.js?v=14"></script>
 </body>
 </html>
