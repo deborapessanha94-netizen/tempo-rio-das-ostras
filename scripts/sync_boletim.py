@@ -80,7 +80,12 @@ def sync_bulletin():
     xlsx_file = find_latest_file("dados_boletim_*.xlsx", search_dirs)
     records = []
     if xlsx_file:
-        print(f"   [DADOS] Lendo planilha oficial: {xlsx_file.name}")
+        from datetime import datetime as dt_cls
+        mtime = dt_cls.fromtimestamp(xlsx_file.stat().st_mtime)
+        if mtime.date() != dt_cls.now().date():
+            print(f"   [INFO] Planilha local ({xlsx_file.name}) é anterior a hoje ({mtime.date()} < {dt_cls.now().date()}). Ignorando para garantir previsão a partir de HOJE.")
+            return False
+        print(f"   [DADOS] Lendo planilha oficial do dia: {xlsx_file.name}")
         df = pd.read_excel(xlsx_file)
         
         dia_map = {
