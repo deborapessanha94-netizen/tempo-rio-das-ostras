@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais 100% Preto e Branco -->
-  <link rel="stylesheet" href="css/styles.css?v=35">
+  <link rel="stylesheet" href="css/styles.css?v=36">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -172,6 +172,34 @@
               </div>
             </div>
 
+          </div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- SEÇÃO DE ALERTAS OFICIAIS VIGENTES (INMET & MARINHA DO BRASIL)    -->
+        <!-- VISÍVEL DIRETAMENTE NA TELA PRINCIPAL (ALTO CONTRASTE E LETRAS GRANDES) -->
+        <!-- ================================================================= -->
+        <div id="section-alertas-oficiais" class="theme-card p-5 sm:p-6 space-y-4 bg-white border-2 border-black rounded-2xl shadow-md">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-black pb-3">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="shield-alert" class="w-6 h-6 text-black shrink-0"></i>
+              <div>
+                <h4 class="text-base sm:text-lg font-black uppercase tracking-wider text-black leading-tight">
+                  Alertas Meteorológicos Oficiais Vigentes
+                </h4>
+                <p class="text-xs sm:text-sm font-bold text-black mt-0.5">
+                  Monitoramento contínuo: Instituto Nacional de Meteorologia (INMET) & Marinha do Brasil
+                </p>
+              </div>
+            </div>
+            <span id="badge-total-alertas" class="self-start sm:self-center text-xs font-black uppercase px-2.5 py-1 rounded bg-black text-white">
+              Vigentes Agora
+            </span>
+          </div>
+
+          <!-- Grade dos Alertas Oficiais na Tela Principal -->
+          <div id="container-alertas-principais" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-black">
+            <!-- Renderizado dinamicamente via app.js -->
           </div>
         </div>
 
@@ -586,6 +614,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=35"></script>
+  <script type="module" src="js/app.js?v=36"></script>
 </body>
 </html>

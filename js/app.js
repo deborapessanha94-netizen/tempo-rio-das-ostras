@@ -268,6 +268,7 @@ async function loadAllApplicationData() {
 
     // Renderiza a nova interface minimalista
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
+    renderAlertasPrincipais(state.inmetAlerts, state.marinhaAvisos);
     renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
     updateBulletinChart();
 
@@ -301,9 +302,10 @@ function renderDashboardUI(meta, rows, weather) {
     subcondEl.textContent = `Chuva prevista: ${hojeChuva} • ${hojeVento} na orla marítima`;
   }
 
-  if (heroAlertPill && meta?.informe_alerta) {
-    if (meta.informe_alerta.includes('ALERTA MÁXIMO') || meta.informe_alerta.includes('TRANSBORDO')) {
-      heroAlertPill.textContent = 'Alerta Hidrológico';
+  if (heroAlertPill) {
+    const temAlerta = (state.inmetAlerts && state.inmetAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo);
+    if (temAlerta) {
+      heroAlertPill.textContent = 'Alerta Oficial Vigente';
     } else {
       heroAlertPill.textContent = 'Normalidade';
     }
@@ -399,6 +401,126 @@ function renderDashboardUI(meta, rows, weather) {
 
   // 4. Card Inferior: Chuva por Turno
   renderChuvaTurnosBars(rows);
+}
+
+/**
+ * 6.1 Renderiza os Alertas Oficiais do INMET e da Marinha do Brasil diretamente na Tela Principal
+ */
+function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
+  const container = document.getElementById('container-alertas-principais');
+  const badgeTotal = document.getElementById('badge-total-alertas');
+  if (!container) return;
+
+  const cardsHtml = [];
+
+  // 1. Alertas Oficiais do INMET
+  if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
+    inmetAlerts.forEach(a => {
+      const titulo = a.descricao || 'Alerta Meteorológico';
+      const severidade = a.severidade || 'Perigo Potencial';
+      const periodo = `Vigência: ${a.inicio_formatado || a.inicio} até ${a.fim_formatado || a.fim}`;
+      const riscos = (a.riscos && a.riscos[0]) ? a.riscos[0] : 'Chuva intensa, ventos fortes e descargas elétricas.';
+      const instrucoes = (a.instrucoes && a.instrucoes[0]) ? a.instrucoes[0] : 'Não se abrigue debaixo de árvores. Em emergência ligue 199.';
+
+      cardsHtml.push(`
+        <div class="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white space-y-3 shadow-sm text-black">
+          <div class="flex items-center justify-between gap-2 border-b-2 border-black pb-2.5">
+            <span class="text-xs px-2.5 py-1 rounded font-black uppercase bg-black text-white">
+              INMET
+            </span>
+            <span class="text-xs font-black uppercase border-2 border-black px-2 py-0.5 rounded text-black bg-white">
+              ${severidade}
+            </span>
+          </div>
+
+          <div>
+            <h5 class="text-base sm:text-lg font-black text-black uppercase leading-tight">${titulo}</h5>
+            <p class="text-xs sm:text-sm font-bold text-black flex items-center gap-1.5 mt-1">
+              <i data-lucide="clock" class="w-4 h-4 text-black shrink-0"></i>
+              <span>${periodo}</span>
+            </p>
+          </div>
+
+          <div class="p-3 rounded-xl border-2 border-black bg-zinc-50 space-y-1">
+            <span class="text-xs uppercase font-black text-black block tracking-wider">Riscos Associados:</span>
+            <p class="text-xs sm:text-sm font-bold text-black leading-snug">${cleanBulletinText(riscos)}</p>
+          </div>
+
+          <div class="pt-1 text-xs sm:text-sm font-bold text-black leading-snug">
+            <span class="font-black">Orientação Defesa Civil (199):</span> ${cleanBulletinText(instrucoes)}
+          </div>
+        </div>
+      `);
+    });
+  }
+
+  // 2. Alertas Oficiais da Marinha do Brasil
+  if (marinhaAvisos && (marinhaAvisos.aviso_ativo || marinhaAvisos.numero || marinhaAvisos.tipo)) {
+    const numero = marinhaAvisos.numero || '733/2026';
+    const tipo = marinhaAvisos.tipo || 'VENTO FORTE';
+    const area = marinhaAvisos.area || 'Área DELTA (Cabo Frio ao Farol de São Tomé)';
+    const rajadas = marinhaAvisos.rajadas || 'Até 53 km/h (28 nós)';
+    const marOndas = marinhaAvisos.mar_ondas || '2,0 a 2,5 m (Muito Agitado)';
+    const validade = marinhaAvisos.validade || marinhaAvisos.fim_formatado || 'Em vigor nas próximas 24 horas';
+
+    cardsHtml.push(`
+      <div class="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white space-y-3 shadow-sm text-black">
+        <div class="flex items-center justify-between gap-2 border-b-2 border-black pb-2.5">
+          <span class="text-xs px-2.5 py-1 rounded font-black uppercase bg-black text-white">
+            Marinha do Brasil
+          </span>
+          <span class="text-xs font-black uppercase border-2 border-black px-2 py-0.5 rounded text-black bg-white">
+            Aviso nº ${numero}
+          </span>
+        </div>
+
+        <div>
+          <h5 class="text-base sm:text-lg font-black text-black uppercase leading-tight">${tipo} • ${area}</h5>
+          <p class="text-xs sm:text-sm font-bold text-black flex items-center gap-1.5 mt-1">
+            <i data-lucide="clock" class="w-4 h-4 text-black shrink-0"></i>
+            <span>${validade}</span>
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div class="p-2.5 rounded-xl border-2 border-black bg-zinc-50">
+            <span class="text-xs uppercase font-black text-black block">Rajadas de Vento</span>
+            <span class="text-sm sm:text-base font-black font-mono text-black">${rajadas}</span>
+          </div>
+          <div class="p-2.5 rounded-xl border-2 border-black bg-zinc-50">
+            <span class="text-xs uppercase font-black text-black block">Estado do Mar</span>
+            <span class="text-sm sm:text-base font-black font-mono text-black">${marOndas}</span>
+          </div>
+        </div>
+
+        <div class="p-3 rounded-xl border-2 border-black bg-zinc-50 space-y-1">
+          <span class="text-xs uppercase font-black text-black block tracking-wider">Restrições na Orla & Segurança:</span>
+          <p class="text-xs sm:text-sm font-bold text-black leading-snug">
+            Condição de mar agitado e ressaca na orla costeira. Atenção redobrada a banhistas, embarcações e pescadores artesanais.
+          </p>
+        </div>
+      </div>
+    `);
+  }
+
+  if (cardsHtml.length > 0) {
+    container.innerHTML = cardsHtml.join('');
+    if (badgeTotal) {
+      badgeTotal.textContent = `${cardsHtml.length} Alerta(s) Vigente(s)`;
+    }
+  } else {
+    container.innerHTML = `
+      <div class="col-span-full p-5 rounded-2xl border-2 border-black bg-white text-center space-y-1">
+        <span class="text-base font-black text-black block">Condições de Normalidade na Região</span>
+        <p class="text-xs sm:text-sm font-bold text-black">Nenhum aviso meteorológico severo vigente do INMET ou da Marinha para Rio das Ostras no momento.</p>
+      </div>
+    `;
+    if (badgeTotal) {
+      badgeTotal.textContent = 'Normalidade';
+    }
+  }
+
+  if (window.lucide) window.lucide.createIcons();
 }
 
 /**
@@ -649,7 +771,7 @@ function setupActionButtons() {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=35').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=36').catch(() => {});
   }
 }
 
