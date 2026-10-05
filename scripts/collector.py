@@ -966,34 +966,15 @@ def run_daily_collection():
     marinha = collect_marinha_data()
     balnear = collect_balneabilidade()
 
-    # 1. Se estiver rodando localmente no computador de Deborah e ela gerou nova planilha, tenta sincronizá-la
-    synced_local = False
+    # Gera a previsão e o boletim oficial para os 3 dias a partir de hoje
     try:
         try:
-            from scripts.sync_boletim import sync_bulletin
+            from scripts.auto_bulletin import run_auto_bulletin_pipeline
         except ImportError:
-            from sync_boletim import sync_bulletin
-        synced_local = sync_bulletin()
+            from auto_bulletin import run_auto_bulletin_pipeline
+        run_auto_bulletin_pipeline()
     except Exception as e:
-        print(f"   [INFO] Sincronização manual local não executada ({e}).")
-
-    # 2. Se não sincronizou manualmente (ex: rodando na nuvem com computador desligado),
-    # ou se o boletim oficial existente estiver com data anterior ao dia de hoje em Brasília:
-    now_brt_date = (datetime.now(timezone.utc) - timedelta(hours=3)).strftime("%Y-%m-%d")
-    precisa_gerar = not synced_local
-
-    if not precisa_gerar:
-        try:
-            with open(DATA_DIR / "boletim_oficial.json", 'r', encoding='utf-8') as f:
-                existing = json.load(f)
-                if not existing or existing[0].get('data_iso') != now_brt_date:
-                    precisa_gerar = True
-        except:
-            precisa_gerar = True
-
-    if precisa_gerar:
-        print(">> Acionando síntese autônoma para garantir atualização 24/7 na nuvem...")
-        generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha)
+        print(f"   [AVISO] Falha ao rodar auto_bulletin: {e}")
 
     print("====================================================================")
     print(">> COLETA DIÁRIA DAS 17:00 FINALIZADA COM SUCESSO!")

@@ -54,10 +54,19 @@ def deg_to_compass(d):
     arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WSW', 'NW', 'NNW']
     return arr[(val % 16)]
 
-def fetch_json(url, timeout=12):
-    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-    with urllib.request.urlopen(req, timeout=timeout) as res:
-        return json.loads(res.read().decode('utf-8'))
+def fetch_json(url, timeout=12, retries=3):
+    headers = {'User-Agent': 'MeteoRioDasOstras/2.0 (Defesa Civil Rio das Ostras; contato@riodasostras.rj.gov.br)'}
+    for attempt in range(retries):
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=timeout) as res:
+                return json.loads(res.read().decode('utf-8'))
+        except Exception as e:
+            if attempt < retries - 1:
+                import time
+                time.sleep(2)
+            else:
+                raise e
 
 def fetch_inea_cheias():
     url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
@@ -246,22 +255,26 @@ def run_auto_bulletin_pipeline():
     now_dt = datetime.now()
     emissao_str = now_dt.strftime("%d/%m/%Y às %H:%Mh")
 
-    # 0. Prioridade: Sincronização de planilha oficial local — somente se for do dia de HOJE
+    # Sincroniza PDFs se existirem localmente
     try:
         try:
-            from scripts.sync_boletim import sync_bulletin, find_latest_file, get_search_directories
+            from scripts.sync_boletim import get_search_directories, find_latest_file
         except ImportError:
-            from sync_boletim import sync_bulletin, find_latest_file, get_search_directories
-        
-        latest_xlsx = find_latest_file("dados_boletim_*.xlsx", get_search_directories())
-        if latest_xlsx:
-            if sync_bulletin():
-                print(">> [Auto-Bulletin] Planilha oficial do dia de hoje preservada com sucesso!")
-                return True
-            else:
-                print(f"   [INFO] Planilha local ({latest_xlsx.name}) foi ignorada por não iniciar em HOJE. Gerando previsão em tempo real para os 3 dias a partir de HO.")
+            from sync_boletim import get_search_directories, find_latest_file
+        import shutil
+        search_dirs = get_search_directories()
+        pdf_boletim = find_latest_file("*boletim*.pdf", search_dirs) or find_latest_file("*Boletim_Meteorologico*.pdf", search_dirs)
+        pdf_populacao = find_latest_file("*previsao_populacao*.pdf", search_dirs) or find_latest_file("*Previsao_Populacao*.pdf", search_dirs)
+        if pdf_boletim:
+            dest_b = DOCS_DIR / "boletim_operacional.pdf"
+            shutil.copy2(pdf_boletim, dest_b)
+            print(f"   [PDF] Boletim Operacional copiado de: {pdf_boletim.name}")
+        if pdf_populacao:
+            dest_p = DOCS_DIR / "informativo_populacao.pdf"
+            shutil.copy2(pdf_populacao, dest_p)
+            print(f"   [PDF] Informativo à População copiado de: {pdf_populacao.name}")
     except Exception as e:
-        print(f"   [AVISO] Falha na checagem de planilha local ({e}), prosseguindo com geração meteorológica a partir de HOJE...")
+        print(f"   [INFO] Checagem de PDFs locais: {e}")
 
     # Se não houver nenhum boletim oficial na máquina, busca modelos numéricos globais:
     url_om = (
