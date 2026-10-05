@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=30">
+  <link rel="stylesheet" href="css/styles.css?v=31">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -165,81 +165,81 @@
   <!-- CONTAINER PRINCIPAL -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 mt-4 space-y-4">
 
-    <!-- CABEÇALHO DE DOCUMENTO OFICIAL (ESTILO BOLETIM TÉCNICO A4) -->
-    <div class="theme-card p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-3">
-      <div class="space-y-1 text-center md:text-left">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest theme-text-dim block">
-          ESTADO DO RIO DE JANEIRO • PREFEITURA MUNICIPAL DE RIO DAS OSTRAS • SUBSECRETARIA DE DEFESA CIVIL
-        </span>
-        <h2 class="text-base sm:text-xl font-bold theme-text-main tracking-tight">
-          SISTEMA OFICIAL DE MONITORAMENTO METEOROLÓGICO & DEFESA CIVIL
-        </h2>
-        <p class="text-xs theme-text-muted">
-          Previsão Meteorológica Operacional • Telemetria Hidrológica de Rios • Avisos da Marinha e INMET
-        </p>
-      </div>
-
-      <div class="flex flex-wrap md:flex-col items-center md:items-end justify-center gap-2 md:gap-0.5 text-xs theme-text-muted shrink-0 text-right">
-        <div><strong>Local:</strong> <span class="theme-text-main font-semibold">Rio das Ostras - RJ</span></div>
-        <div><strong>Período:</strong> <span id="meta-periodo-top" class="theme-text-main font-bold">03/10 (Sábado) a 05/10/2026 (Segunda-feira)</span></div>
-        <div><strong>Emissão Oficial:</strong> <span id="meta-emissao-top" class="theme-text-main font-bold">03/10/2026 às 17:00h</span></div>
-      </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- FAIXA DE INDICADORES-CHAVE / CARDS DE STATUS (6 KPIS INSTITUCIONAIS)      -->
-    <!-- ========================================================================= -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
-      
-      <!-- Card 1: Nível Rio Jundiá -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Nível Rio Jundiá</span>
-        <span id="kpi-jundia-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">2,40 m</span>
-        <span class="text-[10px] text-rose-600 dark:text-rose-400 font-bold block">ALERTA MÁXIMO</span>
-      </div>
-
-      <!-- Card 2: Chuva 3 Dias -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Chuva Acumulada</span>
-        <span id="kpi-chuva-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">104,9 mm</span>
-        <span class="text-[10px] theme-text-muted font-medium block">Previsão 3 Dias</span>
-      </div>
-
-      <!-- Card 3: Vento & Marinha -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Aviso Marinha</span>
-        <span id="kpi-aviso-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 theme-text-main">FORÇA 7</span>
-        <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rajadas até 48 km/h</span>
-      </div>
-
-      <!-- Card 4: Pico Térmico -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Pico de Calor</span>
-        <span id="kpi-temp-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">30°C</span>
-        <span class="text-[10px] theme-text-muted font-medium block">Segunda-feira</span>
-      </div>
-
-      <!-- Card 5: Operação PLANCON -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Risco PLANCON</span>
-        <span id="kpi-plancon-val" class="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 tracking-tight block my-0.5">ALERTA</span>
-        <span class="text-[10px] theme-text-muted font-medium block">5 Setores em Foco</span>
-      </div>
-
-      <!-- Card 6: Telemetria 24/7 -->
-      <div class="theme-tile p-3 text-center">
-        <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Rede Telemétrica</span>
-        <span id="kpi-status-val" class="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight block my-0.5">ATIVA</span>
-        <span class="text-[10px] theme-text-muted font-medium block">INEA, INMET & CPTEC</span>
-      </div>
-
-    </div>
-
     <!-- ========================================================================= -->
     <!-- ABA 1: INFORMATIVO METEOROLÓGICO À POPULAÇÃO                             -->
     <!-- ========================================================================= -->
     <section id="tab-populacao" class="tab-pane space-y-4">
       
+      <!-- CABEÇALHO DE DOCUMENTO OFICIAL (ESTILO BOLETIM TÉCNICO A4) -->
+      <div class="theme-card p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="space-y-1 text-center md:text-left">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest theme-text-dim block">
+            ESTADO DO RIO DE JANEIRO • PREFEITURA MUNICIPAL DE RIO DAS OSTRAS • SUBSECRETARIA DE DEFESA CIVIL
+          </span>
+          <h2 class="text-base sm:text-xl font-bold theme-text-main tracking-tight">
+            SISTEMA OFICIAL DE MONITORAMENTO METEOROLÓGICO & DEFESA CIVIL
+          </h2>
+          <p class="text-xs theme-text-muted">
+            Previsão Meteorológica Operacional • Telemetria Hidrológica de Rios • Avisos da Marinha e INMET
+          </p>
+        </div>
+
+        <div class="flex flex-wrap md:flex-col items-center md:items-end justify-center gap-2 md:gap-0.5 text-xs theme-text-muted shrink-0 text-right">
+          <div><strong>Local:</strong> <span class="theme-text-main font-semibold">Rio das Ostras - RJ</span></div>
+          <div><strong>Período:</strong> <span id="meta-periodo-top" class="theme-text-main font-bold">03/10 (Sábado) a 05/10/2026 (Segunda-feira)</span></div>
+          <div><strong>Emissão Oficial:</strong> <span id="meta-emissao-top" class="theme-text-main font-bold">03/10/2026 às 17:00h</span></div>
+        </div>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- FAIXA DE INDICADORES-CHAVE / CARDS DE STATUS (6 KPIS INSTITUCIONAIS)      -->
+      <!-- ========================================================================= -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+        
+        <!-- Card 1: Nível Rio Jundiá -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Nível Rio Jundiá</span>
+          <span id="kpi-jundia-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">2,40 m</span>
+          <span class="text-[10px] text-rose-600 dark:text-rose-400 font-bold block">ALERTA MÁXIMO</span>
+        </div>
+
+        <!-- Card 2: Chuva 3 Dias -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Chuva Acumulada</span>
+          <span id="kpi-chuva-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">104,9 mm</span>
+          <span class="text-[10px] theme-text-muted font-medium block">Previsão 3 Dias</span>
+        </div>
+
+        <!-- Card 3: Vento & Marinha -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Aviso Marinha</span>
+          <span id="kpi-aviso-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 theme-text-main">FORÇA 7</span>
+          <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold block">Rajadas até 48 km/h</span>
+        </div>
+
+        <!-- Card 4: Pico Térmico -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Pico de Calor</span>
+          <span id="kpi-temp-val" class="text-xl sm:text-2xl font-bold tracking-tight block my-0.5 font-mono theme-text-main">30°C</span>
+          <span class="text-[10px] theme-text-muted font-medium block">Segunda-feira</span>
+        </div>
+
+        <!-- Card 5: Operação PLANCON -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Risco PLANCON</span>
+          <span id="kpi-plancon-val" class="text-xl sm:text-2xl font-bold text-amber-600 dark:text-amber-400 tracking-tight block my-0.5">ALERTA</span>
+          <span class="text-[10px] theme-text-muted font-medium block">5 Setores em Foco</span>
+        </div>
+
+        <!-- Card 6: Telemetria 24/7 -->
+        <div class="theme-tile p-3 text-center">
+          <span class="text-[10px] sm:text-[11px] font-bold uppercase tracking-wide block theme-text-dim">Rede Telemétrica</span>
+          <span id="kpi-status-val" class="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight block my-0.5">ATIVA</span>
+          <span class="text-[10px] theme-text-muted font-medium block">INEA, INMET & CPTEC</span>
+        </div>
+
+      </div>
+
       <!-- Metadados da Emissão -->
       <div class="px-3.5 py-2 rounded-lg theme-tile flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 text-xs theme-text-muted">
         <div>
@@ -1522,6 +1522,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=30"></script>
+  <script type="module" src="js/app.js?v=31"></script>
 </body>
 </html>
