@@ -339,9 +339,10 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
   padding-bottom: 0.25rem !important;
 }
 
-#header-top-bar.header-compact img {
-  height: 1.75rem !important;
-  width: 1.75rem !important;
+#header-top-bar.header-compact img,
+#header-top-bar.header-compact .site-logo {
+  height: 2.25rem !important;
+  width: auto !important;
 }
 
 #header-top-bar.header-compact h1 {
@@ -350,6 +351,46 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
 
 #header-top-bar.header-compact .theme-header-sub {
   display: none !important;
+}
+
+/* Logo Oficial em Destaque Ampliado */
+.site-logo {
+  height: 3.5rem; /* 56px no mobile */
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(91, 134, 182, 0.45);
+  box-shadow: 0 2px 6px rgba(0, 15, 34, 0.35);
+  transition: all 0.2s ease;
+  display: block;
+}
+
+@media (min-width: 640px) {
+  .site-logo {
+    height: 4.25rem; /* 68px no tablet */
+    max-width: 260px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-logo {
+    height: 4.75rem; /* 76px no desktop */
+    max-width: 300px;
+  }
+}
+
+.site-logo:hover {
+  transform: scale(1.02);
+  border-color: #80aad3;
+}
+
+.site-logo-footer {
+  height: 2.25rem;
+  width: auto;
+  object-fit: contain;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(91, 134, 182, 0.35);
 }
 
 #main-nav-tabs {
