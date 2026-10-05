@@ -189,12 +189,12 @@ def format_inmet_date(dt_str):
 def get_inmet_color_info(sev, raw_color=None):
     sev_str = str(sev).lower()
     if 'grande perigo' in sev_str or 'vermelho' in sev_str:
-        return 'Vermelho', '🔴 Alerta Vermelho • Grande Perigo', '#EF4444'
+        return 'Vermelho', 'Alerta Vermelho • Grande Perigo', '#EF4444'
     elif 'perigo potencial' in sev_str or 'amarelo' in sev_str:
-        return 'Amarelo', '🟡 Alerta Amarelo • Perigo Potencial', '#EAB308'
+        return 'Amarelo', 'Alerta Amarelo • Perigo Potencial', '#EAB308'
     elif 'perigo' in sev_str or 'laranja' in sev_str:
-        return 'Laranja', '🟠 Alerta Laranja • Perigo', '#F97316'
-    return 'Amarelo', '🟡 Alerta Amarelo • Perigo Potencial', '#EAB308'
+        return 'Laranja', 'Alerta Laranja • Perigo', '#F97316'
+    return 'Amarelo', 'Alerta Amarelo • Perigo Potencial', '#EAB308'
 
 def fetch_inmet_alerts():
     url = "https://apiprevmet3.inmet.gov.br/avisos/ativos"
@@ -583,8 +583,7 @@ def run_auto_bulletin_pipeline():
         if not alerta_dia and inmet_list:
             alerta_dia = inmet_list[0]
         if alerta_dia and dia_idx <= 1:
-            cor_badge_txt = alerta_dia.get('cor_badge', f"Alerta {alerta_dia.get('cor_nome', 'Amarelo')}")
-            avisos_ref.append(f"{cor_badge_txt} de {alerta_dia.get('descricao', 'Tempestade')} nº {alerta_dia.get('id', '')} do INMET")
+            avisos_ref.append(f"Alerta {alerta_dia.get('cor_nome', 'Amarelo')} de {alerta_dia.get('descricao', 'Tempestade')} nº {alerta_dia.get('id', '')} do INMET")
 
         avisos_str = " e ".join(avisos_ref) if avisos_ref else "Sem avisos meteorológicos vigentes"
         dir_inicio = day_turnos[0]['vento_dir'] if day_turnos else "SW"

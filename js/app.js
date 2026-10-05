@@ -443,23 +443,8 @@ function renderDashboardUI(meta, rows, weather) {
             </div>
 
             ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0 ? `
-              <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/70 text-xs space-y-1.5 text-zinc-700">
-                <div class="flex items-center gap-1.5 font-bold text-zinc-900 text-[11px] uppercase tracking-wide border-b border-zinc-200/60 pb-1">
-                  <i data-lucide="megaphone" class="w-3.5 h-3.5 text-zinc-700"></i>
-                  Informe à População (Defesa Civil)
-                </div>
-                ${d.informe_populacao.map((item, itemIdx) => {
-                  const iconesTopicos = ['sun', 'cloud-rain', 'thermometer', 'droplets', 'wind'];
-                  const titulosTopicos = ['Dinâmica do Tempo', 'Chuva & Rio Jundiá', 'Temperaturas', 'Umidade Relativa', 'Ventos & Avisos'];
-                  const ic = iconesTopicos[itemIdx] || 'info';
-                  const tit = titulosTopicos[itemIdx] || '';
-                  return `
-                    <div class="flex items-start gap-1.5 leading-relaxed text-[11px] sm:text-xs">
-                      <i data-lucide="${ic}" class="w-3.5 h-3.5 text-zinc-500 shrink-0 mt-0.5"></i>
-                      <div><strong class="font-semibold text-zinc-800">${tit}:</strong> <span>${cleanBulletinText(item)}</span></div>
-                    </div>
-                  `;
-                }).join('')}
+              <div class="mt-2 p-3 rounded-lg bg-zinc-50 border border-zinc-200 text-xs sm:text-sm text-zinc-800 space-y-2 leading-relaxed">
+                ${d.informe_populacao.map(item => `<p>${cleanBulletinText(item)}</p>`).join('')}
               </div>
             ` : ''}
           </div>
@@ -482,19 +467,19 @@ function getAlertBadgeAndClass(severidade, corNome) {
   if (sev.includes('grande perigo') || c.includes('vermelho')) {
     return {
       cardClass: 'alert-card-inmet-vermelho',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300">🔴 Alerta Vermelho • Grande Perigo</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300">Alerta Vermelho • Grande Perigo</span>',
       corNome: 'Vermelho'
     };
   } else if ((sev.includes('perigo') && !sev.includes('potencial')) || c.includes('laranja')) {
     return {
       cardClass: 'alert-card-inmet-laranja',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-900 border border-orange-300">🟠 Alerta Laranja • Perigo</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-900 border border-orange-300">Alerta Laranja • Perigo</span>',
       corNome: 'Laranja'
     };
   } else {
     return {
       cardClass: 'alert-card-inmet-amarelo',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">🟡 Alerta Amarelo • Perigo Potencial</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">Alerta Amarelo • Perigo Potencial</span>',
       corNome: 'Amarelo'
     };
   }
@@ -572,7 +557,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
             </span>
           </div>
           <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300">
-            ⚓ Aviso nº ${numero}
+            Aviso nº ${numero}
           </span>
         </div>
 
