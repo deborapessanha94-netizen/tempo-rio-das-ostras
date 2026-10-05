@@ -139,27 +139,25 @@ export function formatPilarValue(label, val) {
 
   if (lLabel.includes('céu') || lLabel.includes('ceu')) {
     const lVal = str.toLowerCase();
-    // Se veio cortado de versões antigas ("panc" ou "poss") ou frases prolixas do INMET:
-    if (lVal.includes('trovoada') || lVal.includes('tempestade')) return 'Pancadas e Trovoadas';
-    if (lVal.includes('panc')) return 'Pancadas de Chuva';
-    if (lVal.includes('poss')) return 'Muitas Nuvens / Chuvisco';
-    if (lVal.includes('chuva fraca') || lVal.includes('garoa') || lVal.includes('chuvisco')) return 'Chuva Fraca / Garoa';
-    if (lVal.includes('chuva forte') || lVal.includes('volumosa')) return 'Chuva Forte';
-    if (lVal.includes('chuv')) return 'Chuvoso';
-    if (lVal.includes('muitas nuvens') && (lVal.includes('sol') || lVal.includes('calor') || lVal.includes('abertura'))) return 'Sol entre Nuvens';
-    if (lVal.includes('sol e calor') || (lVal.includes('sol') && lVal.includes('calor'))) return 'Sol e Calor';
-    if (lVal.includes('muitas nuvens') || lVal.includes('nublado')) return 'Muitas Nuvens';
-    if (lVal.includes('encoberto')) return 'Encoberto e Frio';
-    if (lVal.includes('limpo') || lVal.includes('claro') || lVal.includes('ensolarado')) return 'Céu Limpo';
+    if (str.length > 28 || str.includes('...')) {
+      if (lVal.includes('trovoada') || lVal.includes('tempestade')) return 'Pancadas e Trovoadas';
+      if (lVal.includes('panc')) return 'Pancadas de Chuva';
+      if (lVal.includes('poss')) return 'Muitas Nuvens / Chuvisco';
+      if (lVal.includes('chuva fraca') || lVal.includes('garoa') || lVal.includes('chuvisco')) return 'Chuva Fraca / Garoa';
+      if (lVal.includes('chuva forte') || lVal.includes('volumosa')) return 'Chuva Forte';
+      if (lVal.includes('chuv')) return 'Chuvoso';
+      if (lVal.includes('muitas nuvens') && (lVal.includes('sol') || lVal.includes('calor') || lVal.includes('abertura'))) return 'Sol entre Nuvens';
+      if (lVal.includes('sol e calor') || (lVal.includes('sol') && lVal.includes('calor'))) return 'Sol e Calor';
+      if (lVal.includes('muitas nuvens') || lVal.includes('nublado')) return 'Muitas Nuvens';
+      if (lVal.includes('encoberto')) return 'Encoberto e Frio';
+      if (lVal.includes('limpo') || lVal.includes('claro') || lVal.includes('ensolarado')) return 'Céu Limpo';
+    }
     return str;
   }
 
   if (lLabel.includes('mar') || lLabel.includes('onda')) {
     const lVal = str.toLowerCase();
     if (lVal.includes('mto')) return str.replace(/mto/i, 'Muito');
-    if (lVal.includes('muito agitado') || lVal.includes('ressaca')) return 'Muito Agitado (2,5 m)';
-    if (lVal.includes('agitado')) return 'Agitado (1,6-2,0 m)';
-    if (lVal.includes('moderado')) return 'Moderado (1,0-1,5 m)';
     return str;
   }
 
@@ -172,6 +170,56 @@ export function formatPilarValue(label, val) {
   }
 
   return str;
+}
+
+/**
+ * Renderiza os 6 pilares estruturais de previsão oficial (Céu, Temperatura, Umidade, Vento, Chuva, Mar)
+ * com 100% de integridade, ícones dedicados e layout responsivo sem nenhum corte de texto.
+ */
+export function renderSixPillarsHtml(pilares = {}) {
+  const pilarDefs = [
+    { key: 'ceu', defaultLabel: 'CÉU', defaultIcon: 'cloud', fallbackKeys: ['ceu', 'condicao_ceu', 'tempo'] },
+    { key: 'temp', defaultLabel: 'TEMPERATURA', defaultIcon: 'thermometer', fallbackKeys: ['temp', 'temperatura'] },
+    { key: 'umid', defaultLabel: 'UMIDADE', defaultIcon: 'droplets', fallbackKeys: ['umid', 'umidade'] },
+    { key: 'vento', defaultLabel: 'VENTO & RAJADAS', defaultIcon: 'wind', fallbackKeys: ['vento', 'rajada', 'vento_rajada'] },
+    { key: 'chuva', defaultLabel: 'CHUVA', defaultIcon: 'cloud-rain', fallbackKeys: ['chuva', 'precipitacao'] },
+    { key: 'mar', defaultLabel: 'MAR E PRAIA', defaultIcon: 'waves', fallbackKeys: ['mar', 'ondas', 'mar_praia'] }
+  ];
+
+  return pilarDefs.map(def => {
+    let item = pilares[def.key];
+    if (!item) {
+      for (const fk of def.fallbackKeys) {
+        if (pilares[fk]) { item = pilares[fk]; break; }
+      }
+    }
+    const label = item?.label || def.defaultLabel;
+    const rawVal = item?.val || (typeof item === 'string' ? item : '—');
+    const formattedVal = formatPilarValue(label, rawVal);
+    let icon = item?.icon || def.defaultIcon;
+    if (def.key === 'ceu') {
+      const lVal = String(formattedVal).toLowerCase();
+      if (lVal.includes('sol') && !lVal.includes('chuva') && !lVal.includes('pancada') && !lVal.includes('nuven')) icon = 'sun';
+      else if (lVal.includes('sol') || lVal.includes('abertura')) icon = 'cloud-sun';
+      else if (lVal.includes('chuvisco') || lVal.includes('garoa')) icon = 'cloud-drizzle';
+      else if (lVal.includes('chuva') || lVal.includes('pancada') || lVal.includes('chuv')) icon = 'cloud-rain';
+      else if (lVal.includes('encoberto') || lVal.includes('nuvens') || lVal.includes('nublado')) icon = 'cloud';
+    } else if (def.key === 'chuva') {
+      const lVal = String(formattedVal).toLowerCase();
+      if (lVal.includes('fraca') || lVal.includes('chuvisco') || lVal.includes('garoa')) icon = 'cloud-drizzle';
+      else icon = 'cloud-rain';
+    }
+
+    return `
+      <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[62px] h-auto border theme-border">
+        <i data-lucide="${icon}" class="w-4 h-4 text-[#3f6593] dark:text-[#80aad3] shrink-0 mt-0.5"></i>
+        <div class="min-w-0 flex-1">
+          <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${label}</span>
+          <span class="text-[11px] sm:text-xs font-bold theme-text-main block leading-tight break-words whitespace-normal">${cleanBulletinText(formattedVal || '—')}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 /**
@@ -383,52 +431,37 @@ function renderBulletinDOM(meta, rows) {
   if (meta?.dias_resumo && Array.isArray(meta.dias_resumo) && meta.dias_resumo.length > 0) {
     const gridEl = document.getElementById('populacao-cards-grid');
     if (gridEl) {
-      gridEl.innerHTML = meta.dias_resumo.map(d => {
+      gridEl.innerHTML = meta.dias_resumo.map((d, idx) => {
         let badgeClass = 'badge-neutral-theme';
-        if (d.badge_tipo === 'danger') {
+        const bType = String(d.badge_tipo || '').toLowerCase();
+        const bTxt = String(d.badge || '').toUpperCase();
+        if (bType === 'danger' || bTxt.includes('MÁXIMO') || bTxt.includes('MAXIMO') || bTxt.includes('ALERTA MÁXIMO')) {
           badgeClass = 'badge-danger-theme';
-        } else if (d.badge_tipo === 'warning') {
+        } else if (bType === 'warning' || bTxt.includes('AVISO') || bTxt.includes('ATENÇÃO') || bTxt.includes('ATENCAO') || bTxt.includes('VENTO')) {
           badgeClass = 'badge-warning-theme';
-        } else if (d.badge_tipo === 'info') {
+        } else if (bType === 'info' || bTxt.includes('CALOR') || bTxt.includes('PANCADAS')) {
           badgeClass = 'badge-info-theme';
         }
-
-        const pilares = d.pilares || {};
-        const pilarKeys = Object.keys(pilares);
-
-        const pilaresHtml = pilarKeys.map(k => {
-          const p = pilares[k];
-          const formattedVal = formatPilarValue(p.label || k, p.val);
-          return `
-            <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[62px] h-auto">
-              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0 mt-0.5"></i>
-              <div class="min-w-0 flex-1">
-                <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${p.label || k}</span>
-                <span class="text-[11px] sm:text-xs font-bold theme-text-main block leading-tight break-words whitespace-normal">${cleanBulletinText(formattedVal || '—')}</span>
-              </div>
-            </div>
-          `;
-        }).join('');
 
         return `
           <div class="theme-card p-4 sm:p-5 space-y-3">
             <div class="flex items-center justify-between gap-2 border-b theme-border pb-2">
               <div>
-                <span class="text-[10px] font-bold theme-text-dim uppercase tracking-wider">Previsão Oficial</span>
-                <h3 class="text-sm font-bold theme-text-main">${d.dia}</h3>
-                <p class="text-[11px] theme-text-muted">${cleanBulletinText(d.subtitulo || '')}</p>
+                <span class="text-[10px] font-bold theme-text-dim uppercase tracking-wider">PREVISÃO OFICIAL • DIA ${idx + 1} (D+${idx})</span>
+                <h3 class="text-sm sm:text-base font-bold theme-text-main">${cleanBulletinText(d.dia || `Dia ${idx + 1}`)}</h3>
+                <p class="text-[11px] theme-text-muted mt-0.5 leading-snug">${cleanBulletinText(d.subtitulo || '')}</p>
               </div>
               <span class="${badgeClass} shrink-0">
-                ${d.badge || 'OFICIAL'}
+                ${cleanBulletinText(d.badge || 'OFICIAL')}
               </span>
             </div>
 
-            <p class="text-xs theme-text-body leading-relaxed">
-              ${cleanBulletinText(d.descricao)}
+            <p class="text-xs theme-text-body leading-relaxed text-justify">
+              ${cleanBulletinText(d.descricao || '')}
             </p>
 
-            <div class="grid grid-cols-2 gap-2 pt-2">
-              ${pilaresHtml}
+            <div class="grid grid-cols-2 gap-2 pt-2 border-t theme-border">
+              ${renderSixPillarsHtml(d.pilares)}
             </div>
           </div>
         `;
@@ -1332,12 +1365,14 @@ function renderSinopseContent(meta) {
         subtitulo: "Frente Semi-Estacionária, Chuva Volumosa e Alerta Máximo no Rio Jundiá",
         badge: "ALERTA MÁXIMO / CHEIAS",
         badge_tipo: "danger",
-        descricao: "Neste sábado, o tempo segue totalmente encoberto, frio e chuvoso sob atuação de frente fria semi-estacionária combinada ao transporte de umidade marítima. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo 100% saturado e transbordo na calha do Rio Jundiá (acumulado oficial de 88,7 mm a 108,2 mm). Temperaturas variam entre mínima de 20°C e máxima de 21°C.",
+        descricao: "Neste sábado, o tempo segue totalmente encoberto, frio e chuvoso sob atuação de frente fria semi-estacionária combinada ao transporte de umidade marítima. Previsão de chuva contínua e volumosa em todos os períodos do dia, mantendo solo 100% saturado e transbordo na calha do Rio Jundiá (acumulado oficial de 88,7 mm a 108,2 mm). Temperaturas variam entre mínima de 20°C e máxima de 21°C. Na região rural, oscilam entre 18°C e 20°C. Umidade relativa de 90% a 100%. Rajadas de até 48 km/h na orla.",
         pilares: {
-          temp: { val: "20° a 21°C" },
-          chuva: { val: "88,7 mm" },
-          ceu: { val: "Encoberto e frio", icon: "cloud-rain" },
-          vento: { val: "Rajadas até 48 km/h" }
+          ceu: { label: "CÉU", val: "Encoberto e frio", icon: "cloud-rain" },
+          temp: { label: "TEMPERATURA", val: "20° a 21°C", icon: "thermometer" },
+          umid: { label: "UMIDADE", val: "90% a 100%", icon: "droplets" },
+          vento: { label: "VENTO & RAJADAS", val: "Rajadas até 48 km/h", icon: "wind" },
+          chuva: { label: "CHUVA", val: "Volumosa (88,7 mm)", icon: "cloud-rain" },
+          mar: { label: "MAR E PRAIA", val: "Muito Agitado (2,5 m)", icon: "waves" }
         }
       },
       {
@@ -1345,12 +1380,14 @@ function renderSinopseContent(meta) {
         subtitulo: "Chuva na Madrugada/Manhã e Retorno do Sol com Aquecimento à Tarde",
         badge: "AVISO 733 / VENTO FORTE",
         badge_tipo: "warning",
-        descricao: "Neste domingo, a frente fria se afasta para o oceano, permitindo a abertura gradual do tempo com períodos de sol e aquecimento acentuado a partir da tarde. Previsão de chuva fraca a moderada na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12,9 mm no dia, vazante lenta do Rio Jundiá). Temperaturas entre 20°C e 28°C.",
+        descricao: "Neste domingo, a frente fria se afasta para o oceano, permitindo a abertura gradual do tempo com períodos de sol e aquecimento acentuado a partir da tarde. Previsão de chuva fraca a moderada na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12,9 mm no dia, vazante lenta do Rio Jundiá). Temperaturas entre 20°C e 28°C. Na região rural, oscilam entre 18°C e 26°C. Umidade de 70% a 98%. Rajadas de vento de até 47 km/h na orla.",
         pilares: {
-          temp: { val: "20° a 28°C" },
-          chuva: { val: "12,9 mm" },
-          ceu: { val: "Sol entre nuvens", icon: "cloud-sun" },
-          vento: { val: "Rajadas até 47 km/h" }
+          ceu: { label: "CÉU", val: "Sol entre nuvens", icon: "cloud-sun" },
+          temp: { label: "TEMPERATURA", val: "20° a 28°C", icon: "thermometer" },
+          umid: { label: "UMIDADE", val: "70% a 98%", icon: "droplets" },
+          vento: { label: "VENTO & RAJADAS", val: "Rajadas até 47 km/h", icon: "wind" },
+          chuva: { label: "CHUVA", val: "Fraca (12,9 mm)", icon: "cloud-drizzle" },
+          mar: { label: "MAR E PRAIA", val: "Agitado (1,6-2,0 m)", icon: "waves" }
         }
       },
       {
@@ -1358,12 +1395,14 @@ function renderSinopseContent(meta) {
         subtitulo: "Predomínio de Sol, Calor Pré-Frontal de 30°C e Pancadas Isoladas à Tarde",
         badge: "CALOR E PANCADAS",
         badge_tipo: "info",
-        descricao: "Nesta segunda-feira, o sol predomina pela manhã com rápido aquecimento térmico pré-frontal sob escoamento de ventos quentes de Nordeste e Norte. Previsão de aumento da nebulosidade a partir da tarde com formação de pancadas isoladas de chuva acompanhadas de trovoadas (acumulados de 3,3 mm, pontuais de até 5 mm). Temperaturas entre 21°C e 30°C.",
+        descricao: "Nesta segunda-feira, o sol predomina pela manhã com rápido aquecimento térmico pré-frontal sob escoamento de ventos quentes de Nordeste e Norte. Previsão de aumento da nebulosidade a partir da tarde com formação de pancadas isoladas de chuva acompanhadas de trovoadas (acumulados de 3,3 mm, pontuais de até 5 mm). Temperaturas entre 21°C e 30°C na orla. Umidade de 60% a 95%. Rajadas matutinas de até 40 km/h.",
         pilares: {
-          temp: { val: "21° a 30°C" },
-          chuva: { val: "3,3 mm" },
-          ceu: { val: "Sol e calor à tarde", icon: "sun" },
-          vento: { val: "Rajadas até 40 km/h" }
+          ceu: { label: "CÉU", val: "Sol e calor à tarde", icon: "sun" },
+          temp: { label: "TEMPERATURA", val: "21° a 30°C", icon: "thermometer" },
+          umid: { label: "UMIDADE", val: "60% a 95%", icon: "droplets" },
+          vento: { label: "VENTO & RAJADAS", val: "Rajadas até 40 km/h", icon: "wind" },
+          chuva: { label: "CHUVA", val: "Pancadas (3,3 mm)", icon: "cloud-rain" },
+          mar: { label: "MAR E PRAIA", val: "Moderado (1,0-1,5 m)", icon: "waves" }
         }
       }
     ];
@@ -1440,7 +1479,7 @@ function renderSinopseContent(meta) {
   const gradientePill = s.ordem_1_atmosfera?.pilares?.find(p => p.label && (p.label.toLowerCase().includes('gradiente') || p.label.toLowerCase().includes('amplit'))?.val)
     || `19°C (Mín) a ${picoCalor} (Máx)`;
 
-  // GERAÇÃO DOS 3 CARDS LADO A LADO DA EVOLUÇÃO DIÁRIA (100% GARANTIDO 3 DIAS)
+  // GERAÇÃO DOS 3 CARDS LADO A LADO DA EVOLUÇÃO DIÁRIA (100% DETALHADOS COM OS 6 PILARES OFICIAIS)
   const evolucao3dCardsHtml = [
     { offset: 'D+0', num: 1, d: d0 },
     { offset: 'D+1', num: 2, d: d1 },
@@ -1458,60 +1497,29 @@ function renderSinopseContent(meta) {
       badgeClass = 'badge-info-theme';
     }
 
-    const pilares = d.pilares || {};
-    const tempVal = pilares.temp?.val || '—';
-    const chuvaVal = pilares.chuva?.val || '—';
-    const ceuVal = pilares.ceu?.val || '—';
-    const ceuIcon = pilares.ceu?.icon || 'cloud';
-    const ventoVal = pilares.vento?.val || '—';
-
     return `
-      <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-slate-300 dark:hover:border-slate-700">
-        <div>
-          <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
-            <span class="badge-neutral-theme text-[9px] font-bold">DIA ${num} • ${offset}</span>
-            <span class="${badgeClass} text-[10px] font-bold">${cleanBulletinText(d.badge || 'OFICIAL')}</span>
+      <div class="theme-card p-4 sm:p-5 rounded-xl border theme-border flex flex-col justify-between space-y-3 transition hover:border-[#80aad3] dark:hover:border-[#3f6593]">
+        <div class="space-y-2">
+          <div class="flex items-center justify-between gap-1.5 border-b theme-border pb-2 flex-wrap">
+            <div>
+              <span class="text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#c0e6fd]/25 text-[#1b3554] dark:bg-[#1b3554]/60 dark:text-[#c0e6fd] border border-[#80aad3]/30">DIA ${num} • ${offset}</span>
+              <span class="text-[10px] font-bold theme-text-dim uppercase tracking-wider ml-1.5 hidden sm:inline">Previsão Oficial</span>
+            </div>
+            <span class="${badgeClass} text-[10px] font-bold shrink-0">${cleanBulletinText(d.badge || 'OFICIAL')}</span>
           </div>
-          <div class="mt-1.5">
-            <h5 class="text-xs font-bold theme-text-main">${cleanBulletinText(d.dia || `Dia ${num}`)}</h5>
-            <span class="text-[10px] theme-text-muted block leading-snug mt-0.5">${cleanBulletinText(d.subtitulo || '')}</span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
-          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
-            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
-            <span class="font-bold theme-text-main flex items-center gap-1">
-              <i data-lucide="thermometer" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
-              <span>${cleanBulletinText(tempVal)}</span>
-            </span>
-          </div>
-          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
-            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
-            <span class="font-bold text-[#1b3554] dark:text-[#c0e6fd] flex items-center gap-1">
-              <i data-lucide="cloud-rain" class="w-3 h-3 text-[#5b86b6] shrink-0"></i>
-              <span>${cleanBulletinText(chuvaVal)}</span>
-            </span>
-          </div>
-          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
-            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
-            <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
-              <i data-lucide="${ceuIcon}" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
-              <span class="truncate">${cleanBulletinText(ceuVal)}</span>
-            </span>
-          </div>
-          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
-            <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
-            <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
-              <i data-lucide="wind" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
-              <span>${cleanBulletinText(ventoVal)}</span>
-            </span>
+          <div>
+            <h4 class="text-sm sm:text-base font-bold theme-text-main">${cleanBulletinText(d.dia || `Dia ${num}`)}</h4>
+            <p class="text-[11px] theme-text-muted mt-0.5 leading-snug">${cleanBulletinText(d.subtitulo || '')}</p>
           </div>
         </div>
 
-        <p class="text-[11px] theme-text-body leading-relaxed text-justify pt-1.5 border-t theme-tile-border">
+        <p class="text-xs theme-text-body leading-relaxed text-justify">
           ${cleanBulletinText(d.descricao || '')}
         </p>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t theme-border">
+          ${renderSixPillarsHtml(d.pilares)}
+        </div>
       </div>
     `;
   }).join('');
