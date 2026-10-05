@@ -1,6 +1,7 @@
 /**
  * Gerenciamento de gráficos interativos com Chart.js
- * Especializado para Rio das Ostras (RJ)
+ * 100% Preto e Branco / Monocromático de Alto Contraste
+ * Rio das Ostras (RJ)
  */
 
 import { calculatePrecipitableWater, getLocalHourIndex } from './api.js';
@@ -16,9 +17,7 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
   }
 
   const ctx = canvas.getContext('2d');
-
   const startIndex = getLocalHourIndex(hourlyData.time);
-
   const count = 24; // 24 Horas
   const times = hourlyData.time.slice(startIndex, startIndex + count);
   const labels = times.map(t => {
@@ -30,15 +29,37 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
   activeChart = new Chart(ctx, chartConfig);
 }
 
+function isLightMode() {
+  return document.documentElement.classList.contains('theme-light') || !document.documentElement.classList.contains('theme-dark');
+}
+
+function getColors() {
+  const isLight = isLightMode();
+  return {
+    primary: isLight ? '#000000' : '#ffffff',
+    secondary: isLight ? '#52525b' : '#a1a1aa',
+    tertiary: isLight ? '#71717a' : '#d4d4d8',
+    barFill: isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.85)',
+    barBorder: isLight ? '#000000' : '#ffffff',
+    gradStart: isLight ? 'rgba(0, 0, 0, 0.18)' : 'rgba(255, 255, 255, 0.25)',
+    gradEnd: 'rgba(0, 0, 0, 0.0)',
+    text: isLight ? '#000000' : '#ffffff',
+    textMuted: isLight ? '#3f3f46' : '#d4d4d8',
+    grid: isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.15)'
+  };
+}
+
 function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
+  const c = getColors();
+
   // Gráfico de Temperatura
   if (metric === 'temperature') {
     const tempSlice = hourlyData.temperature_2m.slice(startIndex, startIndex + count);
     const appTempSlice = hourlyData.apparent_temperature.slice(startIndex, startIndex + count);
 
-    const gradTemp = ctx.createLinearGradient(0, 0, 0, 300);
-    gradTemp.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
-    gradTemp.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
+    const gradTemp = ctx.createLinearGradient(0, 0, 0, 280);
+    gradTemp.addColorStop(0, c.gradStart);
+    gradTemp.addColorStop(1, c.gradEnd);
 
     return {
       type: 'line',
@@ -48,23 +69,23 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Temperatura (°C)',
             data: tempSlice,
-            borderColor: '#3f6593',
+            borderColor: c.primary,
             backgroundColor: gradTemp,
             borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#1b3554',
+            pointBackgroundColor: c.primary,
             pointRadius: 3
           },
           {
             label: 'Sensação Térmica (°C)',
             data: appTempSlice,
-            borderColor: '#80aad3',
+            borderColor: c.secondary,
             borderWidth: 2,
             borderDash: [5, 5],
             tension: 0.35,
             fill: false,
-            pointBackgroundColor: '#80aad3',
+            pointBackgroundColor: c.secondary,
             pointRadius: 2
           }
         ]
@@ -88,18 +109,18 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'bar',
             label: 'Volume Chuva (mm)',
             data: rainSlice,
-            backgroundColor: 'rgba(91, 134, 182, 0.65)',
-            borderColor: '#5b86b6',
+            backgroundColor: c.barFill,
+            borderColor: c.barBorder,
             borderWidth: 1.5,
-            borderRadius: 6,
+            borderRadius: 4,
             yAxisID: 'y'
           },
           {
             type: 'line',
             label: 'Probabilidade (%)',
             data: probSlice,
-            borderColor: '#3f6593',
-            backgroundColor: 'rgba(63, 101, 147, 0.1)',
+            borderColor: c.primary,
+            backgroundColor: 'transparent',
             borderWidth: 2,
             tension: 0.3,
             yAxisID: 'y1',
@@ -109,7 +130,7 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'line',
             label: 'Água Precipitável VIME (mm)',
             data: pwSlice,
-            borderColor: '#80aad3',
+            borderColor: c.secondary,
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
@@ -125,17 +146,17 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           y: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: 'Volume / Água Precipitável (mm)', color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#94a3b8' },
+            title: { display: true, text: 'Volume / Água Precipitável (mm)', color: c.text },
+            grid: { color: c.grid },
+            ticks: { color: c.text, font: { weight: '600' } },
             min: 0
           },
           y1: {
             type: 'linear',
             position: 'right',
-            title: { display: true, text: 'Probabilidade (%)', color: '#94a3b8' },
+            title: { display: true, text: 'Probabilidade (%)', color: c.textMuted },
             grid: { drawOnChartArea: false },
-            ticks: { color: '#94a3b8' },
+            ticks: { color: c.textMuted },
             min: 0,
             max: 100
           }
@@ -149,9 +170,9 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const windSlice = hourlyData.wind_speed_10m.slice(startIndex, startIndex + count);
     const gustsSlice = hourlyData.wind_gusts_10m ? hourlyData.wind_gusts_10m.slice(startIndex, startIndex + count) : [];
 
-    const gradWind = ctx.createLinearGradient(0, 0, 0, 300);
-    gradWind.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
-    gradWind.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
+    const gradWind = ctx.createLinearGradient(0, 0, 0, 280);
+    gradWind.addColorStop(0, c.gradStart);
+    gradWind.addColorStop(1, c.gradEnd);
 
     return {
       type: 'line',
@@ -161,23 +182,23 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Velocidade do Vento (km/h)',
             data: windSlice,
-            borderColor: '#3f6593',
+            borderColor: c.primary,
             backgroundColor: gradWind,
             borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#1b3554',
+            pointBackgroundColor: c.primary,
             pointRadius: 3
           },
           {
             label: 'Rajadas Máximas (km/h)',
             data: gustsSlice,
-            borderColor: '#80aad3',
+            borderColor: c.secondary,
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.35,
             fill: false,
-            pointBackgroundColor: '#80aad3',
+            pointBackgroundColor: c.secondary,
             pointRadius: 2
           }
         ]
@@ -190,9 +211,9 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
   if (metric === 'pressure') {
     const pressureSlice = (hourlyData.pressure_msl || hourlyData.surface_pressure).slice(startIndex, startIndex + count);
 
-    const gradPress = ctx.createLinearGradient(0, 0, 0, 300);
-    gradPress.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
-    gradPress.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
+    const gradPress = ctx.createLinearGradient(0, 0, 0, 280);
+    gradPress.addColorStop(0, c.gradStart);
+    gradPress.addColorStop(1, c.gradEnd);
 
     const minPress = Math.min(...pressureSlice) - 2;
     const maxPress = Math.max(...pressureSlice) + 2;
@@ -205,12 +226,12 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Pressão ao Nível do Mar (hPa)',
             data: pressureSlice,
-            borderColor: '#3f6593',
+            borderColor: c.primary,
             backgroundColor: gradPress,
             borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#1b3554',
+            pointBackgroundColor: c.primary,
             pointRadius: 3
           }
         ]
@@ -220,9 +241,9 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
         scales: {
           x: getXAxisConfig(),
           y: {
-            title: { display: true, text: 'Pressão (hPa)', color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#94a3b8' },
+            title: { display: true, text: 'Pressão (hPa)', color: c.text },
+            grid: { color: c.grid },
+            ticks: { color: c.text, font: { weight: '600' } },
             min: Math.floor(minPress),
             max: Math.ceil(maxPress)
           }
@@ -236,9 +257,9 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const humSlice = hourlyData.relative_humidity_2m.slice(startIndex, startIndex + count);
     const dewSlice = hourlyData.dew_point_2m ? hourlyData.dew_point_2m.slice(startIndex, startIndex + count) : [];
 
-    const gradHum = ctx.createLinearGradient(0, 0, 0, 300);
-    gradHum.addColorStop(0, 'rgba(91, 134, 182, 0.35)');
-    gradHum.addColorStop(1, 'rgba(91, 134, 182, 0.0)');
+    const gradHum = ctx.createLinearGradient(0, 0, 0, 280);
+    gradHum.addColorStop(0, c.gradStart);
+    gradHum.addColorStop(1, c.gradEnd);
 
     return {
       type: 'line',
@@ -248,18 +269,18 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Umidade Relativa (%)',
             data: humSlice,
-            borderColor: '#5b86b6',
+            borderColor: c.primary,
             backgroundColor: gradHum,
             borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#3f6593',
+            pointBackgroundColor: c.primary,
             pointRadius: 3
           },
           {
             label: 'Ponto de Orvalho (°C)',
             data: dewSlice,
-            borderColor: '#80aad3',
+            borderColor: c.secondary,
             borderWidth: 2,
             borderDash: [5, 5],
             tension: 0.35,
@@ -273,9 +294,9 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
         scales: {
           x: getXAxisConfig(),
           y: {
-            title: { display: true, text: 'Umidade / Ponto de Orvalho', color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.05)' },
-            ticks: { color: '#94a3b8' },
+            title: { display: true, text: 'Umidade / Ponto de Orvalho', color: c.text },
+            grid: { color: c.grid },
+            ticks: { color: c.text, font: { weight: '600' } },
             min: 0,
             max: 100
           }
@@ -287,17 +308,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
   return {};
 }
 
-function isLightMode() {
-  return document.documentElement.classList.contains('theme-light') || !document.documentElement.classList.contains('theme-dark');
-}
-
 function getCommonOptions(yTitle) {
-  const isLight = isLightMode();
-  const textColor = isLight ? '#334155' : '#cbd5e1';
-  const gridColor = isLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.06)';
-  const tooltipBg = isLight ? '#ffffff' : 'rgba(15, 23, 42, 0.95)';
-  const tooltipText = isLight ? '#0f172a' : '#f8fafc';
-  const tooltipBorder = isLight ? '#cbd5e1' : 'rgba(255, 255, 255, 0.15)';
+  const c = getColors();
 
   return {
     responsive: true,
@@ -310,42 +322,40 @@ function getCommonOptions(yTitle) {
       legend: {
         position: 'top',
         labels: {
-          color: textColor,
-          font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '600' },
+          color: c.text,
+          font: { family: "'Plus Jakarta Sans', sans-serif", size: 12, weight: '700' },
           usePointStyle: true,
           boxWidth: 8
         }
       },
       tooltip: {
-        backgroundColor: tooltipBg,
-        titleColor: tooltipText,
-        bodyColor: textColor,
-        borderColor: tooltipBorder,
+        backgroundColor: isLightMode() ? '#ffffff' : '#000000',
+        titleColor: c.text,
+        bodyColor: c.text,
+        borderColor: isLightMode() ? '#000000' : '#ffffff',
         borderWidth: 1,
         padding: 10,
         boxPadding: 4,
         usePointStyle: true,
-        cornerRadius: 8
+        cornerRadius: 6
       }
     },
     scales: {
       x: getXAxisConfig(),
       y: {
-        title: { display: !!yTitle, text: yTitle, color: textColor },
-        grid: { color: gridColor },
-        ticks: { color: textColor, font: { size: 11, family: "'JetBrains Mono', monospace" } }
+        title: { display: !!yTitle, text: yTitle, color: c.text },
+        grid: { color: c.grid },
+        ticks: { color: c.text, font: { size: 11, family: "'JetBrains Mono', monospace", weight: '600' } }
       }
     }
   };
 }
 
 function getXAxisConfig() {
-  const isLight = isLightMode();
-  const textColor = isLight ? '#475569' : '#94a3b8';
-  const gridColor = isLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.04)';
+  const c = getColors();
   return {
-    grid: { color: gridColor },
-    ticks: { color: textColor, maxRotation: 0, font: { size: 11, family: "'JetBrains Mono', monospace" } }
+    grid: { color: c.grid },
+    ticks: { color: c.text, maxRotation: 0, font: { size: 11, family: "'JetBrains Mono', monospace", weight: '600' } }
   };
 }
 
@@ -361,6 +371,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
 
   const ctx = canvas.getContext('2d');
   const labels = bulletinRows.map(r => `${r.dia_semana.substring(0, 3)} ${r.turno}`);
+  const c = getColors();
 
   let config = null;
 
@@ -376,24 +387,24 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Máxima (°C)',
             data: tMax,
-            borderColor: '#3f6593',
-            backgroundColor: 'rgba(63, 101, 147, 0.15)',
+            borderColor: c.primary,
+            backgroundColor: c.gradStart,
             borderWidth: 2.5,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#1b3554',
+            pointBackgroundColor: c.primary,
             pointRadius: 4
           },
           {
             label: 'Mínima (°C)',
             data: tMin,
-            borderColor: '#80aad3',
-            backgroundColor: 'rgba(128, 170, 211, 0.08)',
+            borderColor: c.secondary,
+            backgroundColor: 'transparent',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#80aad3',
+            pointBackgroundColor: c.secondary,
             pointRadius: 4
           }
         ]
@@ -405,9 +416,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           y: {
             min: 16,
             max: 32,
-            ticks: { stepSize: 2, color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            title: { display: true, text: 'Temperatura (°C)', color: '#94a3b8' }
+            ticks: { stepSize: 2, color: c.text, font: { weight: '600' } },
+            grid: { color: c.grid },
+            title: { display: true, text: 'Temperatura (°C)', color: c.text }
           }
         }
       }
@@ -424,23 +435,23 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Umidade Máx (%)',
             data: uMax,
-            borderColor: '#5b86b6',
-            backgroundColor: 'rgba(91, 134, 182, 0.18)',
+            borderColor: c.primary,
+            backgroundColor: c.gradStart,
             borderWidth: 2,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#3f6593',
+            pointBackgroundColor: c.primary,
             pointRadius: 4
           },
           {
             label: 'Umidade Mín (%)',
             data: uMin,
-            borderColor: '#80aad3',
+            borderColor: c.secondary,
             borderWidth: 1.5,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#80aad3',
+            pointBackgroundColor: c.secondary,
             pointRadius: 3.5
           }
         ]
@@ -452,9 +463,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           y: {
             min: 50,
             max: 100,
-            ticks: { stepSize: 10, color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            title: { display: true, text: 'Umidade (%)', color: '#94a3b8' }
+            ticks: { stepSize: 10, color: c.text, font: { weight: '600' } },
+            grid: { color: c.grid },
+            title: { display: true, text: 'Umidade (%)', color: c.text }
           }
         }
       }
@@ -470,12 +481,12 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Pressão ao Nível Médio do Mar (hPa)',
             data: pVal,
-            borderColor: '#5b86b6',
-            backgroundColor: 'rgba(91, 134, 182, 0.15)',
+            borderColor: c.primary,
+            backgroundColor: c.gradStart,
             borderWidth: 2,
             tension: 0.25,
             fill: true,
-            pointBackgroundColor: '#3f6593',
+            pointBackgroundColor: c.primary,
             pointRadius: 4
           }
         ]
@@ -487,9 +498,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           y: {
             min: 1010,
             max: 1022,
-            ticks: { stepSize: 2, color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            title: { display: true, text: 'Pressão (hPa)', color: '#94a3b8' }
+            ticks: { stepSize: 2, color: c.text, font: { weight: '600' } },
+            grid: { color: c.grid },
+            title: { display: true, text: 'Pressão (hPa)', color: c.text }
           }
         }
       }
@@ -507,8 +518,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'bar',
             label: 'Vento Médio (km/h)',
             data: vMed,
-            backgroundColor: 'rgba(63, 101, 147, 0.85)',
-            borderColor: '#1b3554',
+            backgroundColor: c.barFill,
+            borderColor: c.barBorder,
             borderWidth: 1,
             borderRadius: 4
           },
@@ -516,9 +527,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'line',
             label: 'Rajada Máxima (km/h)',
             data: vRaj,
-            borderColor: '#80aad3',
+            borderColor: c.primary,
             borderWidth: 2,
-            pointBackgroundColor: '#80aad3',
+            pointBackgroundColor: c.primary,
             pointRadius: 4,
             pointHoverRadius: 6,
             fill: false
@@ -532,9 +543,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           y: {
             min: 0,
             max: 55,
-            ticks: { stepSize: 10, color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            title: { display: true, text: 'Velocidade (km/h)', color: '#94a3b8' }
+            ticks: { stepSize: 10, color: c.text, font: { weight: '600' } },
+            grid: { color: c.grid },
+            title: { display: true, text: 'Velocidade (km/h)', color: c.text }
           }
         }
       }
@@ -550,8 +561,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Precipitação Prevista (mm)',
             data: chTot,
-            backgroundColor: 'rgba(91, 134, 182, 0.75)',
-            borderColor: '#3f6593',
+            backgroundColor: c.barFill,
+            borderColor: c.barBorder,
             borderWidth: 1.5,
             borderRadius: 4
           }
@@ -564,9 +575,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           y: {
             min: 0,
             max: 40,
-            ticks: { stepSize: 10, color: '#94a3b8' },
-            grid: { color: 'rgba(255, 255, 255, 0.06)' },
-            title: { display: true, text: 'Volume Previsto (mm)', color: '#94a3b8' }
+            ticks: { stepSize: 10, color: c.text, font: { weight: '600' } },
+            grid: { color: c.grid },
+            title: { display: true, text: 'Volume Previsto (mm)', color: c.text }
           }
         }
       }
@@ -577,4 +588,3 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
     activeBulletinChart = new Chart(ctx, config);
   }
 }
-

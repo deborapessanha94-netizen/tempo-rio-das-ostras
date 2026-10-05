@@ -11,27 +11,23 @@
   
   <!-- Progressive Web App (PWA) 24/7 -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#000f22">
+  <meta name="theme-color" content="#000000">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tempo RO">
   <link rel="apple-touch-icon" href="img/icon-192.png">
 
-  <!-- Tailwind CSS CDN com Extensão da Paleta Minimalista Oficial (#c0e6fd a #000f22) -->
+  <!-- Tailwind CSS CDN -->
   <script>
     tailwind = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            palette: {
-              ice: '#c0e6fd',
-              soft: '#80aad3',
-              steel: '#5b86b6',
-              slate: '#3f6593',
-              navy: '#1b3554',
-              midnight: '#000f22'
+            mono: {
+              black: '#000000',
+              white: '#ffffff'
             }
           }
         }
@@ -43,8 +39,8 @@
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-  <!-- Estilos Institucionais Padrão Minimalista -->
-  <link rel="stylesheet" href="css/styles.css?v=32">
+  <!-- Estilos Institucionais 100% Preto e Branco -->
+  <link rel="stylesheet" href="css/styles.css?v=33">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -55,12 +51,12 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
-<body class="antialiased selection:bg-[#3f6593] selection:text-white pb-10 min-h-screen">
+<body class="antialiased selection:bg-black selection:text-white pb-10 min-h-screen">
 
   <!-- ========================================================================= -->
-  <!-- BARRA SUPERIOR INSTITUCIONAL (MINIMALISTA PRETO & BRANCO / PALETA AZUL)   -->
+  <!-- BARRA SUPERIOR INSTITUCIONAL (100% PRETO & BRANCO / ALTO CONTRASTE)       -->
   <!-- ========================================================================= -->
-  <header id="site-header" class="sticky top-0 z-40 transition-colors border-b border-[#1b3554]">
+  <header id="site-header" class="sticky top-0 z-40 transition-colors border-b border-zinc-800 bg-black">
     <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3">
       
       <!-- Marca Oficial: Logo em Destaque Real -->
@@ -69,9 +65,9 @@
         <div class="hidden sm:flex flex-col justify-center">
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-white tracking-wide uppercase">Defesa Civil</span>
-            <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#c0e6fd] text-[#000f22]">24H</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-white text-black">24H</span>
           </div>
-          <p class="text-[10px] text-[#80aad3] truncate">Monitoramento Meteorológico & Alerta Hidrológico</p>
+          <p class="text-[10px] text-zinc-400 truncate">Monitoramento Meteorológico & Alerta Hidrológico</p>
         </div>
       </div>
 
@@ -85,26 +81,26 @@
             <span class="hidden md:inline">Claro</span>
           </button>
           <button id="btn-theme-dark" class="theme-switch-btn" title="Modo Escuro">
-            <i data-lucide="moon" class="w-3.5 h-3.5 text-[#80aad3]"></i>
+            <i data-lucide="moon" class="w-3.5 h-3.5 text-zinc-400"></i>
             <span class="hidden md:inline">Escuro</span>
           </button>
         </div>
 
         <!-- Download Informativo PDF -->
         <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="btn-header-action px-2.5 py-1.5 flex items-center gap-1.5" title="Baixar PDF Informativo à População">
-          <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#80aad3]"></i>
+          <i data-lucide="file-text" class="w-3.5 h-3.5 text-zinc-300"></i>
           <span class="hidden sm:inline">Informativo</span> <span>(PDF)</span>
         </a>
 
         <!-- Download Boletim PDF -->
         <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-header-action px-2.5 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Boletim Técnico">
-          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-[#80aad3]"></i>
+          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-zinc-300"></i>
           <span class="hidden sm:inline">Boletim</span> <span>(PDF)</span>
         </a>
 
         <!-- Plantão 199 -->
-        <a href="tel:199" class="btn-header-action px-2.5 py-1.5 font-bold text-[#c0e6fd] flex items-center gap-1" title="Ligue 199 para a Defesa Civil">
-          <i data-lucide="phone" class="w-3.5 h-3.5 text-[#c0e6fd]"></i>
+        <a href="tel:199" class="btn-header-action px-2.5 py-1.5 font-bold text-white flex items-center gap-1" title="Ligue 199 para a Defesa Civil">
+          <i data-lucide="phone" class="w-3.5 h-3.5 text-white"></i>
           <span>199</span>
         </a>
 
@@ -120,31 +116,31 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- CONTAINER PRINCIPAL: DASHBOARD MINIMALISTA (MODELO media_1791167531010)   -->
+  <!-- CONTAINER PRINCIPAL: DASHBOARD MINIMALISTA (100% PRETO E BRANCO)         -->
   <!-- ========================================================================= -->
   <main class="max-w-7xl mx-auto px-3 sm:px-6 mt-4 sm:mt-6">
     
-    <div class="dashboard-frame grid grid-cols-1 lg:grid-cols-12 overflow-hidden bg-white dark:bg-[#071322]">
+    <div class="dashboard-frame grid grid-cols-1 lg:grid-cols-12 overflow-hidden bg-white dark:bg-black">
       
       <!-- ===================================================================== -->
       <!-- PAINEL ESQUERDO: CONTEÚDO PRINCIPAL (8 COLUNAS NO DESKTOP)            -->
       <!-- ===================================================================== -->
-      <section class="lg:col-span-8 p-4 sm:p-6 space-y-4 sm:space-y-5 bg-white dark:bg-[#071322]">
+      <section class="lg:col-span-8 p-4 sm:p-6 space-y-4 sm:space-y-5 bg-white dark:bg-black">
         
-        <!-- CARD HERO: VISÃO GERAL DE RIO DAS OSTRAS (ESTILO BANNER SUPERIOR) -->
+        <!-- CARD HERO: VISÃO GERAL DE RIO DAS OSTRAS (PRETO PURO COM CONTRASTE BRANCO) -->
         <div class="hero-dashboard-card p-5 sm:p-6 text-white relative">
           <div class="relative z-10 flex flex-col justify-between h-full space-y-4">
             
             <!-- Linha Superior do Hero -->
             <div class="flex items-center justify-between gap-2">
               <div class="flex items-center gap-2">
-                <span class="text-xs sm:text-sm font-semibold tracking-wide text-[#c0e6fd] flex items-center gap-1.5">
-                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-[#80aad3]"></i>
+                <span class="text-xs sm:text-sm font-semibold tracking-wide text-white flex items-center gap-1.5">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-zinc-300"></i>
                   Rio das Ostras, RJ
                 </span>
-                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#000f22]/70 text-[#c0e6fd] border border-[#3f6593]/40">Oficial</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-900 text-white border border-zinc-700">Oficial</span>
               </div>
-              <span id="hero-badge-status" class="text-[10px] px-2 py-0.5 rounded font-bold bg-[#1b3554]/90 text-[#c0e6fd] border border-[#5b86b6]/40">
+              <span id="hero-badge-status" class="text-[10px] px-2 py-0.5 rounded font-bold bg-white text-black border border-white">
                 Monitoramento 24H
               </span>
             </div>
@@ -153,24 +149,24 @@
             <div class="space-y-0.5">
               <div class="flex items-baseline gap-2">
                 <span id="hero-clock" class="text-3xl sm:text-5xl font-bold font-mono tracking-tight text-white">--:--</span>
-                <span id="hero-period-label" class="text-xs text-[#80aad3] font-medium uppercase tracking-wider">Hora Oficial de Brasília</span>
+                <span id="hero-period-label" class="text-xs text-zinc-400 font-medium uppercase tracking-wider">Hora Oficial de Brasília</span>
               </div>
-              <p id="hero-date" class="text-xs sm:text-sm text-[#c0e6fd]/90 font-medium">Carregando data oficial...</p>
+              <p id="hero-date" class="text-xs sm:text-sm text-zinc-200 font-medium">Carregando data oficial...</p>
             </div>
 
             <!-- Base do Hero: Resumo da Previsão Atual -->
-            <div class="pt-2 border-t border-[#5b86b6]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="pt-2 border-t border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div class="space-y-0.5">
                 <div class="flex items-center gap-2">
-                  <span class="text-[10px] uppercase font-bold text-[#80aad3] tracking-wider">Previsão Operacional</span>
-                  <span id="hero-alert-pill" class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#000f22] text-[#c0e6fd] border border-[#3f6593]/40">Normalidade</span>
+                  <span class="text-[10px] uppercase font-bold text-zinc-400 tracking-wider">Previsão Operacional</span>
+                  <span id="hero-alert-pill" class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-900 text-white border border-zinc-700">Normalidade</span>
                 </div>
                 <h3 id="hero-condition" class="text-sm sm:text-base font-bold text-white">Carregando previsão...</h3>
-                <p id="hero-subcondition" class="text-[11px] text-[#c0e6fd]/80">Acompanhamento contínuo da atmosfera municipal</p>
+                <p id="hero-subcondition" class="text-[11px] text-zinc-300">Acompanhamento contínuo da atmosfera municipal</p>
               </div>
 
               <div class="shrink-0 flex items-center gap-2 self-start sm:self-center">
-                <div id="hero-weather-icon" class="w-12 h-12 rounded-xl bg-[#000f22]/40 border border-[#5b86b6]/30 flex items-center justify-center text-[#c0e6fd]">
+                <div id="hero-weather-icon" class="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white">
                   <i data-lucide="cloud-sun" class="w-7 h-7"></i>
                 </div>
               </div>
@@ -184,7 +180,7 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b theme-border pb-3">
             <div>
               <h4 class="text-xs font-bold uppercase tracking-wider theme-text-main flex items-center gap-2">
-                <i data-lucide="activity" class="w-4 h-4 text-[#3f6593]"></i>
+                <i data-lucide="activity" class="w-4 h-4 text-black dark:text-white"></i>
                 <span>Tendência Horária das Próximas 24 Horas</span>
               </h4>
               <p class="text-[10px] theme-text-muted">Projeção ponto a ponto dos modelos numéricos oficiais</p>
@@ -224,7 +220,7 @@
             <div>
               <div class="flex items-center justify-between border-b theme-border pb-2">
                 <h5 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-1.5">
-                  <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#3f6593]"></i>
+                  <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black dark:text-white"></i>
                   <span>Precipitação por Turno</span>
                 </h5>
                 <span id="badge-total-chuva" class="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded theme-tile">
@@ -251,10 +247,10 @@
             <div>
               <div class="flex items-center justify-between border-b theme-border pb-2">
                 <h5 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-1.5">
-                  <i data-lucide="waves" class="w-3.5 h-3.5 text-[#3f6593]"></i>
+                  <i data-lucide="waves" class="w-3.5 h-3.5 text-black dark:text-white"></i>
                   <span>Rio Jundiá — Telemetria INEA</span>
                 </h5>
-                <span class="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded bg-[#000f22] text-[#c0e6fd] border border-[#3f6593]/40">
+                <span class="text-[10px] font-bold font-mono px-1.5 py-0.5 rounded bg-black text-white border border-zinc-700">
                   Estação 2241036
                 </span>
               </div>
@@ -265,7 +261,7 @@
               <span class="text-[10px] uppercase font-bold theme-text-dim block">Cota Atual Registrada</span>
               <span id="kpi-jundia-val" class="text-3xl font-bold font-mono theme-text-main block tracking-tight">2,40 m</span>
               <div class="flex items-center justify-center gap-1.5 pt-1">
-                <span id="kpi-jundia-status" class="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-[#000f22] text-[#c0e6fd] border border-[#3f6593]/40">
+                <span id="kpi-jundia-status" class="text-[10px] px-2 py-0.5 rounded font-bold uppercase bg-black text-white border border-zinc-700">
                   Monitoramento Contínuo
                 </span>
               </div>
@@ -302,45 +298,45 @@
       <!-- ===================================================================== -->
       <!-- PAINEL DIREITO: SIDEBAR DE DESTAQUE NOTURNA (4 COLUNAS NO DESKTOP)    -->
       <!-- ===================================================================== -->
-      <aside class="lg:col-span-4 sidebar-dashboard p-5 sm:p-6 flex flex-col justify-between space-y-6">
+      <aside class="lg:col-span-4 sidebar-dashboard p-5 sm:p-6 flex flex-col justify-between space-y-6 bg-black text-white">
         
         <!-- Bloco Superior: Clima Agora -->
         <div class="space-y-4">
           
           <!-- Topo da Sidebar -->
-          <div class="flex items-center justify-between text-xs border-b border-[#1b3554] pb-3">
-            <span class="text-[11px] font-bold text-[#c0e6fd] uppercase tracking-wider flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-[#c0e6fd] animate-pulse"></span>
+          <div class="flex items-center justify-between text-xs border-b border-zinc-800 pb-3">
+            <span class="text-[11px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
               Tempo Agora • Rio das Ostras
             </span>
-            <span class="text-[10px] font-mono text-[#80aad3]" id="sidebar-updated-time">Atualizado</span>
+            <span class="text-[10px] font-mono text-zinc-400" id="sidebar-updated-time">Atualizado</span>
           </div>
 
           <!-- Destaque Central: Temperatura Grande -->
           <div class="text-center py-2 space-y-1">
-            <div id="sidebar-icon" class="w-16 h-16 mx-auto flex items-center justify-center text-[#c0e6fd]">
+            <div id="sidebar-icon" class="w-16 h-16 mx-auto flex items-center justify-center text-white">
               <i data-lucide="cloud-sun" class="w-14 h-14"></i>
             </div>
             <div class="flex items-center justify-center gap-1">
               <span id="sidebar-temp" class="text-5xl sm:text-6xl font-bold font-heading text-white tracking-tight">28°</span>
-              <span class="text-2xl text-[#80aad3] font-light">C</span>
+              <span class="text-2xl text-zinc-400 font-light">C</span>
             </div>
-            <p id="sidebar-cond" class="text-sm font-semibold text-[#80aad3]">Parcialmente Nublado</p>
+            <p id="sidebar-cond" class="text-sm font-semibold text-zinc-300">Parcialmente Nublado</p>
           </div>
 
           <!-- Métricas Complementares (Divisores Verticais) -->
-          <div class="grid grid-cols-3 gap-1 py-2.5 px-3 rounded-xl bg-[#071322] border border-[#1b3554] text-center text-xs">
+          <div class="grid grid-cols-3 gap-1 py-2.5 px-3 rounded-xl bg-zinc-900 border border-zinc-800 text-center text-xs">
             <div>
-              <span class="text-[9px] uppercase font-bold text-[#80aad3] block tracking-wider">Vento</span>
-              <span id="sidebar-wind" class="font-bold text-[#c0e6fd] font-mono text-xs">24 km/h</span>
+              <span class="text-[9px] uppercase font-bold text-zinc-400 block tracking-wider">Vento</span>
+              <span id="sidebar-wind" class="font-bold text-white font-mono text-xs">24 km/h</span>
             </div>
-            <div class="border-x border-[#1b3554]">
-              <span class="text-[9px] uppercase font-bold text-[#80aad3] block tracking-wider">Umidade</span>
-              <span id="sidebar-hum" class="font-bold text-[#c0e6fd] font-mono text-xs">76%</span>
+            <div class="border-x border-zinc-800">
+              <span class="text-[9px] uppercase font-bold text-zinc-400 block tracking-wider">Umidade</span>
+              <span id="sidebar-hum" class="font-bold text-white font-mono text-xs">76%</span>
             </div>
             <div>
-              <span class="text-[9px] uppercase font-bold text-[#80aad3] block tracking-wider">Mar</span>
-              <span id="sidebar-sea" class="font-bold text-[#c0e6fd] font-mono text-xs">1.8 m</span>
+              <span class="text-[9px] uppercase font-bold text-zinc-400 block tracking-wider">Mar</span>
+              <span id="sidebar-sea" class="font-bold text-white font-mono text-xs">1.8 m</span>
             </div>
           </div>
 
@@ -349,12 +345,12 @@
         <!-- Bloco Intermediário: Previsão dos Próximos 3 Dias (Começando Hoje) -->
         <div class="space-y-3">
           
-          <div class="flex items-center justify-between border-b border-[#1b3554] pb-2">
+          <div class="flex items-center justify-between border-b border-zinc-800 pb-2">
             <div>
               <h5 class="text-xs font-bold text-white uppercase tracking-wider">Previsão dos Próximos Dias</h5>
-              <p id="sidebar-period-txt" class="text-[10px] text-[#80aad3]">Começando na data de hoje</p>
+              <p id="sidebar-period-txt" class="text-[10px] text-zinc-400">Começando na data de hoje</p>
             </div>
-            <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#1b3554] text-[#c0e6fd] border border-[#3f6593]/40">3 Dias</span>
+            <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-900 text-white border border-zinc-700">3 Dias</span>
           </div>
 
           <!-- Lista Vertical dos 3 Dias -->
@@ -389,12 +385,12 @@
             </a>
 
             <!-- Botão 5: Telefone 199 Defesa Civil -->
-            <a href="tel:199" class="dock-btn text-[#c0e6fd] hover:text-white" title="Ligue 199 (Defesa Civil)">
+            <a href="tel:199" class="dock-btn text-white hover:text-white" title="Ligue 199 (Defesa Civil)">
               <i data-lucide="phone" class="w-4 h-4"></i>
             </a>
 
           </div>
-          <p class="text-[9px] text-center text-[#80aad3] mt-2">
+          <p class="text-[9px] text-center text-zinc-400 mt-2">
             Prefeitura Municipal de Rio das Ostras • Defesa Civil 24H
           </p>
         </div>
@@ -409,30 +405,30 @@
   <!-- MODAL 1: BOLETIM TÉCNICO OPERACIONAL COMPLETO & PANORAMA SINÓTICO         -->
   <!-- ========================================================================= -->
   <div id="modal-boletim-tecnico" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="theme-card max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-[#3f6593]">
+    <div class="theme-card max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-zinc-700">
       
       <!-- Cabeçalho do Modal -->
-      <div class="px-5 py-3.5 bg-[#000f22] text-white flex items-center justify-between border-b border-[#1b3554]">
+      <div class="px-5 py-3.5 bg-black text-white flex items-center justify-between border-b border-zinc-800">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-[#c0e6fd]"></i>
+          <i data-lucide="file-spreadsheet" class="w-5 h-5 text-white"></i>
           <div>
             <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Boletim Meteorológico Operacional Completo</h3>
-            <span id="modal-boletim-periodo" class="text-[10px] text-[#80aad3]">12 Turnos • Defesa Civil de Rio das Ostras</span>
+            <span id="modal-boletim-periodo" class="text-[10px] text-zinc-400">12 Turnos • Defesa Civil de Rio das Ostras</span>
           </div>
         </div>
-        <button id="btn-close-modal-boletim" class="p-1 rounded text-[#80aad3] hover:text-white hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-boletim" class="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
       <!-- Conteúdo com Scroll -->
-      <div class="p-4 sm:p-6 overflow-y-auto space-y-5 text-xs text-[#1e293b] dark:text-[#e2e8f0]">
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-5 text-xs text-black dark:text-white">
         
         <!-- Panorama Sinótico Geral -->
         <div class="theme-tile p-4 space-y-2">
           <div class="flex items-center justify-between border-b theme-border pb-1.5">
             <h4 class="font-bold theme-text-main text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <i data-lucide="compass" class="w-4 h-4 text-[#3f6593]"></i>
+              <i data-lucide="compass" class="w-4 h-4 text-black dark:text-white"></i>
               <span>Panorama Sinótico Geral dos 3 Dias</span>
             </h4>
             <span class="text-[10px] theme-text-muted">Análise Técnica</span>
@@ -446,7 +442,7 @@
         <div class="space-y-2">
           <div class="flex items-center justify-between">
             <h4 class="font-bold theme-text-main text-xs uppercase tracking-wider flex items-center gap-1.5">
-              <i data-lucide="calendar" class="w-4 h-4 text-[#3f6593]"></i>
+              <i data-lucide="calendar" class="w-4 h-4 text-black dark:text-white"></i>
               <span>Quadro Técnico dos 12 Turnos Operacionais</span>
             </h4>
             <a href="docs/boletim_operacional.pdf" target="_blank" download class="text-[11px] font-bold theme-text-dim hover:underline">
@@ -462,7 +458,7 @@
         <!-- Risco por Bairros (PLANCON) -->
         <div class="theme-tile p-4 space-y-2">
           <h4 class="font-bold theme-text-main text-xs uppercase tracking-wider flex items-center gap-1.5 border-b theme-border pb-1.5">
-            <i data-lucide="shield" class="w-4 h-4 text-[#3f6593]"></i>
+            <i data-lucide="shield" class="w-4 h-4 text-black dark:text-white"></i>
             <span>Setores Monitorados no PLANCON Municipal</span>
           </h4>
           <div id="modal-plancon-list" class="space-y-2 text-[11px]">
@@ -473,9 +469,9 @@
       </div>
 
       <!-- Rodapé do Modal -->
-      <div class="px-5 py-3 bg-[#f8fafc] dark:bg-[#071322] border-t theme-border flex items-center justify-between text-xs">
+      <div class="px-5 py-3 bg-zinc-100 dark:bg-zinc-900 border-t theme-border flex items-center justify-between text-xs">
         <span class="theme-text-muted">Subsecretaria de Defesa Civil • Plantão 199</span>
-        <button id="btn-close-modal-boletim-foot" class="px-4 py-1.5 rounded font-bold bg-[#000f22] text-[#c0e6fd] hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-boletim-foot" class="px-4 py-1.5 rounded font-bold bg-black text-white hover:bg-zinc-800 cursor-pointer">
           Fechar
         </button>
       </div>
@@ -487,17 +483,17 @@
   <!-- MODAL 2: RADAR DOPPLER HD & MAPA DE TELEMETRIA AO VIVO                    -->
   <!-- ========================================================================= -->
   <div id="modal-radar" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="theme-card max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-[#3f6593]">
+    <div class="theme-card max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-zinc-700">
       
-      <div class="px-5 py-3.5 bg-[#000f22] text-white flex items-center justify-between border-b border-[#1b3554]">
+      <div class="px-5 py-3.5 bg-black text-white flex items-center justify-between border-b border-zinc-800">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="radar" class="w-5 h-5 text-[#c0e6fd]"></i>
+          <i data-lucide="radar" class="w-5 h-5 text-white"></i>
           <div>
             <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Radar Meteorológico Doppler & Bacia Hidrográfica</h3>
-            <span class="text-[10px] text-[#80aad3]">Monitoramento em Tempo Real • INEA RH-VIII & CPTEC</span>
+            <span class="text-[10px] text-zinc-400">Monitoramento em Tempo Real • INEA RH-VIII & CPTEC</span>
           </div>
         </div>
-        <button id="btn-close-modal-radar" class="p-1 rounded text-[#80aad3] hover:text-white hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-radar" class="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -515,9 +511,9 @@
         </div>
       </div>
 
-      <div class="px-5 py-3 bg-[#f8fafc] dark:bg-[#071322] border-t theme-border flex items-center justify-between text-xs">
+      <div class="px-5 py-3 bg-zinc-100 dark:bg-zinc-900 border-t theme-border flex items-center justify-between text-xs">
         <span class="theme-text-muted">Atualização contínua a cada ciclo do radar</span>
-        <button id="btn-close-modal-radar-foot" class="px-4 py-1.5 rounded font-bold bg-[#000f22] text-[#c0e6fd] hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-radar-foot" class="px-4 py-1.5 rounded font-bold bg-black text-white hover:bg-zinc-800 cursor-pointer">
           Fechar
         </button>
       </div>
@@ -529,17 +525,17 @@
   <!-- MODAL 3: AVISOS METEOROLÓGICOS OFICIAIS (INMET & MARINHA)                 -->
   <!-- ========================================================================= -->
   <div id="modal-avisos" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="theme-card max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-[#3f6593]">
+    <div class="theme-card max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden border border-zinc-700">
       
-      <div class="px-5 py-3.5 bg-[#000f22] text-white flex items-center justify-between border-b border-[#1b3554]">
+      <div class="px-5 py-3.5 bg-black text-white flex items-center justify-between border-b border-zinc-800">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="shield-alert" class="w-5 h-5 text-[#c0e6fd]"></i>
+          <i data-lucide="shield-alert" class="w-5 h-5 text-white"></i>
           <div>
             <h3 class="text-sm sm:text-base font-bold text-white leading-tight">Avisos Oficiais da Marinha & INMET</h3>
-            <span class="text-[10px] text-[#80aad3]">Orientações de Segurança da Defesa Civil</span>
+            <span class="text-[10px] text-zinc-400">Orientações de Segurança da Defesa Civil</span>
           </div>
         </div>
-        <button id="btn-close-modal-avisos" class="p-1 rounded text-[#80aad3] hover:text-white hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-avisos" class="p-1 rounded text-zinc-400 hover:text-white hover:bg-zinc-800 cursor-pointer">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
@@ -550,9 +546,9 @@
         </div>
       </div>
 
-      <div class="px-5 py-3 bg-[#f8fafc] dark:bg-[#071322] border-t theme-border flex items-center justify-between text-xs">
+      <div class="px-5 py-3 bg-zinc-100 dark:bg-zinc-900 border-t theme-border flex items-center justify-between text-xs">
         <span class="theme-text-muted">Em caso de emergência ligue 199</span>
-        <button id="btn-close-modal-avisos-foot" class="px-4 py-1.5 rounded font-bold bg-[#000f22] text-[#c0e6fd] hover:bg-[#1b3554] cursor-pointer">
+        <button id="btn-close-modal-avisos-foot" class="px-4 py-1.5 rounded font-bold bg-black text-white hover:bg-zinc-800 cursor-pointer">
           Fechar
         </button>
       </div>
@@ -562,10 +558,10 @@
 
   <!-- MODAL PWA INSTALAÇÃO -->
   <div id="modal-install-guide" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
-    <div class="theme-card max-w-md w-full p-5 space-y-4 shadow-2xl border border-[#3f6593]">
+    <div class="theme-card max-w-md w-full p-5 space-y-4 shadow-2xl border border-zinc-700">
       <div class="flex items-center justify-between border-b theme-border pb-3">
         <div class="flex items-center gap-2">
-          <i data-lucide="smartphone" class="w-5 h-5 text-[#3f6593]"></i>
+          <i data-lucide="smartphone" class="w-5 h-5 text-black dark:text-white"></i>
           <h3 class="font-bold theme-text-main text-sm">Instalar Aplicativo Oficial</h3>
         </div>
         <button id="btn-close-install-modal" class="p-1 rounded theme-text-muted hover:theme-text-main">
@@ -590,6 +586,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=32"></script>
+  <script type="module" src="js/app.js?v=33"></script>
 </body>
 </html>
