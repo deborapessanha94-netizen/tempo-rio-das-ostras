@@ -31,16 +31,16 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
 
 function getColors() {
   return {
-    primary: '#000000',
-    secondary: '#27272a',
-    tertiary: '#52525b',
-    barFill: 'rgba(0, 0, 0, 0.85)',
-    barBorder: '#000000',
-    gradStart: 'rgba(0, 0, 0, 0.15)',
-    gradEnd: 'rgba(0, 0, 0, 0.0)',
-    text: '#000000',
-    textMuted: '#27272a',
-    grid: 'rgba(0, 0, 0, 0.15)'
+    primary: '#0284c7',       /* Sky 600 - Azul oceânico moderno */
+    secondary: '#f59e0b',     /* Âmbar - Sensação / Mínima */
+    tertiary: '#6366f1',      /* Índigo - Rajadas */
+    barFill: 'rgba(2, 132, 199, 0.75)',
+    barBorder: '#0284c7',
+    gradStart: 'rgba(2, 132, 199, 0.22)',
+    gradEnd: 'rgba(2, 132, 199, 0.01)',
+    text: '#0f172a',          /* Slate 900 - Alta legibilidade */
+    textMuted: '#64748b',     /* Slate 500 */
+    grid: 'rgba(226, 232, 240, 0.85)' /* Slate 200 */
   };
 }
 
@@ -324,17 +324,17 @@ function getCommonOptions(yTitle) {
         }
       },
       tooltip: {
-        backgroundColor: '#000000',
+        backgroundColor: '#0f172a',
         titleColor: '#ffffff',
-        bodyColor: '#ffffff',
-        borderColor: '#000000',
+        bodyColor: '#e2e8f0',
+        borderColor: '#334155',
         borderWidth: 1,
-        padding: 10,
-        boxPadding: 4,
+        padding: 12,
+        boxPadding: 6,
         usePointStyle: true,
-        cornerRadius: 6,
-        titleFont: { weight: '800' },
-        bodyFont: { weight: '700' }
+        cornerRadius: 8,
+        titleFont: { size: 13, weight: '700' },
+        bodyFont: { size: 12, weight: '600' }
       }
     },
     scales: {

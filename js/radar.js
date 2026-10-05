@@ -74,10 +74,10 @@ function setupInteractiveControls() {
     btnModeMulti.dataset.bound = 'true';
     btnModeMulti.addEventListener('click', () => {
       currentMode = 'windy';
-      btnModeMulti.classList.add('bg-black', 'text-white', 'font-bold', 'border-black');
-      btnModeMulti.classList.remove('text-black', 'theme-text-muted');
-      btnModeDoppler.classList.remove('bg-black', 'text-white');
-      btnModeDoppler.classList.add('text-black', 'font-bold');
+      btnModeMulti.classList.add('bg-sky-600', 'text-white', 'shadow-sm');
+      btnModeMulti.classList.remove('bg-slate-100', 'text-slate-700');
+      btnModeDoppler.classList.remove('bg-sky-600', 'text-white', 'shadow-sm');
+      btnModeDoppler.classList.add('bg-slate-100', 'text-slate-700');
 
       if (windyWrapper) windyWrapper.classList.remove('hidden');
       if (leafletWrapper) leafletWrapper.classList.add('hidden');
@@ -89,10 +89,10 @@ function setupInteractiveControls() {
     btnModeDoppler.dataset.bound = 'true';
     btnModeDoppler.addEventListener('click', () => {
       currentMode = 'doppler';
-      btnModeDoppler.classList.add('bg-black', 'text-white', 'font-bold', 'border-black');
-      btnModeDoppler.classList.remove('text-black', 'theme-text-muted');
-      btnModeMulti.classList.remove('bg-black', 'text-white');
-      btnModeMulti.classList.add('text-black', 'font-bold');
+      btnModeDoppler.classList.add('bg-sky-600', 'text-white', 'shadow-sm');
+      btnModeDoppler.classList.remove('bg-slate-100', 'text-slate-700');
+      btnModeMulti.classList.remove('bg-sky-600', 'text-white', 'shadow-sm');
+      btnModeMulti.classList.add('bg-slate-100', 'text-slate-700');
 
       if (leafletWrapper) leafletWrapper.classList.remove('hidden');
       if (windyWrapper) windyWrapper.classList.add('hidden');
@@ -117,11 +117,11 @@ function setupInteractiveControls() {
 
       // Atualiza botões
       layerButtons.forEach(b => {
-        b.classList.remove('active', 'bg-black', 'text-white');
-        b.classList.add('text-black', 'font-bold');
+        b.classList.remove('active', 'bg-sky-600', 'text-white', 'shadow-sm');
+        b.classList.add('bg-slate-100', 'text-slate-700');
       });
-      btn.classList.add('active', 'bg-black', 'text-white');
-      btn.classList.remove('text-black');
+      btn.classList.add('active', 'bg-sky-600', 'text-white', 'shadow-sm');
+      btn.classList.remove('bg-slate-100', 'text-slate-700');
 
       if (currentMode === 'doppler' && selectedLayer !== 'radar') {
         if (btnModeMulti) btnModeMulti.click();
@@ -139,10 +139,10 @@ function setupInteractiveControls() {
     btnScopeRj.dataset.bound = 'true';
     btnScopeRj.addEventListener('click', () => {
       currentScope = 'rj';
-      btnScopeRj.classList.add('bg-black', 'text-white', 'font-bold');
-      btnScopeRj.classList.remove('text-black');
-      btnScopeRo.classList.remove('bg-black', 'text-white');
-      btnScopeRo.classList.add('text-black', 'font-bold');
+      btnScopeRj.classList.add('bg-sky-600', 'text-white', 'shadow-sm');
+      btnScopeRj.classList.remove('bg-slate-100', 'text-slate-700');
+      btnScopeRo.classList.remove('bg-sky-600', 'text-white', 'shadow-sm');
+      btnScopeRo.classList.add('bg-slate-100', 'text-slate-700');
 
       if (map) map.setView([RJ_CENTER.lat, RJ_CENTER.lon], RJ_CENTER.zoom);
       updateWindyIframe();
@@ -153,10 +153,10 @@ function setupInteractiveControls() {
     btnScopeRo.dataset.bound = 'true';
     btnScopeRo.addEventListener('click', () => {
       currentScope = 'ro';
-      btnScopeRo.classList.add('bg-black', 'text-white', 'font-bold');
-      btnScopeRo.classList.remove('text-black');
-      btnScopeRj.classList.remove('bg-black', 'text-white');
-      btnScopeRj.classList.add('text-black', 'font-bold');
+      btnScopeRo.classList.add('bg-sky-600', 'text-white', 'shadow-sm');
+      btnScopeRo.classList.remove('bg-slate-100', 'text-slate-700');
+      btnScopeRj.classList.remove('bg-sky-600', 'text-white', 'shadow-sm');
+      btnScopeRj.classList.add('bg-slate-100', 'text-slate-700');
 
       if (map) map.setView([RO_CENTER.lat, RO_CENTER.lon], RO_CENTER.zoom);
       updateWindyIframe();
