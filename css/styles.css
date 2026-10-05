@@ -1,117 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap');
 
 /* ========================================================================= */
-/* REGRA INFALÍVEL DE ALTO CONTRASTE (PEDIDO EXPRESSO DA USUÁRIA):           */
-/* 1. ONDE O FUNDO FOR BRANCO -> LETRA PRETA PURA OBRIGATÓRIA (#000000)       */
-/* 2. ONDE O FUNDO FOR PRETO -> LETRA BRANCA PURA OBRIGATÓRIA (#ffffff)       */
-/* NUNCA LETRA BRANCA EM FUNDO BRANCO • NUNCA LETRA PRETA EM FUNDO PRETO    */
+/* DESIGN SISTEMA OFICIAL: 100% PRETO E BRANCO DE ALTO CONTRASTE             */
+/* REGRA GLOBAL INEGOCIÁVEL:                                                 */
+/* 1. FUNDO BRANCO PURO EM TODA A PÁGINA (ZERO MOLDURAS OU FAIXAS ESCURAS)    */
+/* 2. TODAS AS LETRAS SÃO PRETO PURO (#000000)                                */
+/* 3. A ÚNICA EXCEÇÃO SÃO ELEMENTOS COM FUNDO PRETO (bg-black) QUE TÊM LETRA  */
+/*    E ÍCONES BRANCOS PUROS (#ffffff)                                       */
 /* ========================================================================= */
 
 :root {
   --mono-black: #000000;
   --mono-white: #ffffff;
-  --mono-gray-900: #18181b;
-  --mono-gray-800: #27272a;
-  --mono-gray-700: #3f3f46;
-  --mono-gray-200: #e4e4e7;
-  --mono-gray-100: #f4f4f5;
-
   color-scheme: light;
-  --bg-page: #ffffff;
-  --card-bg: #ffffff;
-  --card-border: #000000;
-  --text-main: #000000;
-  --border-thick: 2px solid #000000;
 }
 
+/* Fundo 100% Branco Puro e Letras Pretas em Toda a Estrutura */
 html, body {
   background-color: #ffffff !important;
+  background: #ffffff !important;
   color: #000000 !important;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 16px; /* Base grande para máxima legibilidade */
+  font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ========================================================================= */
-/* 1. REGRA: FUNDO BRANCO -> TEXTOS E ÍCONES 100% PRETOS                     */
-/* ========================================================================= */
-body, 
-main,
-section,
-article,
-aside,
-header,
-.bg-white,
-[class*="bg-white"],
-.theme-card,
-.theme-tile,
-.hero-dashboard-card,
-.sidebar-dashboard,
-.forecast-day-row {
+main, section, aside, article, .dashboard-frame {
   background-color: #ffffff !important;
+  background: #ffffff !important;
   color: #000000 !important;
 }
 
-/* Força que qualquer texto dentro de containers brancos seja preto */
-.theme-card p,
-.theme-card h1, .theme-card h2, .theme-card h3, .theme-card h4, .theme-card h5, .theme-card h6,
-.hero-dashboard-card p,
-.hero-dashboard-card h1, .hero-dashboard-card h2, .hero-dashboard-card h3, .hero-dashboard-card h4, .hero-dashboard-card h5, .hero-dashboard-card h6,
-.sidebar-dashboard p,
-.sidebar-dashboard h1, .sidebar-dashboard h2, .sidebar-dashboard h3, .sidebar-dashboard h4, .sidebar-dashboard h5, .sidebar-dashboard h6,
-.forecast-day-row p,
-.theme-tile p {
-  color: #000000 !important;
-}
-
-/* Força spans e divs comuns dentro de containers brancos a serem pretos (exceto os com fundo preto) */
-.theme-card span:not([class*="bg-black"]):not(.badge-black):not(.btn-black),
-.hero-dashboard-card span:not([class*="bg-black"]):not(.badge-black):not(.btn-black),
-.sidebar-dashboard span:not([class*="bg-black"]):not(.badge-black):not(.btn-black),
-.forecast-day-row span:not([class*="bg-black"]):not(.badge-black):not(.btn-black),
-.theme-tile span:not([class*="bg-black"]):not(.badge-black):not(.btn-black) {
-  color: #000000 !important;
-}
-
-/* Ícones padrão são PRETOS */
-svg, [data-lucide] {
-  color: #000000 !important;
-  stroke: #000000 !important;
-}
-
 /* ========================================================================= */
-/* 2. REGRA: FUNDO PRETO -> TEXTOS E ÍCONES 100% BRANCOS                     */
+/* TODAS AS LETRAS, TÍTULOS E NÚMEROS SÃO 100% PRETO PURO                    */
 /* ========================================================================= */
-.bg-black,
-[class*="bg-black"],
-.btn-black,
-.badge-black {
-  background-color: #000000 !important;
-  color: #ffffff !important;
+p, span, h1, h2, h3, h4, h5, h6, strong, em, div, label, td, th, a, button {
+  color: #000000;
 }
 
-/* Qualquer elemento ou texto dentro de fundo preto DEVE ser branco */
-.bg-black *,
-[class*="bg-black"] *,
-.btn-black *,
-.badge-black * {
-  color: #ffffff !important;
-}
-
-/* Ícones dentro de fundo preto DEVEM ser brancos */
-.bg-black svg, .bg-black [data-lucide],
-[class*="bg-black"] svg, [class*="bg-black"] [data-lucide],
-.btn-black svg, .btn-black [data-lucide],
-.badge-black svg, .badge-black [data-lucide] {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
-/* ========================================================================= */
-/* TIPOGRAFIA OFICIAL E PESO DE CONTRASTE                                    */
-/* ========================================================================= */
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   color: #000000 !important;
@@ -121,18 +49,80 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .font-mono, .mono-val {
   font-family: 'JetBrains Mono', monospace !important;
-  font-weight: 700;
+  font-weight: 800;
   color: #000000 !important;
 }
 
-/* Números mono dentro de fundo preto são brancos */
-.bg-black .font-mono, .bg-black .mono-val,
-[class*="bg-black"] .font-mono, [class*="bg-black"] .mono-val {
+/* Ícones padrão: 100% PRETO PURO */
+svg, [data-lucide] {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* ========================================================================= */
+/* CARDS DO DASHBOARD (FUNDO BRANCO, BORDAS PRETAS DE 2PX, LETRAS GRANDES)   */
+/* ========================================================================= */
+.theme-card,
+.hero-dashboard-card,
+.sidebar-dashboard,
+.forecast-day-row,
+.theme-tile {
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+  border-radius: 1rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Força que filhos de cards sejam PRETO PURO (a menos que tenham bg-black) */
+.theme-card *:not(.bg-black):not([class*="bg-black"]):not(.badge-black),
+.hero-dashboard-card *:not(.bg-black):not([class*="bg-black"]):not(.badge-black),
+.sidebar-dashboard *:not(.bg-black):not([class*="bg-black"]):not(.badge-black),
+.forecast-day-row *:not(.bg-black):not([class*="bg-black"]):not(.badge-black),
+.theme-tile *:not(.bg-black):not([class*="bg-black"]):not(.badge-black) {
+  color: #000000 !important;
+}
+
+.theme-card svg:not(.bg-black svg):not([class*="bg-black"] svg),
+.hero-dashboard-card svg:not(.bg-black svg):not([class*="bg-black"] svg),
+.sidebar-dashboard svg:not(.bg-black svg):not([class*="bg-black"] svg),
+.forecast-day-row svg:not(.bg-black svg):not([class*="bg-black"] svg) {
+  color: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* ========================================================================= */
+/* EXCEÇÃO ABSOLUTA: ELEMENTOS COM FUNDO PRETO TÊM TEXTO E ÍCONES BRANCOS    */
+/* ========================================================================= */
+.bg-black,
+[class*="bg-black"],
+.btn-black,
+.badge-black {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.bg-black *,
+[class*="bg-black"] *,
+.btn-black *,
+.badge-black * {
+  color: #ffffff !important;
+}
+
+.bg-black svg, .bg-black [data-lucide],
+[class*="bg-black"] svg, [class*="bg-black"] [data-lucide],
+.btn-black svg, .btn-black [data-lucide],
+.badge-black svg, .badge-black [data-lucide] {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.bg-black .font-mono, [class*="bg-black"] .font-mono {
   color: #ffffff !important;
 }
 
 /* ========================================================================= */
-/* CABEÇALHO CLARO E LIMPO                                                  */
+/* CABEÇALHO DO SITE                                                        */
 /* ========================================================================= */
 #site-header {
   background: #ffffff !important;
@@ -141,7 +131,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .site-logo {
-  height: 4.25rem; /* 68px */
+  height: 4.25rem;
   width: auto;
   max-width: 250px;
   object-fit: contain;
@@ -154,7 +144,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 @media (min-width: 640px) {
   .site-logo {
-    height: 4.75rem; /* 76px */
+    height: 4.75rem;
     max-width: 280px;
   }
 }
@@ -163,7 +153,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-color: #ffffff !important;
   border: 2px solid #000000 !important;
   color: #000000 !important;
-  font-size: 0.875rem !important; /* 14px */
+  font-size: 0.875rem !important;
   font-weight: 800 !important;
   border-radius: 0.5rem;
   padding: 0.5rem 0.875rem !important;
@@ -202,142 +192,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   stroke: #ffffff !important;
 }
 
-.btn-header-install:hover {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-}
-
-.btn-header-install:hover svg {
-  color: #000000 !important;
-  stroke: #000000 !important;
-}
-
-/* Cápsula de Tema de Alto Contraste */
-.theme-switch-container {
-  background-color: #ffffff;
-  border: 2px solid #000000;
-  border-radius: 0.5rem;
-  padding: 2px;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.theme-switch-btn {
-  border: 1px solid transparent;
-  background: transparent;
-  color: #000000 !important;
-  font-weight: 800;
-  font-size: 0.8125rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  transition: all 0.15s ease;
-}
-
-.theme-switch-btn svg {
-  color: #000000 !important;
-  stroke: #000000 !important;
-}
-
-.theme-switch-btn.active {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border-color: #000000 !important;
-}
-
-.theme-switch-btn.active svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
-/* ========================================================================= */
-/* CARDS DO DASHBOARD (FUNDO BRANCO, BORDAS PRETAS 2PX, LETRAS GRANDES)      */
-/* ========================================================================= */
-.theme-card {
-  background-color: #ffffff !important;
-  border: 2px solid #000000 !important;
-  border-radius: 1rem;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-}
-
-.theme-tile {
-  background-color: #ffffff !important;
-  border: 2px solid #000000 !important;
-  border-radius: 0.75rem;
-  padding: 0.875rem;
-}
-
-.theme-text-main {
-  color: #000000 !important;
-}
-
-.theme-text-body {
-  color: #000000 !important;
-}
-
-.theme-text-muted {
-  color: #000000 !important;
-  font-weight: 600;
-}
-
-.theme-text-dim {
-  color: #000000 !important;
-}
-
-.theme-border {
-  border-color: #000000 !important;
-}
-
-/* Card Hero: Fundo Branco Puro, Letras Pretas Grandes */
-.hero-dashboard-card {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 2px solid #000000 !important;
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-/* Sidebar Direita: Fundo Branco Puro, Letras Pretas Grandes */
-.sidebar-dashboard {
-  background: #ffffff !important;
-  color: #000000 !important;
-  border: 2px solid #000000 !important;
-  border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
-
-/* Moldura do Dashboard */
-.dashboard-frame {
-  background: transparent;
-  border: none;
-  gap: 1.25rem;
-}
-
-/* Linha de Cada Dia na Previsão dos 3 Dias */
-.forecast-day-row {
-  background-color: #ffffff !important;
-  border: 2px solid #000000 !important;
-  border-radius: 0.75rem;
-  padding: 0.875rem;
-  color: #000000 !important;
-  transition: all 0.15s ease;
-}
-
-.forecast-day-row:hover {
-  background-color: #f4f4f5 !important;
-  transform: translateY(-1px);
-}
-
-/* Botões do Gráfico */
+/* Botões do Gráfico de Tendência */
 .bulletin-tab-btn {
   background-color: #ffffff !important;
   color: #000000 !important;
   border: 2px solid #000000 !important;
-  font-size: 0.875rem !important; /* 14px */
+  font-size: 0.875rem !important;
   font-weight: 800 !important;
   border-radius: 0.5rem;
   padding: 0.4rem 0.875rem;
@@ -345,7 +205,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .bulletin-tab-btn:hover:not(.active) {
-  background-color: #e4e4e7 !important;
+  background-color: #f4f4f5 !important;
 }
 
 .bulletin-tab-btn.active {
@@ -378,22 +238,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   stroke: #000000 !important;
 }
 
-.dock-btn:hover {
+.dock-btn:hover, .dock-btn.active {
   background-color: #000000 !important;
   color: #ffffff !important;
 }
 
-.dock-btn:hover svg {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
-.dock-btn.active {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-}
-
-.dock-btn.active svg {
+.dock-btn:hover svg, .dock-btn.active svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
@@ -409,7 +259,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   width: 100%;
   border-collapse: collapse;
   border: 2px solid #000000;
-  font-size: 0.875rem; /* 14px */
+  font-size: 0.875rem;
 }
 
 .theme-table th {
