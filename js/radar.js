@@ -16,21 +16,21 @@ const RJ_RADARS = [
     nome: 'Radar Pico do Couto (REDEMET / DECEA)',
     coords: [-22.463, -43.298],
     alcanceKm: 250,
-    cor: '#3f6593',
+    cor: '#000000',
     detalhes: 'Banda S • 100% de cobertura do Estado do RJ, Região Serrana e Baixada'
   },
   {
     nome: 'Radar Macaé (INEA / Petrobras)',
     coords: [-22.376, -41.786],
     alcanceKm: 120,
-    cor: '#0D9488',
+    cor: '#52525b',
     detalhes: 'Banda X/C • Foco na Bacia dos Rios Macaé e Ostras e Litoral Norte'
   },
   {
     nome: 'Radar Sumaré / Guaratiba (AlertaRio)',
     coords: [-22.951, -43.238],
     alcanceKm: 150,
-    cor: '#7C3AED',
+    cor: '#27272a',
     detalhes: 'Banda C • Região Metropolitana, Baía de Guanabara e Costa Verde'
   }
 ];
@@ -74,10 +74,10 @@ function setupInteractiveControls() {
     btnModeMulti.dataset.bound = 'true';
     btnModeMulti.addEventListener('click', () => {
       currentMode = 'windy';
-      btnModeMulti.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnModeMulti.classList.remove('bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'theme-text-muted', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnModeDoppler.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnModeDoppler.classList.add('theme-text-muted', 'font-medium');
+      btnModeMulti.classList.add('bg-black', 'text-white', 'font-bold', 'border-black');
+      btnModeMulti.classList.remove('text-black', 'theme-text-muted');
+      btnModeDoppler.classList.remove('bg-black', 'text-white');
+      btnModeDoppler.classList.add('text-black', 'font-bold');
 
       if (windyWrapper) windyWrapper.classList.remove('hidden');
       if (leafletWrapper) leafletWrapper.classList.add('hidden');
@@ -89,10 +89,10 @@ function setupInteractiveControls() {
     btnModeDoppler.dataset.bound = 'true';
     btnModeDoppler.addEventListener('click', () => {
       currentMode = 'doppler';
-      btnModeDoppler.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnModeDoppler.classList.remove('bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'theme-text-muted', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnModeMulti.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnModeMulti.classList.add('theme-text-muted', 'font-medium');
+      btnModeDoppler.classList.add('bg-black', 'text-white', 'font-bold', 'border-black');
+      btnModeDoppler.classList.remove('text-black', 'theme-text-muted');
+      btnModeMulti.classList.remove('bg-black', 'text-white');
+      btnModeMulti.classList.add('text-black', 'font-bold');
 
       if (leafletWrapper) leafletWrapper.classList.remove('hidden');
       if (windyWrapper) windyWrapper.classList.add('hidden');
@@ -117,14 +117,12 @@ function setupInteractiveControls() {
 
       // Atualiza botões
       layerButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'bg-slate-900', 'bg-[#1b3554]', 'text-white', 'text-black', 'font-semibold', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-        b.classList.add('theme-text-muted', 'font-medium');
+        b.classList.remove('active', 'bg-black', 'text-white');
+        b.classList.add('text-black', 'font-bold');
       });
-      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btn.classList.remove('theme-text-muted', 'font-medium');
+      btn.classList.add('active', 'bg-black', 'text-white');
+      btn.classList.remove('text-black');
 
-      // Se estiver no modo Doppler e selecionar uma camada que não é radar de chuva,
-      // alterna automaticamente para o visualizador multivariáveis para mostrar com fidelidade
       if (currentMode === 'doppler' && selectedLayer !== 'radar') {
         if (btnModeMulti) btnModeMulti.click();
       } else {
@@ -141,10 +139,10 @@ function setupInteractiveControls() {
     btnScopeRj.dataset.bound = 'true';
     btnScopeRj.addEventListener('click', () => {
       currentScope = 'rj';
-      btnScopeRj.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnScopeRj.classList.remove('bg-slate-900', 'theme-text-muted', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnScopeRo.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'text-white', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnScopeRo.classList.add('theme-text-muted', 'font-medium');
+      btnScopeRj.classList.add('bg-black', 'text-white', 'font-bold');
+      btnScopeRj.classList.remove('text-black');
+      btnScopeRo.classList.remove('bg-black', 'text-white');
+      btnScopeRo.classList.add('text-black', 'font-bold');
 
       if (map) map.setView([RJ_CENTER.lat, RJ_CENTER.lon], RJ_CENTER.zoom);
       updateWindyIframe();
@@ -155,10 +153,10 @@ function setupInteractiveControls() {
     btnScopeRo.dataset.bound = 'true';
     btnScopeRo.addEventListener('click', () => {
       currentScope = 'ro';
-      btnScopeRo.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnScopeRo.classList.remove('bg-slate-900', 'theme-text-muted', 'dark:bg-slate-100', 'dark:text-slate-900');
-      btnScopeRj.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'text-white', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btnScopeRj.classList.add('theme-text-muted', 'font-medium');
+      btnScopeRo.classList.add('bg-black', 'text-white', 'font-bold');
+      btnScopeRo.classList.remove('text-black');
+      btnScopeRj.classList.remove('bg-black', 'text-white');
+      btnScopeRj.classList.add('text-black', 'font-bold');
 
       if (map) map.setView([RO_CENTER.lat, RO_CENTER.lon], RO_CENTER.zoom);
       updateWindyIframe();
@@ -273,8 +271,8 @@ async function initLeafletRadar(containerId = 'radar-map') {
     const customIconRO = L.divIcon({
       className: 'radar-city-marker',
       html: `<div class="relative flex items-center justify-center">
-              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-[#5b86b6] opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-4 w-4 bg-[#1b3554] border-2 border-white dark:border-[#c0e6fd] shadow-lg"></span>
+              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-zinc-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-black border-2 border-white shadow-lg"></span>
              </div>`,
       iconSize: [32, 32],
       iconAnchor: [16, 16]
@@ -285,15 +283,15 @@ async function initLeafletRadar(containerId = 'radar-map') {
       <div class="text-xs space-y-1">
         <strong class="text-sm font-bold block theme-text-main">Rio das Ostras - RJ</strong>
         <p class="theme-text-body">Centro de Monitoramento Hidrológico da Bacia do Rio Jundiá e Costa Marítima.</p>
-        <span class="inline-block bg-[#c0e6fd]/30 text-[#1b3554] dark:bg-[#1b3554]/60 dark:text-[#c0e6fd] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#80aad3]/40">DEFESA CIVIL ATIVA</span>
+        <span class="inline-block bg-black text-white text-[11px] font-bold px-2 py-0.5 rounded border border-black">DEFESA CIVIL ATIVA</span>
       </div>
     `);
 
     // Raio municipal de vigilância de Rio das Ostras (20 km)
     L.circle([RIO_DAS_OSTRAS_COORDS.lat, RIO_DAS_OSTRAS_COORDS.lon], {
-      color: '#3f6593',
-      fillColor: '#80aad3',
-      fillOpacity: 0.12,
+      color: '#000000',
+      fillColor: '#71717a',
+      fillOpacity: 0.1,
       weight: 1.5,
       dashArray: '4, 4',
       radius: 20000

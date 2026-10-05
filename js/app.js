@@ -366,37 +366,37 @@ function renderDashboardUI(meta, rows, weather) {
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
 
       return `
-        <div class="forecast-day-row p-2.5 rounded-xl border border-zinc-800 bg-zinc-900/90 space-y-2 cursor-pointer transition hover:border-zinc-600" onclick="this.querySelector('.pilares-collapse').classList.toggle('hidden')">
-          <div class="flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2 min-w-0">
-              <i data-lucide="${iconName}" class="w-4 h-4 text-white shrink-0"></i>
+        <div class="forecast-day-row p-3 rounded-xl border-2 border-black bg-white space-y-2.5 cursor-pointer transition hover:bg-zinc-100 shadow-sm" onclick="this.querySelector('.pilares-collapse').classList.toggle('hidden')">
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <i data-lucide="${iconName}" class="w-5 h-5 text-black shrink-0"></i>
               <div class="min-w-0">
-                <span class="font-bold text-white block leading-tight truncate">${rotuloCurto} (${nomeDiaCurto})</span>
-                <span class="text-[10px] text-zinc-300 block truncate">${condTxt} • ${chuvaVal}</span>
+                <span class="font-black text-black text-sm sm:text-base block leading-tight truncate">${rotuloCurto} (${nomeDiaCurto})</span>
+                <span class="text-xs sm:text-sm font-bold text-black block truncate">${condTxt} • ${chuvaVal}</span>
               </div>
             </div>
             <div class="text-right shrink-0 pl-2">
-              <span class="font-bold font-mono text-white text-xs">${tempVal}</span>
+              <span class="font-black font-mono text-black text-sm sm:text-base">${tempVal}</span>
             </div>
           </div>
 
-          <!-- Acordeão com os 6 Pilares Oficiais -->
-          <div class="pilares-collapse hidden pt-2 border-t border-zinc-800 grid grid-cols-2 gap-1.5 text-[10px]">
-            <div class="p-1.5 rounded bg-black border border-zinc-700">
-              <span class="text-zinc-400 font-bold block uppercase text-[8px]">Céu</span>
-              <span class="text-white font-medium truncate block">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
+          <!-- Acordeão com os Pilares Oficiais (Fundo Branco, Bordas Pretas, Letras Grandes) -->
+          <div class="pilares-collapse hidden pt-2.5 border-t-2 border-black grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2 rounded-lg bg-white border-2 border-black">
+              <span class="text-black font-black block uppercase text-[10px] tracking-wider">Céu</span>
+              <span class="text-black font-bold text-xs truncate block">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
             </div>
-            <div class="p-1.5 rounded bg-black border border-zinc-700">
-              <span class="text-zinc-400 font-bold block uppercase text-[8px]">Chuva</span>
-              <span class="text-white font-medium truncate block">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
+            <div class="p-2 rounded-lg bg-white border-2 border-black">
+              <span class="text-black font-black block uppercase text-[10px] tracking-wider">Chuva</span>
+              <span class="text-black font-bold text-xs truncate block">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
             </div>
-            <div class="p-1.5 rounded bg-black border border-zinc-700">
-              <span class="text-zinc-400 font-bold block uppercase text-[8px]">Vento</span>
-              <span class="text-white font-medium truncate block">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
+            <div class="p-2 rounded-lg bg-white border-2 border-black">
+              <span class="text-black font-black block uppercase text-[10px] tracking-wider">Vento</span>
+              <span class="text-black font-bold text-xs truncate block">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
             </div>
-            <div class="p-1.5 rounded bg-black border border-zinc-700">
-              <span class="text-zinc-400 font-bold block uppercase text-[8px]">Mar</span>
-              <span class="text-white font-medium truncate block">${cleanBulletinText(d.pilares?.mar?.val || '—')}</span>
+            <div class="p-2 rounded-lg bg-white border-2 border-black">
+              <span class="text-black font-black block uppercase text-[10px] tracking-wider">Mar</span>
+              <span class="text-black font-bold text-xs truncate block">${cleanBulletinText(d.pilares?.mar?.val || '—')}</span>
             </div>
           </div>
         </div>
@@ -431,13 +431,13 @@ function renderChuvaTurnosBars(rows) {
     const perc = Math.min(Math.round((val / maxChuva) * 100), 100);
 
     return `
-      <div class="space-y-0.5">
-        <div class="flex justify-between text-[11px]">
-          <span class="font-medium theme-text-main">${r.turno}</span>
-          <span class="font-mono font-bold theme-text-dim">${val.toFixed(1)} mm</span>
+      <div class="space-y-1">
+        <div class="flex justify-between text-xs sm:text-sm font-bold">
+          <span class="text-black">${r.turno}</span>
+          <span class="font-mono font-black text-black">${val.toFixed(1)} mm</span>
         </div>
-        <div class="w-full h-1.5 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
-          <div class="h-full rounded-full bg-black dark:bg-white transition-all" style="width: ${perc}%;"></div>
+        <div class="w-full h-2.5 rounded-full bg-zinc-200 border border-black overflow-hidden">
+          <div class="h-full rounded-full bg-black transition-all" style="width: ${perc}%;"></div>
         </div>
       </div>
     `;
@@ -466,14 +466,14 @@ function renderJundiaTelemetry(stations) {
 
   if (gridEl) {
     gridEl.innerHTML = stations.slice(0, 6).map(s => `
-      <div class="p-2 rounded bg-white dark:bg-zinc-900 border theme-border space-y-1">
-        <div class="flex justify-between items-center text-[11px] font-bold theme-text-main">
+      <div class="p-2.5 rounded-xl bg-white border-2 border-black space-y-1">
+        <div class="flex justify-between items-center text-xs sm:text-sm font-black text-black">
           <span class="truncate">${s.nome_estacao}</span>
           <span class="font-mono">${s.nivel_rio || '—'} m</span>
         </div>
-        <div class="flex justify-between text-[10px] theme-text-muted">
+        <div class="flex justify-between text-xs font-bold text-black">
           <span>${s.curso_dagua || s.municipio}</span>
-          <span class="font-semibold theme-text-dim">${s.status || 'Normal'}</span>
+          <span class="font-black">${s.status || 'Normal'}</span>
         </div>
       </div>
     `).join('');
@@ -510,34 +510,34 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
       const dRows = grouped[dia];
       const dataIso = dRows[0]?.data_iso || '';
       return `
-        <div class="border theme-border rounded-xl overflow-hidden">
-          <div class="px-3.5 py-2 bg-black text-white font-bold text-xs flex justify-between">
+        <div class="border-2 border-black rounded-xl overflow-hidden bg-white">
+          <div class="px-4 py-2.5 bg-black text-white font-black text-sm flex justify-between">
             <span>${dia.toUpperCase()} (${formatIsoDate(dataIso)})</span>
-            <span class="font-mono text-[11px]">4 Turnos</span>
+            <span class="font-mono text-xs font-bold">4 Turnos</span>
           </div>
           <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-zinc-100 dark:bg-zinc-900 border-b theme-border text-[10px] uppercase font-bold text-black dark:text-white">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-zinc-100 border-b-2 border-black text-xs uppercase font-black text-black">
                 <tr>
-                  <th class="p-2">Turno</th>
-                  <th class="p-2">Céu</th>
-                  <th class="p-2">Temp</th>
-                  <th class="p-2">Umid</th>
-                  <th class="p-2">Chuva</th>
-                  <th class="p-2">Vento</th>
-                  <th class="p-2">Mar</th>
+                  <th class="p-2.5">Turno</th>
+                  <th class="p-2.5">Céu</th>
+                  <th class="p-2.5">Temp</th>
+                  <th class="p-2.5">Umid</th>
+                  <th class="p-2.5">Chuva</th>
+                  <th class="p-2.5">Vento</th>
+                  <th class="p-2.5">Mar</th>
                 </tr>
               </thead>
-              <tbody class="divide-y theme-border">
+              <tbody class="divide-y-2 border-black">
                 ${dRows.map(r => `
-                  <tr class="hover:bg-zinc-100 dark:hover:bg-zinc-800">
-                    <td class="p-2 font-bold theme-text-main">${r.turno}</td>
-                    <td class="p-2 theme-text-muted">${cleanBulletinText(r.tempo_desc || '—')}</td>
-                    <td class="p-2 font-mono font-bold">${r.temp_min}° / ${r.temp_max}°C</td>
-                    <td class="p-2 font-mono">${r.umid_min}% - ${r.umid_max}%</td>
-                    <td class="p-2 font-mono font-bold theme-text-dim">${r.chuva_media} mm</td>
-                    <td class="p-2 font-mono text-[11px]">${r.vento_dir} ${r.vento_vel_media} km/h</td>
-                    <td class="p-2 text-[11px] theme-text-muted">${r.mar_ondas || '1.5 m'}</td>
+                  <tr class="hover:bg-zinc-100 font-medium text-black">
+                    <td class="p-2.5 font-black text-black">${r.turno}</td>
+                    <td class="p-2.5 text-black">${cleanBulletinText(r.tempo_desc || '—')}</td>
+                    <td class="p-2.5 font-mono font-black text-black">${r.temp_min}° / ${r.temp_max}°C</td>
+                    <td class="p-2.5 font-mono font-bold text-black">${r.umid_min}% - ${r.umid_max}%</td>
+                    <td class="p-2.5 font-mono font-black text-black">${r.chuva_media} mm</td>
+                    <td class="p-2.5 font-mono text-xs font-bold text-black">${r.vento_dir} ${r.vento_vel_media} km/h</td>
+                    <td class="p-2.5 text-xs font-bold text-black">${r.mar_ondas || '1.5 m'}</td>
                   </tr>
                 `).join('')}
               </tbody>
@@ -552,12 +552,12 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
   const planconList = document.getElementById('modal-plancon-list');
   if (planconList && meta?.impactos_bairros && Array.isArray(meta.impactos_bairros)) {
     planconList.innerHTML = meta.impactos_bairros.map(b => `
-      <div class="p-2.5 rounded border theme-border space-y-1">
-        <div class="flex justify-between items-center font-bold theme-text-main">
+      <div class="p-3 rounded-xl border-2 border-black bg-white space-y-1">
+        <div class="flex justify-between items-center font-black text-black text-sm">
           <span>${b.setor}</span>
-          <span class="text-[9px] px-1.5 py-0.5 rounded bg-black text-white border border-zinc-700">Monitoramento</span>
+          <span class="text-xs px-2 py-0.5 rounded font-black uppercase bg-black text-white">Monitoramento</span>
         </div>
-        <p class="theme-text-muted text-[11px] leading-snug">${cleanBulletinText(b.impactos)}</p>
+        <p class="text-black text-xs sm:text-sm font-medium leading-snug">${cleanBulletinText(b.impactos)}</p>
       </div>
     `).join('');
   }
@@ -569,12 +569,12 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
     if (inmetAlerts && inmetAlerts.length > 0) {
       inmetAlerts.forEach(a => {
         html += `
-          <div class="p-3 rounded-lg border border-zinc-700 bg-zinc-900 text-white space-y-1.5">
+          <div class="p-3.5 rounded-xl border-2 border-black bg-white text-black space-y-1.5">
             <div class="flex items-center justify-between">
-              <span class="font-bold text-xs text-white uppercase">${a.descricao || 'Alerta Meteorológico'}</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-black text-white border border-zinc-600">INMET</span>
+              <span class="font-black text-sm sm:text-base text-black uppercase">${a.descricao || 'Alerta Meteorológico'}</span>
+              <span class="text-xs px-2 py-0.5 rounded font-black uppercase bg-black text-white">INMET</span>
             </div>
-            <p class="text-[11px] text-zinc-300">${cleanBulletinText(a.instrucoes?.[0] || 'Acompanhe as atualizações da Defesa Civil.')}</p>
+            <p class="text-xs sm:text-sm text-black font-medium leading-snug">${cleanBulletinText(a.instrucoes?.[0] || 'Acompanhe as atualizações da Defesa Civil.')}</p>
           </div>
         `;
       });
@@ -583,23 +583,24 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
     if (marinhaAvisos && marinhaAvisos.avisos) {
       marinhaAvisos.avisos.forEach(m => {
         html += `
-          <div class="p-3 rounded-lg border border-zinc-700 bg-zinc-900 text-white space-y-1.5">
+          <div class="p-3.5 rounded-xl border-2 border-black bg-white text-black space-y-1.5">
             <div class="flex items-center justify-between">
-              <span class="font-bold text-xs text-white uppercase">${m.titulo || 'Aviso Marítimo'}</span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-black text-white border border-zinc-600">Marinha</span>
+              <span class="font-black text-sm sm:text-base text-black uppercase">${m.titulo || 'Aviso Marítimo'}</span>
+              <span class="text-xs px-2 py-0.5 rounded font-black uppercase bg-black text-white">Marinha</span>
             </div>
-            <p class="text-[11px] text-zinc-300">${cleanBulletinText(m.texto || 'Condições de mar agitado e vento forte na costa.')}</p>
+            <p class="text-xs sm:text-sm text-black font-medium leading-snug">${cleanBulletinText(m.texto || 'Condições de mar agitado e vento forte na costa.')}</p>
           </div>
         `;
       });
     }
 
     if (!html) {
-      html = '<div class="p-4 text-center theme-text-muted">Nenhum aviso meteorológico severo vigente para Rio das Ostras no momento.</div>';
+      html = '<div class="p-4 text-center font-bold text-black text-sm">Nenhum aviso meteorológico severo vigente para Rio das Ostras no momento.</div>';
     }
 
     avisosList.innerHTML = html;
   }
+}
 }
 
 /**
@@ -655,7 +656,7 @@ function setupActionButtons() {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=32').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=34').catch(() => {});
   }
 }
 
