@@ -679,57 +679,10 @@ function renderJundiaTelemetry(stations) {
   const jundia = stations.find(s => s.eh_rio_das_ostras || s.nome_estacao.toLowerCase().includes('jundi') || s.curso_dagua.toLowerCase().includes('jundi'));
 
   if (jundia) {
-    const levelEl = document.getElementById('jundia-current-level');
-    const readingEl = document.getElementById('jundia-last-reading');
-    const percentEl = document.getElementById('jundia-percentage');
-    const progressEl = document.getElementById('jundia-progress-bar');
-    const statusBadge = document.getElementById('jundia-status-badge');
-
-    const rain1h = document.getElementById('jundia-rain-1h');
-    const rain4h = document.getElementById('jundia-rain-4h');
-    const rain6h = document.getElementById('jundia-rain-6h');
-    const rain12h = document.getElementById('jundia-rain-12h');
-    const rain24h = document.getElementById('jundia-rain-24h');
-    const rain36h = document.getElementById('jundia-rain-36h');
-    const rain48h = document.getElementById('jundia-rain-48h');
-    const rain96h = document.getElementById('jundia-rain-96h');
-    const rain30d = document.getElementById('jundia-rain-30d');
-
     const kpiJundia = document.getElementById('kpi-jundia-val');
     if (kpiJundia && jundia.nivel_rio) {
       kpiJundia.textContent = `${jundia.nivel_rio} m`;
     }
-
-    if (levelEl) levelEl.textContent = `${jundia.nivel_rio} m`;
-    if (readingEl) readingEl.textContent = `Última leitura: ${jundia.ultima_leitura || 'Hoje'}`;
-    if (percentEl) percentEl.textContent = `${jundia.porcentagem_calha}% da Cota de Transbordo (${jundia.cota_transborda || '2.84 m'})`;
-    
-    if (progressEl) {
-      progressEl.style.width = `${Math.min(100, Math.max(5, jundia.porcentagem_calha))}%`;
-    }
-
-    if (statusBadge) {
-      statusBadge.textContent = jundia.status || 'ALERTA MÁXIMO';
-      if (jundia.status === 'TRANSBORDAMENTO' || jundia.status === 'ALERTA MÁXIMO') {
-        statusBadge.className = 'badge-danger-theme';
-      } else if (jundia.status === 'ALERTA') {
-        statusBadge.className = 'badge-danger-theme';
-      } else if (jundia.status === 'ATENÇÃO') {
-        statusBadge.className = 'badge-warning-theme';
-      } else {
-        statusBadge.className = 'badge-neutral-theme';
-      }
-    }
-
-    if (rain1h) rain1h.textContent = `${jundia.chuva_1h || '0.0'} mm`;
-    if (rain4h) rain4h.textContent = `${jundia.chuva_4h || '0.0'} mm`;
-    if (rain6h) rain6h.textContent = `${jundia.chuva_6h || '0.0'} mm`;
-    if (rain12h) rain12h.textContent = `${jundia.chuva_12h || '0.0'} mm`;
-    if (rain24h) rain24h.textContent = `${jundia.chuva_24h || '0.0'} mm`;
-    if (rain36h) rain36h.textContent = `${jundia.chuva_36h || '0.0'} mm`;
-    if (rain48h) rain48h.textContent = `${jundia.chuva_48h || '0.0'} mm`;
-    if (rain96h) rain96h.textContent = `${jundia.chuva_96h || '0.0'} mm`;
-    if (rain30d) rain30d.textContent = `${jundia.chuva_30d || '0.0'} mm`;
   }
 
   // Renderiza TODAS as estações monitoradas da Bacia Hidrográfica (incluindo Rio das Ostras em destaque prioritário)
@@ -768,7 +721,7 @@ function renderJundiaTelemetry(stations) {
       const n48 = parseFloat(c48);
 
       return `
-        <div class="theme-tile p-3.5 space-y-2.5 transition rounded-lg ${isOstras ? 'border-2 border-red-500 shadow-md ring-2 ring-red-500/20' : 'border theme-border hover:border-[#1E528E]'}">
+        <div class="theme-tile p-3.5 space-y-2.5 transition rounded-lg ${isOstras ? 'border-2 border-red-500 shadow-md ring-2 ring-red-500/20' : 'border theme-border hover:border-[#5b86b6] dark:hover:border-[#80aad3]'}">
           <div class="flex items-center justify-between gap-2 border-b theme-tile-border pb-1.5">
             <div class="flex items-center gap-1.5 flex-wrap">
               <span class="font-bold theme-text-main text-xs">${cleanBulletinText(st.nome_estacao)} (${cleanBulletinText(st.municipio)})</span>

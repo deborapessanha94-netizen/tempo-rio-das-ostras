@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=26">
+  <link rel="stylesheet" href="css/styles.css?v=27">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -1448,88 +1448,11 @@
 
       </div>
 
-      <!-- Widget Detalhado da Régua do Rio Jundiá -->
-      <div class="theme-card p-4 sm:p-5 space-y-4">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b theme-border pb-2">
-          <div>
-            <span class="text-[10px] font-bold uppercase theme-text-dim tracking-wider">REDE TELEMÉTRICA INEA • ESTAÇÃO 2241036</span>
-            <h3 class="text-sm sm:text-base font-bold theme-text-main">Monitoramento Hidrológico — Rio Jundiá (Rio das Ostras)</h3>
-          </div>
-          <span id="jundia-status-badge" class="badge-danger-theme">
-            ALERTA MÁXIMO
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-          <!-- Nível Atual -->
-          <div class="theme-tile p-4 text-center md:text-left space-y-1">
-            <span class="text-xs theme-text-dim block">Cota Atual Medida</span>
-            <span id="jundia-current-level" class="text-3xl sm:text-4xl font-extrabold theme-text-main font-mono">2,40 m</span>
-            <span id="jundia-last-reading" class="text-[11px] theme-text-muted block">Última leitura: Hoje</span>
-          </div>
-
-          <!-- Barra da Calha -->
-          <div class="md:col-span-2 space-y-2">
-            <div class="flex justify-between text-xs theme-text-muted">
-              <span>Capacidade da Calha Extravasada</span>
-              <span id="jundia-percentage" class="font-bold theme-text-main font-mono">85% da Cota de Transbordo (2,84 m)</span>
-            </div>
-            <div class="w-full bg-slate-200 dark:bg-slate-800 rounded-full h-3 overflow-hidden border theme-border">
-              <div id="jundia-progress-bar" class="bg-rose-600 h-3 rounded-full transition-all duration-500" style="width: 85%;"></div>
-            </div>
-            <div class="flex justify-between text-[10px] theme-text-dim">
-              <span>Atenção: 1,99 m</span>
-              <span>Alerta: 2,27 m</span>
-              <span class="text-rose-600 font-bold">Transbordo Máximo: 2,84 m</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chuva Telemétrica Acumulada no Sensor Jundiá -->
-        <div class="pt-2 border-t theme-border">
-          <span class="text-xs font-bold theme-text-main block mb-2">Acumulados Pluviométricos Registrados no Pluviômetro do Rio Jundiá (INEA 2241036):</span>
-          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 text-center text-xs">
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 1h</span>
-              <span id="jundia-rain-1h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 4h</span>
-              <span id="jundia-rain-4h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 6h</span>
-              <span id="jundia-rain-6h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 12h</span>
-              <span id="jundia-rain-12h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 24h</span>
-              <span id="jundia-rain-24h" class="font-bold text-rose-600 dark:text-rose-400 font-mono">108.2 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 36h</span>
-              <span id="jundia-rain-36h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 48h</span>
-              <span id="jundia-rain-48h" class="font-bold theme-text-main font-mono">0.0 mm</span>
-            </div>
-            <div class="theme-tile p-2">
-              <span class="text-[10px] theme-text-dim block">Chuva 96h</span>
-              <span id="jundia-rain-96h" class="font-bold theme-text-main font-mono">112.4 mm</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Outras Estações da Bacia Macaé e Rio das Ostras -->
+      <!-- Estações da Bacia Hidrográfica (Rio das Ostras e Região) -->
       <div class="theme-card p-4 sm:p-5 space-y-3">
         <h4 class="text-xs font-bold theme-text-main uppercase tracking-wider flex items-center gap-2 border-b theme-border pb-2">
-          <i data-lucide="activity" class="w-4 h-4 text-slate-500 dark:text-slate-400"></i>
-          <span>Rede Telemétrica Regional — Todas as Estações da Bacia Hidrográfica (Rio das Ostras, Macaé e Nova Friburgo — INEA)</span>
+          <i data-lucide="activity" class="w-4 h-4 text-[#3f6593] dark:text-[#80aad3]"></i>
+          <span>Rede Telemétrica Regional — Estações de Rios e Chuva (Rio das Ostras, Macaé e Nova Friburgo — INEA)</span>
         </h4>
         <div id="other-stations-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <!-- Preenchido via app.js -->
@@ -1602,6 +1525,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=26"></script>
+  <script type="module" src="js/app.js?v=27"></script>
 </body>
 </html>
