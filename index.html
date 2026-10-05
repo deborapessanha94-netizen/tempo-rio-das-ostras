@@ -11,10 +11,10 @@
   
   <!-- Progressive Web App (PWA) 24/7 -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#FFFFFF">
+  <meta name="theme-color" content="#000f22">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Tempo RO">
   <link rel="apple-touch-icon" href="img/icon-192.png">
 
@@ -44,7 +44,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Institucionais Padrão Boletim Oficial / Cemaden / Defesa Civil -->
-  <link rel="stylesheet" href="css/styles.css?v=27">
+  <link rel="stylesheet" href="css/styles.css?v=28">
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -55,16 +55,13 @@
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
-<body class="antialiased selection:bg-[#1b3554] selection:text-white pb-16">
+<body class="antialiased selection:bg-[#5b86b6] selection:text-white pb-16">
 
-  <!-- ========================================================================= -->
-  <!-- TOPO INSTITUCIONAL (PADRÃO GOVERNAMENTAL & CONTROLE DE TEMA)              -->
-  <!-- ========================================================================= -->
   <!-- ========================================================================= -->
   <!-- TOPO INSTITUCIONAL E NAVEGAÇÃO EM ABAS (STICKY UNIFICADO - ACOMPANHA O SCROLL) -->
   <!-- ========================================================================= -->
-  <header id="site-header" class="sticky top-0 z-50 transition-colors shadow-xs" style="background-color: var(--header-bg); border-bottom: 1px solid var(--nav-border);">
-    <div id="header-top-bar" class="px-3 sm:px-6 py-2 transition-all border-b" style="border-color: var(--header-border);">
+  <header id="site-header" class="sticky top-0 z-50 transition-colors">
+    <div id="header-top-bar" class="px-3 sm:px-6 py-2 transition-all border-b border-[#3f6593]/35">
       <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2.5 sm:gap-3">
         
         <!-- Marca Oficial Única: TEMPO em Rio das Ostras -->
@@ -72,10 +69,10 @@
           <img src="img/logo.png" alt="TEMPO em Rio das Ostras" class="h-9 w-9 sm:h-11 sm:w-11 object-contain shrink-0 transition-all">
           <div class="min-w-0">
             <div class="flex items-center gap-2">
-              <h1 class="text-sm sm:text-base md:text-lg font-bold tracking-tight theme-header-title">TEMPO em Rio das Ostras</h1>
-              <span class="text-[9px] px-1.5 py-0.5 rounded font-semibold uppercase theme-header-badge">24H</span>
+              <h1 class="text-sm sm:text-base md:text-lg font-bold tracking-tight text-white">TEMPO em Rio das Ostras</h1>
+              <span class="text-[9px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#c0e6fd] text-[#000f22] border border-[#80aad3]">24H</span>
             </div>
-            <p class="text-[10px] sm:text-[11px] theme-header-sub truncate">Sistema de Monitoramento Meteorológico & Alerta Hidrológico • Defesa Civil</p>
+            <p class="text-[10px] sm:text-[11px] text-[#80aad3] truncate">Sistema de Monitoramento Meteorológico & Alerta Hidrológico • Defesa Civil</p>
           </div>
         </div>
 
@@ -89,20 +86,20 @@
               <span>Modo Claro</span>
             </button>
             <button id="btn-theme-dark" class="theme-switch-btn" title="Ativar Modo Escuro">
-              <i data-lucide="moon" class="w-3.5 h-3.5 text-slate-400"></i>
+              <i data-lucide="moon" class="w-3.5 h-3.5 text-[#80aad3]"></i>
               <span>Modo Escuro</span>
             </button>
           </div>
 
           <!-- Botão Baixar Informativo População (PDF) -->
-          <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="btn-cemaden-outline px-2 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Informativo à População">
-            <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-500"></i>
+          <a href="docs/informativo_populacao.pdf" target="_blank" download="Informativo_Populacao_Rio_das_Ostras.pdf" class="btn-header-action px-2 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Informativo à População">
+            <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#80aad3]"></i>
             <span class="hidden sm:inline">Informativo</span> <span>(PDF)</span>
           </a>
 
           <!-- Botão Baixar Boletim Técnico (PDF) -->
-          <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-cemaden-outline px-2 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Boletim Meteorológico Operacional Completo">
-            <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-slate-500"></i>
+          <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-header-action px-2 py-1.5 flex items-center gap-1.5" title="Baixar PDF do Boletim Meteorológico Operacional Completo">
+            <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-[#80aad3]"></i>
             <span class="hidden sm:inline">Boletim</span> <span>(PDF)</span>
           </a>
 
@@ -113,24 +110,24 @@
           </a>
 
           <!-- Botão Instalar App -->
-          <button id="btn-install-desktop" class="btn-cemaden-primary px-2.5 py-1.5 flex items-center gap-1.5 cursor-pointer text-xs" title="Instalar aplicativo no celular ou computador">
+          <button id="btn-install-desktop" class="btn-header-install px-2.5 py-1.5 flex items-center gap-1.5 cursor-pointer text-xs" title="Instalar aplicativo no celular ou computador">
             <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
             <span class="hidden sm:inline">Instalar App</span>
           </button>
 
           <!-- Botão Imprimir -->
-          <button id="btn-print-bulletin" class="btn-cemaden-outline p-1.5 sm:px-2 hidden sm:flex items-center gap-1 cursor-pointer" title="Imprimir versão formatada em A4">
+          <button id="btn-print-bulletin" class="btn-header-action p-1.5 sm:px-2 hidden sm:flex items-center gap-1 cursor-pointer" title="Imprimir versão formatada em A4">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i>
           </button>
 
           <!-- Botão Atualizar -->
-          <button id="btn-refresh-desktop" class="btn-cemaden-outline p-1.5 sm:px-2 flex items-center gap-1 cursor-pointer" title="Atualizar dados em tempo real">
+          <button id="btn-refresh-desktop" class="btn-header-action p-1.5 sm:px-2 flex items-center gap-1 cursor-pointer" title="Atualizar dados em tempo real">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
           </button>
 
           <!-- Indicador Sóbrio 24/7 -->
-          <div id="status-live-indicator" class="hidden sm:flex items-center gap-1.5 text-xs text-[#1b3554] dark:text-[#c0e6fd] bg-[#c0e6fd]/30 dark:bg-[#1b3554]/50 border border-[#80aad3]/30 dark:border-[#3f6593]/40 px-2 py-1 rounded" title="Sincronização 24/7 ativa">
-            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div id="status-live-indicator" class="hidden sm:flex items-center gap-1.5 text-xs text-[#c0e6fd] bg-[#1b3554]/80 border border-[#5b86b6]/40 px-2 py-1 rounded" title="Sincronização 24/7 ativa">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
             <span class="font-bold text-[11px] font-mono">24/7</span>
           </div>
 
@@ -140,24 +137,24 @@
     </div>
 
     <!-- NAVEGAÇÃO PRINCIPAL EM ABAS (ACOMPANHA SEMPRE A PÁGINA AO DESCER) -->
-    <nav id="main-nav-tabs" class="px-3 sm:px-6 py-1.5 transition-colors" style="background-color: var(--nav-bg);">
+    <nav id="main-nav-tabs" class="px-3 sm:px-6 py-1.5 transition-colors">
       <div class="max-w-7xl mx-auto flex items-center gap-1.5 sm:gap-2 overflow-x-auto text-xs sm:text-sm font-medium scrollbar-none">
-        <button class="nav-tab-btn active px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap bg-[#1b3554] text-white font-medium shadow-xs dark:bg-[#c0e6fd] dark:text-[#000f22]" data-tab="tab-populacao">
+        <button class="nav-tab-btn active px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap" data-tab="tab-populacao">
           <i data-lucide="clipboard-list" class="w-4 h-4"></i>
           <span>Informativo à População</span>
         </button>
 
-        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap theme-text-muted hover:bg-[#c0e6fd]/20 dark:hover:bg-[#1b3554]/40" data-tab="tab-tecnico">
+        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap" data-tab="tab-tecnico">
           <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
           <span>Boletim Técnico Operacional</span>
         </button>
 
-        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap theme-text-muted hover:bg-[#c0e6fd]/20 dark:hover:bg-[#1b3554]/40" data-tab="tab-graficos">
+        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap" data-tab="tab-graficos">
           <i data-lucide="trending-up" class="w-4 h-4"></i>
           <span>Gráficos de Tendência</span>
         </button>
 
-        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap theme-text-muted hover:bg-[#c0e6fd]/20 dark:hover:bg-[#1b3554]/40" data-tab="tab-aovivo">
+        <button class="nav-tab-btn px-3.5 py-2 rounded-md flex items-center gap-2 transition whitespace-nowrap" data-tab="tab-aovivo">
           <i data-lucide="radar" class="w-4 h-4"></i>
           <span>Radar e Telemetria Ao Vivo</span>
         </button>
@@ -1525,6 +1522,6 @@
   </div>
 
   <!-- Scripts da Aplicação -->
-  <script type="module" src="js/app.js?v=27"></script>
+  <script type="module" src="js/app.js?v=28"></script>
 </body>
 </html>

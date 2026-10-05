@@ -15,54 +15,60 @@
 
 :root, html.theme-light {
   color-scheme: light;
-  --bg-page: #f5f9fd;              /* Fundo claro aerado com toque sutil de gelo */
-  --header-bg: #FFFFFF;            /* Header branco plano integrado */
-  --header-border: rgba(128, 170, 211, 0.28); /* Borda suave baseada em #80aad3 */
-  --header-text: #000f22;          /* #000f22 - Título principal */
-  --header-sub: #3f6593;           /* #3f6593 - Subtítulo */
-  --header-badge-bg: rgba(192, 230, 253, 0.35); /* #c0e6fd translúcido */
-  --header-badge-text: #1b3554;    /* #1b3554 */
-  --header-badge-border: rgba(128, 170, 211, 0.45);
+  --bg-page: #eef6fc;
+  --bg-page-gradient: linear-gradient(180deg, #d8ecf8 0%, #eaf4fb 260px, #f2f8fc 100%);
+  --header-bg: linear-gradient(135deg, #000f22 0%, #1b3554 100%);
+  --header-border: rgba(91, 134, 182, 0.35);
+  --header-text: #FFFFFF;
+  --header-sub: #80aad3;
+  --header-badge-bg: #c0e6fd;
+  --header-badge-text: #000f22;
+  --header-badge-border: #80aad3;
 
-  --nav-bg: #FFFFFF;
-  --nav-border: rgba(128, 170, 211, 0.25);
-  --nav-btn-text: #3f6593;         /* #3f6593 */
-  --nav-btn-hover: rgba(192, 230, 253, 0.25);
-  --nav-btn-active-bg: #1b3554;    /* #1b3554 Azul Marinho Sóbrio */
-  --nav-btn-active-text: #FFFFFF;  /* Branco */
+  --nav-bg: #000f22;
+  --nav-border: rgba(91, 134, 182, 0.25);
+  --nav-btn-text: #c0e6fd;
+  --nav-btn-hover: rgba(63, 101, 147, 0.45);
+  --nav-btn-active-bg: #c0e6fd;
+  --nav-btn-active-text: #000f22;
 
-  --card-bg: #FFFFFF;              /* Branco puro minimalista */
-  --card-border: rgba(128, 170, 211, 0.3); /* Borda suave #80aad3 */
-  --card-hover-border: #80aad3;
-  --card-shadow: 0 1px 3px 0 rgba(0, 15, 34, 0.04), 0 1px 2px -1px rgba(0, 15, 34, 0.04);
+  --card-bg: #FFFFFF;
+  --card-border: rgba(91, 134, 182, 0.32);
+  --card-hover-border: #5b86b6;
+  --card-shadow: 0 2px 8px -2px rgba(0, 15, 34, 0.08);
 
-  --tile-bg: rgba(192, 230, 253, 0.14); /* Fundo suave com tom gelo */
-  --tile-border: rgba(128, 170, 211, 0.28);
+  --tile-bg: rgba(192, 230, 253, 0.22);
+  --tile-border: rgba(128, 170, 211, 0.38);
 
-  --text-main: #000f22;            /* #000f22 - Preto-azulado nítido */
-  --text-body: #1b3554;            /* #1b3554 - Texto corrido elegante */
-  --text-muted: #3f6593;           /* #3f6593 - Legendas e labels */
-  --text-dim: #5b86b6;             /* #5b86b6 - Indicadores secundários */
+  --text-main: #000f22;
+  --text-body: #1b3554;
+  --text-muted: #3f6593;
+  --text-dim: #5b86b6;
 
   --btn-outline-bg: #FFFFFF;
-  --btn-outline-border: rgba(128, 170, 211, 0.5);
-  --btn-outline-text: #1b3554;     /* #1b3554 */
-  --btn-outline-hover-bg: rgba(192, 230, 253, 0.25);
+  --btn-outline-border: rgba(91, 134, 182, 0.45);
+  --btn-outline-text: #1b3554;
+  --btn-outline-hover-bg: #c0e6fd;
   --btn-outline-hover-text: #000f22;
 
-  --table-head-bg: rgba(192, 230, 253, 0.25);
-  --table-head-text: #1b3554;
-  --table-row-hover: rgba(192, 230, 253, 0.15);
+  --footer-bg: #000f22;
+  --footer-border: #1b3554;
+  --footer-text-main: #FFFFFF;
+  --footer-text-muted: #80aad3;
+
+  --table-head-bg: rgba(192, 230, 253, 0.35);
+  --table-head-text: #000f22;
+  --table-row-hover: rgba(192, 230, 253, 0.2);
   --table-row-alt: #FFFFFF;
-  --table-border: rgba(128, 170, 211, 0.25);
+  --table-border: rgba(91, 134, 182, 0.3);
   --table-cell-text: #000f22;
 
   --alert-bg: #FFFFFF;
-  --alert-border: rgba(128, 170, 211, 0.35);
+  --alert-border: rgba(91, 134, 182, 0.4);
   --alert-title: #000f22;
   --alert-text: #1b3554;
 
-  /* Badges Minimalistas Flat Pastel */
+  /* Badges */
   --badge-danger-bg: #FEF2F2;
   --badge-danger-text: #B91C1C;
   --badge-danger-border: #FECACA;
@@ -71,13 +77,13 @@
   --badge-warning-text: #B45309;
   --badge-warning-border: #FDE68A;
 
-  --badge-info-bg: rgba(192, 230, 253, 0.4);
-  --badge-info-text: #1b3554;
-  --badge-info-border: rgba(128, 170, 211, 0.5);
+  --badge-info-bg: rgba(192, 230, 253, 0.45);
+  --badge-info-text: #000f22;
+  --badge-info-border: #80aad3;
 
-  --badge-neutral-bg: rgba(192, 230, 253, 0.2);
+  --badge-neutral-bg: rgba(192, 230, 253, 0.25);
   --badge-neutral-text: #3f6593;
-  --badge-neutral-border: rgba(128, 170, 211, 0.3);
+  --badge-neutral-border: rgba(91, 134, 182, 0.35);
 
   --accent-primary: #1b3554;
   --accent-blue: #5b86b6;
@@ -87,34 +93,35 @@
 
 html.theme-dark, html.dark {
   color-scheme: dark;
-  --bg-page: #000f22;              /* #000f22 - Fundo escuro oficial da paleta */
-  --header-bg: #091626;            /* Superfície escura derivada */
-  --header-border: #1b3554;        /* #1b3554 */
+  --bg-page: #000f22;
+  --bg-page-gradient: linear-gradient(180deg, #000f22 0%, #081628 320px, #000f22 100%);
+  --header-bg: linear-gradient(135deg, #000f22 0%, #0a1b2d 100%);
+  --header-border: #1b3554;
   --header-text: #FFFFFF;
-  --header-sub: #80aad3;           /* #80aad3 */
-  --header-badge-bg: #1b3554;      /* #1b3554 */
-  --header-badge-text: #c0e6fd;    /* #c0e6fd */
-  --header-badge-border: #3f6593;  /* #3f6593 */
+  --header-sub: #80aad3;
+  --header-badge-bg: #1b3554;
+  --header-badge-text: #c0e6fd;
+  --header-badge-border: #3f6593;
 
-  --nav-bg: #091626;
+  --nav-bg: #000f22;
   --nav-border: #1b3554;
-  --nav-btn-text: #80aad3;
+  --nav-btn-text: #c0e6fd;
   --nav-btn-hover: #1b3554;
-  --nav-btn-active-bg: #c0e6fd;    /* #c0e6fd Destaque no escuro */
-  --nav-btn-active-text: #000f22;  /* #000f22 Texto no escuro */
+  --nav-btn-active-bg: #c0e6fd;
+  --nav-btn-active-text: #000f22;
 
-  --card-bg: #091626;              /* Cartão azul profundo */
-  --card-border: #1b3554;          /* #1b3554 */
-  --card-hover-border: #3f6593;    /* #3f6593 */
-  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  --card-bg: #0d1e33;
+  --card-border: #1b3554;
+  --card-hover-border: #3f6593;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 
-  --tile-bg: #102136;
+  --tile-bg: #14273e;
   --tile-border: #1b3554;
 
   --text-main: #FFFFFF;
   --text-body: #d4e5f7;
-  --text-muted: #80aad3;           /* #80aad3 */
-  --text-dim: #5b86b6;             /* #5b86b6 */
+  --text-muted: #80aad3;
+  --text-dim: #5b86b6;
 
   --btn-outline-bg: #091626;
   --btn-outline-border: #3f6593;
@@ -122,14 +129,19 @@ html.theme-dark, html.dark {
   --btn-outline-hover-bg: #1b3554;
   --btn-outline-hover-text: #FFFFFF;
 
-  --table-head-bg: #102136;
+  --footer-bg: #000f22;
+  --footer-border: #1b3554;
+  --footer-text-main: #FFFFFF;
+  --footer-text-muted: #80aad3;
+
+  --table-head-bg: #14273e;
   --table-head-text: #80aad3;
   --table-row-hover: #1b3554;
-  --table-row-alt: #091626;
+  --table-row-alt: #0d1e33;
   --table-border: #1b3554;
   --table-cell-text: #FFFFFF;
 
-  --alert-bg: #091626;
+  --alert-bg: #0d1e33;
   --alert-border: #1b3554;
   --alert-title: #FFFFFF;
   --alert-text: #d4e5f7;
@@ -146,7 +158,7 @@ html.theme-dark, html.dark {
   --badge-info-text: #c0e6fd;
   --badge-info-border: rgba(128, 170, 211, 0.4);
 
-  --badge-neutral-bg: #102136;
+  --badge-neutral-bg: #14273e;
   --badge-neutral-text: #80aad3;
   --badge-neutral-border: #1b3554;
 
@@ -166,6 +178,8 @@ html.theme-dark, html.dark {
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-page);
+  background-image: var(--bg-page-gradient);
+  background-attachment: fixed;
   color: var(--text-body);
   min-height: 100vh;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -310,9 +324,9 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
 /* CABEÇALHO E NAVEGAÇÃO EM ABAS STICKY UNIFICADOS                         */
 /* ========================================================================= */
 #site-header {
-  background-color: var(--header-bg);
-  border-bottom: 1px solid var(--header-border);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  background: var(--header-bg) !important;
+  border-bottom: 1px solid var(--header-border) !important;
+  box-shadow: 0 2px 10px rgba(0, 15, 34, 0.25);
   transition: all 0.2s ease;
 }
 
@@ -339,23 +353,69 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
 }
 
 #main-nav-tabs {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--nav-bg) !important;
+  border-top: 1px solid rgba(91, 134, 182, 0.25) !important;
 }
 
 .nav-tab-btn {
+  color: var(--nav-btn-text) !important;
   transition: all 0.15s ease;
   user-select: none;
 }
 
 .nav-tab-btn:hover:not(.active) {
   background-color: var(--nav-btn-hover) !important;
-  color: var(--text-main) !important;
+  color: #FFFFFF !important;
+}
+
+.nav-tab-btn.active {
+  background-color: var(--nav-btn-active-bg) !important;
+  color: var(--nav-btn-active-text) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Botões Especializados do Cabeçalho */
+.btn-header-action {
+  background-color: rgba(27, 53, 84, 0.7) !important;
+  border: 1px solid rgba(91, 134, 182, 0.5) !important;
+  color: #c0e6fd !important;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-header-action:hover {
+  background-color: #3f6593 !important;
+  color: #FFFFFF !important;
+  border-color: #80aad3 !important;
+}
+
+.btn-header-install {
+  background-color: #c0e6fd !important;
+  color: #000f22 !important;
+  font-weight: 700 !important;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-header-install:hover {
+  background-color: #FFFFFF !important;
+  color: #000f22 !important;
+  transform: translateY(-1px);
 }
 
 /* Seletor Segmentado de Tema (Pill Switcher com 2 botões) */
 .theme-switch-container {
-  background-color: var(--tile-bg);
-  border: 1px solid var(--card-border);
+  background-color: #051324;
+  border: 1px solid #3f6593;
   border-radius: 0.5rem;
   padding: 3px;
   display: inline-flex;
@@ -366,7 +426,7 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
 .theme-switch-btn {
   border: 1px solid transparent;
   background: transparent;
-  color: var(--text-muted);
+  color: #80aad3;
   font-weight: 600;
   font-size: 0.75rem;
   padding: 0.35rem 0.65rem;
@@ -379,14 +439,15 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
 }
 
 .theme-switch-btn:hover {
-  color: var(--text-main);
+  color: #c0e6fd;
 }
 
 .theme-switch-btn.active {
-  background-color: var(--card-bg) !important;
-  color: var(--text-main) !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  border-color: var(--card-border) !important;
+  background-color: #c0e6fd !important;
+  color: #000f22 !important;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  border-color: #80aad3 !important;
 }
 
 /* Botão de Alternância de Tema Legado */
@@ -569,6 +630,35 @@ html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover
   color: var(--text-main) !important;
   margin-bottom: 0.25rem !important;
   cursor: pointer;
+}
+
+/* Rodapé Institucional Oficial */
+footer {
+  background-color: var(--footer-bg) !important;
+  border-top: 1px solid var(--footer-border) !important;
+}
+
+/* Sub-abas do Gráfico do Boletim */
+.bulletin-tab-btn {
+  color: var(--text-muted);
+  transition: all 0.15s ease;
+}
+
+.bulletin-tab-btn:hover:not(.active) {
+  background-color: var(--tile-bg);
+  color: var(--text-main);
+}
+
+.bulletin-tab-btn.active {
+  background-color: var(--accent-primary) !important;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 15, 34, 0.15);
+}
+
+html.theme-dark .bulletin-tab-btn.active, html.dark .bulletin-tab-btn.active {
+  background-color: var(--c1-ice) !important;
+  color: #000f22 !important;
 }
 
 /* Estilos de Impressão A4 Oficiais (Papel Físico / PDF) */

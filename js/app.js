@@ -257,11 +257,9 @@ function setupNavigationTabs() {
 
       // Atualiza botões
       tabButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'shadow-sm', 'shadow-md', 'bg-slate-900', 'dark:bg-slate-100', 'dark:text-slate-900', 'bg-[#1b3554]', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-        b.classList.add('theme-text-muted');
+        b.classList.remove('active');
       });
-      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btn.classList.remove('theme-text-muted');
+      btn.classList.add('active');
 
       // Exibe aba correspondente
       tabPanes.forEach(pane => {
@@ -296,11 +294,9 @@ function setupBulletinChartTabs() {
   chartButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       chartButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold', 'bg-slate-900', 'dark:bg-slate-100', 'dark:text-slate-900', 'bg-[#1b3554]', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-        b.classList.add('theme-text-muted');
+        b.classList.remove('active');
       });
-      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
-      btn.classList.remove('theme-text-muted');
+      btn.classList.add('active');
 
       state.activeMetric = btn.getAttribute('data-metric') || 'temperature';
       updateBulletinChart();

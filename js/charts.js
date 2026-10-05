@@ -423,23 +423,23 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Umidade Máx (%)',
             data: uMax,
-            borderColor: '#0284c7',
-            backgroundColor: 'rgba(2, 132, 199, 0.12)',
+            borderColor: '#5b86b6',
+            backgroundColor: 'rgba(91, 134, 182, 0.18)',
             borderWidth: 2,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#0284c7',
+            pointBackgroundColor: '#3f6593',
             pointRadius: 4
           },
           {
             label: 'Umidade Mín (%)',
             data: uMin,
-            borderColor: '#38bdf8',
+            borderColor: '#80aad3',
             borderWidth: 1.5,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#38bdf8',
+            pointBackgroundColor: '#80aad3',
             pointRadius: 3.5
           }
         ]
@@ -469,12 +469,12 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Pressão ao Nível Médio do Mar (hPa)',
             data: pVal,
-            borderColor: '#64748b',
-            backgroundColor: 'rgba(100, 116, 139, 0.12)',
+            borderColor: '#5b86b6',
+            backgroundColor: 'rgba(91, 134, 182, 0.15)',
             borderWidth: 2,
             tension: 0.25,
             fill: true,
-            pointBackgroundColor: '#94a3b8',
+            pointBackgroundColor: '#3f6593',
             pointRadius: 4
           }
         ]
@@ -506,8 +506,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'bar',
             label: 'Vento Médio (km/h)',
             data: vMed,
-            backgroundColor: 'rgba(30, 58, 138, 0.8)',
-            borderColor: '#2563eb',
+            backgroundColor: 'rgba(63, 101, 147, 0.85)',
+            borderColor: '#1b3554',
             borderWidth: 1,
             borderRadius: 4
           },
