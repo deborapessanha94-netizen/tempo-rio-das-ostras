@@ -212,17 +212,24 @@ def run_auto_bulletin_pipeline():
     now_dt = datetime.now()
     emissao_str = now_dt.strftime("%d/%m/%Y às %H:%Mh")
 
-    # 0. Prioridade Absoluta: Tenta sincronizar os arquivos oficiais locais (R/Quarto/Downloads/Desktop)
+    # 0. Prioridade: Sincronização de planilha oficial local — somente se for do dia de HOJE
     try:
         try:
-            from scripts.sync_boletim import sync_bulletin
+            from scripts.sync_boletim import sync_bulletin, find_latest_file, get_search_directories
         except ImportError:
-            from sync_boletim import sync_bulletin
-        if sync_bulletin():
-            print(">> [Auto-Bulletin] Boletim Oficial da Defesa Civil preservado com sucesso!")
-            return True
+            from sync_boletim import sync_bulletin, find_latest_file, get_search_directories
+        
+        latest_xlsx = find_latest_file("dados_boletim_*.xlsx", get_search_directories())
+        if latest_xlsx:
+            mtime = datetime.fromtimestamp(latest_xlsx.stat().st_mtime)
+            if mtime.date() == now_dt.date():
+                if sync_bulletin():
+                    print(">> [Auto-Bulletin] Planilha oficial do dia de hoje preservada com sucesso!")
+                    return True
+            else:
+                print(f"   [INFO] Planilha local ({latest_xlsx.name}) é de data anterior ({mtime.date()} < {now_dt.date()}). Gerando previsão em tempo real a partir de HOJE.")
     except Exception as e:
-        print(f"   [AVISO] Sincronização de boletim oficial local não disponível ({e}), avaliando fallback numérico...")
+        print(f"   [AVISO] Falha na checagem de planilha local ({e}), prosseguindo com geração meteorológica a partir de HOJE...")
 
     # Se não houver nenhum boletim oficial na máquina, busca modelos numéricos globais:
     url_om = (

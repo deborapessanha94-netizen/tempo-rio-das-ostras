@@ -37,8 +37,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const appTempSlice = hourlyData.apparent_temperature.slice(startIndex, startIndex + count);
 
     const gradTemp = ctx.createLinearGradient(0, 0, 0, 300);
-    gradTemp.addColorStop(0, 'rgba(249, 115, 22, 0.45)');
-    gradTemp.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
+    gradTemp.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
+    gradTemp.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
 
     return {
       type: 'line',
@@ -48,22 +48,23 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Temperatura (°C)',
             data: tempSlice,
-            borderColor: '#f97316',
+            borderColor: '#3f6593',
             backgroundColor: gradTemp,
-            borderWidth: 3,
+            borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#ea580c',
+            pointBackgroundColor: '#1b3554',
             pointRadius: 3
           },
           {
             label: 'Sensação Térmica (°C)',
             data: appTempSlice,
-            borderColor: '#fbbf24',
+            borderColor: '#80aad3',
             borderWidth: 2,
             borderDash: [5, 5],
             tension: 0.35,
             fill: false,
+            pointBackgroundColor: '#80aad3',
             pointRadius: 2
           }
         ]
@@ -87,8 +88,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'bar',
             label: 'Volume Chuva (mm)',
             data: rainSlice,
-            backgroundColor: 'rgba(56, 189, 248, 0.65)',
-            borderColor: '#38bdf8',
+            backgroundColor: 'rgba(91, 134, 182, 0.65)',
+            borderColor: '#5b86b6',
             borderWidth: 1.5,
             borderRadius: 6,
             yAxisID: 'y'
@@ -97,8 +98,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'line',
             label: 'Probabilidade (%)',
             data: probSlice,
-            borderColor: '#818cf8',
-            backgroundColor: 'rgba(129, 140, 248, 0.1)',
+            borderColor: '#3f6593',
+            backgroundColor: 'rgba(63, 101, 147, 0.1)',
             borderWidth: 2,
             tension: 0.3,
             yAxisID: 'y1',
@@ -108,7 +109,7 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'line',
             label: 'Água Precipitável VIME (mm)',
             data: pwSlice,
-            borderColor: '#06b6d4',
+            borderColor: '#80aad3',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
@@ -149,8 +150,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const gustsSlice = hourlyData.wind_gusts_10m ? hourlyData.wind_gusts_10m.slice(startIndex, startIndex + count) : [];
 
     const gradWind = ctx.createLinearGradient(0, 0, 0, 300);
-    gradWind.addColorStop(0, 'rgba(45, 212, 191, 0.4)');
-    gradWind.addColorStop(1, 'rgba(45, 212, 191, 0.0)');
+    gradWind.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
+    gradWind.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
 
     return {
       type: 'line',
@@ -160,23 +161,23 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Velocidade do Vento (km/h)',
             data: windSlice,
-            borderColor: '#2dd4bf',
+            borderColor: '#3f6593',
             backgroundColor: gradWind,
-            borderWidth: 3,
+            borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#14b8a6',
+            pointBackgroundColor: '#1b3554',
             pointRadius: 3
           },
           {
             label: 'Rajadas Máximas (km/h)',
             data: gustsSlice,
-            borderColor: '#f43f5e',
+            borderColor: '#80aad3',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.35,
             fill: false,
-            pointBackgroundColor: '#f43f5e',
+            pointBackgroundColor: '#80aad3',
             pointRadius: 2
           }
         ]
@@ -190,8 +191,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const pressureSlice = (hourlyData.pressure_msl || hourlyData.surface_pressure).slice(startIndex, startIndex + count);
 
     const gradPress = ctx.createLinearGradient(0, 0, 0, 300);
-    gradPress.addColorStop(0, 'rgba(168, 85, 247, 0.4)');
-    gradPress.addColorStop(1, 'rgba(168, 85, 247, 0.0)');
+    gradPress.addColorStop(0, 'rgba(63, 101, 147, 0.35)');
+    gradPress.addColorStop(1, 'rgba(63, 101, 147, 0.0)');
 
     const minPress = Math.min(...pressureSlice) - 2;
     const maxPress = Math.max(...pressureSlice) + 2;
@@ -204,12 +205,12 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Pressão ao Nível do Mar (hPa)',
             data: pressureSlice,
-            borderColor: '#a855f7',
+            borderColor: '#3f6593',
             backgroundColor: gradPress,
-            borderWidth: 3,
+            borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#9333ea',
+            pointBackgroundColor: '#1b3554',
             pointRadius: 3
           }
         ]
@@ -236,8 +237,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
     const dewSlice = hourlyData.dew_point_2m ? hourlyData.dew_point_2m.slice(startIndex, startIndex + count) : [];
 
     const gradHum = ctx.createLinearGradient(0, 0, 0, 300);
-    gradHum.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
-    gradHum.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+    gradHum.addColorStop(0, 'rgba(91, 134, 182, 0.35)');
+    gradHum.addColorStop(1, 'rgba(91, 134, 182, 0.0)');
 
     return {
       type: 'line',
@@ -247,18 +248,18 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Umidade Relativa (%)',
             data: humSlice,
-            borderColor: '#3b82f6',
+            borderColor: '#5b86b6',
             backgroundColor: gradHum,
-            borderWidth: 3,
+            borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: '#2563eb',
+            pointBackgroundColor: '#3f6593',
             pointRadius: 3
           },
           {
             label: 'Ponto de Orvalho (°C)',
             data: dewSlice,
-            borderColor: '#06b6d4',
+            borderColor: '#80aad3',
             borderWidth: 2,
             borderDash: [5, 5],
             tension: 0.35,
@@ -375,24 +376,24 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Máxima (°C)',
             data: tMax,
-            borderColor: '#EA580C',
-            backgroundColor: 'rgba(234, 88, 12, 0.12)',
+            borderColor: '#3f6593',
+            backgroundColor: 'rgba(63, 101, 147, 0.15)',
             borderWidth: 2.5,
             tension: 0.3,
             fill: '+1',
-            pointBackgroundColor: '#EA580C',
+            pointBackgroundColor: '#1b3554',
             pointRadius: 4
           },
           {
             label: 'Mínima (°C)',
             data: tMin,
-            borderColor: '#3f6593',
-            backgroundColor: 'rgba(63, 101, 147, 0.08)',
+            borderColor: '#80aad3',
+            backgroundColor: 'rgba(128, 170, 211, 0.08)',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: '#3f6593',
+            pointBackgroundColor: '#80aad3',
             pointRadius: 4
           }
         ]
@@ -515,9 +516,9 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'line',
             label: 'Rajada Máxima (km/h)',
             data: vRaj,
-            borderColor: '#ea580c',
+            borderColor: '#80aad3',
             borderWidth: 2,
-            pointBackgroundColor: '#ea580c',
+            pointBackgroundColor: '#80aad3',
             pointRadius: 4,
             pointHoverRadius: 6,
             fill: false

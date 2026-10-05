@@ -15,87 +15,87 @@
 
 :root, html.theme-light {
   color-scheme: light;
-  --bg-page: #eef6fc;
-  --bg-page-gradient: linear-gradient(180deg, #d8ecf8 0%, #eaf4fb 260px, #f2f8fc 100%);
-  --header-bg: linear-gradient(135deg, #000f22 0%, #1b3554 100%);
-  --header-border: rgba(91, 134, 182, 0.35);
+  --bg-page: #f1f5f9;              /* Cinza suave limpo */
+  --bg-page-gradient: linear-gradient(180deg, #e2e8f0 0%, #f1f5f9 260px, #ffffff 100%);
+  --header-bg: #000f22;            /* Midnight Black */
+  --header-border: #1b3554;
   --header-text: #FFFFFF;
   --header-sub: #80aad3;
-  --header-badge-bg: #c0e6fd;
-  --header-badge-text: #000f22;
-  --header-badge-border: #80aad3;
+  --header-badge-bg: #1b3554;
+  --header-badge-text: #c0e6fd;
+  --header-badge-border: #5b86b6;
 
   --nav-bg: #000f22;
-  --nav-border: rgba(91, 134, 182, 0.25);
+  --nav-border: #1b3554;
   --nav-btn-text: #c0e6fd;
-  --nav-btn-hover: rgba(63, 101, 147, 0.45);
+  --nav-btn-hover: #1b3554;
   --nav-btn-active-bg: #c0e6fd;
   --nav-btn-active-text: #000f22;
 
-  --card-bg: #FFFFFF;
-  --card-border: rgba(91, 134, 182, 0.32);
+  --card-bg: #FFFFFF;              /* Branco puro */
+  --card-border: #e2e8f0;          /* Cinza claro */
   --card-hover-border: #5b86b6;
-  --card-shadow: 0 2px 8px -2px rgba(0, 15, 34, 0.08);
+  --card-shadow: 0 4px 20px -2px rgba(0, 15, 34, 0.06);
 
-  --tile-bg: rgba(192, 230, 253, 0.22);
-  --tile-border: rgba(128, 170, 211, 0.38);
+  --tile-bg: #f8fafc;              /* Cinza gelo limpo */
+  --tile-border: #e2e8f0;
 
-  --text-main: #000f22;
-  --text-body: #1b3554;
-  --text-muted: #3f6593;
-  --text-dim: #5b86b6;
+  --text-main: #000000;            /* Preto puro para contraste máximo */
+  --text-body: #1e293b;            /* Grafite escuro */
+  --text-muted: #64748b;           /* Cinza neutro */
+  --text-dim: #3f6593;             /* Azul ardósia oficial */
 
   --btn-outline-bg: #FFFFFF;
-  --btn-outline-border: rgba(91, 134, 182, 0.45);
-  --btn-outline-text: #1b3554;
-  --btn-outline-hover-bg: #c0e6fd;
-  --btn-outline-hover-text: #000f22;
+  --btn-outline-border: #cbd5e1;
+  --btn-outline-text: #0f172a;
+  --btn-outline-hover-bg: #f1f5f9;
+  --btn-outline-hover-text: #000000;
 
   --footer-bg: #000f22;
   --footer-border: #1b3554;
   --footer-text-main: #FFFFFF;
   --footer-text-muted: #80aad3;
 
-  --table-head-bg: rgba(192, 230, 253, 0.35);
-  --table-head-text: #000f22;
-  --table-row-hover: rgba(192, 230, 253, 0.2);
+  --table-head-bg: #f8fafc;
+  --table-head-text: #0f172a;
+  --table-row-hover: #f1f5f9;
   --table-row-alt: #FFFFFF;
-  --table-border: rgba(91, 134, 182, 0.3);
-  --table-cell-text: #000f22;
+  --table-border: #e2e8f0;
+  --table-cell-text: #0f172a;
 
-  --alert-bg: #FFFFFF;
-  --alert-border: rgba(91, 134, 182, 0.4);
-  --alert-title: #000f22;
-  --alert-text: #1b3554;
+  --alert-bg: #f8fafc;
+  --alert-border: #3f6593;
+  --alert-title: #000000;
+  --alert-text: #1e293b;
 
-  /* Badges */
-  --badge-danger-bg: #FEF2F2;
-  --badge-danger-text: #B91C1C;
-  --badge-danger-border: #FECACA;
+  /* Badges Monocromáticas com Acento na Paleta Oficial */
+  --badge-danger-bg: #000f22;
+  --badge-danger-text: #c0e6fd;
+  --badge-danger-border: #3f6593;
 
-  --badge-warning-bg: #FFFBEB;
-  --badge-warning-text: #B45309;
-  --badge-warning-border: #FDE68A;
+  --badge-warning-bg: #1b3554;
+  --badge-warning-text: #c0e6fd;
+  --badge-warning-border: #5b86b6;
 
-  --badge-info-bg: rgba(192, 230, 253, 0.45);
-  --badge-info-text: #000f22;
-  --badge-info-border: #80aad3;
+  --badge-info-bg: #f1f5f9;
+  --badge-info-text: #1b3554;
+  --badge-info-border: #cbd5e1;
 
-  --badge-neutral-bg: rgba(192, 230, 253, 0.25);
-  --badge-neutral-text: #3f6593;
-  --badge-neutral-border: rgba(91, 134, 182, 0.35);
+  --badge-neutral-bg: #f8fafc;
+  --badge-neutral-text: #475569;
+  --badge-neutral-border: #e2e8f0;
 
   --accent-primary: #1b3554;
   --accent-blue: #5b86b6;
-  --accent-gold: #1b3554;
-  --accent-orange: #EA580C;
+  --accent-gold: #3f6593;
+  --accent-orange: #5b86b6;
 }
 
 html.theme-dark, html.dark {
   color-scheme: dark;
   --bg-page: #000f22;
   --bg-page-gradient: linear-gradient(180deg, #000f22 0%, #081628 320px, #000f22 100%);
-  --header-bg: linear-gradient(135deg, #000f22 0%, #0a1b2d 100%);
+  --header-bg: #000f22;
   --header-border: #1b3554;
   --header-text: #FFFFFF;
   --header-sub: #80aad3;
@@ -110,20 +110,20 @@ html.theme-dark, html.dark {
   --nav-btn-active-bg: #c0e6fd;
   --nav-btn-active-text: #000f22;
 
-  --card-bg: #0d1e33;
+  --card-bg: #071322;              /* Midnight profundo */
   --card-border: #1b3554;
   --card-hover-border: #3f6593;
-  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 
-  --tile-bg: #14273e;
+  --tile-bg: #0e1e32;
   --tile-border: #1b3554;
 
   --text-main: #FFFFFF;
-  --text-body: #d4e5f7;
+  --text-body: #e2e8f0;
   --text-muted: #80aad3;
   --text-dim: #5b86b6;
 
-  --btn-outline-bg: #091626;
+  --btn-outline-bg: #0e1e32;
   --btn-outline-border: #3f6593;
   --btn-outline-text: #c0e6fd;
   --btn-outline-hover-bg: #1b3554;
@@ -134,38 +134,38 @@ html.theme-dark, html.dark {
   --footer-text-main: #FFFFFF;
   --footer-text-muted: #80aad3;
 
-  --table-head-bg: #14273e;
-  --table-head-text: #80aad3;
+  --table-head-bg: #0e1e32;
+  --table-head-text: #c0e6fd;
   --table-row-hover: #1b3554;
-  --table-row-alt: #0d1e33;
+  --table-row-alt: #071322;
   --table-border: #1b3554;
   --table-cell-text: #FFFFFF;
 
-  --alert-bg: #0d1e33;
-  --alert-border: #1b3554;
+  --alert-bg: #0e1e32;
+  --alert-border: #3f6593;
   --alert-title: #FFFFFF;
-  --alert-text: #d4e5f7;
+  --alert-text: #e2e8f0;
 
-  --badge-danger-bg: rgba(220, 38, 38, 0.2);
-  --badge-danger-text: #FCA5A5;
-  --badge-danger-border: rgba(239, 68, 68, 0.35);
+  --badge-danger-bg: #000f22;
+  --badge-danger-text: #c0e6fd;
+  --badge-danger-border: #5b86b6;
 
-  --badge-warning-bg: rgba(245, 158, 11, 0.2);
-  --badge-warning-text: #FCD34D;
-  --badge-warning-border: rgba(245, 158, 11, 0.35);
+  --badge-warning-bg: #1b3554;
+  --badge-warning-text: #c0e6fd;
+  --badge-warning-border: #3f6593;
 
-  --badge-info-bg: rgba(91, 134, 182, 0.25);
+  --badge-info-bg: #0e1e32;
   --badge-info-text: #c0e6fd;
-  --badge-info-border: rgba(128, 170, 211, 0.4);
+  --badge-info-border: #1b3554;
 
-  --badge-neutral-bg: #14273e;
+  --badge-neutral-bg: #071322;
   --badge-neutral-text: #80aad3;
   --badge-neutral-border: #1b3554;
 
   --accent-primary: #c0e6fd;
   --accent-blue: #80aad3;
   --accent-gold: #c0e6fd;
-  --accent-orange: #FB923C;
+  --accent-orange: #c0e6fd;
 }
 
 /* ========================================================================= */
@@ -700,6 +700,87 @@ footer {
 html.theme-dark .bulletin-tab-btn.active, html.dark .bulletin-tab-btn.active {
   background-color: var(--c1-ice) !important;
   color: #000f22 !important;
+}
+
+/* ========================================================================= */
+/* NOVO DASHBOARD MINIMALISTA (BASEADO EM media_1791167531010.jpg)           */
+/* ========================================================================= */
+.dashboard-frame {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -15px rgba(0, 15, 34, 0.18);
+  border: 1px solid var(--card-border);
+  background-color: var(--card-bg);
+}
+
+.hero-dashboard-card {
+  background: linear-gradient(135deg, #000f22 0%, #1b3554 60%, #3f6593 100%);
+  color: #FFFFFF;
+  border-radius: 1.25rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(91, 134, 182, 0.35);
+  box-shadow: 0 8px 24px -6px rgba(0, 15, 34, 0.4);
+}
+
+.hero-dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(192, 230, 253, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.sidebar-dashboard {
+  background: #000f22;
+  color: #FFFFFF;
+  border-left: 1px solid #1b3554;
+}
+
+.floating-dock-bar {
+  background: #091728;
+  border: 1px solid #3f6593;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0, 15, 34, 0.4);
+  padding: 0.375rem 0.75rem;
+}
+
+.dock-btn {
+  color: #80aad3;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dock-btn:hover {
+  color: #FFFFFF;
+  background-color: #1b3554;
+}
+
+.dock-btn.active {
+  color: #000f22 !important;
+  background-color: #c0e6fd !important;
+}
+
+.forecast-day-row {
+  border-bottom: 1px solid rgba(91, 134, 182, 0.15);
+  transition: background-color 0.15s ease;
+}
+
+.forecast-day-row:hover {
+  background-color: rgba(27, 53, 84, 0.35);
+}
+
+.forecast-day-row:last-child {
+  border-bottom: none;
+}
+
+.modal-backdrop {
+  background-color: rgba(0, 15, 34, 0.75);
+  backdrop-filter: blur(4px);
 }
 
 /* Estilos de Impressão A4 Oficiais (Papel Físico / PDF) */
