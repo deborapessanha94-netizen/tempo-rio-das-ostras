@@ -522,33 +522,33 @@ def run_auto_bulletin_pipeline():
 
     informe_alerta = ". ".join(alerta_partes) + "."
 
-    # Síntese Sinótica Elaborada (Mantendo rigorosamente a ordem dos 3 pilares)
-    min_t_val = min([d['t_min'] for d in dias_3]) if dias_3 else 19.0
+    # Síntese Sinótica Elaborada (Estrutura Técnica Oficial Exata em 3 Parágrafos)
+    d0 = dias_3[0]
+    d1 = dias_3[1]
+    d2 = dias_3[2]
+
     sinopse_geral = (
-        f"A atmosfera regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de {periodo_str} "
-        f"é condicionada pela atuação persistente de um sistema frontal costeiro de características semi-estacionárias, "
-        f"acoplado à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). "
-        f"Esse bloqueio atmosférico impulsiona contínua convergência de umidade marítima em direção à faixa costeira, "
-        f"mantendo céu predominantemente encoberto e frio úmido nas primeiras 24 horas, com chuvas contínuas e volumosas que evoluem "
-        f"para gradual afastamento da instabilidade e rápida elevação térmica nos dias subsequentes. Nas rodadas numéricas oficiais de alta resolução "
-        f"(ECMWF, GFS e COSMO/INMET), consolida-se um acumulado pluviométrico total de {chuva_total_3d:.1f} mm ao longo dos 3 dias, "
-        f"com acentuada amplitude térmica entre a massa de ar fria inicial (mínima de {min_t_val:.0f}°C na madrugada e 21°C no litoral) "
-        f"e o subsequente aquecimento pré-frontal, alcançando máximas de até {pico_calor:.0f}°C.\n\n"
-        f"Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, "
-        f"onde a estação telemétrica municipal (INEA 2241036) acusa cota de {jundia_nivel_txt} m (superando a cota de atenção de 1,60 m "
-        f"e a cota de transbordo da calha de 2,20 m), consolidando o status de {jundia_status_txt} com extravasamento da lâmina d'água "
-        f"e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. "
-        f"Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; Rocha Leão: 124,7 mm; "
-        f"PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
-        f"monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da Marinha do Brasil (Área Delta), "
-        f"com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até {max_rajada_geral:.0f} km/h e mar muito agitado com ondas de até 2,5 m, "
-        f"impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais.\n\n"
-        f"Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam "
-        f"com infraestrutura de telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo "
-        f"com terminais locais desligados, com sincronização automática e redundante das redes oficiais INEA, INMET e CEMADEN. "
-        f"A Subsecretaria de Defesa Civil de Rio das Ostras mantém equipes operacionais e patrulhas mecanizadas em nível de prontidão permanente "
-        f"no Centro de Operações (PLANCON), mobilizadas para vistorias técnicas de campo e pronta resposta comunitária, "
-        f"com canais de emergência ininterruptos disponíveis à população pelo telefone 199 e Corpo de Bombeiros (193)."
+        f"O padrão meteorológico regional sobre o município de Rio das Ostras para o período de {periodo_str} "
+        f"é condicionado pela atuação de uma frente fria semi-estacionária sobre o litoral norte fluminense e sul do Espírito Santo, "
+        f"acoplada à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). "
+        f"Esse bloqueio atmosférico impulsiona intenso transporte marítimo de umidade em direção à costa (convergência de umidade marítima), "
+        f"gerando céu encoberto a nublado, temperaturas entre mínima de {d0['t_min']:.0f}°C e máxima de {d0['t_max']:.0f}°C e chuvas intermitentes "
+        f"ao longo desta {d0['dia_semana'].lower()} ({d0['date_short']}), com acumulado diário previsto de {d0['chuva_tot']:.1f} mm com trovoadas e rajadas, "
+        f"somando-se aos acumulados pluviométricos severos registrados na rede de PCDs: 134,0 mm em Palmital, 124,7 mm em Rocha Leão / REBIO União, "
+        f"108,2 mm na estação telemétrica Jundiá e 70,4 mm na Defesa Civil.\n\n"
+        f"Essa precipitação excepcional deflagrou Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá: "
+        f"a estação telemétrica municipal (INEA 2241036) registrou nível de {jundia_nivel_txt} m (Status: {jundia_status_txt}), "
+        f"após ultrapassar a cota de atenção (1,60 m) e a cota de transbordo (2,20 m), atingindo diretamente vias e residências "
+        f"nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. Em paralelo, a Marinha do Brasil mantém o Aviso nº 733/2026 de Vento Forte (Área Delta), "
+        f"com ventos de E/NE Força 7 Beaufort (rajadas de até {max_rajada_geral:.0f} km/h) e mar muito agitado (ondas de 2,0 a 2,5 m), "
+        f"dificultando o escoamento das águas pluviais no litoral.\n\n"
+        f"Na {d1['dia_semana'].lower()} ({d1['date_short']}), a frente fria se afasta progressivamente para o oceano. "
+        f"Chuvas residuais na madrugada e início da manhã ({d1['chuva_tot']:.1f} mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, "
+        f"redução da umidade relativa e acentuada elevação térmica, com máximas atingindo {d1['t_max']:.0f}°C à tarde, propiciando o início da vazante "
+        f"do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na {d2['dia_semana'].lower()} ({d2['date_short']}), "
+        f"instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo {d2['t_max']:.0f}°C). "
+        f"A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde ({d2['chuva_tot']:.1f} mm, pontuais de 3 mm), "
+        f"antecedendo uma nova frente fria em formação no Sul do país."
     )
 
     # Cards dos 3 Dias
