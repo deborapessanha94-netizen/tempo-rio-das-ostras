@@ -51,9 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
  * 1. Gerenciamento do Tema Oficial (Modo Claro & Modo Escuro)
  */
 function initTheme() {
-  const saved = localStorage.getItem('meteo_theme');
-  const initialTheme = saved === 'dark' ? 'dark' : 'light';
-  applyTheme(initialTheme);
+  localStorage.removeItem('meteo_theme');
+  applyTheme('light');
 
   const btnLight = document.getElementById('btn-theme-light');
   const btnDark = document.getElementById('btn-theme-dark');
@@ -67,7 +66,7 @@ function initTheme() {
 
   if (btnDark) {
     btnDark.addEventListener('click', () => {
-      applyTheme('dark');
+      applyTheme('light');
       updateBulletinChart();
     });
   }
@@ -78,19 +77,13 @@ function applyTheme(theme) {
   const btnLight = document.getElementById('btn-theme-light');
   const btnDark = document.getElementById('btn-theme-dark');
 
-  if (theme === 'dark') {
-    root.classList.remove('theme-light');
-    root.classList.add('theme-dark', 'dark');
-    localStorage.setItem('meteo_theme', 'dark');
-    if (btnLight) btnLight.classList.remove('active');
-    if (btnDark) btnDark.classList.add('active');
-  } else {
-    root.classList.remove('theme-dark', 'dark');
-    root.classList.add('theme-light');
-    localStorage.setItem('meteo_theme', 'light');
-    if (btnLight) btnLight.classList.add('active');
-    if (btnDark) btnDark.classList.remove('active');
-  }
+  // Garante que 'dark' nunca seja adicionado a <html> para evitar classes Tailwind com letras brancas no fundo branco
+  root.classList.remove('theme-dark', 'dark');
+  root.classList.add('theme-light');
+  localStorage.setItem('meteo_theme', 'light');
+
+  if (btnLight) btnLight.classList.add('active');
+  if (btnDark) btnDark.classList.remove('active');
 
   if (window.lucide) window.lucide.createIcons();
 }
@@ -656,7 +649,7 @@ function setupActionButtons() {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=34').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=35').catch(() => {});
   }
 }
 

@@ -29,23 +29,18 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
   activeChart = new Chart(ctx, chartConfig);
 }
 
-function isLightMode() {
-  return document.documentElement.classList.contains('theme-light') || !document.documentElement.classList.contains('theme-dark');
-}
-
 function getColors() {
-  const isLight = isLightMode();
   return {
-    primary: isLight ? '#000000' : '#ffffff',
-    secondary: isLight ? '#52525b' : '#a1a1aa',
-    tertiary: isLight ? '#71717a' : '#d4d4d8',
-    barFill: isLight ? 'rgba(0, 0, 0, 0.75)' : 'rgba(255, 255, 255, 0.85)',
-    barBorder: isLight ? '#000000' : '#ffffff',
-    gradStart: isLight ? 'rgba(0, 0, 0, 0.18)' : 'rgba(255, 255, 255, 0.25)',
+    primary: '#000000',
+    secondary: '#27272a',
+    tertiary: '#52525b',
+    barFill: 'rgba(0, 0, 0, 0.85)',
+    barBorder: '#000000',
+    gradStart: 'rgba(0, 0, 0, 0.15)',
     gradEnd: 'rgba(0, 0, 0, 0.0)',
-    text: isLight ? '#000000' : '#ffffff',
-    textMuted: isLight ? '#3f3f46' : '#d4d4d8',
-    grid: isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.15)'
+    text: '#000000',
+    textMuted: '#27272a',
+    grid: 'rgba(0, 0, 0, 0.15)'
   };
 }
 
@@ -329,15 +324,17 @@ function getCommonOptions(yTitle) {
         }
       },
       tooltip: {
-        backgroundColor: isLightMode() ? '#ffffff' : '#000000',
-        titleColor: c.text,
-        bodyColor: c.text,
-        borderColor: isLightMode() ? '#000000' : '#ffffff',
+        backgroundColor: '#000000',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        borderColor: '#000000',
         borderWidth: 1,
         padding: 10,
         boxPadding: 4,
         usePointStyle: true,
-        cornerRadius: 6
+        cornerRadius: 6,
+        titleFont: { weight: '800' },
+        bodyFont: { weight: '700' }
       }
     },
     scales: {
