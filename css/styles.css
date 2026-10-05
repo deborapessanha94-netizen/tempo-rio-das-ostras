@@ -169,28 +169,53 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   flex-shrink: 0;
 }
 
-/* Alertas Oficiais Minimalistas (Design Limpo, Fundo Branco e Borda Lateral Delicada) */
+/* Alertas Oficiais Minimalistas e Compactos (Design Limpo, Fundo Branco e Borda Lateral Cromática) */
 .alert-card-inmet {
   background-color: #ffffff;
   border: 1px solid var(--border-subtle);
-  border-left: 3px solid #f59e0b;
-  border-radius: 0.75rem;
+  border-left: 4px solid #eab308;
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-minimal);
+  transition: border-color 0.15s ease;
+}
+
+.alert-card-inmet-amarelo {
+  background-color: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid #eab308;
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-minimal);
+}
+
+.alert-card-inmet-laranja {
+  background-color: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid #f97316;
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-minimal);
+}
+
+.alert-card-inmet-vermelho {
+  background-color: #ffffff;
+  border: 1px solid var(--border-subtle);
+  border-left: 4px solid #ef4444;
+  border-radius: 0.625rem;
   box-shadow: var(--shadow-minimal);
 }
 
 .alert-card-marinha {
   background-color: #ffffff;
   border: 1px solid var(--border-subtle);
-  border-left: 3px solid #2563eb;
-  border-radius: 0.75rem;
+  border-left: 4px solid #2563eb;
+  border-radius: 0.625rem;
   box-shadow: var(--shadow-minimal);
 }
 
 .alert-card-jundia-danger {
   background-color: #ffffff;
   border: 1px solid var(--border-subtle);
-  border-left: 3px solid #ef4444;
-  border-radius: 0.75rem;
+  border-left: 4px solid #ef4444;
+  border-radius: 0.625rem;
   box-shadow: var(--shadow-minimal);
 }
 

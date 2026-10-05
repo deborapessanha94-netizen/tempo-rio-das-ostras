@@ -331,24 +331,47 @@ function renderDashboardUI(meta, rows, weather) {
             </div>
           </div>
 
-          <!-- Acordeão com os Pilares Oficiais -->
-          <div class="pilares-collapse hidden pt-2 border-t border-zinc-100 grid grid-cols-2 gap-2 text-xs">
-            <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-              <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-              <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
+          <!-- Acordeão com os Pilares Oficiais e Informe à População -->
+          <div class="pilares-collapse hidden pt-2 border-t border-zinc-100 space-y-2">
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
+                <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
+                <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
+              </div>
+              <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
+                <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
+                <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
+              </div>
+              <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
+                <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
+                <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
+              </div>
+              <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
+                <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Mar</span>
+                <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.mar?.val || '—')}</span>
+              </div>
             </div>
-            <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-              <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-              <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
-            </div>
-            <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-              <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-              <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
-            </div>
-            <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-              <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Mar</span>
-              <span class="text-zinc-800 font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.mar?.val || '—')}</span>
-            </div>
+
+            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0 ? `
+              <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/70 text-xs space-y-1.5 text-zinc-700">
+                <div class="flex items-center gap-1.5 font-bold text-zinc-900 text-[11px] uppercase tracking-wide border-b border-zinc-200/60 pb-1">
+                  <i data-lucide="megaphone" class="w-3.5 h-3.5 text-zinc-700"></i>
+                  Informe à População (Defesa Civil)
+                </div>
+                ${d.informe_populacao.map((item, itemIdx) => {
+                  const iconesTopicos = ['sun', 'cloud-rain', 'thermometer', 'droplets', 'wind'];
+                  const titulosTopicos = ['Dinâmica do Tempo', 'Chuva & Rio Jundiá', 'Temperaturas', 'Umidade Relativa', 'Ventos & Avisos'];
+                  const ic = iconesTopicos[itemIdx] || 'info';
+                  const tit = titulosTopicos[itemIdx] || '';
+                  return `
+                    <div class="flex items-start gap-1.5 leading-relaxed text-[11px] sm:text-xs">
+                      <i data-lucide="${ic}" class="w-3.5 h-3.5 text-zinc-500 shrink-0 mt-0.5"></i>
+                      <div><strong class="font-semibold text-zinc-800">${tit}:</strong> <span>${cleanBulletinText(item)}</span></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
@@ -360,7 +383,35 @@ function renderDashboardUI(meta, rows, weather) {
 }
 
 /**
- * 6. Renderiza os Alertas Oficiais do INMET e da Marinha na Tela Principal
+ * Função Auxiliar para Cores e Badges Oficiais dos Alertas do INMET
+ */
+function getAlertBadgeAndClass(severidade, corNome) {
+  const sev = (severidade || '').toLowerCase();
+  const c = (corNome || '').toLowerCase();
+
+  if (sev.includes('grande perigo') || c.includes('vermelho')) {
+    return {
+      cardClass: 'alert-card-inmet-vermelho',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300">🔴 Alerta Vermelho • Grande Perigo</span>',
+      corNome: 'Vermelho'
+    };
+  } else if ((sev.includes('perigo') && !sev.includes('potencial')) || c.includes('laranja')) {
+    return {
+      cardClass: 'alert-card-inmet-laranja',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-900 border border-orange-300">🟠 Alerta Laranja • Perigo</span>',
+      corNome: 'Laranja'
+    };
+  } else {
+    return {
+      cardClass: 'alert-card-inmet-amarelo',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">🟡 Alerta Amarelo • Perigo Potencial</span>',
+      corNome: 'Amarelo'
+    };
+  }
+}
+
+/**
+ * 6. Renderiza os Alertas Oficiais do INMET e da Marinha na Tela Principal (Compacto e com Cores Oficiais)
  */
 function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
   const container = document.getElementById('container-alertas-principais');
@@ -373,45 +424,37 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
   if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
     inmetAlerts.forEach(a => {
       const titulo = a.descricao || 'Alerta Meteorológico';
-      const severidade = a.severidade || 'Perigo Potencial';
+      const alertInfo = getAlertBadgeAndClass(a.severidade, a.cor_nome);
       const periodo = `Vigência: ${a.inicio_formatado || a.inicio} até ${a.fim_formatado || a.fim}`;
       const riscos = (a.riscos && a.riscos[0]) ? a.riscos[0] : 'Chuva intensa, ventos fortes e descargas elétricas.';
       const instrucoes = (a.instrucoes && a.instrucoes[0]) ? a.instrucoes[0] : 'Não se abrigue debaixo de árvores. Em emergência ligue 199.';
 
       cardsHtml.push(`
-        <div class="alert-card-inmet p-4 sm:p-5 space-y-3">
-          <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-2.5">
-            <div class="flex items-center gap-2">
-              <span class="text-[11px] px-2 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
+        <div class="${alertInfo.cardClass} p-3 sm:p-3.5 space-y-2">
+          <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5">
+            <div class="flex items-center gap-1.5">
+              <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
                 INMET
               </span>
-              <span class="text-xs font-semibold text-zinc-600">
-                Aviso Meteorológico Especial
+              <span class="text-xs font-semibold text-zinc-600 truncate">
+                ${a.id ? `Aviso nº ${a.id}` : 'Aviso Especial'}
               </span>
+              ${a.eh_direto_ostras ? '<span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Rio das Ostras</span>' : ''}
             </div>
-            <span class="text-[11px] font-semibold uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-              ${severidade}
+            ${alertInfo.badgeHtml}
+          </div>
+
+          <div class="flex items-baseline justify-between gap-2">
+            <h3 class="text-sm sm:text-base font-bold text-zinc-950 leading-tight">${titulo}</h3>
+            <span class="text-[11px] font-medium text-zinc-500 whitespace-nowrap flex items-center gap-1 shrink-0">
+              <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i>
+              ${periodo}
             </span>
           </div>
 
-          <div>
-            <h3 class="text-base font-bold text-zinc-950 leading-tight">${titulo}</h3>
-            <p class="text-xs font-medium text-zinc-500 flex items-center gap-1.5 mt-1">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
-              <span>${periodo}</span>
-            </p>
-          </div>
-
-          <div class="p-3 rounded-lg bg-zinc-50 border border-zinc-200/60 text-xs sm:text-sm space-y-1">
-            <span class="font-bold text-zinc-800 block uppercase text-[10px] tracking-wider">Riscos Associados:</span>
-            <p class="font-normal text-zinc-700 leading-snug">${cleanBulletinText(riscos)}</p>
-          </div>
-
-          <div class="pt-1 text-xs text-zinc-700 leading-snug flex items-start gap-1.5">
-            <i data-lucide="shield-check" class="w-4 h-4 text-zinc-600 shrink-0 mt-0.5"></i>
-            <div>
-              <strong class="font-semibold text-zinc-900">Orientação Defesa Civil (199):</strong> ${cleanBulletinText(instrucoes)}
-            </div>
+          <div class="p-2 rounded-lg bg-zinc-50/80 border border-zinc-200/50 text-xs text-zinc-700 leading-snug space-y-1">
+            <div><strong class="font-semibold text-zinc-900">Riscos:</strong> ${cleanBulletinText(riscos)}</div>
+            <div><strong class="font-semibold text-zinc-900">Defesa Civil 199:</strong> ${cleanBulletinText(instrucoes)}</div>
           </div>
         </div>
       `);
@@ -428,45 +471,42 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     const validade = marinhaAvisos.validade || marinhaAvisos.fim_formatado || 'Em vigor nas próximas 24 horas';
 
     cardsHtml.push(`
-      <div class="alert-card-marinha p-4 sm:p-5 space-y-3">
-        <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-2.5">
-          <div class="flex items-center gap-2">
-            <span class="text-[11px] px-2 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
-              Marinha do Brasil
+      <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2">
+        <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
+              MARINHA
             </span>
-            <span class="text-xs font-semibold text-zinc-600">
+            <span class="text-xs font-semibold text-zinc-600 truncate">
               Capitania dos Portos / CHM
             </span>
           </div>
-          <span class="text-[11px] font-semibold uppercase px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
-            Aviso nº ${numero}
+          <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300">
+            ⚓ Aviso nº ${numero}
           </span>
         </div>
 
-        <div>
-          <h3 class="text-base font-bold text-zinc-950 leading-tight">${tipo} • ${area}</h3>
-          <p class="text-xs font-medium text-zinc-500 flex items-center gap-1.5 mt-1">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-400 shrink-0"></i>
-            <span>${validade}</span>
-          </p>
+        <div class="flex items-baseline justify-between gap-2">
+          <h3 class="text-sm sm:text-base font-bold text-zinc-950 leading-tight">${tipo} • ${area}</h3>
+          <span class="text-[11px] font-medium text-zinc-500 whitespace-nowrap flex items-center gap-1 shrink-0">
+            <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i>
+            ${validade}
+          </span>
         </div>
 
-        <div class="grid grid-cols-2 gap-2 text-center">
-          <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-            <span class="text-[10px] uppercase font-bold text-zinc-500 block">Rajadas de Vento</span>
-            <span class="text-sm font-bold font-mono text-zinc-900">${rajadas}</span>
+        <div class="grid grid-cols-2 gap-2 text-center text-xs">
+          <div class="p-1.5 rounded-md bg-zinc-50/80 border border-zinc-200/50">
+            <span class="text-[10px] uppercase font-semibold text-zinc-500 block">Rajadas</span>
+            <span class="text-xs font-bold font-mono text-zinc-900">${rajadas}</span>
           </div>
-          <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
-            <span class="text-[10px] uppercase font-bold text-zinc-500 block">Estado do Mar</span>
-            <span class="text-sm font-bold font-mono text-zinc-900">${marOndas}</span>
+          <div class="p-1.5 rounded-md bg-zinc-50/80 border border-zinc-200/50">
+            <span class="text-[10px] uppercase font-semibold text-zinc-500 block">Mar</span>
+            <span class="text-xs font-bold font-mono text-zinc-900">${marOndas}</span>
           </div>
         </div>
 
-        <div class="p-3 rounded-lg bg-zinc-50 border border-zinc-200/60 text-xs sm:text-sm space-y-1">
-          <span class="font-bold text-zinc-800 block uppercase text-[10px] tracking-wider">Restrições na Orla & Navegação:</span>
-          <p class="font-normal text-zinc-700 leading-snug">
-            Mar agitado com ressaca na orla costeira. Atenção redobrada a banhistas, embarcações e pescadores artesanais.
-          </p>
+        <div class="p-2 rounded-lg bg-zinc-50/80 border border-zinc-200/50 text-xs text-zinc-700 leading-snug">
+          <strong class="font-semibold text-zinc-900">Restrição:</strong> Mar agitado com ressaca na orla. Atenção a banhistas e restrição a pequenas embarcações.
         </div>
       </div>
     `);

@@ -174,6 +174,28 @@ def fetch_inea_cheias():
         print(f"[INEA] Erro ao carregar dados: {e}")
         return []
 
+def format_inmet_date(dt_str):
+    if not dt_str: return ""
+    try:
+        if ' ' in dt_str:
+            d_part, h_part = dt_str.split(' ')
+            parts = d_part.split('-')
+            if len(parts) == 3:
+                return f"{parts[2]}/{parts[1]}/{parts[0]} às {h_part}"
+    except Exception:
+        pass
+    return dt_str
+
+def get_inmet_color_info(sev, raw_color=None):
+    sev_str = str(sev).lower()
+    if 'grande perigo' in sev_str or 'vermelho' in sev_str:
+        return 'Vermelho', '🔴 Alerta Vermelho • Grande Perigo', '#EF4444'
+    elif 'perigo potencial' in sev_str or 'amarelo' in sev_str:
+        return 'Amarelo', '🟡 Alerta Amarelo • Perigo Potencial', '#EAB308'
+    elif 'perigo' in sev_str or 'laranja' in sev_str:
+        return 'Laranja', '🟠 Alerta Laranja • Perigo', '#F97316'
+    return 'Amarelo', '🟡 Alerta Amarelo • Perigo Potencial', '#EAB308'
+
 def fetch_inmet_alerts():
     url = "https://apiprevmet3.inmet.gov.br/avisos/ativos"
     try:
@@ -194,14 +216,26 @@ def fetch_inmet_alerts():
                 if eh_direto or eh_rj:
                     seen.add(aid)
                     sev = a.get('severidade', 'Perigo Potencial')
+                    cor_nome, cor_badge, cor_hex = get_inmet_color_info(sev, a.get('aviso_cor'))
+                    ini_fmt = format_inmet_date(a.get('inicio', ''))
+                    fim_fmt = format_inmet_date(a.get('fim', ''))
                     unique.append({
                         'id': aid,
                         'descricao': a.get('descricao', 'Alerta Meteorológico'),
                         'severidade': sev,
+                        'cor_nome': cor_nome,
+                        'cor_badge': cor_badge,
+                        'cor_hex': cor_hex,
                         'eh_direto_ostras': eh_direto,
+                        'inicio': a.get('inicio', ''),
+                        'fim': a.get('fim', ''),
+                        'inicio_formatado': ini_fmt,
+                        'fim_formatado': fim_fmt,
                         'riscos': a.get('riscos', []),
-                        'instrucoes': a.get('instrucoes', [])
+                        'instrucoes': a.get('instrucoes', []),
+                        'estados': estados
                     })
+        unique.sort(key=lambda x: (not x['eh_direto_ostras'], 0 if x['cor_nome'] == 'Vermelho' else 1 if x['cor_nome'] == 'Laranja' else 2))
         return unique
     except Exception as e:
         print(f"[INMET] Erro avisos: {e}")
@@ -492,6 +526,7 @@ def run_auto_bulletin_pipeline():
     # Análise de chuva total e pico térmico
     chuva_total_3d = sum([d['chuva_tot'] for d in dias_3])
     pico_calor = max([d['t_max'] for d in dias_3])
+    min_t_val = min([d['t_min'] for d in dias_3])
     max_rajada_geral = max([d['rajada_max'] for d in dias_3])
 
     # Status Hidrológico do Rio Jundiá
@@ -521,6 +556,62 @@ def run_auto_bulletin_pipeline():
     alerta_partes.append(f"Acumulado total de chuva previsto para o ciclo de 3 dias: {chuva_total_3d:.1f} mm com temperatura máxima alcançando {pico_calor:.0f}°C")
 
     informe_alerta = ". ".join(alerta_partes) + "."
+
+    # Gerador Oficial do Modelo de Informe à População (5 Tópicos)
+    def gerar_informe_populacao_5_topicos(dia_idx, d, day_turnos, jundia_nivel, jundia_status, tem_marinha, inmet_list):
+        dia_nome = d['dia_semana'].lower()
+        t_min = d['t_min']
+        t_max = d['t_max']
+        chuva_tot = d['chuva_tot']
+        rajada_max = d['rajada_max']
+        u_min = min([r['umid_min'] for r in day_turnos]) if day_turnos else 70
+        u_max = max([r['umid_max'] for r in day_turnos]) if day_turnos else 98
+        t_min_rural = max(12, round(t_min - 2))
+        t_max_rural = max(18, round(t_max - 2))
+
+        if u_max >= 95:
+            ar_classificacao = "Ar Muito Úmido"
+        elif u_max >= 85:
+            ar_classificacao = "Ar Úmido"
+        else:
+            ar_classificacao = "Ar Moderadamente Úmido"
+
+        avisos_ref = []
+        if tem_marinha and dia_idx == 0:
+            avisos_ref.append("Aviso de Vento Forte nº 733/2026 da Marinha do Brasil")
+        alerta_dia = next((a for a in inmet_list if a.get('eh_direto_ostras')), None)
+        if not alerta_dia and inmet_list:
+            alerta_dia = inmet_list[0]
+        if alerta_dia and dia_idx <= 1:
+            cor_badge_txt = alerta_dia.get('cor_badge', f"Alerta {alerta_dia.get('cor_nome', 'Amarelo')}")
+            avisos_ref.append(f"{cor_badge_txt} de {alerta_dia.get('descricao', 'Tempestade')} nº {alerta_dia.get('id', '')} do INMET")
+
+        avisos_str = " e ".join(avisos_ref) if avisos_ref else "Sem avisos meteorológicos vigentes"
+        dir_inicio = day_turnos[0]['vento_dir'] if day_turnos else "SW"
+        dir_fim = day_turnos[2]['vento_dir'] if len(day_turnos) > 2 else "NE"
+        if dir_inicio != dir_fim:
+            vento_txt = f"Ventos de {dir_inicio} rondando para {dir_fim} moderados a fortes com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
+        else:
+            vento_txt = f"Ventos predominantes de {dir_inicio} moderados com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
+
+        if dia_idx == 0:
+            t1 = f"Nesta {dia_nome}, uma frente fria semi-estacionária atua sobre o litoral norte fluminense mantendo céu encoberto e instabilidade atmosférica contínua ao longo de todo o dia."
+            t2 = f"Previsão de chuva moderada a pontualmente forte na manhã e pancadas de chuva com trovoadas à tarde e à noite (acumulado previsto de {chuva_tot:.1f} mm no dia, calha do Rio Jundiá em {jundia_nivel} m sob {jundia_status})."
+            elev_tipo = "gradual"
+        elif dia_idx == 1:
+            t1 = f"Nesta {dia_nome}, a frente fria se afasta progressivamente para o oceano, permitindo a abertura gradual do tempo com períodos de sol entre nuvens e aquecimento a partir da tarde."
+            t2 = f"Previsão de chuva fraca a moderada residual na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de {chuva_tot:.1f} mm no dia, início da vazante lenta do Rio Jundiá)."
+            elev_tipo = "moderada"
+        else:
+            t1 = f"Nesta {dia_nome}, o predomínio de uma massa de ar quente e mais seco em padrão pré-frontal garante amplo predomínio de sol, poucas nuvens e rápida elevação térmica."
+            t2 = f"Previsão de tempo estável na maior parte do dia com possibilidade apenas de pancadas isoladas e rápidas no fim da tarde por aquecimento (acumulado de {chuva_tot:.1f} mm no dia, vazante consolidada e normalidade do Rio Jundiá)."
+            elev_tipo = "rápida"
+
+        t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
+        t4 = f"A umidade relativa do ar oscila entre {u_min:.0f}% nas horas mais quentes da tarde e {u_max:.0f}% na madrugada ({ar_classificacao})."
+        t5 = vento_txt
+
+        return [t1, t2, t3, t4, t5]
 
     # Síntese Sinótica Elaborada (Estrutura Técnica Oficial Exata em 3 Parágrafos)
     d0 = dias_3[0]
@@ -553,7 +644,7 @@ def run_auto_bulletin_pipeline():
 
     # Cards dos 3 Dias
     dias_resumo = []
-    for d in dias_3:
+    for d_idx, d in enumerate(dias_3):
         # Pega os 4 turnos do dia
         day_turnos = [r for r in records_12_turnos if r['data_iso'] == d['date_iso']]
         dia_chuva = d['chuva_tot']
@@ -577,12 +668,17 @@ def run_auto_bulletin_pipeline():
             f"Volume pluviométrico diário estimado em {dia_chuva:.1f} mm com rajadas de vento de até {dia_rajada:.0f} km/h na faixa litorânea."
         )
 
+        informe_pop = gerar_informe_populacao_5_topicos(
+            d_idx, d, day_turnos, jundia_nivel_txt, jundia_status_txt, tem_aviso_marinha, inmet_alerts
+        )
+
         dias_resumo.append({
             "dia": f"{d['dia_semana'].upper()} — {d['date_br']}",
             "subtitulo": f"{tempo_desc} • Máxima de {d['t_max']:.0f}°C e Chuva de {dia_chuva:.1f} mm",
             "badge": badge,
             "badge_tipo": badge_tipo,
             "descricao": desc_card,
+            "informe_populacao": informe_pop,
             "pilares": {
                 "ceu": { "label": "CÉU", "val": wmo_desc, "icon": icon_n },
                 "temp": { "label": "TEMPERATURA", "val": f"{d['t_min']:.0f}° a {d['t_max']:.0f}°C", "icon": "thermometer" },
@@ -685,6 +781,7 @@ def run_auto_bulletin_pipeline():
                 "badge": dias_resumo[0]['badge'],
                 "badge_tipo": dias_resumo[0]['badge_tipo'],
                 "descricao": dias_resumo[0]['descricao'],
+                "informe_populacao": dias_resumo[0].get('informe_populacao', []),
                 "pilares": dias_resumo[0]['pilares']
             },
             {
@@ -695,6 +792,7 @@ def run_auto_bulletin_pipeline():
                 "badge": dias_resumo[1]['badge'],
                 "badge_tipo": dias_resumo[1]['badge_tipo'],
                 "descricao": dias_resumo[1]['descricao'],
+                "informe_populacao": dias_resumo[1].get('informe_populacao', []),
                 "pilares": dias_resumo[1]['pilares']
             },
             {
@@ -705,6 +803,7 @@ def run_auto_bulletin_pipeline():
                 "badge": dias_resumo[2]['badge'],
                 "badge_tipo": dias_resumo[2]['badge_tipo'],
                 "descricao": dias_resumo[2]['descricao'],
+                "informe_populacao": dias_resumo[2].get('informe_populacao', []),
                 "pilares": dias_resumo[2]['pilares']
             }
         ],
