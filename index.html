@@ -269,120 +269,27 @@
           </div>
         </div>
 
-        <!-- Ações do Panorama: Alternar Visualização & Recolher -->
+        <!-- Ações do Panorama: Recolher / Expandir -->
         <div class="flex items-center gap-2 self-start sm:self-center">
-          <div class="flex items-center bg-zinc-100 p-0.5 rounded-lg text-xs font-medium">
-            <button id="btn-sinopse-estruturada" class="px-2.5 py-1 rounded-md bg-white text-zinc-900 font-semibold shadow-xs transition cursor-pointer">
-              3 Blocos Técnicos
-            </button>
-            <button id="btn-sinopse-texto" class="px-2.5 py-1 rounded-md text-zinc-600 hover:text-zinc-900 transition cursor-pointer">
-              Texto Integral
-            </button>
-          </div>
           <button id="btn-toggle-sinopse" class="p-1.5 rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-50 cursor-pointer" title="Minimizar / Expandir Panorama">
             <i data-lucide="chevron-up" id="icon-toggle-sinopse" class="w-4 h-4"></i>
           </button>
         </div>
       </div>
 
-      <!-- Conteúdo do Panorama Sinótico -->
-      <div id="container-conteudo-sinopse" class="space-y-4">
-        
-        <!-- VISÃO 1: 3 Blocos Técnicos Estruturados -->
-        <div id="view-sinopse-estruturada" class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          
-          <!-- Bloco 1: Dinâmica Atmosférica -->
-          <div class="p-4 rounded-xl bg-zinc-50/80 border border-zinc-200/70 space-y-3 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-1 border-b border-zinc-200/50 pb-2">
-                <span class="text-xs font-bold text-zinc-900 uppercase tracking-wide flex items-center gap-1.5">
-                  <i data-lucide="cloud-lightning" class="w-3.5 h-3.5 text-zinc-700"></i>
-                  1. Dinâmica Atmosférica
-                </span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-zinc-200 text-zinc-800">
-                  Alta 1022 hPa
-                </span>
-              </div>
-              <p id="sinopse-bloco-1-texto" class="text-xs text-zinc-700 leading-relaxed text-justify">
-                Atuação de frente fria semi-estacionária associada à circulação anticiclônica de uma alta pressão de 1022 hPa no Atlântico subtropical, mantendo intenso transporte marítimo de umidade, céu encoberto, chuvas intermitentes e acumulado diário de 44,0 mm em Rio das Ostras.
-              </p>
-            </div>
-            
-            <div class="pt-2 border-t border-zinc-200/50 space-y-1 text-[11px] text-zinc-600 font-medium">
-              <div class="flex justify-between">
-                <span>Modelos (72h):</span>
-                <span class="font-bold text-zinc-900 font-mono">ECMWF / GFS (57.7 mm)</span>
-              </div>
-              <div class="flex justify-between">
-                <span>Gradiente Térmico:</span>
-                <span class="font-bold text-zinc-900 font-mono">21°C a 29°C</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bloco 2: Hidrologia & Costa -->
-          <div class="p-4 rounded-xl bg-zinc-50/80 border border-zinc-200/70 space-y-3 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-1 border-b border-zinc-200/50 pb-2">
-                <span class="text-xs font-bold text-zinc-900 uppercase tracking-wide flex items-center gap-1.5">
-                  <i data-lucide="waves" class="w-3.5 h-3.5 text-rose-600"></i>
-                  2. Rio Jundiá & Orla
-                </span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-rose-100 text-rose-800 border border-rose-200">
-                  Alerta Máximo
-                </span>
-              </div>
-              <p id="sinopse-bloco-2-texto" class="text-xs text-zinc-700 leading-relaxed text-justify">
-                Calha do Rio Jundiá operando sob Alerta Máximo (2,17 m a 2,48 m, transbordo em 2,20 m). Solo saturado pelos acumulados severos na rede de PCDs: Palmital (134,0 mm), Rocha Leão (124,7 mm) e Jundiá (108,2 mm). Marinha mantém Aviso nº 733/2026 de Vento Forte (rajadas até 53 km/h).
-              </p>
-            </div>
-
-            <div class="pt-2 border-t border-zinc-200/50 grid grid-cols-2 gap-1 text-[11px] text-zinc-600">
-              <div>PCD Palmital: <strong class="text-zinc-900 font-mono">134,0 mm</strong></div>
-              <div>Rocha Leão: <strong class="text-zinc-900 font-mono">124,7 mm</strong></div>
-              <div>PCD Jundiá: <strong class="text-zinc-900 font-mono">108,2 mm</strong></div>
-              <div>Defesa Civil: <strong class="text-zinc-900 font-mono">70,4 mm</strong></div>
-            </div>
-          </div>
-
-          <!-- Bloco 3: Evolução dos 3 Dias & Operacional -->
-          <div class="p-4 rounded-xl bg-zinc-50/80 border border-zinc-200/70 space-y-3 flex flex-col justify-between">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between gap-1 border-b border-zinc-200/50 pb-2">
-                <span class="text-xs font-bold text-zinc-900 uppercase tracking-wide flex items-center gap-1.5">
-                  <i data-lucide="trending-up" class="w-3.5 h-3.5 text-zinc-700"></i>
-                  3. Tendência 3 Dias
-                </span>
-                <span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                  Vazante ➔ Calor
-                </span>
-              </div>
-              <p id="sinopse-bloco-3-texto" class="text-xs text-zinc-700 leading-relaxed text-justify">
-                Terça-feira (06/10) com afastamento da frente fria, chuva residual cessando pela manhã (13,5 mm), sol e início da vazante lenta. Quarta-feira (07/10) em padrão pré-frontal de forte calor (29°C a 30°C) e pancadas isoladas no fim da tarde.
-              </p>
-            </div>
-
-            <div class="pt-2 border-t border-zinc-200/50 space-y-1 text-[11px] text-zinc-600 font-medium">
-              <div class="flex justify-between">
-                <span>Evolução Sinótica:</span>
-                <span class="font-bold text-zinc-900">Chuva ➔ Vazante ➔ Calor</span>
-              </div>
-              <div class="flex justify-between">
-                <span>Emergência Defesa Civil:</span>
-                <span class="font-bold text-zinc-900 font-mono">199 (Plantão 24h)</span>
-              </div>
-            </div>
-          </div>
-
+      <!-- Conteúdo do Panorama Sinótico: Texto Técnico Contínuo Oficial -->
+      <div id="container-conteudo-sinopse">
+        <div id="sinopse-texto-completo" class="p-4 sm:p-5 rounded-xl bg-zinc-50/80 border border-zinc-200/80 text-xs sm:text-sm text-zinc-800 leading-relaxed space-y-3.5 text-justify font-normal">
+          <p class="leading-relaxed">
+            O padrão meteorológico regional sobre o município de Rio das Ostras para o período de <strong>05/10 a 07/10/2026</strong> é condicionado pela atuação de uma <strong>frente fria semi-estacionária</strong> sobre o litoral norte fluminense e sul do Espírito Santo, acoplada à circulação anticiclônica de uma <strong>alta pressão pós-frontal (1022 hPa)</strong> estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsiona intenso transporte marítimo de umidade em direção à costa (<strong>convergência de umidade marítima</strong>), gerando céu encoberto a nublado, temperaturas entre mínima de 21°C e máxima de 27°C e chuvas intermitentes ao longo desta <strong>segunda-feira (05/10)</strong>, com acumulado diário previsto de <strong>44,0 mm</strong> com trovoadas e rajadas, somando-se aos acumulados pluviométricos severos registrados na rede de PCDs: <strong>134,0 mm em Palmital</strong>, <strong>124,7 mm em Rocha Leão / REBIO União</strong>, <strong>108,2 mm na estação telemétrica Jundiá</strong> e <strong>70,4 mm na Defesa Civil</strong>.
+          </p>
+          <p class="leading-relaxed">
+            Essa precipitação excepcional deflagrou <strong>Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá</strong>: a estação telemétrica municipal (INEA 2241036) registrou nível de <strong>2,14 m</strong> (Status: <strong>ALERTA MÁXIMO</strong>), após ultrapassar a cota de atenção (1,60 m) e a cota de transbordo (2,20 m), atingindo diretamente vias e residências nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. Em paralelo, a Marinha do Brasil mantém o <strong>Aviso nº 733/2026 de Vento Forte (Área Delta)</strong>, com ventos de E/NE Força 7 Beaufort (rajadas de até 53 km/h) e mar muito agitado (ondas de 2,0 a 2,5 m), dificultando o escoamento das águas pluviais no litoral.
+          </p>
+          <p class="leading-relaxed">
+            Na <strong>terça-feira (06/10)</strong>, a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (<strong>13,5 mm acumulados</strong>) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo <strong>26°C à tarde</strong>, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na <strong>quarta-feira (07/10)</strong>, instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (<strong>máxima atingindo 29°C</strong>). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde (0,2 mm, pontuais de 3 mm), antecedendo uma nova frente fria em formação no Sul do país.
+          </p>
         </div>
-
-        <!-- VISÃO 2: Texto Integral Contínuo (Alternável) -->
-        <div id="view-sinopse-texto" class="hidden p-4 rounded-xl bg-zinc-50/80 border border-zinc-200/70 text-xs sm:text-sm text-zinc-800 leading-relaxed space-y-3 text-justify font-normal">
-          <div id="sinopse-texto-completo">
-            <!-- Preenchido dinamicamente via app.js -->
-          </div>
-        </div>
-
       </div>
 
     </div>

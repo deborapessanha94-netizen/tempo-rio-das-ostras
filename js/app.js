@@ -163,36 +163,12 @@ function setupModalsAndDock() {
 }
 
 /**
- * 2.1. Controles Interativos do Panorama Sinótico Geral
+ * 2.1. Controles do Panorama Sinótico Geral (Minimizar / Expandir)
  */
 function setupPanoramaSinoticoControls() {
-  const btnEstruturada = document.getElementById('btn-sinopse-estruturada');
-  const btnTexto = document.getElementById('btn-sinopse-texto');
-  const viewEstruturada = document.getElementById('view-sinopse-estruturada');
-  const viewTexto = document.getElementById('view-sinopse-texto');
   const btnToggle = document.getElementById('btn-toggle-sinopse');
   const containerConteudo = document.getElementById('container-conteudo-sinopse');
   const iconToggle = document.getElementById('icon-toggle-sinopse');
-
-  if (btnEstruturada && btnTexto && viewEstruturada && viewTexto) {
-    btnEstruturada.addEventListener('click', () => {
-      viewEstruturada.classList.remove('hidden');
-      viewTexto.classList.add('hidden');
-      btnEstruturada.classList.add('bg-white', 'text-zinc-900', 'font-semibold', 'shadow-xs');
-      btnEstruturada.classList.remove('text-zinc-600');
-      btnTexto.classList.remove('bg-white', 'text-zinc-900', 'font-semibold', 'shadow-xs');
-      btnTexto.classList.add('text-zinc-600');
-    });
-
-    btnTexto.addEventListener('click', () => {
-      viewEstruturada.classList.add('hidden');
-      viewTexto.classList.remove('hidden');
-      btnTexto.classList.add('bg-white', 'text-zinc-900', 'font-semibold', 'shadow-xs');
-      btnTexto.classList.remove('text-zinc-600');
-      btnEstruturada.classList.remove('bg-white', 'text-zinc-900', 'font-semibold', 'shadow-xs');
-      btnEstruturada.classList.add('text-zinc-600');
-    });
-  }
 
   if (btnToggle && containerConteudo) {
     btnToggle.addEventListener('click', () => {
@@ -294,7 +270,6 @@ function renderPanoramaSinotico(meta) {
   if (!meta) return;
 
   const sinopseGeral = meta.sinopse_geral || meta.sinopse || '';
-  const est = meta.sinopse_estruturada;
 
   // 1. Período
   const badgePeriodo = document.getElementById('badge-periodo-sinotico');
@@ -302,33 +277,11 @@ function renderPanoramaSinotico(meta) {
     badgePeriodo.textContent = meta.periodo;
   }
 
-  // 2. Visão Texto Integral
+  // 2. Texto Integral Oficial
   const textoCompletoEl = document.getElementById('sinopse-texto-completo');
   if (textoCompletoEl && sinopseGeral) {
     const paragrafos = sinopseGeral.split('\n\n').filter(p => p.trim());
-    textoCompletoEl.innerHTML = paragrafos.map(p => `<p class="leading-relaxed mb-3 last:mb-0 text-justify text-zinc-800">${cleanBulletinText(p)}</p>`).join('');
-  }
-
-  // 3. Blocos Estruturados
-  const bloco1El = document.getElementById('sinopse-bloco-1-texto');
-  const bloco2El = document.getElementById('sinopse-bloco-2-texto');
-  const bloco3El = document.getElementById('sinopse-bloco-3-texto');
-
-  if (est) {
-    if (bloco1El && est.ordem_1_atmosfera?.texto) {
-      bloco1El.textContent = cleanBulletinText(est.ordem_1_atmosfera.texto);
-    }
-    if (bloco2El && est.ordem_2_hidrologia_costa?.texto) {
-      bloco2El.textContent = cleanBulletinText(est.ordem_2_hidrologia_costa.texto);
-    }
-    if (bloco3El && est.ordem_3_operacional?.texto) {
-      bloco3El.textContent = cleanBulletinText(est.ordem_3_operacional.texto);
-    }
-  } else if (sinopseGeral) {
-    const paras = sinopseGeral.split('\n\n').filter(p => p.trim());
-    if (bloco1El && paras[0]) bloco1El.textContent = cleanBulletinText(paras[0]);
-    if (bloco2El && paras[1]) bloco2El.textContent = cleanBulletinText(paras[1]);
-    if (bloco3El && paras[2]) bloco3El.textContent = cleanBulletinText(paras[2]);
+    textoCompletoEl.innerHTML = paragrafos.map(p => `<p class="leading-relaxed text-justify text-zinc-800">${cleanBulletinText(p)}</p>`).join('');
   }
 }
 
