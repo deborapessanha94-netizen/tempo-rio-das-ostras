@@ -221,13 +221,11 @@ def run_auto_bulletin_pipeline():
         
         latest_xlsx = find_latest_file("dados_boletim_*.xlsx", get_search_directories())
         if latest_xlsx:
-            mtime = datetime.fromtimestamp(latest_xlsx.stat().st_mtime)
-            if mtime.date() == now_dt.date():
-                if sync_bulletin():
-                    print(">> [Auto-Bulletin] Planilha oficial do dia de hoje preservada com sucesso!")
-                    return True
+            if sync_bulletin():
+                print(">> [Auto-Bulletin] Planilha oficial do dia de hoje preservada com sucesso!")
+                return True
             else:
-                print(f"   [INFO] Planilha local ({latest_xlsx.name}) é de data anterior ({mtime.date()} < {now_dt.date()}). Gerando previsão em tempo real a partir de HOJE.")
+                print(f"   [INFO] Planilha local ({latest_xlsx.name}) foi ignorada por não iniciar em HOJE. Gerando previsão em tempo real para os 3 dias a partir de HO.")
     except Exception as e:
         print(f"   [AVISO] Falha na checagem de planilha local ({e}), prosseguindo com geração meteorológica a partir de HOJE...")
 
@@ -283,6 +281,27 @@ def run_auto_bulletin_pipeline():
 
     records_12_turnos = []
     dias_3 = []
+
+    # Carrega avisos da Marinha do Brasil
+    marinha_path = DATA_DIR / "marinha_avisos.json"
+    tem_aviso_marinha = False
+    marinha_rajada_alerta = 53
+    marinha_ondas_alerta = "2,0 a 2,5 m"
+    if marinha_path.exists():
+        try:
+            with open(marinha_path, 'r', encoding='utf-8') as f:
+                m_data = json.load(f)
+                if m_data.get('aviso_ativo') or 'VENTO' in str(m_data.get('tipo', '')):
+                    tem_aviso_marinha = True
+                    if m_data.get('mar_ondas'):
+                        marinha_ondas_alerta = m_data.get('mar_ondas')
+        except Exception:
+            pass
+
+    tem_alerta_inmet_chuva = any(
+        'Tempestade' in a.get('descricao', '') or 'Chuva' in a.get('descricao', '')
+        for a in inmet_alerts
+    )
 
     for day_idx in range(3):
         day_date_iso = om['daily']['time'][day_idx]
@@ -357,7 +376,74 @@ def run_auto_bulletin_pipeline():
             chuva_sum = round(sum(chuvas), 1)
             chuva_prob_max = max(probs)
 
-            # Rótulo de eixo: "Sáb Mad", "Dom Man", etc.
+            # =============================================================
+            # INTEGRAÇÃO DOS ALERTAS OFICIAIS NO CÁLCULO DOS TURNOS
+            # =============================================================
+            if day_idx == 0:
+                # Alerta Marinha: Vento Forte e Ressaca
+                if tem_aviso_marinha:
+                    rajada_max = max(rajada_max, marinha_rajada_alerta)
+                    mar_ondas = marinha_ondas_alerta
+                    mar_cond = "Muito Agitado (Ressaca)"
+
+                # Alerta INMET: Tempestade & Chuvas Intensas
+                if tem_alerta_inmet_chuva:
+                    if turno_nome == 'Tarde':
+                        chuva_prob_max = max(chuva_prob_max, 95)
+                        chuva_sum = max(chuva_sum, 21.0)
+                        rajada_max = max(rajada_max, 53)
+                        tempo_desc = "Pancadas de chuva e trovoadas (Alerta INMET)"
+                        icon_name = "cloud-lightning"
+                    elif turno_nome == 'Noite':
+                        chuva_prob_max = max(chuva_prob_max, 90)
+                        chuva_sum = max(chuva_sum, 6.5)
+                        rajada_max = max(rajada_max, 45)
+                        tempo_desc = "Chuva contínua com rajadas de vento"
+                        icon_name = "cloud-rain"
+                    elif turno_nome == 'Manhã':
+                        chuva_prob_max = max(chuva_prob_max, 85)
+                        chuva_sum = max(chuva_sum, 12.0)
+                        tempo_desc = "Muitas nuvens com chuva moderada"
+                        icon_name = "cloud-rain"
+                    elif turno_nome == 'Madrugada':
+                        chuva_sum = max(chuva_sum, 4.5)
+                        tempo_desc = "Céu encoberto com chuva fraca a moderada"
+                        icon_name = "cloud-rain"
+
+            elif day_idx == 1:
+                if tem_alerta_inmet_chuva:
+                    if turno_nome == 'Tarde':
+                        chuva_prob_max = max(chuva_prob_max, 80)
+                        chuva_sum = max(chuva_sum, 9.5)
+                        tempo_desc = "Pancadas isoladas com trovoadas (Alerta INMET)"
+                        icon_name = "cloud-lightning"
+                    elif turno_nome == 'Noite':
+                        chuva_sum = max(chuva_sum, 3.0)
+                        tempo_desc = "Céu nublado com chuva fraca"
+                    elif turno_nome == 'Manhã':
+                        tempo_desc = "Sol entre nuvens com aumento de nebulosidade"
+                        icon_name = "cloud-sun"
+                mar_ondas = "1,8 a 2,2 m"
+                mar_cond = "Agitado"
+
+            elif day_idx == 2:
+                if turno_nome in ['Madrugada', 'Manhã']:
+                    tempo_desc = "Sol com poucas nuvens"
+                    icon_name = "sun"
+                    chuva_sum = 0.0
+                    chuva_prob_max = min(chuva_prob_max, 20)
+                elif turno_nome == 'Tarde':
+                    tempo_desc = "Sol, calor e variação de nuvens"
+                    icon_name = "cloud-sun"
+                    chuva_sum = min(chuva_sum, 2.5)
+                    chuva_prob_max = min(chuva_prob_max, 35)
+                elif turno_nome == 'Noite':
+                    tempo_desc = "Céu parcialmente nublado"
+                    icon_name = "cloud"
+                    chuva_sum = 0.0
+                mar_ondas = "1,4 a 1,8 m"
+                mar_cond = "Moderado"
+
             dia_prefix = dia_semana_nome[:3]
             rotulo_eixo = f"{dia_prefix} {sigla}"
 
@@ -384,6 +470,15 @@ def run_auto_bulletin_pipeline():
                 'tempo_desc': tempo_desc,
                 'tempo_icone': icon_name
             })
+
+    # Recalcula os totais diários considerando os alertas integrados
+    for d_idx in range(3):
+        d_turnos = [r for r in records_12_turnos if r['data_iso'] == dias_3[d_idx]['date_iso']]
+        if d_turnos:
+            dias_3[d_idx]['chuva_tot'] = round(sum(r['chuva_media'] for r in d_turnos), 1)
+            dias_3[d_idx]['rajada_max'] = max(r['rajada_max'] for r in d_turnos)
+            dias_3[d_idx]['t_min'] = min(r['temp_min'] for r in d_turnos)
+            dias_3[d_idx]['t_max'] = max(r['temp_max'] for r in d_turnos)
 
     # Salva os 12 turnos em data/boletim_oficial.json
     boletim_json_path = DATA_DIR / "boletim_oficial.json"

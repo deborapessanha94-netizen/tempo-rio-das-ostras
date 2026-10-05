@@ -1,8 +1,10 @@
-name: Sincronização e Previsão Meteorológica Oficial 24/7 (De 1 em 1 Hora)
+name: Previsão Meteorológica Oficial Autônoma 24/7 (07:00 e 17:00 BRT + Monitoramento Horário)
 
 on:
   schedule:
-    # Executa automaticamente de 1 em 1 hora em ponto (24 rodadas diárias 24/7)
+    # 07:00 BRT (10:00 UTC) e 17:00 BRT (20:00 UTC) - Emissões Oficiais da Defesa Civil
+    - cron: '0 10,20 * * *'
+    # Monitoramento contínuo 24/7 de 1 em 1 hora para telemetria e novos alertas do INMET/Marinha
     - cron: '0 * * * *'
   workflow_dispatch:
   push:

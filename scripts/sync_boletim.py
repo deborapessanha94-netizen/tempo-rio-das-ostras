@@ -82,9 +82,19 @@ def sync_bulletin():
     if xlsx_file:
         from datetime import datetime as dt_cls
         mtime = dt_cls.fromtimestamp(xlsx_file.stat().st_mtime)
-        if mtime.date() != dt_cls.now().date():
-            print(f"   [INFO] Planilha local ({xlsx_file.name}) é anterior a hoje ({mtime.date()} < {dt_cls.now().date()}). Ignorando para garantir previsão a partir de HOJE.")
+        try:
+            df_check = pd.read_excel(xlsx_file)
+            if len(df_check) > 0:
+                first_date_val = str(df_check.iloc[0].get('data', '')).split('T')[0].strip()
+                hoje_br = dt_cls.now().strftime("%d/%m/%Y")
+                hoje_iso = dt_cls.now().strftime("%Y-%m-%d")
+                if first_date_val and first_date_val != hoje_br and first_date_val != hoje_iso:
+                    print(f"   [INFO] Planilha local ({xlsx_file.name}) contém previsão que inicia em {first_date_val} (anterior a hoje {hoje_br}). Ignorando para garantir previsão a partir de HOJE.")
+                    return False
+        except Exception as e:
+            print(f"   [AVISO] Falha ao pré-verificar {xlsx_file.name}: {e}")
             return False
+
         print(f"   [DADOS] Lendo planilha oficial do dia: {xlsx_file.name}")
         df = pd.read_excel(xlsx_file)
         
