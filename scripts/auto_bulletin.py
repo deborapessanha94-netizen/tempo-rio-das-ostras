@@ -698,6 +698,19 @@ def run_auto_bulletin_pipeline():
     }
 
     meta_path = DATA_DIR / "boletim_metadata.json"
+    if meta_path.exists():
+        try:
+            with open(meta_path, 'r', encoding='utf-8') as f:
+                old_meta = json.load(f)
+                if 'dias_previsao' in old_meta:
+                    metadata['dias_previsao'] = old_meta['dias_previsao']
+                if 'sinopse_estruturada' in old_meta and isinstance(old_meta['sinopse_estruturada'], dict):
+                    for k, v in old_meta['sinopse_estruturada'].items():
+                        if k not in metadata['sinopse_estruturada']:
+                            metadata['sinopse_estruturada'][k] = v
+        except Exception:
+            pass
+
     with open(meta_path, 'w', encoding='utf-8') as f:
         json.dump(metadata, f, ensure_ascii=False, indent=2)
     print(f"   [METADADOS] Salvo boletim_metadata.json com sucesso ({periodo_str})")

@@ -52,8 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 function initTheme() {
   const saved = localStorage.getItem('meteo_theme');
-  // Padrão: Modo "Black and Gold Elegance" (#000000, #14213D, #FCA311)
-  const initialTheme = saved === 'light' ? 'light' : 'dark';
+  // Padrão Minimalista: Modo Claro Oficial
+  const initialTheme = saved === 'dark' ? 'dark' : 'light';
   applyTheme(initialTheme);
 
   const btnLight = document.getElementById('btn-theme-light');
@@ -209,10 +209,10 @@ function setupNavigationTabs() {
 
       // Atualiza botões
       tabButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'shadow-sm', 'shadow-md');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'shadow-sm', 'shadow-md', 'bg-slate-900', 'dark:bg-slate-100', 'dark:text-slate-900', 'bg-[#1b3554]', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
         b.classList.add('theme-text-muted');
       });
-      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-md');
+      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
       btn.classList.remove('theme-text-muted');
 
       // Exibe aba correspondente
@@ -248,10 +248,10 @@ function setupBulletinChartTabs() {
   chartButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       chartButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold', 'bg-slate-900', 'dark:bg-slate-100', 'dark:text-slate-900', 'bg-[#1b3554]', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
         b.classList.add('theme-text-muted');
       });
-      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-sm');
+      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
       btn.classList.remove('theme-text-muted');
 
       state.activeMetric = btn.getAttribute('data-metric') || 'temperature';
@@ -401,7 +401,7 @@ function renderBulletinDOM(meta, rows) {
           const formattedVal = formatPilarValue(p.label || k, p.val);
           return `
             <div class="theme-tile p-2.5 rounded-lg flex items-start gap-2 min-h-[62px] h-auto">
-              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5"></i>
+              <i data-lucide="${p.icon || 'circle'}" class="w-4 h-4 text-slate-500 dark:text-slate-400 shrink-0 mt-0.5"></i>
               <div class="min-w-0 flex-1">
                 <span class="text-[9px] uppercase font-bold theme-text-dim block tracking-wider leading-none mb-1">${p.label || k}</span>
                 <span class="text-[11px] sm:text-xs font-bold theme-text-main block leading-tight break-words whitespace-normal">${cleanBulletinText(formattedVal || '—')}</span>
@@ -1030,25 +1030,25 @@ function renderAvisosDetalhados(inmetAvisos, marinha) {
           </div>
 
           <!-- BLOCO DE VIGÊNCIA OFICIAL E DATAS (100% GARANTIDO) -->
-          <div class="p-2.5 rounded-md bg-black/40 border border-[#FCA311]/30 space-y-1 font-mono text-xs">
-            <div class="flex items-center justify-between text-white flex-wrap gap-1">
+          <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1 font-mono text-xs">
+            <div class="flex items-center justify-between theme-text-main flex-wrap gap-1">
               <span class="flex items-center gap-1.5">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
-                <span><strong class="text-[#FCA311]">Início da Vigência:</strong> ${cleanBulletinText(marInicio)}</span>
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+                <span><strong class="theme-text-main">Início da Vigência:</strong> ${cleanBulletinText(marInicio)}</span>
               </span>
-              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 font-sans font-bold">Oficial CHM</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 font-sans font-bold border border-blue-200 dark:border-blue-800">Oficial CHM</span>
             </div>
-            <div class="flex items-center justify-between text-white flex-wrap gap-1">
+            <div class="flex items-center justify-between theme-text-main flex-wrap gap-1">
               <span class="flex items-center gap-1.5">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
-                <span><strong class="text-[#FCA311]">Término / Validade:</strong> ${cleanBulletinText(marFim)}</span>
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+                <span><strong class="theme-text-main">Término / Validade:</strong> ${cleanBulletinText(marFim)}</span>
               </span>
             </div>
-            <div class="flex items-center gap-1.5 text-[10px] text-[#E5E5E5] pt-1 border-t border-white/10 flex-wrap">
-              <i data-lucide="file-badge" class="w-3 h-3 text-blue-400 shrink-0"></i>
+            <div class="flex items-center gap-1.5 text-[10px] theme-text-muted pt-1 border-t theme-border flex-wrap">
+              <i data-lucide="file-badge" class="w-3 h-3 text-blue-600 shrink-0"></i>
               <span><strong>Emissão Oficial:</strong> ${cleanBulletinText(marEmissao)}</span>
-              <span class="text-white/40">•</span>
-              <span class="text-amber-300"><strong>Validade:</strong> ${cleanBulletinText(marValidade)}</span>
+              <span class="theme-text-dim">•</span>
+              <span class="text-amber-700 dark:text-amber-300"><strong>Validade:</strong> ${cleanBulletinText(marValidade)}</span>
             </div>
           </div>
         </div>
@@ -1059,7 +1059,7 @@ function renderAvisosDetalhados(inmetAvisos, marinha) {
   // 2. Avisos INMET
   if (Array.isArray(inmetAvisos) && inmetAvisos.length > 0) {
     inmetAvisos.forEach(a => {
-      const sevClass = a.severidade === 'Grande Perigo' ? 'border-l-red-600' : (a.severidade === 'Perigo' ? 'border-l-orange-500' : 'border-l-amber-500');
+      const sevClass = a.severidade === 'Grande Perigo' ? 'border-l-rose-600' : (a.severidade === 'Perigo' ? 'border-l-orange-500' : 'border-l-amber-500');
       const badgeClass = a.severidade === 'Grande Perigo' ? 'badge-danger-theme' : (a.severidade === 'Perigo' ? 'badge-warning-theme' : 'badge-warning-theme');
       
       const inicioTxt = resolverInicioAviso(a);
@@ -1089,42 +1089,42 @@ function renderAvisosDetalhados(inmetAvisos, marinha) {
             </div>
 
             <!-- BLOCO DE VIGÊNCIA OFICIAL E DATAS (100% GARANTIDO) -->
-            <div class="p-2.5 rounded-md bg-black/40 border border-[#FCA311]/30 space-y-1 font-mono text-xs">
-              <div class="flex items-center justify-between text-white flex-wrap gap-1">
+            <div class="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-1 font-mono text-xs">
+              <div class="flex items-center justify-between theme-text-main flex-wrap gap-1">
                 <span class="flex items-center gap-1.5">
-                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
-                  <span><strong class="text-[#FCA311]">Início do Alerta:</strong> ${cleanBulletinText(inicioTxt)}</span>
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+                  <span><strong class="theme-text-main">Início do Alerta:</strong> ${cleanBulletinText(inicioTxt)}</span>
                 </span>
-                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-sans font-bold">Oficial INMET</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300 font-sans font-bold border border-amber-200 dark:border-amber-800">Oficial INMET</span>
               </div>
-              <div class="flex items-center justify-between text-white flex-wrap gap-1">
+              <div class="flex items-center justify-between theme-text-main flex-wrap gap-1">
                 <span class="flex items-center gap-1.5">
-                  <i data-lucide="clock" class="w-3.5 h-3.5 text-[#FCA311] shrink-0"></i>
-                  <span><strong class="text-[#FCA311]">Término Previsto:</strong> ${cleanBulletinText(fimTxt)}</span>
+                  <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-500 shrink-0"></i>
+                  <span><strong class="theme-text-main">Término Previsto:</strong> ${cleanBulletinText(fimTxt)}</span>
                 </span>
               </div>
-              <div class="flex items-center gap-1.5 text-[10px] text-[#E5E5E5] pt-1 border-t border-white/10 flex-wrap">
-                <i data-lucide="shield-alert" class="w-3 h-3 text-amber-400 shrink-0"></i>
+              <div class="flex items-center gap-1.5 text-[10px] theme-text-muted pt-1 border-t theme-border flex-wrap">
+                <i data-lucide="shield-alert" class="w-3 h-3 text-amber-500 shrink-0"></i>
                 <span><strong>Período Ativo:</strong> ${cleanBulletinText(periodoTxt)}</span>
               </div>
             </div>
 
             ${riscosText ? `
               <div>
-                <strong class="text-[#E5E5E5] block text-[11px] mb-0.5">Riscos Potenciais:</strong>
+                <strong class="theme-text-main block text-[11px] mb-0.5">Riscos Potenciais:</strong>
                 <p class="text-[11px] theme-text-muted leading-relaxed">${cleanBulletinText(riscosText)}</p>
               </div>
             ` : ''}
 
             ${instrucoesText ? `
               <div>
-                <strong class="text-[#E5E5E5] block text-[11px] mb-0.5">Orientações de Segurança:</strong>
+                <strong class="theme-text-main block text-[11px] mb-0.5">Orientações de Segurança:</strong>
                 <p class="text-[11px] theme-text-muted leading-relaxed">${cleanBulletinText(instrucoesText)}</p>
               </div>
             ` : ''}
 
             ${a.estados ? `
-              <div class="text-[10px] theme-text-dim pt-1 border-t border-white/5">
+              <div class="text-[10px] theme-text-dim pt-1 border-t theme-border">
                 <strong>Área de Abrangência:</strong> ${cleanBulletinText(a.estados)}
               </div>
             ` : ''}
@@ -1202,7 +1202,7 @@ function renderAlertBannerGrid(meta) {
       }
 
       return `
-        <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+        <div class="p-2.5 rounded-lg bg-white dark:bg-[#091626] border border-[#80aad3]/25 dark:border-[#1b3554] space-y-1 shadow-xs">
           <div class="flex items-center justify-between gap-1">
             <div class="flex items-center gap-1.5 font-bold theme-text-main">
               <i data-lucide="${icon}" class="w-4 h-4 ${iconColor} shrink-0"></i>
@@ -1243,7 +1243,7 @@ function renderAlertBannerGrid(meta) {
 
   gridEl.innerHTML = `
     <!-- 1. Alerta Hidrológico -->
-    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+    <div class="p-2.5 rounded-lg bg-white dark:bg-[#091626] border border-[#80aad3]/25 dark:border-[#1b3554] space-y-1 shadow-xs">
       <div class="flex items-center justify-between gap-1">
         <div class="flex items-center gap-1.5 font-bold theme-text-main">
           <i data-lucide="waves" class="w-4 h-4 text-red-600 shrink-0"></i>
@@ -1260,7 +1260,7 @@ function renderAlertBannerGrid(meta) {
     </div>
 
     <!-- 2. Aviso Marítimo -->
-    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+    <div class="p-2.5 rounded-lg bg-white dark:bg-[#091626] border border-[#80aad3]/25 dark:border-[#1b3554] space-y-1 shadow-xs">
       <div class="flex items-center justify-between gap-1">
         <div class="flex items-center gap-1.5 font-bold theme-text-main">
           <i data-lucide="anchor" class="w-4 h-4 text-blue-600 shrink-0"></i>
@@ -1277,7 +1277,7 @@ function renderAlertBannerGrid(meta) {
     </div>
 
     <!-- 3. Alerta Pluviométrico / Meteorológico -->
-    <div class="p-2.5 rounded-lg bg-white/90 dark:bg-slate-900/80 border border-orange-200 dark:border-orange-950/40 space-y-1 shadow-xs">
+    <div class="p-2.5 rounded-lg bg-white dark:bg-[#091626] border border-[#80aad3]/25 dark:border-[#1b3554] space-y-1 shadow-xs">
       <div class="flex items-center justify-between gap-1">
         <div class="flex items-center gap-1.5 font-bold theme-text-main">
           <i data-lucide="cloud-rain" class="w-4 h-4 text-orange-500 shrink-0"></i>
@@ -1428,7 +1428,7 @@ function renderSinopseContent(meta) {
   const estacoesHtml = estacoes.map(est => `
     <div class="p-2 rounded theme-tile border theme-border flex flex-col">
       <span class="text-[10px] font-sans theme-text-muted">${cleanBulletinText(est.nome)}</span>
-      <span class="font-bold text-red-600 dark:text-red-400 text-xs">${cleanBulletinText(est.valor)}</span>
+      <span class="font-bold text-rose-600 dark:text-rose-400 text-xs">${cleanBulletinText(est.valor)}</span>
     </div>
   `).join('');
 
@@ -1466,10 +1466,10 @@ function renderSinopseContent(meta) {
     const ventoVal = pilares.vento?.val || '—';
 
     return `
-      <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-[#FCA311]">
+      <div class="theme-tile p-3 sm:p-3.5 rounded-lg border theme-border flex flex-col justify-between space-y-2.5 transition hover:border-slate-300 dark:hover:border-slate-700">
         <div>
           <div class="flex items-center justify-between gap-1 border-b theme-tile-border pb-1.5 flex-wrap">
-            <span class="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-black/40 text-[#FCA311] border border-[#FCA311]/30">DIA ${num} • ${offset}</span>
+            <span class="badge-neutral-theme text-[9px] font-bold">DIA ${num} • ${offset}</span>
             <span class="${badgeClass} text-[10px] font-bold">${cleanBulletinText(d.badge || 'OFICIAL')}</span>
           </div>
           <div class="mt-1.5">
@@ -1479,31 +1479,31 @@ function renderSinopseContent(meta) {
         </div>
 
         <div class="grid grid-cols-2 gap-1.5 text-left font-mono text-[10px] sm:text-[11px] pt-1 border-t theme-tile-border">
-          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
             <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Temperatura</span>
             <span class="font-bold theme-text-main flex items-center gap-1">
-              <i data-lucide="thermometer" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <i data-lucide="thermometer" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
               <span>${cleanBulletinText(tempVal)}</span>
             </span>
           </div>
-          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
             <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Chuva Prevista</span>
-            <span class="font-bold text-blue-400 flex items-center gap-1">
-              <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-400 shrink-0"></i>
+            <span class="font-bold text-[#1b3554] dark:text-[#c0e6fd] flex items-center gap-1">
+              <i data-lucide="cloud-rain" class="w-3 h-3 text-[#5b86b6] shrink-0"></i>
               <span>${cleanBulletinText(chuvaVal)}</span>
             </span>
           </div>
-          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
             <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Condição do Céu</span>
             <span class="font-bold theme-text-body flex items-center gap-1 text-[10px]">
-              <i data-lucide="${ceuIcon}" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <i data-lucide="${ceuIcon}" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
               <span class="truncate">${cleanBulletinText(ceuVal)}</span>
             </span>
           </div>
-          <div class="p-1.5 rounded bg-black/10 dark:bg-white/5 border border-white/5">
+          <div class="p-1.5 rounded bg-[#c0e6fd]/15 dark:bg-[#102136] border border-[#80aad3]/25 dark:border-[#1b3554]">
             <span class="block text-[8px] font-sans font-bold theme-text-dim uppercase tracking-wider">Vento & Rajada</span>
             <span class="font-bold theme-text-muted flex items-center gap-1 text-[10px]">
-              <i data-lucide="wind" class="w-3 h-3 text-[#FCA311] shrink-0"></i>
+              <i data-lucide="wind" class="w-3 h-3 text-[#3f6593] dark:text-[#80aad3] shrink-0"></i>
               <span>${cleanBulletinText(ventoVal)}</span>
             </span>
           </div>
@@ -1519,10 +1519,10 @@ function renderSinopseContent(meta) {
   sinopseEl.innerHTML = `
     <div class="space-y-4 text-xs">
       <!-- 1. Configuração Sinótica Regional & Dinâmica Atmosférica (Visão Geral dos 3 Dias) -->
-      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(252, 163, 17, 0.3);">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border theme-border space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b theme-border pb-2">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
-            <i data-lucide="compass" class="w-4 h-4 text-[#FCA311]"></i>
+            <i data-lucide="compass" class="w-4 h-4 text-[#3f6593] dark:text-[#80aad3]"></i>
             <span>1. Configuração Sinótica Regional & Dinâmica Atmosférica</span>
           </div>
           <span class="badge-info-theme text-[10px]">FRENTE SEMI-ESTACIONÁRIA • ALTA 1022 hPa</span>
@@ -1547,10 +1547,10 @@ function renderSinopseContent(meta) {
       </div>
 
       <!-- 2. Evolução e Tendência Diária dos 3 Dias da Previsão Oficial (3 Cards Dedicados) -->
-      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-3" style="border-color: rgba(252, 163, 17, 0.3);">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(252, 163, 17, 0.2);">
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border theme-border space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b theme-border pb-2">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
-            <i data-lucide="calendar-days" class="w-4 h-4 text-[#FCA311]"></i>
+            <i data-lucide="calendar-days" class="w-4 h-4 text-[#3f6593] dark:text-[#80aad3]"></i>
             <span>2. Evolução & Tendência Diária dos 3 Dias da Previsão Oficial</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -1565,10 +1565,10 @@ function renderSinopseContent(meta) {
       </div>
 
       <!-- 3. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla -->
-      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border-l-4 border-l-red-500 border border-red-200 dark:border-red-900/30 space-y-2.5">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(239, 68, 68, 0.2);">
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border-l-4 border-l-rose-500 border theme-border space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b theme-border pb-2">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
-            <i data-lucide="waves" class="w-4 h-4 text-red-600"></i>
+            <i data-lucide="waves" class="w-4 h-4 text-rose-600"></i>
             <span>3. Rede Hidrográfica Municipal (Rio Jundiá) & Dinâmica Costeira na Orla</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -1586,18 +1586,18 @@ function renderSinopseContent(meta) {
               ${estacoesHtml}
             </div>
           </div>
-          <div class="pt-1.5 border-t border-white/10 text-[11px] font-mono text-[#FCA311] flex items-center gap-1.5">
-            <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0"></i>
-            <span><strong>Vigência Marinha:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
+          <div class="pt-1.5 border-t theme-border text-[11px] font-mono theme-text-muted flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 shrink-0 text-[#3f6593] dark:text-[#80aad3]"></i>
+            <span><strong class="theme-text-main">Vigência Marinha:</strong> 04/10/2026 às 00:00 UTC até 05/10/2026 às 09:00h BRT (Aviso nº 733/2026 CHM)</span>
           </div>
         </div>
       </div>
 
       <!-- 4. Regime Operacional, Atualização em Nuvem & Plantão Defesa Civil 24/7 -->
-      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border space-y-2.5" style="border-color: rgba(59, 130, 246, 0.3);">
-        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b pb-2" style="border-color: rgba(59, 130, 246, 0.2);">
+      <div class="p-3.5 sm:p-4 rounded-lg theme-tile border theme-border space-y-2.5">
+        <div class="flex flex-wrap items-center justify-between gap-1.5 border-b theme-border pb-2">
           <div class="flex items-center gap-2 font-bold theme-text-main text-xs sm:text-sm">
-            <i data-lucide="server" class="w-4 h-4 text-blue-500"></i>
+            <i data-lucide="server" class="w-4 h-4 text-[#3f6593] dark:text-[#80aad3]"></i>
             <span>4. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7</span>
           </div>
           <div class="flex items-center gap-1.5 flex-wrap">
@@ -1615,11 +1615,11 @@ function renderSinopseContent(meta) {
           </div>
           <div class="p-2 rounded theme-tile border theme-border flex flex-col">
             <span class="text-[10px] font-sans theme-text-muted">Infraestrutura em Nuvem</span>
-            <span class="font-bold text-emerald-500">Ativa 24h / Servidor Autônomo</span>
+            <span class="font-bold text-emerald-600 dark:text-emerald-400">Ativa 24h / Servidor Autônomo</span>
           </div>
           <div class="p-2 rounded theme-tile border theme-border flex flex-col">
             <span class="text-[10px] font-sans theme-text-muted">Canais de Emergência</span>
-            <span class="font-bold text-[#FCA311]">199 (Defesa Civil) • 193 (Bombeiros)</span>
+            <span class="font-bold text-rose-600 dark:text-rose-400">199 (Defesa Civil) • 193 (Bombeiros)</span>
           </div>
         </div>
       </div>

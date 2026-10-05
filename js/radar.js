@@ -16,7 +16,7 @@ const RJ_RADARS = [
     nome: 'Radar Pico do Couto (REDEMET / DECEA)',
     coords: [-22.463, -43.298],
     alcanceKm: 250,
-    cor: '#FCA311',
+    cor: '#3f6593',
     detalhes: 'Banda S • 100% de cobertura do Estado do RJ, Região Serrana e Baixada'
   },
   {
@@ -74,9 +74,9 @@ function setupInteractiveControls() {
     btnModeMulti.dataset.bound = 'true';
     btnModeMulti.addEventListener('click', () => {
       currentMode = 'windy';
-      btnModeMulti.classList.add('bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
-      btnModeMulti.classList.remove('bg-[#1E88E5]', 'text-white', 'theme-text-muted', 'font-medium');
-      btnModeDoppler.classList.remove('bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'shadow-xs');
+      btnModeMulti.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
+      btnModeMulti.classList.remove('bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'theme-text-muted', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900');
+      btnModeDoppler.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]', 'dark:bg-slate-100', 'dark:text-slate-900');
       btnModeDoppler.classList.add('theme-text-muted', 'font-medium');
 
       if (windyWrapper) windyWrapper.classList.remove('hidden');
@@ -89,9 +89,9 @@ function setupInteractiveControls() {
     btnModeDoppler.dataset.bound = 'true';
     btnModeDoppler.addEventListener('click', () => {
       currentMode = 'doppler';
-      btnModeDoppler.classList.add('bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
-      btnModeDoppler.classList.remove('bg-[#1E88E5]', 'text-white', 'theme-text-muted', 'font-medium');
-      btnModeMulti.classList.remove('bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'shadow-xs');
+      btnModeDoppler.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
+      btnModeDoppler.classList.remove('bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'theme-text-muted', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900');
+      btnModeMulti.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'bg-[#FCA311]', 'bg-[#1E88E5]', 'text-black', 'text-white', 'font-bold', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]', 'dark:bg-slate-100', 'dark:text-slate-900');
       btnModeMulti.classList.add('theme-text-muted', 'font-medium');
 
       if (leafletWrapper) leafletWrapper.classList.remove('hidden');
@@ -117,10 +117,10 @@ function setupInteractiveControls() {
 
       // Atualiza botões
       layerButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'text-white', 'text-black', 'font-semibold', 'font-bold');
+        b.classList.remove('active', 'bg-[#1E88E5]', 'bg-[#FCA311]', 'bg-slate-900', 'bg-[#1b3554]', 'text-white', 'text-black', 'font-semibold', 'font-bold', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
         b.classList.add('theme-text-muted', 'font-medium');
       });
-      btn.classList.add('active', 'bg-[#FCA311]', 'text-black', 'font-bold', 'shadow-xs');
+      btn.classList.add('active', 'bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
       btn.classList.remove('theme-text-muted', 'font-medium');
 
       // Se estiver no modo Doppler e selecionar uma camada que não é radar de chuva,
@@ -141,9 +141,9 @@ function setupInteractiveControls() {
     btnScopeRj.dataset.bound = 'true';
     btnScopeRj.addEventListener('click', () => {
       currentScope = 'rj';
-      btnScopeRj.classList.add('bg-[#FCA311]/20', 'text-[#FCA311]', 'font-bold', 'border', 'border-[#FCA311]/40');
-      btnScopeRj.classList.remove('bg-[#1E88E5]/15', 'theme-text-muted', 'font-medium');
-      btnScopeRo.classList.remove('bg-[#FCA311]/20', 'text-[#FCA311]', 'border', 'border-[#FCA311]/40');
+      btnScopeRj.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
+      btnScopeRj.classList.remove('bg-slate-900', 'theme-text-muted', 'dark:bg-slate-100', 'dark:text-slate-900');
+      btnScopeRo.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'text-white', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
       btnScopeRo.classList.add('theme-text-muted', 'font-medium');
 
       if (map) map.setView([RJ_CENTER.lat, RJ_CENTER.lon], RJ_CENTER.zoom);
@@ -155,9 +155,9 @@ function setupInteractiveControls() {
     btnScopeRo.dataset.bound = 'true';
     btnScopeRo.addEventListener('click', () => {
       currentScope = 'ro';
-      btnScopeRo.classList.add('bg-[#FCA311]/20', 'text-[#FCA311]', 'font-bold', 'border', 'border-[#FCA311]/40');
-      btnScopeRo.classList.remove('bg-[#1E88E5]/15', 'theme-text-muted', 'font-medium');
-      btnScopeRj.classList.remove('bg-[#FCA311]/20', 'text-[#FCA311]', 'border', 'border-[#FCA311]/40');
+      btnScopeRo.classList.add('bg-[#1b3554]', 'text-white', 'font-medium', 'shadow-xs', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
+      btnScopeRo.classList.remove('bg-slate-900', 'theme-text-muted', 'dark:bg-slate-100', 'dark:text-slate-900');
+      btnScopeRj.classList.remove('bg-[#1b3554]', 'bg-slate-900', 'text-white', 'dark:bg-slate-100', 'dark:text-slate-900', 'dark:bg-[#c0e6fd]', 'dark:text-[#000f22]');
       btnScopeRj.classList.add('theme-text-muted', 'font-medium');
 
       if (map) map.setView([RO_CENTER.lat, RO_CENTER.lon], RO_CENTER.zoom);
@@ -273,8 +273,8 @@ async function initLeafletRadar(containerId = 'radar-map') {
     const customIconRO = L.divIcon({
       className: 'radar-city-marker',
       html: `<div class="relative flex items-center justify-center">
-              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-[#FCA311] opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-4 w-4 bg-[#FCA311] border-2 border-black shadow-lg"></span>
+              <span class="animate-ping absolute inline-flex h-8 w-8 rounded-full bg-[#5b86b6] opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-4 w-4 bg-[#1b3554] border-2 border-white dark:border-[#c0e6fd] shadow-lg"></span>
              </div>`,
       iconSize: [32, 32],
       iconAnchor: [16, 16]
@@ -283,17 +283,17 @@ async function initLeafletRadar(containerId = 'radar-map') {
     markerRO = L.marker([RIO_DAS_OSTRAS_COORDS.lat, RIO_DAS_OSTRAS_COORDS.lon], { icon: customIconRO }).addTo(map);
     markerRO.bindPopup(`
       <div class="text-xs space-y-1">
-        <strong class="text-sm font-bold block text-amber-500">Rio das Ostras - RJ</strong>
-        <p class="text-slate-200">Centro de Monitoramento Hidrológico da Bacia do Rio Jundiá e Costa Marítima.</p>
-        <span class="inline-block bg-[#FCA311]/20 text-[#FCA311] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#FCA311]/40">DEFESA CIVIL ATIVA</span>
+        <strong class="text-sm font-bold block theme-text-main">Rio das Ostras - RJ</strong>
+        <p class="theme-text-body">Centro de Monitoramento Hidrológico da Bacia do Rio Jundiá e Costa Marítima.</p>
+        <span class="inline-block bg-[#c0e6fd]/30 text-[#1b3554] dark:bg-[#1b3554]/60 dark:text-[#c0e6fd] text-[10px] font-bold px-1.5 py-0.5 rounded border border-[#80aad3]/40">DEFESA CIVIL ATIVA</span>
       </div>
     `);
 
     // Raio municipal de vigilância de Rio das Ostras (20 km)
     L.circle([RIO_DAS_OSTRAS_COORDS.lat, RIO_DAS_OSTRAS_COORDS.lon], {
-      color: '#FCA311',
-      fillColor: '#FCA311',
-      fillOpacity: 0.1,
+      color: '#3f6593',
+      fillColor: '#80aad3',
+      fillOpacity: 0.12,
       weight: 1.5,
       dashArray: '4, 4',
       radius: 20000

@@ -4,152 +4,156 @@
 /* VARIÁVEIS DE TEMA: MODO CLARO (PADRÃO / BOLETIM A4) & MODO ESCURO (24H)   */
 /* ========================================================================= */
 :root {
-  /* Paleta Oficial Black and Gold Elegance */
-  --palette-white: #FFFFFF;
-  --palette-platinum: #E5E5E5;
-  --palette-gold: #FCA311;
-  --palette-navy: #14213D;
-  --palette-black: #000000;
+  /* Paleta Oficial Minimalista (Extraída com precisão de media_1791161584444.jpg) */
+  --c1-ice: #c0e6fd;       /* 1. Azul Gelo / Céu Suave */
+  --c2-soft: #80aad3;      /* 2. Azul Pastel Oceano */
+  --c3-steel: #5b86b6;     /* 3. Azul Aço / Cerúleo */
+  --c4-slate: #3f6593;     /* 4. Azul Ardósia Profundo */
+  --c5-navy: #1b3554;      /* 5. Azul Marinho Fechado */
+  --c6-midnight: #000f22;  /* 6. Azul Noite / Midnight Quase Preto */
 }
 
 :root, html.theme-light {
   color-scheme: light;
-  --bg-page: #f4f6fa;
-  --header-bg: #14213D;
-  --header-border: #0d1629;
-  --header-text: #FFFFFF;
-  --header-sub: #E5E5E5;
-  --header-badge-bg: #0d1629;
-  --header-badge-text: #FCA311;
-  --header-badge-border: #FCA311;
+  --bg-page: #f5f9fd;              /* Fundo claro aerado com toque sutil de gelo */
+  --header-bg: #FFFFFF;            /* Header branco plano integrado */
+  --header-border: rgba(128, 170, 211, 0.28); /* Borda suave baseada em #80aad3 */
+  --header-text: #000f22;          /* #000f22 - Título principal */
+  --header-sub: #3f6593;           /* #3f6593 - Subtítulo */
+  --header-badge-bg: rgba(192, 230, 253, 0.35); /* #c0e6fd translúcido */
+  --header-badge-text: #1b3554;    /* #1b3554 */
+  --header-badge-border: rgba(128, 170, 211, 0.45);
 
   --nav-bg: #FFFFFF;
-  --nav-border: #E5E5E5;
-  --nav-btn-text: #14213D;
-  --nav-btn-hover: #f1f5f9;
-  --nav-btn-active-bg: #FCA311;
-  --nav-btn-active-text: #000000;
+  --nav-border: rgba(128, 170, 211, 0.25);
+  --nav-btn-text: #3f6593;         /* #3f6593 */
+  --nav-btn-hover: rgba(192, 230, 253, 0.25);
+  --nav-btn-active-bg: #1b3554;    /* #1b3554 Azul Marinho Sóbrio */
+  --nav-btn-active-text: #FFFFFF;  /* Branco */
 
-  --card-bg: #FFFFFF;
-  --card-border: #E5E5E5;
-  --card-hover-border: #FCA311;
-  --card-shadow: 0 2px 10px 0 rgba(20, 33, 61, 0.08);
+  --card-bg: #FFFFFF;              /* Branco puro minimalista */
+  --card-border: rgba(128, 170, 211, 0.3); /* Borda suave #80aad3 */
+  --card-hover-border: #80aad3;
+  --card-shadow: 0 1px 3px 0 rgba(0, 15, 34, 0.04), 0 1px 2px -1px rgba(0, 15, 34, 0.04);
 
-  --tile-bg: #f8fafc;
-  --tile-border: #E5E5E5;
+  --tile-bg: rgba(192, 230, 253, 0.14); /* Fundo suave com tom gelo */
+  --tile-border: rgba(128, 170, 211, 0.28);
 
-  --text-main: #14213D;
-  --text-body: #334155;
-  --text-muted: #64748b;
-  --text-dim: #94a3b8;
+  --text-main: #000f22;            /* #000f22 - Preto-azulado nítido */
+  --text-body: #1b3554;            /* #1b3554 - Texto corrido elegante */
+  --text-muted: #3f6593;           /* #3f6593 - Legendas e labels */
+  --text-dim: #5b86b6;             /* #5b86b6 - Indicadores secundários */
 
   --btn-outline-bg: #FFFFFF;
-  --btn-outline-border: #14213D;
-  --btn-outline-text: #14213D;
-  --btn-outline-hover-bg: #14213D;
-  --btn-outline-hover-text: #FFFFFF;
+  --btn-outline-border: rgba(128, 170, 211, 0.5);
+  --btn-outline-text: #1b3554;     /* #1b3554 */
+  --btn-outline-hover-bg: rgba(192, 230, 253, 0.25);
+  --btn-outline-hover-text: #000f22;
 
-  --table-head-bg: #14213D;
-  --table-head-text: #FFFFFF;
-  --table-row-hover: #f1f5f9;
-  --table-row-alt: #fcfcfc;
-  --table-border: #E5E5E5;
-  --table-cell-text: #14213D;
+  --table-head-bg: rgba(192, 230, 253, 0.25);
+  --table-head-text: #1b3554;
+  --table-row-hover: rgba(192, 230, 253, 0.15);
+  --table-row-alt: #FFFFFF;
+  --table-border: rgba(128, 170, 211, 0.25);
+  --table-cell-text: #000f22;
 
-  --alert-bg: #fffbeb;
-  --alert-border: #FCA311;
-  --alert-title: #b45309;
-  --alert-text: #78350f;
+  --alert-bg: #FFFFFF;
+  --alert-border: rgba(128, 170, 211, 0.35);
+  --alert-title: #000f22;
+  --alert-text: #1b3554;
 
-  --badge-danger-bg: #fee2e2;
-  --badge-danger-text: #991b1b;
-  --badge-danger-border: #f87171;
+  /* Badges Minimalistas Flat Pastel */
+  --badge-danger-bg: #FEF2F2;
+  --badge-danger-text: #B91C1C;
+  --badge-danger-border: #FECACA;
 
-  --badge-warning-bg: #fef3c7;
-  --badge-warning-text: #b45309;
-  --badge-warning-border: #FCA311;
+  --badge-warning-bg: #FFFBEB;
+  --badge-warning-text: #B45309;
+  --badge-warning-border: #FDE68A;
 
-  --badge-info-bg: #e0f2fe;
-  --badge-info-text: #0369a1;
-  --badge-info-border: #38bdf8;
+  --badge-info-bg: rgba(192, 230, 253, 0.4);
+  --badge-info-text: #1b3554;
+  --badge-info-border: rgba(128, 170, 211, 0.5);
 
-  --badge-neutral-bg: #E5E5E5;
-  --badge-neutral-text: #14213D;
-  --badge-neutral-border: #cbd5e1;
+  --badge-neutral-bg: rgba(192, 230, 253, 0.2);
+  --badge-neutral-text: #3f6593;
+  --badge-neutral-border: rgba(128, 170, 211, 0.3);
 
-  --accent-gold: #FCA311;
-  --accent-blue: #FCA311;
-  --accent-orange: #FCA311;
+  --accent-primary: #1b3554;
+  --accent-blue: #5b86b6;
+  --accent-gold: #1b3554;
+  --accent-orange: #EA580C;
 }
 
-html.theme-dark {
+html.theme-dark, html.dark {
   color-scheme: dark;
-  --bg-page: #000000;              /* Fundo Preto Absoluto da Paleta */
-  --header-bg: #14213D;            /* Deep Navy #14213D */
-  --header-border: #1e3158;
-  --header-text: #FFFFFF;          /* Branco #FFFFFF */
-  --header-sub: #E5E5E5;           /* Platinado #E5E5E5 */
-  --header-badge-bg: #0c1527;
-  --header-badge-text: #FCA311;     /* Dourado #FCA311 */
-  --header-badge-border: #FCA311;
+  --bg-page: #000f22;              /* #000f22 - Fundo escuro oficial da paleta */
+  --header-bg: #091626;            /* Superfície escura derivada */
+  --header-border: #1b3554;        /* #1b3554 */
+  --header-text: #FFFFFF;
+  --header-sub: #80aad3;           /* #80aad3 */
+  --header-badge-bg: #1b3554;      /* #1b3554 */
+  --header-badge-text: #c0e6fd;    /* #c0e6fd */
+  --header-badge-border: #3f6593;  /* #3f6593 */
 
-  --nav-bg: #14213D;
-  --nav-border: #1e3158;
-  --nav-btn-text: #E5E5E5;
-  --nav-btn-hover: #1b2c52;
-  --nav-btn-active-bg: #FCA311;     /* Dourado #FCA311 */
-  --nav-btn-active-text: #000000;   /* Texto em Preto para alto contraste */
+  --nav-bg: #091626;
+  --nav-border: #1b3554;
+  --nav-btn-text: #80aad3;
+  --nav-btn-hover: #1b3554;
+  --nav-btn-active-bg: #c0e6fd;    /* #c0e6fd Destaque no escuro */
+  --nav-btn-active-text: #000f22;  /* #000f22 Texto no escuro */
 
-  --card-bg: #14213D;              /* Superfície Nobre Deep Navy #14213D */
-  --card-border: #1f3259;
-  --card-hover-border: #FCA311;     /* Realce Dourado Elegance */
-  --card-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.7);
+  --card-bg: #091626;              /* Cartão azul profundo */
+  --card-border: #1b3554;          /* #1b3554 */
+  --card-hover-border: #3f6593;    /* #3f6593 */
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
 
-  --tile-bg: #0c1527;              /* Deep Navy Escuro para células de dados */
-  --tile-border: #1b2a47;
+  --tile-bg: #102136;
+  --tile-border: #1b3554;
 
-  --text-main: #FFFFFF;            /* Branco puro para títulos e métricas */
-  --text-body: #E5E5E5;            /* Platinado para textos corridos */
-  --text-muted: #a3b4cc;           /* Azul-acinzentado elegante */
-  --text-dim: #72849e;
+  --text-main: #FFFFFF;
+  --text-body: #d4e5f7;
+  --text-muted: #80aad3;           /* #80aad3 */
+  --text-dim: #5b86b6;             /* #5b86b6 */
 
-  --btn-outline-bg: #14213D;
-  --btn-outline-border: #FCA311;
-  --btn-outline-text: #FCA311;
-  --btn-outline-hover-bg: #FCA311;
-  --btn-outline-hover-text: #000000;
+  --btn-outline-bg: #091626;
+  --btn-outline-border: #3f6593;
+  --btn-outline-text: #c0e6fd;
+  --btn-outline-hover-bg: #1b3554;
+  --btn-outline-hover-text: #FFFFFF;
 
-  --table-head-bg: #0c1527;
-  --table-head-text: #FCA311;       /* Dourado nas colunas */
-  --table-row-hover: #1a2a47;
-  --table-row-alt: #0f192e;
-  --table-border: #1b2d4f;
-  --table-cell-text: #E5E5E5;
+  --table-head-bg: #102136;
+  --table-head-text: #80aad3;
+  --table-row-hover: #1b3554;
+  --table-row-alt: #091626;
+  --table-border: #1b3554;
+  --table-cell-text: #FFFFFF;
 
-  --alert-bg: #14213D;
-  --alert-border: #FCA311;
-  --alert-title: #FCA311;
-  --alert-text: #FFFFFF;
+  --alert-bg: #091626;
+  --alert-border: #1b3554;
+  --alert-title: #FFFFFF;
+  --alert-text: #d4e5f7;
 
-  --badge-danger-bg: rgba(220, 38, 38, 0.25);
-  --badge-danger-text: #fca5a5;
-  --badge-danger-border: #ef4444;
+  --badge-danger-bg: rgba(220, 38, 38, 0.2);
+  --badge-danger-text: #FCA5A5;
+  --badge-danger-border: rgba(239, 68, 68, 0.35);
 
-  --badge-warning-bg: rgba(252, 163, 17, 0.2);
-  --badge-warning-text: #FCA311;
-  --badge-warning-border: #FCA311;
+  --badge-warning-bg: rgba(245, 158, 11, 0.2);
+  --badge-warning-text: #FCD34D;
+  --badge-warning-border: rgba(245, 158, 11, 0.35);
 
-  --badge-info-bg: rgba(20, 33, 61, 0.9);
-  --badge-info-text: #93c5fd;
-  --badge-info-border: #3b82f6;
+  --badge-info-bg: rgba(91, 134, 182, 0.25);
+  --badge-info-text: #c0e6fd;
+  --badge-info-border: rgba(128, 170, 211, 0.4);
 
-  --badge-neutral-bg: #0c1527;
-  --badge-neutral-text: #E5E5E5;
-  --badge-neutral-border: #1f3259;
+  --badge-neutral-bg: #102136;
+  --badge-neutral-text: #80aad3;
+  --badge-neutral-border: #1b3554;
 
-  --accent-gold: #FCA311;
-  --accent-blue: #FCA311;
-  --accent-orange: #FCA311;
+  --accent-primary: #c0e6fd;
+  --accent-blue: #80aad3;
+  --accent-gold: #c0e6fd;
+  --accent-orange: #FB923C;
 }
 
 /* ========================================================================= */
@@ -240,21 +244,30 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Botões Institucionais */
 .btn-cemaden-primary {
-  background-color: var(--accent-gold);
-  color: #000000 !important;
-  font-weight: 700;
+  background-color: var(--accent-primary);
+  color: #FFFFFF !important;
+  font-weight: 600;
   border-radius: 0.375rem;
   transition: all 0.15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(252, 163, 17, 0.25);
+  box-shadow: 0 1px 2px rgba(0, 15, 34, 0.08);
+}
+
+html.theme-dark .btn-cemaden-primary, html.dark .btn-cemaden-primary {
+  background-color: var(--c1-ice);
+  color: #000f22 !important;
 }
 
 .btn-cemaden-primary:hover {
-  background-color: #e5920b;
+  background-color: #000f22;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(252, 163, 17, 0.4);
+  box-shadow: 0 2px 4px rgba(0, 15, 34, 0.12);
+}
+
+html.theme-dark .btn-cemaden-primary:hover, html.dark .btn-cemaden-primary:hover {
+  background-color: #FFFFFF;
 }
 
 .btn-cemaden-primary:active {
@@ -276,7 +289,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 .btn-cemaden-outline:hover {
   background-color: var(--btn-outline-hover-bg);
   color: var(--btn-outline-hover-text) !important;
-  border-color: var(--accent-gold);
+  border-color: var(--card-hover-border);
 }
 
 .theme-header-title {
@@ -297,7 +310,9 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 /* CABEÇALHO E NAVEGAÇÃO EM ABAS STICKY UNIFICADOS                         */
 /* ========================================================================= */
 #site-header {
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
 
@@ -392,8 +407,8 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-theme-toggle:hover {
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
+  border-color: var(--card-hover-border);
+  color: var(--text-main);
 }
 
 /* Badges Responsivos ao Tema */
@@ -483,12 +498,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   background-color: var(--table-row-hover);
 }
 
-/* Caixa de Informe de Alerta */
+/* Caixa de Informe de Alerta Minimalista */
 .theme-alert-banner {
-  background-color: var(--alert-bg) !important;
-  border: 1px solid var(--alert-border) !important;
-  border-left: 4px solid var(--alert-border) !important;
-  color: var(--alert-text) !important;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--card-border) !important;
+  border-left: 3px solid #E11D48 !important;
+  color: var(--text-body) !important;
   border-radius: 0.5rem;
   padding: 0.875rem 1rem;
 }
