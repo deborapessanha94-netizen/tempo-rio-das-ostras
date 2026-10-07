@@ -1,8 +1,8 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "06/10 (Terça-feira) a 08/10 (Quinta-feira)",
-  "emissao": "06/10/2026 às 23:44h",
-  "informe_alerta": "ALERTA MÁXIMO HIDROLÓGICO (INEA) para o Rio Jundiá, que atingiu 2.40 m (cota de transbordo é 2,20 m / calha a 2,84 m). Aviso de Vento Forte e Mar Agitado na orla marítima (rajadas atingindo até 53 km/h e mar com ondas de até 2,5 m). Acumulado total de chuva previsto para o ciclo de 3 dias: 56.6 mm com temperatura máxima alcançando 29°C.",
+  "emissao": "07/10/2026 às 00:20h",
+  "informe_alerta": "ALERTA MÁXIMO HIDROLÓGICO (INEA) para o Rio Jundiá, que atingiu 2.40 m (cota de transbordo é 2,20 m / calha a 2,84 m). Aviso de Vento Forte e Mar Agitado na orla marítima (rajadas atingindo até 53 km/h e mar com ondas de até 2,5 m). Acumulado total de chuva previsto para o ciclo de 3 dias: 57.2 mm com temperatura máxima alcançando 30°C.",
   "alertas_estruturados": [
     {
       "tipo": "hidrologico",
@@ -25,11 +25,11 @@
       "titulo": "Previsão Pluviométrica",
       "status": "ACUMULADO 3D",
       "badge": "info",
-      "detalhe": "Volume previsto: 56.6 mm • Pico térmico: 29°C",
+      "detalhe": "Volume previsto: 57.2 mm • Pico térmico: 30°C",
       "impacto": "Solo saturado nas encostas. Monitoramento preventivo em Cantagalo e Rocha Leão."
     }
   ],
-  "sinopse_geral": "O padrão meteorológico regional sobre o município de Rio das Ostras para o período de 06/10 (Terça-feira) a 08/10 (Quinta-feira) é condicionado pela atuação de uma frente fria semi-estacionária sobre o litoral norte fluminense e sul do Espírito Santo, acoplada à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsiona intenso transporte marítimo de umidade em direção à costa (convergência de umidade marítima), gerando céu encoberto a nublado, temperaturas entre mínima de 20°C e máxima de 27°C e chuvas intermitentes ao longo desta terça-feira (06/10), com acumulado diário previsto de 44.0 mm com trovoadas e rajadas, somando-se aos acumulados pluviométricos severos registrados na rede de PCDs: 134,0 mm em Palmital, 124,7 mm em Rocha Leão / REBIO União, 108,2 mm na estação telemétrica Jundiá e 70,4 mm na Defesa Civil.\n\nEssa precipitação excepcional deflagrou Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá: a estação telemétrica municipal (INEA 2241036) registrou nível de 2.40 m (Status: ALERTA MÁXIMO), após ultrapassar a cota de atenção (1,60 m) e a cota de transbordo (2,20 m), atingindo diretamente vias e residências nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. Em paralelo, a Marinha do Brasil mantém o Aviso nº 733/2026 de Vento Forte (Área Delta), com ventos de E/NE Força 7 Beaufort (rajadas de até 53 km/h) e mar muito agitado (ondas de 2,0 a 2,5 m), dificultando o escoamento das águas pluviais no litoral.\n\nNa quarta-feira (07/10), a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (12.5 mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo 29°C à tarde, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na quinta-feira (08/10), instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo 27°C). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde (0.1 mm, pontuais de 3 mm), antecedendo uma nova frente fria em formação no Sul do país.",
+  "sinopse_geral": "O padrão meteorológico regional sobre o município de Rio das Ostras para o período de 06/10 (Terça-feira) a 08/10 (Quinta-feira) é condicionado pela atuação de uma frente fria semi-estacionária sobre o litoral norte fluminense e sul do Espírito Santo, acoplada à circulação anticiclônica de uma alta pressão pós-frontal (1022 hPa) estabelecida no Atlântico subtropical (Carta Sinótica CHM 12Z). Esse bloqueio atmosférico impulsiona intenso transporte marítimo de umidade em direção à costa (convergência de umidade marítima), gerando céu encoberto a nublado, temperaturas entre mínima de 20°C e máxima de 27°C e chuvas intermitentes ao longo desta terça-feira (06/10), com acumulado diário previsto de 44.0 mm com trovoadas e rajadas, somando-se aos acumulados pluviométricos severos registrados na rede de PCDs: 134,0 mm em Palmital, 124,7 mm em Rocha Leão / REBIO União, 108,2 mm na estação telemétrica Jundiá e 70,4 mm na Defesa Civil.\n\nEssa precipitação excepcional deflagrou Cenário de Alerta Máximo de Inundação na Bacia do Rio Jundiá: a estação telemétrica municipal (INEA 2241036) registrou nível de 2.40 m (Status: ALERTA MÁXIMO), após ultrapassar a cota de atenção (1,60 m) e a cota de transbordo (2,20 m), atingindo diretamente vias e residências nos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. Em paralelo, a Marinha do Brasil mantém o Aviso nº 733/2026 de Vento Forte (Área Delta), com ventos de E/NE Força 7 Beaufort (rajadas de até 53 km/h) e mar muito agitado (ondas de 2,0 a 2,5 m), dificultando o escoamento das águas pluviais no litoral.\n\nNa quarta-feira (07/10), a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (12.5 mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo 30°C à tarde, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na quinta-feira (08/10), instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo 27°C). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde (0.7 mm, pontuais de 3 mm), antecedendo uma nova frente fria em formação no Sul do país.",
   "sinopse_estruturada": {
     "periodo": "06/10 (Terça-feira) a 08/10 (Quinta-feira)",
     "evolucao_3_dias": [
@@ -45,7 +45,7 @@
           "Nesta terça-feira, uma frente fria semi-estacionária atua sobre o litoral norte fluminense mantendo céu encoberto e instabilidade atmosférica contínua ao longo de todo o dia.",
           "Previsão de chuva moderada a pontualmente forte na manhã e pancadas de chuva com trovoadas à tarde e à noite (acumulado previsto de 44.0 mm no dia, calha do Rio Jundiá em 2.40 m sob ALERTA MÁXIMO).",
           "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 27°C à tarde em gradual elevação. Na região rural, oscilam entre 18°C e 25°C.",
-          "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 98% na madrugada (Ar Muito Úmido).",
+          "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
           "Ventos de WSW rondando para ESE moderados a fortes com rajadas de até 53 km/h na orla (Aviso de Vento Forte nº 733/2026 da Marinha do Brasil e Alerta Amarelo de Tempestade nº 55963 do INMET)."
         ],
         "pilares": {
@@ -61,7 +61,7 @@
           },
           "umid": {
             "label": "UMIDADE",
-            "val": "68% a 98%",
+            "val": "68% a 96%",
             "icon": "droplets"
           },
           "vento": {
@@ -85,36 +85,36 @@
         "dia_offset": "D+1",
         "dia_ordem": 2,
         "dia_rotulo": "QUARTA-FEIRA — 07/10/2026",
-        "subtitulo": "Céu parcialmente nublado • Máxima de 29°C e Chuva de 12.5 mm",
+        "subtitulo": "Céu parcialmente nublado • Máxima de 30°C e Chuva de 12.5 mm",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 29°C. Volume pluviométrico diário estimado em 12.5 mm com rajadas de vento de até 35 km/h na faixa litorânea.",
+        "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 30°C. Volume pluviométrico diário estimado em 12.5 mm com rajadas de vento de até 40 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta quarta-feira, a frente fria se afasta progressivamente para o oceano, permitindo a abertura gradual do tempo com períodos de sol entre nuvens e aquecimento a partir da tarde.",
           "Previsão de chuva fraca a moderada residual na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12.5 mm no dia, início da vazante lenta do Rio Jundiá).",
-          "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 29°C à tarde em moderada elevação. Na região rural, oscilam entre 20°C e 27°C.",
-          "A umidade relativa do ar oscila entre 74% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-          "Ventos de NE rondando para S moderados a fortes com rajadas de até 35 km/h na orla (Alerta Amarelo de Tempestade nº 55963 do INMET)."
+          "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 30°C à tarde em moderada elevação. Na região rural, oscilam entre 20°C e 28°C.",
+          "A umidade relativa do ar oscila entre 73% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
+          "Ventos de NE rondando para SSE moderados a fortes com rajadas de até 40 km/h na orla (Alerta Amarelo de Tempestade nº 55963 do INMET)."
         ],
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Pancadas Fracas",
-            "icon": "cloud-rain"
+            "val": "Trovoada",
+            "icon": "cloud-lightning"
           },
           "temp": {
             "label": "TEMPERATURA",
-            "val": "22° a 29°C",
+            "val": "22° a 30°C",
             "icon": "thermometer"
           },
           "umid": {
             "label": "UMIDADE",
-            "val": "74% a 99%",
+            "val": "73% a 99%",
             "icon": "droplets"
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Rajadas 35 km/h",
+            "val": "Rajadas 40 km/h",
             "icon": "wind"
           },
           "chuva": {
@@ -133,16 +133,16 @@
         "dia_offset": "D+2",
         "dia_ordem": 3,
         "dia_rotulo": "QUINTA-FEIRA — 08/10/2026",
-        "subtitulo": "Céu parcialmente nublado • Máxima de 27°C e Chuva de 0.1 mm",
+        "subtitulo": "Céu parcialmente nublado • Máxima de 27°C e Chuva de 0.7 mm",
         "badge": "OBSERVAÇÃO",
         "badge_tipo": "info",
-        "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 27°C. Volume pluviométrico diário estimado em 0.1 mm com rajadas de vento de até 38 km/h na faixa litorânea.",
+        "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 27°C. Volume pluviométrico diário estimado em 0.7 mm com rajadas de vento de até 33 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta quinta-feira, o predomínio de uma massa de ar quente e mais seco em padrão pré-frontal garante amplo predomínio de sol, poucas nuvens e rápida elevação térmica.",
-          "Previsão de tempo estável na maior parte do dia com possibilidade apenas de pancadas isoladas e rápidas no fim da tarde por aquecimento (acumulado de 0.1 mm no dia, vazante consolidada e normalidade do Rio Jundiá).",
+          "Previsão de tempo estável na maior parte do dia com possibilidade apenas de pancadas isoladas e rápidas no fim da tarde por aquecimento (acumulado de 0.7 mm no dia, vazante consolidada e normalidade do Rio Jundiá).",
           "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 27°C à tarde em rápida elevação. Na região rural, oscilam entre 20°C e 25°C.",
-          "A umidade relativa do ar oscila entre 75% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-          "Ventos de SW rondando para ESE moderados a fortes com rajadas de até 38 km/h na orla (Sem avisos meteorológicos vigentes)."
+          "A umidade relativa do ar oscila entre 77% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
+          "Ventos de SW rondando para SE moderados a fortes com rajadas de até 33 km/h na orla (Sem avisos meteorológicos vigentes)."
         ],
         "pilares": {
           "ceu": {
@@ -157,17 +157,17 @@
           },
           "umid": {
             "label": "UMIDADE",
-            "val": "75% a 99%",
+            "val": "77% a 100%",
             "icon": "droplets"
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Rajadas 38 km/h",
+            "val": "Rajadas 33 km/h",
             "icon": "wind"
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "0.1 mm",
+            "val": "0.7 mm",
             "icon": "cloud-drizzle"
           },
           "mar": {
@@ -185,11 +185,11 @@
       "pilares": [
         {
           "label": "Modelos Numéricos (3 Dias)",
-          "val": "ECMWF, GFS e COSMO (56.6 mm em 72h)"
+          "val": "ECMWF, GFS e COSMO (57.2 mm em 72h)"
         },
         {
           "label": "Gradiente Térmico Oficial",
-          "val": "Mínima de 20°C até Máxima de 29°C"
+          "val": "Mínima de 20°C até Máxima de 30°C"
         },
         {
           "label": "Evolução Sinótica Oficial",
@@ -227,7 +227,7 @@
       "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
       "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
       "badge_emergencia": "EMERGÊNCIA 199",
-      "texto": "Na quarta-feira (07/10), a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (12.5 mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo 29°C à tarde, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na quinta-feira (08/10), instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo 27°C). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde (0.1 mm, pontuais de 3 mm), antecedendo uma nova frente fria em formação no Sul do país.",
+      "texto": "Na quarta-feira (07/10), a frente fria se afasta progressivamente para o oceano. Chuvas residuais na madrugada e início da manhã (12.5 mm acumulados) cessam gradualmente, dando lugar a aberturas de sol, redução da umidade relativa e acentuada elevação térmica, com máximas atingindo 30°C à tarde, propiciando o início da vazante do Rio Jundiá (embora com solo saturado e risco geológico remanescente CEMADEN). Na quinta-feira (08/10), instala-se um padrão pré-frontal com predomínio de sol, vento de quadrante Norte e forte calor (máxima atingindo 27°C). A combinação de calor intenso e umidade favorece a formação de pancadas isoladas de chuva à tarde (0.7 mm, pontuais de 3 mm), antecedendo uma nova frente fria em formação no Sul do país.",
       "pilares": [
         {
           "label": "Ciclo Sinótico Oficial",
@@ -281,7 +281,7 @@
         "Nesta terça-feira, uma frente fria semi-estacionária atua sobre o litoral norte fluminense mantendo céu encoberto e instabilidade atmosférica contínua ao longo de todo o dia.",
         "Previsão de chuva moderada a pontualmente forte na manhã e pancadas de chuva com trovoadas à tarde e à noite (acumulado previsto de 44.0 mm no dia, calha do Rio Jundiá em 2.40 m sob ALERTA MÁXIMO).",
         "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 27°C à tarde em gradual elevação. Na região rural, oscilam entre 18°C e 25°C.",
-        "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 98% na madrugada (Ar Muito Úmido).",
+        "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
         "Ventos de WSW rondando para ESE moderados a fortes com rajadas de até 53 km/h na orla (Aviso de Vento Forte nº 733/2026 da Marinha do Brasil e Alerta Amarelo de Tempestade nº 55963 do INMET)."
       ],
       "pilares": {
@@ -297,7 +297,7 @@
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "68% a 98%",
+          "val": "68% a 96%",
           "icon": "droplets"
         },
         "vento": {
@@ -319,36 +319,36 @@
     },
     {
       "dia": "QUARTA-FEIRA — 07/10/2026",
-      "subtitulo": "Céu parcialmente nublado • Máxima de 29°C e Chuva de 12.5 mm",
+      "subtitulo": "Céu parcialmente nublado • Máxima de 30°C e Chuva de 12.5 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 29°C. Volume pluviométrico diário estimado em 12.5 mm com rajadas de vento de até 35 km/h na faixa litorânea.",
+      "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 30°C. Volume pluviométrico diário estimado em 12.5 mm com rajadas de vento de até 40 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta quarta-feira, a frente fria se afasta progressivamente para o oceano, permitindo a abertura gradual do tempo com períodos de sol entre nuvens e aquecimento a partir da tarde.",
         "Previsão de chuva fraca a moderada residual na madrugada e início da manhã, cessando gradativamente ao longo do dia (acumulado de 12.5 mm no dia, início da vazante lenta do Rio Jundiá).",
-        "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 29°C à tarde em moderada elevação. Na região rural, oscilam entre 20°C e 27°C.",
-        "A umidade relativa do ar oscila entre 74% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-        "Ventos de NE rondando para S moderados a fortes com rajadas de até 35 km/h na orla (Alerta Amarelo de Tempestade nº 55963 do INMET)."
+        "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 30°C à tarde em moderada elevação. Na região rural, oscilam entre 20°C e 28°C.",
+        "A umidade relativa do ar oscila entre 73% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
+        "Ventos de NE rondando para SSE moderados a fortes com rajadas de até 40 km/h na orla (Alerta Amarelo de Tempestade nº 55963 do INMET)."
       ],
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Pancadas Fracas",
-          "icon": "cloud-rain"
+          "val": "Trovoada",
+          "icon": "cloud-lightning"
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 29°C",
+          "val": "22° a 30°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "74% a 99%",
+          "val": "73% a 99%",
           "icon": "droplets"
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Rajadas 35 km/h",
+          "val": "Rajadas 40 km/h",
           "icon": "wind"
         },
         "chuva": {
@@ -365,16 +365,16 @@
     },
     {
       "dia": "QUINTA-FEIRA — 08/10/2026",
-      "subtitulo": "Céu parcialmente nublado • Máxima de 27°C e Chuva de 0.1 mm",
+      "subtitulo": "Céu parcialmente nublado • Máxima de 27°C e Chuva de 0.7 mm",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 27°C. Volume pluviométrico diário estimado em 0.1 mm com rajadas de vento de até 38 km/h na faixa litorânea.",
+      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 27°C. Volume pluviométrico diário estimado em 0.7 mm com rajadas de vento de até 33 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta quinta-feira, o predomínio de uma massa de ar quente e mais seco em padrão pré-frontal garante amplo predomínio de sol, poucas nuvens e rápida elevação térmica.",
-        "Previsão de tempo estável na maior parte do dia com possibilidade apenas de pancadas isoladas e rápidas no fim da tarde por aquecimento (acumulado de 0.1 mm no dia, vazante consolidada e normalidade do Rio Jundiá).",
+        "Previsão de tempo estável na maior parte do dia com possibilidade apenas de pancadas isoladas e rápidas no fim da tarde por aquecimento (acumulado de 0.7 mm no dia, vazante consolidada e normalidade do Rio Jundiá).",
         "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 27°C à tarde em rápida elevação. Na região rural, oscilam entre 20°C e 25°C.",
-        "A umidade relativa do ar oscila entre 75% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-        "Ventos de SW rondando para ESE moderados a fortes com rajadas de até 38 km/h na orla (Sem avisos meteorológicos vigentes)."
+        "A umidade relativa do ar oscila entre 77% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
+        "Ventos de SW rondando para SE moderados a fortes com rajadas de até 33 km/h na orla (Sem avisos meteorológicos vigentes)."
       ],
       "pilares": {
         "ceu": {
@@ -389,17 +389,17 @@
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "75% a 99%",
+          "val": "77% a 100%",
           "icon": "droplets"
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Rajadas 38 km/h",
+          "val": "Rajadas 33 km/h",
           "icon": "wind"
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "0.1 mm",
+          "val": "0.7 mm",
           "icon": "cloud-drizzle"
         },
         "mar": {
@@ -455,9 +455,9 @@
   "kpis": {
     "jundia_nivel": "2.13 m",
     "jundia_status": "ALERTA MÁXIMO",
-    "chuva_3d": "56.6 mm",
+    "chuva_3d": "57.2 mm",
     "aviso_marinha": "FORÇA 7",
-    "pico_calor": "29°C",
+    "pico_calor": "30°C",
     "plancon_status": "ALERTA"
   },
   "contatos_emergencia": {
