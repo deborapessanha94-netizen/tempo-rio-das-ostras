@@ -350,6 +350,30 @@ def run_auto_bulletin_pipeline():
         for a in inmet_alerts
     )
 
+    def parse_alert_dates(a):
+        ini = str(a.get('inicio', ''))
+        fim = str(a.get('fim', ''))
+        ini_iso = ini[:10] if '-' in ini else ''
+        fim_iso = fim[:10] if '-' in fim else ''
+        if not ini_iso and '/' in ini:
+            p = ini.split(' ')[0].split('/')
+            if len(p) == 3: ini_iso = f"{p[2]}-{p[1]}-{p[0]}"
+        if not fim_iso and '/' in fim:
+            p = fim.split(' ')[0].split('/')
+            if len(p) == 3: fim_iso = f"{p[2]}-{p[1]}-{p[0]}"
+        return ini_iso, fim_iso
+
+    def get_day_alerts(dt_iso):
+        res = []
+        for a in inmet_alerts:
+            i_iso, f_iso = parse_alert_dates(a)
+            if i_iso and f_iso:
+                if i_iso <= dt_iso <= f_iso:
+                    res.append(a)
+            elif i_iso and dt_iso == i_iso:
+                res.append(a)
+        return res
+
     for day_idx in range(3):
         day_date_iso = om['daily']['time'][day_idx]
         dt = datetime.strptime(day_date_iso, '%Y-%m-%d')
@@ -426,53 +450,91 @@ def run_auto_bulletin_pipeline():
             # =============================================================
             # INTEGRAÇÃO DOS ALERTAS OFICIAIS NO CÁLCULO DOS TURNOS
             # =============================================================
-            if day_idx == 0:
-                # Alerta Marinha: Vento Forte e Ressaca
-                if tem_aviso_marinha:
-                    rajada_max = max(rajada_max, marinha_rajada_alerta)
-                    mar_ondas = marinha_ondas_alerta
-                    mar_cond = "Muito Agitado (Ressaca)"
+            day_alerts = get_day_alerts(day_date_iso)
+            tem_alerta_inmet_dia = len(day_alerts) > 0
+            
+            # Severidade máxima no dia
+            alerta_cor_dia = "Verde"
+            for a in day_alerts:
+                c = a.get('cor_nome', '')
+                if c == 'Vermelho': alerta_cor_dia = 'Vermelho'; break
+                elif c == 'Laranja' and alerta_cor_dia != 'Vermelho': alerta_cor_dia = 'Laranja'
+                elif c == 'Amarelo' and alerta_cor_dia not in ['Vermelho', 'Laranja']: alerta_cor_dia = 'Amarelo'
 
-                # Alerta INMET: Tempestade & Chuvas Intensas
-                if tem_alerta_inmet_chuva:
+            # 1. Ponderação da Marinha do Brasil (Área Delta)
+            if tem_aviso_marinha and day_idx == 0:
+                rajada_max = max(rajada_max, marinha_rajada_alerta)
+                mar_ondas = marinha_ondas_alerta
+                mar_cond = "Muito Agitado (Ressaca)"
+
+            # 2. Ponderação dos Alertas INMET nos Cálculos
+            if tem_alerta_inmet_dia:
+                if alerta_cor_dia == 'Vermelho':
+                    chuva_prob_max = max(chuva_prob_max, 95)
+                    rajada_max = max(rajada_max, 70)
                     if turno_nome == 'Tarde':
-                        chuva_prob_max = max(chuva_prob_max, 95)
-                        chuva_sum = max(chuva_sum, 21.0)
-                        rajada_max = max(rajada_max, 53)
-                        tempo_desc = "Pancadas de chuva e trovoadas (Alerta INMET)"
+                        chuva_sum = max(chuva_sum, 35.0)
+                        tempo_desc = "Tempestade severa com chuva torrencial (Alerta Vermelho)"
                         icon_name = "cloud-lightning"
                     elif turno_nome == 'Noite':
-                        chuva_prob_max = max(chuva_prob_max, 90)
-                        chuva_sum = max(chuva_sum, 6.5)
-                        rajada_max = max(rajada_max, 45)
-                        tempo_desc = "Chuva contínua com rajadas de vento"
+                        chuva_sum = max(chuva_sum, 20.0)
+                        tempo_desc = "Chuva forte contínua e rajadas (Alerta Vermelho)"
                         icon_name = "cloud-rain"
                     elif turno_nome == 'Manhã':
-                        chuva_prob_max = max(chuva_prob_max, 85)
-                        chuva_sum = max(chuva_sum, 12.0)
-                        tempo_desc = "Muitas nuvens com chuva moderada"
+                        chuva_sum = max(chuva_sum, 15.0)
+                        tempo_desc = "Céu encoberto com chuva forte (Alerta Vermelho)"
                         icon_name = "cloud-rain"
                     elif turno_nome == 'Madrugada':
-                        chuva_sum = max(chuva_sum, 4.5)
-                        tempo_desc = "Céu encoberto com chuva fraca a moderada"
-                        icon_name = "cloud-rain"
-
-            elif day_idx == 1:
-                if tem_alerta_inmet_chuva:
+                        chuva_sum = max(chuva_sum, 8.0)
+                elif alerta_cor_dia == 'Laranja':
+                    chuva_prob_max = max(chuva_prob_max, 90)
+                    rajada_max = max(rajada_max, 58)
                     if turno_nome == 'Tarde':
-                        chuva_prob_max = max(chuva_prob_max, 80)
-                        chuva_sum = max(chuva_sum, 9.5)
-                        tempo_desc = "Pancadas isoladas com trovoadas (Alerta INMET)"
+                        chuva_sum = max(chuva_sum, 24.0)
+                        tempo_desc = "Pancadas de chuva forte e trovoadas (Alerta Laranja)"
                         icon_name = "cloud-lightning"
                     elif turno_nome == 'Noite':
-                        chuva_sum = max(chuva_sum, 3.0)
-                        tempo_desc = "Céu nublado com chuva fraca"
+                        chuva_sum = max(chuva_sum, 10.0)
+                        tempo_desc = "Chuva moderada a forte com rajadas (Alerta Laranja)"
+                        icon_name = "cloud-rain"
                     elif turno_nome == 'Manhã':
-                        tempo_desc = "Sol entre nuvens com aumento de nebulosidade"
-                        icon_name = "cloud-sun"
-                mar_ondas = "1,8 a 2,2 m"
-                mar_cond = "Agitado"
-
+                        chuva_sum = max(chuva_sum, 10.0)
+                        tempo_desc = "Muitas nuvens com chuva (Alerta Laranja)"
+                        icon_name = "cloud-rain"
+                    elif turno_nome == 'Madrugada':
+                        chuva_sum = max(chuva_sum, 5.0)
+                elif alerta_cor_dia == 'Amarelo':
+                    chuva_prob_max = max(chuva_prob_max, 80)
+                    if day_idx == 0:
+                        rajada_max = max(rajada_max, 50)
+                        if turno_nome == 'Tarde':
+                            chuva_sum = max(chuva_sum, 21.0)
+                            tempo_desc = "Pancadas de chuva e trovoadas (Alerta Amarelo)"
+                            icon_name = "cloud-lightning"
+                        elif turno_nome == 'Noite':
+                            chuva_sum = max(chuva_sum, 6.5)
+                            tempo_desc = "Chuva contínua com rajadas de vento"
+                            icon_name = "cloud-rain"
+                        elif turno_nome == 'Manhã':
+                            chuva_sum = max(chuva_sum, 12.0)
+                            tempo_desc = "Muitas nuvens com chuva moderada"
+                            icon_name = "cloud-rain"
+                        elif turno_nome == 'Madrugada':
+                            chuva_sum = max(chuva_sum, 4.5)
+                            tempo_desc = "Céu encoberto com chuva fraca a moderada"
+                            icon_name = "cloud-rain"
+                    elif day_idx == 1:
+                        rajada_max = max(rajada_max, 31)
+                        if turno_nome == 'Tarde':
+                            chuva_sum = max(chuva_sum, 9.5)
+                            tempo_desc = "Pancadas isoladas com trovoadas (Alerta Amarelo)"
+                            icon_name = "cloud-lightning"
+                        elif turno_nome == 'Noite':
+                            chuva_sum = max(chuva_sum, 3.0)
+                            tempo_desc = "Céu nublado com chuva fraca"
+                        elif turno_nome == 'Manhã':
+                            tempo_desc = "Sol entre nuvens com aumento de nebulosidade"
+                            icon_name = "cloud-sun"
             elif day_idx == 2:
                 if turno_nome in ['Madrugada', 'Manhã']:
                     tempo_desc = "Sol com poucas nuvens"
