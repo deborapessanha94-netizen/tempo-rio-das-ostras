@@ -14,12 +14,12 @@
     "vento_vel_min": 2,
     "vento_vel_max": 6,
     "vento_vel_media": 5,
-    "rajada_max": 53,
-    "chuva_media": 4.5,
+    "rajada_max": 14,
+    "chuva_media": 0.1,
     "chuva_prob": 94,
-    "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
-    "mar_condicao": "Muito Agitado (Ressaca)",
-    "tempo_desc": "Céu encoberto com chuva fraca a moderada",
+    "mar_ondas": "0.7 a 0.7 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Muitas nuvens com pancadas de chuva isoladas",
     "tempo_icone": "cloud-rain"
   },
   {
@@ -37,12 +37,12 @@
     "vento_vel_min": 7,
     "vento_vel_max": 10,
     "vento_vel_media": 9,
-    "rajada_max": 53,
-    "chuva_media": 12.0,
-    "chuva_prob": 80,
-    "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
-    "mar_condicao": "Muito Agitado (Ressaca)",
-    "tempo_desc": "Muitas nuvens com chuva moderada",
+    "rajada_max": 25,
+    "chuva_media": 0.2,
+    "chuva_prob": 45,
+    "mar_ondas": "0.7 a 0.8 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Muitas nuvens com pancadas de chuva isoladas",
     "tempo_icone": "cloud-rain"
   },
   {
@@ -60,12 +60,12 @@
     "vento_vel_min": 5,
     "vento_vel_max": 18,
     "vento_vel_media": 12,
-    "rajada_max": 53,
-    "chuva_media": 21.0,
+    "rajada_max": 42,
+    "chuva_media": 0.8,
     "chuva_prob": 97,
-    "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
-    "mar_condicao": "Muito Agitado (Ressaca)",
-    "tempo_desc": "Pancadas de chuva e trovoadas (Alerta Amarelo)",
+    "mar_ondas": "0.8 a 0.9 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Muitas nuvens com pancadas de chuva e trovoadas (Alerta Amarelo)",
     "tempo_icone": "cloud-lightning"
   },
   {
@@ -83,13 +83,13 @@
     "vento_vel_min": 14,
     "vento_vel_max": 16,
     "vento_vel_media": 15,
-    "rajada_max": 53,
-    "chuva_media": 6.5,
+    "rajada_max": 36,
+    "chuva_media": 0.3,
     "chuva_prob": 92,
-    "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
-    "mar_condicao": "Muito Agitado (Ressaca)",
-    "tempo_desc": "Chuva contínua com rajadas de vento",
-    "tempo_icone": "cloud-rain"
+    "mar_ondas": "0.8 a 0.9 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
+    "tempo_icone": "cloud-lightning"
   },
   {
     "data_iso": "2026-10-08",
@@ -107,12 +107,12 @@
     "vento_vel_max": 20,
     "vento_vel_media": 18,
     "rajada_max": 43,
-    "chuva_media": 0.0,
-    "chuva_prob": 80,
+    "chuva_media": 0.1,
+    "chuva_prob": 25,
     "mar_ondas": "0.8 a 0.8 m",
     "mar_condicao": "Calmo",
-    "tempo_desc": "Céu Limpo",
-    "tempo_icone": "sun"
+    "tempo_desc": "Muitas nuvens com chuva isolada",
+    "tempo_icone": "cloud-drizzle"
   },
   {
     "data_iso": "2026-10-08",
@@ -130,12 +130,12 @@
     "vento_vel_max": 14,
     "vento_vel_media": 11,
     "rajada_max": 31,
-    "chuva_media": 0.0,
-    "chuva_prob": 80,
+    "chuva_media": 0.2,
+    "chuva_prob": 45,
     "mar_ondas": "0.8 a 0.8 m",
     "mar_condicao": "Calmo",
-    "tempo_desc": "Sol entre nuvens com aumento de nebulosidade",
-    "tempo_icone": "cloud-sun"
+    "tempo_desc": "Muitas nuvens com chuva isolada",
+    "tempo_icone": "cloud-drizzle"
   },
   {
     "data_iso": "2026-10-08",
@@ -153,11 +153,11 @@
     "vento_vel_max": 20,
     "vento_vel_media": 16,
     "rajada_max": 49,
-    "chuva_media": 9.5,
-    "chuva_prob": 80,
+    "chuva_media": 0.8,
+    "chuva_prob": 75,
     "mar_ondas": "0.8 a 0.8 m",
     "mar_condicao": "Calmo",
-    "tempo_desc": "Pancadas isoladas com trovoadas (Alerta Amarelo)",
+    "tempo_desc": "Muitas nuvens com pancadas de chuva e trovoadas (Alerta Amarelo)",
     "tempo_icone": "cloud-lightning"
   },
   {
@@ -175,13 +175,13 @@
     "vento_vel_min": 1,
     "vento_vel_max": 10,
     "vento_vel_media": 5,
-    "rajada_max": 31,
-    "chuva_media": 3.0,
-    "chuva_prob": 80,
+    "rajada_max": 26,
+    "chuva_media": 0.3,
+    "chuva_prob": 60,
     "mar_ondas": "0.7 a 0.8 m",
     "mar_condicao": "Calmo",
-    "tempo_desc": "Céu nublado com chuva fraca",
-    "tempo_icone": "cloud-sun"
+    "tempo_desc": "Muitas nuvens com chuva",
+    "tempo_icone": "cloud-rain"
   },
   {
     "data_iso": "2026-10-09",
@@ -201,9 +201,9 @@
     "rajada_max": 22,
     "chuva_media": 0.0,
     "chuva_prob": 0,
-    "mar_ondas": "1,4 a 1,8 m",
-    "mar_condicao": "Moderado",
-    "tempo_desc": "Sol com poucas nuvens",
+    "mar_ondas": "0.7 a 0.8 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Céu com poucas nuvens",
     "tempo_icone": "sun"
   },
   {
@@ -224,10 +224,10 @@
     "rajada_max": 24,
     "chuva_media": 0.0,
     "chuva_prob": 0,
-    "mar_ondas": "1,4 a 1,8 m",
-    "mar_condicao": "Moderado",
-    "tempo_desc": "Sol com poucas nuvens",
-    "tempo_icone": "sun"
+    "mar_ondas": "0.8 a 0.8 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Sol entre nuvens",
+    "tempo_icone": "cloud-sun"
   },
   {
     "data_iso": "2026-10-09",
@@ -235,8 +235,8 @@
     "turno": "Tarde",
     "rotulo_eixo": "Sex Tar",
     "temp_min": 26,
-    "temp_max": 29,
-    "temp_media": 27.5,
+    "temp_max": 33,
+    "temp_media": 29.5,
     "umid_min": 74,
     "umid_max": 82,
     "pressao_hpa": 1013,
@@ -245,11 +245,11 @@
     "vento_vel_max": 13,
     "vento_vel_media": 12,
     "rajada_max": 32,
-    "chuva_media": 0.0,
-    "chuva_prob": 4,
-    "mar_ondas": "1,4 a 1,8 m",
-    "mar_condicao": "Moderado",
-    "tempo_desc": "Sol, calor e variação de nuvens",
+    "chuva_media": 0.2,
+    "chuva_prob": 35,
+    "mar_ondas": "0.8 a 0.9 m",
+    "mar_condicao": "Calmo",
+    "tempo_desc": "Sol, calor intenso e variação de nuvens com possibilidade de chuva isolada",
     "tempo_icone": "cloud-sun"
   },
   {
@@ -270,8 +270,8 @@
     "rajada_max": 34,
     "chuva_media": 0.0,
     "chuva_prob": 0,
-    "mar_ondas": "1,4 a 1,8 m",
-    "mar_condicao": "Moderado",
+    "mar_ondas": "1.0 a 1.0 m",
+    "mar_condicao": "Calmo",
     "tempo_desc": "Céu parcialmente nublado",
     "tempo_icone": "cloud"
   }

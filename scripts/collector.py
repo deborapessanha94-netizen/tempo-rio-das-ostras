@@ -237,16 +237,16 @@ def collect_all_stations():
         "vento_atual": None,
         "rajada_atual": None,
         "umidade_atual": None,
-        "chuva_1h": 1.4,
-        "chuva_4h": 1.6,
-        "chuva_6h": 8.5,
-        "chuva_12h": 22.0,
-        "chuva_24h": 53.8,
-        "chuva_36h": 75.8,
-        "chuva_48h": 95.5,
-        "chuva_96h": 134.8,
-        "nivel_rio": "2,50 m",
-        "status_rio": "ALERTA MÁXIMO",
+        "chuva_1h": 0.0,
+        "chuva_4h": 0.0,
+        "chuva_6h": 0.0,
+        "chuva_12h": 0.0,
+        "chuva_24h": 0.0,
+        "chuva_36h": 0.0,
+        "chuva_48h": 0.0,
+        "chuva_96h": 2.0,
+        "nivel_rio": "1,82 m",
+        "status_rio": "Atenção",
         "ultima_leitura": "Hoje",
         "online": True
     }
@@ -360,21 +360,21 @@ def collect_inmet_data():
 def collect_marinha_data():
     print(">> [3/7] Coletando Avisos de Mau Tempo da Marinha (Área Delta)...")
     marinha_info = {
-        "aviso_ativo": True,
-        "numero": "733/2026",
-        "tipo": "VENTO FORTE",
+        "aviso_ativo": False,
+        "numero": None,
+        "tipo": "NORMALIDADE",
         "area": "Área DELTA (Farol de São Tomé a Cabo Frio)",
-        "forca": "FORÇA 7 BEAUFORT",
-        "rajadas": "Até 53 km/h (28 nós)",
-        "inicio_utc": "2026-10-04T00:00:00Z",
-        "fim_utc": "2026-10-05T12:00:00Z",
-        "inicio": "04/10/2026 às 00:00 UTC (03/10 às 21:00h BRT)",
-        "fim": "05/10/2026 às 12:00 UTC (05/10 às 09:00h BRT)",
-        "inicio_formatado": "04/10/2026 às 00:00 UTC (03/10 às 21:00h BRT)",
-        "fim_formatado": "05/10/2026 às 12:00 UTC (05/10 às 09:00h BRT)",
-        "emissao": "03/10/2026 às 10:00h BRT (1300Z)",
-        "validade": "Válido de 04/10 às 00h UTC até 05/10/2026 às 09:00h BRT (1200Z)",
-        "mar_ondas": "2,0 a 2,5 m (Muito Agitado)",
+        "forca": "FORÇA 3-4 BEAUFORT",
+        "rajadas": "Até 35 km/h",
+        "inicio_utc": None,
+        "fim_utc": None,
+        "inicio": None,
+        "fim": None,
+        "inicio_formatado": None,
+        "fim_formatado": None,
+        "emissao": None,
+        "validade": "Sem avisos de mau tempo vigentes para a Área Delta",
+        "mar_ondas": "1,2 a 1,6 m (Moderado)",
         "cartas_sinoticas": [
             {"horario": "00 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"},
             {"horario": "12 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"}
@@ -385,29 +385,29 @@ def collect_marinha_data():
         url_marinha = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
         html = fetch_url(url_marinha, timeout=12)
         matches = re.finditer(r'<div class=[\'"]aviso-texto[\'"][^>]*data-numero=[\'"]([^\'"]+)[\'"][^>]*data-inicio-utc=[\'"]([^\'"]+)[\'"][^>]*data-fim-utc=[\'"]([^\'"]+)[\'"][^>]*>(.*?)</div>', html, re.S)
+        now_utc = datetime.now(timezone.utc)
         for m in matches:
             num, ini_utc, fim_utc, body = m.group(1), m.group(2), m.group(3), m.group(4)
             clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
-            if '733' in num or 'DELTA' in clean_text.upper() or 'CABO FRIO' in clean_text.upper() or 'SÃO TOMÉ' in clean_text.upper() or 'SAO TOME' in clean_text.upper():
-                marinha_info["numero"] = num
-                marinha_info["aviso_ativo"] = True
-                marinha_info["inicio_utc"] = ini_utc
-                marinha_info["fim_utc"] = fim_utc
-                
+            if 'DELTA' in clean_text.upper() or 'CABO FRIO' in clean_text.upper() or 'SÃO TOMÉ' in clean_text.upper() or 'SAO TOME' in clean_text.upper():
                 try:
                     dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
                     dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
-                    marinha_info["inicio_formatado"] = f"{dt_ini.strftime('%d/%m/%Y')} às {dt_ini.strftime('%H:%M')} UTC (03/10 às 21:00h BRT)"
-                    marinha_info["fim_formatado"] = f"{dt_fim.strftime('%d/%m/%Y')} às {dt_fim.strftime('%H:%M')} UTC (05/10 às 09:00h BRT)"
-                    marinha_info["inicio"] = marinha_info["inicio_formatado"]
-                    marinha_info["fim"] = marinha_info["fim_formatado"]
+                    if dt_fim > now_utc:
+                        marinha_info["numero"] = num
+                        marinha_info["aviso_ativo"] = True
+                        marinha_info["tipo"] = "VENTO FORTE" if "VENTO" in clean_text.upper() else "MAU TEMPO"
+                        marinha_info["inicio_utc"] = ini_utc
+                        marinha_info["fim_utc"] = fim_utc
+                        marinha_info["inicio_formatado"] = f"{dt_ini.strftime('%d/%m/%Y')} às {dt_ini.strftime('%H:%M')} UTC"
+                        marinha_info["fim_formatado"] = f"{dt_fim.strftime('%d/%m/%Y')} às {dt_fim.strftime('%H:%M')} UTC"
+                        marinha_info["inicio"] = marinha_info["inicio_formatado"]
+                        marinha_info["fim"] = marinha_info["fim_formatado"]
+                        marinha_info["validade"] = f"Válido até {dt_fim.strftime('%d/%m/%Y às %H:%M')} UTC"
+                        marinha_info["mar_ondas"] = "2,0 a 2,5 m (Muito Agitado)"
+                        break
                 except Exception:
                     pass
-
-                m_emit = re.search(r'EMITIDO ÀS\s+([^\-]+-\s*[^\-]+-\s*[\d/A-Z]+)', clean_text, re.I)
-                if m_emit:
-                    marinha_info["emissao"] = m_emit.group(1).strip()
-                break
     except Exception as e:
         print(f"   [AVISO] Erro Marinha: {e}")
 
