@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "08/10 (Quinta-feira) a 10/10 (Sábado)",
-  "emissao": "08/10/2026 às 20:28h",
+  "emissao": "09/10/2026 às 00:14h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Alerta Amarelo de Tempestade do INMET vigente para pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 5.1 mm com temperatura máxima alcançando 35°C.",
   "alertas_estruturados": [
     {
@@ -76,7 +76,7 @@
           },
           "mar": {
             "label": "MAR E PRAIA",
-            "val": "0.8 a 0.8 m",
+            "val": "0.8 a 0.9 m",
             "icon": "waves"
           }
         }
@@ -88,7 +88,7 @@
         "subtitulo": "Muitas nuvens com possibilidade de chuva isolada (Alerta Amarelo de Tempestade) • Máxima de 34°C e Chuva de 1.4 mm",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de sol com poucas nuvens sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 34°C. Volume pluviométrico diário estimado em 1.4 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
+        "descricao": "Previsão de sol entre nuvens sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 34°C. Volume pluviométrico diário estimado em 1.4 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta sexta-feira, a nebulosidade varia entre períodos de céu nublado e aberturas de sol, mantendo condições para pancadas isoladas de chuva e trovoadas à tarde decorrentes do aquecimento diurno.",
           "Previsão de chuva isolada pela manhã e pancadas com trovoadas no período da tarde (acumulado previsto de 1.4 mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de 1.82 m).",
@@ -99,7 +99,7 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Poucas Nuvens",
+            "val": "Parcialmente Nublado",
             "icon": "cloud-sun"
           },
           "temp": {
@@ -124,7 +124,7 @@
           },
           "mar": {
             "label": "MAR E PRAIA",
-            "val": "0.8 a 0.8 m",
+            "val": "0.8 a 0.9 m",
             "icon": "waves"
           }
         }
@@ -133,10 +133,10 @@
         "dia_offset": "D+2",
         "dia_ordem": 3,
         "dia_rotulo": "SÁBADO — 10/10/2026",
-        "subtitulo": "Poucas Nuvens (Alerta Amarelo de Tempestade) • Máxima de 35°C e Chuva de 2.3 mm",
+        "subtitulo": "Céu Limpo (Alerta Amarelo de Tempestade) • Máxima de 35°C e Chuva de 2.3 mm",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de garoa persistente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 35°C. Volume pluviométrico diário estimado em 2.3 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
+        "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 35°C. Volume pluviométrico diário estimado em 2.3 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta sábado, o predomínio de uma massa de ar quente sobre o estado do Rio de Janeiro garante predomínio de sol, poucas nuvens pela manhã e acentuado aquecimento térmico ao longo do dia.",
           "Previsão de tempo estável na maior parte do período, com pequena probabilidade de pancadas rápidas e isoladas no fim da tarde por convecção (acumulado previsto de 2.3 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
@@ -147,8 +147,8 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Garoa Densa",
-            "icon": "cloud-drizzle"
+            "val": "Pancadas Fracas",
+            "icon": "cloud-rain"
           },
           "temp": {
             "label": "TEMPERATURA",
@@ -172,7 +172,7 @@
           },
           "mar": {
             "label": "MAR E PRAIA",
-            "val": "1.0 a 1.1 m",
+            "val": "1.0 a 1.0 m",
             "icon": "waves"
           }
         }
@@ -312,7 +312,7 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.8 a 0.8 m",
+          "val": "0.8 a 0.9 m",
           "icon": "waves"
         }
       }
@@ -322,7 +322,7 @@
       "subtitulo": "Muitas nuvens com possibilidade de chuva isolada (Alerta Amarelo de Tempestade) • Máxima de 34°C e Chuva de 1.4 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de sol com poucas nuvens sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 34°C. Volume pluviométrico diário estimado em 1.4 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
+      "descricao": "Previsão de sol entre nuvens sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 34°C. Volume pluviométrico diário estimado em 1.4 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta sexta-feira, a nebulosidade varia entre períodos de céu nublado e aberturas de sol, mantendo condições para pancadas isoladas de chuva e trovoadas à tarde decorrentes do aquecimento diurno.",
         "Previsão de chuva isolada pela manhã e pancadas com trovoadas no período da tarde (acumulado previsto de 1.4 mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de 1.82 m).",
@@ -333,7 +333,7 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Poucas Nuvens",
+          "val": "Parcialmente Nublado",
           "icon": "cloud-sun"
         },
         "temp": {
@@ -358,17 +358,17 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.8 a 0.8 m",
+          "val": "0.8 a 0.9 m",
           "icon": "waves"
         }
       }
     },
     {
       "dia": "SÁBADO — 10/10/2026",
-      "subtitulo": "Poucas Nuvens (Alerta Amarelo de Tempestade) • Máxima de 35°C e Chuva de 2.3 mm",
+      "subtitulo": "Céu Limpo (Alerta Amarelo de Tempestade) • Máxima de 35°C e Chuva de 2.3 mm",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de garoa persistente sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 35°C. Volume pluviométrico diário estimado em 2.3 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
+      "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 22°C e máxima de 35°C. Volume pluviométrico diário estimado em 2.3 mm com rajadas de vento de até 42 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta sábado, o predomínio de uma massa de ar quente sobre o estado do Rio de Janeiro garante predomínio de sol, poucas nuvens pela manhã e acentuado aquecimento térmico ao longo do dia.",
         "Previsão de tempo estável na maior parte do período, com pequena probabilidade de pancadas rápidas e isoladas no fim da tarde por convecção (acumulado previsto de 2.3 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
@@ -379,8 +379,8 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Densa",
-          "icon": "cloud-drizzle"
+          "val": "Pancadas Fracas",
+          "icon": "cloud-rain"
         },
         "temp": {
           "label": "TEMPERATURA",
@@ -404,7 +404,7 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.0 a 1.1 m",
+          "val": "1.0 a 1.0 m",
           "icon": "waves"
         }
       }

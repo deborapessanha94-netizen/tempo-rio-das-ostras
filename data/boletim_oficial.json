@@ -17,7 +17,7 @@
     "rajada_max": 41,
     "chuva_media": 0.1,
     "chuva_prob": 43,
-    "mar_ondas": "0.8 a 0.8 m",
+    "mar_ondas": "0.8 a 0.9 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens com chuva isolada",
     "tempo_icone": "cloud-drizzle"
@@ -40,7 +40,7 @@
     "rajada_max": 31,
     "chuva_media": 0.2,
     "chuva_prob": 45,
-    "mar_ondas": "0.8 a 0.8 m",
+    "mar_ondas": "0.8 a 0.9 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens com chuva isolada",
     "tempo_icone": "cloud-drizzle"
@@ -86,7 +86,7 @@
     "rajada_max": 19,
     "chuva_media": 0.3,
     "chuva_prob": 60,
-    "mar_ondas": "0.7 a 0.8 m",
+    "mar_ondas": "0.8 a 0.8 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
     "tempo_icone": "cloud-lightning"
@@ -109,7 +109,7 @@
     "rajada_max": 22,
     "chuva_media": 0.1,
     "chuva_prob": 25,
-    "mar_ondas": "0.7 a 0.8 m",
+    "mar_ondas": "0.8 a 0.8 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens",
     "tempo_icone": "cloud"
@@ -132,7 +132,7 @@
     "rajada_max": 31,
     "chuva_media": 0.2,
     "chuva_prob": 45,
-    "mar_ondas": "0.8 a 0.8 m",
+    "mar_ondas": "0.8 a 0.9 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens",
     "tempo_icone": "cloud"
@@ -155,7 +155,7 @@
     "rajada_max": 42,
     "chuva_media": 0.8,
     "chuva_prob": 75,
-    "mar_ondas": "0.9 a 1.0 m",
+    "mar_ondas": "0.9 a 1.1 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Muitas nuvens com possibilidade de chuva isolada (Alerta Amarelo de Tempestade)",
     "tempo_icone": "cloud-lightning"
@@ -178,8 +178,8 @@
     "rajada_max": 34,
     "chuva_media": 0.3,
     "chuva_prob": 60,
-    "mar_ondas": "1.0 a 1.1 m",
-    "mar_condicao": "Calmo",
+    "mar_ondas": "1.1 a 1.1 m",
+    "mar_condicao": "Moderado",
     "tempo_desc": "Muitas nuvens",
     "tempo_icone": "cloud"
   },
@@ -203,8 +203,8 @@
     "chuva_prob": 25,
     "mar_ondas": "1.0 a 1.0 m",
     "mar_condicao": "Calmo",
-    "tempo_desc": "Nublado",
-    "tempo_icone": "cloud"
+    "tempo_desc": "Parcialmente Nublado",
+    "tempo_icone": "cloud-sun"
   },
   {
     "data_iso": "2026-10-10",
@@ -224,7 +224,7 @@
     "rajada_max": 24,
     "chuva_media": 0.2,
     "chuva_prob": 45,
-    "mar_ondas": "1.0 a 1.1 m",
+    "mar_ondas": "1.0 a 1.0 m",
     "mar_condicao": "Calmo",
     "tempo_desc": "Céu Limpo",
     "tempo_icone": "sun"
@@ -247,9 +247,9 @@
     "rajada_max": 42,
     "chuva_media": 0.8,
     "chuva_prob": 75,
-    "mar_ondas": "1.1 a 1.2 m",
+    "mar_ondas": "1.0 a 1.2 m",
     "mar_condicao": "Moderado",
-    "tempo_desc": "Poucas Nuvens (Alerta Amarelo de Tempestade)",
+    "tempo_desc": "Céu Limpo (Alerta Amarelo de Tempestade)",
     "tempo_icone": "cloud-lightning"
   },
   {
@@ -272,7 +272,7 @@
     "chuva_prob": 60,
     "mar_ondas": "1.1 a 1.2 m",
     "mar_condicao": "Moderado",
-    "tempo_desc": "Poucas Nuvens",
-    "tempo_icone": "cloud-sun"
+    "tempo_desc": "Nublado",
+    "tempo_icone": "cloud"
   }
 ]
