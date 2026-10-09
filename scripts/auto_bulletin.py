@@ -383,6 +383,8 @@ def run_auto_bulletin_pipeline():
     def get_day_alerts(dt_iso):
         res = []
         for a in inmet_alerts:
+            if not a.get('eh_direto_ostras'):
+                continue
             i_iso, f_iso = parse_alert_dates(a)
             if i_iso and f_iso:
                 if i_iso <= dt_iso <= f_iso:
@@ -390,6 +392,14 @@ def run_auto_bulletin_pipeline():
             elif i_iso and dt_iso == i_iso:
                 res.append(a)
         return res
+
+    def prep_dia(dia_nome):
+        d_l = dia_nome.lower()
+        return "no" if ('sábado' in d_l or 'domingo' in d_l) else "na"
+
+    def pron_dia(dia_nome):
+        d_l = dia_nome.lower()
+        return "Neste" if ('sábado' in d_l or 'domingo' in d_l) else "Nesta"
 
     for day_idx in range(3):
         day_date_iso = om['daily']['time'][day_idx]
@@ -637,8 +647,12 @@ def run_auto_bulletin_pipeline():
     else:
         alerta_partes.append(f"Rio Jundiá em regime seguro de vazante contínua com cota de {jundia_nivel_txt} m")
 
-    if inmet_alerts:
-        alerta_partes.append(f"Alerta Amarelo de Tempestade do INMET vigente para pancadas isoladas com trovoadas no período da tarde")
+    direct_alerts = [a for a in inmet_alerts if a.get('eh_direto_ostras')]
+    direct_alerts_sorted = sorted(direct_alerts, key=lambda x: str(x.get('inicio', '')))
+    alert_ids_str = " e ".join(f"nº {a['id']}" for a in direct_alerts_sorted) if direct_alerts_sorted else ""
+
+    if direct_alerts:
+        alerta_partes.append(f"Alerta Amarelo de Tempestade do INMET ({alert_ids_str}) previsto para pancadas isoladas com trovoadas no período da tarde")
 
     if tem_aviso_marinha:
         alerta_partes.append(f"Aviso de Vento Forte da Marinha do Brasil para a Área Delta")
@@ -684,17 +698,32 @@ def run_auto_bulletin_pipeline():
         else:
             vento_txt = f"Ventos predominantes de {dir_inicio} moderados com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
 
+        pron = pron_dia(d['dia_semana'])
+        tem_alerta_dia = len(day_alerts) > 0
+
         if dia_idx == 0:
-            t1 = f"Nesta {dia_nome}, o tempo apresenta variação de nebulosidade com aumento de nuvens e instabilidade atmosférica, favorecendo o desenvolvimento de convecção diurna a partir da tarde."
-            t2 = f"Previsão de pancadas de chuva isoladas com trovoadas à tarde e à noite (acumulado previsto de {chuva_tot:.1f} mm no dia). A calha do Rio Jundiá registra cota de {jundia_nivel} m (Status: {jundia_status}), consolidando quadro seguro de vazante contínua com escoamento normalizado."
+            if tem_alerta_dia:
+                t1 = f"{pron} {dia_nome}, o tempo apresenta variação de nebulosidade com aumento de nuvens e instabilidade atmosférica, favorecendo o desenvolvimento de convecção diurna a partir da tarde."
+                t2 = f"Previsão de pancadas de chuva isoladas com trovoadas à tarde e à noite (acumulado previsto de {chuva_tot:.1f} mm no dia). A calha do Rio Jundiá registra cota de {jundia_nivel} m (Status: {jundia_status}), consolidando quadro seguro de vazante contínua com escoamento normalizado."
+            else:
+                t1 = f"{pron} {dia_nome}, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde."
+                t2 = f"Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de {chuva_tot:.1f} mm no dia). A calha do Rio Jundiá registra cota de {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e vazante consolidada."
             elev_tipo = "gradual"
         elif dia_idx == 1:
-            t1 = f"Nesta {dia_nome}, a nebulosidade varia entre períodos de céu nublado e aberturas de sol, mantendo condições para pancadas isoladas de chuva e trovoadas à tarde decorrentes do aquecimento diurno."
-            t2 = f"Previsão de chuva isolada pela manhã e pancadas com trovoadas no período da tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+            if tem_alerta_dia:
+                t1 = f"{pron} {dia_nome}, a nebulosidade varia entre períodos de céu nublado e aberturas de sol com forte aquecimento, mantendo condições para pancadas isoladas de chuva e trovoadas à tarde decorrentes do calor diurno."
+                t2 = f"Previsão de pancadas de chuva com trovoadas no período da tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+            else:
+                t1 = f"{pron} {dia_nome}, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico significativo."
+                t2 = f"Previsão de chuva fraca ou isolada (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá permanece seguro com nível de {jundia_nivel} m."
             elev_tipo = "moderada"
         else:
-            t1 = f"Nesta {dia_nome}, o predomínio de uma massa de ar quente sobre o estado do Rio de Janeiro garante predomínio de sol, poucas nuvens pela manhã e acentuado aquecimento térmico ao longo do dia."
-            t2 = f"Previsão de tempo estável na maior parte do período, com pequena probabilidade de pancadas rápidas e isoladas no fim da tarde por convecção (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
+            if tem_alerta_dia:
+                t1 = f"{pron} {dia_nome}, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã."
+                t2 = f"Previsão de pancadas de chuva e trovoadas à tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
+            else:
+                t1 = f"{pron} {dia_nome}, o predomínio de uma massa de ar quente sobre o estado do Rio de Janeiro garante predomínio de sol, poucas nuvens pela manhã e acentuado aquecimento térmico ao longo do dia."
+                t2 = f"Previsão de tempo estável na maior parte do período, com pequena probabilidade de pancadas rápidas e isoladas no fim da tarde por convecção (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
             elev_tipo = "rápida"
 
         t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
@@ -708,24 +737,41 @@ def run_auto_bulletin_pipeline():
     d1 = dias_3[1]
     d2 = dias_3[2]
 
+    d0_alerts = get_day_alerts(d0['date_iso'])
+    d1_alerts = get_day_alerts(d1['date_iso'])
+    d2_alerts = get_day_alerts(d2['date_iso'])
+
+    def format_alert_text(alerts):
+        if not alerts: return "sem avisos meteorológicos vigentes"
+        return "sob " + " e ".join(f"Alerta {a.get('cor_nome', 'Amarelo')} de {a.get('descricao', 'Tempestade')} nº {a.get('id', '')} do INMET" for a in alerts)
+
+    d0_aviso_str = format_alert_text(d0_alerts)
+    d1_aviso_str = format_alert_text(d1_alerts)
+    d2_aviso_str = format_alert_text(d2_alerts)
+
+    prep0 = prep_dia(d0['dia_semana'])
+    prep1 = prep_dia(d1['dia_semana'])
+    prep2 = prep_dia(d2['dia_semana'])
+
     sinopse_geral = (
         f"O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de {periodo_str} "
-        f"é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao aquecimento diurno. "
-        f"Esse padrão termodinâmico sustenta a formação de instabilidades convectivas no período da tarde, sob influência de cavados em médios níveis da atmosfera "
-        f"e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de {d0['t_min']:.0f}°C ao amanhecer "
-        f"e máxima de {d0['t_max']:.0f}°C nesta {d0['dia_semana'].lower()} ({d0['date_short']}), com acumulado pluviométrico diário previsto de {d0['chuva_tot']:.1f} mm em pancadas isoladas "
-        f"com trovoadas à tarde e à noite, sob vigência do Alerta Amarelo nº 55969 do INMET. O gradiente térmico semanal evolui para aquecimento progressivo, "
-        f"alcançando pico pré-frontal de até {pico_calor:.0f}°C na {d2['dia_semana'].lower()} ({d2['date_short']}).\n\n"
+        f"é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. "
+        f"Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, "
+        f"sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). "
+        f"As temperaturas oscilam entre mínima de {d0['t_min']:.0f}°C ao amanhecer e máxima de {d0['t_max']:.0f}°C {prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), "
+        f"com acumulado pluviométrico diário previsto de {d0['chuva_tot']:.1f} mm ({d0_aviso_str}). "
+        f"O gradiente térmico semanal evolui com calor persistente, alcançando pico de até {pico_calor:.0f}°C {prep2} {d2['dia_semana'].lower()} ({d2['date_short']}).\n\n"
         f"No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. "
         f"A estação telemétrica municipal (INEA 2241036) registrou cota de {jundia_nivel_txt} m (Status: {jundia_status_txt}), "
-        f"posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 64%. "
-        f"Nas últimas 24 horas, a rede de PCDs não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais "
+        f"posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. "
+        f"Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais "
         f"nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil "
-        f"não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros moderados com rajadas pontuais de até {max_rajada_geral:.0f} km/h "
+        f"não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até {max_rajada_geral:.0f} km/h "
         f"associadas às células convectivas da tarde.\n\n"
-        f"Para os dias subsequentes, a {d1['dia_semana'].lower()} ({d1['date_short']}) mantém variação de nuvens com máxima de {d1['t_max']:.0f}°C e pancadas isoladas com trovoadas à tarde "
-        f"({d1['chuva_tot']:.1f} mm acumulados, Alerta Amarelo nº 55986 do INMET). Na {d2['dia_semana'].lower()} ({d2['date_short']}), o predomínio do sol impulsiona forte elevação térmica "
-        f"(máxima de {d2['t_max']:.0f}°C à tarde) com ventos de quadrante norte/nordeste e tempo predominantemente estável ({d2['chuva_tot']:.1f} mm). "
+        f"Para os dias subsequentes, {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) a aproximação de instabilidades mantém variação de nuvens com máxima de {d1['t_max']:.0f}°C "
+        f"e pancadas isoladas com trovoadas à tarde ({d1['chuva_tot']:.1f} mm acumulados, {d1_aviso_str}). "
+        f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o calor intenso persiste com máxima de {d2['t_max']:.0f}°C e convecção diurna "
+        f"({d2['chuva_tot']:.1f} mm acumulados, {d2_aviso_str}). "
         f"A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. "
         f"A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193."
     )
@@ -860,7 +906,20 @@ def run_auto_bulletin_pipeline():
     d0_nome = dias_resumo[0]['dia'].split('—')[0].strip() if dias_resumo else "D+0"
     d1_nome = dias_resumo[1]['dia'].split('—')[0].strip() if len(dias_resumo) > 1 else "D+1"
     d2_nome = dias_resumo[2]['dia'].split('—')[0].strip() if len(dias_resumo) > 2 else "D+2"
-    evol_3d_str = f"{d0_nome}: Convecção/Trovoadas ➔ {d1_nome}: Nuvens/Pancadas ➔ {d2_nome}: Sol/Calor 33°C"
+
+    def extrair_resumo_curto(dr):
+        t_val = dr.get('pilares', {}).get('temp', {}).get('val', '')
+        t_max_num = t_val.split('a')[-1].strip() if 'a' in t_val else t_val
+        sub = dr.get('subtitulo', '')
+        if 'trovoada' in sub.lower() or 'tempestade' in sub.lower():
+            cond = "Pancadas/Trovoadas"
+        elif 'chuva' in sub.lower() or 'garoa' in sub.lower():
+            cond = "Possibilidade de Chuva"
+        else:
+            cond = "Nublado/Estável"
+        return f"{cond} ({t_max_num})"
+
+    evol_3d_str = f"{d0_nome}: {extrair_resumo_curto(dias_resumo[0])} ➔ {d1_nome}: {extrair_resumo_curto(dias_resumo[1])} ➔ {d2_nome}: {extrair_resumo_curto(dias_resumo[2])}"
 
     sinopse_estruturada = {
         "periodo": periodo_str,
@@ -956,10 +1015,10 @@ def run_auto_bulletin_pipeline():
         {
             "tipo": "meteorologico",
             "titulo": "Avisos Meteorológicos (INMET)",
-            "status": "ALERTA AMARELO • TEMPESTADE" if len(inmet_alerts) > 0 else "SEM AVISOS",
-            "badge": "warning" if len(inmet_alerts) > 0 else "info",
-            "detalhe": f"Alerta nº 55969 / 55986 (Perigo Potencial)" if len(inmet_alerts) > 0 else "Condições estáveis",
-            "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas à tarde decorrentes do calor diurno."
+            "status": "ALERTA AMARELO • TEMPESTADE" if len(direct_alerts) > 0 else "SEM AVISOS VIGENTES",
+            "badge": "warning" if len(direct_alerts) > 0 else "info",
+            "detalhe": f"Alerta {alert_ids_str} (Perigo Potencial)" if len(direct_alerts) > 0 else "Sem avisos vigentes para o município",
+            "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas à tarde decorrentes do calor diurno." if len(direct_alerts) > 0 else "Sem riscos meteorológicos severos previstos."
         }
     ]
 
@@ -980,7 +1039,7 @@ def run_auto_bulletin_pipeline():
             "chuva_3d": f"{chuva_total_3d:.1f} mm",
             "aviso_marinha": "NORMAL" if not tem_aviso_marinha else "FORÇA 7",
             "pico_calor": f"{pico_calor:.0f}°C",
-            "plancon_status": "ATENÇÃO" if len(inmet_alerts) > 0 else "OBSERVAÇÃO"
+            "plancon_status": "ATENÇÃO" if len(direct_alerts) > 0 else "OBSERVAÇÃO"
         },
         "contatos_emergencia": {
             "defesa_civil_plantao": "199",
