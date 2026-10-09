@@ -1,6 +1,30 @@
 [
   {
-    "id": 56001,
+    "id": 56011,
+    "descricao": "Tempestade",
+    "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
+    "eh_direto_ostras": true,
+    "inicio": "11/10/2026 às 00:00",
+    "fim": "12/10/2026 às 23:59",
+    "inicio_formatado": "11/10/2026 às 00:00",
+    "fim_formatado": "12/10/2026 às 23:59",
+    "data_inicio": "2026-10-11T00:00:00.000Z",
+    "hora_inicio": "00:00",
+    "data_fim": "2026-10-12T00:00:00.000Z",
+    "hora_fim": "23:59",
+    "riscos": [
+      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Evite usar aparelhos eletrônicos ligados à tomada. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Paraná,Santa Catarina,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio Grande do Sul,Rondônia,Amazonas,Rio de Janeiro,Goiás,Pará"
+  },
+  {
+    "id": 56027,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_inmet": "#EAB308",
@@ -21,21 +45,45 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Paraná,Santa Catarina,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio Grande do Sul,Rondônia,Amazonas,Rio de Janeiro,Goiás"
+    "estados": "Paraná,Santa Catarina,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio Grande do Sul,Rondônia,Amazonas,Rio de Janeiro,Goiás,Pará"
   },
   {
-    "id": 55987,
+    "id": 56021,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_inmet": "#EAB308",
     "eh_direto_ostras": false,
-    "inicio": "08/10/2026 às 00:00",
-    "fim": "09/10/2026 às 23:59",
-    "inicio_formatado": "08/10/2026 às 00:00",
-    "fim_formatado": "09/10/2026 às 23:59",
-    "data_inicio": "2026-10-08T00:00:00.000Z",
+    "inicio": "09/10/2026 às 09:40",
+    "fim": "10/10/2026 às 09:59",
+    "inicio_formatado": "09/10/2026 às 09:40",
+    "fim_formatado": "10/10/2026 às 09:59",
+    "data_inicio": "2026-10-09T00:00:00.000Z",
+    "hora_inicio": "09:40",
+    "data_fim": "2026-10-10T00:00:00.000Z",
+    "hora_fim": "09:59",
+    "riscos": [
+      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Evite usar aparelhos eletrônicos ligados à tomada. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Paraná,Santa Catarina,Rio Grande do Sul,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Minas Gerais,Rondônia,Amazonas,Rio de Janeiro"
+  },
+  {
+    "id": 56014,
+    "descricao": "Tempestade",
+    "severidade": "Perigo Potencial",
+    "cor_inmet": "#EAB308",
+    "eh_direto_ostras": false,
+    "inicio": "13/10/2026 às 00:00",
+    "fim": "13/10/2026 às 23:59",
+    "inicio_formatado": "13/10/2026 às 00:00",
+    "fim_formatado": "13/10/2026 às 23:59",
+    "data_inicio": "2026-10-13T00:00:00.000Z",
     "hora_inicio": "00:00",
-    "data_fim": "2026-10-09T00:00:00.000Z",
+    "data_fim": "2026-10-13T00:00:00.000Z",
     "hora_fim": "23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
@@ -45,30 +93,6 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "São Paulo,Minas Gerais,Rio de Janeiro"
-  },
-  {
-    "id": 55993,
-    "descricao": "Tempestade",
-    "severidade": "Perigo Potencial",
-    "cor_inmet": "#EAB308",
-    "eh_direto_ostras": false,
-    "inicio": "11/10/2026 às 00:00",
-    "fim": "11/10/2026 às 23:59",
-    "inicio_formatado": "11/10/2026 às 00:00",
-    "fim_formatado": "11/10/2026 às 23:59",
-    "data_inicio": "2026-10-11T00:00:00.000Z",
-    "hora_inicio": "00:00",
-    "data_fim": "2026-10-11T00:00:00.000Z",
-    "hora_fim": "23:59",
-    "riscos": [
-      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
-    ],
-    "instrucoes": [
-      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
-      "Evite usar aparelhos eletrônicos ligados à tomada. ",
-      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
-    ],
-    "estados": "Paraná,Santa Catarina,Acre,São Paulo,Mato Grosso do Sul,Rio Grande do Sul,Minas Gerais,Rondônia,Mato Grosso,Amazonas,Rio de Janeiro"
+    "estados": "Paraná,Santa Catarina,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Rio Grande do Sul,Minas Gerais,Rondônia,Amazonas,Rio de Janeiro"
   }
 ]
