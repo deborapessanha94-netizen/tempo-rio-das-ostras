@@ -146,12 +146,12 @@
     "chuva_6h": 0.0,
     "chuva_12h": 0.0,
     "chuva_24h": 0.0,
-    "chuva_36h": 0.6,
-    "chuva_48h": 1.1,
-    "chuva_96h": 2.2,
-    "nivel_rio": "1.69 m",
-    "status_rio": "VIGILÂNCIA",
-    "ultima_leitura": "09/10/2026 17:15",
+    "chuva_36h": 0.0,
+    "chuva_48h": 0.0,
+    "chuva_96h": 2.0,
+    "nivel_rio": "1,82 m",
+    "status_rio": "Atenção",
+    "ultima_leitura": "Hoje",
     "online": true
   }
 ]
