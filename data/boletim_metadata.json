@@ -51,8 +51,8 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Nublado",
-            "icon": "cloud"
+            "val": "Garoa Moderada",
+            "icon": "cloud-drizzle"
           },
           "temp": {
             "label": "TEMPERATURA",
@@ -287,8 +287,8 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Nublado",
-          "icon": "cloud"
+          "val": "Garoa Moderada",
+          "icon": "cloud-drizzle"
         },
         "temp": {
           "label": "TEMPERATURA",
