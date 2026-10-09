@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "09/10 (Sexta-feira) a 11/10 (Domingo)",
-  "emissao": "09/10/2026 às 18:20h",
+  "emissao": "09/10/2026 às 18:21h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.69 m. Alerta Amarelo de Tempestade do INMET (nº 56027 e nº 56011) previsto para pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 5.9 mm com temperatura máxima alcançando 34°C.",
   "alertas_estruturados": [
     {
@@ -51,8 +51,8 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Garoa Moderada",
-            "icon": "cloud-drizzle"
+            "val": "Nublado",
+            "icon": "cloud"
           },
           "temp": {
             "label": "TEMPERATURA",
@@ -287,8 +287,8 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Moderada",
-          "icon": "cloud-drizzle"
+          "val": "Nublado",
+          "icon": "cloud"
         },
         "temp": {
           "label": "TEMPERATURA",
