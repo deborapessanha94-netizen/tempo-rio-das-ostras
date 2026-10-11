@@ -24,17 +24,17 @@
     "estados": "Paraná,Santa Catarina,Mato Grosso,Acre,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio Grande do Sul,Rondônia,Amazonas,Rio de Janeiro,Goiás,Pará"
   },
   {
-    "id": 56039,
+    "id": 56046,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_inmet": "#EAB308",
     "eh_direto_ostras": true,
-    "inicio": "14/10/2026 às 00:01",
+    "inicio": "14/10/2026 às 00:00",
     "fim": "14/10/2026 às 23:59",
-    "inicio_formatado": "14/10/2026 às 00:01",
+    "inicio_formatado": "14/10/2026 às 00:00",
     "fim_formatado": "14/10/2026 às 23:59",
     "data_inicio": "2026-10-14T00:00:00.000Z",
-    "hora_inicio": "00:01",
+    "hora_inicio": "00:00",
     "data_fim": "2026-10-14T00:00:00.000Z",
     "hora_fim": "23:59",
     "riscos": [
@@ -45,7 +45,7 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Minas Gerais,Paraná,Goiás,São Paulo,Mato Grosso do Sul,Mato Grosso,Rio de Janeiro"
+    "estados": "Paraná,Santa Catarina,Mato Grosso,São Paulo,Mato Grosso do Sul,Minas Gerais,Rondônia,Rio de Janeiro,Goiás"
   },
   {
     "id": 56044,
