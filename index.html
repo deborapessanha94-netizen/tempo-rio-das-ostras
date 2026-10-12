@@ -296,6 +296,35 @@
   </section>
 
   <!-- ========================================================================= -->
+  <!-- SEÇÃO DE PREVISÃO DOS PRÓXIMOS 3 DIAS (LOGO APÓS O PANORAMA SINÓTICO)     -->
+  <!-- ========================================================================= -->
+  <section id="section-previsao-3dias" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
+    <div class="modern-card p-5 sm:p-6 bg-white border border-zinc-200 space-y-4">
+      
+      <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-zinc-100 text-zinc-800 border border-zinc-200 flex items-center justify-center shrink-0">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-bold text-zinc-950 tracking-tight">Previsão dos Próximos Dias</h3>
+            <p id="sidebar-period-txt" class="text-xs font-normal text-zinc-500">12/10 (Segunda-feira) a 14/10 (Quarta-feira)</p>
+          </div>
+        </div>
+        <span class="text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-zinc-100 text-zinc-800 border border-zinc-200">
+          3 Dias
+        </span>
+      </div>
+
+      <!-- Lista / Grid dos 3 Dias -->
+      <div id="sidebar-3days-list" class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+        <!-- Renderizado dinamicamente via app.js -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
   <!-- CONTAINER PRINCIPAL DO DASHBOARD (ESTRUTURA EM 2 COLUNAS)                 -->
   <!-- ========================================================================= -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
@@ -740,25 +769,6 @@
 
         </div>
 
-        <!-- CARD 3: PREVISÃO DOS PRÓXIMOS 3 DIAS -->
-        <div class="modern-card p-5 sm:p-6 bg-white space-y-4">
-          
-          <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
-            <div>
-              <h3 class="text-base font-bold text-zinc-950 tracking-tight">Previsão dos Próximos Dias</h3>
-              <p id="sidebar-period-txt" class="text-xs font-normal text-zinc-500">12/10 (Seg) a 14/10 (Qua)</p>
-            </div>
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-zinc-100 text-zinc-700">
-              3 Dias
-            </span>
-          </div>
-
-          <!-- Lista Vertical dos Dias -->
-          <div id="sidebar-3days-list" class="space-y-2.5">
-            <!-- Renderizado dinamicamente via app.js -->
-          </div>
-
-        </div>
 
         <!-- CARD 4: TELEFONES ÚTEIS & CONTATOS DE EMERGÊNCIA -->
         <div class="modern-card p-5 sm:p-6 bg-zinc-900 text-white space-y-3.5">
