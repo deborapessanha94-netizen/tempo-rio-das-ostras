@@ -392,3 +392,27 @@ export async function getMarinhaAvisos() {
   return null;
 }
 
+/**
+ * Obtém os dados de previsão e meteograma do CPTEC/INPE (Rio das Ostras ID 3866)
+ */
+export async function getCptecData() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/cptec_previsao.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
+/**
+ * Obtém os metadados do meteograma oficial do INMET (COSMO 3304524)
+ */
+export async function getInmetMeteogramaData() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/inmet_meteograma.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+

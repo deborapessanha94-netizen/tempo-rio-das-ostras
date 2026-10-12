@@ -13,15 +13,18 @@ import re
 import os
 import sys
 import html as html_lib
+import base64
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 DOCS_DIR = BASE_DIR / "docs"
+IMG_DIR = BASE_DIR / "img"
 
 DATA_DIR.mkdir(exist_ok=True)
 DOCS_DIR.mkdir(exist_ok=True)
+IMG_DIR.mkdir(exist_ok=True)
 
 # Coordenadas Oficiais de Rio das Ostras - RJ
 LAT = -22.5269
@@ -265,6 +268,101 @@ def fetch_inmet_forecast():
         except:
             return {}
 
+def fetch_inmet_meteograma():
+    """Busca o meteograma dinâmico oficial do INMET para Rio das Ostras (3304524)"""
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    out_img = IMG_DIR / "meteograma_inmet.png"
+    out_json = DATA_DIR / "inmet_meteograma.json"
+
+    for rodada in ['12', '00']:
+        url = f"https://apiprevmet3.inmet.gov.br/meteograma/3304524/{today_str}/{rodada}"
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            res = urllib.request.urlopen(req, timeout=12)
+            data = json.loads(res.read().decode('utf-8'))
+            b64_str = data.get('base64') if isinstance(data, dict) else (data[0].get('base64') if isinstance(data, list) and len(data) > 0 else None)
+            if b64_str and ('data:image' in b64_str or 'iVBORw' in b64_str):
+                raw_b64 = b64_str.split(',', 1)[1] if ',' in b64_str else b64_str
+                img_bytes = base64.b64decode(raw_b64)
+                with open(out_img, 'wb') as f:
+                    f.write(img_bytes)
+                meteo_info = {
+                    "ibge": "3304524",
+                    "municipio": "Rio das Ostras - RJ",
+                    "data": today_str,
+                    "rodada": rodada,
+                    "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
+                    "imagem_disponivel": True,
+                    "imagem_path": "img/meteograma_inmet.png",
+                    "atualizado_em": datetime.now().isoformat()
+                }
+                with open(out_json, 'w', encoding='utf-8') as f:
+                    json.dump(meteo_info, f, ensure_ascii=False, indent=2)
+                print(f"[INMET Meteograma] Meteograma oficial obtido com sucesso (rodada {rodada}, {len(img_bytes)} bytes)")
+                return meteo_info
+        except Exception as e:
+            print(f"[INMET Meteograma] Rodada {rodada} falhou: {e}")
+
+    if out_img.exists() and out_json.exists():
+        try:
+            with open(out_json, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            pass
+    return {
+        "ibge": "3304524",
+        "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
+        "imagem_disponivel": out_img.exists()
+    }
+
+def fetch_cptec_data():
+    """Busca previsão e meteograma numérico do CPTEC/INPE para Rio das Ostras (ID 3866 / IBGE 3304524)"""
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Referer': 'https://www.cptec.inpe.br/'
+    }
+    cptec_info = {
+        "cidade": "Rio das Ostras",
+        "uf": "RJ",
+        "id_cidade": 3866,
+        "id_ibge": 3304524,
+        "url_portal": "https://www.cptec.inpe.br/",
+        "hoje": {},
+        "proximos_dias": [],
+        "meteograma_multimodel": {}
+    }
+
+    try:
+        url_hoje = "https://www.cptec.inpe.br/api/forecast-input?city=Rio%20das%20Ostras,%20RJ"
+        req = urllib.request.Request(url_hoje, headers=headers)
+        cptec_info['hoje'] = json.loads(urllib.request.urlopen(req, timeout=10).read().decode('utf-8'))
+        print("[CPTEC/INPE] Previsão municipal de hoje obtida com sucesso")
+    except Exception as e:
+        print(f"[CPTEC/INPE] Erro previsão hoje: {e}")
+
+    try:
+        url_next = "https://www.cptec.inpe.br/api/forecast-input-next-days?city=Rio%20das%20Ostras,%20RJ"
+        req = urllib.request.Request(url_next, headers=headers)
+        cptec_info['proximos_dias'] = json.loads(urllib.request.urlopen(req, timeout=10).read().decode('utf-8'))
+        print(f"[CPTEC/INPE] Previsão estendida obtida ({len(cptec_info['proximos_dias'])} dias)")
+    except Exception as e:
+        print(f"[CPTEC/INPE] Erro próximos dias: {e}")
+
+    try:
+        url_multi = "https://s1.cptec.inpe.br/grafico/Modelos/Multimodel/pag_web/horario/3866.json"
+        req = urllib.request.Request(url_multi, headers=headers)
+        multi_data = json.loads(urllib.request.urlopen(req, timeout=10).read().decode('utf-8'))
+        if 'datasets' in multi_data and len(multi_data['datasets']) > 0:
+            cptec_info['meteograma_multimodel'] = multi_data['datasets'][0]
+            print(f"[CPTEC/INPE] Meteograma Multimodel obtido ({len(multi_data['datasets'][0].get('data', []))} horas de previsão numérica)")
+    except Exception as e:
+        print(f"[CPTEC/INPE] Erro meteograma multimodel: {e}")
+
+    with open(DATA_DIR / "cptec_previsao.json", 'w', encoding='utf-8') as f:
+        json.dump(cptec_info, f, ensure_ascii=False, indent=2)
+
+    return cptec_info
+
 def run_auto_bulletin_pipeline():
     print(">> [Auto-Bulletin] Iniciando rodada meteorológica...")
     now_dt = datetime.now()
@@ -297,10 +395,12 @@ def run_auto_bulletin_pipeline():
         print(f"[AVISO] Falha ao carregar Marine API (usando estimativa): {e}")
         marine = None
 
-    # Busca INEA, INMET Avisos e Previsão INMET
+    # Busca INEA, INMET Avisos, Previsão INMET, Meteograma Dinâmico INMET e CPTEC/INPE
     inea_stations = fetch_inea_cheias()
     inmet_alerts = fetch_inmet_alerts()
     inmet_forecast = fetch_inmet_forecast()
+    inmet_meteograma = fetch_inmet_meteograma()
+    cptec_data = fetch_cptec_data()
 
     # Salva dados brutos para os endpoints do servidor
     if inea_stations:
@@ -1055,6 +1155,16 @@ def run_auto_bulletin_pipeline():
             "url": "https://previsao.inmet.gov.br/3304524",
             "api_url": "https://apiprevmet3.inmet.gov.br/previsao/3304524",
             "previsao_5dias": inmet_forecast
+        },
+        "inmet_meteograma": inmet_meteograma,
+        "cptec_oficial": {
+            "id_cidade": 3866,
+            "id_ibge": 3304524,
+            "municipio": "Rio das Ostras - RJ",
+            "url_portal": "https://www.cptec.inpe.br/",
+            "hoje": cptec_data.get('hoje', {}),
+            "proximos_dias": cptec_data.get('proximos_dias', []),
+            "tem_meteograma_multimodel": bool(cptec_data.get('meteograma_multimodel'))
         },
         "impactos_bairros": impactos_bairros,
         "kpis": {

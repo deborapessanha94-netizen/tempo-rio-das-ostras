@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v50';
+const CACHE_NAME = 'meteo-ostras-v51';
 const STATIC_ASSETS = [
   './css/styles.css',
   './js/app.js',
@@ -10,9 +10,12 @@ const STATIC_ASSETS = [
   './img/logo-full.png',
   './img/icon-192.png',
   './img/icon-512.png',
+  './img/meteograma_inmet.png',
   './data/inea_cheias.json',
   './data/inmet_avisos.json',
   './data/inmet_previsao.json',
+  './data/inmet_meteograma.json',
+  './data/cptec_previsao.json',
   './data/boletim_oficial.json',
   './data/boletim_metadata.json',
   './data/acumulados_estacoes.json',

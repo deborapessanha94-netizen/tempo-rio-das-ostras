@@ -288,7 +288,7 @@ def build_operational_bulletin_pdf(metadata, turnos, output_path):
     ]))
     story.append(meta_table)
 
-    fontes_txt = "<b>Fontes Oficiais Consultadas:</b> INMET (COSMO 7x7 km e Estações Automáticas), CPTEC/INPE (WRF), ECMWF (Windy), INEA (Alerta de Cheias RH-VIII), CEMADEN-RJ e Marinha do Brasil (CHM / Cartas Sinóticas)."
+    fontes_txt = "<b>Fontes Oficiais Consultadas:</b> INMET (Previsão 3304524 & Meteograma Dinâmico COSMO), CPTEC/INPE (Multimodel 3866 & WRF), ECMWF, INEA (Alerta de Cheias RH-VIII), CEMADEN-RJ e Marinha do Brasil (CHM / Cartas Sinóticas)."
     story.append(Paragraph(fontes_txt, s_fontes))
     story.append(HRFlowable(width="100%", thickness=1.2, color=colors.HexColor("#1e3a8a"), spaceBefore=2, spaceAfter=3))
 

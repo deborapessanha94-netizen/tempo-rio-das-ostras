@@ -14,6 +14,8 @@ import {
   getAcumuladosEstacoes, 
   getBalneabilidade, 
   getMarinhaAvisos, 
+  getCptecData, 
+  getInmetMeteogramaData, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js';
@@ -30,6 +32,8 @@ const state = {
   marinhaAvisos: null,
   acumuladosEstacoes: [],
   balneabilidade: [],
+  cptecData: null,
+  inmetMeteoData: null,
   weatherData: null,
   activeMetric: 'temperature',
   radarInitialized: false,
@@ -140,17 +144,55 @@ function setupModalsAndDock() {
   if (btnCloseAvisos) btnCloseAvisos.addEventListener('click', closeAvisos);
   if (btnCloseAvisosFoot) btnCloseAvisosFoot.addEventListener('click', closeAvisos);
 
+  // Modal 4: Meteogramas Oficiais (INMET & CPTEC/INPE)
+  const modalMeteo = document.getElementById('modal-meteogramas');
+  const btnOpenMeteo1 = document.getElementById('dock-btn-meteogramas');
+  const btnOpenMeteo2 = document.getElementById('btn-open-meteogramas-card');
+  const btnCloseMeteo = document.getElementById('btn-close-modal-meteogramas');
+  const btnCloseMeteoFoot = document.getElementById('btn-close-modal-meteogramas-foot');
+
+  const openMeteo = () => { if (modalMeteo) modalMeteo.classList.remove('hidden'), modalMeteo.classList.add('flex'); };
+  const closeMeteo = () => { if (modalMeteo) modalMeteo.classList.add('hidden'), modalMeteo.classList.remove('flex'); };
+
+  if (btnOpenMeteo1) btnOpenMeteo1.addEventListener('click', openMeteo);
+  if (btnOpenMeteo2) btnOpenMeteo2.addEventListener('click', openMeteo);
+  if (btnCloseMeteo) btnCloseMeteo.addEventListener('click', closeMeteo);
+  if (btnCloseMeteoFoot) btnCloseMeteoFoot.addEventListener('click', closeMeteo);
+
+  // Alternância de Abas: INMET COSMO vs CPTEC Multimodel
+  const tabInmet = document.getElementById('tab-btn-inmet-meteo');
+  const tabCptec = document.getElementById('tab-btn-cptec-meteo');
+  const contentInmet = document.getElementById('tab-content-inmet-meteo');
+  const contentCptec = document.getElementById('tab-content-cptec-meteo');
+
+  if (tabInmet && tabCptec && contentInmet && contentCptec) {
+    tabInmet.addEventListener('click', () => {
+      tabInmet.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-zinc-900 text-zinc-900 cursor-pointer flex items-center gap-2';
+      tabCptec.className = 'px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-zinc-500 hover:text-zinc-900 cursor-pointer flex items-center gap-2';
+      contentInmet.classList.remove('hidden');
+      contentCptec.classList.add('hidden');
+    });
+
+    tabCptec.addEventListener('click', () => {
+      tabCptec.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-zinc-900 text-zinc-900 cursor-pointer flex items-center gap-2';
+      tabInmet.className = 'px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-zinc-500 hover:text-zinc-900 cursor-pointer flex items-center gap-2';
+      contentCptec.classList.remove('hidden');
+      contentInmet.classList.add('hidden');
+    });
+  }
+
   // Fechar no ESC
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeBoletim();
       closeRadar();
       closeAvisos();
+      closeMeteo();
     }
   });
 
   // Fechar ao clicar fora
-  [modalBoletim, modalRadar, modalAvisos].forEach(m => {
+  [modalBoletim, modalRadar, modalAvisos, modalMeteo].forEach(m => {
     if (m) {
       m.addEventListener('click', (e) => {
         if (e.target === m) {
@@ -204,7 +246,7 @@ async function loadAllApplicationData() {
   state.isSyncing = true;
 
   try {
-    const [boletimRows, boletimMeta, ineaStations, alerts, openMeteo, estacoes, balnear, marinha] = await Promise.allSettled([
+    const [boletimRows, boletimMeta, ineaStations, alerts, openMeteo, estacoes, balnear, marinha, cptec, inmetMeteo] = await Promise.allSettled([
       getBoletimOficialData(),
       getBoletimMetadata(),
       getIneaCheias(),
@@ -212,7 +254,9 @@ async function loadAllApplicationData() {
       getRioDasOstrasWeatherData(),
       getAcumuladosEstacoes(),
       getBalneabilidade(),
-      getMarinhaAvisos()
+      getMarinhaAvisos(),
+      getCptecData(),
+      getInmetMeteogramaData()
     ]);
 
     if (boletimRows.status === 'fulfilled' && Array.isArray(boletimRows.value)) {
@@ -248,11 +292,20 @@ async function loadAllApplicationData() {
       state.weatherData = openMeteo.value;
     }
 
+    if (cptec.status === 'fulfilled' && cptec.value) {
+      state.cptecData = cptec.value;
+    }
+
+    if (inmetMeteo.status === 'fulfilled' && inmetMeteo.value) {
+      state.inmetMeteoData = inmetMeteo.value;
+    }
+
     // Renderiza a interface profissional
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
     renderPanoramaSinotico(state.boletimMetadata);
     renderAlertasPrincipais(state.inmetAlerts, state.marinhaAvisos);
     renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
+    renderCptecData(state.cptecData);
     updateBulletinChart();
 
   } catch (error) {
@@ -833,9 +886,86 @@ function setupActionButtons() {
   }
 }
 
+/**
+ * 12. Renderização do Meteograma e Projeções Oficiais do CPTEC / INPE
+ */
+function renderCptecData(cptec) {
+  if (!cptec) return;
+
+  // 1. Grid das Projeções dos Próximos Dias (CPTEC)
+  const grid = document.getElementById('cptec-proximos-grid');
+  if (grid && Array.isArray(cptec.proximos_dias)) {
+    grid.innerHTML = cptec.proximos_dias.map(d => {
+      const uv = Number(d.indice_uv || 0);
+      const uvBadgeClass = uv >= 11 ? 'bg-purple-100 text-purple-800 border-purple-200' :
+                           uv >= 8 ? 'bg-rose-100 text-rose-800 border-rose-200' :
+                           uv >= 6 ? 'bg-amber-100 text-amber-800 border-amber-200' : 'bg-emerald-100 text-emerald-800 border-emerald-200';
+
+      return `
+        <div class="p-2.5 rounded-xl border border-zinc-200 bg-white space-y-1.5 text-center">
+          <div class="flex items-center justify-between text-[11px] font-bold text-zinc-700">
+            <span>${d.semana_dia}</span>
+            <span class="text-zinc-400 font-normal">Dia ${d.data_atual}</span>
+          </div>
+          <div class="font-bold font-mono text-xs sm:text-sm">
+            <span class="text-rose-600">${d.temperatura_max}°</span> / <span class="text-blue-600">${d.temperatura_min}°</span>
+          </div>
+          <div class="text-[11px] text-zinc-500 flex items-center justify-center gap-1">
+            <i data-lucide="cloud-rain" class="w-3 h-3 text-blue-500"></i>
+            <span>${d.probabilidade_chuva}%</span>
+          </div>
+          <div class="pt-1 border-t border-zinc-100 flex items-center justify-between text-[10px]">
+            <span class="text-zinc-400">UV:</span>
+            <span class="font-bold font-mono px-1 py-0.5 rounded border ${uvBadgeClass}">${uv}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 2. Tabela Horária do Multimodel CPTEC/INPE (Próximas 24 Horas)
+  const tbody = document.getElementById('cptec-hourly-tbody');
+  if (tbody && cptec.meteograma_multimodel && Array.isArray(cptec.meteograma_multimodel.data)) {
+    const hourlyItems = cptec.meteograma_multimodel.data.slice(0, 24);
+    tbody.innerHTML = hourlyItems.map(h => {
+      let horaLabel = `+${h.fcst}h`;
+      if (h.date) {
+        try {
+          const baseDate = new Date(h.date.replace(' ', 'T'));
+          baseDate.setHours(baseDate.getHours() + h.fcst);
+          const dia = String(baseDate.getDate()).padStart(2, '0');
+          const hora = String(baseDate.getHours()).padStart(2, '0');
+          horaLabel = `${dia} às ${hora}:00`;
+        } catch (e) {}
+      }
+
+      const tempStr = h.temp !== undefined ? `${Math.round(h.temp)}°C` : '—';
+      const heatStr = h.heat_index !== undefined ? `${Math.round(h.heat_index)}°C` : '—';
+      const urStr = h.ur !== undefined ? `${h.ur}%` : '—';
+      const ventKmh = h.vent !== undefined ? `${Math.round(h.vent * 3.6)} km/h` : '—';
+      const precMm = h.prec !== undefined ? `${Number(h.prec).toFixed(1)} mm` : '0.0 mm';
+      const pressHpa = h.press !== undefined ? `${Math.round(h.press)} hPa` : '—';
+
+      return `
+        <tr class="hover:bg-zinc-100/60 transition">
+          <td class="p-2 font-bold text-zinc-900">${horaLabel}</td>
+          <td class="p-2 font-bold text-zinc-900">${tempStr}</td>
+          <td class="p-2 text-zinc-600">${heatStr}</td>
+          <td class="p-2 text-zinc-600">${urStr}</td>
+          <td class="p-2 text-zinc-600">${ventKmh}</td>
+          <td class="p-2 ${h.prec > 0 ? 'font-bold text-blue-600' : 'text-zinc-500'}">${precMm}</td>
+          <td class="p-2 text-zinc-500">${pressHpa}</td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=40').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=51').catch(() => {});
   }
 }
 
