@@ -308,7 +308,8 @@ function renderDashboardUI(meta, rows, weather) {
   }
 
   if (heroAlertPill) {
-    const temAlerta = (state.inmetAlerts && state.inmetAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo);
+    const directAlerts = (state.inmetAlerts && Array.isArray(state.inmetAlerts)) ? state.inmetAlerts.filter(a => a.eh_direto_ostras !== false) : [];
+    const temAlerta = (directAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
     if (temAlerta) {
       heroAlertPill.textContent = 'Alerta Oficial Vigente';
       heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
@@ -444,13 +445,15 @@ function getAlertBadgeAndClass(severidade, corNome) {
 function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
   const container = document.getElementById('container-alertas-principais');
   const badgeTotal = document.getElementById('badge-total-alertas');
+  const sectionAlertas = document.getElementById('section-alertas-oficiais');
   if (!container) return;
 
   const cardsHtml = [];
 
-  // 1. Alertas Oficiais do INMET
+  // 1. Alertas Oficiais do INMET (filtrando apenas vigentes para Rio das Ostras e Litoral Norte)
   if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
-    inmetAlerts.forEach(a => {
+    const directAlerts = inmetAlerts.filter(a => a.eh_direto_ostras !== false);
+    directAlerts.forEach(a => {
       const titulo = a.descricao || 'Alerta Meteorológico';
       const alertInfo = getAlertBadgeAndClass(a.severidade, a.cor_nome);
       const periodo = `Vigência: ${a.inicio_formatado || a.inicio} até ${a.fim_formatado || a.fim}`;
@@ -489,14 +492,15 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     });
   }
 
-  // 2. Alertas Oficiais da Marinha do Brasil
-  if (marinhaAvisos && (marinhaAvisos.aviso_ativo || marinhaAvisos.numero || marinhaAvisos.tipo)) {
-    const numero = marinhaAvisos.numero || '733/2026';
-    const tipo = marinhaAvisos.tipo || 'VENTO FORTE';
+  // 2. Alertas Oficiais da Marinha do Brasil (só renderiza se houver aviso real ativo)
+  if (marinhaAvisos && marinhaAvisos.aviso_ativo === true && marinhaAvisos.numero) {
+    const numero = marinhaAvisos.numero;
+    const tipo = marinhaAvisos.tipo || 'VENTO FORTE / RESSACA';
     const area = marinhaAvisos.area || 'Área DELTA (Cabo Frio ao Farol de São Tomé)';
-    const rajadas = marinhaAvisos.rajadas || 'Até 53 km/h (28 nós)';
-    const marOndas = marinhaAvisos.mar_ondas || '2,0 a 2,5 m (Muito Agitado)';
+    const rajadas = marinhaAvisos.rajadas || 'Ventos fortes na orla';
+    const marOndas = marinhaAvisos.mar_ondas || 'Mar agitado';
     const validade = marinhaAvisos.validade || marinhaAvisos.fim_formatado || 'Em vigor nas próximas 24 horas';
+    const restricao = marinhaAvisos.restricao || 'Atenção a pescadores, banhistas e pequenas embarcações na orla marítima.';
 
     cardsHtml.push(`
       <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2">
@@ -534,26 +538,26 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
         </div>
 
         <div class="p-2 rounded-lg bg-zinc-50/80 border border-zinc-200/50 text-xs text-zinc-700 leading-snug">
-          <strong class="font-semibold text-zinc-900">Restrição:</strong> Mar agitado com ressaca na orla. Atenção a banhistas e restrição a pequenas embarcações.
+          <strong class="font-semibold text-zinc-900">Restrição:</strong> ${cleanBulletinText(restricao)}
         </div>
       </div>
     `);
   }
 
   if (cardsHtml.length > 0) {
+    if (sectionAlertas) sectionAlertas.classList.remove('hidden');
     container.innerHTML = cardsHtml.join('');
+    container.className = cardsHtml.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4';
     if (badgeTotal) {
-      badgeTotal.textContent = `${cardsHtml.length} Alerta(s) Ativo(s)`;
+      badgeTotal.textContent = `${cardsHtml.length} ${cardsHtml.length === 1 ? 'Alerta Ativo' : 'Alertas Ativos'}`;
+      badgeTotal.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
     }
   } else {
-    container.innerHTML = `
-      <div class="col-span-full p-5 rounded-xl bg-zinc-50 border border-zinc-200 text-center space-y-1">
-        <span class="text-sm font-bold text-zinc-900 block">Condições de Normalidade Operacional</span>
-        <p class="text-xs text-zinc-600">Nenhum aviso meteorológico severo vigente do INMET ou da Marinha para Rio das Ostras no momento.</p>
-      </div>
-    `;
+    // Quando não houver avisos, oculta o container de alertas da tela principal
+    if (sectionAlertas) sectionAlertas.classList.add('hidden');
+    container.innerHTML = '';
     if (badgeTotal) {
-      badgeTotal.textContent = 'Normalidade';
+      badgeTotal.textContent = 'Sem Avisos';
       badgeTotal.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
     }
   }
@@ -721,8 +725,9 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
   const avisosList = document.getElementById('modal-avisos-list');
   if (avisosList) {
     let html = '';
-    if (inmetAlerts && inmetAlerts.length > 0) {
-      inmetAlerts.forEach(a => {
+    const inmetAtivos = (inmetAlerts && Array.isArray(inmetAlerts)) ? inmetAlerts.filter(a => a.eh_direto_ostras !== false) : [];
+    if (inmetAtivos.length > 0) {
+      inmetAtivos.forEach(a => {
         html += `
           <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
             <div class="flex items-center justify-between">
@@ -735,12 +740,12 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
       });
     }
 
-    if (marinhaAvisos && (marinhaAvisos.aviso_ativo || marinhaAvisos.tipo)) {
+    if (marinhaAvisos && marinhaAvisos.aviso_ativo === true && marinhaAvisos.numero) {
       html += `
         <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="font-bold text-sm text-zinc-950 uppercase">${marinhaAvisos.tipo || 'Aviso Marítimo'}</span>
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200">Marinha</span>
+            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200">Marinha • Aviso nº ${marinhaAvisos.numero}</span>
           </div>
           <p class="text-xs text-zinc-600 font-normal leading-snug">${cleanBulletinText(marinhaAvisos.validade || 'Condições de mar agitado e vento forte na costa.')}</p>
         </div>
