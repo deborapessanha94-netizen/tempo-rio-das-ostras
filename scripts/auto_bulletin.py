@@ -270,26 +270,6 @@ def run_auto_bulletin_pipeline():
     now_dt = datetime.now()
     emissao_str = now_dt.strftime("%d/%m/%Y às %H:%Mh")
 
-    # Sincroniza PDFs se existirem localmente
-    try:
-        try:
-            from scripts.sync_boletim import get_search_directories, find_latest_file
-        except ImportError:
-            from sync_boletim import get_search_directories, find_latest_file
-        import shutil
-        search_dirs = get_search_directories()
-        pdf_boletim = find_latest_file("*boletim*.pdf", search_dirs) or find_latest_file("*Boletim_Meteorologico*.pdf", search_dirs)
-        pdf_populacao = find_latest_file("*previsao_populacao*.pdf", search_dirs) or find_latest_file("*Previsao_Populacao*.pdf", search_dirs)
-        if pdf_boletim:
-            dest_b = DOCS_DIR / "boletim_operacional.pdf"
-            shutil.copy2(pdf_boletim, dest_b)
-            print(f"   [PDF] Boletim Operacional copiado de: {pdf_boletim.name}")
-        if pdf_populacao:
-            dest_p = DOCS_DIR / "informativo_populacao.pdf"
-            shutil.copy2(pdf_populacao, dest_p)
-            print(f"   [PDF] Informativo à População copiado de: {pdf_populacao.name}")
-    except Exception as e:
-        print(f"   [INFO] Checagem de PDFs locais: {e}")
 
     # Se não houver nenhum boletim oficial na máquina, busca modelos numéricos globais:
     url_om = (
@@ -1053,6 +1033,17 @@ def run_auto_bulletin_pipeline():
     with open(meta_path, 'w', encoding='utf-8') as f:
         json.dump(metadata, f, ensure_ascii=False, indent=2)
     print(f"   [METADADOS] Salvo boletim_metadata.json com sucesso ({periodo_str})")
+
+    # Gera automaticamente os PDFs oficiais (Boletim Operacional e Informativo à População)
+    try:
+        try:
+            from scripts.generate_bulletin_pdf import generate_all_bulletins
+        except ImportError:
+            from generate_bulletin_pdf import generate_all_bulletins
+        print(">> [PDF] Gerando PDFs oficiais atualizados a partir da previsão feita...")
+        generate_all_bulletins()
+    except Exception as e:
+        print(f"   [AVISO] Não foi possível gerar PDFs: {e}")
 
     print(">> [Auto-Bulletin] Rodada concluída com 100% de sucesso!")
     return True

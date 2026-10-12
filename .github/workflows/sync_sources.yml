@@ -36,7 +36,7 @@ jobs:
       - name: Instalar Dependências
         run: |
           python -m pip install --upgrade pip
-          pip install pandas openpyxl || true
+          pip install pandas openpyxl reportlab matplotlib || true
 
       - name: Executar Coleta de Todas as Fontes e Gerar Previsão Autônoma a partir de Hoje
         run: |
