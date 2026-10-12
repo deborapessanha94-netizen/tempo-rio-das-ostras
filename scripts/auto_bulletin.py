@@ -476,14 +476,39 @@ def run_auto_bulletin_pipeline():
             wmo_code = max(set(codes), key=codes.count)
             tempo_desc_wmo, icon_name, resumo_txt = WMO_MAP.get(wmo_code, ("Instável", "cloud", "Tempo instável"))
 
-            t_min = round(min(temps))
-            t_max = round(max(temps))
-            if turno_nome == 'Tarde':
-                t_max = max(t_max, day_t_max)
-            elif turno_nome == 'Madrugada':
-                t_min = min(t_min, day_t_min)
-            u_min = round(min(umids))
-            u_max = round(max(umids))
+            # Ajuste de temperatura com prioridade oficial ao INMET (https://previsao.inmet.gov.br/3304524)
+            if t_min_inmet is not None and t_max_inmet is not None:
+                if turno_nome == 'Tarde':
+                    t_max = day_t_max
+                    t_min = max(min(round(min(temps)), day_t_max), day_t_min)
+                elif turno_nome == 'Madrugada':
+                    t_min = day_t_min
+                    t_max = min(max(round(max(temps)), day_t_min), day_t_max)
+                elif turno_nome == 'Manhã':
+                    t_min = day_t_min
+                    t_max = min(max(round(max(temps)), day_t_min), day_t_max)
+                else: # Noite
+                    t_min = max(min(round(min(temps)), day_t_max), day_t_min)
+                    t_max = min(max(round(max(temps)), day_t_min), day_t_max)
+            else:
+                t_min = round(min(temps))
+                t_max = round(max(temps))
+                if turno_nome == 'Tarde':
+                    t_max = max(t_max, day_t_max)
+                elif turno_nome == 'Madrugada':
+                    t_min = min(t_min, day_t_min)
+
+            # Umidade oficial do INMET (https://previsao.inmet.gov.br/3304524)
+            if inmet_sub.get('umidade_min') and inmet_sub.get('umidade_max'):
+                try:
+                    u_min = int(inmet_sub.get('umidade_min'))
+                    u_max = int(inmet_sub.get('umidade_max'))
+                except:
+                    u_min = round(min(umids))
+                    u_max = round(max(umids))
+            else:
+                u_min = round(min(umids))
+                u_max = round(max(umids))
             p_media = round(sum(press) / len(press))
             chuva_sum = round(sum(chuvas), 1)
             chuva_prob_max = max(probs)
@@ -580,14 +605,26 @@ def run_auto_bulletin_pipeline():
                 'tempo_icone': icon_name
             })
 
-    # Recalcula os totais diários considerando os alertas integrados
+    # Recalcula os totais diários considerando os alertas integrados e respeitando estritamente o INMET
     for d_idx in range(3):
         d_turnos = [r for r in records_12_turnos if r['data_iso'] == dias_3[d_idx]['date_iso']]
         if d_turnos:
             dias_3[d_idx]['chuva_tot'] = round(sum(r['chuva_media'] for r in d_turnos), 1)
             dias_3[d_idx]['rajada_max'] = max(r['rajada_max'] for r in d_turnos)
-            dias_3[d_idx]['t_min'] = min(r['temp_min'] for r in d_turnos)
-            dias_3[d_idx]['t_max'] = max(r['temp_max'] for r in d_turnos)
+
+            # Prioridade estrita aos limites térmicos do INMET (https://previsao.inmet.gov.br/3304524)
+            inmet_dia = inmet_forecast.get(dias_3[d_idx]['date_br'], {})
+            t_min_inm = inmet_dia.get('temp_min') or inmet_dia.get('manha', {}).get('temp_min') or inmet_dia.get('tarde', {}).get('temp_min')
+            t_max_inm = inmet_dia.get('temp_max') or inmet_dia.get('tarde', {}).get('temp_max') or inmet_dia.get('manha', {}).get('temp_max')
+            if t_min_inm is not None:
+                dias_3[d_idx]['t_min'] = round(float(t_min_inm))
+            else:
+                dias_3[d_idx]['t_min'] = min(r['temp_min'] for r in d_turnos)
+
+            if t_max_inm is not None:
+                dias_3[d_idx]['t_max'] = round(float(t_max_inm))
+            else:
+                dias_3[d_idx]['t_max'] = max(r['temp_max'] for r in d_turnos)
 
     # Salva os 12 turnos em data/boletim_oficial.json
     boletim_json_path = DATA_DIR / "boletim_oficial.json"
@@ -1012,6 +1049,13 @@ def run_auto_bulletin_pipeline():
         "sinopse_estruturada": sinopse_estruturada,
         "glossario": glossario,
         "dias_resumo": dias_resumo,
+        "inmet_oficial": {
+            "ibge": "3304524",
+            "municipio": "Rio das Ostras - RJ",
+            "url": "https://previsao.inmet.gov.br/3304524",
+            "api_url": "https://apiprevmet3.inmet.gov.br/previsao/3304524",
+            "previsao_5dias": inmet_forecast
+        },
         "impactos_bairros": impactos_bairros,
         "kpis": {
             "jundia_nivel": f"{jundia_nivel_txt} m",

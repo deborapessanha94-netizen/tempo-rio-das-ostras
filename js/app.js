@@ -325,8 +325,15 @@ function renderDashboardUI(meta, rows, weather) {
   const sideHum = document.getElementById('sidebar-hum');
   const sideSea = document.getElementById('sidebar-sea');
 
-  if (sideTemp && rows && rows[0]) {
-    sideTemp.textContent = `${rows[0].temp_max || 28}°`;
+  if (sideTemp) {
+    if (weather && weather.current_weather && weather.current_weather.temperature !== undefined) {
+      sideTemp.textContent = `${Math.round(weather.current_weather.temperature)}°`;
+    } else if (primeiroDia?.pilares?.temp?.val) {
+      const maxVal = primeiroDia.pilares.temp.val.split(' a ')?.[1]?.replace('°C', '') || '27';
+      sideTemp.textContent = `${maxVal.trim()}°`;
+    } else if (rows && rows[0]) {
+      sideTemp.textContent = `${rows[0].temp_max || 27}°`;
+    }
   }
 
   if (sideWind && primeiroDia) {
