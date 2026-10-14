@@ -18,11 +18,20 @@
     "temperatura_min": "21",
     "vento": "4",
     "umidade": 79,
-    "temperatura_prev": "26",
-    "sensacao_termica": "25",
-    "hora_atual": "2026-10-14T01:00:00.000Z"
+    "temperatura_prev": "23",
+    "sensacao_termica": "21",
+    "hora_atual": "2026-10-13T07:00:00.000Z"
   },
   "proximos_dias": [
+    {
+      "data_atual": "15",
+      "semana_dia": "Qui",
+      "probabilidade_chuva": 50,
+      "temperatura_max": "28",
+      "temperatura_min": "22",
+      "umidade": 80,
+      "indice_uv": 12
+    },
     {
       "data_atual": "16",
       "semana_dia": "Sex",
@@ -62,15 +71,6 @@
     {
       "data_atual": "20",
       "semana_dia": "Ter",
-      "probabilidade_chuva": null,
-      "temperatura_max": null,
-      "temperatura_min": null,
-      "umidade": null,
-      "indice_uv": null
-    },
-    {
-      "data_atual": "21",
-      "semana_dia": "Qua",
       "probabilidade_chuva": null,
       "temperatura_max": null,
       "temperatura_min": null,
