@@ -4,9 +4,9 @@
     "nome": "Rio das Ostras - Costazul / Centro",
     "rede": "PWS Weather Underground",
     "temp_atual": 25,
-    "vento_atual": 2,
+    "vento_atual": 3,
     "rajada_atual": 5,
-    "umidade_atual": 86,
+    "umidade_atual": 87,
     "chuva_1h": 0.0,
     "chuva_4h": 0.0,
     "chuva_12h": 0.5,
@@ -14,10 +14,10 @@
     "chuva_36h": 0.5,
     "chuva_48h": 0.5,
     "chuva_96h": 0.5,
-    "ultima_leitura": "2026-10-15 19:58:57",
+    "ultima_leitura": "2026-10-15 20:31:23",
     "online": true,
     "chuva_hoje": 0.51,
-    "chuva_6h": 0.5
+    "chuva_6h": 0.0
   },
   {
     "codigo": "IRIODA15",
@@ -34,10 +34,10 @@
     "chuva_36h": 8.6,
     "chuva_48h": 8.8,
     "chuva_96h": 10.9,
-    "ultima_leitura": "2026-10-15 19:59:06",
+    "ultima_leitura": "2026-10-15 20:31:21",
     "online": true,
     "chuva_hoje": 8.61,
-    "chuva_6h": 8.6
+    "chuva_6h": 1.5
   },
   {
     "codigo": "IRIODA16",
@@ -65,7 +65,7 @@
     "temp_atual": 25,
     "vento_atual": 0,
     "rajada_atual": 0,
-    "umidade_atual": 91,
+    "umidade_atual": 92,
     "chuva_1h": 0.0,
     "chuva_4h": 0.0,
     "chuva_12h": 0.0,
@@ -73,7 +73,7 @@
     "chuva_36h": 0.0,
     "chuva_48h": 0.0,
     "chuva_96h": 0.0,
-    "ultima_leitura": "2026-10-15 19:58:55",
+    "ultima_leitura": "2026-10-15 20:31:31",
     "online": true,
     "chuva_hoje": 0.0,
     "chuva_6h": 0.0
@@ -130,7 +130,7 @@
     "chuva_36h": 0.0,
     "chuva_48h": 0.0,
     "chuva_96h": 2.2,
-    "ultima_leitura": "15/10/26 22:10",
+    "ultima_leitura": "15/10/26 23:10",
     "online": true
   },
   {
