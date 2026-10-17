@@ -1,15 +1,15 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "17/10 (Sábado) a 19/10 (Segunda-feira)",
-  "emissao": "17/10/2026 às 20:12h",
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Alerta Amarelo de Tempestade do INMET (nº 56094) previsto para pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 27.4 mm com temperatura máxima alcançando 26°C.",
+  "emissao": "17/10/2026 às 17:18h",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.79 m. Alerta Amarelo de Tempestade do INMET (nº 56094) previsto para pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 29.0 mm com temperatura máxima alcançando 26°C.",
   "alertas_estruturados": [
     {
       "tipo": "hidrologico",
       "titulo": "Rio Jundiá (INEA)",
-      "status": "Atenção",
+      "status": "ATENÇÃO",
       "badge": "success",
-      "detalhe": "Cota: 1.82 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.79 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -229,15 +229,15 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "ATENÇÃO • COTA 1.82 M (VAZANTE)",
+      "badge": "ATENÇÃO • COTA 1.79 M (VAZANTE)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.82 m",
-      "status": "Atenção",
-      "texto": "No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 61 km/h associadas às células convectivas da tarde.",
+      "cota": "1.79 m",
+      "status": "ATENÇÃO",
+      "texto": "No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.79 m (Status: ATENÇÃO), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 57 km/h associadas às células convectivas da tarde.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1.82 m (0,0 mm 24h)"
+          "valor": "1.79 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital",
@@ -724,7 +724,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-17T20:12:55.228110"
+    "atualizado_em": "2026-10-17T17:19:07.726512"
   },
   "cptec_oficial": {
     "id_cidade": 3866,
@@ -813,7 +813,7 @@
       "risco_sab": "ATENÇÃO",
       "risco_dom": "ATENÇÃO",
       "risco_seg": "OBS",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.82 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.79 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
     },
     {

@@ -755,7 +755,7 @@ def run_auto_bulletin_pipeline():
                     chuva_prob_max = max(chuva_prob_max, round(prob_chuva_cptec * 0.75))
                     if turno_nome in ['Manhã', 'Tarde']:
                         chuva_prob_max = max(chuva_prob_max, round(prob_chuva_cptec))
-                elif prob_chuva_cptec <= 10:
+                elif prob_chuva_cptec <= 10 and not ('chuva' in (inmet_desc or '').lower()):
                     chuva_prob_max = min(chuva_prob_max, 25)
                     chuva_sum = min(chuva_sum, 0.5)
 
