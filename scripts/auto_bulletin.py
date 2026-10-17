@@ -714,13 +714,14 @@ def run_auto_bulletin_pipeline():
             # Precipitação e Probabilidade combinadas
             multi_prec_sum = sum(multi_precs) if multi_precs else 0.0
             om_prec_sum = sum(chuvas)
-            chuva_sum = round((om_prec_sum * 0.5 + multi_prec_sum * 0.5), 1)
+            if multi_precs and len(multi_precs) > 0:
+                chuva_sum = round((om_prec_sum * 0.5 + multi_prec_sum * 0.5), 1)
+            else:
+                chuva_sum = round(om_prec_sum, 1)
 
             base_prob = max(probs)
             if multi_probs:
                 base_prob = round((base_prob + max(multi_probs)) / 2)
-            if prob_chuva_cptec is not None and turno_nome in ['Tarde', 'Noite']:
-                base_prob = max(round(prob_chuva_cptec), base_prob)
             chuva_prob_max = base_prob
 
             # Descrição do tempo do INMET
@@ -729,10 +730,16 @@ def run_auto_bulletin_pipeline():
                 dl = inmet_desc.lower()
                 if 'trovoada' in dl or 'tempestade' in dl:
                     icon_name = "cloud-lightning"
+                    chuva_sum = max(chuva_sum, 2.0)
+                    chuva_prob_max = max(chuva_prob_max, 70)
                 elif 'pancada' in dl or 'chuva forte' in dl:
                     icon_name = "cloud-rain"
+                    chuva_sum = max(chuva_sum, 1.8)
+                    chuva_prob_max = max(chuva_prob_max, 65)
                 elif 'chuva' in dl or 'chuvisco' in dl:
                     icon_name = "cloud-rain" if 'isolada' not in dl else "cloud-drizzle"
+                    chuva_sum = max(chuva_sum, 1.2 if 'isolada' not in dl else 0.4)
+                    chuva_prob_max = max(chuva_prob_max, 60 if 'isolada' not in dl else 35)
                 elif 'muitas nuvens' in dl and ('sol' in dl or 'abertura' in dl):
                     icon_name = "cloud-sun"
                 elif 'muitas nuvens' in dl or 'nublado' in dl:
@@ -742,35 +749,31 @@ def run_auto_bulletin_pipeline():
             else:
                 tempo_desc = tempo_desc_wmo
 
+            # Calibração com Probabilidade Diária do CPTEC/INPE
+            if prob_chuva_cptec is not None:
+                if prob_chuva_cptec >= 70 and chuva_sum > 0:
+                    chuva_prob_max = max(chuva_prob_max, round(prob_chuva_cptec * 0.75))
+                    if turno_nome in ['Manhã', 'Tarde']:
+                        chuva_prob_max = max(chuva_prob_max, round(prob_chuva_cptec))
+                elif prob_chuva_cptec <= 10:
+                    chuva_prob_max = min(chuva_prob_max, 25)
+                    chuva_sum = min(chuva_sum, 0.5)
+
             # Integração dos Alertas INMET vigentes nos cálculos do turno
             if tem_alerta_inmet_dia and alerta_dia:
                 sev_alerta = alerta_dia.get('cor_nome', 'Amarelo')
                 if turno_nome == 'Tarde':
                     chuva_prob_max = max(chuva_prob_max, 75 if sev_alerta == 'Amarelo' else 90)
                     rajada_max = max(rajada_max, 45 if sev_alerta == 'Amarelo' else 55)
-                    chuva_sum = max(chuva_sum, 1.2)
+                    chuva_sum = max(chuva_sum, 2.5)
                     if 'trovoada' not in tempo_desc.lower() and 'tempestade' not in tempo_desc.lower():
                         tempo_desc = f"{tempo_desc} ({alerta_dia.get('cor_badge', 'Alerta de Tempestade')})"
                     icon_name = "cloud-lightning"
                 elif turno_nome == 'Noite':
-                    chuva_prob_max = max(chuva_prob_max, 55)
-                    chuva_sum = max(chuva_sum, 0.4)
+                    chuva_prob_max = max(chuva_prob_max, 60)
+                    chuva_sum = max(chuva_sum, 0.5)
                 elif turno_nome == 'Manhã':
-                    chuva_prob_max = max(chuva_prob_max, 35)
-                    chuva_sum = max(chuva_sum, 0.1)
-                elif turno_nome == 'Madrugada':
-                    chuva_prob_max = max(chuva_prob_max, 20)
-                    chuva_sum = 0.0
-            else:
-                if turno_nome in ['Madrugada', 'Manhã']:
-                    chuva_sum = 0.0
-                    chuva_prob_max = min(chuva_prob_max, 15)
-                elif turno_nome == 'Tarde':
-                    chuva_prob_max = min(chuva_prob_max, 25)
-                    chuva_sum = min(chuva_sum, 0.3)
-                elif turno_nome == 'Noite':
-                    chuva_sum = 0.0
-                    chuva_prob_max = min(chuva_prob_max, 15)
+                    chuva_prob_max = max(chuva_prob_max, 40)
 
             # Se Marinha tiver aviso ativo
             if tem_aviso_marinha and day_idx == 0:
@@ -932,20 +935,20 @@ def run_auto_bulletin_pipeline():
                 t2 = f"Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de {chuva_tot:.1f} mm no dia). A calha do Rio Jundiá registra cota de {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e vazante consolidada."
             elev_tipo = "gradual"
         elif dia_idx == 1:
-            if tem_alerta_dia:
-                t1 = f"{pron} {dia_nome}, a nebulosidade varia entre períodos de céu nublado e aberturas de sol com forte aquecimento, mantendo condições para pancadas isoladas de chuva e trovoadas à tarde decorrentes do calor diurno."
-                t2 = f"Previsão de pancadas de chuva com trovoadas no período da tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+            if tem_alerta_dia or chuva_tot >= 5.0:
+                t1 = f"{pron} {dia_nome}, o tempo se mantém instável com predomínio de muitas nuvens sob atuação de cavados atmosféricos e circulação de umidade do oceano."
+                t2 = f"Previsão de pancadas de chuva com trovoadas pela manhã e chuva contínua no decorrer da tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
             else:
-                t1 = f"{pron} {dia_nome}, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico significativo."
+                t1 = f"{pron} {dia_nome}, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico gradual."
                 t2 = f"Previsão de chuva fraca ou isolada (acumulado previsto de {chuva_tot:.1f} mm no dia). O Rio Jundiá permanece seguro com nível de {jundia_nivel} m."
             elev_tipo = "moderada"
         else:
-            if tem_alerta_dia:
+            if tem_alerta_dia or chuva_tot >= 5.0:
                 t1 = f"{pron} {dia_nome}, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã."
                 t2 = f"Previsão de pancadas de chuva e trovoadas à tarde (acumulado previsto de {chuva_tot:.1f} mm no dia). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
             else:
-                t1 = f"{pron} {dia_nome}, o predomínio de uma massa de ar quente sobre o estado do Rio de Janeiro garante predomínio de sol, poucas nuvens pela manhã e acentuado aquecimento térmico ao longo do dia."
-                t2 = f"Previsão de tempo estável na maior parte do período, com pequena probabilidade de pancadas rápidas e isoladas no fim da tarde por convecção (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
+                t1 = f"{pron} {dia_nome}, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia."
+                t2 = f"Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
             elev_tipo = "rápida"
 
         t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
@@ -991,8 +994,8 @@ def run_auto_bulletin_pipeline():
         f"não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até {max_rajada_geral:.0f} km/h "
         f"associadas às células convectivas da tarde.\n\n"
         f"Para os dias subsequentes, {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) a aproximação de instabilidades mantém variação de nuvens com máxima de {d1['t_max']:.0f}°C "
-        f"e pancadas isoladas com trovoadas à tarde ({d1['chuva_tot']:.1f} mm acumulados, {d1_aviso_str}). "
-        f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o calor intenso persiste com máxima de {d2['t_max']:.0f}°C e convecção diurna "
+        f"e pancadas de chuva com trovoadas ({d1['chuva_tot']:.1f} mm acumulados, {d1_aviso_str}). "
+        f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o calor persiste com máxima de {d2['t_max']:.0f}°C e gradual diminuição de instabilidades "
         f"({d2['chuva_tot']:.1f} mm acumulados, {d2_aviso_str}). "
         f"A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. "
         f"A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193."
