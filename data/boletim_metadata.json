@@ -1,15 +1,15 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "19/10 (Segunda-feira) a 21/10 (Quarta-feira)",
-  "emissao": "19/10/2026 às 20:50h",
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.92 m. Acumulado total de chuva previsto para o ciclo de 3 dias: 6.2 mm com temperatura máxima alcançando 24°C.",
+  "emissao": "19/10/2026 às 23:53h",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Acumulado total de chuva previsto para o ciclo de 3 dias: 6.2 mm com temperatura máxima alcançando 24°C.",
   "alertas_estruturados": [
     {
       "tipo": "hidrologico",
       "titulo": "Rio Jundiá (INEA)",
-      "status": "VIGILÂNCIA",
+      "status": "Atenção",
       "badge": "success",
-      "detalhe": "Cota: 1.92 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.82 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -29,7 +29,7 @@
       "impacto": "Sem riscos meteorológicos severos previstos."
     }
   ],
-  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 19/10 (Segunda-feira) a 21/10 (Quarta-feira) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 19°C ao amanhecer e máxima de 24°C na segunda-feira (19/10), com acumulado pluviométrico diário previsto de 4.4 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quarta-feira (21/10).\n\nNo monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.92 m (Status: VIGILÂNCIA), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 36 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, na terça-feira (20/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (0.8 mm acumulados, sem avisos meteorológicos vigentes). Na quarta-feira (21/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (1.0 mm acumulados, sem avisos meteorológicos vigentes). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
+  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 19/10 (Segunda-feira) a 21/10 (Quarta-feira) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 19°C ao amanhecer e máxima de 24°C na segunda-feira (19/10), com acumulado pluviométrico diário previsto de 4.4 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quarta-feira (21/10).\n\nNo monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 36 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, na terça-feira (20/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (0.8 mm acumulados, sem avisos meteorológicos vigentes). Na quarta-feira (21/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (1.0 mm acumulados, sem avisos meteorológicos vigentes). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
   "sinopse_estruturada": {
     "periodo": "19/10 (Segunda-feira) a 21/10 (Quarta-feira)",
     "evolucao_3_dias": [
@@ -43,7 +43,7 @@
         "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 4.4 mm com rajadas de vento de até 36 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de 4.4 mm no dia). A calha do Rio Jundiá registra cota de 1.92 m (Status: VIGILÂNCIA), em regime de total estabilidade e vazante consolidada.",
+          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de 4.4 mm no dia). A calha do Rio Jundiá registra cota de 1.82 m (Status: Atenção), em regime de total estabilidade e vazante consolidada.",
           "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em gradual elevação. Na região rural, oscilam entre 17°C e 22°C.",
           "A umidade relativa do ar oscila entre 63% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
           "Ventos predominantes de SW-S moderados com rajadas de até 36 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -101,7 +101,7 @@
         "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 0.8 mm com rajadas de vento de até 31 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta terça-feira, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico gradual.",
-          "Previsão de chuva fraca ou isolada (acumulado previsto de 0.8 mm no dia). O Rio Jundiá permanece seguro com nível de 1.92 m.",
+          "Previsão de chuva fraca ou isolada (acumulado previsto de 0.8 mm no dia). O Rio Jundiá permanece seguro com nível de 1.82 m.",
           "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em moderada elevação. Na região rural, oscilam entre 17°C e 22°C.",
           "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos de SE-E rondando para NW-N moderados com rajadas de até 31 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -229,15 +229,15 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1.92 M (VAZANTE)",
+      "badge": "ATENÇÃO • COTA 1.82 M (VAZANTE)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.92 m",
-      "status": "VIGILÂNCIA",
-      "texto": "No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.92 m (Status: VIGILÂNCIA), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 36 km/h associadas às células convectivas da tarde.",
+      "cota": "1.82 m",
+      "status": "Atenção",
+      "texto": "No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 36 km/h associadas às células convectivas da tarde.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1.92 m (0,0 mm 24h)"
+          "valor": "1.82 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital",
@@ -309,7 +309,7 @@
       "descricao": "Previsão de pancadas isoladas de chuva sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 4.4 mm com rajadas de vento de até 36 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de 4.4 mm no dia). A calha do Rio Jundiá registra cota de 1.92 m (Status: VIGILÂNCIA), em regime de total estabilidade e vazante consolidada.",
+        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (acumulado previsto de 4.4 mm no dia). A calha do Rio Jundiá registra cota de 1.82 m (Status: Atenção), em regime de total estabilidade e vazante consolidada.",
         "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em gradual elevação. Na região rural, oscilam entre 17°C e 22°C.",
         "A umidade relativa do ar oscila entre 63% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos predominantes de SW-S moderados com rajadas de até 36 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -365,7 +365,7 @@
       "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 0.8 mm com rajadas de vento de até 31 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta terça-feira, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico gradual.",
-        "Previsão de chuva fraca ou isolada (acumulado previsto de 0.8 mm no dia). O Rio Jundiá permanece seguro com nível de 1.92 m.",
+        "Previsão de chuva fraca ou isolada (acumulado previsto de 0.8 mm no dia). O Rio Jundiá permanece seguro com nível de 1.82 m.",
         "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em moderada elevação. Na região rural, oscilam entre 17°C e 22°C.",
         "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos de SE-E rondando para NW-N moderados com rajadas de até 31 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -724,7 +724,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-19T20:50:40.123556"
+    "atualizado_em": "2026-10-19T23:54:00.213881"
   },
   "cptec_oficial": {
     "id_cidade": 3866,
@@ -813,7 +813,7 @@
       "risco_sab": "OBS",
       "risco_dom": "OBS",
       "risco_seg": "OBS",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.92 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.82 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
     },
     {
