@@ -872,7 +872,14 @@ def run_auto_bulletin_pipeline():
     else:
         alerta_partes.append(f"Rio Jundiá em regime seguro de vazante contínua com cota de {jundia_nivel_txt} m")
 
-    direct_alerts = [a for a in inmet_alerts if a.get('eh_direto_ostras')]
+    cycle_isos = [d['date_iso'] for d in dias_3]
+    direct_alerts = []
+    seen_ids = set()
+    for iso_date in cycle_isos:
+        for a in get_day_alerts(iso_date):
+            if a.get('id') not in seen_ids:
+                seen_ids.add(a.get('id'))
+                direct_alerts.append(a)
     direct_alerts_sorted = sorted(direct_alerts, key=lambda x: str(x.get('inicio', '')))
     alert_ids_str = " e ".join(f"nº {a['id']}" for a in direct_alerts_sorted) if direct_alerts_sorted else ""
 
