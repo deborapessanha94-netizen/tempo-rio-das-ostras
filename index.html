@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=65">
+  <link rel="stylesheet" href="css/styles.css?v=66">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -143,17 +143,17 @@
     <div class="modern-card p-5 sm:p-6 bg-white border border-[#e2e8f0]">
       
       <!-- Cabeçalho do Bloco de Alertas -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3 mb-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3 mb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center shrink-0">
+          <div class="w-8 h-8 rounded-xl bg-[#ffebe4] text-black border border-[#f97316] flex items-center justify-center shrink-0 shadow-xs">
             <i data-lucide="shield-alert" class="w-4 h-4"></i>
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-base sm:text-lg font-bold text-[#1e293b] tracking-tight">
+              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
                 Alertas Meteorológicos Oficiais Vigentes
               </h2>
-              <span id="badge-total-alertas" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#f07a53]/15 text-[#d8623b] border border-[#f07a53]/30">
+              <span id="badge-total-alertas" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">
                 1 Alerta Ativo
               </span>
             </div>
@@ -168,7 +168,7 @@
             <i data-lucide="info" class="w-3.5 h-3.5 text-[#64748b]"></i>
             Área de Cobertura: Rio das Ostras & Litoral Norte
           </span>
-          <button id="dock-btn-avisos" class="text-xs font-bold text-[#f07a53] hover:text-[#d8623b] hover:underline cursor-pointer">
+          <button id="dock-btn-avisos" class="text-xs font-bold text-black hover:underline cursor-pointer">
             Ver Avisos →
           </button>
         </div>
@@ -179,23 +179,23 @@
         
         <!-- Card Alerta 1: INMET -->
         <div class="alert-card-inmet-amarelo p-3 sm:p-3.5 space-y-2">
-          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/15 pb-1.5">
+          <div class="flex items-center justify-between gap-2 border-b border-[#cbd5e1] pb-2">
             <div class="flex items-center gap-1.5">
-              <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-[#334155] tracking-wide">
+              <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
                 INMET
               </span>
               <span class="text-xs font-semibold text-[#64748b] truncate">
                 Aviso nº 55969 / 55986
               </span>
-              <span class="text-[10px] px-1.5 py-0.2 rounded font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Rio das Ostras</span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>
             </div>
-            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">
+            <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f97316]">
               Alerta Amarelo • Perigo Potencial
             </span>
           </div>
 
           <div class="flex items-baseline justify-between gap-2">
-            <h3 class="text-sm sm:text-base font-bold text-[#1e293b] leading-tight">
+            <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">
               Tempestade & Convecção Diurna
             </h3>
             <span class="text-[11px] font-medium text-[#64748b] whitespace-nowrap flex items-center gap-1 shrink-0">
@@ -229,7 +229,7 @@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <h2 class="text-base sm:text-lg font-bold text-[#1e293b] tracking-tight">
+              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
                 Panorama Sinótico Geral
               </h2>
               <span id="badge-periodo-sinotico" class="text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-[#3d4f61] border border-[#e2e8f0]">
@@ -628,7 +628,7 @@
                 <h3 class="text-base font-bold text-[#1e293b] tracking-tight">
                   Radar Meteorológico Doppler & Satélite em Tempo Real
                 </h3>
-                <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#cbd5e1]">
                   Ao Vivo
                 </span>
               </div>
@@ -1659,6 +1659,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=65"></script>
+  <script type="module" src="js/app.js?v=66"></script>
 </body>
 </html>

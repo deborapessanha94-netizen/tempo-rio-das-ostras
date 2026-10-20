@@ -383,11 +383,11 @@ function renderDashboardUI(meta, rows, weather) {
 
     if (temAlertaHoje) {
       heroAlertPill.textContent = 'Alerta Oficial Vigente Hoje';
-      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold';
     } else if (futureAlerts.length > 0) {
       const pDia = futureAlerts[0].inicio_formatado ? futureAlerts[0].inicio_formatado.split(' ')[0] : '22/10';
       heroAlertPill.textContent = `Atenção: Alerta Previsto para ${pDia}`;
-      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200';
+      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#94a3b8] font-bold';
     } else {
       heroAlertPill.textContent = 'Normalidade Operacional';
       heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
@@ -541,19 +541,19 @@ function getAlertBadgeAndClass(severidade, corNome) {
   if (sev.includes('grande perigo') || c.includes('vermelho')) {
     return {
       cardClass: 'alert-card-inmet-vermelho',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-900 border border-red-300">Alerta Vermelho • Grande Perigo</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#fee2e2] text-black border border-[#dc2626]">Alerta Vermelho • Grande Perigo</span>',
       corNome: 'Vermelho'
     };
   } else if ((sev.includes('perigo') && !sev.includes('potencial')) || c.includes('laranja')) {
     return {
       cardClass: 'alert-card-inmet-laranja',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-orange-100 text-orange-900 border border-orange-300">Alerta Laranja • Perigo</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#ea580c]">Alerta Laranja • Perigo</span>',
       corNome: 'Laranja'
     };
   } else {
     return {
       cardClass: 'alert-card-inmet-amarelo',
-      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300">Alerta Amarelo • Perigo Potencial</span>',
+      badgeHtml: '<span class="text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f97316]">Alerta Amarelo • Perigo Potencial</span>',
       corNome: 'Amarelo'
     };
   }
@@ -573,6 +573,11 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
   // 1. Alertas Oficiais do INMET (filtrando apenas vigentes para Rio das Ostras e Litoral Norte)
   if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
     const directAlerts = inmetAlerts.filter(a => a.eh_direto_ostras !== false);
+    directAlerts.sort((a, b) => {
+      const tA = new Date(toIsoDate(a.data_inicio || a.inicio)).getTime() || 0;
+      const tB = new Date(toIsoDate(b.data_inicio || b.inicio)).getTime() || 0;
+      return tA - tB;
+    });
     const nowIso = new Date().toISOString().slice(0, 10);
 
     directAlerts.forEach(a => {
@@ -588,38 +593,38 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
       const instrucoes = (a.instrucoes && a.instrucoes[0]) ? a.instrucoes[0] : 'Não se abrigue debaixo de árvores. Em emergência ligue 199.';
 
       let statusBadge = isVigenteHoje 
-        ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-amber-100 text-amber-800 border border-amber-300">Vigente Hoje</span>'
+        ? '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">Vigente Hoje</span>'
         : (isFuturo 
-            ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-700 border border-blue-200">Programado para ${a.inicio_formatado ? a.inicio_formatado.split(' ')[0] : '22/10'}</span>`
-            : '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-zinc-100 text-zinc-600 border border-zinc-200">Encerrado</span>');
+            ? `<span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Programado para ${a.inicio_formatado ? a.inicio_formatado.split(' ')[0] : '22/10'}</span>`
+            : '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Encerrado</span>');
 
       cardsHtml.push(`
         <div class="${alertInfo.cardClass} p-3 sm:p-3.5 space-y-2">
-          <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5 flex-wrap">
+          <div class="flex items-center justify-between gap-2 border-b border-[#cbd5e1] pb-2 flex-wrap">
             <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
                 INMET
               </span>
-              <span class="text-xs font-semibold text-zinc-600 truncate">
+              <span class="text-xs font-semibold font-mono text-black truncate">
                 ${a.id ? `Aviso nº ${a.id}` : 'Aviso Especial'}
               </span>
-              ${a.eh_direto_ostras ? '<span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Rio das Ostras</span>' : ''}
+              ${a.eh_direto_ostras ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>' : ''}
               ${statusBadge}
             </div>
             ${alertInfo.badgeHtml}
           </div>
 
           <div class="flex items-baseline justify-between gap-2 flex-wrap">
-            <h3 class="text-sm sm:text-base font-bold text-zinc-950 leading-tight">${titulo}</h3>
-            <span class="text-[11px] font-medium text-zinc-500 whitespace-nowrap flex items-center gap-1 shrink-0">
-              <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i>
+            <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${titulo}</h3>
+            <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1.5 shrink-0">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
               ${periodo}
             </span>
           </div>
 
-          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] text-xs text-[#334155] leading-snug space-y-1">
-            <div><strong class="font-semibold text-zinc-900">Riscos:</strong> ${cleanBulletinText(riscos)}</div>
-            <div><strong class="font-semibold text-zinc-900">Defesa Civil 199:</strong> ${cleanBulletinText(instrucoes)}</div>
+          <div class="p-3 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1.5">
+            <div><strong class="font-bold text-black">Riscos:</strong> ${cleanBulletinText(riscos)}</div>
+            <div><strong class="font-bold text-black">Defesa Civil 199:</strong> ${cleanBulletinText(instrucoes)}</div>
           </div>
         </div>
       `);
@@ -653,9 +658,9 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
         </div>
 
         <div class="flex items-baseline justify-between gap-2">
-          <h3 class="text-sm sm:text-base font-bold text-zinc-950 leading-tight">${tipo} • ${area}</h3>
-          <span class="text-[11px] font-medium text-zinc-500 whitespace-nowrap flex items-center gap-1 shrink-0">
-            <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i>
+          <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${tipo} • ${area}</h3>
+          <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1.5 shrink-0">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
             ${validade}
           </span>
         </div>
@@ -684,7 +689,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     container.className = cardsHtml.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4';
     if (badgeTotal) {
       badgeTotal.textContent = `${cardsHtml.length} ${cardsHtml.length === 1 ? 'Alerta Ativo' : 'Alertas Ativos'}`;
-      badgeTotal.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+      badgeTotal.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]';
     }
   } else {
     // Quando não houver avisos, oculta o container de alertas da tela principal
@@ -958,7 +963,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
           <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-sm text-zinc-950 uppercase">${a.descricao || 'Alerta Meteorológico'}</span>
-              <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200">INMET</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold">INMET</span>
             </div>
             <p class="text-xs text-zinc-600 font-normal leading-snug">${cleanBulletinText(a.instrucoes?.[0] || 'Acompanhe as atualizações da Defesa Civil.')}</p>
           </div>
@@ -971,7 +976,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
         <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="font-bold text-sm text-zinc-950 uppercase">${marinhaAvisos.tipo || 'Aviso Marítimo'}</span>
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200">Marinha • Aviso nº ${marinhaAvisos.numero}</span>
+            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#94a3b8] font-bold">Marinha • Aviso nº ${marinhaAvisos.numero}</span>
           </div>
           <p class="text-xs text-zinc-600 font-normal leading-snug">${cleanBulletinText(marinhaAvisos.validade || 'Condições de mar agitado e vento forte na costa.')}</p>
         </div>
@@ -1131,7 +1136,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=65').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=66').catch(() => {});
   }
 }
 
@@ -1334,7 +1339,7 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
       badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-rose-50 text-rose-800 border border-rose-200';
       badgeEl.textContent = `Ressaca (Aviso nº ${marinhaAvisos.numero})`;
     } else if (temVento) {
-      badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+      badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold';
       badgeEl.textContent = `Vento Forte (Aviso nº ${marinhaAvisos.numero})`;
     } else {
       badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
