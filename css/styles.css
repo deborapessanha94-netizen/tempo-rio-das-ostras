@@ -136,28 +136,28 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   overflow: hidden;
 }
 
-/* Variação Card Coral Suave (Inspirado no Card Terracota com Letras Pretas) */
+/* Variação Card Coral Suave (Inspirado no Vaso Terracota da Imagem) */
 .card-coral {
-  background: #ffebe4 !important;
+  background: linear-gradient(150deg, #ffebe4 0%, #ffdcd1 100%) !important;
   border: 1.5px solid #f97316 !important;
   color: #000000 !important;
-  box-shadow: var(--shadow-card) !important;
+  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.12) !important;
 }
 
-/* Variação Card Slate Ice Suave */
+/* Variação Card Slate Ice (Inspirado no Vaso Slate Blue da Imagem) */
 .card-slate {
-  background: #eaf0f6 !important;
-  border: 1.5px solid #94a3b8 !important;
+  background: linear-gradient(150deg, #e3ecf4 0%, #d8e5f0 100%) !important;
+  border: 1.5px solid #6d8ba6 !important;
   color: #000000 !important;
-  box-shadow: var(--shadow-card) !important;
+  box-shadow: 0 4px 16px rgba(61, 79, 97, 0.1) !important;
 }
 
-/* Variação Card Stoneware Branco */
+/* Variação Card Stoneware Sandstone (Inspirado no Vaso Cerâmica da Imagem) */
 .card-stoneware {
-  background: #ffffff !important;
-  border: 1.5px solid var(--border-light) !important;
+  background: linear-gradient(150deg, #f5efe8 0%, #ebe2d7 100%) !important;
+  border: 1.5px solid #b8a99a !important;
   color: #000000 !important;
-  box-shadow: var(--shadow-card) !important;
+  box-shadow: 0 4px 16px rgba(120, 100, 80, 0.08) !important;
 }
 
 /* Variação Card Central de Emergência Claro */

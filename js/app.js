@@ -473,36 +473,36 @@ function renderDashboardUI(meta, rows, weather) {
     const cardThemes = [
       {
         cardClass: 'card-coral shadow-sm',
-        medallionClass: 'icon-medallion bg-[#fbd5c8] text-black border border-[#f97316]',
+        medallionClass: 'icon-medallion bg-white text-black border-1.5 border-[#f97316] shadow-xs',
         badgeText: 'text-black font-semibold',
-        titleText: 'text-black font-bold',
-        tempText: 'text-black font-extrabold',
+        titleText: 'text-black font-extrabold',
+        tempText: 'text-black font-extrabold bg-white/90 px-2.5 py-1 rounded-xl border border-[#f97316]/40 shadow-2xs',
         iconColor: 'text-black',
         chevronColor: 'text-black',
-        subCardBg: 'bg-white/85 border border-[#f97316]/30 text-black',
-        subCardLabel: 'text-black font-medium'
-      },
-      {
-        cardClass: 'card-stoneware bg-white border border-[#cbd5e1] shadow-sm',
-        medallionClass: 'icon-medallion bg-[#f1f5f9] text-black border border-[#94a3b8]',
-        badgeText: 'text-black font-semibold',
-        titleText: 'text-black font-bold',
-        tempText: 'text-black font-extrabold',
-        iconColor: 'text-black',
-        chevronColor: 'text-black',
-        subCardBg: 'bg-[#f8fafc] border border-[#cbd5e1] text-black',
-        subCardLabel: 'text-black font-medium'
+        subCardBg: 'bg-white/95 border border-[#f97316]/30 text-black shadow-2xs',
+        subCardLabel: 'text-[#ea580c] font-bold text-[9.5px]'
       },
       {
         cardClass: 'card-slate shadow-sm',
-        medallionClass: 'icon-medallion bg-[#d4e2ee] text-black border border-[#94a3b8]',
+        medallionClass: 'icon-medallion bg-white text-black border-1.5 border-[#6d8ba6] shadow-xs',
         badgeText: 'text-black font-semibold',
-        titleText: 'text-black font-bold',
-        tempText: 'text-black font-extrabold',
+        titleText: 'text-black font-extrabold',
+        tempText: 'text-black font-extrabold bg-white/90 px-2.5 py-1 rounded-xl border border-[#6d8ba6]/40 shadow-2xs',
         iconColor: 'text-black',
         chevronColor: 'text-black',
-        subCardBg: 'bg-white/85 border border-[#94a3b8]/30 text-black',
-        subCardLabel: 'text-black font-medium'
+        subCardBg: 'bg-white/95 border border-[#6d8ba6]/30 text-black shadow-2xs',
+        subCardLabel: 'text-[#3d4f61] font-bold text-[9.5px]'
+      },
+      {
+        cardClass: 'card-stoneware shadow-sm',
+        medallionClass: 'icon-medallion bg-white text-black border-1.5 border-[#b8a99a] shadow-xs',
+        badgeText: 'text-black font-semibold',
+        titleText: 'text-black font-extrabold',
+        tempText: 'text-black font-extrabold bg-white/90 px-2.5 py-1 rounded-xl border border-[#b8a99a]/40 shadow-2xs',
+        iconColor: 'text-black',
+        chevronColor: 'text-black',
+        subCardBg: 'bg-white/95 border border-[#b8a99a]/35 text-black shadow-2xs',
+        subCardLabel: 'text-[#786350] font-bold text-[9.5px]'
       }
     ];
 
@@ -1175,7 +1175,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=68').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=69').catch(() => {});
   }
 }
 
