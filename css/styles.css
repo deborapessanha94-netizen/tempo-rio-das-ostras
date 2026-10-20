@@ -1,31 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
 /* ========================================================================= */
-/* DESIGN MINIMALISTA & PROFISSIONAL — TEMPO EM RIO DAS OSTRAS (DEFESA CIVIL) */
-/* Estética Limpa, Neutra, Alto Contraste, Tipografia Precisa e Sem Poluição  */
+/* DESIGN LUXO BOTÂNICO: FLORESTA, TERRA & AREIA DOURADA                      */
+/* Inspirado na estética orgânica e sofisticada da referência visual         */
 /* ========================================================================= */
 
 :root {
-  --bg-main: #fafafa;
-  --bg-card: #ffffff;
-  --bg-subtle: #f4f4f5;
-
-  --text-primary: #09090b;    /* Zinc 950: Legibilidade absoluta e nítida */
-  --text-secondary: #27272a;  /* Zinc 800: Texto de leitura claro */
-  --text-muted: #71717a;      /* Zinc 500: Metadados e unidades */
-
-  --border-subtle: #e4e4e7;   /* Zinc 200: Linhas ultrafinas minimalistas */
-  --border-medium: #d4d4d8;   /* Zinc 300 */
-  --border-strong: #a1a1aa;   /* Zinc 400 */
-
-  /* Acentos Funcionais Minimalistas */
-  --accent-blue: #0284c7;
-  --accent-amber: #f59e0b;
-  --accent-red: #ef4444;
-  --accent-emerald: #10b981;
-
-  --shadow-minimal: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-  --shadow-hover: 0 2px 8px -1px rgba(0, 0, 0, 0.06);
+  /* Paleta Base Floresta & Terra */
+  --bg-deep-forest: #081a13;
+  --bg-forest-base: #0c261c;
+  --bg-forest-card: #133a2b;
+  --bg-forest-light: #1b4937;
+  
+  --bg-earth-card: #3a2217;
+  --bg-earth-dark: #24130c;
+  --bg-toffee-card: #6d422b;
+  --bg-sage-card: #204e3b;
+  
+  /* Acentos de Areia e Ouro Quente */
+  --sand-50: #fdfaf6;
+  --sand-100: #f7efe4;
+  --sand-200: #eddac6;
+  --sand-300: #dfb992;
+  --sand-400: #d4a373;
+  --sand-500: #c58d5b;
+  --sand-dark: #381f13;
+  
+  /* Tipografia Orgânica */
+  --text-ivory: #faf4eb;      /* Branco marfim / champagne */
+  --text-cream: #eedfcb;      /* Creme suave */
+  --text-sage: #a9c6b6;       /* Sálvia claro para metadados */
+  --text-sand: #e6be95;       /* Areia quente para destaques */
+  --text-muted: #7f9f8e;      /* Muted natural */
+  
+  /* Linhas e Bordas Sutis */
+  --border-gold: rgba(223, 185, 146, 0.22);
+  --border-gold-strong: rgba(223, 185, 146, 0.42);
+  --border-forest: rgba(169, 198, 182, 0.16);
+  --border-forest-strong: rgba(169, 198, 182, 0.32);
+  
+  /* Sombras Orgânicas e Suaves */
+  --shadow-organic: 0 16px 36px -12px rgba(4, 15, 10, 0.55), 0 2px 6px rgba(0, 0, 0, 0.2);
+  --shadow-earth: 0 16px 36px -12px rgba(28, 14, 8, 0.65), 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-pill: 0 6px 18px -3px rgba(212, 163, 115, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  --shadow-medallion: 4px 6px 14px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.25);
 }
 
 /* Base Geral */
@@ -34,19 +52,27 @@
 }
 
 html, body {
-  background-color: var(--bg-main) !important;
-  color: var(--text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-deep-forest) !important;
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(35, 92, 70, 0.35) 0%, transparent 45%),
+    radial-gradient(circle at 85% 25%, rgba(90, 52, 34, 0.25) 0%, transparent 40%),
+    radial-gradient(circle at 50% 65%, rgba(19, 58, 43, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 20% 90%, rgba(70, 40, 26, 0.22) 0%, transparent 45%),
+    linear-gradient(180deg, #071711 0%, #0a2219 50%, #05130d 100%) !important;
+  background-attachment: fixed !important;
+  color: var(--text-ivory);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 /* Tipografia */
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text-primary);
+  color: var(--text-ivory);
   letter-spacing: -0.025em;
 }
 
@@ -55,12 +81,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   letter-spacing: -0.02em;
 }
 
-/* Barra Superior Fixa Minimalista */
+/* Barra Superior Fixa: Frosted Dark Forest Glass */
 #site-header {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(9, 28, 20, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-gold);
 }
 
 /* Logo Oficial */
@@ -78,271 +104,359 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   }
 }
 
-/* Cards Minimalistas */
+/* ========================================================================= */
+/* CARDS ORGÂNICOS — PADRÃO VISUAL DA REFERÊNCIA (ROUNDED 26PX & CORES)       */
+/* ========================================================================= */
+
 .modern-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.875rem;
-  box-shadow: var(--shadow-minimal);
-  transition: border-color 0.15s ease;
+  background: linear-gradient(150deg, #12392b 0%, #0c271d 100%);
+  border: 1px solid var(--border-gold);
+  border-radius: 1.625rem; /* 26px */
+  box-shadow: var(--shadow-organic);
+  color: var(--text-ivory);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .modern-card:hover {
-  border-color: var(--border-medium);
+  border-color: var(--border-gold-strong);
+  box-shadow: 0 20px 42px -12px rgba(4, 15, 10, 0.7), 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Hero Card Minimalista (Sem gradientes agressivos ou brilhos artificiais) */
+/* Hero Card: Floresta Verde Esmeralda Luxuosa */
 .hero-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.875rem;
-  box-shadow: var(--shadow-minimal);
+  background: linear-gradient(145deg, #164634 0%, #0f3225 60%, #092218 100%);
+  border: 1px solid rgba(223, 185, 146, 0.28);
+  border-radius: 1.75rem; /* 28px */
+  box-shadow: 0 20px 45px -10px rgba(3, 14, 9, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
+  overflow: hidden;
 }
 
-/* Botões Minimalistas */
+/* Variação Card Earth / Terra e Cacau */
+.card-earth {
+  background: linear-gradient(150deg, #3f251a 0%, #25140d 100%) !important;
+  border: 1px solid rgba(223, 185, 146, 0.28) !important;
+  box-shadow: var(--shadow-earth) !important;
+}
+
+.card-earth:hover {
+  border-color: rgba(223, 185, 146, 0.48) !important;
+}
+
+/* Variação Card Sage / Folha Verde */
+.card-sage {
+  background: linear-gradient(150deg, #245842 0%, #15392b 100%) !important;
+  border: 1px solid rgba(169, 198, 182, 0.28) !important;
+}
+
+/* Variação Card Toffee / Bronze Areia */
+.card-toffee {
+  background: linear-gradient(150deg, #6c412a 0%, #442718 100%) !important;
+  border: 1px solid rgba(240, 197, 152, 0.35) !important;
+}
+
+/* Variação Card Sand / Areia Dourada Quente */
+.card-sand {
+  background: linear-gradient(150deg, #dfb48c 0%, #ba8a60 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #2b180e !important;
+}
+
+/* ========================================================================= */
+/* BOTÕES EM PÍLULA DOURADA (INSPIRADOS NO BOTÃO "HESES ROGE" DA REFERÊNCIA) */
+/* ========================================================================= */
+
+/* Botão Pílula Areia Dourada (CTA Primário) */
+.btn-sand-pill, .btn-action-primary {
+  background: linear-gradient(135deg, #f2c99d 0%, #dca273 50%, #c48758 100%) !important;
+  color: #2c170d !important;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 0.5rem 1.25rem !important;
+  box-shadow: var(--shadow-pill) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn-sand-pill:hover, .btn-action-primary:hover {
+  background: linear-gradient(135deg, #f8d7b3 0%, #e2ad7f 50%, #ce9163 100%) !important;
+  transform: translateY(-1.5px);
+  box-shadow: 0 8px 22px -2px rgba(212, 163, 115, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.8) !important;
+  color: #1f0f08 !important;
+}
+
+.btn-sand-pill:active, .btn-action-primary:active {
+  transform: translateY(0);
+}
+
+/* Botão Pílula Emergência (199 / Defesa Civil) */
 .btn-emergency {
-  background-color: #dc2626;
+  background: linear-gradient(135deg, #c93b28 0%, #992312 100%) !important;
   color: #ffffff !important;
-  font-weight: 700;
-  border-radius: 0.5rem;
-  transition: background-color 0.15s ease;
+  font-weight: 700 !important;
+  border-radius: 9999px !important;
+  padding: 0.45rem 1.15rem !important;
+  box-shadow: 0 6px 18px -2px rgba(201, 59, 40, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .btn-emergency:hover {
-  background-color: #b91c1c;
+  background: linear-gradient(135deg, #dc4530 0%, #aa2715 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px -2px rgba(201, 59, 40, 0.65) !important;
 }
 
+/* Botões Pílula Outline (Areia Translúcida) */
 .btn-action-outline {
-  background-color: #ffffff;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
-  font-weight: 600;
-  border-radius: 0.5rem;
-  transition: all 0.15s ease;
+  background: rgba(223, 185, 146, 0.08) !important;
+  color: var(--text-cream) !important;
+  border: 1px solid var(--border-gold) !important;
+  font-weight: 600 !important;
+  border-radius: 9999px !important;
+  padding: 0.45rem 1rem !important;
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .btn-action-outline:hover {
-  background-color: var(--bg-subtle);
-  border-color: var(--border-medium);
-  color: var(--text-primary);
-}
-
-.btn-action-primary {
-  background-color: #09090b;
+  background: rgba(223, 185, 146, 0.18) !important;
+  border-color: var(--border-gold-strong) !important;
   color: #ffffff !important;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  transition: background-color 0.15s ease;
+  transform: translateY(-1px);
 }
 
-.btn-action-primary:hover {
-  background-color: #27272a;
-}
+/* ========================================================================= */
+/* MEDALHÕES CIRCULARES EMBOSSADOS (PADRÃO DOS ÍCONES DA REFERÊNCIA)         */
+/* ========================================================================= */
 
-/* Chips de Métricas Minimalistas */
-.metric-chip {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem;
-  padding: 0.75rem 0.875rem;
+.icon-medallion {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #265542 0%, #102e22 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: var(--shadow-medallion);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  transition: border-color 0.15s ease;
+  justify-content: center;
+  color: var(--text-cream);
+  flex-shrink: 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.icon-medallion:hover {
+  transform: scale(1.05);
+}
+
+.icon-medallion-earth {
+  background: radial-gradient(circle at 35% 30%, #5a3424 0%, #2a160e 100%);
+  border: 1px solid rgba(223, 185, 146, 0.25);
+  box-shadow: 4px 6px 14px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.icon-medallion-sand {
+  background: radial-gradient(circle at 35% 30%, #d4a373 0%, #9e6c43 100%);
+  color: #2c170d;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Chips de Métricas do Hero */
+.metric-chip {
+  background: rgba(9, 28, 20, 0.65);
+  border: 1px solid var(--border-gold);
+  border-radius: 1.25rem; /* 20px */
+  padding: 0.75rem 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
 }
 
 .metric-chip:hover {
-  border-color: var(--border-medium);
+  background: rgba(14, 42, 31, 0.85);
+  border-color: var(--border-gold-strong);
+  transform: translateY(-1.5px);
 }
 
 .metric-icon-wrap {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0.5rem;
-  background-color: var(--bg-subtle);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-subtle);
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 35% 30%, #204c3a 0%, #0d261b 100%);
+  color: var(--sand-300);
+  border: 1px solid rgba(223, 185, 146, 0.25);
+  box-shadow: var(--shadow-medallion);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-/* Alertas Oficiais Minimalistas e Compactos (Design Limpo, Fundo Branco e Borda Lateral Cromática) */
-.alert-card-inmet {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #eab308;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
-  transition: border-color 0.15s ease;
-}
+/* ========================================================================= */
+/* ALERTAS OFICIAIS COM ESTÉTICA DE TERRA E OURO                             */
+/* ========================================================================= */
 
 .alert-card-inmet-amarelo {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #eab308;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
+  background: linear-gradient(145deg, rgba(74, 46, 26, 0.9) 0%, rgba(45, 26, 14, 0.95) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-left: 5px solid #f59e0b;
+  border-radius: 1.15rem;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  color: var(--text-ivory);
 }
 
 .alert-card-inmet-laranja {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #f97316;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
+  background: linear-gradient(145deg, rgba(82, 40, 20, 0.9) 0%, rgba(50, 22, 10, 0.95) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.35);
+  border-left: 5px solid #f97316;
+  border-radius: 1.15rem;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  color: var(--text-ivory);
 }
 
 .alert-card-inmet-vermelho {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #ef4444;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
+  background: linear-gradient(145deg, rgba(85, 26, 26, 0.9) 0%, rgba(52, 14, 14, 0.95) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-left: 5px solid #ef4444;
+  border-radius: 1.15rem;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  color: var(--text-ivory);
 }
 
 .alert-card-marinha {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #2563eb;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
+  background: linear-gradient(145deg, rgba(16, 48, 64, 0.9) 0%, rgba(8, 28, 38, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-left: 5px solid #38bdf8;
+  border-radius: 1.15rem;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.4);
+  color: var(--text-ivory);
 }
 
-.alert-card-jundia-danger {
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-left: 4px solid #ef4444;
-  border-radius: 0.625rem;
-  box-shadow: var(--shadow-minimal);
-}
+/* ========================================================================= */
+/* ABAS E SEGMENTOS EM PÍLULA (GRÁFICOS E ORLA)                              */
+/* ========================================================================= */
 
-/* Segmented Control Minimalista para Abas do Gráfico */
 .tab-metric-btn {
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.375rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text-sage);
   background-color: transparent;
   border: none;
-  transition: all 0.15s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
   cursor: pointer;
 }
 
 .tab-metric-btn:hover {
-  color: var(--text-primary);
+  color: var(--text-ivory);
+  background-color: rgba(223, 185, 146, 0.1);
 }
 
 .tab-metric-btn.active {
-  background-color: #ffffff;
-  color: var(--text-primary);
-  font-weight: 700;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, #f2c99d 0%, #dca273 100%) !important;
+  color: #2b170d !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(212, 163, 115, 0.4) !important;
 }
 
-/* Carrossel Horário Minimalista */
-.hourly-scroll-container {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: 0.375rem;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-medium) transparent;
-}
-
-.hourly-scroll-container::-webkit-scrollbar {
-  height: 4px;
-}
-
-.hourly-scroll-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.hourly-scroll-container::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-  border-radius: 9999px;
-}
-
-.hourly-pill {
-  scroll-snap-align: start;
-  flex: 0 0 auto;
-  width: 5.25rem;
-  background-color: #ffffff;
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.625rem;
-  padding: 0.625rem 0.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.375rem;
-  text-align: center;
-  transition: border-color 0.15s ease;
-}
-
-.hourly-pill:hover {
-  border-color: var(--border-strong);
-}
-
-.hourly-pill.now {
-  border-color: var(--text-primary);
-  background-color: var(--bg-subtle);
-}
-
-/* Barra do Rio Jundiá */
-.gauge-track {
-  width: 100%;
-  height: 0.75rem;
-  background-color: #f4f4f5;
-  border-radius: 9999px;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border-subtle);
-}
-
-/* Modais Minimalistas */
-.modal-backdrop {
-  background: rgba(9, 9, 11, 0.45);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-/* Pulso Ao Vivo Minimalista */
-@keyframes pulse-dot {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(0.95); opacity: 0.7; }
-}
-
-.live-pulse {
-  animation: pulse-dot 2.5s infinite ease-in-out;
-}
-
-
-/* Nicho Orla, Praias e Balneabilidade (Segmented Tabs & Day Selector) */
+/* Nicho Orla, Praias e Balneabilidade (Pílulas Douradas) */
 .orla-tab-btn {
   border: 1px solid transparent;
   outline: none;
   cursor: pointer;
   user-select: none;
+  border-radius: 9999px !important;
+  transition: all 0.2s ease;
 }
+
 .orla-tab-btn.active {
-  background-color: #ffffff !important;
-  color: #09090b !important;
-  border-color: #e4e4e7 !important;
+  background: linear-gradient(135deg, #f2c99d 0%, #dca273 100%) !important;
+  color: #2c170d !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
   font-weight: 700 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 14px rgba(212, 163, 115, 0.45) !important;
 }
+
 .orla-tab-btn:not(.active):hover {
-  background-color: rgba(255, 255, 255, 0.7);
-  color: #18181b;
+  background-color: rgba(223, 185, 146, 0.12) !important;
+  color: #ffffff !important;
 }
+
 .orla-day-btn {
-  transition: all 0.15s ease;
+  border-radius: 9999px !important;
+  transition: all 0.2s ease;
   user-select: none;
+}
+
+.orla-day-btn.active {
+  background: linear-gradient(135deg, #f2c99d 0%, #dca273 100%) !important;
+  color: #2c170d !important;
+  font-weight: 700 !important;
+  box-shadow: 0 3px 10px rgba(212, 163, 115, 0.35) !important;
+  border: none !important;
+}
+
+/* Régua do Rio Jundiá */
+.gauge-track {
+  width: 100%;
+  height: 0.75rem;
+  background-color: rgba(20, 10, 6, 0.6);
+  border-radius: 9999px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(223, 185, 146, 0.2);
+}
+
+/* Modais Botânicos */
+.modal-backdrop {
+  background: rgba(5, 18, 13, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Pulso Ao Vivo */
+@keyframes pulse-dot {
+  0% { transform: scale(0.92); opacity: 0.75; }
+  50% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(0.92); opacity: 0.75; }
+}
+
+.live-pulse {
+  animation: pulse-dot 2.2s infinite ease-in-out;
+}
+
+/* Legibilidade do Texto Técnico do Panorama Sinótico */
+#sinopse-texto-completo {
+  color: #eedfcb !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+}
+
+#sinopse-texto-completo p {
+  color: #eedfcb !important;
+  font-size: 0.875rem !important;
+  line-height: 1.7 !important;
+  margin-bottom: 0.75rem !important;
 }

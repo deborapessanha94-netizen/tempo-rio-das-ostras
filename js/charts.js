@@ -31,16 +31,16 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
 
 function getColors() {
   return {
-    primary: '#0284c7',       /* Sky 600 - Azul oceânico moderno */
-    secondary: '#f59e0b',     /* Âmbar - Sensação / Mínima */
-    tertiary: '#6366f1',      /* Índigo - Rajadas */
-    barFill: 'rgba(2, 132, 199, 0.75)',
-    barBorder: '#0284c7',
-    gradStart: 'rgba(2, 132, 199, 0.22)',
-    gradEnd: 'rgba(2, 132, 199, 0.01)',
-    text: '#0f172a',          /* Slate 900 - Alta legibilidade */
-    textMuted: '#64748b',     /* Slate 500 */
-    grid: 'rgba(226, 232, 240, 0.85)' /* Slate 200 */
+    primary: '#48bb78',       /* Emerald / Folha verde orgânica */
+    secondary: '#e2ba94',     /* Areia Dourada Quente */
+    tertiary: '#d4a373',      /* Caramelo Bronze */
+    barFill: 'rgba(72, 187, 120, 0.75)',
+    barBorder: '#48bb78',
+    gradStart: 'rgba(72, 187, 120, 0.35)',
+    gradEnd: 'rgba(72, 187, 120, 0.02)',
+    text: '#faf4eb',          /* Marfim Champagne */
+    textMuted: '#a9c6b6',     /* Sálvia Claro */
+    grid: 'rgba(223, 185, 146, 0.14)' /* Grade em areia sutil */
   };
 }
 
@@ -324,10 +324,10 @@ function getCommonOptions(yTitle) {
         }
       },
       tooltip: {
-        backgroundColor: '#0f172a',
-        titleColor: '#ffffff',
-        bodyColor: '#e2e8f0',
-        borderColor: '#334155',
+        backgroundColor: '#12392b',
+        titleColor: '#faf4eb',
+        bodyColor: '#eedfcb',
+        borderColor: 'rgba(223, 185, 146, 0.35)',
         borderWidth: 1,
         padding: 12,
         boxPadding: 6,
