@@ -20,10 +20,10 @@ import {
   getInmetMeteogramaData, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
-} from './api.js?v=61';
+} from './api.js?v=62';
 
-import { renderBulletinChart } from './charts.js?v=61';
-import { initRadarMap } from './radar.js?v=61';
+import { renderBulletinChart } from './charts.js?v=62';
+import { initRadarMap } from './radar.js?v=62';
 
 // Estado global da aplicação
 const state = {
@@ -340,6 +340,14 @@ function renderPanoramaSinotico(meta) {
 /**
  * 5. Renderização do Dashboard Profissional
  */
+function toIsoDate(str) {
+  if (!str) return '';
+  if (/^\d{4}-\d{2}-\d{2}/.test(str)) return str.slice(0, 10);
+  const m = String(str).match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if (m) return `${m[3]}-${m[2]}-${m[1]}`;
+  return str;
+}
+
 function renderDashboardUI(meta, rows, weather) {
   const primeiroDia = meta?.dias_resumo?.[0];
   const hojeChuva = primeiroDia?.pilares?.chuva?.val || '2.1 mm';
@@ -366,11 +374,11 @@ function renderDashboardUI(meta, rows, weather) {
     const todayIso = new Date().toISOString().slice(0, 10);
     const directAlerts = (state.inmetAlerts && Array.isArray(state.inmetAlerts)) ? state.inmetAlerts.filter(a => a.eh_direto_ostras !== false) : [];
     const activeTodayAlerts = directAlerts.filter(a => {
-      const inicio = (a.inicio || '').slice(0, 10);
-      const fim = (a.fim || '').slice(0, 10);
+      const inicio = toIsoDate(a.data_inicio || a.inicio);
+      const fim = toIsoDate(a.data_fim || a.fim);
       return inicio <= todayIso && todayIso <= fim;
     });
-    const futureAlerts = directAlerts.filter(a => (a.inicio || '').slice(0, 10) > todayIso);
+    const futureAlerts = directAlerts.filter(a => toIsoDate(a.data_inicio || a.inicio) > todayIso);
     const temAlertaHoje = (activeTodayAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
 
     if (temAlertaHoje) {
@@ -531,8 +539,8 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     const nowIso = new Date().toISOString().slice(0, 10);
 
     directAlerts.forEach(a => {
-      const inicioIso = (a.inicio || '').slice(0, 10);
-      const fimIso = (a.fim || '').slice(0, 10);
+      const inicioIso = toIsoDate(a.data_inicio || a.inicio);
+      const fimIso = toIsoDate(a.data_fim || a.fim);
       const isVigenteHoje = inicioIso <= nowIso && nowIso <= fimIso;
       const isFuturo = inicioIso > nowIso;
 
@@ -1086,7 +1094,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=61').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=62').catch(() => {});
   }
 }
 
