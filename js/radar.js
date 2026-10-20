@@ -74,10 +74,10 @@ function setupInteractiveControls() {
     btnModeMulti.dataset.bound = 'true';
     btnModeMulti.addEventListener('click', () => {
       currentMode = 'windy';
-      btnModeMulti.classList.add('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnModeMulti.classList.remove('bg-[#0c271d]', 'text-[#eedfcb]');
-      btnModeDoppler.classList.remove('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnModeDoppler.classList.add('bg-[#0c271d]', 'text-[#eedfcb]');
+      btnModeMulti.classList.add('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnModeMulti.classList.remove('bg-[#ffffff]', 'text-[#334155]');
+      btnModeDoppler.classList.remove('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnModeDoppler.classList.add('bg-[#ffffff]', 'text-[#334155]');
 
       if (windyWrapper) windyWrapper.classList.remove('hidden');
       if (leafletWrapper) leafletWrapper.classList.add('hidden');
@@ -89,10 +89,10 @@ function setupInteractiveControls() {
     btnModeDoppler.dataset.bound = 'true';
     btnModeDoppler.addEventListener('click', () => {
       currentMode = 'doppler';
-      btnModeDoppler.classList.add('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnModeDoppler.classList.remove('bg-[#0c271d]', 'text-[#eedfcb]');
-      btnModeMulti.classList.remove('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnModeMulti.classList.add('bg-[#0c271d]', 'text-[#eedfcb]');
+      btnModeDoppler.classList.add('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnModeDoppler.classList.remove('bg-[#ffffff]', 'text-[#334155]');
+      btnModeMulti.classList.remove('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnModeMulti.classList.add('bg-[#ffffff]', 'text-[#334155]');
 
       if (leafletWrapper) leafletWrapper.classList.remove('hidden');
       if (windyWrapper) windyWrapper.classList.add('hidden');
@@ -117,11 +117,11 @@ function setupInteractiveControls() {
 
       // Atualiza botões
       layerButtons.forEach(b => {
-        b.classList.remove('active', 'bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-        b.classList.add('bg-[#0c271d]', 'text-[#eedfcb]');
+        b.classList.remove('active', 'bg-[#f07a53]', 'text-white', 'shadow-sm');
+        b.classList.add('bg-[#ffffff]', 'text-[#334155]');
       });
-      btn.classList.add('active', 'bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btn.classList.remove('bg-[#0c271d]', 'text-[#eedfcb]');
+      btn.classList.add('active', 'bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btn.classList.remove('bg-[#ffffff]', 'text-[#334155]');
 
       if (currentMode === 'doppler' && selectedLayer !== 'radar') {
         if (btnModeMulti) btnModeMulti.click();
@@ -139,10 +139,10 @@ function setupInteractiveControls() {
     btnScopeRj.dataset.bound = 'true';
     btnScopeRj.addEventListener('click', () => {
       currentScope = 'rj';
-      btnScopeRj.classList.add('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnScopeRj.classList.remove('bg-[#0c271d]', 'text-[#eedfcb]');
-      btnScopeRo.classList.remove('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnScopeRo.classList.add('bg-[#0c271d]', 'text-[#eedfcb]');
+      btnScopeRj.classList.add('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnScopeRj.classList.remove('bg-[#ffffff]', 'text-[#334155]');
+      btnScopeRo.classList.remove('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnScopeRo.classList.add('bg-[#ffffff]', 'text-[#334155]');
 
       if (map) map.setView([RJ_CENTER.lat, RJ_CENTER.lon], RJ_CENTER.zoom);
       updateWindyIframe();
@@ -153,10 +153,10 @@ function setupInteractiveControls() {
     btnScopeRo.dataset.bound = 'true';
     btnScopeRo.addEventListener('click', () => {
       currentScope = 'ro';
-      btnScopeRo.classList.add('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnScopeRo.classList.remove('bg-[#0c271d]', 'text-[#eedfcb]');
-      btnScopeRj.classList.remove('bg-[#dfb992]', 'text-[#2b180e]', 'shadow-sm');
-      btnScopeRj.classList.add('bg-[#0c271d]', 'text-[#eedfcb]');
+      btnScopeRo.classList.add('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnScopeRo.classList.remove('bg-[#ffffff]', 'text-[#334155]');
+      btnScopeRj.classList.remove('bg-[#f07a53]', 'text-white', 'shadow-sm');
+      btnScopeRj.classList.add('bg-[#ffffff]', 'text-[#334155]');
 
       if (map) map.setView([RO_CENTER.lat, RO_CENTER.lon], RO_CENTER.zoom);
       updateWindyIframe();

@@ -9,7 +9,7 @@ httpd = socketserver.TCPServer(('', PORT), Handler)
 threading.Thread(target=httpd.serve_forever, daemon=True).start()
 
 edge_path = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
-screenshot_path = os.path.join(r'C:\Users\debor\.gemini\antigravity\brain\ec824ae4-216a-462f-9550-50517e326bdf', 'botanical_theme_screenshot.png')
+screenshot_path = os.path.join(r'C:\Users\debor\.gemini\antigravity\brain\ec824ae4-216a-462f-9550-50517e326bdf', 'nordic_minimalist_screenshot.png')
 
 cmd = [
     edge_path,

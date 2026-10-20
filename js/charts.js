@@ -31,16 +31,16 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
 
 function getColors() {
   return {
-    primary: '#48bb78',       /* Emerald / Folha verde orgânica */
-    secondary: '#e2ba94',     /* Areia Dourada Quente */
-    tertiary: '#d4a373',      /* Caramelo Bronze */
-    barFill: 'rgba(72, 187, 120, 0.75)',
-    barBorder: '#48bb78',
-    gradStart: 'rgba(72, 187, 120, 0.35)',
-    gradEnd: 'rgba(72, 187, 120, 0.02)',
-    text: '#faf4eb',          /* Marfim Champagne */
-    textMuted: '#a9c6b6',     /* Sálvia Claro */
-    grid: 'rgba(223, 185, 146, 0.14)' /* Grade em areia sutil */
+    primary: '#3d4f61',       /* Nordic Slate Denim */
+    secondary: '#f07a53',     /* Warm Coral Orange */
+    tertiary: '#64748b',      /* Slate Gray */
+    barFill: 'rgba(61, 79, 97, 0.75)',
+    barBorder: '#3d4f61',
+    gradStart: 'rgba(61, 79, 97, 0.25)',
+    gradEnd: 'rgba(61, 79, 97, 0.02)',
+    text: '#1e293b',          /* Slate Dark */
+    textMuted: '#64748b',     /* Slate Muted */
+    grid: 'rgba(226, 232, 240, 0.85)' /* Linhas de grade suaves */
   };
 }
 
@@ -324,10 +324,10 @@ function getCommonOptions(yTitle) {
         }
       },
       tooltip: {
-        backgroundColor: '#12392b',
-        titleColor: '#faf4eb',
-        bodyColor: '#eedfcb',
-        borderColor: 'rgba(223, 185, 146, 0.35)',
+        backgroundColor: '#273441',
+        titleColor: '#ffffff',
+        bodyColor: '#f1f5f9',
+        borderColor: '#3d4f61',
         borderWidth: 1,
         padding: 12,
         boxPadding: 6,
