@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=76">
+  <link rel="stylesheet" href="css/styles.css?v=77">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -142,7 +142,7 @@
       <!-- Cabeçalho do Bloco de Alertas -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3 mb-4">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#ffebe4] text-black border border-[#f97316] flex items-center justify-center shrink-0 shadow-xs">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
             <i data-lucide="shield-alert" class="w-4 h-4"></i>
           </div>
           <div>
@@ -150,7 +150,7 @@
               <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
                 Alertas Meteorológicos Oficiais Vigentes
               </h2>
-              <span id="badge-total-alertas" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">
+              <span id="badge-total-alertas" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
                 1 Alerta Ativo
               </span>
             </div>
@@ -221,7 +221,7 @@
       <!-- Cabeçalho do Panorama Sinótico -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-[#eaf0f6] text-black border border-[#94a3b8] flex items-center justify-center shrink-0 shadow-xs">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
             <i data-lucide="compass" class="w-4 h-4 text-black"></i>
           </div>
           <div>
@@ -229,7 +229,7 @@
               <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
                 Panorama Sinótico Geral
               </h2>
-              <span id="badge-periodo-sinotico" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316] shadow-2xs">
+              <span id="badge-periodo-sinotico" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
                 20/10 a 22/10
               </span>
             </div>
@@ -253,7 +253,7 @@
           
           <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
             <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#94a3b8] flex items-center gap-1.5 tracking-wider">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
                 <i data-lucide="cloud-sun" class="w-3.5 h-3.5 text-black"></i>
                 <span>Dinâmica Atmosférica & Temperatura</span>
               </span>
@@ -263,7 +263,7 @@
 
           <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
             <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f97316] flex items-center gap-1.5 tracking-wider">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
                 <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
                 <span>Hidrografia, Rio Jundiá & Faixa Litorânea</span>
               </span>
@@ -273,7 +273,7 @@
 
           <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
             <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1] flex items-center gap-1.5 tracking-wider">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
                 <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-black"></i>
                 <span>Tendência dos Próximos Dias & PLANCON</span>
               </span>
@@ -295,11 +295,11 @@
       
       <div class="flex items-center justify-between border-b border-[#dfb992]/15 pb-3">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-zinc-100 text-[#334155] border border-[#e2e8f0] flex items-center justify-center shrink-0">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
             <i data-lucide="calendar" class="w-4 h-4"></i>
           </div>
           <div>
-            <h3 class="text-base sm:text-lg font-bold text-[#1e293b] tracking-tight">Previsão dos Próximos Dias</h3>
+            <h3 class="text-base sm:text-lg font-bold text-black tracking-tight">Previsão dos Próximos Dias</h3>
             <p id="sidebar-period-txt" class="text-xs font-normal text-[#64748b]">20/10 (Terça-feira) a 22/10 (Quinta-feira)</p>
           </div>
         </div>
@@ -460,7 +460,7 @@
           <!-- Topo do Hero -->
           <div class="flex items-center justify-between gap-3 border-b border-[#dfb992]/20 pb-3.5 mb-4">
             <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-[#ffebe4] border border-[#f97316] text-black flex items-center justify-center">
+              <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
                 <i data-lucide="map-pin" class="w-4 h-4 text-black"></i>
               </div>
               <div>
@@ -472,7 +472,7 @@
             </div>
 
             <div class="flex items-center gap-2">
-              <span id="hero-alert-pill" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316] shadow-xs">
+              <span id="hero-alert-pill" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-xs">
                 Alerta Oficial Vigente
               </span>
               <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
@@ -489,7 +489,7 @@
                 <span id="sidebar-temp" class="text-6xl sm:text-7xl font-extrabold font-heading text-black tracking-tight">28°</span>
                 <div class="flex flex-col gap-1">
                   <span class="text-2xl font-bold text-black leading-none">C</span>
-                  <span class="bg-[#ffebe4] border border-[#f97316] px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block">Sensação: 31°C</span>
+                  <span class="badge-title-orange px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block">Sensação: 31°C</span>
                 </div>
               </div>
               
@@ -602,10 +602,10 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3">
             <div>
               <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center text-[#334155]">
+                <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
                   <i data-lucide="activity" class="w-3.5 h-3.5"></i>
                 </div>
-                <h3 class="text-base font-bold text-[#1e293b] tracking-tight">
+                <h3 class="text-base font-bold text-black tracking-tight">
                   Tendência Horária das Próximas 24 Horas
                 </h3>
               </div>
@@ -647,13 +647,13 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3">
             <div>
               <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-lg bg-zinc-100 flex items-center justify-center text-[#334155]">
+                <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
                   <i data-lucide="radar" class="w-3.5 h-3.5"></i>
                 </div>
-                <h3 class="text-base font-bold text-[#1e293b] tracking-tight">
+                <h3 class="text-base font-bold text-black tracking-tight">
                   Radar Meteorológico Doppler & Satélite em Tempo Real
                 </h3>
-                <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#cbd5e1]">
+                <span class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
                   Ao Vivo
                 </span>
               </div>
@@ -664,7 +664,7 @@
 
             <!-- Controles Rápidos do Mapa -->
             <div class="flex items-center gap-1.5 flex-wrap">
-              <button id="btn-mode-doppler" class="px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffebe4] text-black border border-[#f97316] shadow-xs cursor-pointer transition">
+              <button id="btn-mode-doppler" class="badge-title-orange px-3.5 py-1.5 rounded-full text-xs font-bold shadow-xs cursor-pointer transition">
                 Radar Doppler HD
               </button>
               <button id="btn-mode-multivariable" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#e2e8f0] text-[#334155] hover:bg-[#f1f5f9] cursor-pointer transition">
@@ -809,7 +809,7 @@
           
           <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
             <div class="flex items-center gap-2.5">
-              <div id="jundia-icon-box" class="w-8 h-8 rounded-xl bg-[#eaf0f6] text-black border border-[#6d8ba6] flex items-center justify-center">
+              <div id="jundia-icon-box" class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
                 <i data-lucide="waves" class="w-4 h-4 text-black"></i>
               </div>
               <div>
@@ -817,7 +817,7 @@
                 <span id="jundia-leitura-tempo" class="text-xs font-normal text-black">Estação Telemétrica INEA nº 224103620</span>
               </div>
             </div>
-            <span id="jundia-header-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6]">
+            <span id="jundia-header-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
               Vigilância
             </span>
           </div>
@@ -827,7 +827,7 @@
             <span class="text-[10px] uppercase font-bold text-black block tracking-wider">Cota Atual Registrada</span>
             <span id="kpi-jundia-val" class="text-5xl font-extrabold font-mono text-black block tracking-tight">1,91 m</span>
             <div class="flex items-center justify-center pt-0.5">
-              <span id="kpi-jundia-status" class="text-[11px] px-3 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6]">
+              <span id="kpi-jundia-status" class="badge-title-orange text-[11px] px-3 py-0.5 rounded-full font-bold uppercase shadow-2xs">
                 VIGILÂNCIA
               </span>
             </div>
@@ -872,7 +872,7 @@
           <!-- Cabeçalho do Card com Título e Status Geral -->
           <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
             <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-[#eaf0f6] border-2 border-[#6d8ba6] flex items-center justify-center text-black shadow-xs">
+              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
                 <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
               </div>
               <div>
@@ -880,7 +880,7 @@
                 <span class="text-xs font-normal text-black">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
               </div>
             </div>
-            <span id="orla-status-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6] shadow-2xs">
+            <span id="orla-status-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
               Normalidade
             </span>
           </div>
@@ -1110,7 +1110,7 @@
           
           <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
             <div class="flex items-center gap-2.5">
-              <div class="w-9 h-9 rounded-xl bg-[#ffebe4] border-2 border-[#f07a53] flex items-center justify-center text-black shadow-xs">
+              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
                 <i data-lucide="phone-call" class="w-4 h-4 text-black"></i>
               </div>
               <div>
@@ -1118,7 +1118,7 @@
                 <span class="text-xs font-medium text-black">Atendimento 24 Horas Gratuito</span>
               </div>
             </div>
-            <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6] shadow-2xs">
+            <span class="badge-title-orange text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
               Ligação Gratuita
             </span>
           </div>
@@ -1226,7 +1226,7 @@
       <!-- Cabeçalho do Modal -->
       <div class="px-5 py-4 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1]">
         <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-[#ffebe4] border-2 border-[#f07a53] flex items-center justify-center text-black shadow-xs">
+          <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
             <i data-lucide="waves" class="w-5 h-5 text-black"></i>
           </div>
           <div>
@@ -1320,8 +1320,8 @@
       <!-- Cabeçalho do Modal -->
       <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-[#ffebe4] border border-[#f97316] flex items-center justify-center text-black">
-            <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-black"></i>
           </div>
           <div>
             <h3 class="text-base font-bold text-black leading-tight">Boletim Meteorológico Operacional Completo</h3>
@@ -1399,8 +1399,8 @@
       
       <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-[#ffebe4] border border-[#f97316] flex items-center justify-center text-black">
-            <i data-lucide="radar" class="w-4 h-4"></i>
+          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="radar" class="w-4 h-4 text-black"></i>
           </div>
           <div>
             <h3 class="text-base font-bold text-black leading-tight">Radar Meteorológico Doppler & Bacia Hidrográfica</h3>
@@ -1440,8 +1440,8 @@
       
       <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-[#f1f5f9] border border-[#cbd5e1] flex items-center justify-center text-amber-400">
-            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-black"></i>
           </div>
           <div>
             <h3 class="text-base font-bold text-black leading-tight">Avisos Oficiais da Marinha & INMET</h3>
@@ -1478,8 +1478,8 @@
       <!-- Cabeçalho do Modal -->
       <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
         <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-lg bg-[#f1f5f9] border border-[#cbd5e1] flex items-center justify-center text-blue-400">
-            <i data-lucide="line-chart" class="w-4 h-4"></i>
+          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="line-chart" class="w-4 h-4 text-black"></i>
           </div>
           <div>
             <h3 class="text-base font-bold text-black leading-tight">Meteogramas Numéricos Oficiais</h3>
@@ -1583,9 +1583,11 @@
   <div id="modal-install-guide" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
     <div class="modern-card max-w-md w-full p-6 space-y-4 shadow-xl bg-white border border-[#e2e8f0]">
       <div class="flex items-center justify-between border-b border-[#e2e8f0] pb-3">
-        <div class="flex items-center gap-2">
-          <i data-lucide="smartphone" class="w-4 h-4 text-[#334155]"></i>
-          <h3 class="font-bold text-[#1e293b] text-base">Instalar Aplicativo Oficial</h3>
+        <div class="flex items-center gap-2.5">
+          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="smartphone" class="w-4 h-4 text-black"></i>
+          </div>
+          <h3 class="font-bold text-black text-base">Instalar Aplicativo Oficial</h3>
         </div>
         <button id="btn-close-install-modal" class="p-1 rounded-lg text-[#64748b] hover:text-[#334155] cursor-pointer transition">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -1609,6 +1611,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=76"></script>
+  <script type="module" src="js/app.js?v=77"></script>
 </body>
 </html>

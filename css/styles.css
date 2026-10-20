@@ -543,3 +543,20 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   line-height: 1.75 !important;
   margin-bottom: 0.75rem !important;
 }
+
+
+/* Balão Laranja Vibrante da Paleta para Títulos (Texto 100% Preto) */
+.badge-title-orange {
+  background: linear-gradient(135deg, #ff8c66 0%, #f07a53 100%) !important;
+  color: #000000 !important;
+  border: 1.5px solid #d95328 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 1px 3px rgba(240, 122, 83, 0.25) !important;
+}
+
+.medallion-title-orange {
+  background: linear-gradient(135deg, #ff8c66 0%, #f07a53 100%) !important;
+  color: #000000 !important;
+  border: 1.5px solid #d95328 !important;
+  box-shadow: 0 1px 3px rgba(240, 122, 83, 0.25) !important;
+}

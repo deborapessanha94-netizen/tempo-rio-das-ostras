@@ -422,14 +422,14 @@ function renderDashboardUI(meta, rows, weather) {
 
     if (temAlertaHoje) {
       heroAlertPill.textContent = 'Alerta Oficial Vigente Hoje';
-      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold';
+      heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     } else if (futureAlerts.length > 0) {
       const pDia = futureAlerts[0].inicio_formatado ? futureAlerts[0].inicio_formatado.split(' ')[0] : '22/10';
       heroAlertPill.textContent = `Atenção: Alerta Previsto para ${pDia}`;
-      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#94a3b8] font-bold';
+      heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     } else {
       heroAlertPill.textContent = 'Normalidade Operacional';
-      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+      heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     }
   }
 
@@ -761,7 +761,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     container.className = cardsHtml.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4';
     if (badgeTotal) {
       badgeTotal.textContent = `${cardsHtml.length} ${cardsHtml.length === 1 ? 'Alerta Ativo' : 'Alertas Ativos'}`;
-      badgeTotal.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]';
+      badgeTotal.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     }
   } else {
     // Quando não houver avisos, oculta o container de alertas da tela principal
@@ -769,7 +769,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     container.innerHTML = '';
     if (badgeTotal) {
       badgeTotal.textContent = 'Sem Avisos';
-      badgeTotal.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+      badgeTotal.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     }
   }
 
@@ -851,8 +851,8 @@ function renderJundiaTelemetry(stations) {
     if (cotaTransbordoEl) cotaTransbordoEl.textContent = `${cotaTransbordo.toFixed(2).replace('.', ',')} m`;
 
     let statusText = 'VIGILÂNCIA';
-    let statusClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
-    let badgeClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+    let statusClass = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
+    let badgeClass = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     let iconClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6]';
     let barColor = 'bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6]';
     let msgClass = 'text-black font-medium';
@@ -886,8 +886,8 @@ function renderJundiaTelemetry(stations) {
       msgText = `Estado de Atenção: Nível acima da cota de atenção (1,99 m), a ${folga} m do transbordo. Monitoramento intensificado.`;
     } else {
       statusText = 'VIGILÂNCIA';
-      statusClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
-      badgeClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+      statusClass = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
+      badgeClass = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
       iconClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6]';
       barColor = 'bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6]';
       msgClass = 'text-black font-medium';
@@ -901,11 +901,11 @@ function renderJundiaTelemetry(stations) {
 
     if (headerBadgeEl) {
       headerBadgeEl.textContent = statusText.toLowerCase();
-      headerBadgeEl.className = `text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase border ${badgeClass}`;
+      headerBadgeEl.className = badgeClass;
     }
 
     if (iconBoxEl) {
-      iconBoxEl.className = `w-8 h-8 rounded-xl border flex items-center justify-center ${iconClass}`;
+      iconBoxEl.className = `medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs`;
     }
 
     const pct = jundiaSt.porcentagem_calha || Math.min(100, Math.max(10, Math.round((nivelFloat / cotaTransbordo) * 100)));
@@ -1208,7 +1208,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=76').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=77').catch(() => {});
   }
 }
 
@@ -1503,7 +1503,7 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
       badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold';
       badgeEl.textContent = `Vento Forte (Aviso nº ${marinhaAvisos.numero})`;
     } else {
-      badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
+      badgeEl.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
       badgeEl.textContent = 'Normalidade';
     }
   }
