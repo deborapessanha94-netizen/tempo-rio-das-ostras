@@ -416,3 +416,27 @@ export async function getInmetMeteogramaData() {
   return null;
 }
 
+
+/**
+ * Obtém as condições dinâmicas da orla e praias de Rio das Ostras
+ */
+export async function getOrlaCondicoes() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(\./data/orla_condicoes.json?t=\, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
+
+/**
+ * Obtém a tábua de marés oficial da Marinha do Brasil (Terminal de Imbetiba nº 39)
+ */
+export async function getTabuaMares() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(\./data/tabua_mares.json?t=\, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}

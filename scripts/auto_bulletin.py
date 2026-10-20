@@ -402,6 +402,17 @@ def run_auto_bulletin_pipeline():
     inmet_meteograma = fetch_inmet_meteograma()
     cptec_data = fetch_cptec_data()
 
+    # 2. Marinha do Brasil — Avisos de Mau Tempo & Tábua de Marés Oficial (Terminal de Imbetiba)
+    try:
+        try:
+            from scripts.marinha_service import build_orla_e_tabua_dataset
+        except ImportError:
+            from marinha_service import build_orla_e_tabua_dataset
+        orla_condicoes, tabua_mares = build_orla_e_tabua_dataset()
+    except Exception as e:
+        print(f"[MARINHA SERVICE] Erro: {e}")
+        orla_condicoes, tabua_mares = None, None
+
     # Salva dados brutos para os endpoints do servidor
     if inea_stations:
         with open(DATA_DIR / "inea_cheias.json", 'w', encoding='utf-8') as f:
@@ -1274,6 +1285,8 @@ def run_auto_bulletin_pipeline():
             "previsao_5dias": inmet_forecast
         },
         "inmet_meteograma": inmet_meteograma,
+        "orla_condicoes": orla_condicoes,
+        "tabua_mares": tabua_mares,
         "cptec_oficial": {
             "id_cidade": 3866,
             "id_ibge": 3304524,
@@ -1309,6 +1322,7 @@ def run_auto_bulletin_pipeline():
             {"nome": "CPTEC/INPE - Meteograma Multimodel Horário (ID 3866)", "url": "https://s1.cptec.inpe.br/grafico/Modelos/Multimodel/pag_web/horario/3866.json", "tipo": "Multimodel Horário"},
             {"nome": "CPTEC/INPE - Satélite GOES-16 DSAT", "url": "https://www.cptec.inpe.br/dsat/", "tipo": "Sensoriamento Remoto"},
             {"nome": "Marinha do Brasil - Avisos de Mau Tempo (Área Delta)", "url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo", "tipo": "Meteorologia Marinha"},
+            {"nome": "Marinha do Brasil - Tábuas de Maré (Estação Imbetiba nº 39)", "url": "https://www.marinha.mil.br/chm/tabuas-de-mare", "tipo": "Maregrafia Oficial"},
             {"nome": "Marinha do Brasil - Cartas Sinóticas (00Z e 12Z)", "url": "https://www.marinha.mil.br/chm/cartassinoticas", "tipo": "Sinótica de Superfície"},
             {"nome": "INEA - Alerta de Cheias e Rio Jundiá (2241036)", "url": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php", "tipo": "Telemetria Hidrológica"},
             {"nome": "INEA - Radar Tool RJ", "url": "https://radartool.inea.rj.gov.br/radar-tool/", "tipo": "Radar Meteorológico"},

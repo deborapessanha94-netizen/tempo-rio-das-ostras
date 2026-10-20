@@ -358,7 +358,15 @@ def collect_inmet_data():
 # 3. MARINHA DO BRASIL — ÁREA DELTA & CARTAS SINÓTICAS
 # ==============================================================================
 def collect_marinha_data():
-    print(">> [3/7] Coletando Avisos de Mau Tempo da Marinha (Área Delta)...")
+    print(">> [3/7] Coletando Avisos de Mau Tempo & Tábua de Marés da Marinha...")
+    try:
+        try:
+            from scripts.marinha_service import build_orla_e_tabua_dataset
+        except ImportError:
+            from marinha_service import build_orla_e_tabua_dataset
+        orla_dataset, tabua_dataset = build_orla_e_tabua_dataset()
+    except Exception as e:
+        print(f"   [MARINHA SERVICE] Erro: {e}")
     marinha_info = {
         "aviso_ativo": False,
         "numero": None,

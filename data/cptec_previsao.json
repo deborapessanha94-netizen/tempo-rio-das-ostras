@@ -20,27 +20,9 @@
     "umidade": 63,
     "temperatura_prev": "21",
     "sensacao_termica": "22",
-    "hora_atual": "2026-10-19T23:00:00.000Z"
+    "hora_atual": "2026-10-20T00:00:00.000Z"
   },
   "proximos_dias": [
-    {
-      "data_atual": "20",
-      "semana_dia": "Ter",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "23",
-      "temperatura_min": "19",
-      "umidade": 68,
-      "indice_uv": 12
-    },
-    {
-      "data_atual": "21",
-      "semana_dia": "Qua",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "24",
-      "temperatura_min": "20",
-      "umidade": 75,
-      "indice_uv": 12
-    },
     {
       "data_atual": "22",
       "semana_dia": "Qui",
@@ -76,6 +58,24 @@
       "temperatura_min": "23",
       "umidade": 78,
       "indice_uv": 13
+    },
+    {
+      "data_atual": "26",
+      "semana_dia": "Seg",
+      "probabilidade_chuva": null,
+      "temperatura_max": null,
+      "temperatura_min": null,
+      "umidade": null,
+      "indice_uv": null
+    },
+    {
+      "data_atual": "27",
+      "semana_dia": "Ter",
+      "probabilidade_chuva": null,
+      "temperatura_max": null,
+      "temperatura_min": null,
+      "umidade": null,
+      "indice_uv": null
     }
   ],
   "meteograma_multimodel": {

@@ -687,8 +687,8 @@
 
         </div>
 
-        <!-- CARD 2: CONDIÇÕES MARÍTIMAS & BALNEABILIDADE DAS PRAIAS -->
-        <div class="modern-card p-5 sm:p-6 bg-white space-y-4">
+        <!-- CARD 2: CONDIÇÕES MARÍTIMAS, PRAIAS & TÁBUA DE MARÉS (CHM) -->
+        <div class="modern-card p-5 sm:p-6 bg-white space-y-4" id="card-condicoes-orla">
           
           <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
             <div class="flex items-center gap-2">
@@ -697,52 +697,49 @@
               </div>
               <div>
                 <h3 class="text-base font-bold text-zinc-950 tracking-tight">Condições da Orla</h3>
-                <span class="text-xs font-normal text-zinc-500">Praias & Estado do Mar</span>
+                <span class="text-xs font-normal text-zinc-500">Praias, Estado do Mar & Tábuas de Maré</span>
               </div>
             </div>
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200">
-              Ressaca
+            <span id="orla-status-badge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+              Normalidade
             </span>
           </div>
 
-          <div class="space-y-2 text-xs sm:text-sm">
-            <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-between">
-              <div>
-                <strong class="font-semibold text-zinc-900 block text-xs">Praia de Costazul</strong>
-                <span class="text-[11px] text-zinc-500">Ondas 2,0 a 2,5 m • Corrente forte</span>
+          <!-- Tábua de Marés Oficial (Terminal de Imbetiba / Macaé e Rio das Ostras) -->
+          <div class="p-3 rounded-lg bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border border-blue-200/60 space-y-2">
+            <div class="flex items-center justify-between flex-wrap gap-1.5">
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-blue-950">
+                <i data-lucide="waves" class="w-3.5 h-3.5 text-blue-600"></i>
+                <span>Tábua de Marés (CHM)</span>
               </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-                Evitar Banho
+              <span id="orla-proxima-mare" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                Carregando maré...
               </span>
             </div>
-
-            <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-between">
-              <div>
-                <strong class="font-semibold text-zinc-900 block text-xs">Praia do Centro</strong>
-                <span class="text-[11px] text-zinc-500">Mar agitado • Orla monitorada</span>
-              </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-                Atenção
-              </span>
+            <div id="orla-mares-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
+              <!-- Eventos de maré preenchidos via JS -->
             </div>
-
-            <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-between">
-              <div>
-                <strong class="font-semibold text-zinc-900 block text-xs">Praia da Tartaruga</strong>
-                <span class="text-[11px] text-zinc-500">Balneabilidade INEA: Própria</span>
-              </div>
-              <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
-                Própria
-              </span>
+            <div class="flex items-center justify-between text-[10px] text-zinc-500 pt-1 border-t border-blue-100/80">
+              <span>Estação Oficial: Terminal de Imbetiba (Macaé/Rio das Ostras)</span>
+              <a href="https://www.marinha.mil.br/chm/tabuas-de-mare" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-semibold flex items-center gap-0.5">
+                Tábuas CHM ↗
+              </a>
             </div>
           </div>
 
-          <p class="text-[11px] font-normal text-zinc-500 leading-tight">
-            * Em dias de aviso de ressaca da Marinha, respeite as bandeiras dos Guarda-Vidas do Corpo de Bombeiros.
-          </p>
+          <!-- Lista Dinâmica de Praias e Balneabilidade -->
+          <div id="orla-praias-list" class="space-y-2 text-xs sm:text-sm">
+            <!-- Preenchido dinamicamente com dados reais -->
+          </div>
+
+          <div class="pt-2 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-500">
+            <span id="orla-aviso-resumo">* Condições em conformidade com o Serviço Meteorológico Marinho (SMM/CHM) e INEA.</span>
+            <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="text-zinc-700 hover:text-blue-600 font-semibold hover:underline flex items-center gap-1">
+              Avisos da Marinha →
+            </a>
+          </div>
 
         </div>
-
 
         <!-- CARD 4: TELEFONES ÚTEIS & CONTATOS DE EMERGÊNCIA -->
         <div class="modern-card p-5 sm:p-6 bg-zinc-900 text-white space-y-3.5">

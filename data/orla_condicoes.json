@@ -1,0 +1,78 @@
+{
+  "status_geral": "Sem avisos de mau tempo vigentes na orla",
+  "badge": "NORMALIDADE",
+  "badge_tipo": "success",
+  "aviso_ativo": false,
+  "aviso_numero": null,
+  "aviso_tipo": "NORMALIDADE",
+  "mar_ondas": "1,2 a 1,6 m (Moderado)",
+  "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
+  "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente",
+  "nota_rodape": "Em dias de aviso da Marinha, respeite as bandeiras de sinalização dos Guarda-Vidas do Corpo de Bombeiros (193).",
+  "praias": [
+    {
+      "praia": "Praia de Costazul",
+      "detalhes": "Ondas 1,2 a 1,5 m • Mar moderado • Balneabilidade Própria",
+      "status": "Liberada",
+      "badge": "success",
+      "icone": "check-circle"
+    },
+    {
+      "praia": "Praia do Centro",
+      "detalhes": "Ondas 0,8 a 1,1 m • Mar calmo • Balneabilidade INEA: Própria",
+      "status": "Própria",
+      "badge": "success",
+      "icone": "check-circle"
+    },
+    {
+      "praia": "Praia da Tartaruga",
+      "detalhes": "Águas calmas e límpidas • Balneabilidade INEA: Própria",
+      "status": "Própria",
+      "badge": "success",
+      "icone": "check-circle"
+    },
+    {
+      "praia": "Praia do Bosque",
+      "detalhes": "Águas abrigadas com sombra natural • Balneabilidade INEA: Própria",
+      "status": "Própria",
+      "badge": "success",
+      "icone": "check-circle"
+    }
+  ],
+  "tabua_resumo": {
+    "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
+    "data": "2026-10-19",
+    "proxima_mare": {
+      "tipo": "PREAMAR",
+      "hora": "22:45",
+      "altura": 0.8,
+      "rotulo": "Preia-mar (0,8 m)"
+    },
+    "mares_do_dia": [
+      {
+        "tipo": "BAIXA-MAR",
+        "hora": "04:10",
+        "altura": 0.18,
+        "rotulo": "Baixa-mar (0,2 m)"
+      },
+      {
+        "tipo": "PREAMAR",
+        "hora": "11:35",
+        "altura": 0.85,
+        "rotulo": "Preia-mar (0,9 m)"
+      },
+      {
+        "tipo": "BAIXA-MAR",
+        "hora": "17:20",
+        "altura": 0.35,
+        "rotulo": "Baixa-mar (0,4 m)"
+      },
+      {
+        "tipo": "PREAMAR",
+        "hora": "22:45",
+        "altura": 0.8,
+        "rotulo": "Preia-mar (0,8 m)"
+      }
+    ]
+  }
+}
