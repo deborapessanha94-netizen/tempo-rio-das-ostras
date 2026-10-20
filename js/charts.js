@@ -35,11 +35,11 @@ function getColors() {
     secondary: '#f07a53',     /* Warm Coral Orange */
     tertiary: '#64748b',      /* Slate Gray */
     barFill: 'rgba(61, 79, 97, 0.75)',
-    barBorder: '#3d4f61',
+    barBorder: '#000000',
     gradStart: 'rgba(61, 79, 97, 0.25)',
     gradEnd: 'rgba(61, 79, 97, 0.02)',
-    text: '#1e293b',          /* Slate Dark */
-    textMuted: '#64748b',     /* Slate Muted */
+    text: '#000000',          /* Slate Dark */
+    textMuted: '#000000',     /* Slate Muted */
     grid: 'rgba(226, 232, 240, 0.85)' /* Linhas de grade suaves */
   };
 }
@@ -324,11 +324,11 @@ function getCommonOptions(yTitle) {
         }
       },
       tooltip: {
-        backgroundColor: '#273441',
-        titleColor: '#ffffff',
-        bodyColor: '#f1f5f9',
-        borderColor: '#3d4f61',
-        borderWidth: 1,
+        backgroundColor: '#ffffff',
+        titleColor: '#000000',
+        bodyColor: '#000000',
+        borderColor: '#000000',
+        borderWidth: 1.5,
         padding: 12,
         boxPadding: 6,
         usePointStyle: true,

@@ -433,37 +433,37 @@ function renderDashboardUI(meta, rows, weather) {
   if (list3d && meta?.dias_resumo && Array.isArray(meta.dias_resumo)) {
     const cardThemes = [
       {
-        cardClass: 'card-coral shadow-lg',
-        medallionClass: 'icon-medallion bg-white/20 text-white',
-        badgeText: 'text-white/90',
-        titleText: 'text-white',
-        tempText: 'text-white',
-        iconColor: 'text-white',
-        chevronColor: 'text-white/80',
-        subCardBg: 'bg-black/15 border border-white/20 text-white',
-        subCardLabel: 'text-white/80'
+        cardClass: 'card-coral shadow-sm',
+        medallionClass: 'icon-medallion bg-[#fbd5c8] text-black border border-[#f97316]',
+        badgeText: 'text-black font-semibold',
+        titleText: 'text-black font-bold',
+        tempText: 'text-black font-extrabold',
+        iconColor: 'text-black',
+        chevronColor: 'text-black',
+        subCardBg: 'bg-white/85 border border-[#f97316]/30 text-black',
+        subCardLabel: 'text-black font-medium'
       },
       {
-        cardClass: 'card-stoneware bg-white border border-[#e2e8f0] shadow-sm',
-        medallionClass: 'icon-medallion bg-[#f1f5f9] text-[#3d4f61]',
-        badgeText: 'text-[#64748b]',
-        titleText: 'text-[#1e293b]',
-        tempText: 'text-[#1e293b]',
-        iconColor: 'text-[#3d4f61]',
-        chevronColor: 'text-[#64748b]',
-        subCardBg: 'bg-[#f8fafc] border border-[#e2e8f0] text-[#334155]',
-        subCardLabel: 'text-[#64748b]'
+        cardClass: 'card-stoneware bg-white border border-[#cbd5e1] shadow-sm',
+        medallionClass: 'icon-medallion bg-[#f1f5f9] text-black border border-[#94a3b8]',
+        badgeText: 'text-black font-semibold',
+        titleText: 'text-black font-bold',
+        tempText: 'text-black font-extrabold',
+        iconColor: 'text-black',
+        chevronColor: 'text-black',
+        subCardBg: 'bg-[#f8fafc] border border-[#cbd5e1] text-black',
+        subCardLabel: 'text-black font-medium'
       },
       {
-        cardClass: 'card-slate shadow-lg',
-        medallionClass: 'icon-medallion bg-white/15 text-white',
-        badgeText: 'text-[#d9e2ec]',
-        titleText: 'text-white',
-        tempText: 'text-white',
-        iconColor: 'text-white',
-        chevronColor: 'text-white/80',
-        subCardBg: 'bg-black/20 border border-white/15 text-white',
-        subCardLabel: 'text-[#d9e2ec]'
+        cardClass: 'card-slate shadow-sm',
+        medallionClass: 'icon-medallion bg-[#d4e2ee] text-black border border-[#94a3b8]',
+        badgeText: 'text-black font-semibold',
+        titleText: 'text-black font-bold',
+        tempText: 'text-black font-extrabold',
+        iconColor: 'text-black',
+        chevronColor: 'text-black',
+        subCardBg: 'bg-white/85 border border-[#94a3b8]/30 text-black',
+        subCardLabel: 'text-black font-medium'
       }
     ];
 
@@ -774,46 +774,46 @@ function renderJundiaTelemetry(stations) {
     if (cotaTransbordoEl) cotaTransbordoEl.textContent = `${cotaTransbordo.toFixed(2).replace('.', ',')} m`;
 
     let statusText = 'VIGILÂNCIA';
-    let statusClass = 'bg-emerald-600 text-white';
-    let badgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+    let statusClass = 'bg-emerald-100 text-black border border-emerald-500 font-bold';
+    let badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
     let iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
     let barColor = 'bg-emerald-500';
-    let msgClass = 'text-emerald-800';
+    let msgClass = 'text-black font-medium';
     let msgText = '';
 
     const folga = (cotaTransbordo - nivelFloat).toFixed(2).replace('.', ',');
 
     if (nivelFloat >= cotaTransbordo) {
       statusText = 'ALERTA MÁXIMO';
-      statusClass = 'bg-rose-600 text-white animate-pulse';
-      badgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
+      statusClass = 'bg-rose-100 text-black border border-rose-500 font-bold animate-pulse';
+      badgeClass = 'bg-rose-100 text-black border border-rose-400 font-bold';
       iconClass = 'bg-rose-50 text-rose-600 border-rose-200';
       barColor = 'bg-rose-600';
-      msgClass = 'text-rose-800 font-bold';
+      msgClass = 'text-black font-bold';
       msgText = `Nível atingiu a cota de transbordo (2,84 m). Risco crítico de extravasamento e refluxo pluvial.`;
     } else if (nivelFloat >= cotaAlerta) {
       statusText = 'ALERTA';
-      statusClass = 'bg-amber-600 text-white';
-      badgeClass = 'bg-amber-100 text-amber-800 border-amber-300';
+      statusClass = 'bg-amber-100 text-black border border-amber-500 font-bold';
+      badgeClass = 'bg-amber-100 text-black border border-amber-400 font-bold';
       iconClass = 'bg-amber-50 text-amber-600 border-amber-200';
       barColor = 'bg-amber-500';
-      msgClass = 'text-amber-800 font-semibold';
+      msgClass = 'text-black font-semibold';
       msgText = `Alerta Hidrológico: Nível em elevação acentuada (${nivelFormatted} m), a apenas ${folga} m do transbordo.`;
     } else if (nivelFloat >= cotaAtencao) {
       statusText = 'ATENÇÃO';
-      statusClass = 'bg-yellow-500 text-zinc-950';
-      badgeClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      statusClass = 'bg-yellow-100 text-black border border-yellow-500 font-bold';
+      badgeClass = 'bg-yellow-100 text-black border border-yellow-400 font-bold';
       iconClass = 'bg-yellow-50 text-yellow-600 border-yellow-200';
       barColor = 'bg-yellow-500';
-      msgClass = 'text-yellow-900 font-medium';
+      msgClass = 'text-black font-medium';
       msgText = `Estado de Atenção: Nível acima da cota de atenção (1,99 m), a ${folga} m do transbordo. Monitoramento intensificado.`;
     } else {
       statusText = 'VIGILÂNCIA';
-      statusClass = 'bg-emerald-600 text-white';
-      badgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      statusClass = 'bg-emerald-100 text-black border border-emerald-500 font-bold';
+      badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
       iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
       barColor = 'bg-emerald-500';
-      msgClass = 'text-emerald-800';
+      msgClass = 'text-black font-medium';
       msgText = `Calha em regime seguro de vazante contínua com cota de ${nivelFormatted} m (margem de segurança de ${folga} m até o transbordo).`;
     }
 
@@ -896,7 +896,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
       const dataIso = dRows[0]?.data_iso || '';
       return `
         <div class="border border-zinc-200 rounded-xl overflow-hidden bg-white">
-          <div class="px-4 py-2.5 bg-zinc-900 text-white font-bold text-sm flex justify-between">
+          <div class="px-4 py-2.5 bg-[#f1f5f9] text-black border-b border-[#cbd5e1] font-bold text-sm flex justify-between">
             <span>${dia.toUpperCase()} (${formatIsoDate(dataIso)})</span>
             <span class="font-mono text-xs text-zinc-400">4 Turnos</span>
           </div>
@@ -1131,7 +1131,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=64').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=65').catch(() => {});
   }
 }
 
@@ -1185,7 +1185,7 @@ window.selectOrlaDay = function(dayKey) {
     const btn = document.getElementById(`orla-day-btn-${dk}`);
     if (btn) {
       if (dk === dayKey) {
-        btn.className = 'orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#f07a53] text-white shadow-sm cursor-pointer';
+        btn.className = 'orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffebe4] text-black border border-[#f97316] shadow-sm cursor-pointer';
       } else {
         btn.className = 'orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#ffffff] text-[#475569] hover:bg-[#f1f5f9] border border-[#e2e8f0] cursor-pointer';
       }
@@ -1231,11 +1231,11 @@ function renderCondicoesMarList(orlaData, dayKey = 'd0') {
       const ondas = diaObj.ondas || '0,8 a 1,2 m';
       const detalhe = diaObj.detalhe || p.perfil || '';
       
-      let badgeClass = 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+      let badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
       if (diaObj.badge === 'danger' || estado.includes('Agitado') || estado.includes('Correnteza') || estado.includes('Evitar')) {
-        badgeClass = 'bg-rose-500/20 text-rose-300 border border-rose-500/40';
+        badgeClass = 'bg-rose-100 text-black border border-rose-400 font-bold';
       } else if (diaObj.badge === 'warning' || estado.includes('Moderado a Agitado') || estado.includes('Atenção')) {
-        badgeClass = 'bg-amber-500/20 text-amber-300 border border-amber-500/40';
+        badgeClass = 'bg-amber-100 text-black border border-amber-400 font-bold';
       }
 
       return `
@@ -1288,8 +1288,8 @@ function renderBalneabilidadeList(balnearData) {
     pontosListEl.innerHTML = pontos.map(pt => {
       const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
       const badgeClass = isPropria 
-        ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
-        : 'bg-rose-50 text-rose-800 border-rose-200';
+        ? 'bg-emerald-100 text-black border border-emerald-400 font-bold' 
+        : 'bg-rose-100 text-black border border-rose-400 font-bold';
 
       const motivoHtml = pt.motivo 
         ? `<span class="text-[10px] text-rose-600 font-medium block mt-0.5">${pt.motivo}</span>` 

@@ -1,47 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap');
 
 /* ========================================================================= */
-/* DESIGN SCANDINAVIAN / NORDIC CERAMIC MINIMALISM                           */
-/* Inspirado na estética Japandi/Nórdica de cerâmicas, slate denim e coral   */
+/* DESIGN SCANDINAVIAN / NORDIC CERAMIC MINIMALISM — 100% LETRAS PRETAS      */
+/* Todas as letras, números, símbolos e textos em preto puro (#000000)      */
 /* ========================================================================= */
 
 :root {
-  /* Paleta Base Nórdica e Cerâmica */
+  /* Paleta Base Nórdica e Cerâmica Suave */
   --bg-canvas: #f4f6f8;            /* Off-white / fundo cerâmica suave */
   --bg-card: #ffffff;              /* Superfície branca pura dos cards */
   --bg-subtle: #eaeff2;            /* Cinza cerâmica suave */
   --bg-stone: #dee4e8;             /* Stoneware neutro */
   
-  /* Azul Nórdico Denim / Slate Blue */
-  --nordic-slate: #3d4f61;         /* Azul slate nórdico principal */
-  --nordic-slate-dark: #273441;    /* Slate denim escuro */
-  --nordic-slate-light: #52677b;   /* Slate suave */
-  --nordic-slate-ice: #e8eef3;     /* Gelo nórdico */
+  /* Azul Nórdico Suave */
+  --nordic-slate-ice: #e8eef3;     /* Gelo nórdico suave */
+  --nordic-slate-border: #cbd5e1;  /* Borda slate suave */
   
-  /* Coral / Terracota Vibrante de Cerâmica */
+  /* Coral / Terracota Suave de Cerâmica */
   --coral-orange: #f07a53;         /* Coral cerâmica vibrante */
-  --coral-dark: #d8623b;           /* Terracota terral */
-  --coral-soft: #fdeee9;           /* Tom pastel suave de coral */
-  --coral-accent: #f89472;
+  --coral-soft: #ffebe4;           /* Tom pastel suave de coral */
+  --coral-border: #f97316;
   
-  /* Tipografia Editorial e Alto Contraste */
-  --text-dark: #1a2530;            /* Grafite ardósia escuro */
-  --text-slate: #334155;           /* Ardósia neutro */
-  --text-muted: #64748b;           /* Cinza sutil para legendas */
-  --text-light: #f8fafc;           /* Branco puro para áreas escuras */
-  --text-ice: #d9e2ec;             /* Branco azulado suave */
+  /* Tipografia: 100% PRETO PURO (#000000) */
+  --text-pure-black: #000000;
   
   /* Linhas e Bordas Arquiteturais */
   --border-light: #e2e8f0;         /* Linha ultrafina */
-  --border-subtle: #cbd5e1;        /* Contorno suave */
-  --border-slate: rgba(61, 79, 97, 0.2);
-  --border-coral: rgba(240, 122, 83, 0.3);
+  --border-medium: #cbd5e1;        /* Contorno suave */
+  --border-strong: #94a3b8;        /* Contorno médio */
+  --border-black: #000000;         /* Contorno preto */
   
   /* Sombras Nórdicas Macias */
-  --shadow-card: 0 10px 30px -5px rgba(27, 38, 59, 0.05), 0 2px 6px -1px rgba(27, 38, 59, 0.02);
-  --shadow-hover: 0 16px 36px -4px rgba(27, 38, 59, 0.1), 0 4px 10px -2px rgba(27, 38, 59, 0.04);
-  --shadow-pill: 0 6px 16px -2px rgba(240, 122, 83, 0.35);
-  --shadow-slate-pill: 0 6px 16px -2px rgba(61, 79, 97, 0.35);
+  --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-hover: 0 16px 36px -4px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+  --shadow-pill: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 /* Base Geral */
@@ -49,9 +41,23 @@
   box-sizing: border-box;
 }
 
+/* REGRA UNIVERSAL: TODAS AS LETRAS, NÚMEROS E TEXTOS EM PRETO (#000000) */
+html, body, p, span, div, h1, h2, h3, h4, h5, h6, a, button, input, select, textarea, table, th, td, label, strong, b, em, i, small, pre, code {
+  color: #000000 !important;
+}
+
+body, body *:not(svg):not(path) {
+  color: #000000 !important;
+}
+
+/* Ícones traçados em preto de alto contraste */
+svg, svg path {
+  stroke: #000000 !important;
+}
+
 html, body {
   background-color: var(--bg-canvas) !important;
-  color: var(--text-dark);
+  color: #000000 !important;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   font-size: 15px;
   line-height: 1.5;
@@ -63,21 +69,23 @@ html, body {
 /* Tipografia */
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: var(--text-dark);
+  color: #000000 !important;
   letter-spacing: -0.025em;
+  font-weight: 700;
 }
 
 .font-mono, .mono-val {
   font-family: 'JetBrains Mono', monospace !important;
   letter-spacing: -0.02em;
+  color: #000000 !important;
 }
 
 /* Barra Superior Fixa: Cerâmica Minimalista Branca */
 #site-header {
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 1.5px solid var(--border-light);
 }
 
 /* Logo Oficial */
@@ -96,89 +104,81 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* ========================================================================= */
-/* CARDS NÓRDICOS MINIMALISTAS (ROUNDED 24PX A 28PX)                         */
+/* CARDS NÓRDICOS MINIMALISTAS CLAROS (ROUNDED 24PX A 28PX)                  */
 /* ========================================================================= */
 
 .modern-card {
   background: var(--bg-card);
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   border-radius: 1.5rem; /* 24px */
   box-shadow: var(--shadow-card);
-  color: var(--text-dark);
+  color: #000000 !important;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .modern-card:hover {
-  border-color: var(--border-subtle);
+  border-color: var(--border-medium);
   box-shadow: var(--shadow-hover);
 }
 
-/* Hero Card: Slate Denim Nórdico (Inspirado no Bloco Azul Superior) */
+/* Hero Card: Fundo Claro Cerâmico / White Stoneware com Letras Pretas */
 .hero-card {
-  background: linear-gradient(155deg, #425567 0%, #324353 100%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1.75rem; /* 28px */
-  box-shadow: 0 20px 45px -10px rgba(39, 52, 65, 0.35);
-  color: var(--text-light);
+  background: linear-gradient(155deg, #ffffff 0%, #f8fafc 100%) !important;
+  border: 1.5px solid var(--border-medium) !important;
+  border-radius: 1.75rem !important; /* 28px */
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06) !important;
+  color: #000000 !important;
   position: relative;
   overflow: hidden;
 }
 
-/* Variação Card Coral / Terracota Cerâmica (Inspirado no Card Coral da Foto) */
+/* Variação Card Coral Suave (Inspirado no Card Terracota com Letras Pretas) */
 .card-coral {
-  background: linear-gradient(145deg, #f2825c 0%, #e06d47 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  color: #ffffff !important;
-  box-shadow: 0 14px 30px -6px rgba(240, 122, 83, 0.3) !important;
-}
-
-.card-coral * {
-  color: #ffffff !important;
-}
-
-/* Variação Card Slate Denim Nórdico */
-.card-slate {
-  background: linear-gradient(145deg, #425567 0%, #304151 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff !important;
-  box-shadow: 0 14px 30px -6px rgba(39, 52, 65, 0.25) !important;
-}
-
-.card-slate * {
-  color: #ffffff !important;
-}
-
-/* Variação Card Stoneware Cerâmica Suave */
-.card-stoneware {
-  background: #ffffff !important;
-  border: 1px solid var(--border-light) !important;
-  color: var(--text-dark) !important;
+  background: #ffebe4 !important;
+  border: 1.5px solid #f97316 !important;
+  color: #000000 !important;
   box-shadow: var(--shadow-card) !important;
 }
 
-/* Variação Card Dark Navy Banner (Inspirado no Bloco Escuro Inferior) */
+/* Variação Card Slate Ice Suave */
+.card-slate {
+  background: #eaf0f6 !important;
+  border: 1.5px solid #94a3b8 !important;
+  color: #000000 !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Variação Card Stoneware Branco */
+.card-stoneware {
+  background: #ffffff !important;
+  border: 1.5px solid var(--border-light) !important;
+  color: #000000 !important;
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* Variação Card Central de Emergência Claro */
 .card-navy-banner {
-  background: linear-gradient(155deg, #2a3946 0%, #1e2933 100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-  box-shadow: 0 16px 36px -8px rgba(20, 28, 36, 0.4) !important;
+  background: #ffffff !important;
+  border: 1.5px solid var(--border-medium) !important;
+  color: #000000 !important;
+  box-shadow: var(--shadow-card) !important;
 }
 
 /* ========================================================================= */
-/* BOTÕES EM PÍLULA CERÂMICA NÓRDICA (INSPIRADOS NOS BOTÕES DA IMAGEM)       */
+/* BOTÕES EM PÍLULA CERÂMICA COM LETRAS PRETAS                               */
 /* ========================================================================= */
 
 /* Botão Coral Terracota (CTA Principal / Destaque) */
 .btn-coral-pill, .btn-action-primary {
   background: var(--coral-orange) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
   border-radius: 9999px !important;
   padding: 0.5rem 1.25rem !important;
   box-shadow: var(--shadow-pill) !important;
-  border: none !important;
+  border: 1.5px solid #000000 !important;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   display: inline-flex;
   align-items: center;
@@ -189,20 +189,19 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-coral-pill:hover, .btn-action-primary:hover {
-  background: var(--coral-dark) !important;
+  background: #ff916e !important;
   transform: translateY(-1.5px);
-  box-shadow: 0 8px 22px -2px rgba(240, 122, 83, 0.45) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Botão Slate Denim Nórdico */
+/* Botão Slate Suave */
 .btn-slate-pill {
-  background: var(--nordic-slate) !important;
-  color: #ffffff !important;
-  font-weight: 600 !important;
+  background: #e2e8f0 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
   border-radius: 9999px !important;
   padding: 0.5rem 1.25rem !important;
-  box-shadow: var(--shadow-slate-pill) !important;
-  border: none !important;
+  border: 1.5px solid #000000 !important;
   transition: all 0.2s ease !important;
   display: inline-flex;
   align-items: center;
@@ -213,19 +212,19 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-slate-pill:hover {
-  background: var(--nordic-slate-dark) !important;
+  background: #cbd5e1 !important;
   transform: translateY(-1.5px);
 }
 
 /* Botão Emergência 199 */
 .btn-emergency {
-  background: linear-gradient(135deg, #e85d3f 0%, #c84325 100%) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
+  background: #fee2e2 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
   border-radius: 9999px !important;
   padding: 0.45rem 1.15rem !important;
-  box-shadow: 0 6px 16px -2px rgba(232, 93, 63, 0.4) !important;
-  border: none !important;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15) !important;
+  border: 1.5px solid #ef4444 !important;
   transition: all 0.2s ease !important;
   display: inline-flex;
   align-items: center;
@@ -235,16 +234,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .btn-emergency:hover {
-  background: linear-gradient(135deg, #f06a4d 0%, #d44a2b 100%) !important;
+  background: #fecaca !important;
   transform: translateY(-1px);
 }
 
 /* Botões Pílula Outline Cerâmica */
 .btn-action-outline {
   background: #ffffff !important;
-  color: var(--text-slate) !important;
-  border: 1px solid var(--border-light) !important;
-  font-weight: 600 !important;
+  color: #000000 !important;
+  border: 1.5px solid var(--border-medium) !important;
+  font-weight: 700 !important;
   border-radius: 9999px !important;
   padding: 0.45rem 1rem !important;
   transition: all 0.2s ease !important;
@@ -257,13 +256,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .btn-action-outline:hover {
   background: var(--bg-subtle) !important;
-  border-color: var(--border-subtle) !important;
-  color: var(--text-dark) !important;
+  border-color: #000000 !important;
   transform: translateY(-1px);
 }
 
 /* ========================================================================= */
-/* MEDALHÕES CIRCULARES DE CERÂMICA (ESTÉTICA DAS VAZAS E ESFERAS)           */
+/* MEDALHÕES CIRCULARES DE CERÂMICA COM LETRAS PRETAS                        */
 /* ========================================================================= */
 
 .icon-medallion {
@@ -271,12 +269,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   height: 3rem;
   border-radius: 9999px;
   background: #ffffff;
-  border: 1px solid var(--border-light);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1.5px solid var(--border-medium);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--nordic-slate);
+  color: #000000 !important;
   flex-shrink: 0;
   transition: transform 0.2s ease;
 }
@@ -285,47 +283,33 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: scale(1.05);
 }
 
-.icon-medallion-coral {
-  background: var(--coral-orange);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 6px 14px rgba(240, 122, 83, 0.35);
-}
-
-.icon-medallion-slate {
-  background: var(--nordic-slate);
-  color: #ffffff;
-  border: none;
-  box-shadow: 0 6px 14px rgba(61, 79, 97, 0.3);
-}
-
-/* Chips de Métricas do Hero (Translúcidos / Vidro Cerâmica no Banner Slate) */
+/* Chips de Métricas do Hero */
 .metric-chip {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #ffffff;
+  border: 1.5px solid var(--border-light);
   border-radius: 1.25rem; /* 20px */
   padding: 0.75rem 0.95rem;
   display: flex;
   align-items: center;
   gap: 0.85rem;
   transition: all 0.2s ease;
-  backdrop-filter: blur(8px);
-  color: #ffffff;
+  color: #000000 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
 }
 
 .metric-chip:hover {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--border-medium);
   transform: translateY(-1.5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .metric-icon-wrap {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #f1f5f9;
+  color: #000000 !important;
+  border: 1.5px solid var(--border-medium);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -333,110 +317,113 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 /* ========================================================================= */
-/* ALERTAS OFICIAIS COM ESTÉTICA MINIMALISTA                                 */
+/* ALERTAS OFICIAIS COM LETRAS PRETAS                                        */
 /* ========================================================================= */
 
 .alert-card-inmet-amarelo {
   background: #ffffff;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   border-left: 5px solid #f59e0b;
   border-radius: 1.15rem;
   box-shadow: var(--shadow-card);
-  color: var(--text-dark);
+  color: #000000 !important;
 }
 
 .alert-card-inmet-laranja {
   background: #ffffff;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   border-left: 5px solid var(--coral-orange);
   border-radius: 1.15rem;
   box-shadow: var(--shadow-card);
-  color: var(--text-dark);
+  color: #000000 !important;
 }
 
 .alert-card-inmet-vermelho {
   background: #ffffff;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   border-left: 5px solid #ef4444;
   border-radius: 1.15rem;
   box-shadow: var(--shadow-card);
-  color: var(--text-dark);
+  color: #000000 !important;
 }
 
 .alert-card-marinha {
   background: #ffffff;
-  border: 1px solid var(--border-light);
-  border-left: 5px solid var(--nordic-slate);
+  border: 1.5px solid var(--border-light);
+  border-left: 5px solid #000000;
   border-radius: 1.15rem;
   box-shadow: var(--shadow-card);
-  color: var(--text-dark);
+  color: #000000 !important;
 }
 
 /* ========================================================================= */
-/* ABAS E SEGMENTOS EM PÍLULA CERÂMICA                                       */
+/* ABAS E SEGMENTOS EM PÍLULA CERÂMICA COM LETRAS PRETAS                     */
 /* ========================================================================= */
 
 .tab-metric-btn {
   padding: 0.4rem 0.9rem;
   border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-weight: 700;
+  color: #000000 !important;
   background-color: transparent;
-  border: none;
+  border: 1.5px solid transparent;
   transition: all 0.2s ease;
   white-space: nowrap;
   cursor: pointer;
 }
 
 .tab-metric-btn:hover {
-  color: var(--text-dark);
-  background-color: rgba(61, 79, 97, 0.08);
+  background-color: #f1f5f9;
 }
 
 .tab-metric-btn.active {
-  background: var(--nordic-slate) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 4px 12px rgba(61, 79, 97, 0.25) !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border: 1.5px solid #000000 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
 }
 
-/* Nicho Orla, Praias e Balneabilidade (Pílulas Nórdicas) */
+/* Nicho Orla, Praias e Balneabilidade */
 .orla-tab-btn {
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   outline: none;
   cursor: pointer;
   user-select: none;
   border-radius: 9999px !important;
   transition: all 0.2s ease;
-  color: var(--text-slate);
+  color: #000000 !important;
+  font-weight: 700 !important;
   background-color: transparent;
 }
 
 .orla-tab-btn.active {
-  background: var(--nordic-slate) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 4px 12px rgba(61, 79, 97, 0.3) !important;
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border: 1.5px solid #000000 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
 }
 
 .orla-tab-btn:not(.active):hover {
-  background-color: rgba(61, 79, 97, 0.08) !important;
-  color: var(--text-dark) !important;
+  background-color: #e2e8f0 !important;
 }
 
 .orla-day-btn {
   border-radius: 9999px !important;
   transition: all 0.2s ease;
   user-select: none;
+  color: #000000 !important;
+  font-weight: 700 !important;
 }
 
 .orla-day-btn.active {
-  background: var(--coral-orange) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 3px 10px rgba(240, 122, 83, 0.35) !important;
-  border: none !important;
+  background: #ffebe4 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border: 1.5px solid #f97316 !important;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.15) !important;
 }
 
 /* Régua do Rio Jundiá */
@@ -447,14 +434,14 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   border-radius: 9999px;
   position: relative;
   overflow: hidden;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
 }
 
-/* Modais Nórdicos */
+/* Modais Nórdicos Claros com Letras Pretas */
 .modal-backdrop {
-  background: rgba(30, 41, 51, 0.6);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 /* Pulso Ao Vivo */
@@ -468,16 +455,16 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   animation: pulse-dot 2.2s infinite ease-in-out;
 }
 
-/* Legibilidade do Texto Técnico do Panorama Sinótico */
+/* Legibilidade Máxima do Texto Técnico do Panorama Sinótico */
 #sinopse-texto-completo {
-  color: var(--text-slate) !important;
+  color: #000000 !important;
   font-size: 0.875rem !important;
-  line-height: 1.7 !important;
+  line-height: 1.75 !important;
 }
 
 #sinopse-texto-completo p {
-  color: var(--text-slate) !important;
+  color: #000000 !important;
   font-size: 0.875rem !important;
-  line-height: 1.7 !important;
+  line-height: 1.75 !important;
   margin-bottom: 0.75rem !important;
 }
