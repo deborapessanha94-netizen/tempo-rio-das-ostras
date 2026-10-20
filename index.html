@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=70">
+  <link rel="stylesheet" href="css/styles.css?v=71">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -1336,57 +1336,96 @@
           </div>
 
           <!-- Rodapé de Advertências & Links Oficiais -->
-          <div class="pt-2 border-t border-[#dfb992]/15 flex items-center justify-between text-[11px] text-[#64748b] flex-wrap gap-2">
-            <span id="orla-aviso-resumo">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
+          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
+            <span id="orla-aviso-resumo" class="font-medium text-black">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
             <div class="flex items-center gap-2">
-              <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="text-[#334155] hover:text-blue-600 font-semibold hover:underline flex items-center gap-0.5">
-                Avisos CHM →
+              <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2.5 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                Avisos CHM ↗
               </a>
-              <span class="text-zinc-300">•</span>
-              <a href="https://www.inea.rj.gov.br/rio-das-ostras/" target="_blank" rel="noopener" class="text-[#334155] hover:text-emerald-600 font-semibold hover:underline flex items-center gap-0.5">
-                INEA Balneabilidade →
+              <a href="https://www.inea.rj.gov.br/rio-das-ostras/" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2.5 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                INEA Balneabilidade ↗
               </a>
             </div>
           </div>
 
         </div>
 
-        <!-- CARD 4: TELEFONES ÚTEIS & CONTATOS DE EMERGÊNCIA -->
-        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-3.5" id="card-telefones-uteis">
+        <!-- CARD 4: TELEFONES ÚTEIS & CONTATOS DE EMERGÊNCIA (PALETA NÓRDICA CERÂMICA) -->
+        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-4" id="card-telefones-uteis">
           
-          <div class="flex items-center gap-2.5 border-b border-[#dfb992]/20 pb-3">
-            <div class="w-8 h-8 rounded-xl bg-[#ffebe4] border border-[#f97316] flex items-center justify-center text-black">
-              <i data-lucide="phone" class="w-4 h-4 text-black"></i>
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-[#ffebe4] border-2 border-[#f07a53] flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="phone-call" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-black tracking-tight leading-tight">Central de Emergências</h3>
+                <span class="text-xs font-medium text-black">Atendimento 24 Horas Gratuito</span>
+              </div>
             </div>
-            <div>
-              <h3 class="text-base font-bold text-black tracking-tight">Central de Emergências</h3>
-              <span class="text-xs font-normal text-black">Atendimento 24 Horas Gratuito</span>
-            </div>
+            <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6] shadow-2xs">
+              Ligação Gratuita
+            </span>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <a href="tel:199" class="p-3 rounded-2xl bg-[#ffebe4] hover:bg-[#ffdcd1] border-2 border-[#f97316] flex flex-col justify-between transition shadow-xs">
-              <span class="text-black font-bold">Defesa Civil</span>
-              <span class="text-2xl font-mono font-extrabold text-black mt-1">199</span>
+          <div class="grid grid-cols-2 gap-2.5 text-xs">
+            <!-- 1. Defesa Civil (Terracota Coral) -->
+            <a href="tel:199" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Defesa Civil</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#f07a53]/40 text-black">Plantão</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">199</span>
+                <i data-lucide="shield-alert" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
             </a>
-            <a href="tel:193" class="p-3 rounded-2xl bg-[#f8fafc] hover:bg-[#f1f5f9] border border-[#cbd5e1] flex flex-col justify-between transition shadow-xs">
-              <span class="text-black font-semibold">Bombeiros</span>
-              <span class="text-2xl font-mono font-extrabold text-black mt-1">193</span>
+
+            <!-- 2. Bombeiros (Warm Amber Stoneware) -->
+            <a href="tel:193" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#fef3c7] to-[#fee685] hover:brightness-95 border-2 border-[#d97706] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Bombeiros</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#d97706]/40 text-black">Resgate</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">193</span>
+                <i data-lucide="flame" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
             </a>
-            <a href="tel:192" class="p-3 rounded-2xl bg-[#f8fafc] hover:bg-[#f1f5f9] border border-[#cbd5e1] flex flex-col justify-between transition shadow-xs">
-              <span class="text-black font-semibold">SAMU</span>
-              <span class="text-2xl font-mono font-extrabold text-black mt-1">192</span>
+
+            <!-- 3. SAMU (Nordic Slate Ice) -->
+            <a href="tel:192" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">SAMU</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#6d8ba6]/40 text-black">Médico</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">192</span>
+                <i data-lucide="ambulance" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
             </a>
-            <a href="tel:190" class="p-3 rounded-2xl bg-[#f8fafc] hover:bg-[#f1f5f9] border border-[#cbd5e1] flex flex-col justify-between transition shadow-xs">
-              <span class="text-black font-semibold">Polícia Militar</span>
-              <span class="text-2xl font-mono font-extrabold text-black mt-1">190</span>
+
+            <!-- 4. Polícia Militar (Stoneware Sandstone) -->
+            <a href="tel:190" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] hover:brightness-95 border-2 border-[#b8a99a] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Polícia Militar</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#b8a99a]/40 text-black">32º BPM</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">190</span>
+                <i data-lucide="shield" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
             </a>
           </div>
 
-          <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
-            <span class="font-medium text-black">Plantão Defesa Civil</span>
-            <button id="dock-btn-boletim" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
-              Boletim Completo →
+          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
+            <span class="font-bold text-black flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#f07a53] live-pulse"></span>
+              Plantão Defesa Civil 24H
+            </span>
+            <button id="dock-btn-boletim" class="btn-coral-pill text-xs py-1.5 px-3 cursor-pointer font-bold shadow-xs flex items-center gap-1">
+              <span>Boletim Completo</span>
+              <span>→</span>
             </button>
           </div>
 
@@ -1721,6 +1760,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=70"></script>
+  <script type="module" src="js/app.js?v=71"></script>
 </body>
 </html>
