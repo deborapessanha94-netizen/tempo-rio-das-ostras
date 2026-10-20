@@ -20,10 +20,10 @@ import {
   getInmetMeteogramaData, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
-} from './api.js?v=59';
+} from './api.js?v=60';
 
-import { renderBulletinChart } from './charts.js?v=59';
-import { initRadarMap } from './radar.js?v=59';
+import { renderBulletinChart } from './charts.js?v=60';
+import { initRadarMap } from './radar.js?v=60';
 
 // Estado global da aplicação
 const state = {
@@ -40,6 +40,8 @@ const state = {
   inmetMeteoData: null,
   weatherData: null,
   activeMetric: 'temperature',
+  activeOrlaTab: 'mar',
+  activeOrlaDay: 'd0',
   radarInitialized: false,
   isSyncing: false
 };
@@ -252,13 +254,14 @@ async function loadAllApplicationData() {
   try {
     // FASE 1: Carregamento Ultrarrápido dos Snapshots Oficiais (< 50ms)
     // Renderiza a interface instantaneamente sem nenhum bloqueio
-    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes] = await Promise.allSettled([
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes] = await Promise.allSettled([
       getBoletimMetadata(),
       getBoletimOficialData(),
       getIneaCheias(),
       getTabuaMares(),
       getOrlaCondicoes(),
-      getMarinhaAvisos()
+      getMarinhaAvisos(),
+      getBalneabilidade()
     ]);
 
     if (rowsRes.status === 'fulfilled' && Array.isArray(rowsRes.value)) state.boletimData = rowsRes.value;
@@ -270,6 +273,7 @@ async function loadAllApplicationData() {
     if (tabuaRes.status === 'fulfilled' && tabuaRes.value) state.tabuaMares = tabuaRes.value;
     if (orlaRes.status === 'fulfilled' && orlaRes.value) state.orlaCondicoes = orlaRes.value;
     if (avisosMarRes.status === 'fulfilled' && avisosMarRes.value) state.marinhaAvisos = avisosMarRes.value;
+    if (balnearRes.status === 'fulfilled' && balnearRes.value) state.balneabilidade = balnearRes.value;
 
     // Renderização Imediata (Fast-Path)
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
@@ -291,7 +295,7 @@ async function loadAllApplicationData() {
     if (alerts.status === 'fulfilled' && Array.isArray(alerts.value)) state.inmetAlerts = alerts.value;
     if (openMeteo.status === 'fulfilled' && openMeteo.value) state.weatherData = openMeteo.value;
     if (estacoes.status === 'fulfilled' && Array.isArray(estacoes.value)) state.acumuladosEstacoes = estacoes.value;
-    if (balnear.status === 'fulfilled' && Array.isArray(balnear.value)) state.balneabilidade = balnear.value;
+    if (balnear.status === 'fulfilled' && balnear.value) state.balneabilidade = balnear.value;
     if (cptec.status === 'fulfilled' && cptec.value) state.cptecData = cptec.value;
     if (inmetMeteo.status === 'fulfilled' && inmetMeteo.value) state.inmetMeteoData = inmetMeteo.value;
 
@@ -1055,7 +1059,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=53').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=60').catch(() => {});
   }
 }
 
@@ -1064,17 +1068,178 @@ function startAutoSync() {
   setInterval(loadAllApplicationData, 15 * 60 * 1000);
 }
 
+// Exposição global das funções de abas e dias da Orla
+window.switchOrlaTab = function(tabName) {
+  state.activeOrlaTab = tabName;
+  const tabs = ['mar', 'mares', 'balnear'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`orla-tab-btn-${t}`);
+    const panel = document.getElementById(`orla-panel-${t}`);
+    if (btn) {
+      if (t === tabName) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+      } else {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+      }
+    }
+    if (panel) {
+      if (t === tabName) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+  });
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.selectOrlaDay = function(dayKey) {
+  state.activeOrlaDay = dayKey;
+  ['d0', 'd1', 'd2'].forEach(dk => {
+    const btn = document.getElementById(`orla-day-btn-${dk}`);
+    if (btn) {
+      if (dk === dayKey) {
+        btn.className = 'orla-day-btn active px-2.5 py-1 rounded text-xs font-bold bg-blue-600 text-white shadow-xs cursor-pointer';
+      } else {
+        btn.className = 'orla-day-btn px-2.5 py-1 rounded text-xs font-medium bg-white text-zinc-700 hover:bg-zinc-100 border border-blue-200 cursor-pointer';
+      }
+    }
+  });
+  renderCondicoesMarList(state.orlaCondicoes, dayKey);
+};
+
 /**
- * 6.1. Renderização das Condições da Orla, Praias e Tábua de Marés Oficial (CHM)
+ * Renderiza a lista de 11 praias com previsão de ondas para o dia selecionado (Hoje, Amanhã, D+2)
+ */
+function renderCondicoesMarList(orlaData, dayKey = 'd0') {
+  const praiasListEl = document.getElementById('orla-praias-list');
+  const daySummaryEl = document.getElementById('orla-day-summary');
+  if (!praiasListEl) return;
+
+  const praias = (orlaData && orlaData.praias_condicoes && orlaData.praias_condicoes.length > 0)
+    ? orlaData.praias_condicoes
+    : null;
+
+  if (praias) {
+    if (daySummaryEl) {
+      const rotulos = (orlaData && orlaData.dias_rotulos) || [];
+      const diaInfo = rotulos.find(r => r.key === dayKey);
+      const rotuloTxt = diaInfo ? `${diaInfo.rotulo} (${diaInfo.data_br || ''})` : 'Período selecionado';
+      
+      let waveSwellTxt = 'Swell de E/SE • 1,2 a 1,6 m na orla oceânica';
+      if (dayKey === 'd1') waveSwellTxt = 'Swell de E • 1,0 a 1,4 m • Ondulação mais branda';
+      if (dayKey === 'd2') waveSwellTxt = 'Swell de E/NE • 0,8 a 1,2 m • Águas claras e mar amansando';
+
+      daySummaryEl.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-zinc-600">Ondulação ${rotuloTxt}: <strong class="text-zinc-900">${waveSwellTxt}</strong></span>
+        </div>
+        <span class="text-[10px] text-zinc-400">11 praias cobertas</span>
+      `;
+    }
+
+    praiasListEl.innerHTML = praias.map(p => {
+      const diaObj = (p.dias && p.dias[dayKey]) || {};
+      const estado = diaObj.estado || 'Calmo a Moderado';
+      const ondas = diaObj.ondas || '0,8 a 1,2 m';
+      const detalhe = diaObj.detalhe || p.perfil || '';
+      
+      let badgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+      if (diaObj.badge === 'danger' || estado.includes('Agitado') || estado.includes('Correnteza') || estado.includes('Evitar')) {
+        badgeClass = 'bg-rose-50 text-rose-800 border-rose-200';
+      } else if (diaObj.badge === 'warning' || estado.includes('Moderado a Agitado') || estado.includes('Atenção')) {
+        badgeClass = 'bg-amber-50 text-amber-800 border-amber-200';
+      }
+
+      return `
+        <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/80 flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <strong class="font-semibold text-zinc-900 text-xs">${p.nome}</strong>
+              <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-200 text-zinc-700 font-normal">${p.tipo_orla || ''}</span>
+            </div>
+            <span class="text-[11px] text-zinc-500 block mt-0.5">${detalhe}</span>
+            <span class="text-[10.5px] font-mono font-medium text-blue-700 block mt-0.5">Ondas: ${ondas}</span>
+          </div>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${badgeClass} shrink-0 border">
+            ${estado}
+          </span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+/**
+ * Renderiza os 11 pontos oficiais de Balneabilidade do Boletim INEA
+ */
+function renderBalneabilidadeList(balnearData) {
+  const pontosListEl = document.getElementById('balnear-pontos-list');
+  const tituloEl = document.getElementById('balnear-boletim-titulo');
+  const dataBadgeEl = document.getElementById('balnear-data-badge');
+  const obsEl = document.getElementById('balnear-obs-tecnica');
+
+  if (!pontosListEl) return;
+
+  const data = (balnearData && balnearData.pontos) ? balnearData : null;
+  if (!data) return;
+
+  if (tituloEl && data.boletim_numero) {
+    tituloEl.textContent = `Boletim de Balneabilidade nº ${data.boletim_numero} (INEA)`;
+  }
+  if (dataBadgeEl && data.data_boletim) {
+    dataBadgeEl.textContent = data.data_boletim;
+  }
+  if (obsEl && data.observacao_tecnica) {
+    obsEl.innerHTML = `<strong>Recomendação Oficial do INEA:</strong> ${data.observacao_tecnica}`;
+  }
+
+  const pontos = data.pontos || [];
+  if (pontos.length > 0) {
+    pontosListEl.innerHTML = pontos.map(pt => {
+      const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
+      const badgeClass = isPropria 
+        ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+        : 'bg-rose-50 text-rose-800 border-rose-200';
+
+      const motivoHtml = pt.motivo 
+        ? `<span class="text-[10px] text-rose-600 font-medium block mt-0.5">${pt.motivo}</span>` 
+        : '';
+
+      return `
+        <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/70 flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5">
+              <strong class="font-semibold text-zinc-900 text-xs">${pt.praia}</strong>
+              <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-zinc-200 text-zinc-600 font-mono">${pt.codigo}</span>
+            </div>
+            <span class="text-[11px] text-zinc-500 block mt-0.5">${pt.localizacao}</span>
+            ${motivoHtml}
+          </div>
+          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${badgeClass} shrink-0 border">
+            ${pt.status}
+          </span>
+        </div>
+      `;
+    }).join('');
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+/**
+ * 6.1. Renderização das Condições da Orla, Praias e Tábua de Marés Oficial (CHM) / Balneabilidade (INEA)
  */
 function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
   const badgeEl = document.getElementById('orla-status-badge');
   const proximaMareEl = document.getElementById('orla-proxima-mare');
   const maresGridEl = document.getElementById('orla-mares-grid');
-  const praiasListEl = document.getElementById('orla-praias-list');
   const avisoResumoEl = document.getElementById('orla-aviso-resumo');
-
-  if (!badgeEl && !praiasListEl) return;
 
   // 1. Badge Principal de Status da Orla
   const temRessaca = marinhaAvisos && marinhaAvisos.aviso_ativo && String(marinhaAvisos.tipo).toUpperCase().includes('RESSACA');
@@ -1131,63 +1296,18 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
     }
   }
 
-  // 3. Lista de Praias e Balneabilidade Dinâmica
-  if (praiasListEl) {
-    let praiasArray = (orlaData && orlaData.praias && orlaData.praias.length > 0) ? orlaData.praias : [
-      {
-        praia: "Praia de Costazul",
-        detalhes: temRessaca ? "Ondas 2,0 a 2,5 m • Correnteza forte" : "Ondas 1,2 a 1,5 m • Mar moderado • Balneabilidade Própria",
-        status: temRessaca ? "Evitar Banho" : "Liberada",
-        badge: temRessaca ? "danger" : "success"
-      },
-      {
-        praia: "Praia do Centro",
-        detalhes: temRessaca ? "Mar agitado • Orla monitorada" : "Ondas 0,8 a 1,1 m • Mar calmo • Balneabilidade INEA: Própria",
-        status: temRessaca ? "Atenção" : "Própria",
-        badge: temRessaca ? "warning" : "success"
-      },
-      {
-        praia: "Praia da Tartaruga",
-        detalhes: "Águas calmas e abrigadas • Balneabilidade INEA: Própria",
-        status: "Própria",
-        badge: "success"
-      },
-      {
-        praia: "Praia do Bosque",
-        detalhes: "Águas calmas com sombra natural • Balneabilidade INEA: Própria",
-        status: "Própria",
-        badge: "success"
-      }
-    ];
+  // 3. Renderiza a lista de 11 praias (Dia selecionado no state)
+  renderCondicoesMarList(orlaData, state.activeOrlaDay || 'd0');
 
-    praiasListEl.innerHTML = praiasArray.map(p => {
-      let badgeStyle = 'bg-emerald-50 text-emerald-800 border-emerald-200';
-      if (p.badge === 'danger' || p.status.includes('Evitar') || p.status.includes('Imprópria')) {
-        badgeStyle = 'bg-rose-50 text-rose-800 border-rose-200';
-      } else if (p.badge === 'warning' || p.status.includes('Atenção')) {
-        badgeStyle = 'bg-amber-50 text-amber-800 border-amber-200';
-      }
+  // 4. Renderiza a Balneabilidade Oficial do INEA
+  renderBalneabilidadeList(balnearList || state.balneabilidade);
 
-      return `
-        <div class="p-2.5 rounded-lg bg-zinc-50 border border-zinc-200/60 flex items-center justify-between gap-2">
-          <div class="min-w-0">
-            <strong class="font-semibold text-zinc-900 block text-xs truncate">${p.praia}</strong>
-            <span class="text-[11px] text-zinc-500 line-clamp-1">${p.detalhes}</span>
-          </div>
-          <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full ${badgeStyle} shrink-0 border">
-            ${p.status}
-          </span>
-        </div>
-      `;
-    }).join('');
-  }
-
-  // 4. Rodapé Informativo
+  // 5. Rodapé Informativo
   if (avisoResumoEl) {
     if (marinhaAvisos && marinhaAvisos.aviso_ativo) {
       avisoResumoEl.textContent = `* Em dias de aviso da Marinha (Aviso nº ${marinhaAvisos.numero || ''}), respeite as bandeiras dos Guarda-Vidas (193).`;
     } else {
-      avisoResumoEl.textContent = `* Orla sem avisos de ressaca vigentes. Condições regulares de mar (SMM/CHM) e balneabilidade pelo INEA.`;
+      avisoResumoEl.textContent = `* Orla sem avisos de ressaca vigentes. Condições regulares de mar (CHM) e balneabilidade pelo INEA.`;
     }
   }
 

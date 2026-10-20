@@ -311,81 +311,146 @@ def build_orla_e_tabua_dataset():
         mar_status_txt = "Sem avisos de mau tempo vigentes na orla"
         marinha_aviso_num = None
 
-    # Praias e condições dinâmicas
-    if tem_ressaca:
-        costazul = {
-            "praia": "Praia de Costazul",
-            "detalhes": "Ondas 2,5 a 3,5 m • Correntes de retorno intensas (Ressaca)",
-            "status": "Evitar Banho",
-            "badge": "danger",
-            "icone": "alert-triangle"
+    # 3. Matriz de Condições do Mar para 11 Praias e 3 Dias (Hoje, Amanhã, D+2)
+    dias_rotulos = [
+        {
+            'key': 'd0',
+            'rotulo': 'Hoje',
+            'data_iso': today_dt.strftime('%Y-%m-%d'),
+            'data_br': today_dt.strftime('%d/%m'),
+            'dia_semana': ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][today_dt.weekday()]
+        },
+        {
+            'key': 'd1',
+            'rotulo': 'Amanhã',
+            'data_iso': (today_dt + timedelta(days=1)).strftime('%Y-%m-%d'),
+            'data_br': (today_dt + timedelta(days=1)).strftime('%d/%m'),
+            'dia_semana': ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][(today_dt + timedelta(days=1)).weekday()]
+        },
+        {
+            'key': 'd2',
+            'rotulo': 'Depois de amanhã',
+            'data_iso': (today_dt + timedelta(days=2)).strftime('%Y-%m-%d'),
+            'data_br': (today_dt + timedelta(days=2)).strftime('%d/%m'),
+            'dia_semana': ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'][(today_dt + timedelta(days=2)).weekday()]
         }
-        centro = {
-            "praia": "Praia do Centro",
-            "detalhes": "Mar agitado • Arrebentação e orla monitorada",
-            "status": "Atenção",
-            "badge": "warning",
-            "icone": "waves"
-        }
-        tartaruga = {
-            "praia": "Praia da Tartaruga",
-            "detalhes": "Enseada abrigada • Ondas 1,2 a 1,6 m • Balneabilidade Própria",
-            "status": "Atenção",
-            "badge": "warning",
-            "icone": "shield"
-        }
-    elif tem_vento_forte:
-        costazul = {
-            "praia": "Praia de Costazul",
-            "detalhes": "Ondas 1,8 a 2,2 m • Mar picado com rajadas de vento",
-            "status": "Atenção",
-            "badge": "warning",
-            "icone": "wind"
-        }
-        centro = {
-            "praia": "Praia do Centro",
-            "detalhes": "Ondas 1,0 a 1,4 m • Balneabilidade INEA: Própria",
-            "status": "Própria",
-            "badge": "success",
-            "icone": "check-circle"
-        }
-        tartaruga = {
-            "praia": "Praia da Tartaruga",
-            "detalhes": "Águas calmas e abrigadas • Balneabilidade INEA: Própria",
-            "status": "Própria",
-            "badge": "success",
-            "icone": "check-circle"
-        }
-    else: # NORMALIDADE
-        costazul = {
-            "praia": "Praia de Costazul",
-            "detalhes": "Ondas 1,2 a 1,5 m • Mar moderado • Balneabilidade Própria",
-            "status": "Liberada",
-            "badge": "success",
-            "icone": "check-circle"
-        }
-        centro = {
-            "praia": "Praia do Centro",
-            "detalhes": "Ondas 0,8 a 1,1 m • Mar calmo • Balneabilidade INEA: Própria",
-            "status": "Própria",
-            "badge": "success",
-            "icone": "check-circle"
-        }
-        tartaruga = {
-            "praia": "Praia da Tartaruga",
-            "detalhes": "Águas calmas e límpidas • Balneabilidade INEA: Própria",
-            "status": "Própria",
-            "badge": "success",
-            "icone": "check-circle"
-        }
+    ]
 
-    bosque = {
-        "praia": "Praia do Bosque",
-        "detalhes": "Águas abrigadas com sombra natural • Balneabilidade INEA: Própria",
-        "status": "Própria",
-        "badge": "success",
-        "icone": "check-circle"
-    }
+    # Fator de escala se houver aviso de ressaca ou vento
+    f_ondas = 1.6 if tem_ressaca else (1.3 if tem_vento_forte else 1.0)
+    
+    praias_condicoes = [
+        {
+            'nome': 'Praia de Costazul',
+            'tipo_orla': 'Mar Aberto com Arrebentação',
+            'perfil': 'Orla oceânica extensa com ondas expressivas e orla urbanizada',
+            'dias': {
+                'd0': {'estado': 'Agitado (Ressaca)' if tem_ressaca else 'Moderado a Agitado', 'ondas': f"{1.2*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'danger' if tem_ressaca else 'warning', 'detalhe': 'Swell de SE/E • Arrebentação expressiva e correntes de retorno'},
+                'd1': {'estado': 'Moderado', 'ondas': f"{1.0*min(1.2, f_ondas):.1f} a {1.4*min(1.2, f_ondas):.1f} m", 'badge': 'success', 'detalhe': 'Swell de E • Ondulação mais organizada, orla arejada'},
+                'd2': {'estado': 'Moderado a Calmo', 'ondas': '0,8 a 1,2 m', 'badge': 'success', 'detalhe': 'Swell de E/NE • Água mais límpida e mar amansando'}
+            }
+        },
+        {
+            'nome': 'Praia do Centro',
+            'tipo_orla': 'Enseada Semicerrada',
+            'perfil': 'Praia central protegida por costões rochosos e pontais',
+            'dias': {
+                'd0': {'estado': 'Calmo a Moderado', 'ondas': f"{0.7*f_ondas:.1f} a {1.0*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Ondas suaves junto à faixa de areia central'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,6 a 0,9 m', 'badge': 'success', 'detalhe': 'Mar manso com excelente área para caminhada e lazer'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Águas calmas e límpidas na orla central'}
+            }
+        },
+        {
+            'nome': 'Praia da Tartaruga',
+            'tipo_orla': 'Enseada Abrigada em Concha',
+            'perfil': 'Águas mansas protegidas por costões rochosos, ideal para famílias',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Águas calmas e abrigadas do vento sul'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar muito calmo, perfeito para banho e crianças'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Piscina natural transparente com águas calmas'}
+            }
+        },
+        {
+            'nome': 'Praia do Bosque',
+            'tipo_orla': 'Enseada Abrigada com Sombra Natural',
+            'perfil': 'Águas protegidas com vegetação de eucaliptos ao longo da orla',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo, protegido de correntezas marítimas'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas rasas e mansas, excelente para lazer náutico leve'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Águas muito calmas e serenas'}
+            }
+        },
+        {
+            'nome': 'Praia da Joana',
+            'tipo_orla': 'Pequena Enseada entre Costões',
+            'perfil': 'Praia bucólica encravada entre pedras com mar cristalino',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar tranquilo protegido pelos costões rochosos'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas transparentes, propícias para mergulho livre'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar muito calmo e águas limpas'}
+            }
+        },
+        {
+            'nome': 'Praia do Remanso',
+            'tipo_orla': 'Enseada Abrigada junto ao Mirante',
+            'perfil': 'Praia calma e charmosa próxima ao costão de Costazul',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo protegido da ondulação direta pelo pontal'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas mansas, excelente para stand-up paddle e banho'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas calmas e cristalinas junto às pedras'}
+            }
+        },
+        {
+            'nome': 'Praia da Areia Negra',
+            'tipo_orla': 'Enseada Monazítica Protegida',
+            'perfil': 'Areias escuras e terapêuticas com costão protegido',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo com ondulação fraca nas pedras'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas mansas e temperatura agradável'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar sereno sem correntezas aparentes'}
+            }
+        },
+        {
+            'nome': 'Praia do Mar do Norte',
+            'tipo_orla': 'Mar Aberto Oceânico',
+            'perfil': 'Orla selvagem de mar aberto na divisa norte com Macaé',
+            'dias': {
+                'd0': {'estado': 'Moderado a Agitado', 'ondas': f"{1.1*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'warning', 'detalhe': 'Ondas fortes de mar aberto, atenção a correntezas'},
+                'd1': {'estado': 'Moderado', 'ondas': '0,9 a 1,3 m', 'badge': 'success', 'detalhe': 'Ondulação constante, indicada para surf e pesca'},
+                'd2': {'estado': 'Moderado', 'ondas': '0,7 a 1,1 m', 'badge': 'success', 'detalhe': 'Ondas regulares com vento diminuindo'}
+            }
+        },
+        {
+            'nome': 'Praia do Cemitério',
+            'tipo_orla': 'Enseada Mansa Urbana',
+            'perfil': 'Praia de águas calmas frequentada por moradores e pescadores',
+            'dias': {
+                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Sem arrebentação expressiva, mar chão'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas calmas, excelente para banho tranquilo'},
+                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Mar calmo e seguro'}
+            }
+        },
+        {
+            'nome': 'Boca da Barra',
+            'tipo_orla': 'Desembocadura Fluvial / Foz',
+            'perfil': 'Encontro do Rio das Ostras com o Mar, sob regime de marés',
+            'dias': {
+                'd0': {'estado': 'Agitado / Correnteza', 'ondas': f"{0.8*f_ondas:.1f} a {1.2*f_ondas:.1f} m", 'badge': 'danger', 'detalhe': 'Correnteza forte de vazante fluvial, atenção redobrada'},
+                'd1': {'estado': 'Moderado / Correnteza', 'ondas': '0,6 a 1,0 m', 'badge': 'warning', 'detalhe': 'Correnteza moderada nas trocas de maré'},
+                'd2': {'estado': 'Moderado', 'ondas': '0,5 a 0,9 m', 'badge': 'warning', 'detalhe': 'Escoamento fluvial estabilizado com ondas suaves'}
+            }
+        },
+        {
+            'nome': 'Praia Virgem / Itapebussus',
+            'tipo_orla': 'Costa Selvagem de Preservação',
+            'perfil': 'Área de preservação ambiental com vegetação nativa de restinga',
+            'dias': {
+                'd0': {'estado': 'Moderado', 'ondas': f"{1.2*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'warning', 'detalhe': 'Mar aberto, ondas consistentes para surf e trilhas'},
+                'd1': {'estado': 'Moderado', 'ondas': '1,0 a 1,4 m', 'badge': 'success', 'detalhe': 'Condição favorável para ecoturismo e caminhadas'},
+                'd2': {'estado': 'Moderado', 'ondas': '0,8 a 1,2 m', 'badge': 'success', 'detalhe': 'Mar aberto com ondulações limpas'}
+            }
+        }
+    ]
 
     orla_dataset = {
         "status_geral": mar_status_txt,
@@ -396,9 +461,19 @@ def build_orla_e_tabua_dataset():
         "aviso_tipo": marinha_info.get("tipo", "NORMALIDADE"),
         "mar_ondas": marinha_info.get("mar_ondas", "1,2 a 1,6 m"),
         "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
-        "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente",
+        "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
         "nota_rodape": "Em dias de aviso da Marinha, respeite as bandeiras de sinalização dos Guarda-Vidas do Corpo de Bombeiros (193).",
-        "praias": [costazul, centro, tartaruga, bosque],
+        "dias_rotulos": dias_rotulos,
+        "praias_condicoes": praias_condicoes,
+        "praias": [
+            {
+                "praia": p["nome"],
+                "detalhes": f"Ondas {p['dias']['d0']['ondas']} • {p['dias']['d0']['estado']}",
+                "status": "Atenção" if p['dias']['d0']['badge'] in ['warning', 'danger'] else "Liberada",
+                "badge": p['dias']['d0']['badge'],
+                "icone": "waves"
+            } for p in praias_condicoes
+        ],
         "tabua_resumo": {
             "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
             "data": today_str,

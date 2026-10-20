@@ -1,39 +1,109 @@
-[
-  {
-    "praia": "Praia da Tartaruga",
-    "status": "PRÓPRIA",
-    "badge": "success"
-  },
-  {
-    "praia": "Praia do Centro",
-    "status": "PRÓPRIA",
-    "badge": "success"
-  },
-  {
-    "praia": "Praia do Bosque",
-    "status": "PRÓPRIA",
-    "badge": "success"
-  },
-  {
-    "praia": "Praia de Costazul",
-    "status": "PRÓPRIA",
-    "badge": "success"
-  },
-  {
-    "praia": "Praia do Remanso",
-    "status": "PRÓPRIA",
-    "badge": "success"
-  },
-  {
-    "praia": "Praia de Mariléa",
-    "status": "IMPRÓPRIA",
-    "badge": "danger",
-    "obs": "Evitar banho até 24h após chuvas intensas devido à drenagem pluvial"
-  },
-  {
-    "praia": "Foz do Rio Jundiá",
-    "status": "IMPRÓPRIA",
-    "badge": "danger",
-    "obs": "Transbordo e correnteza forte"
-  }
-]
+{
+  "orgao": "Instituto Estadual do Ambiente - INEA",
+  "boletim_numero": 20,
+  "data_boletim": "29 de Setembro de 2026",
+  "url_fonte": "https://www.inea.rj.gov.br/rio-das-ostras/",
+  "url_pdf": "https://www.inea.rj.gov.br/wp-content/uploads/2026/10/Rio-das-Ostras-29-09-26.pdf",
+  "observacao_tecnica": "Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.",
+  "pontos": [
+    {
+      "praia": "Praia das Tartarugas",
+      "codigo": "RO0007",
+      "localizacao": "Em frente à Rua Jequitibá",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Bosque",
+      "codigo": "RO0008",
+      "localizacao": "Em frente à Rua Figueira",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Centro (Av. Amazonas)",
+      "codigo": "RO0001",
+      "localizacao": "Em frente à Avenida Estado do Amazonas",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Centro (R. Bento Costa Jr)",
+      "codigo": "RO0002",
+      "localizacao": "Em frente à Rua Bento Costa Junior",
+      "status": "IMPRÓPRIA",
+      "badge": "danger",
+      "tipo": "praia",
+      "motivo": "Próximo à drenagem urbana central"
+    },
+    {
+      "praia": "Praia de Costazul",
+      "codigo": "RO0012",
+      "localizacao": "Em frente à Rua Servidão",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia da Joana",
+      "codigo": "RO0009",
+      "localizacao": "Em frente à Rua Maria Amélia",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Remanso",
+      "codigo": "RO0011",
+      "localizacao": "Canto direito da praia, próximo ao mirante",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia da Areia Negra",
+      "codigo": "RO0010",
+      "localizacao": "À esquerda da Rua Amaral, próximo às pedras",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Mar do Norte",
+      "codigo": "RO0014",
+      "localizacao": "Em frente à Rua F",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Praia do Cemitério",
+      "codigo": "RO0004",
+      "localizacao": "Em frente à Rua da Prata",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia"
+    },
+    {
+      "praia": "Boca da Barra",
+      "codigo": "RO0003",
+      "localizacao": "Em frente à Rua Boca da Barra nº 248",
+      "status": "IMPRÓPRIA",
+      "badge": "danger",
+      "tipo": "foz",
+      "motivo": "Desembocadura do Rio das Ostras / vazante pluvial"
+    },
+    {
+      "praia": "Lagoa de Iriri (Coca-Cola)",
+      "codigo": "RO0013",
+      "localizacao": "Em frente à Rua Belém",
+      "status": "IMPRÓPRIA",
+      "badge": "danger",
+      "tipo": "lagoa",
+      "motivo": "Corpo lagunar com baixa renovação hídrica"
+    }
+  ]
+}
