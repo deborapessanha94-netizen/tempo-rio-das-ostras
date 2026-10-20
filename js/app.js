@@ -509,7 +509,40 @@ function renderDashboardUI(meta, rows, weather) {
     list3d.innerHTML = meta.dias_resumo.map((d, idx) => {
       const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã'];
       const rotuloCurto = rotulos[idx] || `Dia ${idx + 1}`;
-      const nomeDiaCurto = d.dia ? d.dia.split(/[•—\-]/)[0].trim() : '';
+      
+      // Formata o nome do dia em Title Case: "TERÇA-FEIRA" -> "Terça-Feira"
+      let nomeDiaFormatado = '';
+      if (d.dia) {
+        const diaSemData = d.dia.split(/[•—]/)[0].trim();
+        nomeDiaFormatado = diaSemData
+          .toLowerCase()
+          .split('-')
+          .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+          .join('-');
+      }
+
+      // Extrai a data oficial: "20/10/2026"
+      let dataStr = '';
+      if (d.dia) {
+        const m = d.dia.match(/(\d{2}\/\d{2}(?:\/\d{4})?)/);
+        if (m) {
+          dataStr = m[1];
+          if (!dataStr.includes('/20')) {
+            dataStr = `${dataStr}/${new Date().getFullYear()}`;
+          }
+        }
+      }
+      if (!dataStr) {
+        const now = new Date();
+        const target = new Date(now.getTime() + idx * 86400000);
+        const dd = String(target.getDate()).padStart(2, '0');
+        const mm = String(target.getMonth() + 1).padStart(2, '0');
+        dataStr = `${dd}/${mm}/${target.getFullYear()}`;
+      }
+
+      // Título exatamente no padrão: "Hoje (Terça-Feira) - 20/10/2026"
+      const tituloCard = `${rotuloCurto} (${nomeDiaFormatado}) - ${dataStr}`;
+
       const tempVal = d.pilares?.temp?.val ? d.pilares.temp.val.replace(' a ', ' / ') : '24° / 19°C';
       const condTxt = d.subtitulo ? d.subtitulo.split(/[•—\-]/)[0].trim() : 'Estável';
       const iconName = d.pilares?.ceu?.icon || 'cloud-sun';
@@ -518,18 +551,18 @@ function renderDashboardUI(meta, rows, weather) {
 
       return `
         <div class="p-4 rounded-2xl ${theme.cardClass} space-y-2.5 cursor-pointer transition hover:scale-[1.01]" onclick="window.toggleDayCard(${idx})">
-          <div class="flex items-center justify-between text-sm">
-            <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center justify-between text-sm gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div class="${theme.medallionClass} w-9 h-9 shrink-0">
                 <i data-lucide="${iconName}" class="w-4 h-4 ${theme.iconColor}"></i>
               </div>
-              <div class="min-w-0">
-                <span class="font-bold ${theme.titleText} text-sm block leading-tight truncate">${rotuloCurto} (${nomeDiaCurto})</span>
-                <span class="text-xs font-normal ${theme.badgeText} block truncate">${condTxt} • ${chuvaVal}</span>
+              <div class="min-w-0 flex-1">
+                <span class="font-black ${theme.titleText} text-xs sm:text-[12.5px] block leading-tight text-black">${tituloCard}</span>
+                <span class="text-[11px] sm:text-xs font-normal ${theme.badgeText} block truncate mt-1">${condTxt} • ${chuvaVal}</span>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0 pl-2">
-              <span class="font-bold font-mono ${theme.tempText} text-sm sm:text-base">${tempVal}</span>
+            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
+              <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
               <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 ${theme.chevronColor} transition"></i>
             </div>
           </div>
@@ -1175,7 +1208,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=74').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=75').catch(() => {});
   }
 }
 
