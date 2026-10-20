@@ -1094,24 +1094,7 @@ function formatIsoDate(isoStr) {
 }
 
 function setupActionButtons() {
-  // Botão Instalar App
-  const btnInstall = document.getElementById('btn-install-desktop');
-  const modalInstall = document.getElementById('modal-install-guide');
-  const btnCloseInstall = document.getElementById('btn-close-install-modal');
 
-  if (btnInstall && modalInstall) {
-    btnInstall.addEventListener('click', () => {
-      modalInstall.classList.remove('hidden');
-      modalInstall.classList.add('flex');
-    });
-  }
-
-  if (btnCloseInstall && modalInstall) {
-    btnCloseInstall.addEventListener('click', () => {
-      modalInstall.classList.add('hidden');
-      modalInstall.classList.remove('flex');
-    });
-  }
 
   // Botão Sincronizar Agora
   const btnSync = document.getElementById('btn-sync-now');
@@ -1207,7 +1190,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=79').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=80').catch(() => {});
   }
 }
 

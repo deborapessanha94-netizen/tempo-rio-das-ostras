@@ -23,7 +23,7 @@
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=79">
+  <link rel="stylesheet" href="css/styles.css?v=80">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -113,11 +113,6 @@
           <span class="hidden md:inline text-black">Meteogramas</span>
         </button>
 
-        <!-- Instalar App PWA (Ceramic Stoneware) -->
-        <button id="btn-install-desktop" class="btn-action-outline flex items-center gap-1.5 cursor-pointer text-xs font-bold whitespace-nowrap" title="Instalar aplicativo no celular ou computador">
-          <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
-          <span class="hidden lg:inline text-black">Instalar</span>
-        </button>
 
         <!-- Sincronizar Agora (Circular Pill) -->
         <button id="btn-sync-now" class="btn-action-outline p-2 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full" title="Sincronizar dados agora">
@@ -1502,38 +1497,9 @@
     </div>
   </div>
 
-  <!-- MODAL PWA INSTALAÇÃO -->
-  <div id="modal-install-guide" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
-    <div class="modern-card max-w-md w-full p-6 space-y-4 shadow-xl bg-white border border-[#e2e8f0]">
-      <div class="flex items-center justify-between border-b border-[#e2e8f0] pb-3">
-        <div class="flex items-center gap-2.5">
-          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-            <i data-lucide="smartphone" class="w-4 h-4 text-black"></i>
-          </div>
-          <h3 class="font-bold text-black text-base">Instalar Aplicativo Oficial</h3>
-        </div>
-        <button id="btn-close-install-modal" class="p-1 rounded-lg text-[#64748b] hover:text-[#334155] cursor-pointer transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-      <div class="space-y-3 text-xs sm:text-sm text-[#64748b]">
-        <p class="font-normal">Instale o aplicativo oficial para receber alertas da Defesa Civil e acompanhar o Rio Jundiá 24 horas:</p>
-        <div class="p-3 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] space-y-1">
-          <strong class="text-[#1e293b] block font-semibold">• No iPhone (Safari):</strong>
-          <span class="text-[#64748b]">Toque no botão Compartilhar e selecione "Adicionar à Tela de Início".</span>
-        </div>
-        <div class="p-3 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] space-y-1">
-          <strong class="text-[#1e293b] block font-semibold">• No Android (Chrome):</strong>
-          <span class="text-[#64748b]">Toque no menu (3 pontinhos) e selecione "Instalar aplicativo".</span>
-        </div>
-      </div>
-      <button id="btn-install-prompt-trigger" class="w-full py-2.5 text-xs font-bold rounded-lg btn-action-primary cursor-pointer">
-        Instalar Agora
-      </button>
-    </div>
-  </div>
+
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=79"></script>
+  <script type="module" src="js/app.js?v=80"></script>
 </body>
 </html>
