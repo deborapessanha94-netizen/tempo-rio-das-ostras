@@ -988,8 +988,22 @@ def run_auto_bulletin_pipeline():
     direct_alerts_sorted = sorted(direct_alerts, key=lambda x: str(x.get('inicio', '')))
     alert_ids_str = " e ".join(f"nº {a['id']}" for a in direct_alerts_sorted) if direct_alerts_sorted else ""
 
-    if direct_alerts:
-        alerta_partes.append(f"Alerta Amarelo de Tempestade do INMET ({alert_ids_str}) previsto para pancadas isoladas com trovoadas no período da tarde")
+    today_iso = dias_3[0]['date_iso'] if dias_3 else ""
+    today_alerts = [a for a in direct_alerts if str(a.get('inicio', ''))[:10] <= today_iso <= str(a.get('fim', ''))[:10]]
+    future_alerts = [a for a in direct_alerts if a not in today_alerts]
+
+    if today_alerts:
+        alerta_partes.append(f"Alerta Amarelo de Tempestade do INMET ({alert_ids_str}) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde")
+    elif future_alerts:
+        fut_dias = []
+        for fa in future_alerts:
+            dia_str = str(fa.get('inicio', ''))[:10]
+            dia_match = next((d['dia_semana'] for d in dias_3 if d['date_iso'] == dia_str), dia_str)
+            fut_dias.append(f"{dia_match} ({dia_str[8:10]}/{dia_str[5:7]})")
+        dias_txt = ", ".join(fut_dias)
+        alerta_partes.append(f"Tempo sem alertas severos para hoje; atenção prevista para {dias_txt}, sob Alerta Amarelo de Tempestade do INMET ({alert_ids_str})")
+    else:
+        alerta_partes.append("Sem avisos meteorológicos severos vigentes para hoje")
 
     if tem_aviso_marinha:
         alerta_partes.append(f"Aviso de Vento Forte da Marinha do Brasil para a Área Delta")
@@ -1354,10 +1368,10 @@ def run_auto_bulletin_pipeline():
         {
             "tipo": "meteorologico",
             "titulo": "Avisos Meteorológicos (INMET)",
-            "status": "ALERTA AMARELO • TEMPESTADE" if len(direct_alerts) > 0 else "SEM AVISOS VIGENTES",
-            "badge": "warning" if len(direct_alerts) > 0 else "info",
-            "detalhe": f"Alerta {alert_ids_str} (Perigo Potencial)" if len(direct_alerts) > 0 else "Sem avisos vigentes para o município",
-            "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas à tarde decorrentes do calor diurno." if len(direct_alerts) > 0 else "Sem riscos meteorológicos severos previstos."
+            "status": "ALERTA AMARELO • TEMPESTADE (HOJE)" if len(today_alerts) > 0 else (f"ALERTA PREVISTO P/ QUINTA (22/10)" if len(future_alerts) > 0 else "SEM AVISOS VIGENTES HOJE"),
+            "badge": "warning" if len(today_alerts) > 0 else ("info" if len(future_alerts) > 0 else "success"),
+            "detalhe": f"Alerta {alert_ids_str} (A partir de 22/10)" if (len(today_alerts) == 0 and len(future_alerts) > 0) else (f"Alerta {alert_ids_str} (Perigo Potencial)" if len(today_alerts) > 0 else "Sem avisos vigentes para o município"),
+            "impacto": "Aviso meteorológico programado para quinta-feira (22/10). Hoje o tempo segue em estabilidade com chuva fraca (2.1 mm)." if (len(today_alerts) == 0 and len(future_alerts) > 0) else ("Possibilidade de pancadas de chuva e trovoadas isoladas à tarde." if len(today_alerts) > 0 else "Sem riscos meteorológicos severos previstos para hoje.")
         }
     ]
 
@@ -1397,7 +1411,7 @@ def run_auto_bulletin_pipeline():
             "chuva_3d": f"{chuva_total_3d:.1f} mm",
             "aviso_marinha": "NORMAL" if not tem_aviso_marinha else "FORÇA 7",
             "pico_calor": f"{pico_calor:.0f}°C",
-            "plancon_status": "ATENÇÃO" if len(direct_alerts) > 0 else "OBSERVAÇÃO"
+            "plancon_status": "ATENÇÃO" if len(today_alerts) > 0 else "OBSERVAÇÃO"
         },
         "contatos_emergencia": {
             "defesa_civil_plantao": "199",

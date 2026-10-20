@@ -20,10 +20,10 @@ import {
   getInmetMeteogramaData, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
-} from './api.js?v=60';
+} from './api.js?v=61';
 
-import { renderBulletinChart } from './charts.js?v=60';
-import { initRadarMap } from './radar.js?v=60';
+import { renderBulletinChart } from './charts.js?v=61';
+import { initRadarMap } from './radar.js?v=61';
 
 // Estado global da aplicação
 const state = {
@@ -341,6 +341,10 @@ function renderPanoramaSinotico(meta) {
  * 5. Renderização do Dashboard Profissional
  */
 function renderDashboardUI(meta, rows, weather) {
+  const primeiroDia = meta?.dias_resumo?.[0];
+  const hojeChuva = primeiroDia?.pilares?.chuva?.val || '2.1 mm';
+  const hojeVento = primeiroDia?.pilares?.vento?.val || '32 km/h';
+
   // 1. Hero Card
   const condEl = document.getElementById('hero-condition');
   const subcondEl = document.getElementById('hero-subcondition');
@@ -349,10 +353,6 @@ function renderDashboardUI(meta, rows, weather) {
   if (heroIcon && primeiroDia?.pilares?.ceu?.icon) {
     heroIcon.innerHTML = `<i data-lucide="${primeiroDia.pilares.ceu.icon}" class="w-12 h-12 sm:w-14 sm:h-14"></i>`;
   }
-
-  const primeiroDia = meta?.dias_resumo?.[0];
-  const hojeChuva = primeiroDia?.pilares?.chuva?.val || '21,4 mm';
-  const hojeVento = primeiroDia?.pilares?.vento?.val || '35 km/h';
 
   if (condEl) {
     condEl.textContent = primeiroDia?.subtitulo?.split('•')?.[0]?.trim() || 'Parcialmente Nublado';
@@ -363,11 +363,23 @@ function renderDashboardUI(meta, rows, weather) {
   }
 
   if (heroAlertPill) {
+    const todayIso = new Date().toISOString().slice(0, 10);
     const directAlerts = (state.inmetAlerts && Array.isArray(state.inmetAlerts)) ? state.inmetAlerts.filter(a => a.eh_direto_ostras !== false) : [];
-    const temAlerta = (directAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
-    if (temAlerta) {
-      heroAlertPill.textContent = 'Alerta Oficial Vigente';
+    const activeTodayAlerts = directAlerts.filter(a => {
+      const inicio = (a.inicio || '').slice(0, 10);
+      const fim = (a.fim || '').slice(0, 10);
+      return inicio <= todayIso && todayIso <= fim;
+    });
+    const futureAlerts = directAlerts.filter(a => (a.inicio || '').slice(0, 10) > todayIso);
+    const temAlertaHoje = (activeTodayAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
+
+    if (temAlertaHoje) {
+      heroAlertPill.textContent = 'Alerta Oficial Vigente Hoje';
       heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-amber-50 text-amber-800 border border-amber-200';
+    } else if (futureAlerts.length > 0) {
+      const pDia = futureAlerts[0].inicio_formatado ? futureAlerts[0].inicio_formatado.split(' ')[0] : '22/10';
+      heroAlertPill.textContent = `Atenção: Alerta Previsto para ${pDia}`;
+      heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-800 border border-blue-200';
     } else {
       heroAlertPill.textContent = 'Normalidade Operacional';
       heroAlertPill.className = 'text-xs px-2.5 py-0.5 rounded-full font-semibold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200';
@@ -421,7 +433,7 @@ function renderDashboardUI(meta, rows, weather) {
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
 
       return `
-        <div class="p-3 rounded-xl border border-zinc-200 bg-white space-y-2 cursor-pointer transition hover:border-zinc-300" onclick="this.querySelector('.pilares-collapse').classList.toggle('hidden')">
+        <div class="p-3.5 rounded-xl border border-zinc-200 bg-white space-y-2.5 cursor-pointer transition hover:border-zinc-300 shadow-xs" onclick="window.toggleDayCard(${idx})">
           <div class="flex items-center justify-between text-sm">
             <div class="flex items-center gap-2.5 min-w-0">
               <div class="w-8 h-8 rounded-lg bg-zinc-100 text-zinc-700 flex items-center justify-center shrink-0">
@@ -432,13 +444,14 @@ function renderDashboardUI(meta, rows, weather) {
                 <span class="text-xs font-normal text-zinc-500 block truncate">${condTxt} • ${chuvaVal}</span>
               </div>
             </div>
-            <div class="text-right shrink-0 pl-2">
+            <div class="flex items-center gap-2 shrink-0 pl-2">
               <span class="font-bold font-mono text-zinc-900 text-sm sm:text-base">${tempVal}</span>
+              <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 text-zinc-400 transition"></i>
             </div>
           </div>
 
           <!-- Acordeão com os Pilares Oficiais e Informe à População -->
-          <div class="pilares-collapse hidden pt-2 border-t border-zinc-100 space-y-2">
+          <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-2 border-t border-zinc-100 space-y-2">
             <div class="grid grid-cols-2 gap-2 text-xs">
               <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60">
                 <span class="text-zinc-500 font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
@@ -515,17 +528,30 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
   // 1. Alertas Oficiais do INMET (filtrando apenas vigentes para Rio das Ostras e Litoral Norte)
   if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
     const directAlerts = inmetAlerts.filter(a => a.eh_direto_ostras !== false);
+    const nowIso = new Date().toISOString().slice(0, 10);
+
     directAlerts.forEach(a => {
+      const inicioIso = (a.inicio || '').slice(0, 10);
+      const fimIso = (a.fim || '').slice(0, 10);
+      const isVigenteHoje = inicioIso <= nowIso && nowIso <= fimIso;
+      const isFuturo = inicioIso > nowIso;
+
       const titulo = a.descricao || 'Alerta Meteorológico';
       const alertInfo = getAlertBadgeAndClass(a.severidade, a.cor_nome);
       const periodo = `Vigência: ${a.inicio_formatado || a.inicio} até ${a.fim_formatado || a.fim}`;
       const riscos = (a.riscos && a.riscos[0]) ? a.riscos[0] : 'Chuva intensa, ventos fortes e descargas elétricas.';
       const instrucoes = (a.instrucoes && a.instrucoes[0]) ? a.instrucoes[0] : 'Não se abrigue debaixo de árvores. Em emergência ligue 199.';
 
+      let statusBadge = isVigenteHoje 
+        ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-amber-100 text-amber-800 border border-amber-300">Vigente Hoje</span>'
+        : (isFuturo 
+            ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-blue-50 text-blue-700 border border-blue-200">Programado para ${a.inicio_formatado ? a.inicio_formatado.split(' ')[0] : '22/10'}</span>`
+            : '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-zinc-100 text-zinc-600 border border-zinc-200">Encerrado</span>');
+
       cardsHtml.push(`
         <div class="${alertInfo.cardClass} p-3 sm:p-3.5 space-y-2">
-          <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5">
-            <div class="flex items-center gap-1.5">
+          <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5 flex-wrap">
+            <div class="flex items-center gap-1.5 flex-wrap">
               <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
                 INMET
               </span>
@@ -533,11 +559,12 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
                 ${a.id ? `Aviso nº ${a.id}` : 'Aviso Especial'}
               </span>
               ${a.eh_direto_ostras ? '<span class="text-[10px] px-1.5 py-0.5 rounded font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Rio das Ostras</span>' : ''}
+              ${statusBadge}
             </div>
             ${alertInfo.badgeHtml}
           </div>
 
-          <div class="flex items-baseline justify-between gap-2">
+          <div class="flex items-baseline justify-between gap-2 flex-wrap">
             <h3 class="text-sm sm:text-base font-bold text-zinc-950 leading-tight">${titulo}</h3>
             <span class="text-[11px] font-medium text-zinc-500 whitespace-nowrap flex items-center gap-1 shrink-0">
               <i data-lucide="clock" class="w-3 h-3 text-zinc-400"></i>
@@ -1059,7 +1086,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=60').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=61').catch(() => {});
   }
 }
 
@@ -1093,6 +1120,18 @@ window.switchOrlaTab = function(tabName) {
     }
   });
   if (window.lucide) window.lucide.createIcons();
+};
+
+window.toggleDayCard = function(idx) {
+  const el = document.getElementById(`day-card-collapse-${idx}`);
+  const icon = document.getElementById(`day-card-chevron-${idx}`);
+  if (el) {
+    const isHidden = el.classList.toggle('hidden');
+    if (icon) {
+      icon.setAttribute('data-lucide', isHidden ? 'chevron-down' : 'chevron-up');
+      if (window.lucide) window.lucide.createIcons();
+    }
+  }
 };
 
 window.selectOrlaDay = function(dayKey) {
