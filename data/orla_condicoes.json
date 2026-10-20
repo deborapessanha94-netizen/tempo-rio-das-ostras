@@ -41,36 +41,36 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-10-19",
+    "data": "2026-10-20",
     "proxima_mare": {
-      "tipo": "PREAMAR",
-      "hora": "22:45",
-      "altura": 0.8,
-      "rotulo": "Preia-mar (0,8 m)"
+      "tipo": "BAIXA-MAR",
+      "hora": "04:52",
+      "altura": 0.23,
+      "rotulo": "Baixa-mar (0,2 m)"
     },
     "mares_do_dia": [
       {
         "tipo": "BAIXA-MAR",
-        "hora": "04:10",
-        "altura": 0.18,
+        "hora": "04:52",
+        "altura": 0.23,
         "rotulo": "Baixa-mar (0,2 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "11:35",
-        "altura": 0.85,
+        "hora": "12:01",
+        "altura": 0.9,
         "rotulo": "Preia-mar (0,9 m)"
       },
       {
         "tipo": "BAIXA-MAR",
-        "hora": "17:20",
-        "altura": 0.35,
+        "hora": "17:55",
+        "altura": 0.41,
         "rotulo": "Baixa-mar (0,4 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "22:45",
-        "altura": 0.8,
+        "hora": "23:11",
+        "altura": 0.84,
         "rotulo": "Preia-mar (0,8 m)"
       }
     ]
