@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "19/10 (Segunda-feira) a 21/10 (Quarta-feira)",
-  "emissao": "20/10/2026 às 01:43h",
+  "emissao": "20/10/2026 às 01:47h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Acumulado total de chuva previsto para o ciclo de 3 dias: 6.7 mm com temperatura máxima alcançando 24°C.",
   "alertas_estruturados": [
     {
@@ -813,7 +813,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-20T01:44:27.231148",
+    "atualizado_em": "2026-10-20T01:48:06.553610",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "04:52",
