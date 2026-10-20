@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=71">
+  <link rel="stylesheet" href="css/styles.css?v=72">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -870,468 +870,226 @@
         </div>
 
         <!-- CARD 2: CONDIÇÕES MARÍTIMAS, PRAIAS & TÁBUA DE MARÉS (CHM) / BALNEABILIDADE (INEA) -->
-        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-condicoes-orla">
+        <div class="modern-card p-5 sm:p-6 space-y-4 bg-white border border-[#94a3b8]" id="card-condicoes-orla">
           
           <!-- Cabeçalho do Card com Título e Status Geral -->
-          <div class="flex items-center justify-between border-b border-[#dfb992]/15 pb-3 flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-              <div class="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center text-cyan-300">
-                <i data-lucide="anchor" class="w-3.5 h-3.5"></i>
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-[#eaf0f6] border-2 border-[#6d8ba6] flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
               </div>
               <div>
-                <h3 class="text-base font-bold text-[#1e293b] tracking-tight">Condições da Orla & Praias</h3>
-                <span class="text-xs font-normal text-[#64748b]">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
+                <h3 class="text-base font-black text-black tracking-tight leading-tight">Condições da Orla & Praias</h3>
+                <span class="text-xs font-normal text-black">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
               </div>
             </div>
-            <span id="orla-status-badge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+            <span id="orla-status-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6] shadow-2xs">
               Normalidade
             </span>
           </div>
 
-          <!-- SELETOR DE NICHOS (3 ABAS SEGMENTADAS) -->
-          <div class="grid grid-cols-3 gap-1 bg-[#f1f5f9] p-1 rounded-full border border-[#e2e8f0] text-center" role="tablist">
-            <button id="orla-tab-btn-mar" onclick="switchOrlaTab('mar')" class="orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition cursor-pointer" role="tab" aria-selected="true">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-blue-600"></i>
+          <!-- SELETOR DE NICHOS (3 ABAS SEGMENTADAS NÓRDICAS) -->
+          <div class="grid grid-cols-3 gap-1 bg-[#f5efe8]/80 p-1.5 rounded-2xl border border-[#b8a99a]/50 text-center" role="tablist">
+            <button id="orla-tab-btn-mar" onclick="switchOrlaTab('mar')" class="orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs" role="tab" aria-selected="true">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
               <span>Mar (3 Dias)</span>
             </button>
-            <button id="orla-tab-btn-mares" onclick="switchOrlaTab('mares')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-medium transition text-[#64748b] hover:text-black cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-600"></i>
+            <button id="orla-tab-btn-mares" onclick="switchOrlaTab('mares')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
+              <i data-lucide="compass" class="w-3.5 h-3.5 text-black"></i>
               <span>Tábuas de Maré</span>
             </button>
-            <button id="orla-tab-btn-balnear" onclick="switchOrlaTab('balnear')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-medium transition text-[#64748b] hover:text-black cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+            <button id="orla-tab-btn-balnear" onclick="switchOrlaTab('balnear')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-black"></i>
               <span>Balneabilidade</span>
             </button>
           </div>
 
-          <!-- PAINEL 1: CONDIÇÕES DO MAR EM TODAS AS 11 PRAIAS (HOJE, D+1 E D+2) -->
-          <div id="orla-panel-mar" class="space-y-3">
+          <!-- PAINEL 1: CONDIÇÕES DO MAR (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
+          <div id="orla-panel-mar" class="space-y-3.5">
             <!-- Seletor de Dias (Hoje, Amanhã, D+2) -->
-            <div class="flex items-center justify-between gap-2 p-1.5 bg-blue-50/60 rounded-lg border border-blue-100 text-xs">
-              <span class="text-[11px] font-semibold text-blue-900 flex items-center gap-1">
-                <i data-lucide="calendar" class="w-3 h-3 text-blue-600"></i> Previsão:
+            <div class="flex items-center justify-between gap-2 p-1.5 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-xs">
+              <span class="text-xs font-bold text-black flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-black"></i> Previsão:
               </span>
               <div class="flex items-center gap-1" id="orla-day-buttons">
-                <button type="button" onclick="selectOrlaDay('d0')" id="orla-day-btn-d0" class="orla-day-btn active px-3 py-1 rounded-full text-xs font-bold cursor-pointer">
+                <button type="button" onclick="selectOrlaDay('d0')" id="orla-day-btn-d0" class="orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer">
                   Hoje (20/10)
                 </button>
-                <button type="button" onclick="selectOrlaDay('d1')" id="orla-day-btn-d1" class="orla-day-btn px-3 py-1 rounded-full text-xs font-medium bg-[#f1f5f9] text-[#334155] hover:bg-[#e2e8f0] border border-[#e2e8f0] cursor-pointer">
+                <button type="button" onclick="selectOrlaDay('d1')" id="orla-day-btn-d1" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
                   Amanhã (21/10)
                 </button>
-                <button type="button" onclick="selectOrlaDay('d2')" id="orla-day-btn-d2" class="orla-day-btn px-3 py-1 rounded-full text-xs font-medium bg-[#f1f5f9] text-[#334155] hover:bg-[#e2e8f0] border border-[#e2e8f0] cursor-pointer">
+                <button type="button" onclick="selectOrlaDay('d2')" id="orla-day-btn-d2" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
                   Quinta (22/10)
                 </button>
               </div>
             </div>
 
-            <!-- Resumo do estado do mar para o dia selecionado -->
-            <div id="orla-day-summary" class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] text-xs flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-[#64748b]">Ondulação estimada: <strong class="text-[#1e293b]">Swell de E/SE • 1,2 a 1,6 m na orla oceânica</strong></span>
-              </div>
-              <span class="text-[10px] text-[#64748b]">11 praias cobertas</span>
-            </div>
-
-            <!-- Lista de Todas as 11 Praias -->
-            <div id="orla-praias-list" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia de Costazul</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Mar Aberto com Arrebentação</span>
+            <!-- Quadro Resumo Executivo / Síntese Geral da Orla de Rio das Ostras -->
+            <div id="orla-summary-content" class="space-y-3">
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#ffebe4] border border-[#f07a53] flex items-center justify-center text-black">
+                      <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider">Panorama Geral em Rio das Ostras</span>
+                      <strong class="text-sm font-black text-black block" id="orla-geral-titulo">Mar Calmo a Moderado na Orla</strong>
+                    </div>
                   </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Swell de SE/E • Arrebentação expressiva e correntes de retorno</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 1.2 a 1.6 m</span>
+                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="orla-geral-badge">Normalidade</span>
                 </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0">
-                  Moderado a Agitado
-                </span>
-              </div>
+                
+                <p class="text-xs font-medium text-black leading-relaxed" id="orla-geral-descricao">
+                  Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica • Águas calmas e abrigadas nas enseadas.
+                </p>
 
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Centro</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Enseada Semicerrada</span>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Enseadas Abrigadas</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black">Calmo</span>
+                    </div>
+                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-enseada">0,3 a 0,7 m</strong>
+                    <span class="text-[10px] text-black font-medium block">Tartaruga, Centro, Bosque e Remanso</span>
                   </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Ondas suaves junto à faixa de areia central</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.7 a 1.0 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo a Moderado
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia da Tartaruga</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Enseada Abrigada em Concha</span>
+                  
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Orla Oceânica</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black">Moderado</span>
+                    </div>
+                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-oceanica">1,2 a 1,6 m</strong>
+                    <span class="text-[10px] text-black font-medium block">Costazul, Joana e Mar do Norte</span>
                   </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Águas calmas e abrigadas do vento sul</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.4 a 0.7 m</span>
                 </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
-                </span>
               </div>
 
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Bosque</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Enseada Abrigada e Sombreada</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Águas mansas com sombra natural de casuarinas</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.3 a 0.6 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
+              <!-- Botão Clicável de Destaque para abrir a lista completa das 11 Praias -->
+              <button type="button" onclick="openModalPraias('mar')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="list-checks" class="w-4 h-4 text-black"></i>
+                  <span>Ver Detalhamento Praia a Praia (11 Praias)</span>
                 </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia da Joana</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Recanto Pequeno Abrigado</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Pequena enseada protegida com mar tranquilo</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.5 a 0.8 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Remanso</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Enseada Pequena e Serena</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Águas mansas e ambiente sereno junto às pedras</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.4 a 0.7 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia da Areia Negra</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Pequena Enseada Abrigada</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Areias monazíticas e mar sereno entre costões</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.4 a 0.7 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Mar do Norte</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Mar Aberto com Ondas Fortes</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Ondulação vigorosa de mar aberto, requer cautela</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 1.2 a 1.6 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0">
-                  Moderado a Agitado
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Cemitério</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Enseada Urbana Calma</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Enseada abrigada de pescadores e mar manso</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.4 a 0.7 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  Calmo
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Boca da Barra</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Foz Fluvial e Orla Lagunar</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Correnteza de vazante do rio, evitar banho no canal</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 0.6 a 1.1 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 shrink-0">
-                  Agitado / Correnteza
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5 flex-wrap">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia Virgem & Itapebussus</strong>
-                    <span class="text-[10px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#334155] font-normal border border-[#e2e8f0]">Costão Oceânico Preservado</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Orla agreste com quebra em lajes rochosas</span>
-                  <span class="text-[10.5px] font-mono font-medium text-cyan-300 block mt-0.5">Ondas: 1.1 a 1.5 m</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 shrink-0">
-                  Moderado a Agitado
-                </span>
-              </div>
+                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#f07a53]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
+              </button>
             </div>
           </div>
 
           <!-- PAINEL 2: TÁBUAS DE MARÉ OFICIAL (CHM / MARINHA DO BRASIL) -->
-          <div id="orla-panel-mares" class="space-y-3 hidden">
-            <div class="p-3 rounded-xl bg-gradient-to-r from-blue-50/70 to-indigo-50/50 border border-blue-200/60 space-y-2.5">
-              <div class="flex items-center justify-between flex-wrap gap-1.5">
-                <div class="flex items-center gap-1.5 text-xs font-semibold text-blue-950">
-                  <i data-lucide="waves" class="w-3.5 h-3.5 text-blue-600"></i>
-                  <span>Tábua de Marés Oficial (CHM)</span>
+          <div id="orla-panel-mares" class="space-y-3.5 hidden">
+            <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-2 text-xs font-black text-black">
+                  <div class="w-7 h-7 rounded-lg bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
+                    <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
+                  </div>
+                  <span>Tábua de Marés Oficial (CHM / DHN)</span>
                 </div>
-                <span id="orla-proxima-mare" class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                <span id="orla-proxima-mare" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53] shadow-2xs">
                   Próxima: Baixa-mar às 04:52 (0,2 m)
                 </span>
               </div>
 
-              <!-- Grid dos 4 Eventos de Maré do Dia -->
-              <div id="orla-mares-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[11px]">
-                <div class="p-1.5 rounded bg-cyan-50/80 border border-cyan-200/80 text-center">
-                  <span class="block text-[10px] text-cyan-800 font-medium"><i data-lucide="arrow-down" class="w-3 h-3 text-cyan-600 inline"></i> Baixa-mar</span>
-                  <span class="font-bold text-cyan-950 font-mono text-xs">04:52</span>
-                  <span class="block text-[10px] text-[#64748b]">0,2 m</span>
+              <!-- Grid dos 4 Eventos de Maré do Dia (Nórdico Cerâmico) -->
+              <div id="orla-mares-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">04:52</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,20 m</span>
                 </div>
-                <div class="p-1.5 rounded bg-blue-50/80 border border-blue-200/80 text-center">
-                  <span class="block text-[10px] text-blue-800 font-medium"><i data-lucide="arrow-up" class="w-3 h-3 text-blue-600 inline"></i> Preia-mar</span>
-                  <span class="font-bold text-blue-950 font-mono text-xs">12:01</span>
-                  <span class="block text-[10px] text-[#64748b]">0,9 m</span>
+                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">12:01</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,90 m</span>
                 </div>
-                <div class="p-1.5 rounded bg-cyan-50/80 border border-cyan-200/80 text-center">
-                  <span class="block text-[10px] text-cyan-800 font-medium"><i data-lucide="arrow-down" class="w-3 h-3 text-cyan-600 inline"></i> Baixa-mar</span>
-                  <span class="font-bold text-cyan-950 font-mono text-xs">17:55</span>
-                  <span class="block text-[10px] text-[#64748b]">0,4 m</span>
+                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">17:55</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,40 m</span>
                 </div>
-                <div class="p-1.5 rounded bg-blue-50/80 border border-blue-200/80 text-center">
-                  <span class="block text-[10px] text-blue-800 font-medium"><i data-lucide="arrow-up" class="w-3 h-3 text-blue-600 inline"></i> Preia-mar</span>
-                  <span class="font-bold text-blue-950 font-mono text-xs">23:11</span>
-                  <span class="block text-[10px] text-[#64748b]">0,8 m</span>
+                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">23:11</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,80 m</span>
                 </div>
               </div>
 
-              <div class="p-2 bg-white/70 rounded-lg border border-blue-100 text-[11px] text-[#64748b] space-y-1">
-                <div class="flex items-center justify-between font-semibold text-[#334155]">
+              <div class="p-2.5 bg-white/90 rounded-xl border border-[#cbd5e1] text-[11px] text-black space-y-1">
+                <div class="flex items-center justify-between font-bold text-black">
                   <span>Estação Maregráfica Oficial</span>
-                  <span class="text-cyan-300">Terminal de Imbetiba / Macaé e Rio das Ostras</span>
+                  <span class="font-mono text-[10px] bg-[#f8fafc] px-2 py-0.5 rounded border border-[#cbd5e1]">Imbetiba / Macaé e Rio das Ostras</span>
                 </div>
-                <p class="text-[10.5px] text-[#64748b] leading-snug">
-                  As previsões de maré são calculadas astronomicamente pelo Centro de Hidrografia da Marinha (CHM/DHN) e refletem a variação das cotas de água na região oceânica de Rio das Ostras.
+                <p class="text-[10.5px] text-black font-medium leading-snug">
+                  As previsões de maré são calculadas astronomicamente pelo Centro de Hidrografia da Marinha (CHM/DHN) e refletem as cotas de variação do nível do mar em Rio das Ostras.
                 </p>
               </div>
 
-              <div class="flex items-center justify-between text-[10px] text-[#64748b] pt-1 border-t border-blue-100/80">
-                <span>Fonte: Marinha do Brasil (CHM / SMM)</span>
-                <a href="https://www.marinha.mil.br/chm/tabuas-de-mare" target="_blank" rel="noopener" class="text-blue-600 hover:underline font-semibold flex items-center gap-0.5">
+              <div class="flex items-center justify-between text-xs text-black pt-1 border-t border-[#dfb992]/20">
+                <span class="font-medium">Fonte: Marinha do Brasil (CHM / DHN)</span>
+                <a href="https://www.marinha.mil.br/chm/tabuas-de-mare" target="_blank" rel="noopener" class="text-black hover:underline font-bold bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
                   Tábua Completa CHM ↗
                 </a>
               </div>
             </div>
           </div>
 
-          <!-- PAINEL 3: BALNEABILIDADE OFICIAL DO INEA (BOLETIM Nº 20) -->
-          <div id="orla-panel-balnear" class="space-y-3 hidden">
-            <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200/70 space-y-2">
-              <div class="flex items-center justify-between flex-wrap gap-1.5">
-                <div class="flex items-center gap-1.5 text-xs font-bold text-emerald-950">
-                  <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
-                  <span id="balnear-boletim-titulo">Boletim de Balneabilidade nº 20 (INEA)</span>
-                </div>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200" id="balnear-data-badge">
-                  29 de Setembro de 2026
-                </span>
-              </div>
-              <p class="text-[11px] text-emerald-900 leading-relaxed bg-white/80 p-2 rounded-lg border border-emerald-100" id="balnear-obs-tecnica">
-                <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.
-              </p>
-              <div class="flex items-center justify-between text-[10.5px] pt-0.5 text-emerald-800">
-                <a href="https://www.inea.rj.gov.br/rio-das-ostras/" target="_blank" rel="noopener" class="hover:underline font-semibold flex items-center gap-1">
-                  Página Oficial INEA ↗
-                </a>
-                <a href="https://www.inea.rj.gov.br/wp-content/uploads/2026/10/Rio-das-Ostras-29-09-26.pdf" target="_blank" rel="noopener" class="text-emerald-700 hover:text-emerald-900 hover:underline font-semibold flex items-center gap-1">
-                  Ver PDF do Boletim ↗
-                </a>
-              </div>
-            </div>
-
-            <!-- Lista dos 11 Pontos de Balneabilidade Monitorados pelo INEA -->
-            <div id="balnear-pontos-list" class="space-y-2 max-h-[380px] overflow-y-auto pr-1">
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia das Tartarugas</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0007</span>
+          <!-- PAINEL 3: BALNEABILIDADE OFICIAL DO INEA (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
+          <div id="orla-panel-balnear" class="space-y-3.5 hidden">
+            <div id="balnear-summary-content" class="space-y-3">
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
+                      <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider" id="balnear-boletim-titulo">Boletim nº 20 (INEA)</span>
+                      <strong class="text-sm font-black text-black block" id="balnear-status-geral-txt">8 de 11 Praias Próprias para Banho (73%)</strong>
+                    </div>
                   </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Jequitibá</span>
+                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="balnear-data-badge">Favorável</span>
                 </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
 
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Bosque</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0008</span>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Praias Próprias</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black" id="balnear-proprias-count">8 Pontos</span>
+                    </div>
+                    <span class="text-[10.5px] text-black font-medium block">Tartarugas, Bosque, Centro, Costazul, Remanso, Joana, Mar do Norte e Areia Negra</span>
                   </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Figueira</span>
+                  
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Pontos de Atenção</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black" id="balnear-improprias-count">3 Pontos</span>
+                    </div>
+                    <span class="text-[10.5px] text-black font-medium block">Boca da Barra (foz do rio) e Lagoa de Iriri (baixa renovação hídrica)</span>
+                  </div>
                 </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
+
+                <p class="text-[11px] text-black font-medium leading-relaxed bg-white/90 p-2.5 rounded-xl border border-[#cbd5e1]" id="balnear-obs-tecnica">
+                  <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas fortes e próximo à saída de canais de drenagem pluvial.
+                </p>
               </div>
 
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Centro (Av. Amazonas)</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0001</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Avenida Estado do Amazonas</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
+              <!-- Botão Clicável de Destaque para abrir a lista completa da Balneabilidade -->
+              <button type="button" onclick="openModalPraias('balnear')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="clipboard-check" class="w-4 h-4 text-black"></i>
+                  <span>Ver Relatório Oficial dos 11 Pontos de Balneabilidade (INEA)</span>
                 </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Centro (R. Bento Costa Jr)</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0002</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Bento Costa Junior</span>
-                  <span class="text-[10px] text-rose-600 font-medium block mt-0.5">Próximo à drenagem urbana central</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 shrink-0">
-                  IMPRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia de Costazul</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0012</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Servidão</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia da Joana</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0009</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Maria Amélia</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Remanso</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0011</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Canto direito da praia, próximo ao mirante</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia da Areia Negra</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0010</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">À esquerda da Rua Amaral, próximo às pedras</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Mar do Norte</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0014</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua F</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Praia do Cemitério</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0004</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua da Prata</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shrink-0">
-                  PRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Boca da Barra</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0003</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Boca da Barra nº 248</span>
-                  <span class="text-[10px] text-rose-600 font-medium block mt-0.5">Desembocadura do Rio das Ostras / vazante pluvial</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 shrink-0">
-                  IMPRÓPRIA
-                </span>
-              </div>
-
-              <div class="p-2.5 rounded-lg bg-[#f8fafc] border border-[#e2e8f0] flex items-start justify-between gap-2">
-                <div class="min-w-0">
-                  <div class="flex items-center gap-1.5">
-                    <strong class="font-semibold text-[#1e293b] text-xs">Lagoa de Iriri (Coca-Cola)</strong>
-                    <span class="text-[9.5px] px-1.5 py-0.2 rounded bg-[#f1f5f9] text-[#64748b] font-mono">RO0013</span>
-                  </div>
-                  <span class="text-[11px] text-[#64748b] block mt-0.5">Em frente à Rua Belém</span>
-                  <span class="text-[10px] text-rose-600 font-medium block mt-0.5">Corpo lagunar com baixa renovação hídrica</span>
-                </div>
-                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 shrink-0">
-                  IMPRÓPRIA
-                </span>
-              </div>
+                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#6d8ba6]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
+              </button>
             </div>
           </div>
 
@@ -1461,6 +1219,100 @@
 
     </div>
   </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: DETALHAMENTO DAS 11 PRAIAS & BALNEABILIDADE INEA (NÓRDICO CERÂMICO) -->
+  <!-- ========================================================================= -->
+  <div id="modal-praias-detalhes" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
+    <div class="modern-card max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden bg-white border border-[#94a3b8] text-black" style="border-top: 4px solid #3d4f61 !important;">
+      
+      <!-- Cabeçalho do Modal -->
+      <div class="px-5 py-4 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1]">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-[#ffebe4] border-2 border-[#f07a53] flex items-center justify-center text-black shadow-xs">
+            <i data-lucide="waves" class="w-5 h-5 text-black"></i>
+          </div>
+          <div>
+            <h3 class="text-base sm:text-lg font-black text-black leading-tight">Detalhamento das 11 Praias & Orla de Rio das Ostras</h3>
+            <span class="text-xs text-black font-medium">Condições Oceanográficas (CHM) e Balneabilidade Oficial (INEA)</span>
+          </div>
+        </div>
+        <button onclick="closeModalPraias()" class="p-1.5 rounded-lg text-black hover:bg-zinc-200 cursor-pointer transition">
+          <i data-lucide="x" class="w-5 h-5 text-black"></i>
+        </button>
+      </div>
+
+      <!-- Abas de Navegação Interna do Modal -->
+      <div class="flex border-b border-[#cbd5e1] bg-[#f5efe8]/60 px-5 pt-3 gap-2">
+        <button id="modal-praias-tab-mar" onclick="switchModalPraiasTab('mar')" class="px-4 py-2 text-xs sm:text-sm font-black border-b-2 border-[#f07a53] text-black bg-white/80 rounded-t-xl cursor-pointer flex items-center gap-2">
+          <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+          <span>Condições do Mar (11 Praias)</span>
+        </button>
+        <button id="modal-praias-tab-balnear" onclick="switchModalPraiasTab('balnear')" class="px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-transparent text-black hover:text-black cursor-pointer flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
+          <span>Balneabilidade Oficial (11 Pontos INEA)</span>
+        </button>
+      </div>
+
+      <!-- Conteúdo com Scroll -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-sm text-black bg-white flex-1">
+        
+        <!-- Painel 1 do Modal: 11 Praias -->
+        <div id="modal-praias-panel-mar" class="space-y-4">
+          <!-- Seletor de Dias no Modal -->
+          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs">
+            <span class="text-xs font-bold text-black flex items-center gap-1.5">
+              <i data-lucide="calendar" class="w-4 h-4 text-black"></i> Previsão para:
+            </span>
+            <div class="flex items-center gap-1.5" id="modal-praias-day-buttons">
+              <button type="button" onclick="selectOrlaDay('d0')" id="modal-day-btn-d0" class="orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer">
+                Hoje (20/10)
+              </button>
+              <button type="button" onclick="selectOrlaDay('d1')" id="modal-day-btn-d1" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
+                Amanhã (21/10)
+              </button>
+              <button type="button" onclick="selectOrlaDay('d2')" id="modal-day-btn-d2" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
+                Quinta (22/10)
+              </button>
+            </div>
+          </div>
+
+          <!-- Grade das 11 Praias -->
+          <div id="modal-praias-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- Preenchido via app.js -->
+          </div>
+        </div>
+
+        <!-- Painel 2 do Modal: 11 Pontos de Balneabilidade -->
+        <div id="modal-praias-panel-balnear" class="space-y-4 hidden">
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-2 text-xs">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="font-black text-black text-sm" id="modal-balnear-titulo">Boletim de Balneabilidade nº 20 (INEA)</span>
+              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="modal-balnear-data">29 de Setembro de 2026</span>
+            </div>
+            <p class="text-xs text-black leading-relaxed" id="modal-balnear-obs">
+              <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.
+            </p>
+          </div>
+
+          <!-- Grade dos 11 Pontos -->
+          <div id="modal-balnear-pontos-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <!-- Preenchido via app.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Rodapé do Modal -->
+      <div class="px-5 py-3.5 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between text-xs text-black">
+        <span class="font-medium text-black">Fontes: Marinha do Brasil (CHM) & INEA</span>
+        <button onclick="closeModalPraias()" class="btn-coral-pill text-xs py-1.5 px-4 cursor-pointer font-bold">
+          Fechar
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- MODAL 1: BOLETIM TÉCNICO OPERACIONAL COMPLETO & PANORAMA SINÓTICO         -->
@@ -1760,6 +1612,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=71"></script>
+  <script type="module" src="js/app.js?v=72"></script>
 </body>
 </html>

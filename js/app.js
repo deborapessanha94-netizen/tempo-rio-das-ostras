@@ -1175,7 +1175,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=71').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=72').catch(() => {});
   }
 }
 
@@ -1195,9 +1195,17 @@ window.switchOrlaTab = function(tabName) {
       if (t === tabName) {
         btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
+        if (t === 'mar') {
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs';
+        } else if (t === 'mares') {
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#eaf0f6] border-2 border-[#6d8ba6] text-black shadow-xs';
+        } else {
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#f5efe8] border-2 border-[#b8a99a] text-black shadow-xs';
+        }
       } else {
         btn.classList.remove('active');
         btn.setAttribute('aria-selected', 'false');
+        btn.className = 'orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer';
       }
     }
     if (panel) {
@@ -1211,158 +1219,239 @@ window.switchOrlaTab = function(tabName) {
   if (window.lucide) window.lucide.createIcons();
 };
 
-window.toggleDayCard = function(idx) {
-  const el = document.getElementById(`day-card-collapse-${idx}`);
-  const icon = document.getElementById(`day-card-chevron-${idx}`);
-  if (el) {
-    const isHidden = el.classList.toggle('hidden');
-    if (icon) {
-      icon.setAttribute('data-lucide', isHidden ? 'chevron-down' : 'chevron-up');
-      if (window.lucide) window.lucide.createIcons();
+window.openModalPraias = function(tabKey = 'mar') {
+  const modal = document.getElementById('modal-praias-detalhes');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    window.switchModalPraiasTab(tabKey);
+    renderCondicoesMarList(state.orlaCondicoes, state.activeOrlaDay || 'd0');
+    renderBalneabilidadeList(state.balneabilidade);
+    if (window.lucide) window.lucide.createIcons();
+  }
+};
+
+window.closeModalPraias = function() {
+  const modal = document.getElementById('modal-praias-detalhes');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+};
+
+window.switchModalPraiasTab = function(tabKey) {
+  const panelMar = document.getElementById('modal-praias-panel-mar');
+  const panelBalnear = document.getElementById('modal-praias-panel-balnear');
+  const tabMar = document.getElementById('modal-praias-tab-mar');
+  const tabBalnear = document.getElementById('modal-praias-tab-balnear');
+
+  if (tabKey === 'mar') {
+    if (panelMar) panelMar.classList.remove('hidden');
+    if (panelBalnear) panelBalnear.classList.add('hidden');
+    if (tabMar) {
+      tabMar.className = 'px-4 py-2 text-xs sm:text-sm font-black border-b-2 border-[#f07a53] text-black bg-white/80 rounded-t-xl cursor-pointer flex items-center gap-2';
+    }
+    if (tabBalnear) {
+      tabBalnear.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-transparent text-black hover:text-black cursor-pointer flex items-center gap-2';
+    }
+  } else {
+    if (panelMar) panelMar.classList.add('hidden');
+    if (panelBalnear) panelBalnear.classList.remove('hidden');
+    if (tabBalnear) {
+      tabBalnear.className = 'px-4 py-2 text-xs sm:text-sm font-black border-b-2 border-[#6d8ba6] text-black bg-white/80 rounded-t-xl cursor-pointer flex items-center gap-2';
+    }
+    if (tabMar) {
+      tabMar.className = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-transparent text-black hover:text-black cursor-pointer flex items-center gap-2';
     }
   }
+  if (window.lucide) window.lucide.createIcons();
 };
 
 window.selectOrlaDay = function(dayKey) {
   state.activeOrlaDay = dayKey;
   ['d0', 'd1', 'd2'].forEach(dk => {
     const btn = document.getElementById(`orla-day-btn-${dk}`);
-    if (btn) {
-      if (dk === dayKey) {
-        btn.className = 'orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffebe4] text-black border border-[#f97316] shadow-sm cursor-pointer';
-      } else {
-        btn.className = 'orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-semibold bg-[#ffffff] text-[#475569] hover:bg-[#f1f5f9] border border-[#e2e8f0] cursor-pointer';
-      }
-    }
+    const modalBtn = document.getElementById(`modal-day-btn-${dk}`);
+    const isActive = (dk === dayKey);
+    const activeClass = 'orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer';
+    const inactiveClass = 'orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer';
+
+    if (btn) btn.className = isActive ? activeClass : inactiveClass;
+    if (modalBtn) modalBtn.className = isActive ? activeClass : inactiveClass;
   });
   renderCondicoesMarList(state.orlaCondicoes, dayKey);
 };
 
 /**
- * Renderiza a lista de 11 praias com previsão de ondas para o dia selecionado (Hoje, Amanhã, D+2)
+ * Renderiza o Resumo Executivo Geral e o Detalhamento das 11 praias (Modal)
  */
 function renderCondicoesMarList(orlaData, dayKey = 'd0') {
-  const praiasListEl = document.getElementById('orla-praias-list');
-  const daySummaryEl = document.getElementById('orla-day-summary');
-  if (!praiasListEl) return;
+  const modalPraiasListEl = document.getElementById('modal-praias-list');
+  const orlaGeralTitulo = document.getElementById('orla-geral-titulo');
+  const orlaGeralBadge = document.getElementById('orla-geral-badge');
+  const orlaGeralDescricao = document.getElementById('orla-geral-descricao');
+  const orlaOndasEnseada = document.getElementById('orla-ondas-enseada');
+  const orlaOndasOceanica = document.getElementById('orla-ondas-oceanica');
 
   const praias = (orlaData && orlaData.praias_condicoes && orlaData.praias_condicoes.length > 0)
     ? orlaData.praias_condicoes
     : null;
 
   if (praias) {
-    if (daySummaryEl) {
-      const rotulos = (orlaData && orlaData.dias_rotulos) || [];
-      const diaInfo = rotulos.find(r => r.key === dayKey);
-      const rotuloTxt = diaInfo ? `${diaInfo.rotulo} (${diaInfo.data_br || ''})` : 'Período selecionado';
-      
-      let waveSwellTxt = 'Swell de E/SE • 1,2 a 1,6 m na orla oceânica';
-      if (dayKey === 'd1') waveSwellTxt = 'Swell de E • 1,0 a 1,4 m • Ondulação mais branda';
-      if (dayKey === 'd2') waveSwellTxt = 'Swell de E/NE • 0,8 a 1,2 m • Águas claras e mar amansando';
+    const rotulos = (orlaData && orlaData.dias_rotulos) || [];
+    const diaInfo = rotulos.find(r => r.key === dayKey);
+    const rotuloTxt = diaInfo ? `${diaInfo.rotulo} (${diaInfo.data_br || ''})` : 'Período selecionado';
 
-      daySummaryEl.innerHTML = `
-        <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span class="text-zinc-600">Ondulação ${rotuloTxt}: <strong class="text-zinc-900">${waveSwellTxt}</strong></span>
-        </div>
-        <span class="text-[10px] text-zinc-400">11 praias cobertas</span>
-      `;
+    let waveSwellTxt = 'Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica • Águas calmas e abrigadas nas enseadas.';
+    let statusGeralTxt = 'Mar Calmo a Moderado na Orla';
+    let statusBadgeTxt = 'Normalidade';
+    let ondasEnseadaTxt = '0,3 a 0,7 m';
+    let ondasOceanicaTxt = '1,2 a 1,6 m';
+
+    if (dayKey === 'd1') {
+      waveSwellTxt = 'Swell de E • Ondulação mais branda de 1,0 a 1,4 m • Águas calmas e límpidas na maioria das enseadas.';
+      statusGeralTxt = 'Mar Moderado com Tendência a Amansar';
+      statusBadgeTxt = 'Bom para Banho';
+      ondasEnseadaTxt = '0,3 a 0,6 m';
+      ondasOceanicaTxt = '1,0 a 1,4 m';
+    } else if (dayKey === 'd2') {
+      waveSwellTxt = 'Swell de E/NE • Ondulação fraca a moderada de 0,8 a 1,2 m • Águas claras e mar sereno em toda a faixa de enseadas.';
+      statusGeralTxt = 'Mar Calmo em quase toda a Região';
+      statusBadgeTxt = 'Excelente';
+      ondasEnseadaTxt = '0,2 a 0,5 m';
+      ondasOceanicaTxt = '0,8 a 1,2 m';
     }
 
-    praiasListEl.innerHTML = praias.map(p => {
-      const diaObj = (p.dias && p.dias[dayKey]) || {};
-      const estado = diaObj.estado || 'Calmo a Moderado';
-      const ondas = diaObj.ondas || '0,8 a 1,2 m';
-      const detalhe = diaObj.detalhe || p.perfil || '';
-      
-      let badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
-      if (diaObj.badge === 'danger' || estado.includes('Agitado') || estado.includes('Correnteza') || estado.includes('Evitar')) {
-        badgeClass = 'bg-rose-100 text-black border border-rose-400 font-bold';
-      } else if (diaObj.badge === 'warning' || estado.includes('Moderado a Agitado') || estado.includes('Atenção')) {
-        badgeClass = 'bg-amber-100 text-black border border-amber-400 font-bold';
-      }
+    if (orlaGeralTitulo) orlaGeralTitulo.textContent = `${statusGeralTxt} — ${rotuloTxt}`;
+    if (orlaGeralBadge) orlaGeralBadge.textContent = statusBadgeTxt;
+    if (orlaGeralDescricao) orlaGeralDescricao.textContent = waveSwellTxt;
+    if (orlaOndasEnseada) orlaOndasEnseada.textContent = ondasEnseadaTxt;
+    if (orlaOndasOceanica) orlaOndasOceanica.textContent = ondasOceanicaTxt;
 
-      return `
-        <div class="p-3 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm flex items-start justify-between gap-2.5 transition hover:border-[#cbd5e1]">
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <strong class="font-bold text-[#1e293b] text-xs">${p.nome}</strong>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569] font-medium border border-[#e2e8f0]">${p.tipo_orla || ''}</span>
+    // Renderiza a grade completa das 11 praias no MODAL
+    if (modalPraiasListEl) {
+      modalPraiasListEl.innerHTML = praias.map(p => {
+        const diaObj = (p.dias && p.dias[dayKey]) || {};
+        const estado = diaObj.estado || 'Calmo a Moderado';
+        const ondas = diaObj.ondas || '0,8 a 1,2 m';
+        const detalhe = diaObj.detalhe || p.perfil || '';
+        
+        let themeCard = 'border-[#6d8ba6]/40 bg-gradient-to-br from-[#ffffff] to-[#f4f8fb]';
+        let badgeClass = 'bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] font-black';
+
+        if (diaObj.badge === 'danger' || estado.includes('Agitado') || estado.includes('Correnteza') || estado.includes('Evitar')) {
+          themeCard = 'border-[#f07a53]/60 bg-gradient-to-br from-[#ffffff] to-[#fff5f2]';
+          badgeClass = 'bg-[#ffebe4] text-black border-2 border-[#f07a53] font-black';
+        } else if (diaObj.badge === 'warning' || estado.includes('Moderado a Agitado') || estado.includes('Atenção')) {
+          themeCard = 'border-[#d97706]/40 bg-gradient-to-br from-[#ffffff] to-[#fefcf6]';
+          badgeClass = 'bg-[#fef3c7] text-black border-2 border-[#d97706] font-black';
+        }
+
+        return `
+          <div class="p-3.5 rounded-2xl border-2 ${themeCard} shadow-xs flex flex-col justify-between space-y-2.5 transition hover:shadow-md">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <strong class="font-black text-black text-sm block leading-tight">${p.nome}</strong>
+                <span class="text-[10px] font-bold text-black uppercase tracking-wider block mt-0.5">${p.tipo_orla || ''}</span>
+              </div>
+              <span class="text-[11px] px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0 uppercase tracking-wide">
+                ${estado}
+              </span>
             </div>
-            <span class="text-[11px] text-[#64748b] block mt-0.5">${detalhe}</span>
-            <span class="text-[11px] font-mono font-semibold text-[#3d4f61] block mt-0.5">Ondas: ${ondas}</span>
+            <p class="text-xs text-black font-medium leading-relaxed">${detalhe}</p>
+            <div class="flex items-center justify-between pt-2 border-t border-black/10 text-xs">
+              <span class="text-[10px] font-bold uppercase text-black">Altura das Ondas:</span>
+              <span class="font-mono font-black text-black text-xs bg-white px-2.5 py-0.5 rounded-md border border-[#cbd5e1] shadow-2xs">${ondas}</span>
+            </div>
           </div>
-          <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0">
-            ${estado}
-          </span>
-        </div>
-      `;
-    }).join('');
+        `;
+      }).join('');
+    }
   }
 
   if (window.lucide) window.lucide.createIcons();
 }
 
 /**
- * Renderiza os 11 pontos oficiais de Balneabilidade do Boletim INEA
+ * Renderiza o Resumo Executivo e os 11 pontos oficiais de Balneabilidade (Modal)
  */
 function renderBalneabilidadeList(balnearData) {
-  const pontosListEl = document.getElementById('balnear-pontos-list');
+  const modalBalnearListEl = document.getElementById('modal-balnear-pontos-list');
   const tituloEl = document.getElementById('balnear-boletim-titulo');
+  const modalTituloEl = document.getElementById('modal-balnear-titulo');
   const dataBadgeEl = document.getElementById('balnear-data-badge');
+  const modalDataBadgeEl = document.getElementById('modal-balnear-data');
   const obsEl = document.getElementById('balnear-obs-tecnica');
-
-  if (!pontosListEl) return;
+  const modalObsEl = document.getElementById('modal-balnear-obs');
+  const statusGeralTxt = document.getElementById('balnear-status-geral-txt');
+  const countPropriasEl = document.getElementById('balnear-proprias-count');
+  const countImpropriasEl = document.getElementById('balnear-improprias-count');
 
   const data = (balnearData && balnearData.pontos) ? balnearData : null;
   if (!data) return;
 
-  if (tituloEl && data.boletim_numero) {
-    tituloEl.textContent = `Boletim de Balneabilidade nº ${data.boletim_numero} (INEA)`;
-  }
-  if (dataBadgeEl && data.data_boletim) {
-    dataBadgeEl.textContent = data.data_boletim;
-  }
+  const boletimNome = data.boletim_numero ? `Boletim nº ${data.boletim_numero} (INEA)` : 'Boletim de Balneabilidade (INEA)';
+  if (tituloEl) tituloEl.textContent = boletimNome;
+  if (modalTituloEl) modalTituloEl.textContent = boletimNome;
+  if (dataBadgeEl && data.data_boletim) dataBadgeEl.textContent = data.data_boletim;
+  if (modalDataBadgeEl && data.data_boletim) modalDataBadgeEl.textContent = data.data_boletim;
+
   if (obsEl && data.observacao_tecnica) {
     obsEl.innerHTML = `<strong>Recomendação Oficial do INEA:</strong> ${data.observacao_tecnica}`;
+  }
+  if (modalObsEl && data.observacao_tecnica) {
+    modalObsEl.innerHTML = `<strong>Recomendação Oficial do INEA:</strong> ${data.observacao_tecnica}`;
   }
 
   const pontos = data.pontos || [];
   if (pontos.length > 0) {
-    pontosListEl.innerHTML = pontos.map(pt => {
-      const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
-      const badgeClass = isPropria 
-        ? 'bg-emerald-100 text-black border border-emerald-400 font-bold' 
-        : 'bg-rose-100 text-black border border-rose-400 font-bold';
+    const proprias = pontos.filter(pt => String(pt.status).toUpperCase() === 'PRÓPRIA');
+    const improprias = pontos.filter(pt => String(pt.status).toUpperCase() !== 'PRÓPRIA');
+    const perc = Math.round((proprias.length / pontos.length) * 100);
 
-      const motivoHtml = pt.motivo 
-        ? `<span class="text-[10px] text-rose-600 font-medium block mt-0.5">${pt.motivo}</span>` 
-        : '';
+    if (statusGeralTxt) statusGeralTxt.textContent = `${proprias.length} de ${pontos.length} Praias Próprias para Banho (${perc}%)`;
+    if (countPropriasEl) countPropriasEl.textContent = `${proprias.length} Pontos`;
+    if (countImpropriasEl) countImpropriasEl.textContent = `${improprias.length} Pontos`;
 
-      return `
-        <div class="p-3 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm flex items-start justify-between gap-2.5 transition hover:border-[#cbd5e1]">
-          <div class="min-w-0">
-            <div class="flex items-center gap-1.5">
-              <strong class="font-bold text-[#1e293b] text-xs">${pt.praia}</strong>
-              <span class="text-[9.5px] px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569] font-mono border border-[#e2e8f0]">${pt.codigo}</span>
+    // Renderiza os pontos no MODAL
+    if (modalBalnearListEl) {
+      modalBalnearListEl.innerHTML = pontos.map(pt => {
+        const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
+        const themeCard = isPropria
+          ? 'border-[#6d8ba6]/40 bg-gradient-to-br from-[#ffffff] to-[#f4f8fb]'
+          : 'border-[#f07a53]/60 bg-gradient-to-br from-[#ffffff] to-[#fff5f2]';
+        const badgeClass = isPropria 
+          ? 'bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] font-black' 
+          : 'bg-[#ffebe4] text-black border-2 border-[#f07a53] font-black';
+
+        const motivoHtml = pt.motivo 
+          ? `<span class="text-[11px] text-black font-semibold block mt-1 bg-white/90 p-1.5 rounded-lg border border-[#f07a53]/30">⚠️ ${pt.motivo}</span>` 
+          : '';
+
+        return `
+          <div class="p-3.5 rounded-2xl border-2 ${themeCard} shadow-xs flex flex-col justify-between space-y-2 transition hover:shadow-md">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <strong class="font-black text-black text-sm">${pt.praia}</strong>
+                  <span class="font-mono font-bold text-[10px] bg-white px-2 py-0.5 rounded border border-[#cbd5e1] text-black">${pt.codigo}</span>
+                </div>
+                <span class="text-xs text-black font-medium block mt-0.5">${pt.localizacao}</span>
+              </div>
+              <span class="text-[11px] px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0 uppercase tracking-wide">
+                ${pt.status}
+              </span>
             </div>
-            <span class="text-[11px] text-[#64748b] block mt-0.5">${pt.localizacao}</span>
             ${motivoHtml}
           </div>
-          <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0">
-            ${pt.status}
-          </span>
-        </div>
-      `;
-    }).join('');
+        `;
+      }).join('');
+    }
   }
 
   if (window.lucide) window.lucide.createIcons();
 }
 
-/**
- * 6.1. Renderização das Condições da Orla, Praias e Tábua de Marés Oficial (CHM) / Balneabilidade (INEA)
- */
 function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
   const badgeEl = document.getElementById('orla-status-badge');
   const proximaMareEl = document.getElementById('orla-proxima-mare');
