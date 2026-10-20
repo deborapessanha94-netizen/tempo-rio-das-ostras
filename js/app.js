@@ -22,7 +22,7 @@ import {
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js?v=62';
 
-import { renderBulletinChart } from './charts.js?v=62';
+import { renderBulletinChart } from './charts.js?v=76';
 import { initRadarMap } from './radar.js?v=62';
 
 // Estado global da aplicação
@@ -805,7 +805,7 @@ function renderChuvaTurnosBars(rows) {
           <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">${val.toFixed(1)} mm</span>
         </div>
         <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-          <div class="h-full rounded-full bg-gradient-to-r from-[#f07a53] to-[#ea580c] transition-all duration-500" style="width: ${perc}%;"></div>
+          <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: ${perc}%;"></div>
         </div>
       </div>
     `;
@@ -1208,7 +1208,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=75').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=76').catch(() => {});
   }
 }
 

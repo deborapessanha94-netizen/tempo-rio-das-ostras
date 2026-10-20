@@ -34,6 +34,9 @@ function getColors() {
     primary: '#3d4f61',       /* Nordic Slate Denim */
     secondary: '#f07a53',     /* Warm Coral Orange */
     tertiary: '#64748b',      /* Slate Gray */
+    rain: '#2563eb',          /* Azul Chuva */
+    rainFill: '#3b82f6',      /* Azul vibrante de precipitação */
+    rainBorder: '#1d4ed8',    /* Borda azul de precipitação */
     barFill: 'rgba(61, 79, 97, 0.75)',
     barBorder: '#000000',
     gradStart: 'rgba(61, 79, 97, 0.25)',
@@ -104,8 +107,8 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'bar',
             label: 'Volume Chuva (mm)',
             data: rainSlice,
-            backgroundColor: c.barFill,
-            borderColor: c.barBorder,
+            backgroundColor: c.rainFill,
+            borderColor: c.rainBorder,
             borderWidth: 1.5,
             borderRadius: 4,
             yAxisID: 'y'
@@ -558,8 +561,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Precipitação Prevista (mm)',
             data: chTot,
-            backgroundColor: c.barFill,
-            borderColor: c.barBorder,
+            backgroundColor: c.rainFill,
+            borderColor: c.rainBorder,
             borderWidth: 1.5,
             borderRadius: 4
           }
