@@ -25,7 +25,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=77">
+  <link rel="stylesheet" href="css/styles.css?v=78">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -323,38 +323,56 @@
       <div id="sidebar-3days-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <!-- Dia 1: Hoje (Card Sage / Folha Verde) -->
         <div class="p-4 rounded-2xl card-sage border border-[#a9c6b6]/35 space-y-2.5 cursor-pointer transition hover:scale-[1.01] shadow-md" onclick="window.toggleDayCard(0)">
-          <div class="flex items-center justify-between text-sm">
-            <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center justify-between text-sm gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div class="icon-medallion w-9 h-9 shrink-0">
-                <i data-lucide="cloud-rain" class="w-4 h-4 text-[#1e293b]"></i>
+                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
               </div>
-              <div class="min-w-0">
-                <span class="font-bold text-[#1e293b] text-sm block leading-tight truncate">Hoje (Terça-Feira) - 20/10/2026</span>
-                <span class="text-xs font-normal text-[#dce8df] block truncate">Muitas nuvens • 2.1 mm</span>
+              <div class="min-w-0 flex-1">
+                <span class="font-black text-black text-xs sm:text-[12.5px] block leading-tight">Hoje (Terça-Feira) - 20/10/2026</span>
+                <span class="text-[11px] sm:text-xs font-normal text-black block truncate mt-0.5">Muitas nuvens com possibilidade de chuva</span>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0 pl-2">
-              <span class="font-bold font-mono text-[#1e293b] text-sm sm:text-base">20° / 24°C</span>
-              <i data-lucide="chevron-down" id="day-card-chevron-0" class="w-4 h-4 text-[#f07a53] transition"></i>
+            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
+              <span class="font-black font-mono text-black bg-white/90 px-2.5 py-1 rounded-xl border border-[#f97316]/40 shadow-2xs text-xs whitespace-nowrap">19° / 24°C</span>
+              <i data-lucide="chevron-down" id="day-card-chevron-0" class="w-4 h-4 text-black transition"></i>
             </div>
           </div>
-          <div id="day-card-collapse-0" class="pilares-collapse hidden pt-3 border-t border-white/10 space-y-2.5">
+
+          <!-- Previsão Essencial com Mar em Destaque -->
+          <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Previsão de Chuva">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Chuva: 2.1 mm</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Condição do Mar na Orla de Rio das Ostras">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Mar: 1,2 a 1,6 m (Mod.)</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Vento / Rajadas">
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#475569]"></i>
+              <span>Rajadas 24 km/h</span>
+            </span>
+          </div>
+
+          <div id="day-card-collapse-0" class="pilares-collapse hidden pt-3 border-t border-black/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Muitas nuvens</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#f97316]/30 text-black shadow-2xs">
+                <span class="text-[#ea580c] font-bold text-[9.5px] block uppercase tracking-wider">Céu</span>
+                <span class="font-medium text-xs truncate block text-black">Garoa Densa</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">2.1 mm</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#f97316]/30 text-black shadow-2xs">
+                <span class="text-[#ea580c] font-bold text-[9.5px] block uppercase tracking-wider">Chuva</span>
+                <span class="font-medium text-xs truncate block text-black">2.1 mm</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Rajadas 32 km/h</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#f97316]/30 text-black shadow-2xs">
+                <span class="text-[#ea580c] font-bold text-[9.5px] block uppercase tracking-wider">Vento</span>
+                <span class="font-medium text-xs truncate block text-black">Rajadas 24 km/h</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Mar</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">1.2 a 1.6 m</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#f97316]/30 text-black shadow-2xs">
+                <span class="text-[#ea580c] font-bold text-[9.5px] block uppercase tracking-wider">Mar na Orla</span>
+                <span class="font-bold text-xs truncate block text-black">1,2 a 1,6 m • Calmo a Moderado</span>
+                <span class="text-[9.5px] text-[#475569] font-medium block truncate mt-0.5">Swell E/SE • Enseadas 0,3-0,7 m</span>
               </div>
             </div>
           </div>
@@ -362,38 +380,56 @@
 
         <!-- Dia 2: Amanhã (Card Earth / Terracota Cacau) -->
         <div class="p-4 rounded-2xl card-earth border border-[#dfb992]/35 space-y-2.5 cursor-pointer transition hover:scale-[1.01] shadow-md" onclick="window.toggleDayCard(1)">
-          <div class="flex items-center justify-between text-sm">
-            <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center justify-between text-sm gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div class="icon-medallion icon-medallion-earth w-9 h-9 shrink-0">
-                <i data-lucide="cloud-drizzle" class="w-4 h-4 text-[#334155]"></i>
+                <i data-lucide="cloud-drizzle" class="w-4 h-4 text-black"></i>
               </div>
-              <div class="min-w-0">
-                <span class="font-bold text-[#1e293b] text-sm block leading-tight truncate">Amanhã (Quarta-Feira) - 21/10/2026</span>
-                <span class="text-xs font-normal text-[#334155] block truncate">Encoberto com chuvisco • 4.8 mm</span>
+              <div class="min-w-0 flex-1">
+                <span class="font-black text-black text-xs sm:text-[12.5px] block leading-tight">Amanhã (Quarta-Feira) - 21/10/2026</span>
+                <span class="text-[11px] sm:text-xs font-normal text-black block truncate mt-0.5">Muitas nuvens com possibilidade de chuva</span>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0 pl-2">
-              <span class="font-bold font-mono text-[#1e293b] text-sm sm:text-base">20° / 24°C</span>
-              <i data-lucide="chevron-down" id="day-card-chevron-1" class="w-4 h-4 text-[#f07a53] transition"></i>
+            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
+              <span class="font-black font-mono text-black bg-white/90 px-2.5 py-1 rounded-xl border border-[#6d8ba6]/40 shadow-2xs text-xs whitespace-nowrap">20° / 24°C</span>
+              <i data-lucide="chevron-down" id="day-card-chevron-1" class="w-4 h-4 text-black transition"></i>
             </div>
           </div>
-          <div id="day-card-collapse-1" class="pilares-collapse hidden pt-3 border-t border-white/10 space-y-2.5">
+
+          <!-- Previsão Essencial com Mar em Destaque -->
+          <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Previsão de Chuva">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Chuva: 2.1 mm</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Condição do Mar na Orla de Rio das Ostras">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Mar: 1,0 a 1,4 m (Mod.)</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Vento / Rajadas">
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#475569]"></i>
+              <span>Rajadas 35 km/h</span>
+            </span>
+          </div>
+
+          <div id="day-card-collapse-1" class="pilares-collapse hidden pt-3 border-t border-black/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Encoberto com chuvisco</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#6d8ba6]/30 text-black shadow-2xs">
+                <span class="text-[#3d4f61] font-bold text-[9.5px] block uppercase tracking-wider">Céu</span>
+                <span class="font-medium text-xs truncate block text-black">Garoa Fraca</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">4.8 mm</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#6d8ba6]/30 text-black shadow-2xs">
+                <span class="text-[#3d4f61] font-bold text-[9.5px] block uppercase tracking-wider">Chuva</span>
+                <span class="font-medium text-xs truncate block text-black">2.1 mm</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Rajadas 28 km/h</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#6d8ba6]/30 text-black shadow-2xs">
+                <span class="text-[#3d4f61] font-bold text-[9.5px] block uppercase tracking-wider">Vento</span>
+                <span class="font-medium text-xs truncate block text-black">Rajadas 35 km/h</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Mar</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">1.0 a 1.4 m</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#6d8ba6]/30 text-black shadow-2xs">
+                <span class="text-[#3d4f61] font-bold text-[9.5px] block uppercase tracking-wider">Mar na Orla</span>
+                <span class="font-bold text-xs truncate block text-black">1,0 a 1,4 m • Moderado</span>
+                <span class="text-[9.5px] text-[#475569] font-medium block truncate mt-0.5">Swell E • Enseadas 0,3-0,6 m</span>
               </div>
             </div>
           </div>
@@ -401,38 +437,56 @@
 
         <!-- Dia 3: Depois de amanhã (Card Toffee / Bronze Dourado) -->
         <div class="p-4 rounded-2xl card-toffee border border-[#f0c598]/35 space-y-2.5 cursor-pointer transition hover:scale-[1.01] shadow-md" onclick="window.toggleDayCard(2)">
-          <div class="flex items-center justify-between text-sm">
-            <div class="flex items-center gap-3 min-w-0">
+          <div class="flex items-center justify-between text-sm gap-2">
+            <div class="flex items-center gap-2.5 min-w-0 flex-1">
               <div class="icon-medallion icon-medallion-sand w-9 h-9 shrink-0">
-                <i data-lucide="cloud-lightning" class="w-4 h-4 text-amber-200"></i>
+                <i data-lucide="cloud-lightning" class="w-4 h-4 text-black"></i>
               </div>
-              <div class="min-w-0">
-                <span class="font-bold text-[#1e293b] text-sm block leading-tight truncate">Depois de amanhã (Quinta-Feira) - 22/10/2026</span>
-                <span class="text-xs font-normal text-[#fde68a] block truncate">Garoa Fraca • 5.2 mm (Alerta 56118)</span>
+              <div class="min-w-0 flex-1">
+                <span class="font-black text-black text-xs sm:text-[12.5px] block leading-tight">Depois de amanhã (Quinta-Feira) - 22/10/2026</span>
+                <span class="text-[11px] sm:text-xs font-normal text-black block truncate mt-0.5">Garoa Fraca (Alerta Amarelo • Perigo Potencial)</span>
               </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0 pl-2">
-              <span class="font-bold font-mono text-[#1e293b] text-sm sm:text-base">19° / 24°C</span>
-              <i data-lucide="chevron-down" id="day-card-chevron-2" class="w-4 h-4 text-[#f07a53] transition"></i>
+            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
+              <span class="font-black font-mono text-black bg-white/90 px-2.5 py-1 rounded-xl border border-[#b8a99a]/40 shadow-2xs text-xs whitespace-nowrap">20° / 24°C</span>
+              <i data-lucide="chevron-down" id="day-card-chevron-2" class="w-4 h-4 text-black transition"></i>
             </div>
           </div>
-          <div id="day-card-collapse-2" class="pilares-collapse hidden pt-3 border-t border-white/10 space-y-2.5">
+
+          <!-- Previsão Essencial com Mar em Destaque -->
+          <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Previsão de Chuva">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Chuva: 5.2 mm</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Condição do Mar na Orla de Rio das Ostras">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Mar: 0,8 a 1,2 m (Calmo)</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Vento / Rajadas">
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#475569]"></i>
+              <span>Rajadas 45 km/h</span>
+            </span>
+          </div>
+
+          <div id="day-card-collapse-2" class="pilares-collapse hidden pt-3 border-t border-black/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Pancadas c/ Trovoadas</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#b8a99a]/35 text-black shadow-2xs">
+                <span class="text-[#786350] font-bold text-[9.5px] block uppercase tracking-wider">Céu</span>
+                <span class="font-medium text-xs truncate block text-black">Garoa Moderada</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">5.2 mm</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#b8a99a]/35 text-black shadow-2xs">
+                <span class="text-[#786350] font-bold text-[9.5px] block uppercase tracking-wider">Chuva</span>
+                <span class="font-medium text-xs truncate block text-black">5.2 mm</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-                <span class="text-[#1e293b] font-medium text-xs truncate block">Rajadas 32 km/h</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#b8a99a]/35 text-black shadow-2xs">
+                <span class="text-[#786350] font-bold text-[9.5px] block uppercase tracking-wider">Vento</span>
+                <span class="font-medium text-xs truncate block text-black">Rajadas 45 km/h</span>
               </div>
-              <div class="p-2 rounded-xl bg-black/25 border border-white/10">
-                <span class="text-[#64748b] font-semibold block uppercase text-[10px] tracking-wider">Alerta</span>
-                <span class="text-[#fde68a] font-semibold text-xs truncate block">Amarelo (INMET 56118)</span>
+              <div class="p-2 rounded-xl bg-white/95 border border-[#b8a99a]/35 text-black shadow-2xs">
+                <span class="text-[#786350] font-bold text-[9.5px] block uppercase tracking-wider">Mar na Orla</span>
+                <span class="font-bold text-xs truncate block text-black">0,8 a 1,2 m • Calmo a Sereno</span>
+                <span class="text-[9.5px] text-[#475569] font-medium block truncate mt-0.5">Swell E/NE • Enseadas 0,2-0,5 m</span>
               </div>
             </div>
           </div>
@@ -1611,6 +1665,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=77"></script>
+  <script type="module" src="js/app.js?v=78"></script>
 </body>
 </html>

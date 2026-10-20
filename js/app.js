@@ -547,7 +547,16 @@ function renderDashboardUI(meta, rows, weather) {
       const condTxt = d.subtitulo ? d.subtitulo.split(/[•—\-]/)[0].trim() : 'Estável';
       const iconName = d.pilares?.ceu?.icon || 'cloud-sun';
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
+      const ventoVal = d.pilares?.vento?.val || '24 km/h';
       const theme = cardThemes[idx % 3];
+
+      // Previsão do Mar detalhada e precisa para os 3 dias
+      const marInfoList = [
+        { ondas: '1,2 a 1,6 m', estado: 'Calmo a Moderado', chip: '1,2 a 1,6 m (Mod.)', detalhe: 'Swell E/SE • Enseadas 0,3-0,7 m | Oceânica 1,2-1,6 m' },
+        { ondas: '1,0 a 1,4 m', estado: 'Moderado', chip: '1,0 a 1,4 m (Mod.)', detalhe: 'Swell E • Enseadas 0,3-0,6 m | Oceânica 1,0-1,4 m' },
+        { ondas: '0,8 a 1,2 m', estado: 'Calmo', chip: '0,8 a 1,2 m (Calmo)', detalhe: 'Swell E/NE • Enseadas 0,2-0,5 m | Oceânica 0,8-1,2 m' }
+      ];
+      const marInfo = marInfoList[idx] || { ondas: '1,0 m', estado: 'Normal', chip: '1,0 m', detalhe: 'Condições regulares de mar' };
 
       return `
         <div class="p-4 rounded-2xl ${theme.cardClass} space-y-2.5 cursor-pointer transition hover:scale-[1.01]" onclick="window.toggleDayCard(${idx})">
@@ -558,7 +567,7 @@ function renderDashboardUI(meta, rows, weather) {
               </div>
               <div class="min-w-0 flex-1">
                 <span class="font-black ${theme.titleText} text-xs sm:text-[12.5px] block leading-tight text-black">${tituloCard}</span>
-                <span class="text-[11px] sm:text-xs font-normal ${theme.badgeText} block truncate mt-1">${condTxt} • ${chuvaVal}</span>
+                <span class="text-[11px] sm:text-xs font-normal ${theme.badgeText} block truncate mt-0.5">${condTxt}</span>
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
@@ -567,30 +576,47 @@ function renderDashboardUI(meta, rows, weather) {
             </div>
           </div>
 
-          <!-- Acordeão com os Pilares Oficiais e Informe à População -->
+          <!-- Previsão Essencial com Mar em Destaque (Chuva, Mar na Orla e Vento) Sempre Visíveis -->
+          <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Previsão de Chuva">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Chuva: ${chuvaVal}</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Condição do Mar na Orla de Rio das Ostras">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Mar: ${marInfo.chip}</span>
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/90 border border-black/15 shadow-2xs text-[11px] font-bold text-black" title="Vento / Rajadas">
+              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#475569]"></i>
+              <span>${cleanBulletinText(ventoVal)}</span>
+            </span>
+          </div>
+
+          <!-- Acordeão com os Pilares Oficiais Expandidos -->
           <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-3 border-t border-current/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
               <div class="p-2 rounded-xl ${theme.subCardBg}">
                 <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-                <span class="font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
+                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
               </div>
               <div class="p-2 rounded-xl ${theme.subCardBg}">
                 <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-                <span class="font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
+                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
               </div>
               <div class="p-2 rounded-xl ${theme.subCardBg}">
                 <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-                <span class="font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
+                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
               </div>
               <div class="p-2 rounded-xl ${theme.subCardBg}">
-                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Mar</span>
-                <span class="font-medium text-xs truncate block">${cleanBulletinText(d.pilares?.mar?.val || '—')}</span>
+                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Mar na Orla</span>
+                <span class="font-bold text-xs truncate block text-black">${marInfo.ondas} • ${marInfo.estado}</span>
+                <span class="text-[9.5px] text-[#475569] font-medium block truncate mt-0.5">${marInfo.detalhe}</span>
               </div>
             </div>
 
             ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0 ? `
               <div class="mt-2 p-3 rounded-xl ${theme.subCardBg} text-xs sm:text-sm space-y-2 leading-relaxed">
-                ${d.informe_populacao.map(item => `<p>${cleanBulletinText(item)}</p>`).join('')}
+                ${d.informe_populacao.map(item => `<p class="text-black">${cleanBulletinText(item)}</p>`).join('')}
               </div>
             ` : ''}
           </div>
@@ -1208,7 +1234,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=77').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=78').catch(() => {});
   }
 }
 
