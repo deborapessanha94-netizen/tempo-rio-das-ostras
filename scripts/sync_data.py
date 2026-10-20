@@ -6,6 +6,7 @@ mesmo com o computador pessoal desligado.
 """
 
 import urllib.request
+import ssl
 import json
 import re
 import os
