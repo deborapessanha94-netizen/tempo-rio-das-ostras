@@ -21,11 +21,9 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=78">
+  <link rel="stylesheet" href="css/styles.css?v=79">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -42,8 +40,6 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Script Inline Síncrono: Relógio e Data Imediatos no Milissegundo 0 -->
   <script>
@@ -695,93 +691,7 @@
 
         </div>
 
-        <!-- CARD 3: RADAR METEOROLÓGICO DOPPLER & SATÉLITE AO VIVO (INTEGRADO NA TELA) -->
-        <div class="modern-card p-5 sm:p-6 space-y-4">
-          
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-                  <i data-lucide="radar" class="w-3.5 h-3.5"></i>
-                </div>
-                <h3 class="text-base font-bold text-black tracking-tight">
-                  Radar Meteorológico Doppler & Satélite em Tempo Real
-                </h3>
-                <span class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                  Ao Vivo
-                </span>
-              </div>
-              <p class="text-xs font-normal text-[#64748b] mt-0.5">
-                Cobertura do Estado do Rio de Janeiro e Bacia de Rio das Ostras
-              </p>
-            </div>
-
-            <!-- Controles Rápidos do Mapa -->
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <button id="btn-mode-doppler" class="badge-title-orange px-3.5 py-1.5 rounded-full text-xs font-bold shadow-xs cursor-pointer transition">
-                Radar Doppler HD
-              </button>
-              <button id="btn-mode-multivariable" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#e2e8f0] text-[#334155] hover:bg-[#f1f5f9] cursor-pointer transition">
-                Satélite & Vento
-              </button>
-              <button id="btn-scope-ro" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#e2e8f0] text-[#334155] hover:bg-[#f1f5f9] cursor-pointer transition">
-                Focar Rio das Ostras
-              </button>
-              <button id="btn-scope-rj" class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white border border-[#e2e8f0] text-[#334155] hover:bg-[#f1f5f9] cursor-pointer transition">
-                Ver Todo RJ
-              </button>
-            </div>
-          </div>
-
-          <!-- Visualizador do Mapa Integrado -->
-          <div class="relative w-full rounded-xl overflow-hidden border border-[#e2e8f0] bg-zinc-50">
-            
-            <!-- Wrapper Leaflet (Doppler) -->
-            <div id="leaflet-wrapper" class="w-full">
-              <div id="radar-map" class="w-full h-[360px] sm:h-[420px]"></div>
-              
-              <!-- Barra de Controles de Animação do Radar -->
-              <div class="p-2.5 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between gap-3 text-xs">
-                <div class="flex items-center gap-1.5">
-                  <button id="radar-play-btn" class="p-1.5 rounded-md bg-white text-black hover:bg-zinc-100 border border-[#cbd5e1] cursor-pointer" title="Iniciar/Pausar Reprodução">
-                    <i data-lucide="play" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <button id="radar-prev-btn" class="p-1.5 rounded-md bg-zinc-100 text-[#334155] hover:bg-[#f1f5f9] cursor-pointer" title="Quadro Anterior">
-                    <i data-lucide="skip-back" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <button id="radar-next-btn" class="p-1.5 rounded-md bg-zinc-100 text-[#334155] hover:bg-[#f1f5f9] cursor-pointer" title="Próximo Quadro">
-                    <i data-lucide="skip-forward" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <span id="radar-time-label" class="font-mono font-medium text-[#334155] ml-1">
-                    Último ciclo disponível
-                  </span>
-                </div>
-
-                <div class="hidden sm:flex items-center gap-2 text-[#64748b] font-normal text-[11px]">
-                  <span>Pico do Couto (250 km)</span>
-                  <span>•</span>
-                  <span>Macaé (120 km)</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Wrapper Windy Iframe (Alternativo) -->
-            <div id="windy-wrapper" class="w-full hidden">
-              <iframe id="windy-iframe" class="w-full h-[360px] sm:h-[420px] border-0" src="about:blank"></iframe>
-            </div>
-
-          </div>
-
-          <div class="flex items-center justify-between text-xs text-[#64748b] pt-1">
-            <span>Fontes: REDEMET (Aeronáutica), INEA e RainViewer</span>
-            <button id="dock-btn-radar" class="text-[#1e293b] font-semibold hover:underline cursor-pointer">
-              Abrir Radar em Tela Cheia →
-            </button>
-          </div>
-
-        </div>
-
-        <!-- CARD 4: PRECIPITAÇÃO POR TURNO (PLANCON MUNICIPAL) -->
+        <!-- CARD 3: PRECIPITAÇÃO POR TURNO (PLANCON MUNICIPAL) -->
         <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
           
           <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
@@ -1446,48 +1356,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL 2: RADAR DOPPLER HD & MAPA DE TELEMETRIA EXPANDIDO                   -->
-  <!-- ========================================================================= -->
-  <div id="modal-radar" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="modern-card max-w-5xl w-full max-h-[92vh] flex flex-col shadow-xl overflow-hidden bg-white border border-[#e2e8f0] text-[#1e293b]">
-      
-      <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
-        <div class="flex items-center gap-2.5">
-          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-            <i data-lucide="radar" class="w-4 h-4 text-black"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-black leading-tight">Radar Meteorológico Doppler & Bacia Hidrográfica</h3>
-            <span class="text-xs text-[#64748b] font-normal">Monitoramento em Tempo Real • INEA RH-VIII & CPTEC</span>
-          </div>
-        </div>
-        <button id="btn-close-modal-radar" class="p-1 rounded-lg text-[#64748b] hover:text-black cursor-pointer transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
-
-      <div class="p-5 overflow-y-auto space-y-4 bg-white text-[#334155]">
-        <!-- Grade Regional de Rios -->
-        <div class="p-4 rounded-xl bg-[#f8fafc] border border-[#e2e8f0] space-y-2">
-          <span class="text-xs uppercase font-bold text-[#334155] block tracking-wider">Estações Telemétricas Regionais (INEA)</span>
-          <div id="other-stations-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
-            <!-- Preenchido via app.js -->
-          </div>
-        </div>
-      </div>
-
-      <div class="px-5 py-3 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between text-xs font-medium text-[#64748b]">
-        <span>Atualização contínua a cada ciclo do radar</span>
-        <button id="btn-close-modal-radar-foot" class="px-4 py-1.5 rounded-full font-semibold btn-action-outline cursor-pointer">
-          Fechar
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL 3: AVISOS METEOROLÓGICOS OFICIAIS                                    -->
+  <!-- MODAL 2: AVISOS METEOROLÓGICOS OFICIAIS                                    -->
   <!-- ========================================================================= -->
   <div id="modal-avisos" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
     <div class="modern-card max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden bg-white border border-[#e2e8f0] text-[#1e293b]">
@@ -1665,6 +1534,6 @@
   </div>
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=78"></script>
+  <script type="module" src="js/app.js?v=79"></script>
 </body>
 </html>

@@ -23,7 +23,6 @@ import {
 } from './api.js?v=62';
 
 import { renderBulletinChart } from './charts.js?v=76';
-import { initRadarMap } from './radar.js?v=62';
 
 // Estado global da aplicação
 const state = {
@@ -42,7 +41,6 @@ const state = {
   activeMetric: 'temperature',
   activeOrlaTab: 'mar',
   activeOrlaDay: 'd0',
-  radarInitialized: false,
   isSyncing: false
 };
 
@@ -56,13 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAllApplicationData();
   startAutoSync();
 
-  // Inicializa o Radar Meteorológico Doppler na tela principal após breve intervalo
-  setTimeout(() => {
-    if (!state.radarInitialized) {
-      state.radarInitialized = true;
-      initRadarMap('radar-map');
-    }
-  }, 400);
+
 });
 
 /**
@@ -117,25 +109,7 @@ function setupModalsAndDock() {
   if (btnCloseBoletim) btnCloseBoletim.addEventListener('click', closeBoletim);
   if (btnCloseBoletimFoot) btnCloseBoletimFoot.addEventListener('click', closeBoletim);
 
-  // Modal 2: Radar Expandido
-  const modalRadar = document.getElementById('modal-radar');
-  const btnOpenRadar1 = document.getElementById('dock-btn-radar');
-  const btnOpenRadar2 = document.getElementById('btn-abrir-radar-modal-1');
-  const btnCloseRadar = document.getElementById('btn-close-modal-radar');
-  const btnCloseRadarFoot = document.getElementById('btn-close-modal-radar-foot');
 
-  const openRadar = () => {
-    if (modalRadar) {
-      modalRadar.classList.remove('hidden');
-      modalRadar.classList.add('flex');
-    }
-  };
-  const closeRadar = () => { if (modalRadar) modalRadar.classList.add('hidden'), modalRadar.classList.remove('flex'); };
-
-  if (btnOpenRadar1) btnOpenRadar1.addEventListener('click', openRadar);
-  if (btnOpenRadar2) btnOpenRadar2.addEventListener('click', openRadar);
-  if (btnCloseRadar) btnCloseRadar.addEventListener('click', closeRadar);
-  if (btnCloseRadarFoot) btnCloseRadarFoot.addEventListener('click', closeRadar);
 
   // Modal 3: Avisos Meteorológicos
   const modalAvisos = document.getElementById('modal-avisos');
@@ -191,14 +165,13 @@ function setupModalsAndDock() {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeBoletim();
-      closeRadar();
-      closeAvisos();
+            closeAvisos();
       closeMeteo();
     }
   });
 
   // Fechar ao clicar fora
-  [modalBoletim, modalRadar, modalAvisos, modalMeteo].forEach(m => {
+  [modalBoletim, modalAvisos, modalMeteo].forEach(m => {
     if (m) {
       m.addEventListener('click', (e) => {
         if (e.target === m) {
@@ -1234,7 +1207,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=78').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=79').catch(() => {});
   }
 }
 
