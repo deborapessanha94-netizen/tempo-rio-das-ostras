@@ -766,13 +766,13 @@ function renderChuvaTurnosBars(rows) {
     const perc = Math.min(Math.round((val / maxChuva) * 100), 100);
 
     return `
-      <div class="space-y-1">
-        <div class="flex justify-between text-xs font-semibold">
-          <span class="text-zinc-700 font-medium">${r.turno}</span>
-          <span class="font-mono font-bold text-zinc-900">${val.toFixed(1)} mm</span>
+      <div class="space-y-1.5">
+        <div class="flex justify-between items-center text-xs font-semibold">
+          <span class="text-black font-semibold">${r.turno}</span>
+          <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">${val.toFixed(1)} mm</span>
         </div>
-        <div class="w-full h-2 rounded-full bg-zinc-100 overflow-hidden">
-          <div class="h-full rounded-full bg-zinc-800 transition-all duration-500" style="width: ${perc}%;"></div>
+        <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+          <div class="h-full rounded-full bg-gradient-to-r from-[#f07a53] to-[#ea580c] transition-all duration-500" style="width: ${perc}%;"></div>
         </div>
       </div>
     `;
@@ -818,10 +818,10 @@ function renderJundiaTelemetry(stations) {
     if (cotaTransbordoEl) cotaTransbordoEl.textContent = `${cotaTransbordo.toFixed(2).replace('.', ',')} m`;
 
     let statusText = 'VIGILÂNCIA';
-    let statusClass = 'bg-emerald-100 text-black border border-emerald-500 font-bold';
-    let badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
-    let iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
-    let barColor = 'bg-emerald-500';
+    let statusClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+    let badgeClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+    let iconClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6]';
+    let barColor = 'bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6]';
     let msgClass = 'text-black font-medium';
     let msgText = '';
 
@@ -829,50 +829,50 @@ function renderJundiaTelemetry(stations) {
 
     if (nivelFloat >= cotaTransbordo) {
       statusText = 'ALERTA MÁXIMO';
-      statusClass = 'bg-rose-100 text-black border border-rose-500 font-bold animate-pulse';
-      badgeClass = 'bg-rose-100 text-black border border-rose-400 font-bold';
-      iconClass = 'bg-rose-50 text-rose-600 border-rose-200';
-      barColor = 'bg-rose-600';
+      statusClass = 'bg-[#ffe4e6] text-black border-2 border-[#e11d48] font-bold animate-pulse';
+      badgeClass = 'bg-[#ffe4e6] text-black border border-[#e11d48] font-bold';
+      iconClass = 'bg-[#ffe4e6] text-black border border-[#e11d48]';
+      barColor = 'bg-gradient-to-r from-[#e11d48] to-[#be123c]';
       msgClass = 'text-black font-bold';
       msgText = `Nível atingiu a cota de transbordo (2,84 m). Risco crítico de extravasamento e refluxo pluvial.`;
     } else if (nivelFloat >= cotaAlerta) {
       statusText = 'ALERTA';
-      statusClass = 'bg-amber-100 text-black border border-amber-500 font-bold';
-      badgeClass = 'bg-amber-100 text-black border border-amber-400 font-bold';
-      iconClass = 'bg-amber-50 text-amber-600 border-amber-200';
-      barColor = 'bg-amber-500';
+      statusClass = 'bg-[#ffebe4] text-black border border-[#f97316] font-bold';
+      badgeClass = 'bg-[#ffebe4] text-black border border-[#f97316] font-bold';
+      iconClass = 'bg-[#ffebe4] text-black border border-[#f97316]';
+      barColor = 'bg-gradient-to-r from-[#f07a53] to-[#ea580c]';
       msgClass = 'text-black font-semibold';
       msgText = `Alerta Hidrológico: Nível em elevação acentuada (${nivelFormatted} m), a apenas ${folga} m do transbordo.`;
     } else if (nivelFloat >= cotaAtencao) {
       statusText = 'ATENÇÃO';
-      statusClass = 'bg-yellow-100 text-black border border-yellow-500 font-bold';
-      badgeClass = 'bg-yellow-100 text-black border border-yellow-400 font-bold';
-      iconClass = 'bg-yellow-50 text-yellow-600 border-yellow-200';
-      barColor = 'bg-yellow-500';
+      statusClass = 'bg-[#fef3c7] text-black border border-[#d97706] font-bold';
+      badgeClass = 'bg-[#fef3c7] text-black border border-[#d97706] font-bold';
+      iconClass = 'bg-[#fef3c7] text-black border border-[#d97706]';
+      barColor = 'bg-gradient-to-r from-[#f59e0b] to-[#d97706]';
       msgClass = 'text-black font-medium';
       msgText = `Estado de Atenção: Nível acima da cota de atenção (1,99 m), a ${folga} m do transbordo. Monitoramento intensificado.`;
     } else {
       statusText = 'VIGILÂNCIA';
-      statusClass = 'bg-emerald-100 text-black border border-emerald-500 font-bold';
-      badgeClass = 'bg-emerald-100 text-black border border-emerald-400 font-bold';
-      iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
-      barColor = 'bg-emerald-500';
+      statusClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+      badgeClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6] font-bold';
+      iconClass = 'bg-[#eaf0f6] text-black border border-[#6d8ba6]';
+      barColor = 'bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6]';
       msgClass = 'text-black font-medium';
       msgText = `Calha em regime seguro de vazante contínua com cota de ${nivelFormatted} m (margem de segurança de ${folga} m até o transbordo).`;
     }
 
     if (jundiaStatusEl) {
       jundiaStatusEl.textContent = statusText;
-      jundiaStatusEl.className = `text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase ${statusClass}`;
+      jundiaStatusEl.className = `text-[11px] px-3 py-0.5 rounded-full font-bold uppercase ${statusClass}`;
     }
 
     if (headerBadgeEl) {
       headerBadgeEl.textContent = statusText.toLowerCase();
-      headerBadgeEl.className = `text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase border ${badgeClass}`;
+      headerBadgeEl.className = `text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase border ${badgeClass}`;
     }
 
     if (iconBoxEl) {
-      iconBoxEl.className = `w-7 h-7 rounded-lg border flex items-center justify-center ${iconClass}`;
+      iconBoxEl.className = `w-8 h-8 rounded-xl border flex items-center justify-center ${iconClass}`;
     }
 
     const pct = jundiaSt.porcentagem_calha || Math.min(100, Math.max(10, Math.round((nivelFloat / cotaTransbordo) * 100)));
@@ -1175,7 +1175,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=69').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=70').catch(() => {});
   }
 }
 
@@ -1407,17 +1407,17 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
       maresGridEl.innerHTML = eventos.map(ev => {
         const isHigh = ev.tipo === 'PREAMAR';
         const iconSvg = isHigh 
-          ? '<i data-lucide="arrow-up" class="w-3 h-3 text-blue-600 inline"></i>' 
-          : '<i data-lucide="arrow-down" class="w-3 h-3 text-cyan-600 inline"></i>';
+          ? '<i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i>' 
+          : '<i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i>';
         const labelNome = isHigh ? 'Preia-mar' : 'Baixa-mar';
-        const bgCor = isHigh ? 'bg-blue-50/80 border-blue-200/80' : 'bg-cyan-50/80 border-cyan-200/80';
+        const bgCor = isHigh ? 'bg-[#ffebe4] border-[#f97316]/60' : 'bg-[#eaf0f6] border-[#6d8ba6]/60';
         return `
-          <div class="p-1.5 rounded-md ${bgCor} border text-center flex flex-col justify-center">
-            <span class="text-[9.5px] font-semibold text-zinc-500 uppercase flex items-center justify-center gap-0.5">
+          <div class="p-2 rounded-xl ${bgCor} border text-center flex flex-col justify-center shadow-2xs">
+            <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
               ${iconSvg} ${labelNome}
             </span>
-            <strong class="text-xs font-mono font-bold text-zinc-900 mt-0.5">${ev.hora}</strong>
-            <span class="text-[10px] font-semibold text-blue-800">${ev.altura.toFixed(2).replace('.', ',')} m</span>
+            <strong class="text-xs font-mono font-extrabold text-black mt-0.5">${ev.hora}</strong>
+            <span class="text-[11px] font-bold text-black font-mono">${ev.altura.toFixed(2).replace('.', ',')} m</span>
           </div>
         `;
       }).join('');

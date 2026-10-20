@@ -125,15 +125,42 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   box-shadow: var(--shadow-hover);
 }
 
-/* Hero Card: Fundo Claro Cerâmico / White Stoneware com Letras Pretas */
+/* Hero Card: Design Nórdico Cerâmico / Terracotta & Slate Ice Hairline */
 .hero-card {
-  background: linear-gradient(155deg, #ffffff 0%, #f8fafc 100%) !important;
-  border: 1.5px solid var(--border-medium) !important;
+  background: linear-gradient(160deg, #ffffff 0%, #f8fafc 55%, #edf3f8 100%) !important;
+  border: 1.5px solid #94a3b8 !important;
+  border-top: 3.5px solid var(--coral-orange) !important;
   border-radius: 1.75rem !important; /* 28px */
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 10px 30px -5px rgba(61, 79, 97, 0.08) !important;
   color: #000000 !important;
   position: relative;
   overflow: hidden;
+}
+
+/* Identidade Cerâmica Nórdica para Cards Principais */
+#card-chuva-turnos {
+  border-top: 3.5px solid var(--coral-orange) !important;
+  border-color: #94a3b8 !important;
+}
+
+#card-telemetria-jundia {
+  border-top: 3.5px solid var(--slate-denim) !important;
+  border-color: #94a3b8 !important;
+}
+
+#card-condicoes-orla {
+  border-top: 3.5px solid var(--slate-ice) !important;
+  border-color: #94a3b8 !important;
+}
+
+#card-telefones-uteis {
+  border-top: 3.5px solid var(--coral-orange) !important;
+  border-color: #94a3b8 !important;
+}
+
+#card-radar-meteorologico {
+  border-top: 3.5px solid var(--slate-ice) !important;
+  border-color: #94a3b8 !important;
 }
 
 /* Variação Card Coral Suave (Inspirado no Vaso Terracota da Imagem) */
@@ -346,6 +373,31 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   flex-shrink: 0;
 }
 
+.metric-icon-coral {
+  background: #ffebe4 !important;
+  border: 1.5px solid #f97316 !important;
+  color: #000000 !important;
+}
+
+.metric-icon-slate {
+  background: #eaf0f6 !important;
+  border: 1.5px solid #6d8ba6 !important;
+  color: #000000 !important;
+}
+
+.metric-icon-sandstone {
+  background: #f5efe8 !important;
+  border: 1.5px solid #b8a99a !important;
+  color: #000000 !important;
+}
+
+#hero-weather-icon {
+  background: #ffffff !important;
+  border: 2px solid #f07a53 !important;
+  box-shadow: 0 4px 16px rgba(240, 122, 83, 0.18) !important;
+  color: #000000 !important;
+}
+
 /* ========================================================================= */
 /* ALERTAS OFICIAIS COM LETRAS PRETAS                                        */
 /* ========================================================================= */
@@ -422,11 +474,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .orla-tab-btn.active {
-  background: #ffffff !important;
+  background: #ffebe4 !important;
   color: #000000 !important;
   font-weight: 800 !important;
-  border: 1.5px solid #000000 !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  border: 1.5px solid #f97316 !important;
+  box-shadow: 0 2px 8px rgba(249, 115, 22, 0.12) !important;
 }
 
 .orla-tab-btn:not(.active):hover {
