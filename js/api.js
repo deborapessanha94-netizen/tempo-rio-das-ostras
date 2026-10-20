@@ -511,7 +511,7 @@ export async function getInmetMeteogramaData() {
 export async function getOrlaCondicoes() {
   const ts = Date.now();
   try {
-    const res = await fetch(`./data/orla_condicoes.json?t=`, { cache: 'no-store' });
+    const res = await fetch(`./data/orla_condicoes.json?t=${ts}`, { cache: 'no-store' });
     if (res.ok) return await res.json();
   } catch (e) {}
   return null;
@@ -523,7 +523,7 @@ export async function getOrlaCondicoes() {
 export async function getTabuaMares() {
   const ts = Date.now();
   try {
-    const res = await fetch(`./data/tabua_mares.json?t=`, { cache: 'no-store' });
+    const res = await fetch(`./data/tabua_mares.json?t=${ts}`, { cache: 'no-store' });
     if (res.ok) return await res.json();
   } catch (e) {}
   return null;

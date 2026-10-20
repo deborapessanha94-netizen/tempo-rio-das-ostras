@@ -20,10 +20,10 @@ import {
   getInmetMeteogramaData, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
-} from './api.js';
+} from './api.js?v=59';
 
-import { renderBulletinChart } from './charts.js';
-import { initRadarMap } from './radar.js';
+import { renderBulletinChart } from './charts.js?v=59';
+import { initRadarMap } from './radar.js?v=59';
 
 // Estado global da aplicação
 const state = {
@@ -342,6 +342,9 @@ function renderDashboardUI(meta, rows, weather) {
   const subcondEl = document.getElementById('hero-subcondition');
   const heroAlertPill = document.getElementById('hero-alert-pill');
   const heroIcon = document.getElementById('hero-weather-icon');
+  if (heroIcon && primeiroDia?.pilares?.ceu?.icon) {
+    heroIcon.innerHTML = `<i data-lucide="${primeiroDia.pilares.ceu.icon}" class="w-12 h-12 sm:w-14 sm:h-14"></i>`;
+  }
 
   const primeiroDia = meta?.dias_resumo?.[0];
   const hojeChuva = primeiroDia?.pilares?.chuva?.val || '21,4 mm';
@@ -404,12 +407,12 @@ function renderDashboardUI(meta, rows, weather) {
   }
 
   if (list3d && meta?.dias_resumo && Array.isArray(meta.dias_resumo)) {
-    list3d.innerHTML = meta.dias_resumo.map((d, idx) => {
+        list3d.innerHTML = meta.dias_resumo.map((d, idx) => {
       const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã'];
       const rotuloCurto = rotulos[idx] || `Dia ${idx + 1}`;
-      const nomeDiaCurto = d.dia?.split('—')?.[0]?.trim() || '';
-      const tempVal = d.pilares?.temp?.val?.replace(' a ', ' / ') || '28° / 21°C';
-      const condTxt = d.subtitulo?.split('•')?.[0]?.trim() || 'Estável';
+      const nomeDiaCurto = d.dia ? d.dia.split(/[•—\-]/)[0].trim() : '';
+      const tempVal = d.pilares?.temp?.val ? d.pilares.temp.val.replace(' a ', ' / ') : '24° / 19°C';
+      const condTxt = d.subtitulo ? d.subtitulo.split(/[•—\-]/)[0].trim() : 'Estável';
       const iconName = d.pilares?.ceu?.icon || 'cloud-sun';
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
 
