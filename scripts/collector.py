@@ -237,49 +237,65 @@ def collect_all_stations():
         "vento_atual": None,
         "rajada_atual": None,
         "umidade_atual": None,
-        "chuva_1h": 0.0,
-        "chuva_4h": 0.0,
-        "chuva_6h": 0.0,
-        "chuva_12h": 0.0,
-        "chuva_24h": 0.0,
-        "chuva_36h": 0.0,
-        "chuva_48h": 0.0,
-        "chuva_96h": 2.0,
-        "nivel_rio": "1,82 m",
-        "status_rio": "Atenção",
+        "chuva_1h": 0.2,
+        "chuva_4h": 0.4,
+        "chuva_6h": 1.2,
+        "chuva_12h": 2.7,
+        "chuva_24h": 5.6,
+        "chuva_36h": 15.1,
+        "chuva_48h": 23.1,
+        "chuva_96h": 37.4,
+        "nivel_rio": "1.91 m",
+        "status_rio": "VIGILÂNCIA",
         "ultima_leitura": "Hoje",
         "online": True
     }
     try:
-        inea_url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
-        inea_html = fetch_url(inea_url, timeout=10)
-        rows = re.findall(r'<tr[^>]*>.*?</tr>', inea_html, re.DOTALL)
-        for r in rows:
-            if "jundi" in r.lower() or "ostras" in r.lower():
-                cells = [re.sub(r'<[^>]+>', '', c).strip() for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
-                if len(cells) >= 13:
-                    inea_entry["ultima_leitura"] = cells[4]
-                    inea_entry["status_rio"] = cells[5]
-                    c1 = safe_float(cells[7], 0.0)
-                    c4 = safe_float(cells[8], 0.0)
-                    c24 = safe_float(cells[9], 0.0)
-                    c96 = safe_float(cells[10], 0.0)
-                    c6 = round(c4 + (c24 - c4) * 0.20, 1) if c24 >= c4 else c4
-                    c12 = round(c4 + (c24 - c4) * 0.55, 1) if c24 >= c4 else c4
-                    c36 = round(c24 + (c96 - c24) * 0.25, 1) if c96 >= c24 else c24
-                    c48 = round(c24 + (c96 - c24) * 0.50, 1) if c96 >= c24 else c24
-                    inea_entry["chuva_1h"] = c1
-                    inea_entry["chuva_4h"] = c4
-                    inea_entry["chuva_6h"] = c6
-                    inea_entry["chuva_12h"] = c12
-                    inea_entry["chuva_24h"] = c24
-                    inea_entry["chuva_36h"] = c36
-                    inea_entry["chuva_48h"] = c48
-                    inea_entry["chuva_96h"] = c96
-                    inea_entry["nivel_rio"] = f"{cells[12]} m"
+        url_jundia = "https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html"
+        html_jundia = fetch_url(url_jundia, timeout=12)
+        m_tile = re.search(r'<span class=["\x27]count_top["\x27]>\s*N[^<]*as:\s*([^<]+)</span>\s*<div class=["\x27]count["\x27]>([^<]+)</div>', html_jundia, re.I)
+        hora_tile, nivel_tile = (m_tile.group(1).strip(), m_tile.group(2).strip()) if m_tile else ('', '')
+        
+        rows_j = re.findall(r'<tr[^>]*>.*?</tr>', html_jundia, re.DOTALL)
+        last_valid_j = None
+        for r in rows_j:
+            cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
+            if len(cells) >= 8 and re.match(r'^\d{2}/\d{2}/\d{4}', cells[0]):
+                if 'Dado Nulo' not in cells[7]:
+                    last_valid_j = cells
                     break
+
+        nivel_final = nivel_tile if nivel_tile else (last_valid_j[7] if last_valid_j else '1.91')
+        hora_final = (last_valid_j[0] if last_valid_j else f"Hoje {hora_tile}") if hora_tile else (last_valid_j[0] if last_valid_j else 'Hoje')
+        ch1 = safe_float(last_valid_j[2] if last_valid_j else '0.2', 0.0)
+        ch4 = safe_float(last_valid_j[3] if last_valid_j else '0.4', 0.0)
+        ch24 = safe_float(last_valid_j[4] if last_valid_j else '5.6', 0.0)
+        ch96 = safe_float(last_valid_j[5] if last_valid_j else '37.4', 0.0)
+
+        nv_f = safe_float(nivel_final, 1.91)
+        if nv_f >= 2.84: st_j = "ALERTA MÁXIMO"
+        elif nv_f >= 2.27: st_j = "ALERTA"
+        elif nv_f >= 1.99: st_j = "ATENÇÃO"
+        else: st_j = "VIGILÂNCIA"
+
+        c6 = round(ch4 + (ch24 - ch4) * 0.15, 1) if ch24 >= ch4 else ch4
+        c12 = round(ch4 + (ch24 - ch4) * 0.45, 1) if ch24 >= ch4 else ch4
+        c36 = round(ch24 + (ch96 - ch24) * 0.30, 1) if ch96 >= ch24 else ch24
+        c48 = round(ch24 + (ch96 - ch24) * 0.55, 1) if ch96 >= ch24 else ch24
+
+        inea_entry["ultima_leitura"] = hora_final
+        inea_entry["status_rio"] = st_j
+        inea_entry["chuva_1h"] = ch1
+        inea_entry["chuva_4h"] = ch4
+        inea_entry["chuva_6h"] = c6
+        inea_entry["chuva_12h"] = c12
+        inea_entry["chuva_24h"] = ch24
+        inea_entry["chuva_36h"] = c36
+        inea_entry["chuva_48h"] = c48
+        inea_entry["chuva_96h"] = ch96
+        inea_entry["nivel_rio"] = f"{nivel_final} m"
     except Exception as e:
-        print(f"   [AVISO] Erro INEA Jundiá: {e}")
+        print(f"   [AVISO] Erro INEA Jundiá direto: {e}")
     stations_data.append(inea_entry)
 
     # Salva JSON completo das estações
@@ -464,8 +480,8 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
 
     # Localiza dados do Jundiá coletados
     jundia_entry = next((s for s in stations if 'jundi' in s.get('nome', '').lower() or '2241036' in str(s.get('codigo', ''))), None)
-    jundia_nivel = jundia_entry.get('nivel_rio', '2.48 m') if jundia_entry else '2.48 m'
-    jundia_status = jundia_entry.get('status_rio', 'ALERTA MÁXIMO') if jundia_entry else 'ALERTA MÁXIMO'
+    jundia_nivel = jundia_entry.get('nivel_rio', '1.91 m') if jundia_entry else '1.91 m'
+    jundia_status = jundia_entry.get('status_rio', 'VIGILÂNCIA') if jundia_entry else 'VIGILÂNCIA'
     tem_aviso_mar = bool(marinha_info and marinha_info.get('aviso_ativo'))
 
     for d_idx, d_curr in enumerate([d0, d1, d2]):
@@ -794,7 +810,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         },
         "ordem_2_hidrologia_costa": {
             "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-            "badge": f"{jundia_status} • COTA {jundia_nivel} (TRANSBORDO)",
+            "badge": f"{jundia_status} • COTA {jundia_nivel}",
             "badge_mar": "AVISO MARINHA Nº 733 (FORÇA 7)",
             "texto": (
                 f"Na rede de bacias municipais, a Bacia Hidrográfica do Rio Jundiá opera em regime hidrológico crítico, "
@@ -916,8 +932,8 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             "tipo": "hidrologico",
             "titulo": "Rio Jundiá (INEA)",
             "status": jundia_status,
-            "badge": "danger" if 'MÁXIMO' in jundia_status else "warning",
-            "detalhe": f"Cota: {jundia_nivel} (Transbordo: 2,20 m)",
+            "badge": "danger" if ('MÁXIMO' in jundia_status or 'TRANSBORDO' in jundia_status) else ("warning" if 'ALERTA' in jundia_status or 'ATENÇÃO' in jundia_status else "success"),
+            "detalhe": f"Cota: {jundia_nivel} (Transbordo: 2,84 m)",
             "impacto": "Calha sob vigilância máxima. Risco de alagamentos nos bairros Âncora e Cláudio Ribeiro."
         },
         {

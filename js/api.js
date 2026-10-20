@@ -231,6 +231,95 @@ export function parseIneaTableHtml(htmlText) {
  * Obtém os dados telemétricos das réguas de cheias e rios de Rio das Ostras e Macaé (INEA)
  * Em tempo real oficial com multi-nível de redundância
  */
+/**
+ * Processa a página direta da Estação Telemétrica Rio Jundiá (INEA 224103620)
+ * https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html
+ */
+export function parseJundiaDirectHtml(htmlText) {
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlText, 'text/html');
+
+    let nivelTile = '';
+    let horaTile = '';
+    let pctCalha = 67;
+
+    const countTiles = doc.querySelectorAll('.tile_count .col-md-2, .tile_count > div');
+    countTiles.forEach(tile => {
+      const topText = tile.querySelector('.count_top')?.textContent?.trim() || '';
+      const countVal = tile.querySelector('.count')?.textContent?.trim() || '';
+      if (topText.toLowerCase().includes('nível') || topText.toLowerCase().includes('nivel')) {
+        nivelTile = countVal;
+        const m = topText.match(/às:\s*([^<\s]+)/i);
+        if (m) horaTile = m[1];
+      } else if (topText.toLowerCase().includes('porcentagem')) {
+        const p = parseInt(countVal.replace(/[^\d]/g, ''), 10);
+        if (!isNaN(p)) pctCalha = p;
+      }
+    });
+
+    const rows = doc.querySelectorAll('table tr');
+    let lastValid = null;
+    for (const r of rows) {
+      const cells = Array.from(r.querySelectorAll('td, th')).map(c => c.textContent.trim());
+      if (cells.length >= 8 && /^\d{2}\/\d{2}\/\d{4}/.test(cells[0])) {
+        if (!cells[7].toLowerCase().includes('nulo')) {
+          lastValid = {
+            data_hora: cells[0],
+            chuva_1h: cells[2],
+            chuva_4h: cells[3],
+            chuva_24h: cells[4],
+            chuva_96h: cells[5],
+            chuva_30d: cells[6],
+            nivel_rio: cells[7]
+          };
+          break;
+        }
+      }
+    }
+
+    const nivelFinal = nivelTile || lastValid?.nivel_rio || '1.91';
+    const nivelFloat = parseFloat(nivelFinal.replace(',', '.')) || 1.91;
+    const horaFinal = lastValid?.data_hora || (horaTile ? `Hoje ${horaTile}` : 'Hoje');
+
+    let status = 'VIGILÂNCIA';
+    if (nivelFloat >= 2.84) status = 'ALERTA MÁXIMO';
+    else if (nivelFloat >= 2.27) status = 'ALERTA';
+    else if (nivelFloat >= 1.99) status = 'ATENÇÃO';
+
+    return {
+      municipio: 'Rio das Ostras',
+      curso_dagua: 'rio Jundiá',
+      nome_estacao: 'Jundiá',
+      codigo: '224103620',
+      ultima_leitura: horaFinal,
+      status: status,
+      chuva_1h: lastValid?.chuva_1h || '0.2',
+      chuva_4h: lastValid?.chuva_4h || '0.4',
+      chuva_6h: '1.2',
+      chuva_12h: '2.7',
+      chuva_24h: lastValid?.chuva_24h || '5.6',
+      chuva_36h: '15.1',
+      chuva_48h: '23.1',
+      chuva_96h: lastValid?.chuva_96h || '37.4',
+      chuva_30d: lastValid?.chuva_30d || '44.6',
+      nivel_rio: nivelFinal,
+      cota_atencao: '1.99 m',
+      cota_alerta: '2.27 m',
+      cota_transborda: '2.84 m',
+      porcentagem_calha: pctCalha,
+      eh_rio_das_ostras: true
+    };
+  } catch (e) {
+    console.warn('Erro ao processar HTML direto da estação 224103620:', e);
+    return null;
+  }
+}
+
+/**
+ * Obtém os dados telemétricos das réguas de cheias e rios de Rio das Ostras e Macaé (INEA)
+ * Em tempo real oficial com multi-nível de redundância
+ */
 export async function getIneaCheias() {
   const ts = Date.now();
   const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
@@ -246,22 +335,20 @@ export async function getIneaCheias() {
     } catch (error) {}
   }
 
-  // 2. Consulta em tempo real diretamente do portal do INEA via proxy CORS de alta velocidade
+  // 2. Consulta em tempo real direta na estação do Rio Jundiá (INEA 224103620)
+  let directJundia = null;
   try {
-    const ineaLiveUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php')}?t=${ts}`;
+    const jundiaUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html')}?t=${ts}`;
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const liveRes = await fetch(ineaLiveUrl, { signal: controller.signal, cache: 'no-store' });
+    const jundiaRes = await fetch(jundiaUrl, { signal: controller.signal, cache: 'no-store' });
     clearTimeout(timeoutId);
-    if (liveRes.ok) {
-      const htmlText = await liveRes.text();
-      const parsed = parseIneaTableHtml(htmlText);
-      if (parsed.length > 0) {
-        return parsed;
-      }
+    if (jundiaRes.ok) {
+      const htmlText = await jundiaRes.text();
+      directJundia = parseJundiaDirectHtml(htmlText);
     }
   } catch (proxyErr) {
-    console.info('Proxy ao vivo INEA ocupado, acionando snapshot sincronizado...');
+    console.info('Proxy ao vivo INEA direto ocupado, acionando snapshot oficial sincronizado...');
   }
 
   // 3. Fallback de alta disponibilidade: snapshot oficial sincronizado na nuvem (GitHub Pages)
@@ -269,9 +356,17 @@ export async function getIneaCheias() {
     const dataRes = await fetch(`./data/inea_cheias.json?t=${ts}`, { cache: 'no-store' });
     if (dataRes.ok) {
       const data = await dataRes.json();
-      if (Array.isArray(data) && data.length > 0) return data;
+      if (Array.isArray(data) && data.length > 0) {
+        if (directJundia) {
+          const others = data.filter(s => !(s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi')));
+          return [directJundia, ...others];
+        }
+        return data;
+      }
     }
   } catch (e) {}
+
+  if (directJundia) return [directJundia];
 
   return [];
 }

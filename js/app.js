@@ -682,22 +682,115 @@ function renderChuvaTurnosBars(rows) {
 function renderJundiaTelemetry(stations) {
   const jundiaEl = document.getElementById('kpi-jundia-val');
   const jundiaStatusEl = document.getElementById('kpi-jundia-status');
+  const headerBadgeEl = document.getElementById('jundia-header-badge');
+  const leituraEl = document.getElementById('jundia-leitura-tempo');
+  const cotaAtencaoEl = document.getElementById('jundia-cota-atencao');
+  const cotaAlertaEl = document.getElementById('jundia-cota-alerta');
+  const cotaTransbordoEl = document.getElementById('jundia-cota-transbordo');
+  const gaugeBarEl = document.getElementById('jundia-gauge-bar');
+  const msgStatusEl = document.getElementById('jundia-mensagem-status');
+  const iconBoxEl = document.getElementById('jundia-icon-box');
   const gridEl = document.getElementById('other-stations-grid');
 
   if (!stations || !Array.isArray(stations)) return;
 
   const jundiaSt = stations.find(s => s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi'));
 
-  if (jundiaSt && jundiaEl) {
-    jundiaEl.textContent = `${jundiaSt.nivel_rio || '2,48'} m`;
-  }
+  if (jundiaSt) {
+    const rawNivel = String(jundiaSt.nivel_rio || '1.91').replace(' m', '').trim();
+    const nivelFloat = parseFloat(rawNivel.replace(',', '.')) || 1.91;
+    const nivelFormatted = rawNivel.includes(',') ? rawNivel : nivelFloat.toFixed(2).replace('.', ',');
 
-  if (jundiaSt && jundiaStatusEl) {
-    jundiaStatusEl.textContent = jundiaSt.status || 'ALERTA MÁXIMO';
+    if (jundiaEl) {
+      jundiaEl.textContent = `${nivelFormatted} m`;
+    }
+
+    // Cotas Oficiais INEA Estação 224103620: Atenção = 1.99m, Alerta = 2.27m, Transbordo = 2.84m
+    const cotaAtencao = 1.99;
+    const cotaAlerta = 2.27;
+    const cotaTransbordo = 2.84;
+
+    if (cotaAtencaoEl) cotaAtencaoEl.textContent = `${cotaAtencao.toFixed(2).replace('.', ',')} m`;
+    if (cotaAlertaEl) cotaAlertaEl.textContent = `${cotaAlerta.toFixed(2).replace('.', ',')} m`;
+    if (cotaTransbordoEl) cotaTransbordoEl.textContent = `${cotaTransbordo.toFixed(2).replace('.', ',')} m`;
+
+    let statusText = 'VIGILÂNCIA';
+    let statusClass = 'bg-emerald-600 text-white';
+    let badgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+    let iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
+    let barColor = 'bg-emerald-500';
+    let msgClass = 'text-emerald-800';
+    let msgText = '';
+
+    const folga = (cotaTransbordo - nivelFloat).toFixed(2).replace('.', ',');
+
+    if (nivelFloat >= cotaTransbordo) {
+      statusText = 'ALERTA MÁXIMO';
+      statusClass = 'bg-rose-600 text-white animate-pulse';
+      badgeClass = 'bg-rose-100 text-rose-800 border-rose-300';
+      iconClass = 'bg-rose-50 text-rose-600 border-rose-200';
+      barColor = 'bg-rose-600';
+      msgClass = 'text-rose-800 font-bold';
+      msgText = `Nível atingiu a cota de transbordo (2,84 m). Risco crítico de extravasamento e refluxo pluvial.`;
+    } else if (nivelFloat >= cotaAlerta) {
+      statusText = 'ALERTA';
+      statusClass = 'bg-amber-600 text-white';
+      badgeClass = 'bg-amber-100 text-amber-800 border-amber-300';
+      iconClass = 'bg-amber-50 text-amber-600 border-amber-200';
+      barColor = 'bg-amber-500';
+      msgClass = 'text-amber-800 font-semibold';
+      msgText = `Alerta Hidrológico: Nível em elevação acentuada (${nivelFormatted} m), a apenas ${folga} m do transbordo.`;
+    } else if (nivelFloat >= cotaAtencao) {
+      statusText = 'ATENÇÃO';
+      statusClass = 'bg-yellow-500 text-zinc-950';
+      badgeClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
+      iconClass = 'bg-yellow-50 text-yellow-600 border-yellow-200';
+      barColor = 'bg-yellow-500';
+      msgClass = 'text-yellow-900 font-medium';
+      msgText = `Estado de Atenção: Nível acima da cota de atenção (1,99 m), a ${folga} m do transbordo. Monitoramento intensificado.`;
+    } else {
+      statusText = 'VIGILÂNCIA';
+      statusClass = 'bg-emerald-600 text-white';
+      badgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+      iconClass = 'bg-emerald-50 text-emerald-600 border-emerald-200/60';
+      barColor = 'bg-emerald-500';
+      msgClass = 'text-emerald-800';
+      msgText = `Calha em regime seguro de vazante contínua com cota de ${nivelFormatted} m (margem de segurança de ${folga} m até o transbordo).`;
+    }
+
+    if (jundiaStatusEl) {
+      jundiaStatusEl.textContent = statusText;
+      jundiaStatusEl.className = `text-[11px] px-2.5 py-0.5 rounded-full font-semibold uppercase ${statusClass}`;
+    }
+
+    if (headerBadgeEl) {
+      headerBadgeEl.textContent = statusText.toLowerCase();
+      headerBadgeEl.className = `text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase border ${badgeClass}`;
+    }
+
+    if (iconBoxEl) {
+      iconBoxEl.className = `w-7 h-7 rounded-lg border flex items-center justify-center ${iconClass}`;
+    }
+
+    const pct = jundiaSt.porcentagem_calha || Math.min(100, Math.max(10, Math.round((nivelFloat / cotaTransbordo) * 100)));
+    if (gaugeBarEl) {
+      gaugeBarEl.style.width = `${pct}%`;
+      gaugeBarEl.className = `h-full rounded-full transition-all duration-500 ${barColor}`;
+    }
+
+    if (msgStatusEl) {
+      msgStatusEl.textContent = msgText;
+      msgStatusEl.className = `text-[11px] font-medium pt-1 leading-tight ${msgClass}`;
+    }
+
+    if (leituraEl) {
+      const leituraTxt = jundiaSt.ultima_leitura ? `Leitura: ${jundiaSt.ultima_leitura}` : 'Estação INEA nº 224103620';
+      leituraEl.textContent = `Estação INEA 224103620 • ${leituraTxt}`;
+    }
   }
 
   if (gridEl) {
-    gridEl.innerHTML = stations.slice(0, 6).map(s => `
+    gridEl.innerHTML = stations.filter(s => !(s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi'))).slice(0, 6).map(s => `
       <div class="p-2 rounded-lg bg-zinc-50 border border-zinc-200/60 space-y-1">
         <div class="flex justify-between items-center text-xs font-bold text-zinc-900">
           <span class="truncate">${s.nome_estacao}</span>
@@ -711,7 +804,6 @@ function renderJundiaTelemetry(stations) {
     `).join('');
   }
 }
-
 /**
  * 9. Popula os Dados dos Modais (Boletim Completo, Sinopse e Avisos)
  */

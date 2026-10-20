@@ -230,8 +230,8 @@
     "mar_condicao": "Calmo",
     "indice_uv": 0,
     "agua_precipitavel_mm": 8.7,
-    "tempo_desc": "Nevoeiro",
-    "tempo_icone": "cloud-fog"
+    "tempo_desc": "Nublado",
+    "tempo_icone": "cloud"
   },
   {
     "data_iso": "2026-10-21",

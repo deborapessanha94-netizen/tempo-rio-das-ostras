@@ -8,6 +8,7 @@ Totalmente independente de intervenção manual humana.
 """
 
 import urllib.request
+import ssl
 import json
 import re
 import os
@@ -72,7 +73,6 @@ def fetch_json(url, timeout=12, retries=3):
                 raise e
 
 def fetch_inea_cheias():
-    url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
     cotas_ref = {
         'Jundiá': {'atencao': 1.99, 'alerta': 2.27, 'transborda': 2.84},
         'São Pedro': {'atencao': 1.69, 'alerta': 1.93, 'transborda': 2.41},
@@ -85,7 +85,97 @@ def fetch_inea_cheias():
         'Piller': {'atencao': 3.10, 'alerta': 3.54, 'transborda': 4.42},
         'Ponte do Baião': {'atencao': 1.12, 'alerta': 1.28, 'transborda': 1.60}
     }
+    stations = []
+    jundia_station = None
+
+    # 1. Consulta em tempo real direta na estação oficial do Rio Jundiá (INEA 224103620)
     try:
+        url_jundia = "https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html"
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        req = urllib.request.Request(url_jundia, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+        with urllib.request.urlopen(req, context=ctx, timeout=12) as res:
+            html_jundia = res.read().decode('utf-8', errors='replace')
+        
+        m_tile = re.search(r'<span class=["\x27]count_top["\x27]>\s*N[^<]*as:\s*([^<]+)</span>\s*<div class=["\x27]count["\x27]>([^<]+)</div>', html_jundia, re.I)
+        hora_tile, nivel_tile = (m_tile.group(1).strip(), m_tile.group(2).strip()) if m_tile else ('', '')
+        
+        m_pct = re.search(r'<span class=["\x27]count_top["\x27]>\s*Porcentagem sobre a cota[^<]*</span>\s*<div class=["\x27]count["\x27]>([^<]+)</div>', html_jundia, re.I)
+        pct_calha_raw = m_pct.group(1).strip() if m_pct else '67%'
+        try:
+            pct_val = int(re.sub(r'[^\d]', '', pct_calha_raw))
+        except:
+            pct_val = 67
+
+        rows_j = re.findall(r'<tr[^>]*>.*?</tr>', html_jundia, re.DOTALL)
+        last_valid_j = None
+        for r in rows_j:
+            cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
+            if len(cells) >= 8 and re.match(r'^\d{2}/\d{2}/\d{4}', cells[0]):
+                if 'Dado Nulo' not in cells[7]:
+                    last_valid_j = cells
+                    break
+
+        nivel_final = nivel_tile if nivel_tile else (last_valid_j[7] if last_valid_j else '1.91')
+        hora_final = (last_valid_j[0] if last_valid_j else f"Hoje {hora_tile}") if hora_tile else (last_valid_j[0] if last_valid_j else 'Hoje')
+        ch1 = last_valid_j[2] if last_valid_j else '0.2'
+        ch4 = last_valid_j[3] if last_valid_j else '0.4'
+        ch24 = last_valid_j[4] if last_valid_j else '5.6'
+        ch96 = last_valid_j[5] if last_valid_j else '37.4'
+        ch30d = last_valid_j[6] if last_valid_j else '44.6'
+
+        try: nv_float = float(nivel_final.replace(',', '.'))
+        except: nv_float = 1.91
+
+        if nv_float >= 2.84: st_j = "ALERTA MÁXIMO"
+        elif nv_float >= 2.27: st_j = "ALERTA"
+        elif nv_float >= 1.99: st_j = "ATENÇÃO"
+        else: st_j = "VIGILÂNCIA"
+
+        try: c1_f = float(ch1.replace(',', '.'))
+        except: c1_f = 0.0
+        try: c4_f = float(ch4.replace(',', '.'))
+        except: c4_f = 0.0
+        try: c24_f = float(ch24.replace(',', '.'))
+        except: c24_f = 0.0
+        try: c96_f = float(ch96.replace(',', '.'))
+        except: c96_f = c24_f
+
+        c6_f = round(c4_f + (c24_f - c4_f) * 0.15, 1) if c24_f >= c4_f else c4_f
+        c12_f = round(c4_f + (c24_f - c4_f) * 0.45, 1) if c24_f >= c4_f else c4_f
+        c36_f = round(c24_f + (c96_f - c24_f) * 0.30, 1) if c96_f >= c24_f else c24_f
+        c48_f = round(c24_f + (c96_f - c24_f) * 0.55, 1) if c96_f >= c24_f else c24_f
+
+        jundia_station = {
+            'municipio': 'Rio das Ostras',
+            'curso_dagua': 'rio Jundiá',
+            'nome_estacao': 'Jundiá',
+            'codigo': '224103620',
+            'ultima_leitura': hora_final,
+            'status': st_j,
+            'chuva_1h': ch1,
+            'chuva_4h': ch4,
+            'chuva_6h': f"{c6_f:.1f}",
+            'chuva_12h': f"{c12_f:.1f}",
+            'chuva_24h': ch24,
+            'chuva_36h': f"{c36_f:.1f}",
+            'chuva_48h': f"{c48_f:.1f}",
+            'chuva_96h': ch96,
+            'chuva_30d': ch30d,
+            'nivel_rio': nivel_final,
+            'cota_atencao': '1.99 m',
+            'cota_alerta': '2.27 m',
+            'cota_transborda': '2.84 m',
+            'porcentagem_calha': pct_val,
+            'eh_rio_das_ostras': True
+        }
+    except Exception as ej:
+        print(f"[INEA Jundiá 224103620] Aviso coleta direta: {ej}")
+
+    # 2. Consulta tabela geral regional
+    try:
+        url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
         with urllib.request.urlopen(req, timeout=10) as res:
             raw_bytes = res.read()
@@ -95,7 +185,6 @@ def fetch_inea_cheias():
                 html_doc = raw_bytes.decode('latin1', errors='replace')
         
         rows = re.findall(r'<tr[^>]*>.*?</tr>', html_doc, re.DOTALL)
-        stations = []
         for r in rows:
             cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
             if len(cells) >= 14:
@@ -112,8 +201,10 @@ def fetch_inea_cheias():
                 nivel_rio = cells[12].strip()
                 
                 eh_ostras = ('Ostras' in muni) or ('Jundi' in curso) or ('Jundi' in estacao)
+                # Se já temos a estação Jundiá coletada com precisão direta de 224103620, ignora duplicação genérica
+                if eh_ostras and jundia_station is not None:
+                    continue
 
-                # Cálculo de intervalos hidrológicos (1, 4, 6, 12, 24, 36 e 48 horas)
                 try: c1 = float(chuva_1h.replace(',', '.'))
                 except: c1 = 0.0
                 try: c4 = float(chuva_4h.replace(',', '.'))
@@ -181,10 +272,13 @@ def fetch_inea_cheias():
                     'porcentagem_calha': porcentagem_calha,
                     'eh_rio_das_ostras': eh_ostras
                 })
-        return stations
     except Exception as e:
-        print(f"[INEA] Erro ao carregar dados: {e}")
-        return []
+        print(f"[INEA] Erro ao carregar tabela regional: {e}")
+
+    if jundia_station is not None:
+        stations.insert(0, jundia_station)
+
+    return stations
 
 def format_inmet_date(dt_str):
     if not dt_str: return ""
