@@ -250,73 +250,53 @@ async function loadAllApplicationData() {
   state.isSyncing = true;
 
   try {
-    const [boletimRows, boletimMeta, ineaStations, alerts, openMeteo, estacoes, balnear, marinha, cptec, inmetMeteo, orlaRes, tabuaRes] = await Promise.allSettled([
-      getBoletimOficialData(),
+    // FASE 1: Carregamento Ultrarrápido dos Snapshots Oficiais (< 50ms)
+    // Renderiza a interface instantaneamente sem nenhum bloqueio
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes] = await Promise.allSettled([
       getBoletimMetadata(),
+      getBoletimOficialData(),
       getIneaCheias(),
+      getTabuaMares(),
+      getOrlaCondicoes(),
+      getMarinhaAvisos()
+    ]);
+
+    if (rowsRes.status === 'fulfilled' && Array.isArray(rowsRes.value)) state.boletimData = rowsRes.value;
+    if (metaRes.status === 'fulfilled' && metaRes.value) state.boletimMetadata = metaRes.value;
+    if (ineaRes.status === 'fulfilled' && Array.isArray(ineaRes.value)) {
+      state.ineaCheias = ineaRes.value;
+      renderJundiaTelemetry(state.ineaCheias);
+    }
+    if (tabuaRes.status === 'fulfilled' && tabuaRes.value) state.tabuaMares = tabuaRes.value;
+    if (orlaRes.status === 'fulfilled' && orlaRes.value) state.orlaCondicoes = orlaRes.value;
+    if (avisosMarRes.status === 'fulfilled' && avisosMarRes.value) state.marinhaAvisos = avisosMarRes.value;
+
+    // Renderização Imediata (Fast-Path)
+    renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
+    renderPanoramaSinotico(state.boletimMetadata);
+    renderCondicoesOrla(state.orlaCondicoes, state.tabuaMares, state.marinhaAvisos, state.balneabilidade);
+    renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
+    if (window.lucide) window.lucide.createIcons();
+
+    // FASE 2: Carregamento Assíncrono em Segundo Plano dos feeds meteorológicos
+    const [alerts, openMeteo, estacoes, balnear, cptec, inmetMeteo] = await Promise.allSettled([
       getInmetAlerts(),
       getRioDasOstrasWeatherData(),
       getAcumuladosEstacoes(),
       getBalneabilidade(),
-      getMarinhaAvisos(),
       getCptecData(),
-      getInmetMeteogramaData(),
-      getOrlaCondicoes(),
-      getTabuaMares()
+      getInmetMeteogramaData()
     ]);
 
-    if (boletimRows.status === 'fulfilled' && Array.isArray(boletimRows.value)) {
-      state.boletimData = boletimRows.value;
-    }
+    if (alerts.status === 'fulfilled' && Array.isArray(alerts.value)) state.inmetAlerts = alerts.value;
+    if (openMeteo.status === 'fulfilled' && openMeteo.value) state.weatherData = openMeteo.value;
+    if (estacoes.status === 'fulfilled' && Array.isArray(estacoes.value)) state.acumuladosEstacoes = estacoes.value;
+    if (balnear.status === 'fulfilled' && Array.isArray(balnear.value)) state.balneabilidade = balnear.value;
+    if (cptec.status === 'fulfilled' && cptec.value) state.cptecData = cptec.value;
+    if (inmetMeteo.status === 'fulfilled' && inmetMeteo.value) state.inmetMeteoData = inmetMeteo.value;
 
-    if (boletimMeta.status === 'fulfilled' && boletimMeta.value) {
-      state.boletimMetadata = boletimMeta.value;
-    }
-
-    if (ineaStations.status === 'fulfilled' && Array.isArray(ineaStations.value)) {
-      state.ineaCheias = ineaStations.value;
-      renderJundiaTelemetry(state.ineaCheias);
-    }
-
-    if (alerts.status === 'fulfilled' && Array.isArray(alerts.value)) {
-      state.inmetAlerts = alerts.value;
-    }
-
-    if (marinha.status === 'fulfilled' && marinha.value) {
-      state.marinhaAvisos = marinha.value;
-    }
-
-    if (estacoes.status === 'fulfilled' && Array.isArray(estacoes.value)) {
-      state.acumuladosEstacoes = estacoes.value;
-    }
-
-    if (balnear.status === 'fulfilled' && Array.isArray(balnear.value)) {
-      state.balneabilidade = balnear.value;
-    }
-
-    if (openMeteo.status === 'fulfilled' && openMeteo.value) {
-      state.weatherData = openMeteo.value;
-    }
-
-    if (cptec.status === 'fulfilled' && cptec.value) {
-      state.cptecData = cptec.value;
-    }
-
-    if (inmetMeteo.status === 'fulfilled' && inmetMeteo.value) {
-      state.inmetMeteoData = inmetMeteo.value;
-    }
-
-    if (orlaRes && orlaRes.status === 'fulfilled' && orlaRes.value) {
-      state.orlaCondicoes = orlaRes.value;
-    }
-
-    if (tabuaRes && tabuaRes.status === 'fulfilled' && tabuaRes.value) {
-      state.tabuaMares = tabuaRes.value;
-    }
-
-    // Renderiza a interface profissional
+    // Atualização final com dados dos modelos numéricos
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
-    renderPanoramaSinotico(state.boletimMetadata);
     renderAlertasPrincipais(state.inmetAlerts, state.marinhaAvisos);
     renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
     renderCptecData(state.cptecData);

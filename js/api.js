@@ -335,40 +335,33 @@ export async function getIneaCheias() {
     } catch (error) {}
   }
 
-  // 2. Consulta em tempo real direta na estação do Rio Jundiá (INEA 224103620)
-  let directJundia = null;
-  try {
-    const jundiaUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html')}?t=${ts}`;
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000);
-    const jundiaRes = await fetch(jundiaUrl, { signal: controller.signal, cache: 'no-store' });
-    clearTimeout(timeoutId);
-    if (jundiaRes.ok) {
-      const htmlText = await jundiaRes.text();
-      directJundia = parseJundiaDirectHtml(htmlText);
-    }
-  } catch (proxyErr) {
-    console.info('Proxy ao vivo INEA direto ocupado, acionando snapshot oficial sincronizado...');
-  }
-
-  // 3. Fallback de alta disponibilidade: snapshot oficial sincronizado na nuvem (GitHub Pages)
+  // 2. Consulta ultrarrápida do snapshot sincronizado na nuvem (GitHub Pages) - INSTANTÂNEO (<50ms)
+  let snapshotData = null;
   try {
     const dataRes = await fetch(`./data/inea_cheias.json?t=${ts}`, { cache: 'no-store' });
     if (dataRes.ok) {
-      const data = await dataRes.json();
-      if (Array.isArray(data) && data.length > 0) {
-        if (directJundia) {
-          const others = data.filter(s => !(s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi')));
-          return [directJundia, ...others];
-        }
-        return data;
+      snapshotData = await dataRes.json();
+      if (Array.isArray(snapshotData) && snapshotData.length > 0) {
+        return snapshotData;
       }
     }
   } catch (e) {}
 
-  if (directJundia) return [directJundia];
+  // 3. Fallback se não houver snapshot: consulta direta via proxy com timeout curto
+  try {
+    const jundiaUrl = `https://corsproxy.io/?url=${encodeURIComponent('https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html')}?t=${ts}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1200);
+    const jundiaRes = await fetch(jundiaUrl, { signal: controller.signal, cache: 'no-store' });
+    clearTimeout(timeoutId);
+    if (jundiaRes.ok) {
+      const htmlText = await jundiaRes.text();
+      const directJundia = parseJundiaDirectHtml(htmlText);
+      if (directJundia) return [directJundia];
+    }
+  } catch (proxyErr) {}
 
-  return [];
+  return snapshotData || [];
 }
 
 /**
@@ -518,7 +511,7 @@ export async function getInmetMeteogramaData() {
 export async function getOrlaCondicoes() {
   const ts = Date.now();
   try {
-    const res = await fetch(\./data/orla_condicoes.json?t=\, { cache: 'no-store' });
+    const res = await fetch(`./data/orla_condicoes.json?t=`, { cache: 'no-store' });
     if (res.ok) return await res.json();
   } catch (e) {}
   return null;
@@ -530,7 +523,7 @@ export async function getOrlaCondicoes() {
 export async function getTabuaMares() {
   const ts = Date.now();
   try {
-    const res = await fetch(\./data/tabua_mares.json?t=\, { cache: 'no-store' });
+    const res = await fetch(`./data/tabua_mares.json?t=`, { cache: 'no-store' });
     if (res.ok) return await res.json();
   } catch (e) {}
   return null;
