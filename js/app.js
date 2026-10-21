@@ -40,7 +40,7 @@ import {
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js?v=62';
 
-import { renderBulletinChart } from './charts.js?v=76';
+import { renderBulletinChart } from './charts.js?v=87';
 
 // Estado global da aplicação
 const state = {
@@ -1258,7 +1258,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=86').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=87').catch(() => {});
   }
 }
 

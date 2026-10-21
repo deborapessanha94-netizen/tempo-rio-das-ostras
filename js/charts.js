@@ -11,9 +11,9 @@ let activeChart = null;
 export function renderHourlyChart(canvas, metric, hourlyData) {
   if (!canvas || !hourlyData || !hourlyData.time) return;
 
-  if (activeChart) {
-    activeChart.destroy();
-    activeChart = null;
+  if (canvas._activeChart) {
+    canvas._activeChart.destroy();
+    canvas._activeChart = null;
   }
 
   const ctx = canvas.getContext('2d');
@@ -26,23 +26,25 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
   });
 
   const chartConfig = buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx);
-  activeChart = new Chart(ctx, chartConfig);
+  const instance = new Chart(ctx, chartConfig);
+  canvas._activeChart = instance;
+  activeChart = instance;
 }
 
 function getColors() {
   return {
-    primary: '#3d4f61',       /* Nordic Slate Denim */
-    secondary: '#f07a53',     /* Warm Coral Orange */
-    tertiary: '#64748b',      /* Slate Gray */
-    rain: '#2563eb',          /* Azul Chuva */
-    rainFill: '#3b82f6',      /* Azul vibrante de precipitação */
-    rainBorder: '#1d4ed8',    /* Borda azul de precipitação */
-    barFill: 'rgba(61, 79, 97, 0.75)',
-    barBorder: '#000000',
-    gradStart: 'rgba(61, 79, 97, 0.25)',
-    gradEnd: 'rgba(61, 79, 97, 0.02)',
-    text: '#000000',          /* Slate Dark */
-    textMuted: '#000000',     /* Slate Muted */
+    primary: '#334155',        /* Cinza Escuro Slate */
+    secondary: '#ea580c',      /* Laranja Vibrante da Paleta */
+    tertiary: '#64748b',       /* Cinza Médio */
+    rain: '#0284c7',           /* Azul Chuva */
+    rainFill: 'rgba(2, 132, 199, 0.80)', /* Azul Chuva Preenchimento */
+    rainBorder: '#0369a1',     /* Azul Escuro Borda */
+    barFill: 'rgba(100, 116, 139, 0.45)', /* Cinza para Barras */
+    barBorder: '#334155',      /* Borda Cinza */
+    gradStart: 'rgba(51, 65, 85, 0.22)',  /* Gradiente Cinza Suave */
+    gradEnd: 'rgba(51, 65, 85, 0.02)',
+    text: '#000000',           /* Texto 100% Preto */
+    textMuted: '#000000',      /* Texto 100% Preto */
     grid: 'rgba(226, 232, 240, 0.85)' /* Linhas de grade suaves */
   };
 }
@@ -117,7 +119,7 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'line',
             label: 'Probabilidade (%)',
             data: probSlice,
-            borderColor: c.primary,
+            borderColor: '#2563eb',
             backgroundColor: 'transparent',
             borderWidth: 2,
             tension: 0.3,
@@ -128,7 +130,7 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
             type: 'line',
             label: 'Água Precipitável VIME (mm)',
             data: pwSlice,
-            borderColor: c.secondary,
+            borderColor: '#0284c7',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
@@ -224,13 +226,14 @@ function buildChartConfig(metric, startIndex, count, hourlyData, labels, ctx) {
           {
             label: 'Pressão ao Nível do Mar (hPa)',
             data: pressureSlice,
-            borderColor: c.primary,
+            borderColor: c.secondary,
             backgroundColor: gradPress,
             borderWidth: 2.5,
             tension: 0.35,
             fill: true,
-            pointBackgroundColor: c.primary,
-            pointRadius: 3
+            pointBackgroundColor: c.secondary,
+            pointBorderColor: c.primary,
+            pointRadius: 3.5
           }
         ]
       },
@@ -364,9 +367,9 @@ let activeBulletinChart = null;
 export function renderBulletinChart(canvas, metric, bulletinRows) {
   if (!canvas || !bulletinRows || bulletinRows.length === 0) return;
 
-  if (activeBulletinChart) {
-    activeBulletinChart.destroy();
-    activeBulletinChart = null;
+  if (canvas._activeBulletinChart) {
+    canvas._activeBulletinChart.destroy();
+    canvas._activeBulletinChart = null;
   }
 
   const ctx = canvas.getContext('2d');
@@ -481,13 +484,14 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Pressão ao Nível Médio do Mar (hPa)',
             data: pVal,
-            borderColor: c.primary,
+            borderColor: c.secondary,
             backgroundColor: c.gradStart,
-            borderWidth: 2,
+            borderWidth: 2.5,
             tension: 0.25,
             fill: true,
-            pointBackgroundColor: c.primary,
-            pointRadius: 4
+            pointBackgroundColor: c.secondary,
+            pointBorderColor: c.primary,
+            pointRadius: 4.5
           }
         ]
       },
@@ -527,10 +531,11 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             type: 'line',
             label: 'Rajada Máxima (km/h)',
             data: vRaj,
-            borderColor: c.primary,
-            borderWidth: 2,
-            pointBackgroundColor: c.primary,
-            pointRadius: 4,
+            borderColor: c.secondary,
+            borderWidth: 2.5,
+            pointBackgroundColor: c.secondary,
+            pointBorderColor: '#ffffff',
+            pointRadius: 4.5,
             pointHoverRadius: 6,
             fill: false
           }
@@ -585,6 +590,8 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
   }
 
   if (config) {
-    activeBulletinChart = new Chart(ctx, config);
+    const bInstance = new Chart(ctx, config);
+    canvas._activeBulletinChart = bInstance;
+    activeBulletinChart = bInstance;
   }
 }
