@@ -23,7 +23,7 @@
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=81">
+  <link rel="stylesheet" href="css/styles.css?v=82">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -789,75 +789,6 @@
 
         </div>
 
-      </section>
-
-      <!-- ===================================================================== -->
-      <!-- COLUNA LATERAL (DIREITA - 4 COLUNAS NO DESKTOP)                       -->
-      <!-- ===================================================================== -->
-      <aside class="lg:col-span-4 space-y-6">
-        
-        <!-- CARD 1: TELEMETRIA HIDROLÓGICA — RIO JUNDIÁ (INEA 224103620) -->
-        <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-4" id="card-telemetria-jundia">
-          
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
-            <div class="flex items-center gap-2.5">
-              <div id="jundia-icon-box" class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="waves" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-black tracking-tight">Rio Jundiá</h3>
-                <span id="jundia-leitura-tempo" class="text-xs font-normal text-black">Estação Telemétrica INEA nº 224103620</span>
-              </div>
-            </div>
-            <span id="jundia-header-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-              Vigilância
-            </span>
-          </div>
-
-          <!-- Cota Atual em Destaque -->
-          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 text-center space-y-1.5 shadow-xs">
-            <span class="text-[10px] uppercase font-bold text-black block tracking-wider">Cota Atual Registrada</span>
-            <span id="kpi-jundia-val" class="text-5xl font-extrabold font-mono text-black block tracking-tight">1,91 m</span>
-            <div class="flex items-center justify-center pt-0.5">
-              <span id="kpi-jundia-status" class="badge-title-orange text-[11px] px-3 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                VIGILÂNCIA
-              </span>
-            </div>
-          </div>
-
-          <!-- Régua Visual das Cotas Oficiais do INEA -->
-          <div class="space-y-2 text-xs font-medium text-black">
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Atenção:</span>
-              <span id="jundia-cota-atencao" class="font-mono font-bold text-black bg-[#fef3c7] border border-[#d97706]/40 px-2.5 py-0.5 rounded-md">1,99 m</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Alerta:</span>
-              <span id="jundia-cota-alerta" class="font-mono font-bold text-black bg-[#ffedd5] border border-[#f97316]/40 px-2.5 py-0.5 rounded-md">2,27 m</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Transbordo (Calha):</span>
-              <span id="jundia-cota-transbordo" class="font-mono font-bold text-black bg-[#ffe4e6] border border-[#e11d48]/40 px-2.5 py-0.5 rounded-md">2,84 m</span>
-            </div>
-
-            <!-- Barra de Progresso Visual da Régua -->
-            <div class="gauge-track mt-2 h-2.5 bg-[#e2e8f0] border border-[#cbd5e1] rounded-full overflow-hidden p-[1px]">
-              <div id="jundia-gauge-bar" class="h-full rounded-full bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6] transition-all duration-500" style="width: 67%;"></div>
-            </div>
-            <p id="jundia-mensagem-status" class="text-[11px] font-medium text-black pt-1 leading-tight">
-              Calha em regime seguro de vazante contínua com cota de 1,91 m (a 93 cm da cota de transbordo).
-            </p>
-          </div>
-
-          <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
-            <span class="font-medium text-black">Bacia Hidrográfica RH-VIII</span>
-            <a href="https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
-              Ver Telemetria INEA ↗
-            </a>
-          </div>
-
-        </div>
-
         <!-- CARD 2: CONDIÇÕES MARÍTIMAS, PRAIAS & TÁBUA DE MARÉS (CHM) / BALNEABILIDADE (INEA) -->
         <div class="modern-card p-5 sm:p-6 space-y-4 bg-white border border-[#94a3b8]" id="card-condicoes-orla">
           
@@ -1093,6 +1024,75 @@
                 INEA Balneabilidade ↗
               </a>
             </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- COLUNA LATERAL (DIREITA - 4 COLUNAS NO DESKTOP)                       -->
+      <!-- ===================================================================== -->
+      <aside class="lg:col-span-4 space-y-6">
+        
+        <!-- CARD 1: TELEMETRIA HIDROLÓGICA — RIO JUNDIÁ (INEA 224103620) -->
+        <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-4" id="card-telemetria-jundia">
+          
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div id="jundia-icon-box" class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-black tracking-tight">Rio Jundiá</h3>
+                <span id="jundia-leitura-tempo" class="text-xs font-normal text-black">Estação Telemétrica INEA nº 224103620</span>
+              </div>
+            </div>
+            <span id="jundia-header-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+              Vigilância
+            </span>
+          </div>
+
+          <!-- Cota Atual em Destaque -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 text-center space-y-1.5 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-black block tracking-wider">Cota Atual Registrada</span>
+            <span id="kpi-jundia-val" class="text-5xl font-extrabold font-mono text-black block tracking-tight">1,91 m</span>
+            <div class="flex items-center justify-center pt-0.5">
+              <span id="kpi-jundia-status" class="badge-title-orange text-[11px] px-3 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                VIGILÂNCIA
+              </span>
+            </div>
+          </div>
+
+          <!-- Régua Visual das Cotas Oficiais do INEA -->
+          <div class="space-y-2 text-xs font-medium text-black">
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Atenção:</span>
+              <span id="jundia-cota-atencao" class="font-mono font-bold text-black bg-[#fef3c7] border border-[#d97706]/40 px-2.5 py-0.5 rounded-md">1,99 m</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Alerta:</span>
+              <span id="jundia-cota-alerta" class="font-mono font-bold text-black bg-[#ffedd5] border border-[#f97316]/40 px-2.5 py-0.5 rounded-md">2,27 m</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Transbordo (Calha):</span>
+              <span id="jundia-cota-transbordo" class="font-mono font-bold text-black bg-[#ffe4e6] border border-[#e11d48]/40 px-2.5 py-0.5 rounded-md">2,84 m</span>
+            </div>
+
+            <!-- Barra de Progresso Visual da Régua -->
+            <div class="gauge-track mt-2 h-2.5 bg-[#e2e8f0] border border-[#cbd5e1] rounded-full overflow-hidden p-[1px]">
+              <div id="jundia-gauge-bar" class="h-full rounded-full bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6] transition-all duration-500" style="width: 67%;"></div>
+            </div>
+            <p id="jundia-mensagem-status" class="text-[11px] font-medium text-black pt-1 leading-tight">
+              Calha em regime seguro de vazante contínua com cota de 1,91 m (a 93 cm da cota de transbordo).
+            </p>
+          </div>
+
+          <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
+            <span class="font-medium text-black">Bacia Hidrográfica RH-VIII</span>
+            <a href="https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
+              Ver Telemetria INEA ↗
+            </a>
           </div>
 
         </div>
@@ -1533,6 +1533,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=81"></script>
+  <script type="module" src="js/app.js?v=82"></script>
 </body>
 </html>
