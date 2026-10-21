@@ -40,7 +40,7 @@ import {
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js?v=62';
 
-import { renderBulletinChart } from './charts.js?v=87';
+import { renderBulletinChart } from './charts.js?v=88';
 
 // Estado global da aplicação
 const state = {
@@ -698,6 +698,29 @@ function getAlertBadgeAndClass(severidade, corNome) {
   }
 }
 
+function formatAlertPeriod(inicio, fim) {
+  if (!inicio) return '';
+  if (!fim) return `A partir de ${inicio}`;
+  
+  const pIni = inicio.replace(' às ', ' ').split(' ');
+  const pFim = fim.replace(' às ', ' ').split(' ');
+  
+  const dIni = pIni[0] || '';
+  const hIni = pIni[1] || '';
+  const dFim = pFim[0] || '';
+  const hFim = pFim[1] || '';
+  
+  if (dIni && dFim && dIni === dFim) {
+    const diaMes = dIni.slice(0, 5);
+    return `Vigência: ${diaMes} (${hIni} às ${hFim})`;
+  } else if (dIni && dFim) {
+    const diaMesIni = dIni.slice(0, 5);
+    const diaMesFim = dFim.slice(0, 5);
+    return `Vigência: ${diaMesIni} ${hIni} até ${diaMesFim} ${hFim}`;
+  }
+  return `Vigência: ${inicio} até ${fim}`;
+}
+
 /**
  * 6. Renderiza os Alertas Oficiais do INMET e da Marinha na Tela Principal (Compacto e com Cores Oficiais)
  */
@@ -727,41 +750,43 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
 
       const titulo = a.descricao || 'Alerta Meteorológico';
       const alertInfo = getAlertBadgeAndClass(a.severidade, a.cor_nome);
-      const periodo = `Vigência: ${a.inicio_formatado || a.inicio} até ${a.fim_formatado || a.fim}`;
+      const periodo = formatAlertPeriod(a.inicio_formatado || a.inicio, a.fim_formatado || a.fim);
       const riscos = (a.riscos && a.riscos[0]) ? a.riscos[0] : 'Chuva intensa, ventos fortes e descargas elétricas.';
       const instrucoes = (a.instrucoes && a.instrucoes[0]) ? a.instrucoes[0] : 'Não se abrigue debaixo de árvores. Em emergência ligue 199.';
 
       let statusBadge = isVigenteHoje 
-        ? '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">Vigente Hoje</span>'
+        ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">Vigente Hoje</span>'
         : (isFuturo 
-            ? `<span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Programado para ${a.inicio_formatado ? a.inicio_formatado.split(' ')[0] : '22/10'}</span>`
-            : '<span class="text-[10px] px-2.5 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Encerrado</span>');
+            ? `<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Prog. ${a.inicio_formatado ? a.inicio_formatado.split(' ')[0].slice(0, 5) : '22/10'}</span>`
+            : '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1]">Encerrado</span>');
 
       cardsHtml.push(`
-        <div class="${alertInfo.cardClass} p-3 sm:p-3.5 space-y-2">
-          <div class="flex items-center justify-between gap-2 border-b border-[#cbd5e1] pb-2 flex-wrap">
-            <div class="flex items-center gap-1.5 flex-wrap">
-              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
-                INMET
-              </span>
-              <span class="text-xs font-semibold font-mono text-black truncate">
-                ${a.id ? `Aviso nº ${a.id}` : 'Aviso Especial'}
-              </span>
-              ${a.eh_direto_ostras ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>' : ''}
-              ${statusBadge}
+        <div class="${alertInfo.cardClass} p-3 sm:p-3.5 space-y-2 flex flex-col justify-between __SPAN_CLASS__">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
+                  INMET
+                </span>
+                <span class="text-xs font-semibold font-mono text-black truncate">
+                  ${a.id ? `Aviso nº ${a.id}` : 'Aviso Especial'}
+                </span>
+                ${a.eh_direto_ostras ? '<span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>' : ''}
+                ${statusBadge}
+              </div>
+              ${alertInfo.badgeHtml}
             </div>
-            ${alertInfo.badgeHtml}
+
+            <div class="flex items-baseline justify-between gap-1 flex-wrap">
+              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${titulo}</h3>
+              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
+                ${periodo}
+              </span>
+            </div>
           </div>
 
-          <div class="flex items-baseline justify-between gap-2 flex-wrap">
-            <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${titulo}</h3>
-            <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1.5 shrink-0">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
-              ${periodo}
-            </span>
-          </div>
-
-          <div class="p-3 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1.5">
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
             <div><strong class="font-bold text-black">Riscos:</strong> ${cleanBulletinText(riscos)}</div>
             <div><strong class="font-bold text-black">Defesa Civil 199:</strong> ${cleanBulletinText(instrucoes)}</div>
           </div>
@@ -781,7 +806,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
     const restricao = marinhaAvisos.restricao || 'Atenção a pescadores, banhistas e pequenas embarcações na orla marítima.';
 
     cardsHtml.push(`
-      <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2">
+      <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between __SPAN_CLASS__">
         <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5">
           <div class="flex items-center gap-1.5">
             <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
@@ -824,10 +849,36 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
 
   if (cardsHtml.length > 0) {
     if (sectionAlertas) sectionAlertas.classList.remove('hidden');
-    container.innerHTML = cardsHtml.join('');
-    container.className = cardsHtml.length === 1 ? 'grid grid-cols-1 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4';
+    
+    const count = cardsHtml.length;
+    const finalCards = cardsHtml.map((card, idx) => {
+      const isLast = (idx === count - 1);
+      let span = '';
+      if (count === 3 && isLast) {
+        span = 'md:col-span-2 lg:col-span-1';
+      } else if (count > 1 && (count % 2 === 1) && isLast) {
+        span = 'md:col-span-2';
+      }
+      return card.replace('__SPAN_CLASS__', span);
+    });
+
+    container.innerHTML = finalCards.join('');
+
+    // Grid responsivo adaptativo que elimina buracos vazios:
+    if (count === 1) {
+      container.className = 'grid grid-cols-1 gap-4';
+    } else if (count === 2) {
+      container.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+    } else if (count === 3) {
+      container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5';
+    } else if (count === 4) {
+      container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3';
+    } else {
+      container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5';
+    }
+
     if (badgeTotal) {
-      badgeTotal.textContent = `${cardsHtml.length} ${cardsHtml.length === 1 ? 'Alerta Ativo' : 'Alertas Ativos'}`;
+      badgeTotal.textContent = `${count} ${count === 1 ? 'Alerta Ativo' : 'Alertas Ativos'}`;
       badgeTotal.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     }
   } else {
@@ -1258,7 +1309,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=87').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=88').catch(() => {});
   }
 }
 
