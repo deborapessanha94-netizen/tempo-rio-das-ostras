@@ -13,23 +13,23 @@
     {
       "key": "d0",
       "rotulo": "Hoje",
-      "data_iso": "2026-10-20",
-      "data_br": "20/10",
-      "dia_semana": "Terça"
-    },
-    {
-      "key": "d1",
-      "rotulo": "Amanhã",
       "data_iso": "2026-10-21",
       "data_br": "21/10",
       "dia_semana": "Quarta"
     },
     {
-      "key": "d2",
-      "rotulo": "Depois de amanhã",
+      "key": "d1",
+      "rotulo": "Amanhã",
       "data_iso": "2026-10-22",
       "data_br": "22/10",
       "dia_semana": "Quinta"
+    },
+    {
+      "key": "d2",
+      "rotulo": "Depois de amanhã",
+      "data_iso": "2026-10-23",
+      "data_br": "23/10",
+      "dia_semana": "Sexta"
     }
   ],
   "praias_condicoes": [
@@ -390,37 +390,37 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-10-20",
+    "data": "2026-10-21",
     "proxima_mare": {
-      "tipo": "PREAMAR",
-      "hora": "23:11",
-      "altura": 0.84,
-      "rotulo": "Preia-mar (0,8 m)"
+      "tipo": "BAIXA-MAR",
+      "hora": "05:38",
+      "altura": 0.41,
+      "rotulo": "Baixa-mar (0,4 m)"
     },
     "mares_do_dia": [
       {
         "tipo": "BAIXA-MAR",
-        "hora": "04:52",
-        "altura": 0.23,
-        "rotulo": "Baixa-mar (0,2 m)"
-      },
-      {
-        "tipo": "PREAMAR",
-        "hora": "12:01",
-        "altura": 0.9,
-        "rotulo": "Preia-mar (0,9 m)"
-      },
-      {
-        "tipo": "BAIXA-MAR",
-        "hora": "17:55",
+        "hora": "05:38",
         "altura": 0.41,
         "rotulo": "Baixa-mar (0,4 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "23:11",
-        "altura": 0.84,
-        "rotulo": "Preia-mar (0,8 m)"
+        "hora": "12:22",
+        "altura": 1.23,
+        "rotulo": "Preia-mar (1,2 m)"
+      },
+      {
+        "tipo": "BAIXA-MAR",
+        "hora": "18:07",
+        "altura": 0.6,
+        "rotulo": "Baixa-mar (0,6 m)"
+      },
+      {
+        "tipo": "PREAMAR",
+        "hora": "23:47",
+        "altura": 1.22,
+        "rotulo": "Preia-mar (1,2 m)"
       }
     ]
   }
