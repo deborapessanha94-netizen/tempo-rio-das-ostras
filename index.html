@@ -23,7 +23,7 @@
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=85">
+  <link rel="stylesheet" href="css/styles.css?v=86">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -722,76 +722,6 @@
 
         </div>
 
-        <!-- CARD 3: PRECIPITAÇÃO POR TURNO (PLANCON MUNICIPAL) -->
-        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
-          
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-[#e0f2fe] border border-[#38bdf8] flex items-center justify-center text-black">
-                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-black tracking-tight">
-                  Precipitação por Turno Operacional
-                </h3>
-                <p class="text-xs font-normal text-black">Distribuição estimada para os turnos do dia</p>
-              </div>
-            </div>
-
-            <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
-              Total 3D: 11.1 mm
-            </span>
-          </div>
-
-          <!-- Barrinhas de Chuva dos Turnos -->
-          <div id="chuva-turnos-bars" class="space-y-3 py-1">
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Madrugada</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.1 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 5%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Manhã</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.5 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 25%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Tarde</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">2.0 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 100%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Noite</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.0 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
-            <span class="font-medium text-black">Modelo: CPTEC/INPE & COSMO</span>
-            <button id="btn-ver-boletim-modal-1" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
-              Ver Tabela Completa dos 12 Turnos →
-            </button>
-          </div>
-
-        </div>
-
         <!-- CARD 2: CONDIÇÕES MARÍTIMAS, PRAIAS & TÁBUA DE MARÉS (CHM) / BALNEABILIDADE (INEA) -->
         <div class="modern-card p-5 sm:p-6 space-y-4 bg-white border border-[#94a3b8]" id="card-condicoes-orla">
           
@@ -1181,6 +1111,76 @@
 
         </div>
 
+        <!-- CARD 3: PRECIPITAÇÃO POR TURNO (PLANCON MUNICIPAL) -->
+        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
+          
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-[#e0f2fe] border border-[#38bdf8] flex items-center justify-center text-black">
+                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-black tracking-tight">
+                  Precipitação por Turno Operacional
+                </h3>
+                <p class="text-xs font-normal text-black">Distribuição estimada para os turnos do dia</p>
+              </div>
+            </div>
+
+            <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
+              Total 3D: 11.1 mm
+            </span>
+          </div>
+
+          <!-- Barrinhas de Chuva dos Turnos -->
+          <div id="chuva-turnos-bars" class="space-y-3 py-1">
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Madrugada</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.1 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 5%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Manhã</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.5 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 25%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Tarde</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">2.0 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Noite</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.0 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black flex-wrap gap-2">
+            <span class="font-medium text-black">Modelo: CPTEC/INPE & COSMO</span>
+            <button id="btn-ver-boletim-modal-1" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
+              Ver Tabela Completa dos 12 Turnos →
+            </button>
+          </div>
+
+        </div>
+
       </aside>
 
     </div>
@@ -1536,6 +1536,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=85"></script>
+  <script type="module" src="js/app.js?v=86"></script>
 </body>
 </html>
