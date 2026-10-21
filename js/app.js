@@ -1,3 +1,4 @@
+import { getWeatherCondition } from './weather-codes.js';
 // Controle Global de Abertura/Fechamento dos Cards dos 3 Dias
 window.toggleDayCard = function(idx) {
   const el = document.getElementById(`day-card-collapse-${idx}`);
@@ -40,7 +41,7 @@ import {
   RIO_DAS_OSTRAS_COORDS 
 } from './api.js?v=62';
 
-import { renderBulletinChart } from './charts.js?v=88';
+import { renderBulletinChart } from './charts.js?v=89';
 
 // Estado global da aplicação
 const state = {
@@ -424,15 +425,37 @@ function renderDashboardUI(meta, rows, weather) {
     }
   }
 
-  // 2. Temperatura e Métricas do Hero
+  // 2. Temperatura e Métricas do Hero em Tempo Real (Atualização a cada 1 minuto)
   const sideTemp = document.getElementById('sidebar-temp');
   const sideWind = document.getElementById('sidebar-wind');
   const sideHum = document.getElementById('sidebar-hum');
   const sideSea = document.getElementById('sidebar-sea');
+  const heroSensacao = document.getElementById('hero-sensacao');
+  const heroSyncLabel = document.getElementById('hero-sync-label');
 
+  const chipChuvaVal = document.getElementById('hero-chip-chuva-val');
+  const chipChuvaSub = document.getElementById('hero-chip-chuva-sub');
+  const chipVentoSub = document.getElementById('hero-chip-vento-sub');
+  const chipUmidSub = document.getElementById('hero-chip-umid-sub');
+  const chipMarSub = document.getElementById('hero-chip-mar-sub');
+  const chipPressVal = document.getElementById('hero-chip-press-val');
+  const chipPressSub = document.getElementById('hero-chip-press-sub');
+  const chipUvVal = document.getElementById('hero-chip-uv-val');
+  const chipUvSub = document.getElementById('hero-chip-uv-sub');
+
+  const cur = weather?.current || weather?.current_weather;
+  const tempCur = cur?.temperature_2m !== undefined ? cur.temperature_2m : cur?.temperature;
+  const appTempCur = cur?.apparent_temperature;
+  const windCur = cur?.wind_speed_10m !== undefined ? cur.wind_speed_10m : cur?.windspeed;
+  const gustCur = cur?.wind_gusts_10m;
+  const humCur = cur?.relative_humidity_2m;
+  const pressCur = cur?.pressure_msl || cur?.surface_pressure;
+  const weatherCode = cur?.weather_code;
+
+  // Atualiza Temperatura
   if (sideTemp) {
-    if (weather && weather.current_weather && weather.current_weather.temperature !== undefined) {
-      sideTemp.textContent = `${Math.round(weather.current_weather.temperature)}°`;
+    if (tempCur !== undefined) {
+      sideTemp.textContent = `${Math.round(tempCur)}°`;
     } else if (primeiroDia?.pilares?.temp?.val) {
       const maxVal = primeiroDia.pilares.temp.val.split(' a ')?.[1]?.replace('°C', '') || '27';
       sideTemp.textContent = `${maxVal.trim()}°`;
@@ -441,16 +464,103 @@ function renderDashboardUI(meta, rows, weather) {
     }
   }
 
-  if (sideWind && primeiroDia) {
-    sideWind.textContent = primeiroDia.pilares?.vento?.val?.replace('Rajadas ', '') || '24 km/h';
+  // Atualiza Sensação Térmica
+  if (heroSensacao) {
+    if (appTempCur !== undefined) {
+      heroSensacao.textContent = `Sensação: ${Math.round(appTempCur)}°C`;
+    } else if (tempCur !== undefined) {
+      heroSensacao.textContent = `Sensação: ${Math.round(tempCur)}°C`;
+    }
   }
 
-  if (sideHum && primeiroDia) {
-    sideHum.textContent = primeiroDia.pilares?.umid?.val || '85%';
+  // Atualiza Condição do Tempo e Ícone com base no código WMO em tempo real
+  if (weatherCode !== undefined) {
+    const wmo = getWeatherCondition(weatherCode);
+    if (condEl && wmo?.label) condEl.textContent = wmo.label;
+    if (heroIcon && wmo?.icon) {
+      heroIcon.innerHTML = `<i data-lucide="${wmo.icon}" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>`;
+    }
   }
 
-  if (sideSea && primeiroDia) {
-    sideSea.textContent = primeiroDia.pilares?.mar?.val || '2.2 m';
+  // Atualiza Vento e Rajadas
+  if (sideWind) {
+    if (windCur !== undefined) {
+      sideWind.textContent = `${Math.round(windCur)} km/h`;
+    } else if (primeiroDia?.pilares?.vento?.val) {
+      sideWind.textContent = primeiroDia.pilares.vento.val.replace('Rajadas ', '') || '24 km/h';
+    }
+  }
+  if (chipVentoSub) {
+    if (gustCur !== undefined) {
+      chipVentoSub.textContent = `Rajadas ${Math.round(gustCur)} km/h`;
+    } else {
+      chipVentoSub.textContent = 'Rajadas na orla';
+    }
+  }
+
+  // Atualiza Umidade
+  if (sideHum) {
+    if (humCur !== undefined) {
+      sideHum.textContent = `${Math.round(humCur)}%`;
+    } else if (primeiroDia?.pilares?.umid?.val) {
+      sideHum.textContent = primeiroDia.pilares.umid.val || '85%';
+    }
+  }
+  if (chipUmidSub) {
+    if (humCur !== undefined) {
+      chipUmidSub.textContent = humCur >= 80 ? 'Ar Muito Úmido' : (humCur <= 55 ? 'Ar Mais Seco' : 'Umidade Ideal');
+    }
+  }
+
+  // Atualiza Chuva Prevista
+  if (chipChuvaVal) {
+    chipChuvaVal.textContent = hojeChuva || '0.0 mm';
+  }
+  if (chipChuvaSub) {
+    const prob = weather?.hourly?.precipitation_probability?.[0];
+    chipChuvaSub.textContent = prob !== undefined ? `Probab.: ${prob}%` : 'Probab.: 75%';
+  }
+
+  // Atualiza Mar na Orla
+  if (sideSea) {
+    const ondaOrla = state.orlaCondicoes?.praias?.[0]?.onda;
+    sideSea.textContent = ondaOrla || primeiroDia?.pilares?.mar?.val || '0.7 a 1.2 m';
+  }
+  if (chipMarSub) {
+    const stMar = state.orlaCondicoes?.praias?.[0]?.status;
+    chipMarSub.textContent = stMar || 'Moderado';
+  }
+
+  // Atualiza Pressão Barométrica
+  if (chipPressVal) {
+    if (pressCur !== undefined) {
+      chipPressVal.textContent = `${Math.round(pressCur)} hPa`;
+    } else {
+      chipPressVal.textContent = '1018 hPa';
+    }
+  }
+  if (chipPressSub) {
+    if (pressCur !== undefined) {
+      chipPressSub.textContent = pressCur >= 1016 ? 'Alta Pressão • Estável' : (pressCur <= 1011 ? 'Baixa Pressão' : 'Pressão Estável');
+    }
+  }
+
+  // Atualiza Índice UV
+  if (chipUvVal) {
+    const uvVal = weather?.daily?.uv_index_max?.[0] !== undefined ? Math.round(weather.daily.uv_index_max[0]) : 7;
+    const uvDesc = uvVal >= 8 ? 'Muito Alto' : (uvVal >= 6 ? 'Alto' : (uvVal >= 3 ? 'Moderado' : 'Baixo'));
+    chipUvVal.textContent = `${uvVal} - ${uvDesc}`;
+  }
+  if (chipUvSub) {
+    chipUvSub.textContent = 'FPS recomendado';
+  }
+
+  // Atualiza Label de Sincronização a cada 1 minuto com horário da última sincronia
+  if (heroSyncLabel) {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    heroSyncLabel.textContent = `Atualizado às ${hh}:${mm} (Tempo Real • 1 em 1 min)`;
   }
 
   // 3. Previsão dos Próximos 3 Dias (Começando Hoje)
@@ -1309,13 +1419,15 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=88').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=89').catch(() => {});
   }
 }
 
 function startAutoSync() {
-  // Sincronização periódica a cada 15 minutos
-  setInterval(loadAllApplicationData, 15 * 60 * 1000);
+  // Sincronização periódica a cada 1 minuto (60 segundos)
+  setInterval(() => {
+    loadAllApplicationData();
+  }, 60 * 1000);
 }
 
 // Exposição global das funções de abas e dias da Orla

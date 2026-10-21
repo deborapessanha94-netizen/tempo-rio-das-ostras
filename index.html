@@ -23,7 +23,7 @@
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=88">
+  <link rel="stylesheet" href="css/styles.css?v=89">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -567,7 +567,7 @@
                 <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">24°</span>
                 <div class="flex items-center gap-1.5">
                   <span class="text-xl font-bold text-black leading-none">C</span>
-                  <span class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
+                  <span id="hero-sensacao" class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
                 </div>
               </div>
               
@@ -599,8 +599,8 @@
               </div>
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
-                <span class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
-                <span class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
+                <span id="hero-chip-chuva-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
+                <span id="hero-chip-chuva-sub" class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
               </div>
             </div>
 
@@ -612,7 +612,7 @@
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
                 <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
-                <span class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
+                <span id="hero-chip-vento-sub" class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
               </div>
             </div>
 
@@ -624,7 +624,7 @@
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
                 <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
-                <span class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
+                <span id="hero-chip-umid-sub" class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
               </div>
             </div>
 
@@ -635,8 +635,8 @@
               </div>
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
-                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 m</span>
-                <span class="text-[9.5px] font-medium text-black">Moderado</span>
+                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">0.7 a 1.2 m</span>
+                <span id="hero-chip-mar-sub" class="text-[9.5px] font-medium text-black">Moderado</span>
               </div>
             </div>
 
@@ -647,8 +647,8 @@
               </div>
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
-                <span class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
-                <span class="text-[9.5px] font-medium text-black">Estável</span>
+                <span id="hero-chip-press-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
+                <span id="hero-chip-press-sub" class="text-[9.5px] font-medium text-black">Estável</span>
               </div>
             </div>
 
@@ -659,8 +659,8 @@
               </div>
               <div class="min-w-0">
                 <span class="text-[9.5px] font-bold uppercase text-black block truncate">Índice UV</span>
-                <span class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
-                <span class="text-[9.5px] font-medium text-black">FPS recomendado</span>
+                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
+                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black">FPS recomendado</span>
               </div>
             </div>
 
@@ -669,9 +669,9 @@
           <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
           <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black">
             <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
-            <span class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]">
+            <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 1 minuto">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              Sincronizado Horariamente (Tempo Real 1h)
+              <span id="hero-sync-label">Atualizado a cada 1 minuto (Tempo Real)</span>
             </span>
           </div>
 
@@ -1536,6 +1536,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=88"></script>
+  <script type="module" src="js/app.js?v=89"></script>
 </body>
 </html>
