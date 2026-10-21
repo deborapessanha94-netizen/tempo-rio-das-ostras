@@ -556,17 +556,30 @@ function renderDashboardUI(meta, rows, weather) {
       ];
       const marInfo = marInfoList[idx] || { ondas: '1,0 m', estado: 'Normal', chip: '1,0 m', detalhe: 'Condições regulares de mar' };
 
-      // Extrai o textinho da previsão oficial para exibir de cara no card
+      const marFrases = [
+        'Na orla de Rio das Ostras, o mar varia de calmo a moderado com ondas de 1,2 a 1,6 m na faixa oceânica e águas abrigadas nas enseadas (0,3 a 0,7 m).',
+        'Na orla de Rio das Ostras, o mar se mantém moderado com ondas de 1,0 a 1,4 m e ventos costeiros regulares.',
+        'Na orla de Rio das Ostras, o mar se apresenta calmo com ondas de 0,8 a 1,2 m.'
+      ];
+      const marFrase = marFrases[idx] || `Na orla, o mar se apresenta ${marInfo.estado.toLowerCase()} com ondas de ${marInfo.ondas}.`;
+
+      // Extrai o textinho da previsão oficial para exibir de cara no card, incluindo SEMPRE as condições do mar
       let informeResumo = '';
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0) {
-        informeResumo = cleanBulletinText(d.informe_populacao[0]);
+        let base = cleanBulletinText(d.informe_populacao[0]);
+        if (!base.endsWith('.')) base += '.';
+        if (!base.toLowerCase().includes('mar ')) {
+          informeResumo = `${base} ${marFrase}`;
+        } else {
+          informeResumo = base;
+        }
       } else {
         const fallbacks = [
-          'Nesta terça-feira, predomina sol entre nuvens com rápida elevação térmica e aumento gradual de nuvens à tarde. Baixa possibilidade de chuva isolada.',
-          'Nesta quarta-feira, períodos de sol entre nuvens com aquecimento gradual e chuva fraca ou isolada (2.1 mm). O Rio Jundiá permanece seguro.',
-          'Nesta quinta-feira, calor e umidade sustentam instabilidades com pancadas de chuva e trovoadas à tarde e noite (5.2 mm). Alerta Amarelo INMET.'
+          `Nesta terça-feira, predomina sol entre nuvens com rápida elevação térmica e aumento gradual de nuvens à tarde, com baixa possibilidade de chuva isolada. ${marFrases[0]}`,
+          `Nesta quarta-feira, períodos de sol entre nuvens com aquecimento gradual e chuva fraca ou isolada (2.1 mm). O Rio Jundiá permanece seguro. ${marFrases[1]}`,
+          `Nesta quinta-feira, calor e umidade sustentam a formação de instabilidades com pancadas de chuva e trovoadas à tarde e à noite (5.2 mm, sob Alerta Amarelo). ${marFrases[2]}`
         ];
-        informeResumo = fallbacks[idx] || 'Previsão operacional regular.';
+        informeResumo = fallbacks[idx] || `Previsão operacional regular. ${marFrase}`;
       }
 
       return `
@@ -616,32 +629,35 @@ function renderDashboardUI(meta, rows, weather) {
             </div>
           </div>
 
+          
           <!-- Acordeão com os Pilares Oficiais Expandidos -->
           <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-3 border-t border-current/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <div class="p-2 rounded-xl ${theme.subCardBg}">
-                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Céu</span>
-                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
+              <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
+                <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Céu</span>
+                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
               </div>
-              <div class="p-2 rounded-xl ${theme.subCardBg}">
-                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Chuva</span>
-                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
+              <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
+                <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Chuva</span>
+                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
               </div>
-              <div class="p-2 rounded-xl ${theme.subCardBg}">
-                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Vento</span>
-                <span class="font-medium text-xs truncate block text-black">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
+              <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
+                <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Vento</span>
+                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
               </div>
-              <div class="p-2 rounded-xl ${theme.subCardBg}">
-                <span class="${theme.subCardLabel} font-semibold block uppercase text-[10px] tracking-wider">Mar na Orla</span>
-                <span class="font-bold text-xs truncate block text-black">${marInfo.ondas} • ${marInfo.estado}</span>
-                <span class="text-[9.5px] text-[#475569] font-medium block truncate mt-0.5">${marInfo.detalhe}</span>
+              <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
+                <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Mar na Orla</span>
+                <span class="font-extrabold text-xs block text-black leading-tight mt-0.5">${marInfo.ondas} • ${marInfo.estado}</span>
+                <span class="text-[10px] text-black/75 font-medium block leading-snug mt-1">${marInfo.detalhe}</span>
               </div>
             </div>
 
             ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 1 ? `
-              <div class="mt-2 p-3 rounded-xl ${theme.subCardBg} text-xs space-y-1.5 leading-relaxed">
-                <span class="text-[10px] font-bold uppercase tracking-wider text-[#ea580c] block">Boletim Completo do Dia</span>
-                ${d.informe_populacao.slice(1).map(item => `<p class="text-black font-normal">• ${cleanBulletinText(item)}</p>`).join('')}
+              <div class="mt-2 p-3.5 rounded-xl ${theme.subCardBg} text-xs space-y-2 leading-relaxed">
+                <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Oficial do Boletim</span>
+                <p class="text-black font-normal leading-relaxed text-justify">
+                  ${d.informe_populacao.slice(1).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ')}
+                </p>
               </div>
             ` : ''}
           </div>
@@ -1242,7 +1258,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=82').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=83').catch(() => {});
   }
 }
 
