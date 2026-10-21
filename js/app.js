@@ -389,7 +389,7 @@ function renderDashboardUI(meta, rows, weather) {
   const heroAlertPill = document.getElementById('hero-alert-pill');
   const heroIcon = document.getElementById('hero-weather-icon');
   if (heroIcon && primeiroDia?.pilares?.ceu?.icon) {
-    heroIcon.innerHTML = `<i data-lucide="${primeiroDia.pilares.ceu.icon}" class="w-12 h-12 sm:w-14 sm:h-14"></i>`;
+    heroIcon.innerHTML = `<i data-lucide="${primeiroDia.pilares.ceu.icon}" class="w-8 h-8 sm:w-9 sm:h-9"></i>`;
   }
 
   if (condEl) {
@@ -1258,7 +1258,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=84').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=85').catch(() => {});
   }
 }
 

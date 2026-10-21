@@ -23,7 +23,7 @@
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=84">
+  <link rel="stylesheet" href="css/styles.css?v=85">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -532,144 +532,147 @@
       <!-- ===================================================================== -->
       <section class="lg:col-span-8 space-y-6">
         
-        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO) -->
-        <div class="hero-card p-6 sm:p-7">
+        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO COMPACTO) -->
+        <div class="hero-card p-4 sm:p-5">
           
-          <!-- Topo do Hero -->
-          <div class="flex items-center justify-between gap-3 border-b border-[#dfb992]/20 pb-3.5 mb-4">
-            <div class="flex items-center gap-2.5">
-              <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="map-pin" class="w-4 h-4 text-black"></i>
+          <!-- Topo do Hero Compacto -->
+          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/20 pb-2.5 mb-3">
+            <div class="flex items-center gap-2">
+              <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div>
-                <h1 class="text-base sm:text-lg font-bold text-black tracking-tight leading-none">
+                <h1 class="text-sm sm:text-base font-bold text-black tracking-tight leading-none">
                   Rio das Ostras, RJ
                 </h1>
-                <span class="text-xs font-normal text-black">Região dos Lagos • Costa do Sol</span>
+                <span class="text-[11px] font-normal text-black">Região dos Lagos • Costa do Sol</span>
               </div>
             </div>
 
-            <div class="flex items-center gap-2">
-              <span id="hero-alert-pill" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-xs">
+            <div class="flex items-center gap-1.5">
+              <span id="hero-alert-pill" class="badge-title-orange text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase shadow-xs">
                 Alerta Oficial Vigente
               </span>
-              <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
                 24H
               </span>
             </div>
           </div>
 
-          <!-- Centro do Hero: Temperatura e Condição do Tempo -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-2">
+          <!-- Centro do Hero: Temperatura e Condição do Tempo Compactos -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
             
-            <div class="space-y-2">
-              <div class="flex items-baseline gap-3">
-                <span id="sidebar-temp" class="text-6xl sm:text-7xl font-extrabold font-heading text-black tracking-tight">28°</span>
-                <div class="flex flex-col gap-1">
-                  <span class="text-2xl font-bold text-black leading-none">C</span>
-                  <span class="badge-title-orange px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block">Sensação: 31°C</span>
+            <div class="space-y-1">
+              <div class="flex items-baseline gap-2.5">
+                <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">24°</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xl font-bold text-black leading-none">C</span>
+                  <span class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
                 </div>
               </div>
               
               <div class="space-y-0.5">
-                <h3 id="hero-condition" class="text-lg sm:text-xl font-bold text-black leading-snug">
-                  Muitas nuvens com pancadas de chuva e trovoadas
+                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black leading-snug">
+                  Muitas nuvens com possibilidade de chuva isolada
                 </h3>
-                <p id="hero-subcondition" class="text-xs sm:text-sm font-medium text-black">
-                  Chuva prevista: 1.4 mm • Rajadas até 42 km/h na orla marítima
+                <p id="hero-subcondition" class="text-xs font-medium text-black">
+                  Chuva prevista: 2.1 mm • Rajadas 24 km/h na orla marítima
                 </p>
               </div>
             </div>
 
             <div class="flex items-center justify-center sm:justify-end shrink-0">
-              <div id="hero-weather-icon" class="icon-medallion w-20 h-20 sm:w-24 sm:h-24 bg-white text-black border-2 border-[#f07a53] shadow-md">
-                <i data-lucide="cloud-rain" class="w-12 h-12 sm:w-14 sm:h-14 text-black"></i>
+              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white text-black border-2 border-[#f07a53] shadow-sm">
+                <i data-lucide="cloud-rain" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>
               </div>
             </div>
 
           </div>
 
-          <!-- Base do Hero: Grade de 6 Métricas Essenciais -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-4 mt-3 border-t border-[#dfb992]/20">
+          <!-- Base do Hero: Grade de 6 Métricas Essenciais Compactas -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
             
             <!-- 1. Chuva -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
+                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
-                <span class="text-sm sm:text-base font-bold text-black font-mono block">1.4 mm</span>
-                <span class="text-[10px] font-medium text-black">Probab.: 75%</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
+                <span class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
+                <span class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
               </div>
             </div>
 
             <!-- 2. Vento -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-slate">
-                <i data-lucide="wind" class="w-4 h-4 text-black"></i>
+                <i data-lucide="wind" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
-                <span id="sidebar-wind" class="text-sm sm:text-base font-bold text-black font-mono block">18 km/h</span>
-                <span class="text-[10px] font-medium text-black">Rajadas 42 km/h</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
+                <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
+                <span class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
               </div>
             </div>
 
             <!-- 3. Umidade -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="droplets" class="w-4 h-4 text-black"></i>
+                <i data-lucide="droplets" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
-                <span id="sidebar-hum" class="text-sm sm:text-base font-bold text-black font-mono block">71% a 100%</span>
-                <span class="text-[10px] font-medium text-black">Ar Muito Úmido</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
+                <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
+                <span class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
               </div>
             </div>
 
             <!-- 4. Mar / Ondas -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-sandstone">
-                <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+                <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Mar na Orla</span>
-                <span id="sidebar-sea" class="text-sm sm:text-base font-bold text-black font-mono block">1.4 m</span>
-                <span class="text-[10px] font-medium text-black">Moderado</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
+                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 m</span>
+                <span class="text-[9.5px] font-medium text-black">Moderado</span>
               </div>
             </div>
 
             <!-- 5. Pressão -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-slate">
-                <i data-lucide="gauge" class="w-4 h-4 text-black"></i>
+                <i data-lucide="gauge" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
-                <span class="text-sm sm:text-base font-bold text-black font-mono block">1018 hPa</span>
-                <span class="text-[10px] font-medium text-black">Estável</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
+                <span class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
+                <span class="text-[9.5px] font-medium text-black">Estável</span>
               </div>
             </div>
 
             <!-- 6. Índice UV -->
             <div class="metric-chip">
               <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="sun" class="w-4 h-4 text-black"></i>
+                <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
               </div>
               <div class="min-w-0">
-                <span class="text-[10px] font-bold uppercase text-black block truncate">Índice UV</span>
-                <span class="text-sm sm:text-base font-bold text-black font-mono block">7 - Alto</span>
-                <span class="text-[10px] font-medium text-black">FPS recomendado</span>
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Índice UV</span>
+                <span class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
+                <span class="text-[9.5px] font-medium text-black">FPS recomendado</span>
               </div>
             </div>
 
           </div>
 
-          <!-- Rodapé do Hero: Data Oficial -->
-          <div class="pt-3 mt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
+          <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
+          <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black">
             <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
-            <span class="font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1]">Atualização Operacional Contínua</span>
+            <span class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              Sincronizado Horariamente (Tempo Real 1h)
+            </span>
           </div>
 
         </div>
@@ -1533,6 +1536,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=84"></script>
+  <script type="module" src="js/app.js?v=85"></script>
 </body>
 </html>
