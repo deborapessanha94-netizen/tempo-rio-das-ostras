@@ -1258,7 +1258,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=83').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=84').catch(() => {});
   }
 }
 
