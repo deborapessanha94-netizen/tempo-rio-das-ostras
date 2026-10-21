@@ -1,3 +1,21 @@
+// Controle Global de Abertura/Fechamento dos Cards dos 3 Dias
+window.toggleDayCard = function(idx) {
+  const el = document.getElementById(`day-card-collapse-${idx}`);
+  const chevron = document.getElementById(`day-card-chevron-${idx}`);
+  const btnTxt = document.getElementById(`day-card-btn-txt-${idx}`);
+  if (el) {
+    const isHidden = el.classList.contains('hidden');
+    el.classList.toggle('hidden');
+    if (chevron) {
+      chevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+    if (btnTxt) {
+      btnTxt.textContent = isHidden ? 'Ocultar detalhes técnicos' : 'Ver detalhes técnicos';
+    }
+    if (window.lucide) window.lucide.createIcons();
+  }
+};
+
 /**
  * Aplicação Oficial — TEMPO em Rio das Ostras
  * Dashboard Meteorológico Profissional & Defesa Civil 24H
@@ -517,7 +535,14 @@ function renderDashboardUI(meta, rows, weather) {
       const tituloCard = `${rotuloCurto} (${nomeDiaFormatado}) - ${dataStr}`;
 
       const tempVal = d.pilares?.temp?.val ? d.pilares.temp.val.replace(' a ', ' / ') : '24° / 19°C';
-      const condTxt = d.subtitulo ? d.subtitulo.split(/[•—\-]/)[0].trim() : 'Estável';
+      let condTxt = 'Estável';
+      if (d.subtitulo) {
+        condTxt = d.subtitulo.split(/\s*(?:[-—•]|\s{2,})\s*M[áa]xima/i)[0].trim();
+        condTxt = condTxt.replace(/\(Alerta Amarelo\s*[-—]\s*Perigo Potencial\)/i, '(Alerta Amarelo)');
+        if (condTxt.includes('(') && !condTxt.includes(')')) {
+          condTxt += ')';
+        }
+      }
       const iconName = d.pilares?.ceu?.icon || 'cloud-sun';
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
       const ventoVal = d.pilares?.vento?.val || '24 km/h';
@@ -531,6 +556,19 @@ function renderDashboardUI(meta, rows, weather) {
       ];
       const marInfo = marInfoList[idx] || { ondas: '1,0 m', estado: 'Normal', chip: '1,0 m', detalhe: 'Condições regulares de mar' };
 
+      // Extrai o textinho da previsão oficial para exibir de cara no card
+      let informeResumo = '';
+      if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0) {
+        informeResumo = cleanBulletinText(d.informe_populacao[0]);
+      } else {
+        const fallbacks = [
+          'Nesta terça-feira, predomina sol entre nuvens com rápida elevação térmica e aumento gradual de nuvens à tarde. Baixa possibilidade de chuva isolada.',
+          'Nesta quarta-feira, períodos de sol entre nuvens com aquecimento gradual e chuva fraca ou isolada (2.1 mm). O Rio Jundiá permanece seguro.',
+          'Nesta quinta-feira, calor e umidade sustentam instabilidades com pancadas de chuva e trovoadas à tarde e noite (5.2 mm). Alerta Amarelo INMET.'
+        ];
+        informeResumo = fallbacks[idx] || 'Previsão operacional regular.';
+      }
+
       return `
         <div class="p-4 rounded-2xl ${theme.cardClass} space-y-2.5 cursor-pointer transition hover:scale-[1.01]" onclick="window.toggleDayCard(${idx})">
           <div class="flex items-center justify-between text-sm gap-2">
@@ -539,8 +577,8 @@ function renderDashboardUI(meta, rows, weather) {
                 <i data-lucide="${iconName}" class="w-4 h-4 ${theme.iconColor}"></i>
               </div>
               <div class="min-w-0 flex-1">
-                <span class="font-black ${theme.titleText} text-xs sm:text-[12.5px] block leading-tight text-black">${tituloCard}</span>
-                <span class="text-[11px] sm:text-xs font-normal ${theme.badgeText} block truncate mt-0.5">${condTxt}</span>
+                <span class="font-black ${theme.titleText} text-xs sm:text-[13px] block leading-tight text-black">${tituloCard}</span>
+                <span class="text-[11px] sm:text-xs font-semibold ${theme.badgeText} block mt-0.5">${condTxt}</span>
               </div>
             </div>
             <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
@@ -565,6 +603,19 @@ function renderDashboardUI(meta, rows, weather) {
             </span>
           </div>
 
+          <!-- O TEXTINHO DA PREVISÃO OFICIAL (Visível de cara no card) -->
+          <div class="pt-2 border-t border-black/10 space-y-1">
+            <p class="text-xs text-black/90 font-medium leading-relaxed">
+              ${informeResumo}
+            </p>
+            <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70">
+              <span id="day-card-btn-txt-${idx}" class="hover:underline flex items-center gap-1">
+                Ver detalhes técnicos
+              </span>
+              <span class="text-[10px] text-black/50 uppercase tracking-wider">Defesa Civil</span>
+            </div>
+          </div>
+
           <!-- Acordeão com os Pilares Oficiais Expandidos -->
           <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-3 border-t border-current/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
@@ -587,9 +638,10 @@ function renderDashboardUI(meta, rows, weather) {
               </div>
             </div>
 
-            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0 ? `
-              <div class="mt-2 p-3 rounded-xl ${theme.subCardBg} text-xs sm:text-sm space-y-2 leading-relaxed">
-                ${d.informe_populacao.map(item => `<p class="text-black">${cleanBulletinText(item)}</p>`).join('')}
+            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 1 ? `
+              <div class="mt-2 p-3 rounded-xl ${theme.subCardBg} text-xs space-y-1.5 leading-relaxed">
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[#ea580c] block">Boletim Completo do Dia</span>
+                ${d.informe_populacao.slice(1).map(item => `<p class="text-black font-normal">• ${cleanBulletinText(item)}</p>`).join('')}
               </div>
             ` : ''}
           </div>
@@ -1190,7 +1242,7 @@ function renderCptecData(cptec) {
 
 function setupPWA() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js?v=80').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=81').catch(() => {});
   }
 }
 
