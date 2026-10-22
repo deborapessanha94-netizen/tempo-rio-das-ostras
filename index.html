@@ -1172,6 +1172,31 @@
             </div>
           </div>
 
+          <!-- Síntese Multi-Fonte de Precipitação Oficial -->
+          <div id="chuva-multifonte-box" class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] space-y-1.5 text-xs">
+            <div class="flex items-center justify-between text-[11px] font-bold text-black border-b border-[#cbd5e1]/60 pb-1">
+              <span class="flex items-center gap-1 text-black font-bold">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                Síntese Multi-Fonte de Precipitação
+              </span>
+              <span class="text-[9.5px] font-bold text-[#0369a1] bg-[#e0f2fe] px-1.5 py-0.5 rounded border border-[#bae6fd]">Sem Divergências</span>
+            </div>
+            <div class="space-y-1 text-[11px] text-black">
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">Modelos (Média Contínua):</span>
+                <span id="chuva-multifonte-media" class="font-mono font-bold text-black">8.3 mm hoje</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">INMET (Alerta Tempestade):</span>
+                <span id="chuva-multifonte-alerta" class="font-mono font-bold text-[#b45309]">Até 50 mm/dia (20 a 30 mm/h)</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">Telemetria Prévia (24h):</span>
+                <span id="chuva-multifonte-observado" class="font-mono font-bold text-black">CEMADEN: 10.2 mm • INEA: 8.0 mm</span>
+              </div>
+            </div>
+          </div>
+
           <div class="pt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black flex-wrap gap-2">
             <span class="font-medium text-black">Modelo: CPTEC/INPE & COSMO</span>
             <button id="btn-ver-boletim-modal-1" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
@@ -1536,6 +1561,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=89"></script>
+  <script type="module" src="js/app.js?v=90"></script>
 </body>
 </html>

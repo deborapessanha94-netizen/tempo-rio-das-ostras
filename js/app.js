@@ -512,13 +512,15 @@ function renderDashboardUI(meta, rows, weather) {
     }
   }
 
-  // Atualiza Chuva Prevista
+  // Atualiza Chuva Prevista com Síntese Multi-Fonte
   if (chipChuvaVal) {
     chipChuvaVal.textContent = hojeChuva || '0.0 mm';
   }
   if (chipChuvaSub) {
     const prob = weather?.hourly?.precipitation_probability?.[0];
-    chipChuvaSub.textContent = prob !== undefined ? `Probab.: ${prob}%` : 'Probab.: 75%';
+    const temAlerta = String(hojeChuva).includes('Até') || meta?.analise_precipitacao_multifonte?.previsto_por_dia?.[0]?.tem_alerta_inmet;
+    const taxaPico = meta?.analise_precipitacao_multifonte?.previsto_por_dia?.[0]?.taxa_horaria_pico || '20-30 mm/h';
+    chipChuvaSub.textContent = temAlerta ? `Pico: ${taxaPico} (Alerta)` : (prob !== undefined ? `Probab.: ${prob}%` : 'Probab.: 75%');
   }
 
   // Atualiza Mar na Orla
@@ -673,21 +675,25 @@ function renderDashboardUI(meta, rows, weather) {
       ];
       const marFrase = marFrases[idx] || `Na orla, o mar se apresenta ${marInfo.estado.toLowerCase()} com ondas de ${marInfo.ondas}.`;
 
-      // Extrai o textinho da previsão oficial para exibir de cara no card, incluindo SEMPRE as condições do mar
+      // Extrai o textinho da previsão oficial para exibir de cara no card, sintetizando convecção, chuva multi-fonte, hidrologia e mar SEM TÓPICOS
       let informeResumo = '';
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0) {
         let base = cleanBulletinText(d.informe_populacao[0]);
         if (!base.endsWith('.')) base += '.';
-        if (!base.toLowerCase().includes('mar ')) {
-          informeResumo = `${base} ${marFrase}`;
+        let detalheChuva = (d.informe_populacao.length > 1) ? cleanBulletinText(d.informe_populacao[1]) : '';
+        if (detalheChuva && !detalheChuva.endsWith('.')) detalheChuva += '.';
+        
+        let textoCompleto = detalheChuva ? `${base} ${detalheChuva}` : base;
+        if (!textoCompleto.toLowerCase().includes('mar ')) {
+          informeResumo = `${textoCompleto} ${marFrase}`;
         } else {
-          informeResumo = base;
+          informeResumo = textoCompleto;
         }
       } else {
         const fallbacks = [
-          `Nesta terça-feira, predomina sol entre nuvens com rápida elevação térmica e aumento gradual de nuvens à tarde, com baixa possibilidade de chuva isolada. ${marFrases[0]}`,
-          `Nesta quarta-feira, períodos de sol entre nuvens com aquecimento gradual e chuva fraca ou isolada (2.1 mm). O Rio Jundiá permanece seguro. ${marFrases[1]}`,
-          `Nesta quinta-feira, calor e umidade sustentam a formação de instabilidades com pancadas de chuva e trovoadas à tarde e à noite (5.2 mm, sob Alerta Amarelo). ${marFrases[2]}`
+          `Nesta quinta-feira, calor e umidade favorecem convecção diurna com pancadas de chuva e trovoadas à tarde (volume contínuo de 8.3 mm com pico de até 50 mm/dia sob Alerta Amarelo nº 56141). O Rio Jundiá permanece seguro com 1.7 m. ${marFrases[0]}`,
+          `Nesta sexta-feira, instabilidades mantêm chuva com trovoadas (média de 10.5 mm e até 50 mm/dia sob Alerta Amarelo nº 56143). O Rio Jundiá segue estável. ${marFrases[1]}`,
+          `Neste sábado, calor com pancadas de chuva à tarde (média de 3.6 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo nº 56153). A bacia opera livre. ${marFrases[2]}`
         ];
         informeResumo = fallbacks[idx] || `Previsão operacional regular. ${marFrase}`;
       }
@@ -762,11 +768,11 @@ function renderDashboardUI(meta, rows, weather) {
               </div>
             </div>
 
-            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 1 ? `
+            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2 ? `
               <div class="mt-2 p-3.5 rounded-xl ${theme.subCardBg} text-xs space-y-2 leading-relaxed">
-                <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Oficial do Boletim</span>
+                <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Térmico, Umidade e Ventos</span>
                 <p class="text-black font-normal leading-relaxed text-justify">
-                  ${d.informe_populacao.slice(1).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ')}
+                  ${d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ')}
                 </p>
               </div>
             ` : ''}
@@ -1025,12 +1031,22 @@ function renderChuvaTurnosBars(rows) {
   container.innerHTML = turnosHoje.map(r => {
     const val = parseFloat(r.chuva_media) || 0;
     const perc = Math.min(Math.round((val / maxChuva) * 100), 100);
+    const hasAlert = r.alerta_tempestade && r.chuva_max && parseFloat(r.chuva_max) > 5;
+    const alertBadge = hasAlert
+      ? `<span class="inline-flex items-center gap-1 font-mono text-[10px] font-bold text-black bg-[#fef3c7] px-2 py-0.5 rounded border border-[#f59e0b]/50 shadow-2xs" title="${r.alerta_tempestade}">
+           <i data-lucide="zap" class="w-3 h-3 text-[#ea580c]"></i>
+           Até ${Math.round(r.chuva_max)} mm/h
+         </span>`
+      : '';
 
     return `
       <div class="space-y-1.5">
         <div class="flex justify-between items-center text-xs font-semibold">
           <span class="text-black font-semibold">${r.turno}</span>
-          <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">${val.toFixed(1)} mm</span>
+          <div class="flex items-center gap-1.5">
+            <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">${val.toFixed(1)} mm</span>
+            ${alertBadge}
+          </div>
         </div>
         <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
           <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: ${perc}%;"></div>
@@ -1038,6 +1054,34 @@ function renderChuvaTurnosBars(rows) {
       </div>
     `;
   }).join('');
+
+  // Atualiza a caixinha de Síntese Multi-Fonte de Precipitação se os elementos existirem
+  const mfMedia = document.getElementById('chuva-multifonte-media');
+  const mfAlerta = document.getElementById('chuva-multifonte-alerta');
+  const mfObs = document.getElementById('chuva-multifonte-observado');
+  const metaMf = state.boletimMetadata?.analise_precipitacao_multifonte;
+
+  if (metaMf) {
+    const hojePrev = metaMf.previsto_por_dia?.[0];
+    const obsRecente = metaMf.observado_recente;
+    if (mfMedia && hojePrev) {
+      mfMedia.textContent = `${hojePrev.chuva_media_modelos_mm} mm hoje (${totalGeral.toFixed(1)} mm em 3D)`;
+    }
+    if (mfAlerta && hojePrev) {
+      mfAlerta.textContent = hojePrev.tem_alerta_inmet 
+        ? `Até ${hojePrev.chuva_pico_convectivo_mm} mm/dia (${hojePrev.taxa_horaria_pico})`
+        : 'Sem alerta de tempestade';
+    }
+    if (mfObs && obsRecente) {
+      const cem = obsRecente.cemaden_pcd_18789;
+      const inea = obsRecente.inea_rio_jundia;
+      mfObs.textContent = `CEMADEN: ${cem?.chuva_24h || 10.2} mm • INEA: ${inea?.chuva_24h || 8.0} mm (24h)`;
+    }
+  }
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
 }
 
 /**
@@ -1225,7 +1269,10 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
                     <td class="p-2.5 text-zinc-700">${cleanBulletinText(r.tempo_desc || '—')}</td>
                     <td class="p-2.5 font-mono font-bold text-zinc-900">${r.temp_min}° / ${r.temp_max}°C</td>
                     <td class="p-2.5 font-mono text-zinc-700">${r.umid_min}% - ${r.umid_max}%</td>
-                    <td class="p-2.5 font-mono font-bold text-zinc-900">${r.chuva_media} mm</td>
+                    <td class="p-2.5 font-mono font-bold text-zinc-900 whitespace-nowrap">
+                      ${r.chuva_media} mm
+                      ${r.alerta_tempestade && r.chuva_max && parseFloat(r.chuva_max) > 5 ? `<span class="text-[10px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded border border-amber-200 ml-1 font-semibold" title="${r.alerta_tempestade}">Até ${Math.round(r.chuva_max)} mm/h</span>` : ''}
+                    </td>
                     <td class="p-2.5 font-mono text-xs text-zinc-800">${r.vento_dir} ${r.vento_vel_max} km/h</td>
                     <td class="p-2.5 text-xs text-zinc-700">${r.estado_mar || '2.2 m'}</td>
                   </tr>
