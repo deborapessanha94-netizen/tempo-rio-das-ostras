@@ -1,11 +1,13 @@
-name: Previsão Meteorológica Oficial Autônoma 24/7 (07:00 e 17:00 BRT + Monitoramento Horário)
+name: Sincronização e Previsão Meteorológica Oficial 24/7 (A cada 5 minutos em Nuvem)
 
 on:
   schedule:
-    # 07:00 BRT (10:00 UTC) e 17:00 BRT (20:00 UTC) - Emissões Oficiais da Defesa Civil
+    # Atualização contínua em nuvem a cada 5 minutos (mesmo com computador desligado)
+    - cron: '*/5 * * * *'
+    # Rodadas Oficiais de Previsão Numérica do INMET COSMO 7x7km (00:00 UTC e 12:00 UTC)
+    - cron: '0 0,12 * * *'
+    # Horários Oficiais dos Boletins Operacionais (07:00 e 17:00 BRT -> 10:00 e 20:00 UTC)
     - cron: '0 10,20 * * *'
-    # Monitoramento contínuo 24/7 de 1 em 1 hora para telemetria e novos alertas do INMET/Marinha
-    - cron: '0 * * * *'
   workflow_dispatch:
   push:
     branches:
@@ -27,6 +29,8 @@ jobs:
     steps:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -38,19 +42,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas openpyxl reportlab matplotlib || true
 
-      - name: Executar Coleta de Todas as Fontes e Gerar Previsão Autônoma a partir de Hoje
+      - name: Executar Coleta e Síntese Completa de Todas as Fontes Oficiais
         run: |
           python scripts/collector.py
-          python scripts/auto_bulletin.py
-          python scripts/sync_data.py
 
-      - name: Salvar Dados Atualizados no Repositório
+      - name: Salvar Dados e Boletins Atualizados no Repositório
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/ docs/ img/
           if ! git diff --cached --quiet; then
-            git commit -m "chore(auto-sync): atualizacao horaria 24/7 de todas as fontes oficiais [skip ci]"
-            git pull --rebase -X theirs origin main || git pull -s recursive -X theirs origin main
-            git push origin main
+            git commit -m "chore(auto-sync): atualizacao 24/7 em nuvem a cada 5 min [skip ci]"
+            git push origin main || (git fetch origin main && git merge -X theirs origin/main -m "merge auto-sync [skip ci]" && git push origin main)
           fi

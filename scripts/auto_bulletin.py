@@ -397,6 +397,9 @@ def fetch_inmet_meteograma():
             if b64_str and ('data:image' in b64_str or 'iVBORw' in b64_str):
                 raw_b64 = b64_str.split(',', 1)[1] if ',' in b64_str else b64_str
                 img_bytes = base64.b64decode(raw_b64)
+                if len(img_bytes) < 5000:
+                    print(f'[INMET Meteograma] Rodada {rodada} retornou imagem incompleta ({len(img_bytes)} bytes), tentando próxima...')
+                    continue
                 with open(out_img, 'wb') as f:
                     f.write(img_bytes)
                 meteo_info = {
@@ -1192,13 +1195,17 @@ def run_auto_bulletin_pipeline():
     prep1 = prep_dia(d1['dia_semana'])
     prep2 = prep_dia(d2['dia_semana'])
 
+    d0_faixa = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
+    d1_faixa = d1.get('chuva_faixa_txt') or f"{d1['chuva_tot']:.1f} mm"
+    d2_faixa = d2.get('chuva_faixa_txt') or f"{d2['chuva_tot']:.1f} mm"
+
     sinopse_geral = (
         f"O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de {periodo_str} "
         f"é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. "
         f"Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, "
         f"sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). "
         f"As temperaturas oscilam entre mínima de {d0['t_min']:.0f}°C ao amanhecer e máxima de {d0['t_max']:.0f}°C {prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), "
-        f"com precipitação diária prevista em {d0.get('chuva_faixa_txt', f"{d0['chuva_tot']:.1f} mm")} ({d0_aviso_str}). "
+        f"com precipitação diária prevista em {d0_faixa} ({d0_aviso_str}). "
         f"O gradiente térmico semanal evolui com calor persistente, alcançando pico de até {pico_calor:.0f}°C {prep2} {d2['dia_semana'].lower()} ({d2['date_short']}).\n\n"
         f"No monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. "
         f"A estação telemétrica municipal (INEA 224103620) registrou cota de {jundia_nivel_txt} m (Status: {jundia_status_txt}), "
@@ -1209,9 +1216,9 @@ def run_auto_bulletin_pipeline():
         f"registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até {max_rajada_geral:.0f} km/h "
         f"associadas às células convectivas da tarde.\n\n"
         f"Para os dias subsequentes, {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) a aproximação de instabilidades mantém variação de nuvens com máxima de {d1['t_max']:.0f}°C "
-        f"e pancadas de chuva com trovoadas ({d1.get('chuva_faixa_txt', f"{d1['chuva_tot']:.1f} mm")}, {d1_aviso_str}). "
+        f"e pancadas de chuva com trovoadas ({d1_faixa}, {d1_aviso_str}). "
         f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o calor persiste com máxima de {d2['t_max']:.0f}°C e gradual diminuição de instabilidades "
-        f"({d2.get('chuva_faixa_txt', f"{d2['chuva_tot']:.1f} mm")}, {d2_aviso_str}). "
+        f"({d2_faixa}, {d2_aviso_str}). "
         f"A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. "
         f"A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193."
     )
@@ -1239,7 +1246,7 @@ def run_auto_bulletin_pipeline():
             badge_tipo = "info"
 
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
-        faixa_sub = d.get('chuva_faixa_txt', f"{dia_chuva:.1f} mm")
+        faixa_sub = d.get('chuva_faixa_txt') or f"{dia_chuva:.1f} mm"
 
         if d.get('tem_alerta_inmet'):
             desc_card = (
@@ -1501,7 +1508,7 @@ def run_auto_bulletin_pipeline():
                 "dia_semana": d['dia_semana'],
                 "chuva_media_modelos_mm": d['chuva_tot'],
                 "chuva_pico_convectivo_mm": d.get('chuva_pico_max', 50.0),
-                "faixa_oficial": d.get('chuva_faixa_txt', f"{d['chuva_tot']:.1f} mm"),
+                "faixa_oficial": d.get('chuva_faixa_txt') or f"{d['chuva_tot']:.1f} mm",
                 "tem_alerta_inmet": d.get('tem_alerta_inmet', False),
                 "alerta_inmet_id": d.get('alerta_id'),
                 "taxa_horaria_pico": d.get('taxa_horaria_pico', '< 5 mm/h')
