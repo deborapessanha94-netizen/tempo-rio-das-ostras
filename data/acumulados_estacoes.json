@@ -119,11 +119,11 @@
     "chuva_4h": 0.0,
     "chuva_6h": 0.3,
     "chuva_12h": 1.0,
-    "chuva_24h": 1.6,
-    "chuva_36h": 8.1,
+    "chuva_24h": 1.0,
+    "chuva_36h": 7.8,
     "chuva_48h": 14.6,
     "chuva_96h": 15.6,
-    "ultima_leitura": "23/10/26 18:10",
+    "ultima_leitura": "23/10/26 21:10",
     "online": true
   },
   {
