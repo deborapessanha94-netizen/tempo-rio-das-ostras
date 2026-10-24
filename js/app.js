@@ -1880,10 +1880,10 @@ window.switchSocialPreviewTab = function(format) {
 
   if (isStories) {
     if (tabStoriesBtn) {
-      tabStoriesBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#020b18] text-[#00d2ff] border border-[#00d2ff]/40 shadow-xs';
+      tabStoriesBtn.className = 'px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] shadow-xs';
     }
     if (tabPostBtn) {
-      tabPostBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-200 border border-transparent';
+      tabPostBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-100 border border-[#cbd5e1]';
     }
     if (previewImg) {
       previewImg.src = `img/balneabilidade_stories.png?t=${Date.now()}`;
@@ -1893,16 +1893,16 @@ window.switchSocialPreviewTab = function(format) {
     }
   } else {
     if (tabPostBtn) {
-      tabPostBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#020b18] text-[#00d2ff] border border-[#00d2ff]/40 shadow-xs';
+      tabPostBtn.className = 'px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] shadow-xs';
     }
     if (tabStoriesBtn) {
-      tabStoriesBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-200 border border-transparent';
+      tabStoriesBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-100 border border-[#cbd5e1]';
     }
     if (previewImg) {
       previewImg.src = `img/balneabilidade_post.png?t=${Date.now()}`;
     }
     if (dimText) {
-      dimText.textContent = 'Dimensões: 1080 x 1350 px (Feed 4:5 Retrato)';
+      dimText.textContent = 'Dimensões: 1080 x 1350 px (Post Feed 4:5)';
     }
   }
   if (window.lucide) window.lucide.createIcons();
