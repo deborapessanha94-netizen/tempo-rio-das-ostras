@@ -117,13 +117,13 @@
     "umidade_atual": null,
     "chuva_1h": 0.0,
     "chuva_4h": 0.0,
-    "chuva_6h": 0.2,
+    "chuva_6h": 0.1,
     "chuva_12h": 0.2,
-    "chuva_24h": 1.2,
-    "chuva_36h": 6.1,
-    "chuva_48h": 11.0,
+    "chuva_24h": 0.2,
+    "chuva_36h": 4.3,
+    "chuva_48h": 8.4,
     "chuva_96h": 15.4,
-    "ultima_leitura": "24/10/26 08:10",
+    "ultima_leitura": "24/10/26 13:10",
     "online": true
   },
   {

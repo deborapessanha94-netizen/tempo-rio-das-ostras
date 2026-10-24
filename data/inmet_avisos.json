@@ -1,5 +1,49 @@
 [
   {
+    "id": 56171,
+    "descricao": "Tempestade",
+    "severidade": "Perigo",
+    "cor_nome": "Laranja",
+    "cor_badge": "Alerta Laranja • Perigo",
+    "cor_hex": "#F97316",
+    "eh_direto_ostras": true,
+    "inicio": "2026-10-25 00:00",
+    "fim": "2026-10-25 23:59",
+    "inicio_formatado": "25/10/2026 às 00:00",
+    "fim_formatado": "25/10/2026 às 23:59",
+    "riscos": [
+      "Chuva entre 30 e 60 mm/h ou 50 e 100 mm/dia, ventos intensos (60-100 km/h), e queda de granizo. Risco de corte de energia elétrica, estragos em plantações,  queda de árvores e de alagamentos."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Se possível, desligue aparelhos elétricos e quadro geral de energia. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Paraná,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio de Janeiro,Santa Catarina"
+  },
+  {
+    "id": 56175,
+    "descricao": "Tempestade",
+    "severidade": "Perigo",
+    "cor_nome": "Laranja",
+    "cor_badge": "Alerta Laranja • Perigo",
+    "cor_hex": "#F97316",
+    "eh_direto_ostras": true,
+    "inicio": "2026-10-26 00:00",
+    "fim": "2026-10-26 12:00",
+    "inicio_formatado": "26/10/2026 às 00:00",
+    "fim_formatado": "26/10/2026 às 12:00",
+    "riscos": [
+      "Chuva entre 30 e 60 mm/h ou 50 e 100 mm/dia, ventos intensos (60-100 km/h), e queda de granizo. Risco de corte de energia elétrica, estragos em plantações,  queda de árvores e de alagamentos."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Se possível, desligue aparelhos elétricos e quadro geral de energia. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Paraná,São Paulo,Espírito Santo,Minas Gerais,Mato Grosso do Sul,Rio de Janeiro"
+  },
+  {
     "id": 56153,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
@@ -22,7 +66,7 @@
     "estados": "Minas Gerais,Paraná,Santa Catarina,Rio Grande do Sul,São Paulo,Espírito Santo,Mato Grosso do Sul,Rio de Janeiro,Goiás"
   },
   {
-    "id": 56166,
+    "id": 56170,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_nome": "Amarelo",
@@ -41,16 +85,16 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Goiás,Minas Gerais,Paraná,Mato Grosso,São Paulo,Espírito Santo,Santa Catarina,Mato Grosso do Sul,Bahia,Rio Grande do Sul,Rio de Janeiro"
+    "estados": "Goiás,Minas Gerais,Paraná,São Paulo,Espírito Santo,Santa Catarina,Mato Grosso do Sul,Bahia,Mato Grosso,Rio de Janeiro,Rio Grande do Sul"
   },
   {
-    "id": 56167,
+    "id": 56174,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_nome": "Amarelo",
     "cor_badge": "Alerta Amarelo • Perigo Potencial",
     "cor_hex": "#EAB308",
-    "eh_direto_ostras": false,
+    "eh_direto_ostras": true,
     "inicio": "2026-10-26 00:00",
     "fim": "2026-10-26 23:59",
     "inicio_formatado": "26/10/2026 às 00:00",
@@ -63,6 +107,6 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Goiás,Minas Gerais,Bahia,Tocantins,Espírito Santo,Pará,Mato Grosso,Maranhão,Amazonas,Rio de Janeiro,Piauí,Distrito Federal"
+    "estados": "Goiás,Minas Gerais,Bahia,Paraná,Tocantins,Mato Grosso,São Paulo,Espírito Santo,Pará,Mato Grosso do Sul,Maranhão,Amazonas,Rio de Janeiro,Piauí,Distrito Federal,Roraima,Rondônia"
   }
 ]
