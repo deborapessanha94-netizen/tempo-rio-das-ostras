@@ -1039,52 +1039,6 @@
                 <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#6d8ba6]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
               </button>
 
-              <!-- EXPORTAR IMAGENS PARA O INSTAGRAM (POST & STORIES) -->
-              <div class="p-3 sm:p-3.5 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-2.5 shadow-xs">
-                <div class="flex items-center justify-between flex-wrap gap-2">
-                  <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center text-white shadow-xs">
-                      <i data-lucide="instagram" class="w-3.5 h-3.5 text-white"></i>
-                    </div>
-                    <div>
-                      <span class="text-xs font-black text-black block leading-tight">Baixar Imagem para o Instagram</span>
-                      <span class="text-[10px] text-black/70 font-medium block">Artes oficiais prontas com o boletim atualizado</span>
-                    </div>
-                  </div>
-                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-[#cbd5e1] text-black shadow-2xs">
-                    PNG HD
-                  </span>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-0.5">
-                  <!-- Botão Stories (9:16) -->
-                  <button type="button" onclick="openSocialPreview('stories')" class="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-[#f1f6fa] border-2 border-[#6d8ba6] text-black font-black text-xs shadow-2xs hover:shadow-xs transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-2">
-                      <i data-lucide="smartphone" class="w-4 h-4 text-black group-hover:scale-110 transition-transform"></i>
-                      <span>Visualizar Stories (9:16)</span>
-                    </span>
-                    <span class="bg-[#eaf0f6] px-2 py-0.5 rounded text-[10px] font-bold text-black border border-[#6d8ba6]/40 flex items-center gap-1">
-                      <i data-lucide="eye" class="w-3 h-3 text-black"></i>
-                      <span>Ver Arte</span>
-                    </span>
-                  </button>
-
-                  <!-- Botão Post (Feed 4:5) -->
-                  <button type="button" onclick="openSocialPreview('post')" class="w-full py-2.5 px-3 rounded-xl bg-white hover:bg-[#f1f6fa] border-2 border-[#6d8ba6] text-black font-black text-xs shadow-2xs hover:shadow-xs transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-2">
-                      <i data-lucide="image" class="w-4 h-4 text-black group-hover:scale-110 transition-transform"></i>
-                      <span>Visualizar Post (Feed)</span>
-                    </span>
-                    <span class="bg-[#eaf0f6] px-2 py-0.5 rounded text-[10px] font-bold text-black border border-[#6d8ba6]/40 flex items-center gap-1">
-                      <i data-lucide="eye" class="w-3 h-3 text-black"></i>
-                      <span>Ver Arte</span>
-                    </span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <!-- Rodapé de Advertências & Links Oficiais -->
           <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
             <span id="orla-aviso-resumo" class="font-medium text-black">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
@@ -1379,74 +1333,6 @@
     </div>
   </footer>
 
-  <!-- ========================================================================= -->
-  <!-- MODAL: PRÉ-VISUALIZAÇÃO DE ARTES PARA INSTAGRAM (@tempoemriodasostras)     -->
-  <!-- ========================================================================= -->
-  <div id="modal-social-preview" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="modern-card max-w-2xl w-full max-h-[94vh] flex flex-col shadow-2xl overflow-hidden bg-white border-2 border-[#94a3b8] text-black" style="border-top: 4px solid #6d8ba6 !important;">
-      
-      <!-- Cabeçalho do Modal na Paleta Cerâmica -->
-      <div class="p-4 sm:p-5 bg-[#f8fafc] border-b border-[#cbd5e1] text-black flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center text-white shadow-xs">
-            <i data-lucide="instagram" class="w-5 h-5 text-white"></i>
-          </div>
-          <div>
-            <h3 class="text-base sm:text-lg font-black text-black leading-tight">Pré-visualização para o Instagram</h3>
-            <span class="text-xs text-black font-semibold">@tempoemriodasostras • Balneabilidade Oficial INEA</span>
-          </div>
-        </div>
-        <button onclick="closeSocialPreview()" class="p-1.5 rounded-lg text-black hover:bg-zinc-200 cursor-pointer transition">
-          <i data-lucide="x" class="w-5 h-5 text-black"></i>
-        </button>
-      </div>
-
-      <!-- Barra de Formatos (Tabs Stories vs Post na Paleta Cerâmica) -->
-      <div class="flex items-center border-b border-[#cbd5e1] bg-white px-4 py-2.5 gap-2">
-        <button id="social-tab-btn-stories" onclick="switchSocialPreviewTab('stories')" class="px-4 py-2 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] shadow-xs">
-          <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
-          <span>Stories (9:16)</span>
-        </button>
-        <button id="social-tab-btn-post" onclick="switchSocialPreviewTab('post')" class="px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-100 border border-[#cbd5e1]">
-          <i data-lucide="image" class="w-3.5 h-3.5 text-black"></i>
-          <span>Post (Feed 4:5)</span>
-        </button>
-        <span class="ml-auto text-[11px] text-black font-semibold hidden sm:inline">
-          Paleta Oficial do Site
-        </span>
-      </div>
-
-      <!-- Area de Visualizacao da Imagem (Fundo neutro claro elegante) -->
-      <div class="p-3 sm:p-5 overflow-y-auto flex-1 flex flex-col items-center justify-center bg-[#f1f5f9] min-h-[380px]">
-        <div class="relative max-h-[66vh] flex flex-col items-center justify-center">
-          <img id="social-preview-img" src="img/balneabilidade_stories.png" alt="Pre-visualizacao da Arte" class="max-h-[60vh] sm:max-h-[65vh] w-auto rounded-xl shadow-xl border-2 border-[#cbd5e1] object-contain transition-all" />
-          <a id="social-preview-external-link" href="img/balneabilidade_stories.png" target="_blank" rel="noopener" class="mt-2.5 text-xs font-bold text-black hover:underline flex items-center gap-1.5 bg-white px-3 py-1 rounded-full border border-[#cbd5e1] shadow-2xs transition">
-            <i data-lucide="external-link" class="w-3.5 h-3.5 text-black"></i>
-            <span>Ver em tela cheia (alta resolucao)</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Rodapé com Ações na Paleta Cerâmica -->
-      <div class="px-4 sm:px-5 py-3.5 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between flex-wrap gap-2 text-black">
-        <div class="text-xs text-black">
-          <span class="font-black text-black" id="social-preview-dim-text">Dimensões: 1080 x 1920 px (Stories 9:16)</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="closeSocialPreview()" class="px-4 py-2 rounded-xl border-2 border-[#cbd5e1] hover:bg-zinc-200 text-black text-xs font-black cursor-pointer transition">
-            Fechar
-          </button>
-          <button id="social-download-btn" onclick="downloadCurrentSocialPreview()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] text-black font-black text-xs shadow-xs transition flex items-center gap-2 cursor-pointer">
-            <i data-lucide="download" class="w-4 h-4 text-black"></i>
-            <span>Baixar Imagem PNG</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
   <!-- MODAL: DETALHAMENTO DAS 11 PRAIAS & BALNEABILIDADE INEA (NÓRDICO CERÂMICO) -->
   <!-- ========================================================================= -->
   <div id="modal-praias-detalhes" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
@@ -1735,6 +1621,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=98"></script>
+  <script type="module" src="js/app.js?v=99"></script>
 </body>
 </html>
