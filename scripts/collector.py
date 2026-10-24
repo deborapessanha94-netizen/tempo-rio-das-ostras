@@ -389,32 +389,59 @@ def collect_marinha_data():
         print(f"   [MARINHA SERVICE] Erro: {e}")
         return None
 # ==============================================================================
-# 4. INEA — BALNEABILIDADE DAS PRAIAS DE RIO DAS OSTRAS
+# 4. INEA — BALNEABILIDADE DAS PRAIAS DE RIO DAS OSTRAS (SEIRHI & PORTAL OFICIAL)
 # ==============================================================================
 def collect_balneabilidade():
-    print(">> [4/7] Coletando Balneabilidade das Praias de Rio das Ostras (INEA)...")
+    print(">> [4/7] Coletando Balneabilidade das Praias de Rio das Ostras (SEIRHI / INEA)...")
     balneabilidade_data = {
         'orgao': 'Instituto Estadual do Ambiente - INEA',
+        'sistema': 'SEIRHI - Sistema Estadual de Informações sobre Recursos Hídricos',
+        'url_fonte': 'https://seirhi.inea.rj.gov.br/publico',
+        'url_seirhi': 'https://seirhi.inea.rj.gov.br/publico',
+        'url_portal_inea': 'https://www.inea.rj.gov.br/rio-das-ostras/',
         'boletim_numero': 20,
         'data_boletim': '29 de Setembro de 2026',
-        'url_fonte': 'https://www.inea.rj.gov.br/rio-das-ostras/',
-        'url_pdf': 'https://www.inea.rj.gov.br/wp-content/uploads/2026/10/Rio-das-Ostras-29-09-26.pdf',
         'observacao_tecnica': 'Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.',
         'pontos': [
-            {'praia': 'Praia das Tartarugas', 'codigo': 'RO0007', 'localizacao': 'Em frente à Rua Jequitibá', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Bosque', 'codigo': 'RO0008', 'localizacao': 'Em frente à Rua Figueira', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Centro (Av. Amazonas)', 'codigo': 'RO0001', 'localizacao': 'Em frente à Avenida Estado do Amazonas', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Centro (R. Bento Costa Jr)', 'codigo': 'RO0002', 'localizacao': 'Em frente à Rua Bento Costa Junior', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'praia', 'motivo': 'Próximo à drenagem urbana central'},
-            {'praia': 'Praia de Costazul', 'codigo': 'RO0012', 'localizacao': 'Em frente à Rua Servidão', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia da Joana', 'codigo': 'RO0009', 'localizacao': 'Em frente à Rua Maria Amélia', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Remanso', 'codigo': 'RO0011', 'localizacao': 'Canto direito da praia, próximo ao mirante', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia da Areia Negra', 'codigo': 'RO0010', 'localizacao': 'À esquerda da Rua Amaral, próximo às pedras', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Mar do Norte', 'codigo': 'RO0014', 'localizacao': 'Em frente à Rua F', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Praia do Cemitério', 'codigo': 'RO0004', 'localizacao': 'Em frente à Rua da Prata', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
-            {'praia': 'Boca da Barra', 'codigo': 'RO0003', 'localizacao': 'Em frente à Rua Boca da Barra nº 248', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'foz', 'motivo': 'Desembocadura do Rio das Ostras / vazante pluvial'},
-            {'praia': 'Lagoa de Iriri (Coca-Cola)', 'codigo': 'RO0013', 'localizacao': 'Em frente à Rua Belém', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'lagoa', 'motivo': 'Corpo lagunar com baixa renovação hídrica'}
+            {'praia': 'Praia das Tartarugas', 'codigo': 'RO0007', 'codigo_seirhi': '02RJ01RO0007', 'localizacao': 'Em frente à Rua Jequitibá', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Bosque', 'codigo': 'RO0008', 'codigo_seirhi': '02RJ01RO0008', 'localizacao': 'Em frente à Rua Figueira', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Centro (Av. Amazonas)', 'codigo': 'RO0001', 'codigo_seirhi': '02RJ01RO0001', 'localizacao': 'Em frente à Avenida Estado do Amazonas', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Centro (R. Bento Costa Jr)', 'codigo': 'RO0002', 'codigo_seirhi': '02RJ01RO0002', 'localizacao': 'Em frente à Rua Bento Costa Junior', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'praia', 'motivo': 'Próximo à drenagem urbana central'},
+            {'praia': 'Praia de Costazul', 'codigo': 'RO0012', 'codigo_seirhi': '02RJ01RO0012', 'localizacao': 'Em frente à Rua Servidão', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia da Joana', 'codigo': 'RO0009', 'codigo_seirhi': '02RJ01RO0009', 'localizacao': 'Em frente à Rua Maria Amélia', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Remanso', 'codigo': 'RO0011', 'codigo_seirhi': '02RJ01RO0011', 'localizacao': 'Canto direito da praia, próximo ao mirante', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia da Areia Negra', 'codigo': 'RO0010', 'codigo_seirhi': '02RJ01RO0010', 'localizacao': 'À esquerda da Rua Amaral, próximo às pedras', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Mar do Norte', 'codigo': 'RO0014', 'codigo_seirhi': '02RJ01RO0014', 'localizacao': 'Em frente à Rua F', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Praia do Cemitério', 'codigo': 'RO0004', 'codigo_seirhi': '02RJ01RO0004', 'localizacao': 'Em frente à Rua da Prata', 'status': 'PRÓPRIA', 'badge': 'success', 'tipo': 'praia'},
+            {'praia': 'Boca da Barra', 'codigo': 'RO0003', 'codigo_seirhi': '02RJ01RO0003', 'localizacao': 'Em frente à Rua Boca da Barra nº 248', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'foz', 'motivo': 'Desembocadura do Rio das Ostras / vazante pluvial'},
+            {'praia': 'Lagoa de Iriri (Coca-Cola)', 'codigo': 'RO0013', 'codigo_seirhi': '01RJ01RO0013', 'localizacao': 'Em frente à Rua Belém', 'status': 'IMPRÓPRIA', 'badge': 'danger', 'tipo': 'lagoa', 'motivo': 'Corpo lagunar com baixa renovação hídrica'}
         ]
     }
+
+    # Consulta direta ao SEIRHI (Sistema Estadual de Recursos Hídricos do INEA)
+    try:
+        from seirhi_service import fetch_seirhi_rio_das_ostras
+        seirhi_items = fetch_seirhi_rio_das_ostras()
+        if seirhi_items:
+            balneabilidade_data['seirhi_conectado'] = True
+            balneabilidade_data['seirhi_total_estacoes'] = len(seirhi_items)
+            print(f"   [SEIRHI] Conexão bem-sucedida! {len(seirhi_items)} estações de Rio das Ostras no SEIRHI.")
+            for s_item in seirhi_items:
+                s_code = s_item.get('codigo', '')
+                s_status = s_item.get('status', '')
+                s_data = s_item.get('data_coleta', '')
+                for ponto in balneabilidade_data['pontos']:
+                    if ponto.get('codigo_seirhi') == s_code:
+                        ponto['ultima_coleta_seirhi'] = s_data
+                        ponto['status_seirhi'] = s_item.get('status_original', '')
+                        if s_status in ['PROPRIA', 'IMPROPRIA']:
+                            ponto['status'] = 'PRÓPRIA' if s_status == 'PROPRIA' else 'IMPRÓPRIA'
+                            ponto['badge'] = 'success' if s_status == 'PROPRIA' else 'danger'
+                            balneabilidade_data['data_boletim'] = f"Coleta SEIRHI {s_data}"
+    except Exception as e:
+        print(f"   [SEIRHI INFO] Consulta ao SEIRHI: {e}")
+        balneabilidade_data['seirhi_conectado'] = False
+
     with open(DATA_DIR / "balneabilidade.json", 'w', encoding='utf-8') as f:
         json.dump(balneabilidade_data, f, ensure_ascii=False, indent=2)
     print(f"   [SUCESSO] Balneabilidade oficial de {len(balneabilidade_data['pontos'])} pontos salva em data/balneabilidade.json")
