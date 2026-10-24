@@ -445,6 +445,16 @@ def collect_balneabilidade():
     with open(DATA_DIR / "balneabilidade.json", 'w', encoding='utf-8') as f:
         json.dump(balneabilidade_data, f, ensure_ascii=False, indent=2)
     print(f"   [SUCESSO] Balneabilidade oficial de {len(balneabilidade_data['pontos'])} pontos salva em data/balneabilidade.json")
+
+    # Gera automaticamente artes em alta definição para Instagram (Post 1:1 e Stories 9:16)
+    try:
+        from generate_social_cards import generate_post_card, generate_stories_card
+        generate_post_card(balneabilidade_data)
+        generate_stories_card(balneabilidade_data)
+        print("   [SOCIAL CARDS] Imagens para Instagram (Post e Stories) geradas com sucesso!")
+    except Exception as e:
+        print(f"   [SOCIAL CARDS] Erro ao gerar cards sociais: {e}")
+
     return balneabilidade_data
 
 # ==============================================================================

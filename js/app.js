@@ -1846,3 +1846,53 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
 
   if (window.lucide) window.lucide.createIcons();
 }
+
+/**
+ * Baixa ou compartilha a imagem oficial de balneabilidade para Instagram (Post 1:1 ou Stories 9:16)
+ * @param {'post' | 'stories'} format 
+ */
+window.downloadSocialBalneabilidade = async function(format) {
+  const isStories = format === 'stories';
+  const imgUrl = isStories ? 'img/balneabilidade_stories.png' : 'img/balneabilidade_post.png';
+  const nowStr = new Date().toISOString().slice(0, 10);
+  const fileName = isStories 
+    ? `balneabilidade_rio_das_ostras_stories_${nowStr}.png` 
+    : `balneabilidade_rio_das_ostras_post_${nowStr}.png`;
+
+  try {
+    const res = await fetch(`${imgUrl}?t=${Date.now()}`);
+    if (!res.ok) throw new Error('Falha ao obter imagem');
+    const blob = await res.blob();
+
+    // Se estiver em smartphone compatível e suportar compartilhamento de arquivos
+    const file = new File([blob], fileName, { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] }) && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      await navigator.share({
+        title: 'Balneabilidade de Rio das Ostras - INEA',
+        text: 'Boletim Oficial de Balneabilidade das Praias de Rio das Ostras (INEA/SEIRHI).',
+        files: [file]
+      });
+      return;
+    }
+
+    // Download tradicional via Blob URL
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = objectUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 2500);
+  } catch (err) {
+    console.warn('Fallback direto para download da URL:', err);
+    const a = document.createElement('a');
+    a.href = `${imgUrl}?t=${Date.now()}`;
+    a.download = fileName;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+};
+
