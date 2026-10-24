@@ -1877,6 +1877,9 @@ window.switchSocialPreviewTab = function(format) {
   const tabPostBtn = document.getElementById('social-tab-btn-post');
   const previewImg = document.getElementById('social-preview-img');
   const dimText = document.getElementById('social-preview-dim-text');
+  const extLink = document.getElementById('social-preview-external-link');
+
+  const targetImg = isStories ? 'img/balneabilidade_stories.png' : 'img/balneabilidade_post.png';
 
   if (isStories) {
     if (tabStoriesBtn) {
@@ -1886,7 +1889,10 @@ window.switchSocialPreviewTab = function(format) {
       tabPostBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-100 border border-[#cbd5e1]';
     }
     if (previewImg) {
-      previewImg.src = `img/balneabilidade_stories.png?t=${Date.now()}`;
+      previewImg.src = `${targetImg}?t=${Date.now()}`;
+    }
+    if (extLink) {
+      extLink.href = targetImg;
     }
     if (dimText) {
       dimText.textContent = 'Dimensões: 1080 x 1920 px (Stories 9:16)';
@@ -1899,7 +1905,10 @@ window.switchSocialPreviewTab = function(format) {
       tabStoriesBtn.className = 'px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-100 border border-[#cbd5e1]';
     }
     if (previewImg) {
-      previewImg.src = `img/balneabilidade_post.png?t=${Date.now()}`;
+      previewImg.src = `${targetImg}?t=${Date.now()}`;
+    }
+    if (extLink) {
+      extLink.href = targetImg;
     }
     if (dimText) {
       dimText.textContent = 'Dimensões: 1080 x 1350 px (Post Feed 4:5)';

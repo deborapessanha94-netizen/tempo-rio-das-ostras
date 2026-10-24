@@ -1,7 +1,7 @@
 """
-Gerador de Imagens Oficiais para Redes Sociais - Paleta Cerâmica Oficial do Site
-100% Focado na página pessoal @tempoemriodasostras (SEM Defesa Civil)
-Tipografia GRANDE, legível, alto contraste (#000000) e formato em lista limpo.
+Gerador de Imagens Oficiais para Redes Sociais - Design Premium Paleta do Site
+Identidade visual pessoal: @tempoemriodasostras (SEM qualquer menção à Defesa Civil)
+Design em lista corrida, elegante, tipografia grande e nítida, paleta cerâmica oficial.
 
 Produz:
 - img/balneabilidade_stories.png (1080x1920 px - Stories 9:16)
@@ -38,7 +38,7 @@ def get_fonts():
         p = bold_path if bold else reg_path
         if p:
             try:
-                return ImageFont.truetype(p, size)
+                return ImageFont.truetype(p, int(size))
             except Exception:
                 pass
         return ImageFont.load_default()
@@ -53,258 +53,275 @@ def clean_praia_name(name):
 def draw_rounded_rect(draw, box, radius, fill=None, outline=None, width=1):
     draw.rounded_rectangle(box, radius=int(radius), fill=fill, outline=outline, width=int(width))
 
-def draw_check_icon(draw, cx, cy, size=15, color="#15803d"):
+def draw_check_icon(draw, cx, cy, size=14, color="#15803d"):
     p1 = (cx - size * 0.45, cy)
     p2 = (cx - size * 0.1, cy + size * 0.4)
     p3 = (cx + size * 0.5, cy - size * 0.4)
     draw.line([p1, p2, p3], fill=color, width=4, joint="curve")
 
-def draw_alert_icon(draw, cx, cy, size=15, color="#b91c1c"):
+def draw_alert_icon(draw, cx, cy, size=14, color="#b91c1c"):
     draw.line([(cx, cy - size * 0.45), (cx, cy + size * 0.1)], fill=color, width=4)
     draw.ellipse([cx - 2, cy + size * 0.3, cx + 2, cy + size * 0.45], fill=color)
 
 def generate_stories_card(data):
     """
     Stories 1080x1920 (9:16)
-    Paleta Cerâmica do Site: Tons de #f8fafc, #ffffff, #eaf0f6, #6d8ba6, #000000
-    Texto GRANDE e nítido em lista ponto a ponto.
+    Design em lista corrida no estilo do modelo, com paleta do site:
+    Fundo #f8fafc, barra vertical coral, divisórias limpas, tipografia grande e nítida.
     """
     W, H = 1080, 1920
-    im = Image.new("RGB", (W, H), "#f1f5f9") # Fundo cerâmico suave
+    im = Image.new("RGB", (W, H), "#f8fafc")
     draw = ImageDraw.Draw(im)
     font = get_fonts()
 
-    # Container Branco Cerâmico Principal com margens seguras do Instagram Stories
-    pad_x = 44
-    card_y1 = 100
-    card_y2 = H - 90
-    draw_rounded_rect(draw, (pad_x, card_y1, W - pad_x, card_y2), 32, fill="#ffffff", outline="#94a3b8", width=3)
+    # Faixa lateral decorativa sutil da paleta cerâmica do site
+    draw.rectangle([0, 0, 14, H], fill="#f07a53") # Coral da paleta oficial do site
+    draw.rectangle([14, 0, 20, H], fill="#6d8ba6") # Azul ardósia da paleta
 
-    # 1. Topo Institucional da Página
-    header_h = 100
-    draw_rounded_rect(draw, (pad_x + 24, card_y1 + 24, W - pad_x - 24, card_y1 + header_h), 18, fill="#eaf0f6", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 48, card_y1 + 40), "@tempoemriodasostras", font=font(28, bold=True), fill="#000000")
-    draw.text((pad_x + 48, card_y1 + 76), "Monitoramento de Meteorologia, Orla & Praias", font=font(18, bold=False), fill="#000000")
-    
-    # Badge INEA Oficial à direita
-    draw_rounded_rect(draw, (W - pad_x - 260, card_y1 + 40, W - pad_x - 48, card_y1 + 92), 12, fill="#ffffff", outline="#6d8ba6", width=2)
-    draw.text((W - pad_x - 240, card_y1 + 52), "DADOS OFICIAIS INEA", font=font(16, bold=True), fill="#000000")
+    pad_x = 65
 
-    # 2. Título do Boletim e Placar de Praias
-    title_y = card_y1 + 135
-    draw.text((pad_x + 28, title_y), "BALNEABILIDADE DAS PRAIAS", font=font(40, bold=True), fill="#000000")
+    # 1. Topo: Identificador Pessoal e Fonte Oficial
+    top_y = 135
+    draw.text((pad_x, top_y), "@tempoemriodasostras", font=font(26, bold=True), fill="#000000")
+    draw.text((pad_x, top_y + 34), "Monitoramento de Meteorologia, Orla & Praias", font=font(18, bold=False), fill="#475569")
     
-    data_boletim = data.get("data_boletim", "Outubro de 2026")
+    # Badge INEA à direita
+    badge_txt = "DADOS DO INEA"
+    f_badge = font(16, bold=True)
+    bbox = f_badge.getbbox(badge_txt)
+    bw = (bbox[2] - bbox[0]) + 36
+    draw_rounded_rect(draw, (W - pad_x - bw, top_y + 4, W - pad_x, top_y + 48), 10, fill="#ffffff", outline="#cbd5e1", width=2)
+    draw.text((W - pad_x - bw + 18, top_y + 14), badge_txt, font=f_badge, fill="#000000")
+
+    # 2. Cabeçalho Principal (Estilo idêntico ao modelo com barra vertical)
+    title_y = top_y + 90
+    bar_h = 102
+    draw_rounded_rect(draw, (pad_x, title_y, pad_x + 9, title_y + bar_h), 4, fill="#f07a53")
+
+    draw.text((pad_x + 26, title_y - 2), "BALNEABILIDADE DAS", font=font(34, bold=True), fill="#000000")
+    draw.text((pad_x + 26, title_y + 38), "PRAIAS", font=font(52, bold=True), fill="#000000")
+
+    data_boletim = data.get("data_boletim", "24 de Outubro de 2026")
     boletim_num = data.get("boletim_numero", 20)
-    draw.text((pad_x + 28, title_y + 48), f"Boletim Oficial nº {boletim_num}  •  {data_boletim}", font=font(22, bold=False), fill="#000000")
+    draw.text((pad_x + 26, title_y + 104), f"Boletim Oficial nº {boletim_num} • {data_boletim}", font=font(20, bold=False), fill="#475569")
 
-    # Placar Destaque
+    # Placar Geral de Balneabilidade
     pontos = data.get("pontos", [])
     proprias = [p for p in pontos if str(p.get("status", "")).upper() == "PRÓPRIA"]
-    improprias = [p for p in pontos if str(p.get("status", "")).upper() != "PRÓPRIA"]
     total = len(pontos) if pontos else 12
     perc = int(round((len(proprias) / total) * 100)) if total else 75
 
-    placar_y = title_y + 90
-    draw_rounded_rect(draw, (pad_x + 24, placar_y, W - pad_x - 24, placar_y + 88), 18, fill="#eaf2f8", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 50, placar_y + 16), f"{len(proprias)} DE {total} PRAIAS PRÓPRIAS PARA BANHO ({perc}%)", font=font(28, bold=True), fill="#000000")
-    draw.text((pad_x + 50, placar_y + 54), "Condições avaliadas por análise microbiológica oficial pelo INEA", font=font(18, bold=False), fill="#000000")
+    placar_y = title_y + 148
+    draw_rounded_rect(draw, (pad_x, placar_y, W - pad_x, placar_y + 70), 14, fill="#ffffff", outline="#6d8ba6", width=2)
+    draw.text((pad_x + 28, placar_y + 12), f"{len(proprias)} DE {total} PRAIAS PRÓPRIAS PARA BANHO ({perc}%)", font=font(23, bold=True), fill="#000000")
+    draw.text((pad_x + 28, placar_y + 40), "Análise microbiológica oficial divulgada pelo INEA", font=font(16, bold=False), fill="#475569")
 
-    # 3. Lista das 12 Praias (Cards em Lista)
-    list_y = placar_y + 105
-    draw.text((pad_x + 28, list_y), "SITUAÇÃO PONTO A PONTO:", font=font(22, bold=True), fill="#000000")
-    list_y += 34
+    # 3. Lista Ponto a Ponto (Estilo Lista corrida com divisórias finas)
+    list_y = placar_y + 92
+    draw.text((pad_x, list_y), "CONDIÇÃO POR PONTO DE COLETA", font=font(20, bold=True), fill="#000000")
+    draw.line([(pad_x, list_y + 28), (W - pad_x, list_y + 28)], fill="#cbd5e1", width=2)
 
-    row_h = 75
+    curr_y = list_y + 40
+    row_h = 88
+
     for i, p in enumerate(pontos):
         is_propria = str(p.get("status", "")).upper() == "PRÓPRIA"
         nome = clean_praia_name(p.get("praia", ""))
-        cod = p.get("codigo", f"RO{i+1:04d}")
-        loc = p.get("localizacao", "")[:40]
-        motivo = p.get("motivo", "")
+        cod = p.get("codigo", "")
+        loc = p.get("localizacao", "")
 
-        card_bg = "#ffffff"
-        card_border = "#86efac" if is_propria else "#fca5a5"
-        card_w = W - (pad_x + 24) * 2
-
-        # Card de cada praia
-        draw_rounded_rect(draw, (pad_x + 24, list_y, W - pad_x - 24, list_y + row_h - 8), 14, fill=card_bg, outline=card_border, width=2)
-
-        # Ícone de Status (Verde ou Vermelho com símbolo nítido)
-        icon_bg = "#dcfce7" if is_propria else "#fee2e2"
-        icon_border = "#22c55e" if is_propria else "#ef4444"
-        draw_rounded_rect(draw, (pad_x + 36, list_y + 10, pad_x + 84, list_y + row_h - 18), 10, fill=icon_bg, outline=icon_border, width=1.5)
-        if is_propria:
-            draw_check_icon(draw, pad_x + 60, list_y + (row_h - 8) / 2, size=16, color="#15803d")
-        else:
-            draw_alert_icon(draw, pad_x + 60, list_y + (row_h - 8) / 2, size=16, color="#b91c1c")
-
-        # Nome da Praia (PRETO GRANDE)
-        draw.text((pad_x + 98, list_y + 11), nome, font=font(24, bold=True), fill="#000000")
+        # Nome da Praia (Grande e em negrito preto)
+        draw.text((pad_x + 8, curr_y + 8), nome, font=font(27, bold=True), fill="#000000")
         
-        # Localização e Código
-        loc_text = f"{cod} • {loc}" if loc else cod
-        draw.text((pad_x + 98, list_y + 40), loc_text[:46], font=font(16, bold=False), fill="#000000")
+        # Código e Localização
+        sub_desc = f"{cod} • {loc}" if loc else cod
+        if len(sub_desc) > 54:
+            sub_desc = sub_desc[:52] + "..."
+        draw.text((pad_x + 8, curr_y + 45), sub_desc, font=font(17, bold=False), fill="#475569")
 
-        # Badge Grande de Status à Direita
-        badge_w = 175
-        badge_h = 42
-        badge_x1 = W - pad_x - 24 - badge_w - 12
-        badge_x2 = W - pad_x - 24 - 12
-        badge_y1 = list_y + 12
-        badge_y2 = badge_y1 + badge_h
+        # Badge de Status à Direita (Design limpo estilo pill)
+        pill_w = 230
+        pill_h = 52
+        pill_x1 = W - pad_x - pill_w
+        pill_x2 = W - pad_x
+        pill_y1 = curr_y + 14
+        pill_y2 = pill_y1 + pill_h
 
-        badge_bg = "#dcfce7" if is_propria else "#fee2e2"
-        badge_border = "#22c55e" if is_propria else "#ef4444"
-        badge_txt = "PRÓPRIA" if is_propria else "IMPRÓPRIA"
-        text_color = "#000000"
+        if is_propria:
+            draw_rounded_rect(draw, (pill_x1, pill_y1, pill_x2, pill_y2), 12, fill="#dcfce7", outline="#22c55e", width=2)
+            draw_check_icon(draw, pill_x1 + 30, pill_y1 + 26, size=15, color="#15803d")
+            draw.text((pill_x1 + 56, pill_y1 + 13), "PRÓPRIA", font=font(22, bold=True), fill="#14532d")
+        else:
+            draw_rounded_rect(draw, (pill_x1, pill_y1, pill_x2, pill_y2), 12, fill="#fee2e2", outline="#ef4444", width=2)
+            draw_alert_icon(draw, pill_x1 + 30, pill_y1 + 26, size=15, color="#b91c1c")
+            draw.text((pill_x1 + 56, pill_y1 + 13), "ATENÇÃO", font=font(22, bold=True), fill="#7f1d1d")
 
-        draw_rounded_rect(draw, (badge_x1, badge_y1, badge_x2, badge_y2), 10, fill=badge_bg, outline=badge_border, width=2)
-        draw.text((badge_x1 + 32, badge_y1 + 10), badge_txt, font=font(20, bold=True), fill=text_color)
+        # Linha divisória sutil entre os pontos
+        draw.line([(pad_x, curr_y + row_h), (W - pad_x, curr_y + row_h)], fill="#e2e8f0", width=1)
+        curr_y += row_h
 
-        list_y += row_h
+    # 4. Caixa de Recomendação Oficial INEA
+    rec_y = curr_y + 16
+    draw_rounded_rect(draw, (pad_x, rec_y, W - pad_x, rec_y + 90), 14, fill="#ffffff", outline="#cbd5e1", width=1.5)
+    draw.text((pad_x + 24, rec_y + 16), "RECOMENDAÇÃO DO INEA:", font=font(18, bold=True), fill="#000000")
+    draw.text((pad_x + 24, rec_y + 44), "• Evite banho de mar nas primeiras 24h após chuvas fortes e próximo a canais.", font=font(16, bold=False), fill="#334155")
+    draw.text((pad_x + 24, rec_y + 66), "• Foz de rios e lagunas fechadas costumam concentrar vazão de águas pluviais.", font=font(16, bold=False), fill="#334155")
 
-    # 4. Caixa de Recomendação Oficial do INEA
-    rec_y = list_y + 10
-    draw_rounded_rect(draw, (pad_x + 24, rec_y, W - pad_x - 24, rec_y + 92), 16, fill="#fffbeb", outline="#fcd34d", width=2)
-    draw.text((pad_x + 44, rec_y + 14), "RECOMENDAÇÃO TÉCNICA OFICIAL DO INEA:", font=font(18, bold=True), fill="#000000")
-    draw.text((pad_x + 44, rec_y + 42), "• Evite o banho de mar nas primeiras horas após a ocorrência de chuvas fortes.", font=font(17, bold=False), fill="#000000")
-    draw.text((pad_x + 44, rec_y + 66), "• Não tome banho próximo a galerias de águas pluviais, canais ou foz de rios.", font=font(17, bold=False), fill="#000000")
-
-    # 5. Rodapé da Imagem
-    foot_y = rec_y + 110
-    draw_rounded_rect(draw, (pad_x + 24, foot_y, W - pad_x - 24, foot_y + 70), 16, fill="#eaf0f6", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 48, foot_y + 22), "Acompanhe ao vivo pelo portal:", font=font(18, bold=False), fill="#000000")
-    draw.text((pad_x + 320, foot_y + 18), "tempo-riodasostras.com.br", font=font(24, bold=True), fill="#000000")
+    # 5. Rodapé Pessoal Oficial
+    footer_y = rec_y + 106
+    draw.text((pad_x, footer_y), "— @tempoemriodasostras", font=font(24, bold=True), fill="#000000")
+    draw.text((pad_x, footer_y + 32), "Acompanhe ao vivo pelo portal: tempo-riodasostras.com.br", font=font(18, bold=False), fill="#475569")
 
     out_path = IMG_DIR / "balneabilidade_stories.png"
     im.save(out_path, "PNG", quality=95)
-    print(f"[OK] Stories gerado na paleta cerâmica: {out_path} ({W}x{H})")
+    print(f"[OK] Stories gerado com sucesso: {out_path} ({W}x{H})")
     return out_path
 
 def generate_post_card(data):
     """
     Post Feed 1080x1350 (4:5)
-    Paleta Cerâmica do Site: Letras Pretas Grandes, Legibilidade Absoluta, Sem Defesa Civil
+    Design em lista limpa de 2 colunas equilibradas, tipografia grande, nomes completos sem cortes,
+    paleta cerâmica do site com preto puro.
     """
     W, H = 1080, 1350
-    im = Image.new("RGB", (W, H), "#f1f5f9")
+    im = Image.new("RGB", (W, H), "#f8fafc")
     draw = ImageDraw.Draw(im)
     font = get_fonts()
 
-    pad_x = 36
-    card_y1 = 36
-    card_y2 = H - 36
-    draw_rounded_rect(draw, (pad_x, card_y1, W - pad_x, card_y2), 26, fill="#ffffff", outline="#94a3b8", width=3)
+    # Faixa lateral decorativa
+    draw.rectangle([0, 0, 12, H], fill="#f07a53")
+    draw.rectangle([12, 0, 18, H], fill="#6d8ba6")
 
-    # 1. Topo
-    header_h = 80
-    draw_rounded_rect(draw, (pad_x + 20, card_y1 + 18, W - pad_x - 20, card_y1 + header_h), 14, fill="#eaf0f6", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 40, card_y1 + 30), "@tempoemriodasostras", font=font(25, bold=True), fill="#000000")
-    draw.text((pad_x + 40, card_y1 + 58), "Monitoramento de Praias & Balneabilidade", font=font(16, bold=False), fill="#000000")
+    pad_x = 55
+
+    # 1. Topo Pessoal e Fonte
+    top_y = 60
+    draw.text((pad_x, top_y), "@tempoemriodasostras", font=font(24, bold=True), fill="#000000")
+    draw.text((pad_x, top_y + 30), "Monitoramento de Meteorologia, Orla & Praias", font=font(16, bold=False), fill="#475569")
     
-    draw_rounded_rect(draw, (W - pad_x - 240, card_y1 + 30, W - pad_x - 36, card_y1 + 72), 10, fill="#ffffff", outline="#6d8ba6", width=1.5)
-    draw.text((W - pad_x - 222, card_y1 + 40), "DADOS DO INEA", font=font(16, bold=True), fill="#000000")
+    badge_txt = "DADOS DO INEA"
+    f_badge = font(16, bold=True)
+    bbox = f_badge.getbbox(badge_txt)
+    bw = (bbox[2] - bbox[0]) + 34
+    draw_rounded_rect(draw, (W - pad_x - bw, top_y + 2, W - pad_x, top_y + 44), 10, fill="#ffffff", outline="#cbd5e1", width=2)
+    draw.text((W - pad_x - bw + 17, top_y + 12), badge_txt, font=f_badge, fill="#000000")
 
-    # 2. Título e Placar
-    title_y = card_y1 + 106
-    draw.text((pad_x + 22, title_y), "BALNEABILIDADE DAS PRAIAS", font=font(34, bold=True), fill="#000000")
-    data_boletim = data.get("data_boletim", "Outubro de 2026")
+    # 2. Cabeçalho Principal com Barra Vertical Coral
+    title_y = top_y + 75
+    bar_h = 75
+    draw_rounded_rect(draw, (pad_x, title_y, pad_x + 8, title_y + bar_h), 4, fill="#f07a53")
+
+    draw.text((pad_x + 24, title_y - 2), "BALNEABILIDADE DAS", font=font(28, bold=True), fill="#000000")
+    draw.text((pad_x + 24, title_y + 30), "PRAIAS", font=font(44, bold=True), fill="#000000")
+
+    data_boletim = data.get("data_boletim", "24 de Outubro de 2026")
     boletim_num = data.get("boletim_numero", 20)
-    draw.text((pad_x + 22, title_y + 42), f"Boletim Oficial nº {boletim_num}  •  {data_boletim}", font=font(19, bold=False), fill="#000000")
+    draw.text((pad_x + 24, title_y + 80), f"Boletim Oficial nº {boletim_num} • {data_boletim}", font=font(18, bold=False), fill="#475569")
 
+    # Placar Resumo
     pontos = data.get("pontos", [])
     proprias = [p for p in pontos if str(p.get("status", "")).upper() == "PRÓPRIA"]
-    improprias = [p for p in pontos if str(p.get("status", "")).upper() != "PRÓPRIA"]
     total = len(pontos) if pontos else 12
     perc = int(round((len(proprias) / total) * 100)) if total else 75
 
-    placar_y = title_y + 78
-    draw_rounded_rect(draw, (pad_x + 20, placar_y, W - pad_x - 20, placar_y + 68), 14, fill="#eaf2f8", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 40, placar_y + 12), f"{len(proprias)} DE {total} PRAIAS PRÓPRIAS PARA BANHO ({perc}%)", font=font(24, bold=True), fill="#000000")
-    draw.text((pad_x + 40, placar_y + 40), "Condições oficiais divulgadas pelo Instituto Estadual do Ambiente (INEA)", font=font(16, bold=False), fill="#000000")
+    placar_y = title_y + 118
+    draw_rounded_rect(draw, (pad_x, placar_y, W - pad_x, placar_y + 60), 12, fill="#ffffff", outline="#6d8ba6", width=2)
+    draw.text((pad_x + 24, placar_y + 10), f"{len(proprias)} DE {total} PRAIAS PRÓPRIAS PARA BANHO ({perc}%)", font=font(21, bold=True), fill="#000000")
+    draw.text((pad_x + 24, placar_y + 34), "Análise microbiológica oficial pelo Instituto Estadual do Ambiente (INEA)", font=font(15, bold=False), fill="#475569")
 
-    # 3. Lista de Praias (2 Colunas bem distribuídas com letras grandes)
-    col1_x = pad_x + 20
-    col_w = (W - pad_x * 2 - 50) / 2
-    col2_x = col1_x + col_w + 10
-    list_y = placar_y + 86
+    # 3. Lista em 2 Colunas Equilibradas (6 praias em cada coluna)
+    list_y = placar_y + 75
+    draw.text((pad_x, list_y), "SITUAÇÃO PONTO A PONTO:", font=font(18, bold=True), fill="#000000")
+    draw.line([(pad_x, list_y + 25), (W - pad_x, list_y + 25)], fill="#cbd5e1", width=2)
 
-    # 6 Praias na coluna 1
-    curr_y1 = list_y
+    col_gap = 40
+    col_w = int((W - pad_x * 2 - col_gap) / 2) # ~465px
+    col1_x = pad_x
+    col2_x = pad_x + col_w + col_gap
+
+    start_rows_y = list_y + 35
+    row_h = 92
+
+    # Coluna 1: 6 praias
+    curr_y1 = start_rows_y
     for p in pontos[:6]:
         is_propria = str(p.get("status", "")).upper() == "PRÓPRIA"
         nome = clean_praia_name(p.get("praia", ""))
         cod = p.get("codigo", "")
+        loc = p.get("localizacao", "")
 
-        border_c = "#86efac" if is_propria else "#fca5a5"
-        draw_rounded_rect(draw, (col1_x, curr_y1, col1_x + col_w, curr_y1 + 72), 12, fill="#ffffff", outline=border_c, width=2)
+        # Nome completo da praia
+        draw.text((col1_x + 4, curr_y1 + 10), nome, font=font(23, bold=True), fill="#000000")
         
-        # Ícone
-        icon_bg = "#dcfce7" if is_propria else "#fee2e2"
-        draw_rounded_rect(draw, (col1_x + 10, curr_y1 + 10, col1_x + 50, curr_y1 + 62), 8, fill=icon_bg)
+        # Subdescrição
+        sub_desc = f"{cod} • {loc}" if loc else cod
+        if len(sub_desc) > 36:
+            sub_desc = sub_desc[:34] + "..."
+        draw.text((col1_x + 4, curr_y1 + 42), sub_desc, font=font(15, bold=False), fill="#475569")
+
+        # Badge mais proporcional
+        b_w = 135
+        b_h = 42
+        bx1 = col1_x + col_w - b_w
+        by1 = curr_y1 + 16
         if is_propria:
-            draw_check_icon(draw, col1_x + 30, curr_y1 + 36, size=15, color="#15803d")
+            draw_rounded_rect(draw, (bx1, by1, bx1 + b_w, by1 + b_h), 10, fill="#dcfce7", outline="#22c55e", width=2)
+            draw_check_icon(draw, bx1 + 20, by1 + 21, size=12, color="#15803d")
+            draw.text((bx1 + 38, by1 + 11), "PRÓPRIA", font=font(17, bold=True), fill="#14532d")
         else:
-            draw_alert_icon(draw, col1_x + 30, curr_y1 + 36, size=15, color="#b91c1c")
+            draw_rounded_rect(draw, (bx1, by1, bx1 + b_w, by1 + b_h), 10, fill="#fee2e2", outline="#ef4444", width=2)
+            draw_alert_icon(draw, bx1 + 20, by1 + 21, size=12, color="#b91c1c")
+            draw.text((bx1 + 38, by1 + 11), "ATENÇÃO", font=font(17, bold=True), fill="#7f1d1d")
 
-        # Texto
-        draw.text((col1_x + 60, curr_y1 + 10), nome[:22], font=font(22, bold=True), fill="#000000")
-        draw.text((col1_x + 60, curr_y1 + 38), cod, font=font(16, bold=False), fill="#000000")
+        draw.line([(col1_x, curr_y1 + row_h), (col1_x + col_w, curr_y1 + row_h)], fill="#e2e8f0", width=1)
+        curr_y1 += row_h
 
-        # Badge
-        badge_bg = "#dcfce7" if is_propria else "#fee2e2"
-        badge_border = "#22c55e" if is_propria else "#ef4444"
-        badge_txt = "PRÓPRIA" if is_propria else "ATENÇÃO"
-        draw_rounded_rect(draw, (col1_x + col_w - 120, curr_y1 + 16, col1_x + col_w - 10, curr_y1 + 56), 8, fill=badge_bg, outline=badge_border, width=1.5)
-        draw.text((col1_x + col_w - 108, curr_y1 + 24), badge_txt, font=font(17, bold=True), fill="#000000")
-
-        curr_y1 += 80
-
-    # 6 Praias na coluna 2
-    curr_y2 = list_y
+    # Coluna 2: 6 praias
+    curr_y2 = start_rows_y
     for p in pontos[6:]:
         is_propria = str(p.get("status", "")).upper() == "PRÓPRIA"
         nome = clean_praia_name(p.get("praia", ""))
         cod = p.get("codigo", "")
+        loc = p.get("localizacao", "")
 
-        border_c = "#86efac" if is_propria else "#fca5a5"
-        draw_rounded_rect(draw, (col2_x, curr_y2, col2_x + col_w, curr_y2 + 72), 12, fill="#ffffff", outline=border_c, width=2)
+        draw.text((col2_x + 4, curr_y2 + 10), nome, font=font(23, bold=True), fill="#000000")
         
-        icon_bg = "#dcfce7" if is_propria else "#fee2e2"
-        draw_rounded_rect(draw, (col2_x + 10, curr_y2 + 10, col2_x + 50, curr_y2 + 62), 8, fill=icon_bg)
+        sub_desc = f"{cod} • {loc}" if loc else cod
+        if len(sub_desc) > 36:
+            sub_desc = sub_desc[:34] + "..."
+        draw.text((col2_x + 4, curr_y2 + 42), sub_desc, font=font(15, bold=False), fill="#475569")
+
+        b_w = 135
+        b_h = 42
+        bx1 = col2_x + col_w - b_w
+        by1 = curr_y2 + 16
         if is_propria:
-            draw_check_icon(draw, col2_x + 30, curr_y2 + 36, size=15, color="#15803d")
+            draw_rounded_rect(draw, (bx1, by1, bx1 + b_w, by1 + b_h), 10, fill="#dcfce7", outline="#22c55e", width=2)
+            draw_check_icon(draw, bx1 + 20, by1 + 21, size=12, color="#15803d")
+            draw.text((bx1 + 38, by1 + 11), "PRÓPRIA", font=font(17, bold=True), fill="#14532d")
         else:
-            draw_alert_icon(draw, col2_x + 30, curr_y2 + 36, size=15, color="#b91c1c")
+            draw_rounded_rect(draw, (bx1, by1, bx1 + b_w, by1 + b_h), 10, fill="#fee2e2", outline="#ef4444", width=2)
+            draw_alert_icon(draw, bx1 + 20, by1 + 21, size=12, color="#b91c1c")
+            draw.text((bx1 + 38, by1 + 11), "ATENÇÃO", font=font(17, bold=True), fill="#7f1d1d")
 
-        draw.text((col2_x + 60, curr_y2 + 10), nome[:22], font=font(22, bold=True), fill="#000000")
-        draw.text((col2_x + 60, curr_y2 + 38), cod, font=font(16, bold=False), fill="#000000")
-
-        badge_bg = "#dcfce7" if is_propria else "#fee2e2"
-        badge_border = "#22c55e" if is_propria else "#ef4444"
-        badge_txt = "PRÓPRIA" if is_propria else "ATENÇÃO"
-        draw_rounded_rect(draw, (col2_x + col_w - 120, curr_y2 + 16, col2_x + col_w - 10, curr_y2 + 56), 8, fill=badge_bg, outline=badge_border, width=1.5)
-        draw.text((col2_x + col_w - 108, curr_y2 + 24), badge_txt, font=font(17, bold=True), fill="#000000")
-
-        curr_y2 += 80
+        draw.line([(col2_x, curr_y2 + row_h), (col2_x + col_w, curr_y2 + row_h)], fill="#e2e8f0", width=1)
+        curr_y2 += row_h
 
     # 4. Recomendação Oficial INEA
-    rec_y = max(curr_y1, curr_y2) + 12
-    draw_rounded_rect(draw, (pad_x + 20, rec_y, W - pad_x - 20, rec_y + 82), 14, fill="#fffbeb", outline="#fcd34d", width=2)
-    draw.text((pad_x + 38, rec_y + 12), "RECOMENDAÇÃO OFICIAL DO INEA:", font=font(18, bold=True), fill="#000000")
-    draw.text((pad_x + 38, rec_y + 38), "• Evite banho de mar nas primeiras horas após chuvas e próximo a canais de drenagem.", font=font(16, bold=False), fill="#000000")
-    draw.text((pad_x + 38, rec_y + 58), "• Foz de rios e lagunas fechadas costumam concentrar vazão de águas pluviais.", font=font(16, bold=False), fill="#000000")
+    rec_y = max(curr_y1, curr_y2) + 20
+    draw_rounded_rect(draw, (pad_x, rec_y, W - pad_x, rec_y + 85), 12, fill="#ffffff", outline="#cbd5e1", width=1.5)
+    draw.text((pad_x + 22, rec_y + 14), "RECOMENDAÇÃO DO INEA:", font=font(17, bold=True), fill="#000000")
+    draw.text((pad_x + 22, rec_y + 38), "• Evite o banho de mar nas primeiras horas após chuvas e próximo a canais.", font=font(15, bold=False), fill="#334155")
+    draw.text((pad_x + 22, rec_y + 58), "• Foz de rios e lagunas fechadas costumam concentrar vazão de águas pluviais.", font=font(15, bold=False), fill="#334155")
 
-    # 5. Rodapé
-    foot_y = rec_y + 96
-    draw_rounded_rect(draw, (pad_x + 20, foot_y, W - pad_x - 20, foot_y + 64), 14, fill="#eaf0f6", outline="#6d8ba6", width=2)
-    draw.text((pad_x + 40, foot_y + 20), "Acompanhe ao vivo pelo portal:", font=font(18, bold=False), fill="#000000")
-    draw.text((pad_x + 320, foot_y + 16), "tempo-riodasostras.com.br", font=font(24, bold=True), fill="#000000")
+    # 5. Rodapé Pessoal Oficial
+    foot_y = rec_y + 100
+    draw.text((pad_x, foot_y), "— @tempoemriodasostras", font=font(22, bold=True), fill="#000000")
+    draw.text((pad_x, foot_y + 28), "Acompanhe ao vivo pelo portal: tempo-riodasostras.com.br", font=font(16, bold=False), fill="#475569")
 
     out_path = IMG_DIR / "balneabilidade_post.png"
     im.save(out_path, "PNG", quality=95)
-    print(f"[OK] Post gerado na paleta cerâmica: {out_path} ({W}x{H})")
+    print(f"[OK] Post Feed gerado com sucesso: {out_path} ({W}x{H})")
     return out_path
 
 if __name__ == '__main__':
