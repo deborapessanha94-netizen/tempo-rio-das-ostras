@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Coletor Meteorológico Oficial — Defesa Civil de Rio das Ostras
+Coletor Meteorológico Oficial — @tempoemriodasostras
 Extrai dados de todas as fontes oficiais especificadas:
 - INMET Avisos (apiprevmet3)
 - INMET Previsão por Turnos (3304524)
@@ -704,7 +704,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
 
     # Informe de Alerta da Defesa Civil
     informe_alerta = (
-        f"ALERTA METEOROLÓGICO E HIDROLÓGICO (Defesa Civil / INEA / Marinha): "
+        f"ALERTA METEOROLÓGICO E HIDROLÓGICO (INEA / INMET / Marinha): "
         f"Rio Jundiá registrando {jundia_nivel} (Status: {jundia_status}). "
         f"Aviso da Marinha com vento e rajadas até {max_raj_3d} km/h na Área Delta (mar com ondas até 2,5 m). "
         f"Acumulado previsto para os 3 dias: {ch_3d_total} mm com pico de calor atingindo {max_t_3d}°C."
@@ -726,7 +726,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         f"e a cota de transbordo da calha de 2,20 m), consolidando o status de {jundia_status} com extravasamento da lâmina d'água "
         f"e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. "
         f"Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; Rocha Leão: 124,7 mm; "
-        f"PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
+        f"PCD Jundiá: 108,2 mm; Centro Municipal: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
         f"monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da Marinha do Brasil (Área Delta), "
         f"com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até {max_raj_3d} km/h e mar muito agitado com ondas de até 2,5 m, "
         f"impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais.\n\n"
@@ -807,7 +807,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
                 f"e a cota de transbordo da calha de 2,20 m), consolidando o status de {jundia_status} com extravasamento da lâmina d'água "
                 f"e refluxo pluvial em setores ribeirinhos vulneráveis dos bairros Âncora, Cláudio Ribeiro, Nova Esperança e Ilha. "
                 f"Este quadro decorre dos acumulados pluviométricos severos registrados na rede de PCDs (Palmital: 134,0 mm; Rocha Leão: 124,7 mm; "
-                f"PCD Jundiá: 108,2 mm; Defesa Civil: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
+                f"PCD Jundiá: 108,2 mm; Centro Municipal: 70,4 mm), mantendo o solo 100% saturado com risco geológico remanescente de escorregamento "
                 f"monitorado pelo CEMADEN. Concomitantemente, na faixa litorânea e orla marítima, vigora o Aviso de Mau Tempo nº 733/2026 da Marinha do Brasil (Área Delta), "
                 f"com escoamento de ventos de E/NE Força 7 Beaufort sustentando rajadas de até {max_raj_3d} km/h e mar muito agitado com ondas de até 2,5 m, "
                 f"impondo restrições à navegação artesanal e represamento hidrodinâmico das saídas pluviais na desembocadura dos canais."
@@ -818,7 +818,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
                 {"nome": "Palmital", "valor": "134,0 mm"},
                 {"nome": "Rocha Leão / REBIO", "valor": "124,7 mm"},
                 {"nome": "PCD Jundiá", "valor": "108,2 mm"},
-                {"nome": "Defesa Civil", "valor": "70,4 mm"}
+                {"nome": "Centro Municipal", "valor": "70,4 mm"}
             ],
             "maritimo": {
                 "vento": f"Ventos E/NE Força 7 com rajadas de até {max_raj_3d} km/h",
@@ -827,9 +827,9 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             }
         },
         "ordem_3_operacional": {
-            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
+            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Telemetria 24/7",
             "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
-            "badge_emergencia": "EMERGÊNCIA 199",
+            "badge_emergencia": "OPERAÇÃO 24/7",
             "texto": (
                 "Os dados meteorológicos e hidrológicos são atualizados pontualmente a cada ciclo diário oficial das 17:00h e operam "
                 "com infraestrutura de telemetria contínua 24h na nuvem, assegurando processamento ininterrupto de dados em tempo real mesmo "
@@ -841,7 +841,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             "pilares": [
                 {"label": "Ciclo Sinótico Oficial", "val": "Consolidação diária das 17:00h e telemetria telemétrica a cada 15 min"},
                 {"label": "Nuvem Autônoma 24/7", "val": "Processamento redundante em nuvem independente de hardware local ligado"},
-                {"label": "Canais de Emergência", "val": "Defesa Civil 199 • Bombeiros 193 • Telefone Geral (22) 2760-8360"}
+                {"label": "Fontes de Dados", "val": "INEA • INMET • Marinha do Brasil • CEMADEN"}
             ]
         }
     }
@@ -857,7 +857,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
             "risco_d0": r0, "risco_d1": r1, "risco_d2": r2,
             "risco_sab": r0, "risco_dom": r1, "risco_seg": r2,
             "impactos": f"Monitoramento da calha do Rio Jundiá ({jundia_nivel}); risco de refluxo pluvial em ruas ribeirinhas durante maré alta e picos de chuva.",
-            "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, prontidão 24h e suporte da Defesa Civil."
+            "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
         },
         {
             "setor": "Costazul, Tartaruga, Remanso e Mar do Norte (Orla)",
@@ -910,7 +910,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
     }
 
     contatos_emergencia = {
-        "defesa_civil_plantao": "199",
+        "contato_portal": "@tempoemriodasostras",
         "bombeiros": "193",
         "telefone_geral": "(22) 2760-8360",
         "whatsapp_emergencia": "(22) 99245-5678"
@@ -978,6 +978,17 @@ def run_daily_collection():
     avisos, prev_turnos = collect_inmet_data()
     marinha = collect_marinha_data()
     balnear = collect_balneabilidade()
+
+    # Coleta Boletim Hidrometeorológico Oficial do Alerta de Cheias (INEA)
+    try:
+        try:
+            from scripts.inea_cheias_service import get_hydro_forecast_summary
+        except ImportError:
+            from inea_cheias_service import get_hydro_forecast_summary
+        print(">> [5/7] Coletando Boletim Hidrometeorológico INEA Alerta de Cheias...")
+        inea_boletim = get_hydro_forecast_summary()
+    except Exception as e:
+        print(f"   [AVISO] Falha ao coletar Boletim Hidrometeorológico INEA: {e}")
 
     # Gera a previsão e o boletim oficial para os 3 dias a partir de hoje
     try:

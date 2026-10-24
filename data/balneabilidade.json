@@ -15,7 +15,9 @@
       "localizacao": "Em frente à Rua Jequitibá",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "13/01/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Bosque",
@@ -24,7 +26,9 @@
       "localizacao": "Em frente à Rua Figueira",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Centro (Av. Amazonas)",
@@ -33,7 +37,9 @@
       "localizacao": "Em frente à Avenida Estado do Amazonas",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Centro (R. Bento Costa Jr)",
@@ -43,7 +49,9 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "praia",
-      "motivo": "Próximo à drenagem urbana central"
+      "motivo": "Próximo à drenagem urbana central",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia de Costazul",
@@ -52,7 +60,9 @@
       "localizacao": "Em frente à Rua Servidão",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia da Joana",
@@ -61,7 +71,9 @@
       "localizacao": "Em frente à Rua Maria Amélia",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Remanso",
@@ -70,7 +82,9 @@
       "localizacao": "Canto direito da praia, próximo ao mirante",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia da Areia Negra",
@@ -79,7 +93,9 @@
       "localizacao": "À esquerda da Rua Amaral, próximo às pedras",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Mar do Norte",
@@ -88,7 +104,9 @@
       "localizacao": "Em frente à Rua F",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Praia do Cemitério",
@@ -97,7 +115,9 @@
       "localizacao": "Em frente à Rua da Prata",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "ultima_coleta_seirhi": "11/02/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Boca da Barra",
@@ -107,7 +127,9 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "foz",
-      "motivo": "Desembocadura do Rio das Ostras / vazante pluvial"
+      "motivo": "Desembocadura do Rio das Ostras / vazante pluvial",
+      "ultima_coleta_seirhi": "13/01/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     },
     {
       "praia": "Lagoa de Iriri (Coca-Cola)",
@@ -117,8 +139,11 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "lagoa",
-      "motivo": "Corpo lagunar com baixa renovação hídrica"
+      "motivo": "Corpo lagunar com baixa renovação hídrica",
+      "ultima_coleta_seirhi": "06/01/2026",
+      "status_seirhi": "Com amostragem mas sem classificação"
     }
   ],
-  "seirhi_conectado": false
+  "seirhi_conectado": true,
+  "seirhi_total_estacoes": 12
 }

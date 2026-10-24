@@ -59,7 +59,7 @@ def deg_to_compass(d):
     return arr[(val % 16)]
 
 def fetch_json(url, timeout=12, retries=3):
-    headers = {'User-Agent': 'MeteoRioDasOstras/2.0 (Defesa Civil Rio das Ostras; contato@riodasostras.rj.gov.br)'}
+    headers = {'User-Agent': 'MeteoRioDasOstras/2.0 (@tempoemriodasostras; contato@tempo-riodasostras.com.br)'}
     for attempt in range(retries):
         try:
             req = urllib.request.Request(url, headers=headers)
@@ -517,6 +517,17 @@ def run_auto_bulletin_pipeline():
     inmet_forecast = fetch_inmet_forecast()
     inmet_meteograma = fetch_inmet_meteograma()
     cptec_data = fetch_cptec_data()
+
+    # Coleta Boletim Hidrometeorológico Oficial do Alerta de Cheias (INEA)
+    try:
+        try:
+            from scripts.inea_cheias_service import get_hydro_forecast_summary
+        except ImportError:
+            from inea_cheias_service import get_hydro_forecast_summary
+        inea_boletim_data = get_hydro_forecast_summary()
+    except Exception as e:
+        print(f"[INEA CHEIAS BOLETIM] Erro: {e}")
+        inea_boletim_data = None
 
     # 2. Marinha do Brasil — Avisos de Mau Tempo & Tábua de Marés Oficial (Terminal de Imbetiba)
     try:
@@ -1220,7 +1231,7 @@ def run_auto_bulletin_pipeline():
         f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o calor persiste com máxima de {d2['t_max']:.0f}°C e gradual diminuição de instabilidades "
         f"({d2_faixa}, {d2_aviso_str}). "
         f"A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. "
-        f"A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193."
+        f"A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo."
     )
 
     # Cards dos 3 Dias
@@ -1318,7 +1329,7 @@ def run_auto_bulletin_pipeline():
             "risco_dom": calc_risco_setor(c1, 1, 'rio'),
             "risco_seg": calc_risco_setor(c2, 2, 'rio'),
             "impactos": f"Monitoramento da calha do Rio Jundiá ({jundia_nivel_txt} m); calha em regime seguro de vazante contínua com escoamento livre.",
-            "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
+            "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
         },
         {
             "setor": "Costazul, Tartaruga, Remanso e Mar do Norte (Orla)",
@@ -1439,18 +1450,18 @@ def run_auto_bulletin_pipeline():
                 {"nome": "Rio Jundiá (INEA)", "valor": f"{jundia_nivel_txt} m (0,0 mm 24h)"},
                 {"nome": "Palmital", "valor": "0,0 mm (24h)"},
                 {"nome": "Rocha Leão / REBIO", "valor": "0,0 mm (24h)"},
-                {"nome": "Defesa Civil", "valor": "0,0 mm (24h)"}
+                {"nome": "Centro Municipal", "valor": "0,0 mm (24h)"}
             ]
         },
         "ordem_3_operacional": {
-            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
+            "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Telemetria 24/7",
             "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
-            "badge_emergencia": "EMERGÊNCIA 199",
+            "badge_emergencia": "OPERAÇÃO 24/7",
             "texto": sinopse_geral.split('\n\n')[2] if '\n\n' in sinopse_geral and len(sinopse_geral.split('\n\n')) > 2 else "",
             "pilares": [
                 {"label": "Ciclo Sinótico Oficial", "val": "Consolidação diária e telemetria telemétrica contínua"},
                 {"label": "Nuvem Autônoma 24/7", "val": "Processamento redundante em nuvem independente de hardware local ligado"},
-                {"label": "Canais de Emergência", "val": "Defesa Civil 199 • Bombeiros 193 • Telefone Geral (22) 2760-8360"}
+                {"label": "Fontes de Dados", "val": "INEA • INMET • Marinha do Brasil • CEMADEN"}
             ]
         }
     }
@@ -1540,6 +1551,7 @@ def run_auto_bulletin_pipeline():
             "previsao_5dias": inmet_forecast
         },
         "inmet_meteograma": inmet_meteograma,
+        "inea_boletim_hidrometeorologico": inea_boletim_data,
         "orla_condicoes": orla_condicoes,
         "tabua_mares": tabua_mares,
         "cptec_oficial": {
@@ -1561,7 +1573,7 @@ def run_auto_bulletin_pipeline():
             "plancon_status": "ATENÇÃO" if len(today_alerts) > 0 else "OBSERVAÇÃO"
         },
         "contatos_emergencia": {
-            "defesa_civil_plantao": "199",
+            "contato_portal": "@tempoemriodasostras",
             "bombeiros": "193",
             "telefone_geral": "(22) 2760-8360",
             "whatsapp_emergencia": "(22) 99245-5678"
@@ -1579,12 +1591,13 @@ def run_auto_bulletin_pipeline():
             {"nome": "Marinha do Brasil - Avisos de Mau Tempo (Área Delta)", "url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo", "tipo": "Meteorologia Marinha"},
             {"nome": "Marinha do Brasil - Tábuas de Maré (Estação Imbetiba nº 39)", "url": "https://www.marinha.mil.br/chm/tabuas-de-mare", "tipo": "Maregrafia Oficial"},
             {"nome": "Marinha do Brasil - Cartas Sinóticas (00Z e 12Z)", "url": "https://www.marinha.mil.br/chm/cartassinoticas", "tipo": "Sinótica de Superfície"},
+            {"nome": "INEA - Sala de Situação (Boletim Hidrometeorológico Oficial RH-VIII)", "url": "http://alertadecheias.inea.rj.gov.br/analise.php", "tipo": "Previsão Hidrometeorológica"},
             {"nome": "INEA - Alerta de Cheias e Rio Jundiá (2241036)", "url": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php", "tipo": "Telemetria Hidrológica"},
             {"nome": "INEA - Radar Tool RJ", "url": "https://radartool.inea.rj.gov.br/radar-tool/", "tipo": "Radar Meteorológico"},
             {"nome": "INEA - Balneabilidade das Praias", "url": "https://www.inea.rj.gov.br/rio-das-ostras/", "tipo": "Qualidade das Praias"},
             {"nome": "CEMADEN - Riscos Geo-hidrológicos", "url": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos", "tipo": "Riscos de Desastres"},
             {"nome": "CEMADEN / CENAD - Briefing Técnico Diário", "url": "https://www.gov.br/cemaden/pt-br/assuntos/briefing-cemaden-cenad", "tipo": "Briefing de Risco"},
-            {"nome": "Defesa Civil RJ - Painel Pluviométrico REDEC 1", "url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/redec.php?action=1", "tipo": "Defesa Civil Regional"},
+            {"nome": "Painel Pluviométrico Regional REDEC 1", "url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/redec.php?action=1", "tipo": "Telemetria Regional"},
             {"nome": "INPE - Queimadas Situação Atual (Restinga)", "url": "https://data.inpe.br/queimadas/situacao_atual/", "tipo": "Monitoramento de Queimadas"}
         ]
     }

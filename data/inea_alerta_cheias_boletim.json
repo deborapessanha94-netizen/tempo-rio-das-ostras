@@ -1,0 +1,37 @@
+{
+  "orgao": "Instituto Estadual do Ambiente - INEA",
+  "sistema": "Sistema de Alerta de Cheias",
+  "sala_situacao": "Sala de Situação INEA",
+  "titulo": "Boletim Hidrometeorológico Oficial",
+  "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
+  "data_coleta": "2026-10-24 20:53:28",
+  "bulletin_info": {
+    "disponivel": true,
+    "arquivo": "BoletimHidrometeorologico_24-10-2026.pdf",
+    "data_boletim": "24/10/2026",
+    "label": "Boletim HidrometeorolÃ³gico 24/10/2026",
+    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_24-10-2026.pdf"
+  },
+  "previsao_rh8": {
+    "hoje": {
+      "data": "24/10/2026",
+      "faixa_chuva_mm": "1 a 10 mm",
+      "temp_max": 29,
+      "temp_min": 21,
+      "condicao": "Sol com aumento de nebulosidade e pancadas de chuva com raios à tarde/noite associadas à aproximação de frente fria.",
+      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
+      "modelo_meteorologico": "ECMWF"
+    },
+    "amanha": {
+      "data": "25/10/2026",
+      "faixa_chuva_mm": "10 a 25 mm",
+      "temp_max": 28,
+      "temp_min": 24,
+      "condicao": "Céu nublado a encoberto com pancadas de chuva acompanhadas de raios na passagem de frente fria.",
+      "comportamento_rios": "Previsão de elevações nos rios monitorados da bacia.",
+      "modelo_meteorologico": "COSMO / INMET"
+    }
+  },
+  "contato_sala_situacao": "(21) 2334-9307",
+  "url_oficial": "http://alertadecheias.inea.rj.gov.br"
+}
