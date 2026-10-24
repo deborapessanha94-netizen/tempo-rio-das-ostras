@@ -120,10 +120,10 @@
     "chuva_6h": 0.0,
     "chuva_12h": 0.0,
     "chuva_24h": 1.0,
-    "chuva_36h": 6.1,
-    "chuva_48h": 11.2,
-    "chuva_96h": 15.4,
-    "ultima_leitura": "24/10/26 03:10",
+    "chuva_36h": 6.5,
+    "chuva_48h": 12.0,
+    "chuva_96h": 15.6,
+    "ultima_leitura": "24/10/26 00:10",
     "online": true
   },
   {
@@ -136,15 +136,15 @@
     "umidade_atual": null,
     "chuva_1h": 0.2,
     "chuva_4h": 0.4,
-    "chuva_6h": 1.2,
-    "chuva_12h": 2.7,
-    "chuva_24h": 5.6,
-    "chuva_36h": 15.1,
-    "chuva_48h": 23.1,
-    "chuva_96h": 37.4,
-    "nivel_rio": "1.91 m",
+    "chuva_6h": 0.7,
+    "chuva_12h": 1.4,
+    "chuva_24h": 2.6,
+    "chuva_36h": 7.2,
+    "chuva_48h": 11.1,
+    "chuva_96h": 18.0,
+    "nivel_rio": "1.64 m",
     "status_rio": "VIGILÂNCIA",
-    "ultima_leitura": "Hoje",
+    "ultima_leitura": "23/10/2026 20:45",
     "online": true
   }
 ]

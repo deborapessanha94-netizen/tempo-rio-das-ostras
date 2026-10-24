@@ -1,11 +1,11 @@
 {
-  "status_geral": "Sem avisos de mau tempo vigentes na orla",
-  "badge": "NORMALIDADE",
-  "badge_tipo": "success",
-  "aviso_ativo": false,
-  "aviso_numero": null,
-  "aviso_tipo": "NORMALIDADE",
-  "mar_ondas": "1,2 a 1,6 m (Moderado)",
+  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 778/2026 e 781/2026)",
+  "badge": "VENTO FORTE & MAR GROSSO",
+  "badge_tipo": "danger",
+  "aviso_ativo": true,
+  "aviso_numero": "778/2026 e 781/2026",
+  "aviso_tipo": "MAR GROSSO E VENTO FORTE",
+  "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
   "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
   "nota_rodape": "Em dias de aviso da Marinha, respeite as bandeiras de sinalização dos Guarda-Vidas do Corpo de Bombeiros (193).",
@@ -13,23 +13,23 @@
     {
       "key": "d0",
       "rotulo": "Hoje",
+      "data_iso": "2026-10-23",
+      "data_br": "23/10",
+      "dia_semana": "Sexta"
+    },
+    {
+      "key": "d1",
+      "rotulo": "Amanhã",
       "data_iso": "2026-10-24",
       "data_br": "24/10",
       "dia_semana": "Sábado"
     },
     {
-      "key": "d1",
-      "rotulo": "Amanhã",
+      "key": "d2",
+      "rotulo": "Depois de amanhã",
       "data_iso": "2026-10-25",
       "data_br": "25/10",
       "dia_semana": "Domingo"
-    },
-    {
-      "key": "d2",
-      "rotulo": "Depois de amanhã",
-      "data_iso": "2026-10-26",
-      "data_br": "26/10",
-      "dia_semana": "Segunda"
     }
   ],
   "praias_condicoes": [
@@ -40,21 +40,21 @@
       "dias": {
         "d0": {
           "estado": "Moderado a Agitado",
-          "ondas": "1.2 a 1.6 m",
+          "ondas": "1,2 a 1,6 m",
           "badge": "warning",
-          "detalhe": "Swell de SE/E • Arrebentação expressiva e correntes de retorno"
+          "detalhe": "Swell de SE/E • Arrebentação regular e mar arejado"
         },
         "d1": {
-          "estado": "Moderado",
-          "ondas": "1.0 a 1.4 m",
-          "badge": "success",
-          "detalhe": "Swell de E • Ondulação mais organizada, orla arejada"
+          "estado": "Moderado (Agitando à Noite)",
+          "ondas": "1,2 a 1,8 m",
+          "badge": "warning",
+          "detalhe": "Swell de E • Entrada de vento forte a partir das 21h (Aviso nº 781)"
         },
         "d2": {
-          "estado": "Moderado a Calmo",
-          "ondas": "0,8 a 1,2 m",
-          "badge": "success",
-          "detalhe": "Swell de E/NE • Água mais límpida e mar amansando"
+          "estado": "Mar Grosso / Agitado",
+          "ondas": "2,0 a 2,8 m (3,5 m ao largo)",
+          "badge": "danger",
+          "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Forte (nº 781) • Ondas severas e vento até 74 km/h"
         }
       }
     },
@@ -65,21 +65,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo a Moderado",
-          "ondas": "0.7 a 1.0 m",
+          "ondas": "0,7 a 1,0 m",
           "badge": "success",
           "detalhe": "Ondas suaves junto à faixa de areia central"
         },
         "d1": {
-          "estado": "Calmo",
-          "ondas": "0,6 a 0,9 m",
+          "estado": "Calmo a Moderado",
+          "ondas": "0,7 a 1,1 m",
           "badge": "success",
-          "detalhe": "Mar manso com excelente área para caminhada e lazer"
+          "detalhe": "Mar propício para caminhada; vento aumentando à noite"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,5 a 0,8 m",
-          "badge": "success",
-          "detalhe": "Águas calmas e límpidas na orla central"
+          "estado": "Moderado (Vento Forte NW/SW)",
+          "ondas": "0,9 a 1,3 m",
+          "badge": "warning",
+          "detalhe": "Enseada protegida de ondas gigantes, mas com rajadas fortes de vento na orla"
         }
       }
     },
@@ -90,21 +90,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.4 a 0.7 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
           "detalhe": "Águas calmas e abrigadas do vento sul"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
-          "detalhe": "Mar muito calmo, perfeito para banho e crianças"
+          "detalhe": "Mar calmo, condições boas para banho"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,3 a 0,5 m",
-          "badge": "success",
-          "detalhe": "Piscina natural transparente com águas calmas"
+          "estado": "Calmo a Moderado",
+          "ondas": "0,6 a 1,0 m",
+          "badge": "warning",
+          "detalhe": "Águas abrigadas de swell oceânico, atenção a rajadas de vento"
         }
       }
     },
@@ -115,21 +115,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.4 a 0.7 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
           "detalhe": "Mar calmo, protegido de correntezas marítimas"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
-          "detalhe": "Águas rasas e mansas, excelente para lazer náutico leve"
+          "detalhe": "Águas mansas para lazer familiar"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,3 a 0,5 m",
-          "badge": "success",
-          "detalhe": "Águas muito calmas e serenas"
+          "estado": "Calmo a Moderado",
+          "ondas": "0,6 a 0,9 m",
+          "badge": "warning",
+          "detalhe": "Protegida de ondas fortes; rajadas de vento presentes"
         }
       }
     },
@@ -140,21 +140,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.5 a 0.8 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
           "detalhe": "Mar tranquilo protegido pelos costões rochosos"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,7 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
-          "detalhe": "Águas transparentes, propícias para mergulho livre"
+          "detalhe": "Águas cristalinas para mergulho livre"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
-          "badge": "success",
-          "detalhe": "Mar muito calmo e águas limpas"
+          "estado": "Moderado nas Pontas",
+          "ondas": "0,8 a 1,2 m",
+          "badge": "warning",
+          "detalhe": "Ondulação entrando nas pontas rochosas sob aviso da Marinha"
         }
       }
     },
@@ -165,21 +165,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.5 a 0.8 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
           "detalhe": "Mar calmo protegido da ondulação direta pelo pontal"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,7 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
-          "detalhe": "Águas mansas, excelente para stand-up paddle e banho"
+          "detalhe": "Águas mansas para stand-up paddle"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
-          "badge": "success",
-          "detalhe": "Águas calmas e cristalinas junto às pedras"
+          "estado": "Moderado com Vento",
+          "ondas": "0,7 a 1,1 m",
+          "badge": "warning",
+          "detalhe": "Atenção ao vento forte próximo ao costão de Costazul"
         }
       }
     },
@@ -190,21 +190,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.5 a 0.8 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
           "detalhe": "Mar calmo com ondulação fraca nas pedras"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,7 m",
+          "ondas": "0,5 a 0,8 m",
           "badge": "success",
-          "detalhe": "Águas mansas e temperatura agradável"
+          "detalhe": "Águas calmas e temperatura agradável"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
-          "badge": "success",
-          "detalhe": "Mar sereno sem correntezas aparentes"
+          "estado": "Moderado",
+          "ondas": "0,7 a 1,0 m",
+          "badge": "warning",
+          "detalhe": "Resguardo parcial dos costões com vento forte na faixa de areia"
         }
       }
     },
@@ -215,21 +215,21 @@
       "dias": {
         "d0": {
           "estado": "Moderado a Agitado",
-          "ondas": "1.1 a 1.6 m",
+          "ondas": "1,2 a 1,6 m",
           "badge": "warning",
           "detalhe": "Ondas fortes de mar aberto, atenção a correntezas"
         },
         "d1": {
-          "estado": "Moderado",
-          "ondas": "0,9 a 1,3 m",
-          "badge": "success",
-          "detalhe": "Ondulação constante, indicada para surf e pesca"
+          "estado": "Moderado a Agitado",
+          "ondas": "1,3 a 1,8 m",
+          "badge": "warning",
+          "detalhe": "Mar aberto, ondulação constante e vento à noite"
         },
         "d2": {
-          "estado": "Moderado",
-          "ondas": "0,7 a 1,1 m",
-          "badge": "success",
-          "detalhe": "Ondas regulares com vento diminuindo"
+          "estado": "Muito Agitado (Mar Grosso)",
+          "ondas": "2,2 a 3,0 m (3,5 m ao largo)",
+          "badge": "danger",
+          "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Força 7/8 (nº 781) • Evite banho e navegação"
         }
       }
     },
@@ -240,21 +240,21 @@
       "dias": {
         "d0": {
           "estado": "Calmo",
-          "ondas": "0.4 a 0.7 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
           "detalhe": "Sem arrebentação expressiva, mar chão"
         },
         "d1": {
           "estado": "Calmo",
-          "ondas": "0,4 a 0,6 m",
+          "ondas": "0,4 a 0,7 m",
           "badge": "success",
-          "detalhe": "Águas calmas, excelente para banho tranquilo"
+          "detalhe": "Águas calmas para caminhada"
         },
         "d2": {
-          "estado": "Calmo",
-          "ondas": "0,3 a 0,5 m",
-          "badge": "success",
-          "detalhe": "Mar calmo e seguro"
+          "estado": "Calmo a Moderado",
+          "ondas": "0,6 a 0,9 m",
+          "badge": "warning",
+          "detalhe": "Atenção para pequenas embarcações e barcos de pesca fundeados"
         }
       }
     },
@@ -265,21 +265,21 @@
       "dias": {
         "d0": {
           "estado": "Agitado / Correnteza",
-          "ondas": "0.8 a 1.2 m",
+          "ondas": "0,8 a 1,2 m",
           "badge": "danger",
           "detalhe": "Correnteza forte de vazante fluvial, atenção redobrada"
         },
         "d1": {
           "estado": "Moderado / Correnteza",
-          "ondas": "0,6 a 1,0 m",
+          "ondas": "0,8 a 1,3 m",
           "badge": "warning",
-          "detalhe": "Correnteza moderada nas trocas de maré"
+          "detalhe": "Correnteza nas trocas de maré e vento aumentando à noite"
         },
         "d2": {
-          "estado": "Moderado",
-          "ondas": "0,5 a 0,9 m",
-          "badge": "warning",
-          "detalhe": "Escoamento fluvial estabilizado com ondas suaves"
+          "estado": "Muito Agitado / Perigo de Correnteza",
+          "ondas": "1,4 a 2,0 m",
+          "badge": "danger",
+          "detalhe": "Confluência crítica de mar grosso com vazante fluvial e ventos até 74 km/h"
         }
       }
     },
@@ -290,21 +290,21 @@
       "dias": {
         "d0": {
           "estado": "Moderado",
-          "ondas": "1.2 a 1.6 m",
+          "ondas": "1,2 a 1,6 m",
           "badge": "warning",
           "detalhe": "Mar aberto, ondas consistentes para surf e trilhas"
         },
         "d1": {
           "estado": "Moderado",
-          "ondas": "1,0 a 1,4 m",
-          "badge": "success",
-          "detalhe": "Condição favorável para ecoturismo e caminhadas"
+          "ondas": "1,2 a 1,7 m",
+          "badge": "warning",
+          "detalhe": "Ondulação aumentando no final do dia"
         },
         "d2": {
-          "estado": "Moderado",
-          "ondas": "0,8 a 1,2 m",
-          "badge": "success",
-          "detalhe": "Mar aberto com ondulações limpas"
+          "estado": "Muito Agitado",
+          "ondas": "2,0 a 2,8 m",
+          "badge": "danger",
+          "detalhe": "Mar aberto selvagem sob aviso da Marinha de Mar Grosso e Vento Forte"
         }
       }
     }
@@ -312,77 +312,77 @@
   "praias": [
     {
       "praia": "Praia de Costazul",
-      "detalhes": "Ondas 1.2 a 1.6 m • Moderado a Agitado",
+      "detalhes": "Ondas 1,2 a 1,6 m • Moderado a Agitado",
       "status": "Atenção",
       "badge": "warning",
       "icone": "waves"
     },
     {
       "praia": "Praia do Centro",
-      "detalhes": "Ondas 0.7 a 1.0 m • Calmo a Moderado",
+      "detalhes": "Ondas 0,7 a 1,0 m • Calmo a Moderado",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia da Tartaruga",
-      "detalhes": "Ondas 0.4 a 0.7 m • Calmo",
+      "detalhes": "Ondas 0,4 a 0,7 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia do Bosque",
-      "detalhes": "Ondas 0.4 a 0.7 m • Calmo",
+      "detalhes": "Ondas 0,4 a 0,7 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia da Joana",
-      "detalhes": "Ondas 0.5 a 0.8 m • Calmo",
+      "detalhes": "Ondas 0,5 a 0,8 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia do Remanso",
-      "detalhes": "Ondas 0.5 a 0.8 m • Calmo",
+      "detalhes": "Ondas 0,5 a 0,8 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia da Areia Negra",
-      "detalhes": "Ondas 0.5 a 0.8 m • Calmo",
+      "detalhes": "Ondas 0,5 a 0,8 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Praia do Mar do Norte",
-      "detalhes": "Ondas 1.1 a 1.6 m • Moderado a Agitado",
+      "detalhes": "Ondas 1,2 a 1,6 m • Moderado a Agitado",
       "status": "Atenção",
       "badge": "warning",
       "icone": "waves"
     },
     {
       "praia": "Praia do Cemitério",
-      "detalhes": "Ondas 0.4 a 0.7 m • Calmo",
+      "detalhes": "Ondas 0,4 a 0,7 m • Calmo",
       "status": "Liberada",
       "badge": "success",
       "icone": "waves"
     },
     {
       "praia": "Boca da Barra",
-      "detalhes": "Ondas 0.8 a 1.2 m • Agitado / Correnteza",
+      "detalhes": "Ondas 0,8 a 1,2 m • Agitado / Correnteza",
       "status": "Atenção",
       "badge": "danger",
       "icone": "waves"
     },
     {
       "praia": "Praia Virgem / Itapebussus",
-      "detalhes": "Ondas 1.2 a 1.6 m • Moderado",
+      "detalhes": "Ondas 1,2 a 1,6 m • Moderado",
       "status": "Atenção",
       "badge": "warning",
       "icone": "waves"
@@ -390,37 +390,37 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-10-24",
+    "data": "2026-10-23",
     "proxima_mare": {
-      "tipo": "BAIXA-MAR",
-      "hora": "07:34",
-      "altura": 0.21,
-      "rotulo": "Baixa-mar (0,2 m)"
+      "tipo": "PREAMAR",
+      "hora": "01:02",
+      "altura": 1.44,
+      "rotulo": "Preia-mar (1,4 m)"
     },
     "mares_do_dia": [
       {
         "tipo": "PREAMAR",
-        "hora": "01:02",
-        "altura": 1.44,
-        "rotulo": "Preia-mar (1,4 m)"
+        "hora": "00:25",
+        "altura": 1.34,
+        "rotulo": "Preia-mar (1,3 m)"
       },
       {
         "tipo": "BAIXA-MAR",
-        "hora": "07:34",
-        "altura": 0.21,
-        "rotulo": "Baixa-mar (0,2 m)"
+        "hora": "06:57",
+        "altura": 0.25,
+        "rotulo": "Baixa-mar (0,3 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "13:33",
-        "altura": 1.41,
+        "hora": "13:07",
+        "altura": 1.38,
         "rotulo": "Preia-mar (1,4 m)"
       },
       {
         "tipo": "BAIXA-MAR",
-        "hora": "19:47",
-        "altura": 0.31,
-        "rotulo": "Baixa-mar (0,3 m)"
+        "hora": "19:14",
+        "altura": 0.4,
+        "rotulo": "Baixa-mar (0,4 m)"
       }
     ]
   }

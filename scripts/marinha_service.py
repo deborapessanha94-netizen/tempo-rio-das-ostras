@@ -113,14 +113,8 @@ TABUA_MARES_OFICIAL_IMBETIBA = {
 
 def generate_harmonic_tide_for_day(dt):
     """Gera predição de maré semi-diurna caso a data não esteja no banco fixo"""
-    # Modelo semi-diurno M2 (período 12.42h) calibrado para a Bacia de Campos / Imbetiba
-    ref_dt = datetime(2026, 10, 19, 4, 10) # 04:10 baixa-mar (0.18m)
-    diff_h = (dt - ref_dt).total_seconds() / 3600.0
-    
+    ref_dt = datetime(2026, 10, 19, 4, 10)
     events = []
-    # Cria os 4 picos/vales do dia
-    # M2 cycle: ~6.21h entre extremos
-    base_midnight = datetime(dt.year, dt.month, dt.day, 0, 0)
     for step in range(8):
         t_event = ref_dt + timedelta(hours=step * 6.2104)
         if t_event.date() == dt.date():
@@ -163,6 +157,8 @@ def fetch_marinha_avisos():
         "emissao": None,
         "validade": "Sem avisos de mau tempo vigentes para a Área Delta",
         "mar_ondas": "1,2 a 1,6 m (Moderado)",
+        "restricao": "Condições marítimas regulares na Área Delta.",
+        "avisos_ativos": [],
         "cartas_sinoticas": [
             {"horario": "00 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"},
             {"horario": "12 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"}
@@ -175,62 +171,188 @@ def fetch_marinha_avisos():
         ctx.verify_mode = ssl.CERT_NONE
         url_marinha = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
         req = urllib.request.Request(url_marinha, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-        with urllib.request.urlopen(req, context=ctx, timeout=12) as res:
+        with urllib.request.urlopen(req, context=ctx, timeout=15) as res:
             html = res.read().decode("utf-8", errors="replace")
 
-        matches = re.finditer(r'<div[^>]*class=[\'"][^\'"]*aviso-texto[^\'"]*[\'"][^>]*>(.*?)</div>', html, re.S)
+        groups = re.split(r'<div[^>]*class=["\']grupo-area-avisos', html)
         now_utc = datetime.now(timezone.utc)
-        for m in matches:
-            full_div = m.group(0)
-            body = m.group(1)
-            tag = full_div[:full_div.find('>')]
-            clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
-            
-            # Filtra Área DELTA (Farol de São Tomé a Cabo Frio)
-            eh_delta = any(k in clean_text.upper() for k in ['DELTA', 'CABO FRIO', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS'])
-            if eh_delta:
-                num_m = re.search(r'data-numero=[\'"]([^\'"]+)[\'"]', tag)
-                num = num_m.group(1) if num_m else "SMM"
-                ini_m = re.search(r'data-inicio-utc=[\'"]([^\'"]+)[\'"]', tag)
-                ini_utc = ini_m.group(1) if ini_m else ""
-                fim_m = re.search(r'data-fim-utc=[\'"]([^\'"]+)[\'"]', tag)
-                fim_utc = fim_m.group(1) if fim_m else ""
-                
-                try:
-                    dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00')) if fim_utc else None
-                    if dt_fim and dt_fim > now_utc:
-                        dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00')) if ini_utc else None
-                        
-                        # Determina tipo exato
-                        if 'RESSACA' in clean_text.upper():
-                            tipo_nome = 'RESSACA'
-                            ondas_txt = '2,5 a 3,5 m (Ressaca Severa)'
-                        elif 'VENTO' in clean_text.upper():
-                            tipo_nome = 'VENTO FORTE'
-                            ondas_txt = '2,0 a 2,5 m (Mar Agitado)'
-                        elif 'GROSSO' in clean_text.upper():
-                            tipo_nome = 'MAR GROSSO'
-                            ondas_txt = '3,0 a 4,0 m (Muito Agitado)'
-                        else:
-                            tipo_nome = 'MAU TEMPO'
-                            ondas_txt = '2,0 a 2,5 m'
+        avisos_encontrados = []
+        numeros_vistos = set()
 
-                        marinha_info["numero"] = num
-                        marinha_info["aviso_ativo"] = True
-                        marinha_info["tipo"] = tipo_nome
-                        marinha_info["inicio_utc"] = ini_utc
-                        marinha_info["fim_utc"] = fim_utc
+        for g in groups:
+            is_delta_group = bool(re.search(r'REA DELTA', g, re.I))
+            divs = re.finditer(r'<div[^>]*class=["\']aviso-texto["\'][^>]*>(.*?)</div>', g, re.S)
+            for m in divs:
+                full_div = m.group(0)
+                body = m.group(1)
+                tag = full_div[:full_div.find('>')+1]
+                clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
+
+                if clean_text.upper().startswith('WARNING'):
+                    continue
+
+                num_m = re.search(r'data-numero=["\']([^"\']+)["\']', tag)
+                num = num_m.group(1) if num_m else ""
+                ini_m = re.search(r'data-inicio-utc=["\']([^"\']+)["\']', tag)
+                ini_utc = ini_m.group(1) if ini_m else ""
+                fim_m = re.search(r'data-fim-utc=["\']([^"\']+)["\']', tag)
+                fim_utc = fim_m.group(1) if fim_m else ""
+
+                if num in numeros_vistos:
+                    continue
+
+                matches_keywords = any(k in clean_text.upper() for k in [
+                    'DELTA', 'MACAÉ', 'MACAE', 'CABO FRIO', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS'
+                ])
+
+                if is_delta_group or matches_keywords:
+                    dt_fim = None
+                    dt_ini = None
+                    if fim_utc:
+                        try:
+                            dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
+                        except Exception:
+                            pass
+                    if ini_utc:
+                        try:
+                            dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
+                        except Exception:
+                            pass
+
+                    if dt_fim is None or dt_fim > now_utc:
+                        numeros_vistos.add(num)
+
+                        if 'RESSACA' in clean_text.upper():
+                            tipo_aviso = "RESSACA"
+                        elif 'GROSSO' in clean_text.upper():
+                            tipo_aviso = "MAR GROSSO"
+                        elif 'VENTO' in clean_text.upper():
+                            tipo_aviso = "VENTO FORTE"
+                        else:
+                            tipo_aviso = "MAU TEMPO"
+
+                        rajadas_txt = ""
+                        forca_txt = ""
+                        if "FORÇA 8" in clean_text.upper() or "FORCA 8" in clean_text.upper():
+                            rajadas_txt = "62 a 74 km/h (Força 7/8)"
+                            forca_txt = "NW/SW FORÇA 7 COM RAJADAS FORÇA 8"
+                        elif "FORÇA 7" in clean_text.upper() or "FORCA 7" in clean_text.upper():
+                            rajadas_txt = "50 a 61 km/h (Força 7)"
+                            forca_txt = "FORÇA 7 BEAUFORT"
+                        elif tipo_aviso == "VENTO FORTE":
+                            rajadas_txt = "Até 65 km/h"
+                            forca_txt = "VENTO MODERADO A FORTE"
+                        else:
+                            rajadas_txt = "Até 45 km/h"
+                            forca_txt = "FORÇA 4-5 BEAUFORT"
+
+                        ondas_txt = ""
+                        m_ond = re.search(r'ONDAS DE\s+([A-Z0-9/\.\s]+?METROS)', clean_text, re.I)
+                        if m_ond:
+                            raw_ond = m_ond.group(0).strip()
+                            raw_ond = re.sub(r'(?i)ONDAS DE\s*', '', raw_ond)
+                            raw_ond = re.sub(r'(?i)\s*METROS', ' m', raw_ond)
+                            raw_ond = re.sub(r'(\d+(?:\.\d+)?)/(\d+(?:\.\d+)?)', r'\1 a \2', raw_ond)
+                            raw_ond = raw_ond.replace('.', ',')
+                            ondas_txt = f"{raw_ond} (Mar Grosso)" if tipo_aviso == "MAR GROSSO" else f"{raw_ond}"
+                        elif tipo_aviso == "MAR GROSSO":
+                            ondas_txt = "N/NW 3,0 a 3,5 m (Mar Grosso)"
+                        elif tipo_aviso == "RESSACA":
+                            ondas_txt = "2,5 a 3,5 m (Ressaca Severa)"
+                        else:
+                            ondas_txt = "2,0 a 2,5 m (Agitado)"
+
+                        area_aviso = "Área DELTA"
+                        if "MACAÉ" in clean_text.upper() or "MACAE" in clean_text.upper():
+                            area_aviso = "Área Costeira (Macaé/RJ a Caravelas/BA)"
+                        elif "OCEÂNICA" in clean_text.upper() or "OCEANICA" in clean_text.upper():
+                            area_aviso = "Área Oceânica Delta (Bacia de Campos)"
+
+                        ini_br = ""
+                        fim_br = ""
                         if dt_ini:
-                            marinha_info["inicio_formatado"] = f"{dt_ini.strftime('%d/%m/%Y')} às {dt_ini.strftime('%H:%M')} UTC"
-                            marinha_info["inicio"] = marinha_info["inicio_formatado"]
-                        marinha_info["fim_formatado"] = f"{dt_fim.strftime('%d/%m/%Y')} às {dt_fim.strftime('%H:%M')} UTC"
-                        marinha_info["fim"] = marinha_info["fim_formatado"]
-                        marinha_info["validade"] = f"Aviso nº {num} válido até {dt_fim.strftime('%d/%m/%Y às %H:%M')} UTC"
-                        marinha_info["mar_ondas"] = ondas_txt
-                        print(f"[MARINHA CHM] Aviso ativo detectado para Área Delta: {tipo_nome} nº {num}")
-                        break
-                except Exception:
-                    pass
+                            ini_br = (dt_ini - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
+                        if dt_fim:
+                            fim_br = (dt_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
+
+                        periodo_str = f"De {ini_br} até {fim_br}" if (ini_br and fim_br) else "Em vigor"
+
+                        avisos_encontrados.append({
+                            "numero": num,
+                            "tipo": tipo_aviso,
+                            "area": area_aviso,
+                            "forca": forca_txt,
+                            "rajadas": rajadas_txt,
+                            "mar_ondas": ondas_txt,
+                            "ondas": ondas_txt,
+                            "inicio_utc": ini_utc,
+                            "fim_utc": fim_utc,
+                            "inicio_br": ini_br,
+                            "fim_br": fim_br,
+                            "dt_ini": dt_ini,
+                            "dt_fim": dt_fim,
+                            "periodo": periodo_str,
+                            "validade": f"Aviso nº {num} válido até {fim_br}",
+                            "restricao": (
+                                "Atenção a pescadores, navegantes e banhistas na orla costeira." if tipo_aviso == "VENTO FORTE"
+                                else "Mar muito agitado com ondas severas de 3,0 a 3,5 m. Evite a navegação."
+                            ),
+                            "texto": clean_text
+                        })
+
+        if avisos_encontrados:
+            marinha_info["aviso_ativo"] = True
+            marinha_info["avisos_ativos"] = [
+                {k: v for k, v in a.items() if k not in ('dt_ini', 'dt_fim')}
+                for a in avisos_encontrados
+            ]
+
+            nums_str = " e ".join(a['numero'] for a in avisos_encontrados)
+            marinha_info["numero"] = nums_str
+
+            tipos_unicos = list(dict.fromkeys(a['tipo'] for a in avisos_encontrados))
+            marinha_info["tipo"] = " E ".join(tipos_unicos)
+
+            valid_dt_ini = [a['dt_ini'] for a in avisos_encontrados if a['dt_ini']]
+            valid_dt_fim = [a['dt_fim'] for a in avisos_encontrados if a['dt_fim']]
+            min_ini = min(valid_dt_ini) if valid_dt_ini else None
+            max_fim = max(valid_dt_fim) if valid_dt_fim else None
+
+            if min_ini:
+                marinha_info["inicio_utc"] = min_ini.isoformat()
+                marinha_info["inicio_formatado"] = (min_ini - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
+                marinha_info["inicio"] = marinha_info["inicio_formatado"]
+            if max_fim:
+                marinha_info["fim_utc"] = max_fim.isoformat()
+                marinha_info["fim_formatado"] = (max_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
+                marinha_info["fim"] = marinha_info["fim_formatado"]
+
+            marinha_info["validade"] = f"Avisos nº {nums_str} válidos a partir de {marinha_info['inicio_formatado']} até {marinha_info['fim_formatado']}"
+
+            for a in avisos_encontrados:
+                if "7/8" in a.get("rajadas", "") or "74" in a.get("rajadas", ""):
+                    marinha_info["rajadas"] = a["rajadas"]
+                    marinha_info["forca"] = a["forca"]
+                    break
+            else:
+                marinha_info["rajadas"] = avisos_encontrados[0]["rajadas"]
+                marinha_info["forca"] = avisos_encontrados[0]["forca"]
+
+            if any("3,0" in a.get("ondas", "") or "3.0" in a.get("ondas", "") or a.get("tipo") == "MAR GROSSO" for a in avisos_encontrados):
+                marinha_info["mar_ondas"] = "3,0 a 3,5 m (Mar Grosso)"
+            elif any(a.get("tipo") == "RESSACA" for a in avisos_encontrados):
+                marinha_info["mar_ondas"] = "2,5 a 3,5 m (Ressaca Severa)"
+            else:
+                marinha_info["mar_ondas"] = avisos_encontrados[0]["ondas"]
+
+            marinha_info["area"] = "Área DELTA (Macaé a Cabo Frio e Bacia Oceânica)"
+            marinha_info["restricao"] = (
+                f"Atenção a pescadores, navegantes e banhistas na Área Delta: vento Força 7 com rajadas Força 8 "
+                f"de até 74 km/h (Força 7/8) e ondas de {marinha_info['mar_ondas']}, válidos a partir de {marinha_info['inicio_formatado']} até {marinha_info['fim_formatado']}."
+            )
+            print(f"[MARINHA CHM] Avisos ativos para Área Delta: {marinha_info['tipo']} (nº {marinha_info['numero']})")
+        else:
+            print("[MARINHA CHM] Nenhum aviso ativo para a Área Delta.")
     except Exception as e:
         print(f"[MARINHA CHM] Consulta de avisos: {e}")
 
@@ -292,18 +414,29 @@ def build_orla_e_tabua_dataset():
 
     # 3. Matriz das Condições da Orla e Praias
     tem_ressaca = marinha_info.get("aviso_ativo") and "RESSACA" in marinha_info.get("tipo", "")
+    tem_mar_grosso = marinha_info.get("aviso_ativo") and "GROSSO" in marinha_info.get("tipo", "")
     tem_vento_forte = marinha_info.get("aviso_ativo") and "VENTO" in marinha_info.get("tipo", "")
 
     # Status geral do mar
     if tem_ressaca:
         mar_badge = "RESSACA"
         mar_badge_tipo = "danger"
-        mar_status_txt = "Aviso de Ressaca Vigente da Marinha"
+        mar_status_txt = f"Aviso de Ressaca Vigente da Marinha (nº {marinha_info.get('numero')})"
+        marinha_aviso_num = marinha_info.get('numero')
+    elif tem_mar_grosso and tem_vento_forte:
+        mar_badge = "VENTO FORTE & MAR GROSSO"
+        mar_badge_tipo = "danger"
+        mar_status_txt = f"Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº {marinha_info.get('numero')})"
+        marinha_aviso_num = marinha_info.get('numero')
+    elif tem_mar_grosso:
+        mar_badge = "MAR GROSSO"
+        mar_badge_tipo = "danger"
+        mar_status_txt = f"Aviso de Mar Grosso Vigente da Marinha (nº {marinha_info.get('numero')})"
         marinha_aviso_num = marinha_info.get('numero')
     elif tem_vento_forte:
         mar_badge = "VENTO FORTE"
         mar_badge_tipo = "warning"
-        mar_status_txt = "Aviso de Vento Forte Vigente da Marinha"
+        mar_status_txt = f"Aviso de Vento Forte Vigente da Marinha (nº {marinha_info.get('numero')})"
         marinha_aviso_num = marinha_info.get('numero')
     else:
         mar_badge = "NORMALIDADE"
@@ -336,18 +469,21 @@ def build_orla_e_tabua_dataset():
         }
     ]
 
-    # Fator de escala se houver aviso de ressaca ou vento
-    f_ondas = 1.6 if tem_ressaca else (1.3 if tem_vento_forte else 1.0)
-    
+    # Modelagem para as praias nos 3 dias considerando os avisos vigentes a partir de 24/10 às 21h e 25/10
     praias_condicoes = [
         {
             'nome': 'Praia de Costazul',
             'tipo_orla': 'Mar Aberto com Arrebentação',
             'perfil': 'Orla oceânica extensa com ondas expressivas e orla urbanizada',
             'dias': {
-                'd0': {'estado': 'Agitado (Ressaca)' if tem_ressaca else 'Moderado a Agitado', 'ondas': f"{1.2*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'danger' if tem_ressaca else 'warning', 'detalhe': 'Swell de SE/E • Arrebentação expressiva e correntes de retorno'},
-                'd1': {'estado': 'Moderado', 'ondas': f"{1.0*min(1.2, f_ondas):.1f} a {1.4*min(1.2, f_ondas):.1f} m", 'badge': 'success', 'detalhe': 'Swell de E • Ondulação mais organizada, orla arejada'},
-                'd2': {'estado': 'Moderado a Calmo', 'ondas': '0,8 a 1,2 m', 'badge': 'success', 'detalhe': 'Swell de E/NE • Água mais límpida e mar amansando'}
+                'd0': {'estado': 'Moderado a Agitado', 'ondas': '1,2 a 1,6 m', 'badge': 'warning', 'detalhe': 'Swell de SE/E • Arrebentação regular e mar arejado'},
+                'd1': {'estado': 'Moderado (Agitando à Noite)', 'ondas': '1,2 a 1,8 m', 'badge': 'warning', 'detalhe': 'Swell de E • Entrada de vento forte a partir das 21h (Aviso nº 781)'},
+                'd2': {
+                    'estado': 'Mar Grosso / Agitado' if (tem_mar_grosso or tem_vento_forte) else 'Moderado',
+                    'ondas': '2,0 a 2,8 m (3,5 m ao largo)' if tem_mar_grosso else '1,0 a 1,4 m',
+                    'badge': 'danger' if (tem_mar_grosso or tem_vento_forte) else 'success',
+                    'detalhe': 'Aviso de Mar Grosso (nº 778) e Vento Forte (nº 781) • Ondas severas e vento até 74 km/h' if (tem_mar_grosso or tem_vento_forte) else 'Swell de E/NE'
+                }
             }
         },
         {
@@ -355,9 +491,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Semicerrada',
             'perfil': 'Praia central protegida por costões rochosos e pontais',
             'dias': {
-                'd0': {'estado': 'Calmo a Moderado', 'ondas': f"{0.7*f_ondas:.1f} a {1.0*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Ondas suaves junto à faixa de areia central'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,6 a 0,9 m', 'badge': 'success', 'detalhe': 'Mar manso com excelente área para caminhada e lazer'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Águas calmas e límpidas na orla central'}
+                'd0': {'estado': 'Calmo a Moderado', 'ondas': '0,7 a 1,0 m', 'badge': 'success', 'detalhe': 'Ondas suaves junto à faixa de areia central'},
+                'd1': {'estado': 'Calmo a Moderado', 'ondas': '0,7 a 1,1 m', 'badge': 'success', 'detalhe': 'Mar propício para caminhada; vento aumentando à noite'},
+                'd2': {
+                    'estado': 'Moderado (Vento Forte NW/SW)' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,9 a 1,3 m' if tem_vento_forte else '0,5 a 0,8 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Enseada protegida de ondas gigantes, mas com rajadas fortes de vento na orla' if tem_vento_forte else 'Águas calmas na orla central'
+                }
             }
         },
         {
@@ -365,9 +506,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Abrigada em Concha',
             'perfil': 'Águas mansas protegidas por costões rochosos, ideal para famílias',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Águas calmas e abrigadas do vento sul'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar muito calmo, perfeito para banho e crianças'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Piscina natural transparente com águas calmas'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas calmas e abrigadas do vento sul'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Mar calmo, condições boas para banho'},
+                'd2': {
+                    'estado': 'Calmo a Moderado' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,6 a 1,0 m' if tem_vento_forte else '0,3 a 0,5 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Águas abrigadas de swell oceânico, atenção a rajadas de vento' if tem_vento_forte else 'Piscina natural calma'
+                }
             }
         },
         {
@@ -375,9 +521,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Abrigada com Sombra Natural',
             'perfil': 'Águas protegidas com vegetação de eucaliptos ao longo da orla',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo, protegido de correntezas marítimas'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas rasas e mansas, excelente para lazer náutico leve'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Águas muito calmas e serenas'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Mar calmo, protegido de correntezas marítimas'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas mansas para lazer familiar'},
+                'd2': {
+                    'estado': 'Calmo a Moderado' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,6 a 0,9 m' if tem_vento_forte else '0,3 a 0,5 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Protegida de ondas fortes; rajadas de vento presentes' if tem_vento_forte else 'Águas serenas'
+                }
             }
         },
         {
@@ -385,9 +536,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Pequena Enseada entre Costões',
             'perfil': 'Praia bucólica encravada entre pedras com mar cristalino',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar tranquilo protegido pelos costões rochosos'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas transparentes, propícias para mergulho livre'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar muito calmo e águas limpas'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Mar tranquilo protegido pelos costões rochosos'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Águas cristalinas para mergulho livre'},
+                'd2': {
+                    'estado': 'Moderado nas Pontas' if tem_mar_grosso else 'Calmo',
+                    'ondas': '0,8 a 1,2 m' if tem_mar_grosso else '0,4 a 0,6 m',
+                    'badge': 'warning' if tem_mar_grosso else 'success',
+                    'detalhe': 'Ondulação entrando nas pontas rochosas sob aviso da Marinha' if tem_mar_grosso else 'Mar muito calmo'
+                }
             }
         },
         {
@@ -395,9 +551,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Abrigada junto ao Mirante',
             'perfil': 'Praia calma e charmosa próxima ao costão de Costazul',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo protegido da ondulação direta pelo pontal'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas mansas, excelente para stand-up paddle e banho'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas calmas e cristalinas junto às pedras'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Mar calmo protegido da ondulação direta pelo pontal'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Águas mansas para stand-up paddle'},
+                'd2': {
+                    'estado': 'Moderado com Vento' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,7 a 1,1 m' if tem_vento_forte else '0,4 a 0,6 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Atenção ao vento forte próximo ao costão de Costazul' if tem_vento_forte else 'Águas cristalinas'
+                }
             }
         },
         {
@@ -405,9 +566,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Monazítica Protegida',
             'perfil': 'Areias escuras e terapêuticas com costão protegido',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.5*f_ondas:.1f} a {0.8*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Mar calmo com ondulação fraca nas pedras'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas mansas e temperatura agradável'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Mar sereno sem correntezas aparentes'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Mar calmo com ondulação fraca nas pedras'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,5 a 0,8 m', 'badge': 'success', 'detalhe': 'Águas calmas e temperatura agradável'},
+                'd2': {
+                    'estado': 'Moderado' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,7 a 1,0 m' if tem_vento_forte else '0,4 a 0,6 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Resguardo parcial dos costões com vento forte na faixa de areia' if tem_vento_forte else 'Mar sereno'
+                }
             }
         },
         {
@@ -415,9 +581,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Mar Aberto Oceânico',
             'perfil': 'Orla selvagem de mar aberto na divisa norte com Macaé',
             'dias': {
-                'd0': {'estado': 'Moderado a Agitado', 'ondas': f"{1.1*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'warning', 'detalhe': 'Ondas fortes de mar aberto, atenção a correntezas'},
-                'd1': {'estado': 'Moderado', 'ondas': '0,9 a 1,3 m', 'badge': 'success', 'detalhe': 'Ondulação constante, indicada para surf e pesca'},
-                'd2': {'estado': 'Moderado', 'ondas': '0,7 a 1,1 m', 'badge': 'success', 'detalhe': 'Ondas regulares com vento diminuindo'}
+                'd0': {'estado': 'Moderado a Agitado', 'ondas': '1,2 a 1,6 m', 'badge': 'warning', 'detalhe': 'Ondas fortes de mar aberto, atenção a correntezas'},
+                'd1': {'estado': 'Moderado a Agitado', 'ondas': '1,3 a 1,8 m', 'badge': 'warning', 'detalhe': 'Mar aberto, ondulação constante e vento à noite'},
+                'd2': {
+                    'estado': 'Muito Agitado (Mar Grosso)' if (tem_mar_grosso or tem_vento_forte) else 'Moderado',
+                    'ondas': '2,2 a 3,0 m (3,5 m ao largo)' if tem_mar_grosso else '0,7 a 1,1 m',
+                    'badge': 'danger' if (tem_mar_grosso or tem_vento_forte) else 'success',
+                    'detalhe': 'Aviso de Mar Grosso (nº 778) e Vento Força 7/8 (nº 781) • Evite banho e navegação' if (tem_mar_grosso or tem_vento_forte) else 'Ondas regulares'
+                }
             }
         },
         {
@@ -425,9 +596,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Enseada Mansa Urbana',
             'perfil': 'Praia de águas calmas frequentada por moradores e pescadores',
             'dias': {
-                'd0': {'estado': 'Calmo', 'ondas': f"{0.4*f_ondas:.1f} a {0.7*f_ondas:.1f} m", 'badge': 'success', 'detalhe': 'Sem arrebentação expressiva, mar chão'},
-                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,6 m', 'badge': 'success', 'detalhe': 'Águas calmas, excelente para banho tranquilo'},
-                'd2': {'estado': 'Calmo', 'ondas': '0,3 a 0,5 m', 'badge': 'success', 'detalhe': 'Mar calmo e seguro'}
+                'd0': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Sem arrebentação expressiva, mar chão'},
+                'd1': {'estado': 'Calmo', 'ondas': '0,4 a 0,7 m', 'badge': 'success', 'detalhe': 'Águas calmas para caminhada'},
+                'd2': {
+                    'estado': 'Calmo a Moderado' if tem_vento_forte else 'Calmo',
+                    'ondas': '0,6 a 0,9 m' if tem_vento_forte else '0,3 a 0,5 m',
+                    'badge': 'warning' if tem_vento_forte else 'success',
+                    'detalhe': 'Atenção para pequenas embarcações e barcos de pesca fundeados' if tem_vento_forte else 'Mar calmo'
+                }
             }
         },
         {
@@ -435,9 +611,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Desembocadura Fluvial / Foz',
             'perfil': 'Encontro do Rio das Ostras com o Mar, sob regime de marés',
             'dias': {
-                'd0': {'estado': 'Agitado / Correnteza', 'ondas': f"{0.8*f_ondas:.1f} a {1.2*f_ondas:.1f} m", 'badge': 'danger', 'detalhe': 'Correnteza forte de vazante fluvial, atenção redobrada'},
-                'd1': {'estado': 'Moderado / Correnteza', 'ondas': '0,6 a 1,0 m', 'badge': 'warning', 'detalhe': 'Correnteza moderada nas trocas de maré'},
-                'd2': {'estado': 'Moderado', 'ondas': '0,5 a 0,9 m', 'badge': 'warning', 'detalhe': 'Escoamento fluvial estabilizado com ondas suaves'}
+                'd0': {'estado': 'Agitado / Correnteza', 'ondas': '0,8 a 1,2 m', 'badge': 'danger', 'detalhe': 'Correnteza forte de vazante fluvial, atenção redobrada'},
+                'd1': {'estado': 'Moderado / Correnteza', 'ondas': '0,8 a 1,3 m', 'badge': 'warning', 'detalhe': 'Correnteza nas trocas de maré e vento aumentando à noite'},
+                'd2': {
+                    'estado': 'Muito Agitado / Perigo de Correnteza' if (tem_mar_grosso or tem_vento_forte) else 'Moderado',
+                    'ondas': '1,4 a 2,0 m' if (tem_mar_grosso or tem_vento_forte) else '0,5 a 0,9 m',
+                    'badge': 'danger' if (tem_mar_grosso or tem_vento_forte) else 'warning',
+                    'detalhe': 'Confluência crítica de mar grosso com vazante fluvial e ventos até 74 km/h' if (tem_mar_grosso or tem_vento_forte) else 'Escoamento fluvial estabilizado'
+                }
             }
         },
         {
@@ -445,9 +626,14 @@ def build_orla_e_tabua_dataset():
             'tipo_orla': 'Costa Selvagem de Preservação',
             'perfil': 'Área de preservação ambiental com vegetação nativa de restinga',
             'dias': {
-                'd0': {'estado': 'Moderado', 'ondas': f"{1.2*f_ondas:.1f} a {1.6*f_ondas:.1f} m", 'badge': 'warning', 'detalhe': 'Mar aberto, ondas consistentes para surf e trilhas'},
-                'd1': {'estado': 'Moderado', 'ondas': '1,0 a 1,4 m', 'badge': 'success', 'detalhe': 'Condição favorável para ecoturismo e caminhadas'},
-                'd2': {'estado': 'Moderado', 'ondas': '0,8 a 1,2 m', 'badge': 'success', 'detalhe': 'Mar aberto com ondulações limpas'}
+                'd0': {'estado': 'Moderado', 'ondas': '1,2 a 1,6 m', 'badge': 'warning', 'detalhe': 'Mar aberto, ondas consistentes para surf e trilhas'},
+                'd1': {'estado': 'Moderado', 'ondas': '1,2 a 1,7 m', 'badge': 'warning', 'detalhe': 'Ondulação aumentando no final do dia'},
+                'd2': {
+                    'estado': 'Muito Agitado' if (tem_mar_grosso or tem_vento_forte) else 'Moderado',
+                    'ondas': '2,0 a 2,8 m' if tem_mar_grosso else '0,8 a 1,2 m',
+                    'badge': 'danger' if (tem_mar_grosso or tem_vento_forte) else 'success',
+                    'detalhe': 'Mar aberto selvagem sob aviso da Marinha de Mar Grosso e Vento Forte' if (tem_mar_grosso or tem_vento_forte) else 'Mar aberto limpo'
+                }
             }
         }
     ]

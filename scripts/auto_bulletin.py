@@ -1094,7 +1094,7 @@ def run_auto_bulletin_pipeline():
         alerta_partes.append("Sem avisos meteorológicos severos vigentes para hoje")
 
     if tem_aviso_marinha:
-        alerta_partes.append(f"Aviso de Vento Forte da Marinha do Brasil para a Área Delta")
+        alerta_partes.append(f"Avisos da Marinha do Brasil para a Área Delta: {m_data.get('tipo', 'Vento Forte')} (nº {m_data.get('numero')}) válidos a partir de {m_data.get('inicio_formatado', '24/10 às 21h')} até {m_data.get('fim_formatado', '26/10 às 00h')}")
 
     alerta_partes.append(f"Acumulado total de chuva previsto para o ciclo de 3 dias: {chuva_total_3d:.1f} mm com temperatura máxima alcançando {pico_calor:.0f}°C")
 
@@ -1467,10 +1467,10 @@ def run_auto_bulletin_pipeline():
         {
             "tipo": "maritimo",
             "titulo": "Marinha do Brasil (CHM)",
-            "status": "NORMALIDADE" if not tem_aviso_marinha else "AVISO DE MAU TEMPO",
-            "badge": "info" if not tem_aviso_marinha else "warning",
-            "detalhe": "Mar Moderado • Ondas 1,2 a 1,6 m" if not tem_aviso_marinha else f"Vento Forte • Rajadas até {max_rajada_geral:.0f} km/h",
-            "impacto": "Navegação e orla operando em condições regulares para a Área Delta." if not tem_aviso_marinha else "Atenção para embarcações e orla."
+            "status": "NORMALIDADE" if not tem_aviso_marinha else f"AVISOS Nº {m_data.get('numero', '')}",
+            "badge": "info" if not tem_aviso_marinha else "danger",
+            "detalhe": "Mar Moderado • Ondas 1,2 a 1,6 m" if not tem_aviso_marinha else f"{m_data.get('tipo', 'VENTO FORTE E MAR GROSSO')} • {m_data.get('rajadas', 'Até 74 km/h')} • {m_data.get('mar_ondas', '3,0 a 3,5 m')}",
+            "impacto": "Navegação e orla operando em condições regulares para a Área Delta." if not tem_aviso_marinha else f"Avisos vigentes para a Área Delta a partir de {m_data.get('inicio_formatado', '24/10 às 21h')} até {m_data.get('fim_formatado', '26/10 às 00h')}. Mar grosso ({m_data.get('mar_ondas', '3,0-3,5m')}) e vento Força 7 com rajadas Força 8 ({m_data.get('rajadas', 'até 74 km/h')})."
         },
         {
             "tipo": "meteorologico",

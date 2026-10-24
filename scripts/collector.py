@@ -378,69 +378,16 @@ def collect_marinha_data():
     print(">> [3/7] Coletando Avisos de Mau Tempo & Tábua de Marés da Marinha...")
     try:
         try:
-            from scripts.marinha_service import build_orla_e_tabua_dataset
+            from scripts.marinha_service import build_orla_e_tabua_dataset, fetch_marinha_avisos
         except ImportError:
-            from marinha_service import build_orla_e_tabua_dataset
+            from marinha_service import build_orla_e_tabua_dataset, fetch_marinha_avisos
         orla_dataset, tabua_dataset = build_orla_e_tabua_dataset()
+        marinha_info = fetch_marinha_avisos()
+        print("   [SUCESSO] Avisos da Marinha e Tábua de Marés sincronizados com sucesso!")
+        return marinha_info
     except Exception as e:
         print(f"   [MARINHA SERVICE] Erro: {e}")
-    marinha_info = {
-        "aviso_ativo": False,
-        "numero": None,
-        "tipo": "NORMALIDADE",
-        "area": "Área DELTA (Farol de São Tomé a Cabo Frio)",
-        "forca": "FORÇA 3-4 BEAUFORT",
-        "rajadas": "Até 35 km/h",
-        "inicio_utc": None,
-        "fim_utc": None,
-        "inicio": None,
-        "fim": None,
-        "inicio_formatado": None,
-        "fim_formatado": None,
-        "emissao": None,
-        "validade": "Sem avisos de mau tempo vigentes para a Área Delta",
-        "mar_ondas": "1,2 a 1,6 m (Moderado)",
-        "cartas_sinoticas": [
-            {"horario": "00 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"},
-            {"horario": "12 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"}
-        ]
-    }
-
-    try:
-        url_marinha = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
-        html = fetch_url(url_marinha, timeout=12)
-        matches = re.finditer(r'<div class=[\'"]aviso-texto[\'"][^>]*data-numero=[\'"]([^\'"]+)[\'"][^>]*data-inicio-utc=[\'"]([^\'"]+)[\'"][^>]*data-fim-utc=[\'"]([^\'"]+)[\'"][^>]*>(.*?)</div>', html, re.S)
-        now_utc = datetime.now(timezone.utc)
-        for m in matches:
-            num, ini_utc, fim_utc, body = m.group(1), m.group(2), m.group(3), m.group(4)
-            clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
-            if 'DELTA' in clean_text.upper() or 'CABO FRIO' in clean_text.upper() or 'SÃO TOMÉ' in clean_text.upper() or 'SAO TOME' in clean_text.upper():
-                try:
-                    dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
-                    dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
-                    if dt_fim > now_utc:
-                        marinha_info["numero"] = num
-                        marinha_info["aviso_ativo"] = True
-                        marinha_info["tipo"] = "VENTO FORTE" if "VENTO" in clean_text.upper() else "MAU TEMPO"
-                        marinha_info["inicio_utc"] = ini_utc
-                        marinha_info["fim_utc"] = fim_utc
-                        marinha_info["inicio_formatado"] = f"{dt_ini.strftime('%d/%m/%Y')} às {dt_ini.strftime('%H:%M')} UTC"
-                        marinha_info["fim_formatado"] = f"{dt_fim.strftime('%d/%m/%Y')} às {dt_fim.strftime('%H:%M')} UTC"
-                        marinha_info["inicio"] = marinha_info["inicio_formatado"]
-                        marinha_info["fim"] = marinha_info["fim_formatado"]
-                        marinha_info["validade"] = f"Válido até {dt_fim.strftime('%d/%m/%Y às %H:%M')} UTC"
-                        marinha_info["mar_ondas"] = "2,0 a 2,5 m (Muito Agitado)"
-                        break
-                except Exception:
-                    pass
-    except Exception as e:
-        print(f"   [AVISO] Erro Marinha: {e}")
-
-    with open(DATA_DIR / "marinha_avisos.json", 'w', encoding='utf-8') as f:
-        json.dump(marinha_info, f, ensure_ascii=False, indent=2)
-    print("   [SUCESSO] Avisos da Marinha salvos em data/marinha_avisos.json")
-    return marinha_info
-
+        return None
 # ==============================================================================
 # 4. INEA — BALNEABILIDADE DAS PRAIAS DE RIO DAS OSTRAS
 # ==============================================================================

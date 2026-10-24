@@ -245,15 +245,16 @@ async function loadAllApplicationData() {
 
   try {
     // FASE 1: Carregamento Ultrarrápido dos Snapshots Oficiais (< 50ms)
-    // Renderiza a interface instantaneamente sem nenhum bloqueio
-    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes] = await Promise.allSettled([
+    // Renderização Imediata com datasets essenciais e avisos oficiais
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes] = await Promise.allSettled([
       getBoletimMetadata(),
       getBoletimOficialData(),
       getIneaCheias(),
       getTabuaMares(),
       getOrlaCondicoes(),
       getMarinhaAvisos(),
-      getBalneabilidade()
+      getBalneabilidade(),
+      getInmetAlerts()
     ]);
 
     if (rowsRes.status === 'fulfilled' && Array.isArray(rowsRes.value)) state.boletimData = rowsRes.value;
@@ -266,10 +267,12 @@ async function loadAllApplicationData() {
     if (orlaRes.status === 'fulfilled' && orlaRes.value) state.orlaCondicoes = orlaRes.value;
     if (avisosMarRes.status === 'fulfilled' && avisosMarRes.value) state.marinhaAvisos = avisosMarRes.value;
     if (balnearRes.status === 'fulfilled' && balnearRes.value) state.balneabilidade = balnearRes.value;
+    if (inmetAvisosRes.status === 'fulfilled' && Array.isArray(inmetAvisosRes.value)) state.inmetAlerts = inmetAvisosRes.value;
 
     // Renderização Imediata (Fast-Path)
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
     renderPanoramaSinotico(state.boletimMetadata);
+    renderAlertasPrincipais(state.inmetAlerts, state.marinhaAvisos);
     renderCondicoesOrla(state.orlaCondicoes, state.tabuaMares, state.marinhaAvisos, state.balneabilidade);
     renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
     if (window.lucide) window.lucide.createIcons();
@@ -410,13 +413,18 @@ function renderDashboardUI(meta, rows, weather) {
       return inicio <= todayIso && todayIso <= fim;
     });
     const futureAlerts = directAlerts.filter(a => toIsoDate(a.data_inicio || a.inicio) > todayIso);
-    const temAlertaHoje = (activeTodayAlerts.length > 0) || (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
+    const temAlertaHoje = (activeTodayAlerts.length > 0);
+    const temMarinhaAtivo = (state.marinhaAvisos && state.marinhaAvisos.aviso_ativo === true && state.marinhaAvisos.numero);
 
     if (temAlertaHoje) {
       heroAlertPill.textContent = 'Alerta Oficial Vigente Hoje';
       heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
+    } else if (temMarinhaAtivo) {
+      const pIni = state.marinhaAvisos.inicio_formatado ? state.marinhaAvisos.inicio_formatado.split(' ')[0] : '24/10';
+      heroAlertPill.textContent = `Avisos da Marinha Ativos (A partir de ${pIni})`;
+      heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     } else if (futureAlerts.length > 0) {
-      const pDia = futureAlerts[0].inicio_formatado ? futureAlerts[0].inicio_formatado.split(' ')[0] : '22/10';
+      const pDia = futureAlerts[0].inicio_formatado ? futureAlerts[0].inicio_formatado.split(' ')[0] : '24/10';
       heroAlertPill.textContent = `Atenção: Alerta Previsto para ${pDia}`;
       heroAlertPill.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
     } else {
@@ -848,7 +856,7 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
 
   const cardsHtml = [];
 
-  // 1. Alertas Oficiais do INMET (filtrando apenas vigentes para Rio das Ostras e Litoral Norte)
+  // 1. Alertas Oficiais do INMET (priorizando alertas ativos hoje para Rio das Ostras)
   if (inmetAlerts && Array.isArray(inmetAlerts) && inmetAlerts.length > 0) {
     const directAlerts = inmetAlerts.filter(a => a.eh_direto_ostras !== false);
     directAlerts.sort((a, b) => {
@@ -857,8 +865,14 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
       return tA - tB;
     });
     const nowIso = new Date().toISOString().slice(0, 10);
+    const todayAlerts = directAlerts.filter(a => {
+      const ini = toIsoDate(a.data_inicio || a.inicio);
+      const fim = toIsoDate(a.data_fim || a.fim);
+      return ini <= nowIso && nowIso <= fim;
+    });
+    const alertsToDisplay = todayAlerts.length > 0 ? todayAlerts : (directAlerts.length > 0 ? [directAlerts[0]] : []);
 
-    directAlerts.forEach(a => {
+    alertsToDisplay.forEach(a => {
       const inicioIso = toIsoDate(a.data_inicio || a.inicio);
       const fimIso = toIsoDate(a.data_fim || a.fim);
       const isVigenteHoje = inicioIso <= nowIso && nowIso <= fimIso;
@@ -913,54 +927,68 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
 
   // 2. Alertas Oficiais da Marinha do Brasil (só renderiza se houver aviso real ativo)
   if (marinhaAvisos && marinhaAvisos.aviso_ativo === true && marinhaAvisos.numero) {
-    const numero = marinhaAvisos.numero;
-    const tipo = marinhaAvisos.tipo || 'VENTO FORTE / RESSACA';
-    const area = marinhaAvisos.area || 'Área DELTA (Cabo Frio ao Farol de São Tomé)';
-    const rajadas = marinhaAvisos.rajadas || 'Ventos fortes na orla';
-    const marOndas = marinhaAvisos.mar_ondas || 'Mar agitado';
-    const validade = marinhaAvisos.validade || marinhaAvisos.fim_formatado || 'Em vigor nas próximas 24 horas';
-    const restricao = marinhaAvisos.restricao || 'Atenção a pescadores, banhistas e pequenas embarcações na orla marítima.';
+    const avisosList = (marinhaAvisos.avisos_ativos && marinhaAvisos.avisos_ativos.length > 0)
+      ? marinhaAvisos.avisos_ativos
+      : [marinhaAvisos];
 
-    cardsHtml.push(`
-      <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between __SPAN_CLASS__">
-        <div class="flex items-center justify-between gap-2 border-b border-zinc-100 pb-1.5">
-          <div class="flex items-center gap-1.5">
-            <span class="text-[10px] px-1.5 py-0.5 rounded font-bold uppercase bg-zinc-100 text-zinc-800 tracking-wide">
-              MARINHA
-            </span>
-            <span class="text-xs font-semibold text-zinc-600 truncate">
-              Capitania dos Portos / CHM
-            </span>
+    avisosList.forEach(a => {
+      const numero = a.numero;
+      const tipo = a.tipo || marinhaAvisos.tipo || 'MAU TEMPO';
+      const area = a.area || marinhaAvisos.area || 'Área DELTA';
+      const rajadas = a.rajadas || marinhaAvisos.rajadas || 'Até 45 km/h';
+      const marOndas = a.ondas || a.mar_ondas || marinhaAvisos.mar_ondas || '2,0 a 2,5 m';
+      const periodo = a.periodo || a.validade || marinhaAvisos.validade || 'Em vigor';
+      const restricao = a.restricao || marinhaAvisos.restricao || 'Atenção a pescadores, banhistas e pequenas embarcações na orla marítima.';
+
+      cardsHtml.push(`
+        <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between __SPAN_CLASS__">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
+                  MARINHA
+                </span>
+                <span class="text-xs font-semibold font-mono text-black truncate">
+                  Aviso nº ${numero}
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">
+                  Área Delta
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${tipo.includes('GROSSO') ? 'bg-rose-50 text-rose-800 border border-rose-300' : 'bg-[#ffebe4] text-black border border-[#f97316]'}">
+                  ${tipo}
+                </span>
+              </div>
+              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1]">
+                CHM / SMM
+              </span>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-1 flex-wrap">
+              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${tipo} • ${area}</h3>
+              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
+                ${periodo}
+              </span>
+            </div>
           </div>
-          <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-300">
-            Aviso nº ${numero}
-          </span>
-        </div>
 
-        <div class="flex items-baseline justify-between gap-2">
-          <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">${tipo} • ${area}</h3>
-          <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1.5 shrink-0">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
-            ${validade}
-          </span>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2 text-center text-xs">
-          <div class="p-1.5 rounded-md bg-zinc-50/80 border border-zinc-200/50">
-            <span class="text-[10px] uppercase font-semibold text-zinc-500 block">Rajadas</span>
-            <span class="text-xs font-bold font-mono text-zinc-900">${rajadas}</span>
+          <div class="grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Rajadas / Vento</span>
+              <span class="text-xs font-bold font-mono text-black">${rajadas}</span>
+            </div>
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Condição do Mar</span>
+              <span class="text-xs font-bold font-mono text-black">${marOndas}</span>
+            </div>
           </div>
-          <div class="p-1.5 rounded-md bg-zinc-50/80 border border-zinc-200/50">
-            <span class="text-[10px] uppercase font-semibold text-zinc-500 block">Mar</span>
-            <span class="text-xs font-bold font-mono text-zinc-900">${marOndas}</span>
+
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
+            <div><strong class="font-bold text-black">Restrição:</strong> ${cleanBulletinText(restricao)}</div>
           </div>
         </div>
-
-        <div class="p-2 rounded-lg bg-zinc-50/80 border border-zinc-200/50 text-xs text-zinc-700 leading-snug">
-          <strong class="font-semibold text-zinc-900">Restrição:</strong> ${cleanBulletinText(restricao)}
-        </div>
-      </div>
-    `);
+      `);
+    });
   }
 
   if (cardsHtml.length > 0) {
@@ -1319,15 +1347,21 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
     }
 
     if (marinhaAvisos && marinhaAvisos.aviso_ativo === true && marinhaAvisos.numero) {
-      html += `
-        <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-sm text-zinc-950 uppercase">${marinhaAvisos.tipo || 'Aviso Marítimo'}</span>
-            <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#eaf0f6] text-black border border-[#94a3b8] font-bold">Marinha • Aviso nº ${marinhaAvisos.numero}</span>
+      const listAvisos = (marinhaAvisos.avisos_ativos && marinhaAvisos.avisos_ativos.length > 0)
+        ? marinhaAvisos.avisos_ativos
+        : [marinhaAvisos];
+      listAvisos.forEach(a => {
+        html += `
+          <div class="p-3.5 rounded-xl border border-[#cbd5e1] bg-white space-y-1.5 shadow-2xs">
+            <div class="flex items-center justify-between flex-wrap gap-1">
+              <span class="font-bold text-sm text-black uppercase">${a.tipo || 'Aviso Marítimo'} • ${a.area || 'Área Delta'}</span>
+              <span class="text-[11px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#cbd5e1]">Marinha • Aviso nº ${a.numero}</span>
+            </div>
+            <p class="text-xs text-black font-medium leading-snug">${cleanBulletinText(a.periodo || a.validade || 'Condições marítimas sob atenção.')}</p>
+            <p class="text-xs text-zinc-700 leading-snug">${cleanBulletinText(a.restricao || a.texto || '')}</p>
           </div>
-          <p class="text-xs text-zinc-600 font-normal leading-snug">${cleanBulletinText(marinhaAvisos.validade || 'Condições de mar agitado e vento forte na costa.')}</p>
-        </div>
-      `;
+        `;
+      });
     }
 
     if (!html) {
@@ -1595,24 +1629,50 @@ function renderCondicoesMarList(orlaData, dayKey = 'd0') {
     const diaInfo = rotulos.find(r => r.key === dayKey);
     const rotuloTxt = diaInfo ? `${diaInfo.rotulo} (${diaInfo.data_br || ''})` : 'Período selecionado';
 
+    const temAvisoMar = state.marinhaAvisos && state.marinhaAvisos.aviso_ativo;
+    const temGrosso = temAvisoMar && String(state.marinhaAvisos.tipo).toUpperCase().includes('GROSSO');
+    const temVento = temAvisoMar && String(state.marinhaAvisos.tipo).toUpperCase().includes('VENTO');
+
     let waveSwellTxt = 'Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica • Águas calmas e abrigadas nas enseadas.';
     let statusGeralTxt = 'Mar Calmo a Moderado na Orla';
     let statusBadgeTxt = 'Normalidade';
     let ondasEnseadaTxt = '0,3 a 0,7 m';
     let ondasOceanicaTxt = '1,2 a 1,6 m';
 
-    if (dayKey === 'd1') {
-      waveSwellTxt = 'Swell de E • Ondulação mais branda de 1,0 a 1,4 m • Águas calmas e límpidas na maioria das enseadas.';
-      statusGeralTxt = 'Mar Moderado com Tendência a Amansar';
-      statusBadgeTxt = 'Bom para Banho';
-      ondasEnseadaTxt = '0,3 a 0,6 m';
-      ondasOceanicaTxt = '1,0 a 1,4 m';
-    } else if (dayKey === 'd2') {
-      waveSwellTxt = 'Swell de E/NE • Ondulação fraca a moderada de 0,8 a 1,2 m • Águas claras e mar sereno em toda a faixa de enseadas.';
-      statusGeralTxt = 'Mar Calmo em quase toda a Região';
-      statusBadgeTxt = 'Excelente';
-      ondasEnseadaTxt = '0,2 a 0,5 m';
-      ondasOceanicaTxt = '0,8 a 1,2 m';
+    if (dayKey === 'd2') {
+      if (temGrosso || temVento) {
+        waveSwellTxt = 'Avisos da Marinha nº 778/2026 (Mar Grosso) e 781/2026 (Vento Forte) • Ondas de 3,0 a 3,5 m ao largo e 2,0 a 2,8 m na arrebentação sob ventos até 74 km/h.';
+        statusGeralTxt = 'Mar Grosso e Vento Forte na Orla';
+        statusBadgeTxt = 'Mar Grosso • Evitar Banho';
+        ondasEnseadaTxt = '0,8 a 1,4 m';
+        ondasOceanicaTxt = '2,0 a 2,8 m (3,5 m ao largo)';
+      } else {
+        waveSwellTxt = 'Swell de E/NE • Ondulação fraca a moderada de 0,8 a 1,2 m • Águas claras e mar sereno.';
+        statusGeralTxt = 'Mar Calmo em quase toda a Região';
+        statusBadgeTxt = 'Excelente';
+        ondasEnseadaTxt = '0,2 a 0,5 m';
+        ondasOceanicaTxt = '0,8 a 1,2 m';
+      }
+    } else if (dayKey === 'd1') {
+      if (temVento) {
+        waveSwellTxt = 'Swell de E • Ondulação moderada aumentando à noite com entrada de vento forte a partir das 21h (Aviso nº 781/2026).';
+        statusGeralTxt = 'Moderado • Vento à Noite';
+        statusBadgeTxt = 'Atenção à Noite';
+        ondasEnseadaTxt = '0,4 a 0,8 m';
+        ondasOceanicaTxt = '1,2 a 1,8 m';
+      } else {
+        waveSwellTxt = 'Swell de E • Ondulação de 1,0 a 1,4 m • Águas calmas e límpidas na maioria das enseadas.';
+        statusGeralTxt = 'Mar Moderado com Tendência a Amansar';
+        statusBadgeTxt = 'Bom para Banho';
+        ondasEnseadaTxt = '0,3 a 0,6 m';
+        ondasOceanicaTxt = '1,0 a 1,4 m';
+      }
+    } else {
+      if (temAvisoMar) {
+        waveSwellTxt = 'Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica. Avisos de Vento Forte (nº 781) e Mar Grosso (nº 778) emitidos pela Marinha para a Área Delta a partir de sábado às 21h.';
+        statusGeralTxt = 'Mar Moderado na Orla (Avisos Emitidos)';
+        statusBadgeTxt = 'Avisos da Marinha Ativos';
+      }
     }
 
     if (orlaGeralTitulo) orlaGeralTitulo.textContent = `${statusGeralTxt} — ${rotuloTxt}`;
@@ -1753,19 +1813,37 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
 
   // 1. Badge Principal de Status da Orla
   const temRessaca = marinhaAvisos && marinhaAvisos.aviso_ativo && String(marinhaAvisos.tipo).toUpperCase().includes('RESSACA');
+  const temGrosso = marinhaAvisos && marinhaAvisos.aviso_ativo && String(marinhaAvisos.tipo).toUpperCase().includes('GROSSO');
   const temVento = marinhaAvisos && marinhaAvisos.aviso_ativo && String(marinhaAvisos.tipo).toUpperCase().includes('VENTO');
 
   if (badgeEl) {
     if (temRessaca) {
-      badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-rose-50 text-rose-800 border border-rose-200';
+      badgeEl.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300';
       badgeEl.textContent = `Ressaca (Aviso nº ${marinhaAvisos.numero})`;
+    } else if (temGrosso && temVento) {
+      badgeEl.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300';
+      badgeEl.textContent = `Vento Forte & Mar Grosso (Avisos nº ${marinhaAvisos.numero})`;
+    } else if (temGrosso) {
+      badgeEl.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300';
+      badgeEl.textContent = `Mar Grosso (Aviso nº ${marinhaAvisos.numero})`;
     } else if (temVento) {
-      badgeEl.className = 'text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold';
+      badgeEl.className = 'text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]';
       badgeEl.textContent = `Vento Forte (Aviso nº ${marinhaAvisos.numero})`;
     } else {
       badgeEl.className = 'badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs';
       badgeEl.textContent = 'Normalidade';
     }
+  }
+
+  // 1.1. Atualiza botões de dias com base em orlaData.dias_rotulos
+  if (orlaData && orlaData.dias_rotulos) {
+    orlaData.dias_rotulos.forEach(r => {
+      const btn = document.getElementById(`orla-day-btn-${r.key}`);
+      const modalBtn = document.getElementById(`modal-day-btn-${r.key}`);
+      const txt = `${r.rotulo} (${r.data_br})`;
+      if (btn) btn.textContent = txt;
+      if (modalBtn) modalBtn.textContent = txt;
+    });
   }
 
   // 2. Tábua de Marés do Dia (Terminal de Imbetiba / Macaé e Rio das Ostras)
