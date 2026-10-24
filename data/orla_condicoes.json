@@ -1,10 +1,10 @@
 {
-  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 778/2026 e 781/2026)",
+  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 781/2026 e 782/2026 e 785/2026)",
   "badge": "VENTO FORTE & MAR GROSSO",
   "badge_tipo": "danger",
   "aviso_ativo": true,
-  "aviso_numero": "778/2026 e 781/2026",
-  "aviso_tipo": "MAR GROSSO E VENTO FORTE",
+  "aviso_numero": "781/2026 e 782/2026 e 785/2026",
+  "aviso_tipo": "VENTO FORTE E MAR GROSSO",
   "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
   "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
