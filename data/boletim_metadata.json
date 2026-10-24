@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "24/10 (Sábado) a 26/10 (Segunda-feira)",
-  "emissao": "24/10/2026 às 04:15h",
+  "emissao": "24/10/2026 às 04:29h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Alerta Amarelo de Tempestade do INMET (nº 56153 e nº 56166) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: MAR GROSSO E VENTO FORTE (nº 778/2026 e 781/2026) válidos a partir de 24/10 às 21:00h até 26/10 às 00:00h. Acumulado total de chuva previsto para o ciclo de 3 dias: 32.9 mm com temperatura máxima alcançando 30°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -780,7 +780,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-24T04:15:37.632840"
+    "atualizado_em": "2026-10-24T04:29:40.726869"
   },
   "orla_condicoes": {
     "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 778/2026 e 781/2026)",
@@ -1218,7 +1218,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-24T04:15:43.095619",
+    "atualizado_em": "2026-10-24T04:29:45.982581",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "07:34",
