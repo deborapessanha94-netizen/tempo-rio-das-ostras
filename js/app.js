@@ -130,18 +130,7 @@ function setupModalsAndDock() {
 
 
 
-  // Modal 3: Avisos Meteorológicos
-  const modalAvisos = document.getElementById('modal-avisos');
-  const btnOpenAvisos = document.getElementById('dock-btn-avisos');
-  const btnCloseAvisos = document.getElementById('btn-close-modal-avisos');
-  const btnCloseAvisosFoot = document.getElementById('btn-close-modal-avisos-foot');
 
-  const openAvisos = () => { if (modalAvisos) modalAvisos.classList.remove('hidden'), modalAvisos.classList.add('flex'); };
-  const closeAvisos = () => { if (modalAvisos) modalAvisos.classList.add('hidden'), modalAvisos.classList.remove('flex'); };
-
-  if (btnOpenAvisos) btnOpenAvisos.addEventListener('click', openAvisos);
-  if (btnCloseAvisos) btnCloseAvisos.addEventListener('click', closeAvisos);
-  if (btnCloseAvisosFoot) btnCloseAvisosFoot.addEventListener('click', closeAvisos);
 
   // Modal 4: Meteogramas Oficiais (INMET & CPTEC/INPE)
   const modalMeteo = document.getElementById('modal-meteogramas');
@@ -190,7 +179,7 @@ function setupModalsAndDock() {
   });
 
   // Fechar ao clicar fora
-  [modalBoletim, modalAvisos, modalMeteo].forEach(m => {
+  [modalBoletim, modalMeteo].forEach(m => {
     if (m) {
       m.addEventListener('click', (e) => {
         if (e.target === m) {
@@ -1325,50 +1314,6 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
         <p class="text-zinc-600 text-xs sm:text-sm font-normal leading-snug">${cleanBulletinText(b.impactos)}</p>
       </div>
     `).join('');
-  }
-
-  // Modal Avisos: INMET e Marinha
-  const avisosList = document.getElementById('modal-avisos-list');
-  if (avisosList) {
-    let html = '';
-    const inmetAtivos = (inmetAlerts && Array.isArray(inmetAlerts)) ? inmetAlerts.filter(a => a.eh_direto_ostras !== false) : [];
-    if (inmetAtivos.length > 0) {
-      inmetAtivos.forEach(a => {
-        html += `
-          <div class="p-3.5 rounded-lg border border-zinc-200 bg-white space-y-1.5">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-sm text-zinc-950 uppercase">${a.descricao || 'Alerta Meteorológico'}</span>
-              <span class="text-[11px] px-2 py-0.5 rounded-full font-semibold uppercase bg-[#ffebe4] text-black border border-[#f97316] font-bold">INMET</span>
-            </div>
-            <p class="text-xs text-zinc-600 font-normal leading-snug">${cleanBulletinText(a.instrucoes?.[0] || 'Acompanhe as atualizações da Defesa Civil.')}</p>
-          </div>
-        `;
-      });
-    }
-
-    if (marinhaAvisos && marinhaAvisos.aviso_ativo === true && marinhaAvisos.numero) {
-      const listAvisos = (marinhaAvisos.avisos_ativos && marinhaAvisos.avisos_ativos.length > 0)
-        ? marinhaAvisos.avisos_ativos
-        : [marinhaAvisos];
-      listAvisos.forEach(a => {
-        html += `
-          <div class="p-3.5 rounded-xl border border-[#cbd5e1] bg-white space-y-1.5 shadow-2xs">
-            <div class="flex items-center justify-between flex-wrap gap-1">
-              <span class="font-bold text-sm text-black uppercase">${a.tipo || 'Aviso Marítimo'} • ${a.area || 'Área Delta'}</span>
-              <span class="text-[11px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#eaf0f6] text-black border border-[#cbd5e1]">Marinha • Aviso nº ${a.numero}</span>
-            </div>
-            <p class="text-xs text-black font-medium leading-snug">${cleanBulletinText(a.periodo || a.validade || 'Condições marítimas sob atenção.')}</p>
-            <p class="text-xs text-zinc-700 leading-snug">${cleanBulletinText(a.restricao || a.texto || '')}</p>
-          </div>
-        `;
-      });
-    }
-
-    if (!html) {
-      html = '<div class="p-4 text-center font-medium text-zinc-500 text-sm">Nenhum aviso meteorológico severo vigente para Rio das Ostras no momento.</div>';
-    }
-
-    avisosList.innerHTML = html;
   }
 }
 

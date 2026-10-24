@@ -142,7 +142,7 @@
                 Alertas Meteorológicos Oficiais Vigentes
               </h2>
               <span id="badge-total-alertas" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                1 Alerta Ativo
+                3 Alertas Ativos
               </span>
             </div>
             <p class="text-xs font-normal text-[#64748b] mt-0.5">
@@ -156,9 +156,7 @@
             <i data-lucide="info" class="w-3.5 h-3.5 text-[#64748b]"></i>
             Área de Cobertura: Rio das Ostras & Litoral Norte
           </span>
-          <button id="dock-btn-avisos" class="text-xs font-bold text-black hover:underline cursor-pointer">
-            Ver Avisos →
-          </button>
+
         </div>
       </div>
 
@@ -1508,42 +1506,7 @@
     </div>
   </div>
 
-  <!-- ========================================================================= -->
-  <!-- MODAL 2: AVISOS METEOROLÓGICOS OFICIAIS                                    -->
-  <!-- ========================================================================= -->
-  <div id="modal-avisos" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-    <div class="modern-card max-w-2xl w-full max-h-[90vh] flex flex-col shadow-xl overflow-hidden bg-white border border-[#e2e8f0] text-[#1e293b]">
-      
-      <div class="px-5 py-3.5 bg-[#f8fafc] text-[#1e293b] flex items-center justify-between border-b border-[#e2e8f0]">
-        <div class="flex items-center gap-2.5">
-          <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-            <i data-lucide="shield-alert" class="w-4 h-4 text-black"></i>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-black leading-tight">Avisos Oficiais da Marinha & INMET</h3>
-            <span class="text-xs text-[#64748b] font-normal">Orientações de Segurança da Defesa Civil</span>
-          </div>
-        </div>
-        <button id="btn-close-modal-avisos" class="p-1 rounded-lg text-[#64748b] hover:text-black cursor-pointer transition">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </button>
-      </div>
 
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-3.5 text-sm bg-white text-[#334155]">
-        <div id="modal-avisos-list" class="space-y-3">
-          <!-- Preenchido via app.js -->
-        </div>
-      </div>
-
-      <div class="px-5 py-3 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between text-xs font-medium text-[#64748b]">
-        <span>Em caso de emergência ligue 199</span>
-        <button id="btn-close-modal-avisos-foot" class="px-4 py-1.5 rounded-full font-semibold btn-action-outline cursor-pointer">
-          Fechar
-        </button>
-      </div>
-
-    </div>
-  </div>
 
   <!-- ========================================================================= -->
   <!-- MODAL: METEOGRAMAS OFICIAIS (INMET & CPTEC/INPE)                          -->
@@ -1658,6 +1621,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=92"></script>
+  <script type="module" src="js/app.js?v=93"></script>
 </body>
 </html>
