@@ -1847,8 +1847,73 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
   if (window.lucide) window.lucide.createIcons();
 }
 
+// ==============================================================================
+// CONTROLE DO MODAL DE PRÉ-VISUALIZAÇÃO E DOWNLOAD DE ARTES PARA INSTAGRAM
+// ==============================================================================
+window.activeSocialFormat = 'stories';
+
+window.openSocialPreview = function(format) {
+  window.activeSocialFormat = format || 'stories';
+  const modal = document.getElementById('modal-social-preview');
+  if (!modal) return;
+  modal.classList.remove('hidden');
+  modal.classList.add('flex');
+  window.switchSocialPreviewTab(window.activeSocialFormat);
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.closeSocialPreview = function() {
+  const modal = document.getElementById('modal-social-preview');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+};
+
+window.switchSocialPreviewTab = function(format) {
+  window.activeSocialFormat = format || 'stories';
+  const isStories = window.activeSocialFormat === 'stories';
+  const tabStoriesBtn = document.getElementById('social-tab-btn-stories');
+  const tabPostBtn = document.getElementById('social-tab-btn-post');
+  const previewImg = document.getElementById('social-preview-img');
+  const dimText = document.getElementById('social-preview-dim-text');
+
+  if (isStories) {
+    if (tabStoriesBtn) {
+      tabStoriesBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#020b18] text-[#00d2ff] border border-[#00d2ff]/40 shadow-xs';
+    }
+    if (tabPostBtn) {
+      tabPostBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-200 border border-transparent';
+    }
+    if (previewImg) {
+      previewImg.src = `img/balneabilidade_stories.png?t=${Date.now()}`;
+    }
+    if (dimText) {
+      dimText.textContent = 'Dimensões: 1080 x 1920 px (Stories 9:16)';
+    }
+  } else {
+    if (tabPostBtn) {
+      tabPostBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 bg-[#020b18] text-[#00d2ff] border border-[#00d2ff]/40 shadow-xs';
+    }
+    if (tabStoriesBtn) {
+      tabStoriesBtn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-black transition cursor-pointer flex items-center gap-1.5 text-black hover:bg-zinc-200 border border-transparent';
+    }
+    if (previewImg) {
+      previewImg.src = `img/balneabilidade_post.png?t=${Date.now()}`;
+    }
+    if (dimText) {
+      dimText.textContent = 'Dimensões: 1080 x 1350 px (Feed 4:5 Retrato)';
+    }
+  }
+  if (window.lucide) window.lucide.createIcons();
+};
+
+window.downloadCurrentSocialPreview = function() {
+  window.downloadSocialBalneabilidade(window.activeSocialFormat || 'stories');
+};
+
 /**
- * Baixa ou compartilha a imagem oficial de balneabilidade para Instagram (Post 1:1 ou Stories 9:16)
+ * Baixa ou compartilha a imagem oficial de balneabilidade para Instagram (Post 4:5 ou Stories 9:16)
  * @param {'post' | 'stories'} format 
  */
 window.downloadSocialBalneabilidade = async function(format) {
@@ -1858,6 +1923,13 @@ window.downloadSocialBalneabilidade = async function(format) {
   const fileName = isStories 
     ? `balneabilidade_rio_das_ostras_stories_${nowStr}.png` 
     : `balneabilidade_rio_das_ostras_post_${nowStr}.png`;
+
+  const btn = document.getElementById('social-download-btn');
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i><span>Baixando...</span>';
+    if (window.lucide) window.lucide.createIcons();
+  }
 
   try {
     const res = await fetch(`${imgUrl}?t=${Date.now()}`);
@@ -1869,9 +1941,10 @@ window.downloadSocialBalneabilidade = async function(format) {
     if (navigator.canShare && navigator.canShare({ files: [file] }) && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
       await navigator.share({
         title: 'Balneabilidade de Rio das Ostras - INEA',
-        text: 'Boletim Oficial de Balneabilidade das Praias de Rio das Ostras (INEA/SEIRHI).',
+        text: 'Boletim Oficial de Balneabilidade das Praias de Rio das Ostras (@tempoemriodasostras).',
         files: [file]
       });
+      if (btn) btn.innerHTML = originalHtml;
       return;
     }
 
@@ -1893,6 +1966,13 @@ window.downloadSocialBalneabilidade = async function(format) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+  } finally {
+    setTimeout(() => {
+      if (btn) {
+        btn.innerHTML = originalHtml;
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }, 1500);
   }
 };
 
