@@ -1,8 +1,8 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "23/10 (Sexta-feira) a 25/10 (Domingo)",
-  "emissao": "23/10/2026 às 23:01h",
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Alerta Amarelo de Tempestade do INMET (nº 56159 e nº 56153 e nº 56166) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 24.1 mm com temperatura máxima alcançando 32°C.",
+  "emissao": "24/10/2026 às 00:04h",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Alerta Amarelo de Tempestade do INMET (nº 56159 e nº 56153 e nº 56166) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 18.0 mm com temperatura máxima alcançando 30°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
     "observado_recente": {
@@ -11,7 +11,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 1.0,
         "chuva_96h": 15.6,
-        "leitura": "23/10/26 22:10"
+        "leitura": "23/10/26 23:10"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -49,9 +49,9 @@
         "data_iso": "2026-10-25",
         "data_br": "25/10/2026",
         "dia_semana": "Domingo",
-        "chuva_media_modelos_mm": 9.7,
+        "chuva_media_modelos_mm": 3.6,
         "chuva_pico_convectivo_mm": 50,
-        "faixa_oficial": "9.7 mm (Média) • Até 50 mm (Alerta INMET)",
+        "faixa_oficial": "3.6 mm (Média) • Até 50 mm (Alerta INMET)",
         "tem_alerta_inmet": true,
         "alerta_inmet_id": 56166,
         "taxa_horaria_pico": "20 a 30 mm/h"
@@ -85,7 +85,7 @@
       "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas à tarde."
     }
   ],
-  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 26°C na sexta-feira (23/10), com precipitação diária prevista em 9.1 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56159 do INMET). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 32°C no domingo (25/10).\n\nNo monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 1.0 mm em 24h e 15.6 mm em 96h) e a telemetria do INEA (5.6 mm em 24h e 37.4 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 45 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, no sábado (24/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 32°C e pancadas de chuva com trovoadas (5.3 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56153 do INMET). No domingo (25/10), o calor persiste com máxima de 28°C e gradual diminuição de instabilidades (9.7 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56166 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
+  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 26°C na sexta-feira (23/10), com precipitação diária prevista em 9.1 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56159 do INMET). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 30°C no domingo (25/10).\n\nNo monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 1.0 mm em 24h e 15.6 mm em 96h) e a telemetria do INEA (5.6 mm em 24h e 37.4 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 45 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, no sábado (24/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 30°C e pancadas de chuva com trovoadas (5.3 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56153 do INMET). No domingo (25/10), o calor persiste com máxima de 26°C e gradual diminuição de instabilidades (3.6 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56166 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
   "sinopse_estruturada": {
     "periodo": "23/10 (Sexta-feira) a 25/10 (Domingo)",
     "evolucao_3_dias": [
@@ -132,7 +132,7 @@
           },
           "mar": {
             "label": "MAR E PRAIA",
-            "val": "1.0 a 1.0 m",
+            "val": "0.9 a 1.2 m",
             "icon": "waves"
           },
           "uv": {
@@ -151,14 +151,14 @@
         "dia_offset": "D+1",
         "dia_ordem": 2,
         "dia_rotulo": "SÁBADO — 24/10/2026",
-        "subtitulo": "Muitas nuvens com pancadas de chuva isoladas (Alerta Amarelo • Perigo Potencial) • Máxima de 32°C • Chuva: 5.3 mm (Média) • Até 50 mm (Alerta INMET)",
+        "subtitulo": "Muitas nuvens com pancadas de chuva isoladas (Alerta Amarelo • Perigo Potencial) • Máxima de 30°C • Chuva: 5.3 mm (Média) • Até 50 mm (Alerta INMET)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de nevoeiro com visibilidade reduzida sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 32°C. Precipitação: volume médio contínuo de 5.3 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
+        "descricao": "Previsão de nevoeiro com visibilidade reduzida sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 30°C. Precipitação: volume médio contínuo de 5.3 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
         "informe_populacao": [
           "Neste sábado, o tempo se mantém instável com predomínio de muitas nuvens sob atuação de cavados atmosféricos e circulação de umidade do oceano.",
           "Previsão de pancadas de chuva com trovoadas pela manhã e chuva no decorrer da tarde (média de 5.3 mm com pico de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56153 do INMET). O Rio Jundiá segue em regime estável de vazante (nível de 1.82 m).",
-          "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 32°C à tarde em moderada elevação. Na região rural, oscilam entre 19°C e 30°C.",
+          "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 30°C à tarde em moderada elevação. Na região rural, oscilam entre 18°C e 28°C.",
           "A umidade relativa do ar oscila entre 60% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos de E-NE rondando para N-NE moderados com rajadas de até 45 km/h na orla (Alerta Amarelo de Tempestade nº 56153 do INMET)."
         ],
@@ -170,7 +170,7 @@
           },
           "temp": {
             "label": "TEMPERATURA",
-            "val": "21° a 32°C",
+            "val": "20° a 30°C",
             "icon": "thermometer"
           },
           "umid": {
@@ -195,12 +195,12 @@
           },
           "uv": {
             "label": "ÍNDICE UV (CPTEC)",
-            "val": "UV 12.0 (Extremo)",
+            "val": "UV 13.0 (Extremo)",
             "icon": "sun"
           },
           "agua_precipitavel": {
             "label": "ÁGUA PRECIPITÁVEL (VIME)",
-            "val": "14.7 mm",
+            "val": "13.0 mm",
             "icon": "droplets"
           }
         }
@@ -209,15 +209,15 @@
         "dia_offset": "D+2",
         "dia_ordem": 3,
         "dia_rotulo": "DOMINGO — 25/10/2026",
-        "subtitulo": "Tempestade com Granizo • Máxima de 28°C • Chuva: 9.7 mm (Média) • Até 50 mm (Alerta INMET)",
+        "subtitulo": "Tempestade com Granizo • Máxima de 26°C • Chuva: 3.6 mm (Média) • Até 50 mm (Alerta INMET)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 28°C. Precipitação: volume médio contínuo de 9.7 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
+        "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 18°C e máxima de 26°C. Precipitação: volume médio contínuo de 3.6 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
         "informe_populacao": [
           "Neste domingo, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã.",
-          "Previsão de pancadas de chuva e trovoadas à tarde (média de 9.7 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56166 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.82 m).",
-          "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 28°C à tarde em rápida elevação. Na região rural, oscilam entre 19°C e 26°C.",
-          "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
+          "Previsão de pancadas de chuva e trovoadas à tarde (média de 3.6 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56166 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.82 m).",
+          "Temperaturas variam entre mínima de 18°C ao amanhecer e máxima de 26°C à tarde em rápida elevação. Na região rural, oscilam entre 16°C e 24°C.",
+          "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
           "Ventos de ENE rondando para S moderados com rajadas de até 45 km/h na orla (Alerta Amarelo de Tempestade nº 56166 do INMET)."
         ],
         "pilares": {
@@ -228,12 +228,12 @@
           },
           "temp": {
             "label": "TEMPERATURA",
-            "val": "21° a 28°C",
+            "val": "18° a 26°C",
             "icon": "thermometer"
           },
           "umid": {
             "label": "UMIDADE",
-            "val": "76% a 94%",
+            "val": "68% a 94%",
             "icon": "droplets"
           },
           "vento": {
@@ -243,7 +243,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "9.7 mm (Até 50 mm em tempestade)",
+            "val": "3.6 mm (Até 50 mm em tempestade)",
             "icon": "cloud-rain"
           },
           "mar": {
@@ -258,7 +258,7 @@
           },
           "agua_precipitavel": {
             "label": "ÁGUA PRECIPITÁVEL (VIME)",
-            "val": "12.2 mm",
+            "val": "10.3 mm",
             "icon": "droplets"
           }
         }
@@ -267,19 +267,19 @@
     "ordem_1_atmosfera": {
       "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
       "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
-      "texto": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 26°C na sexta-feira (23/10), com precipitação diária prevista em 9.1 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56159 do INMET). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 32°C no domingo (25/10).",
+      "texto": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 26°C na sexta-feira (23/10), com precipitação diária prevista em 9.1 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56159 do INMET). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 30°C no domingo (25/10).",
       "pilares": [
         {
           "label": "Modelos Numéricos (3 Dias)",
-          "val": "INMET e Open-Meteo (24.1 mm em 72h)"
+          "val": "INMET e Open-Meteo (18.0 mm em 72h)"
         },
         {
           "label": "Gradiente Térmico Oficial",
-          "val": "Mínima de 20°C até Máxima de 32°C"
+          "val": "Mínima de 18°C até Máxima de 30°C"
         },
         {
           "label": "Evolução Sinótica Oficial",
-          "val": "SEXTA-FEIRA: Pancadas/Trovoadas (26°C) ➔ SÁBADO: Possibilidade de Chuva (32°C) ➔ DOMINGO: Pancadas/Trovoadas (28°C)"
+          "val": "SEXTA-FEIRA: Pancadas/Trovoadas (26°C) ➔ SÁBADO: Possibilidade de Chuva (30°C) ➔ DOMINGO: Pancadas/Trovoadas (26°C)"
         }
       ]
     },
@@ -313,7 +313,7 @@
       "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Plantão Defesa Civil 24/7",
       "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
       "badge_emergencia": "EMERGÊNCIA 199",
-      "texto": "Para os dias subsequentes, no sábado (24/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 32°C e pancadas de chuva com trovoadas (5.3 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56153 do INMET). No domingo (25/10), o calor persiste com máxima de 28°C e gradual diminuição de instabilidades (9.7 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56166 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
+      "texto": "Para os dias subsequentes, no sábado (24/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 30°C e pancadas de chuva com trovoadas (5.3 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56153 do INMET). No domingo (25/10), o calor persiste com máxima de 26°C e gradual diminuição de instabilidades (3.6 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56166 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.",
       "pilares": [
         {
           "label": "Ciclo Sinótico Oficial",
@@ -398,7 +398,7 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.0 a 1.0 m",
+          "val": "0.9 a 1.2 m",
           "icon": "waves"
         },
         "uv": {
@@ -415,14 +415,14 @@
     },
     {
       "dia": "SÁBADO — 24/10/2026",
-      "subtitulo": "Muitas nuvens com pancadas de chuva isoladas (Alerta Amarelo • Perigo Potencial) • Máxima de 32°C • Chuva: 5.3 mm (Média) • Até 50 mm (Alerta INMET)",
+      "subtitulo": "Muitas nuvens com pancadas de chuva isoladas (Alerta Amarelo • Perigo Potencial) • Máxima de 30°C • Chuva: 5.3 mm (Média) • Até 50 mm (Alerta INMET)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de nevoeiro com visibilidade reduzida sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 32°C. Precipitação: volume médio contínuo de 5.3 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
+      "descricao": "Previsão de nevoeiro com visibilidade reduzida sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 30°C. Precipitação: volume médio contínuo de 5.3 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
       "informe_populacao": [
         "Neste sábado, o tempo se mantém instável com predomínio de muitas nuvens sob atuação de cavados atmosféricos e circulação de umidade do oceano.",
         "Previsão de pancadas de chuva com trovoadas pela manhã e chuva no decorrer da tarde (média de 5.3 mm com pico de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56153 do INMET). O Rio Jundiá segue em regime estável de vazante (nível de 1.82 m).",
-        "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 32°C à tarde em moderada elevação. Na região rural, oscilam entre 19°C e 30°C.",
+        "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 30°C à tarde em moderada elevação. Na região rural, oscilam entre 18°C e 28°C.",
         "A umidade relativa do ar oscila entre 60% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos de E-NE rondando para N-NE moderados com rajadas de até 45 km/h na orla (Alerta Amarelo de Tempestade nº 56153 do INMET)."
       ],
@@ -434,7 +434,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "21° a 32°C",
+          "val": "20° a 30°C",
           "icon": "thermometer"
         },
         "umid": {
@@ -459,27 +459,27 @@
         },
         "uv": {
           "label": "ÍNDICE UV (CPTEC)",
-          "val": "UV 12.0 (Extremo)",
+          "val": "UV 13.0 (Extremo)",
           "icon": "sun"
         },
         "agua_precipitavel": {
           "label": "ÁGUA PRECIPITÁVEL (VIME)",
-          "val": "14.7 mm",
+          "val": "13.0 mm",
           "icon": "droplets"
         }
       }
     },
     {
       "dia": "DOMINGO — 25/10/2026",
-      "subtitulo": "Tempestade com Granizo • Máxima de 28°C • Chuva: 9.7 mm (Média) • Até 50 mm (Alerta INMET)",
+      "subtitulo": "Tempestade com Granizo • Máxima de 26°C • Chuva: 3.6 mm (Média) • Até 50 mm (Alerta INMET)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 28°C. Precipitação: volume médio contínuo de 9.7 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
+      "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 18°C e máxima de 26°C. Precipitação: volume médio contínuo de 3.6 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 45 km/h na faixa litorânea.",
       "informe_populacao": [
         "Neste domingo, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã.",
-        "Previsão de pancadas de chuva e trovoadas à tarde (média de 9.7 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56166 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.82 m).",
-        "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 28°C à tarde em rápida elevação. Na região rural, oscilam entre 19°C e 26°C.",
-        "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
+        "Previsão de pancadas de chuva e trovoadas à tarde (média de 3.6 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56166 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.82 m).",
+        "Temperaturas variam entre mínima de 18°C ao amanhecer e máxima de 26°C à tarde em rápida elevação. Na região rural, oscilam entre 16°C e 24°C.",
+        "A umidade relativa do ar oscila entre 68% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos de ENE rondando para S moderados com rajadas de até 45 km/h na orla (Alerta Amarelo de Tempestade nº 56166 do INMET)."
       ],
       "pilares": {
@@ -490,12 +490,12 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "21° a 28°C",
+          "val": "18° a 26°C",
           "icon": "thermometer"
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "76% a 94%",
+          "val": "68% a 94%",
           "icon": "droplets"
         },
         "vento": {
@@ -505,7 +505,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "9.7 mm (Até 50 mm em tempestade)",
+          "val": "3.6 mm (Até 50 mm em tempestade)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -520,7 +520,7 @@
         },
         "agua_precipitavel": {
           "label": "ÁGUA PRECIPITÁVEL (VIME)",
-          "val": "12.2 mm",
+          "val": "10.3 mm",
           "icon": "droplets"
         }
       }
@@ -554,7 +554,7 @@
           "cod_temp_min_tende_icone": "11",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h11",
           "ocaso": "17h55",
           "fonte": "prevmet"
@@ -580,7 +580,7 @@
           "cod_temp_min_tende_icone": "11",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h11",
           "ocaso": "17h55",
           "fonte": "prevmet"
@@ -606,7 +606,7 @@
           "cod_temp_min_tende_icone": "11",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h11",
           "ocaso": "17h55",
           "fonte": "prevmet"
@@ -634,7 +634,7 @@
           "cod_temp_min_tende_icone": "84",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h10",
           "ocaso": "17h56",
           "fonte": "prevmet"
@@ -660,7 +660,7 @@
           "cod_temp_min_tende_icone": "84",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h10",
           "ocaso": "17h56",
           "fonte": "prevmet"
@@ -686,7 +686,7 @@
           "cod_temp_min_tende_icone": "84",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "05h10",
           "ocaso": "17h56",
           "fonte": "prevmet"
@@ -713,7 +713,7 @@
         "cod_temp_min_tende_icone": "74",
         "temp_min_tende_icone": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAZCAYAAAAv3j5gAAAKN2lDQ1BzUkdCIElFQzYxOTY2LTIuMQAAeJydlndUU9kWh8+9N71QkhCKlNBraFICSA29SJEuKjEJEErAkAAiNkRUcERRkaYIMijggKNDkbEiioUBUbHrBBlE1HFwFBuWSWStGd+8ee/Nm98f935rn73P3Wfvfda6AJD8gwXCTFgJgAyhWBTh58WIjYtnYAcBDPAAA2wA4HCzs0IW+EYCmQJ82IxsmRP4F726DiD5+yrTP4zBAP+flLlZIjEAUJiM5/L42VwZF8k4PVecJbdPyZi2NE3OMErOIlmCMlaTc/IsW3z2mWUPOfMyhDwZy3PO4mXw5Nwn4405Er6MkWAZF+cI+LkyviZjg3RJhkDGb+SxGXxONgAoktwu5nNTZGwtY5IoMoIt43kA4EjJX/DSL1jMzxPLD8XOzFouEiSniBkmXFOGjZMTi+HPz03ni8XMMA43jSPiMdiZGVkc4XIAZs/8WRR5bRmyIjvYODk4MG0tbb4o1H9d/JuS93aWXoR/7hlEH/jD9ld+mQ0AsKZltdn6h21pFQBd6wFQu/2HzWAvAIqyvnUOfXEeunxeUsTiLGcrq9zcXEsBn2spL+jv+p8Of0NffM9Svt3v5WF485M4knQxQ143bmZ6pkTEyM7icPkM5p+H+B8H/nUeFhH8JL6IL5RFRMumTCBMlrVbyBOIBZlChkD4n5r4D8P+pNm5lona+BHQllgCpSEaQH4eACgqESAJe2Qr0O99C8ZHA/nNi9GZmJ37z4L+fVe4TP7IFiR/jmNHRDK4ElHO7Jr8WgI0IABFQAPqQBvoAxPABLbAEbgAD+ADAkEoiARxYDHgghSQAUQgFxSAtaAYlIKtYCeoBnWgETSDNnAYdIFj4DQ4By6By2AE3AFSMA6egCnwCsxAEISFyBAVUod0IEPIHLKFWJAb5AMFQxFQHJQIJUNCSAIVQOugUqgcqobqoWboW+godBq6AA1Dt6BRaBL6FXoHIzAJpsFasBFsBbNgTzgIjoQXwcnwMjgfLoK3wJVwA3wQ7oRPw5fgEVgKP4GnEYAQETqiizARFsJGQpF4JAkRIauQEqQCaUDakB6kH7mKSJGnyFsUBkVFMVBMlAvKHxWF4qKWoVahNqOqUQdQnag+1FXUKGoK9RFNRmuizdHO6AB0LDoZnYsuRlegm9Ad6LPoEfQ4+hUGg6FjjDGOGH9MHCYVswKzGbMb0445hRnGjGGmsVisOtYc64oNxXKwYmwxtgp7EHsSewU7jn2DI+J0cLY4X1w8TogrxFXgWnAncFdwE7gZvBLeEO+MD8Xz8MvxZfhGfA9+CD+OnyEoE4wJroRIQiphLaGS0EY4S7hLeEEkEvWITsRwooC4hlhJPEQ8TxwlviVRSGYkNimBJCFtIe0nnSLdIr0gk8lGZA9yPFlM3kJuJp8h3ye/UaAqWCoEKPAUVivUKHQqXFF4pohXNFT0VFysmK9YoXhEcUjxqRJeyUiJrcRRWqVUo3RU6YbStDJV2UY5VDlDebNyi/IF5UcULMWI4kPhUYoo+yhnKGNUhKpPZVO51HXURupZ6jgNQzOmBdBSaaW0b2iDtCkVioqdSrRKnkqNynEVKR2hG9ED6On0Mvph+nX6O1UtVU9Vvuom1TbVK6qv1eaoeajx1UrU2tVG1N6pM9R91NPUt6l3qd/TQGmYaYRr5Grs0Tir8XQObY7LHO6ckjmH59zWhDXNNCM0V2ju0xzQnNbS1vLTytKq0jqj9VSbru2hnaq9Q/uE9qQOVcdNR6CzQ+ekzmOGCsOTkc6oZPQxpnQ1df11Jbr1uoO6M3rGelF6hXrtevf0Cfos/ST9Hfq9+lMGOgYhBgUGrQa3DfGGLMMUw12G/YavjYyNYow2GHUZPTJWMw4wzjduNb5rQjZxN1lm0mByzRRjyjJNM91tetkMNrM3SzGrMRsyh80dzAXmu82HLdAWThZCiwaLG0wS05OZw2xljlrSLYMtCy27LJ9ZGVjFW22z6rf6aG1vnW7daH3HhmITaFNo02Pzq62ZLde2xvbaXPJc37mr53bPfW5nbse322N3055qH2K/wb7X/oODo4PIoc1h0tHAMdGx1vEGi8YKY21mnXdCO3k5rXY65vTW2cFZ7HzY+RcXpkuaS4vLo3nG8/jzGueNueq5clzrXaVuDLdEt71uUnddd457g/sDD30PnkeTx4SnqWeq50HPZ17WXiKvDq/XbGf2SvYpb8Tbz7vEe9CH4hPlU+1z31fPN9m31XfKz95vhd8pf7R/kP82/xsBWgHcgOaAqUDHwJWBfUGkoAVB1UEPgs2CRcE9IXBIYMj2kLvzDecL53eFgtCA0O2h98KMw5aFfR+OCQ8Lrwl/GGETURDRv4C6YMmClgWvIr0iyyLvRJlESaJ6oxWjE6Kbo1/HeMeUx0hjrWJXxl6K04gTxHXHY+Oj45vipxf6LNy5cDzBPqE44foi40V5iy4s1licvvj4EsUlnCVHEtGJMYktie85oZwGzvTSgKW1S6e4bO4u7hOeB28Hb5Lvyi/nTyS5JpUnPUp2Td6ePJninlKR8lTAFlQLnqf6p9alvk4LTduf9ik9Jr09A5eRmHFUSBGmCfsytTPzMoezzLOKs6TLnJftXDYlChI1ZUPZi7K7xTTZz9SAxESyXjKa45ZTk/MmNzr3SJ5ynjBvYLnZ8k3LJ/J9879egVrBXdFboFuwtmB0pefK+lXQqqWrelfrry5aPb7Gb82BtYS1aWt/KLQuLC98uS5mXU+RVtGaorH1futbixWKRcU3NrhsqNuI2ijYOLhp7qaqTR9LeCUXS61LK0rfb+ZuvviVzVeVX33akrRlsMyhbM9WzFbh1uvb3LcdKFcuzy8f2x6yvXMHY0fJjpc7l+y8UGFXUbeLsEuyS1oZXNldZVC1tep9dUr1SI1XTXutZu2m2te7ebuv7PHY01anVVda926vYO/Ner/6zgajhop9mH05+x42Rjf2f836urlJo6m06cN+4X7pgYgDfc2Ozc0tmi1lrXCrpHXyYMLBy994f9Pdxmyrb6e3lx4ChySHHn+b+O31w0GHe4+wjrR9Z/hdbQe1o6QT6lzeOdWV0iXtjusePhp4tLfHpafje8vv9x/TPVZzXOV42QnCiaITn07mn5w+lXXq6enk02O9S3rvnIk9c60vvG/wbNDZ8+d8z53p9+w/ed71/LELzheOXmRd7LrkcKlzwH6g4wf7HzoGHQY7hxyHui87Xe4Znjd84or7ldNXva+euxZw7dLI/JHh61HXb95IuCG9ybv56Fb6ree3c27P3FlzF3235J7SvYr7mvcbfjT9sV3qID0+6j068GDBgztj3LEnP2X/9H686CH5YcWEzkTzI9tHxyZ9Jy8/Xvh4/EnWk5mnxT8r/1z7zOTZd794/DIwFTs1/lz0/NOvm1+ov9j/0u5l73TY9P1XGa9mXpe8UX9z4C3rbf+7mHcTM7nvse8rP5h+6PkY9PHup4xPn34D94Tz+49wZioAAAAJcEhZcwAALiMAAC4jAXilP3YAAAE1SURBVHic7ZTNToNAFEY/kDRNFKNduDYxxk37BMYHsBuXPpxbH0CbNLr1AbowTUiMXdhFQyKtSPmZMsCMzK1xhZEquOKQm2EB9wwzw2d0b7omgMu8DNSDzOtBNe/r7b0rrbVTj0ZkyAL7Wol0c/8I54en0DStcs+j+wLradii5eq0d3F2cFKpwF25mLgTHG93YKHifRFSwIkc2IFNIsIw18NfGsv8CpMQXuzBW3lYsAVSkRY+W0rEBUfIQ7CUUUVJtL5PGH1FGQpFcRZjzuY0Qz/2wTNeqllpkWo8XU5pKej0VwiJHPaO4WwEXX52181vX9j0B7CWr2qQSpSEb8+492e/mumPqMMhUqZEA8mDfl5b9ZiIkTG+GKudvqtRQhi9214TqhvRhGohTah+0YRqKf47VD8A8OwDZarTwy8AAAAASUVORK5CYII=",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "05h09",
         "ocaso": "17h56",
         "fonte": "prevmet"
@@ -739,7 +739,7 @@
         "cod_temp_min_tende_icone": "86",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "05h09",
         "ocaso": "17h57",
         "fonte": "prevmet"
@@ -765,7 +765,7 @@
         "cod_temp_min_tende_icone": "11",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "05h08",
         "ocaso": "17h57",
         "fonte": "prevmet"
@@ -797,23 +797,23 @@
       {
         "key": "d0",
         "rotulo": "Hoje",
-        "data_iso": "2026-10-23",
-        "data_br": "23/10",
-        "dia_semana": "Sexta"
-      },
-      {
-        "key": "d1",
-        "rotulo": "Amanhã",
         "data_iso": "2026-10-24",
         "data_br": "24/10",
         "dia_semana": "Sábado"
       },
       {
-        "key": "d2",
-        "rotulo": "Depois de amanhã",
+        "key": "d1",
+        "rotulo": "Amanhã",
         "data_iso": "2026-10-25",
         "data_br": "25/10",
         "dia_semana": "Domingo"
+      },
+      {
+        "key": "d2",
+        "rotulo": "Depois de amanhã",
+        "data_iso": "2026-10-26",
+        "data_br": "26/10",
+        "dia_semana": "Segunda"
       }
     ],
     "praias_condicoes": [
@@ -1174,7 +1174,7 @@
     ],
     "tabua_resumo": {
       "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-      "data": "2026-10-23",
+      "data": "2026-10-24",
       "proxima_mare": {
         "tipo": "PREAMAR",
         "hora": "01:02",
@@ -1184,27 +1184,27 @@
       "mares_do_dia": [
         {
           "tipo": "PREAMAR",
-          "hora": "00:25",
-          "altura": 1.34,
-          "rotulo": "Preia-mar (1,3 m)"
-        },
-        {
-          "tipo": "BAIXA-MAR",
-          "hora": "06:57",
-          "altura": 0.25,
-          "rotulo": "Baixa-mar (0,3 m)"
-        },
-        {
-          "tipo": "PREAMAR",
-          "hora": "13:07",
-          "altura": 1.38,
+          "hora": "01:02",
+          "altura": 1.44,
           "rotulo": "Preia-mar (1,4 m)"
         },
         {
           "tipo": "BAIXA-MAR",
-          "hora": "19:14",
-          "altura": 0.4,
-          "rotulo": "Baixa-mar (0,4 m)"
+          "hora": "07:34",
+          "altura": 0.21,
+          "rotulo": "Baixa-mar (0,2 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "13:33",
+          "altura": 1.41,
+          "rotulo": "Preia-mar (1,4 m)"
+        },
+        {
+          "tipo": "BAIXA-MAR",
+          "hora": "19:47",
+          "altura": 0.31,
+          "rotulo": "Baixa-mar (0,3 m)"
         }
       ]
     }
@@ -1218,7 +1218,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-23T23:02:13.056753",
+    "atualizado_em": "2026-10-24T00:04:42.274334",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "01:02",
@@ -1226,37 +1226,6 @@
       "rotulo": "Preia-mar (1,4 m)"
     },
     "dias": [
-      {
-        "data_iso": "2026-10-23",
-        "data_br": "23/10/2026",
-        "dia_semana": "Sexta",
-        "eventos": [
-          {
-            "tipo": "PREAMAR",
-            "hora": "00:25",
-            "altura": 1.34,
-            "rotulo": "Preia-mar (1,3 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "06:57",
-            "altura": 0.25,
-            "rotulo": "Baixa-mar (0,3 m)"
-          },
-          {
-            "tipo": "PREAMAR",
-            "hora": "13:07",
-            "altura": 1.38,
-            "rotulo": "Preia-mar (1,4 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "19:14",
-            "altura": 0.4,
-            "rotulo": "Baixa-mar (0,4 m)"
-          }
-        ]
-      },
       {
         "data_iso": "2026-10-24",
         "data_br": "24/10/2026",
@@ -1442,6 +1411,31 @@
             "rotulo": "Baixa-mar (0,4 m)"
           }
         ]
+      },
+      {
+        "data_iso": "2026-10-30",
+        "data_br": "30/10/2026",
+        "dia_semana": "Sexta",
+        "eventos": [
+          {
+            "tipo": "PREAMAR",
+            "hora": "05:28",
+            "altura": 1.16,
+            "rotulo": "Preia-mar (1,2 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "12:08",
+            "altura": 0.53,
+            "rotulo": "Baixa-mar (0,5 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "17:40",
+            "altura": 1.07,
+            "rotulo": "Preia-mar (1,1 m)"
+          }
+        ]
       }
     ]
   },
@@ -1466,27 +1460,9 @@
       "umidade": 83,
       "temperatura_prev": "24",
       "sensacao_termica": "23",
-      "hora_atual": "2026-10-23T23:00:00.000Z"
+      "hora_atual": "2026-10-24T00:00:00.000Z"
     },
     "proximos_dias": [
-      {
-        "data_atual": "24",
-        "semana_dia": "Sáb",
-        "probabilidade_chuva": 10,
-        "temperatura_max": "31",
-        "temperatura_min": "21",
-        "umidade": 67,
-        "indice_uv": 12
-      },
-      {
-        "data_atual": "25",
-        "semana_dia": "Dom",
-        "probabilidade_chuva": 80,
-        "temperatura_max": "29",
-        "temperatura_min": "22",
-        "umidade": 76,
-        "indice_uv": 13
-      },
       {
         "data_atual": "26",
         "semana_dia": "Seg",
@@ -1522,6 +1498,24 @@
         "temperatura_min": "20",
         "umidade": 80,
         "indice_uv": 13
+      },
+      {
+        "data_atual": "30",
+        "semana_dia": "Sex",
+        "probabilidade_chuva": null,
+        "temperatura_max": null,
+        "temperatura_min": null,
+        "umidade": null,
+        "indice_uv": null
+      },
+      {
+        "data_atual": "31",
+        "semana_dia": "Sáb",
+        "probabilidade_chuva": null,
+        "temperatura_max": null,
+        "temperatura_min": null,
+        "umidade": null,
+        "indice_uv": null
       }
     ],
     "tem_meteograma_multimodel": true
@@ -1531,7 +1525,7 @@
       "setor": "Âncora, Cláudio Ribeiro, Nova Esperança e Ilha",
       "risco_sab": "ATENÇÃO",
       "risco_dom": "OBS",
-      "risco_seg": "ATENÇÃO",
+      "risco_seg": "OBS",
       "impactos": "Monitoramento da calha do Rio Jundiá (1.82 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Manutenção das vistorias em áreas críticas ribeirinhas, monitoramento 24h e suporte da Defesa Civil."
     },
@@ -1571,9 +1565,9 @@
   "kpis": {
     "jundia_nivel": "1.82 m",
     "jundia_status": "Atenção",
-    "chuva_3d": "24.1 mm",
+    "chuva_3d": "18.0 mm",
     "aviso_marinha": "NORMAL",
-    "pico_calor": "32°C",
+    "pico_calor": "30°C",
     "plancon_status": "ATENÇÃO"
   },
   "contatos_emergencia": {
