@@ -120,8 +120,8 @@
     "chuva_6h": 0.1,
     "chuva_12h": 0.2,
     "chuva_24h": 0.2,
-    "chuva_36h": 4.3,
-    "chuva_48h": 8.4,
+    "chuva_36h": 2.8,
+    "chuva_48h": 5.4,
     "chuva_96h": 15.4,
     "ultima_leitura": "24/10/26 13:10",
     "online": true
