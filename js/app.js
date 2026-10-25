@@ -1992,15 +1992,50 @@ window.filterStations = function(cat) {
 };
 
 // =============================================================================
+// =============================================================================
+// ORDENAÇÃO DAS ESTAÇÕES (DA MAIOR PARA A MENOR EM VOLUME MM)
+// =============================================================================
+state.stationsSortMetric = '24h';
+state.stationsRawData = null;
+
+window.sortStationsBy = function(metric) {
+  state.stationsSortMetric = metric;
+
+  ['1h', '24h', '96h'].forEach(m => {
+    const btn = document.getElementById(`sort-btn-${m}`);
+    if (btn) {
+      if (m === metric) {
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-2xs cursor-pointer';
+      } else {
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer';
+      }
+    }
+  });
+
+  if (state.stationsRawData) {
+    renderAcumuladosChuva(state.stationsRawData);
+  }
+};
+
 // RENDERIZAÇÃO DA ABA DE ACUMULADOS DE CHUVA (10 ESTAÇÕES)
 // =============================================================================
 function renderAcumuladosChuva(data) {
   if (!data) return;
+  state.stationsRawData = data;
   setSocialStationsData(data);
   const dataset = Array.isArray(data) ? { estacoes: data } : data;
-  const estacoes = dataset.estacoes || [];
+  const rawEstacoes = dataset.estacoes || [];
   const resumo = dataset.resumo || {};
 
+  // Ordena rigorosamente da maior para a menor pelo volume da métrica ativa (padrão: 24h)
+  const metricKey = state.stationsSortMetric === '1h' ? 'chuva_1h' : (state.stationsSortMetric === '96h' ? 'chuva_96h' : 'chuva_24h');
+  
+  const estacoes = rawEstacoes.slice().sort((a, b) => {
+    const valA = Number(a[metricKey] !== undefined && a[metricKey] !== null ? a[metricKey] : 0.0);
+    const valB = Number(b[metricKey] !== undefined && b[metricKey] !== null ? b[metricKey] : 0.0);
+    if (valB !== valA) return valB - valA;
+    return Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0);
+  });
   // 1. Atualiza KPIs do Topo
   const kpiMediaEl = document.getElementById('chuva-kpi-media');
   const kpiMaiorEl = document.getElementById('chuva-kpi-maior');
@@ -2047,8 +2082,19 @@ function renderAcumuladosChuva(data) {
   const tableBodyEl = document.getElementById('stations-table-tbody');
 
   if (cardsGridEl && estacoes.length > 0) {
-    cardsGridEl.innerHTML = estacoes.map(st => {
+    cardsGridEl.innerHTML = estacoes.map((st, idx) => {
       const isOnline = st.online !== false;
+      const rankNum = idx + 1;
+      let rankBadge = '';
+      if (rankNum === 1) {
+        rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-[#ea580c] text-white shadow-2xs">#1 MAIOR VOLUME</span>';
+      } else if (rankNum === 2) {
+        rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-2xs">#2</span>';
+      } else if (rankNum === 3) {
+        rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-[#fef3c7] border border-[#d97706]/40 text-black">#3</span>';
+      } else {
+        rankBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-[#f1f5f9] text-[#475569] border border-[#cbd5e1]">#${rankNum}</span>`;
+      }
       const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
       const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
       const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
@@ -2122,7 +2168,10 @@ function renderAcumuladosChuva(data) {
           
           <div class="space-y-2.5">
             <div class="flex items-center justify-between gap-1 flex-wrap">
-              ${catBadge}
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${rankBadge}
+                ${catBadge}
+              </div>
               ${statusBadge}
             </div>
 
@@ -2169,8 +2218,12 @@ function renderAcumuladosChuva(data) {
 
   // 3. Renderiza Tabela Comparativa
   if (tableBodyEl && estacoes.length > 0) {
-    tableBodyEl.innerHTML = estacoes.map(st => {
+    tableBodyEl.innerHTML = estacoes.map((st, idx) => {
       const isOnline = st.online !== false;
+      const rankNum = idx + 1;
+      const rankBadge = rankNum === 1
+        ? '<span class="font-mono font-black text-xs text-white bg-[#ea580c] px-2 py-0.5 rounded-full shadow-2xs">#1</span>'
+        : `<span class="font-mono font-bold text-xs text-black">#${rankNum}</span>`;
       const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
       const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
       const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
@@ -2182,6 +2235,7 @@ function renderAcumuladosChuva(data) {
 
       return `
         <tr class="station-item-row hover:bg-[#f8fafc] transition" data-cat="${catClass}">
+          <td class="p-2.5 sm:p-3 text-center whitespace-nowrap">${rankBadge}</td>
           <td class="p-2.5 sm:p-3">
             <strong class="text-xs font-black text-black block leading-tight">${st.nome_curto || st.nome}</strong>
             <span class="text-[10.5px] text-black/75 block">${st.bairro || 'Rio das Ostras'} • ${st.codigo}</span>

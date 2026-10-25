@@ -366,6 +366,18 @@ def collect_stations_network():
 
         stations.append(c_entry)
 
+    # Ordena estações rigorosamente da maior para a menor em volume (mm)
+    stations.sort(
+        key=lambda s: (
+            safe_float(s.get("chuva_24h", 0.0)),
+            safe_float(s.get("chuva_96h", 0.0)),
+            safe_float(s.get("chuva_1h", 0.0))
+        ),
+        reverse=True
+    )
+    for idx, s in enumerate(stations, start=1):
+        s["ranking"] = idx
+
     # Métricas agregadas municipais
     val_24h = [s["chuva_24h"] for s in stations if s.get("chuva_24h") is not None]
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
