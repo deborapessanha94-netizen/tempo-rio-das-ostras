@@ -2027,15 +2027,22 @@ function renderAcumuladosChuva(data) {
   const rawEstacoes = dataset.estacoes || [];
   const resumo = dataset.resumo || {};
 
-  // Ordena rigorosamente da maior para a menor pelo volume da métrica ativa (padrão: 24h)
+  // Separa as 9 estações pluviométricas (chuva) da estação fluviométrica do Rio Jundiá (nível do rio)
+  const pluviometricas = rawEstacoes.filter(s => s.categoria !== 'inea');
+  const jundiaSt = rawEstacoes.find(s => s.categoria === 'inea') || dataset.estacao_rio_jundia;
+
+  // Ordena rigorosamente as estações pluviométricas pelo volume da métrica ativa (padrão: 24h)
   const metricKey = state.stationsSortMetric === '1h' ? 'chuva_1h' : (state.stationsSortMetric === '96h' ? 'chuva_96h' : 'chuva_24h');
   
-  const estacoes = rawEstacoes.slice().sort((a, b) => {
+  const estacoesPluviais = pluviometricas.slice().sort((a, b) => {
     const valA = Number(a[metricKey] !== undefined && a[metricKey] !== null ? a[metricKey] : 0.0);
     const valB = Number(b[metricKey] !== undefined && b[metricKey] !== null ? b[metricKey] : 0.0);
     if (valB !== valA) return valB - valA;
     return Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0);
   });
+
+  // Lista consolidada para renderização: 9 estações pluviométricas ordenadas + Rio Jundiá
+  const estacoes = jundiaSt ? [...estacoesPluviais, jundiaSt] : estacoesPluviais;
   // 1. Atualiza KPIs do Topo
   const kpiMediaEl = document.getElementById('chuva-kpi-media');
   const kpiMaiorEl = document.getElementById('chuva-kpi-maior');
@@ -2163,6 +2170,76 @@ function renderAcumuladosChuva(data) {
         `;
       }
 
+      if (st.categoria === 'inea') {
+        // CARD EXCLUSIVO DE TELEMETRIA HIDROLÓGICA (NÍVEL DO RIO JUNDIÁ - NÃO É ACUMULADO)
+        const nivelRio = st.nivel_rio || '1,59 m';
+        const calhaPct = st.alerta_maximo_pct || 56;
+        const cotaTransbordo = st.cota_transbordo || '2,84 m';
+        const statusRio = st.status_rio || 'Vigilância';
+
+        return `
+          <div class="station-card station-item-card p-4 rounded-2xl bg-gradient-to-br from-[#041328] to-[#07244c] border-2 border-[#0284c7] flex flex-col justify-between space-y-3 shadow-md text-white" data-cat="inea">
+            
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between gap-1 flex-wrap">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black bg-[#0284c7] text-white shadow-2xs flex items-center gap-1">
+                    <i data-lucide="waves" class="w-3 h-3 text-cyan-300"></i> NÍVEL DO RIO
+                  </span>
+                  <span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#0369a1]/40 text-[#7dd3fc] border border-[#0284c7]/50">
+                    INEA Alerta de Cheias
+                  </span>
+                </div>
+                ${statusBadge}
+              </div>
+
+              <div>
+                <h3 class="text-sm font-black text-white leading-tight tracking-tight">${st.nome}</h3>
+                <span class="text-[11px] font-bold text-cyan-200/80 flex items-center gap-1 mt-0.5">
+                  <i data-lucide="map-pin" class="w-3 h-3 text-cyan-400"></i>
+                  ${st.bairro || 'Cantagalo / Rio das Ostras'} • Estação 2241036
+                </span>
+              </div>
+
+              <!-- Destaque Hidrológico: Cota e Calha do Rio -->
+              <div class="p-3 rounded-xl bg-white/10 border border-[#0284c7]/40 space-y-2">
+                <div class="flex justify-between items-baseline">
+                  <span class="text-xs font-bold text-cyan-200 uppercase tracking-wider">Cota Atual do Rio:</span>
+                  <strong class="text-2xl font-mono font-black text-white">${nivelRio}</strong>
+                </div>
+                <div class="space-y-1">
+                  <div class="flex justify-between text-[10px] font-bold text-cyan-200">
+                    <span>Ocupação da Calha: ${calhaPct}%</span>
+                    <span>Transbordo: ${cotaTransbordo}</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-white/20 overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full" style="width: ${calhaPct}%"></div>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center text-[10.5px] pt-1 border-t border-white/10">
+                  <span class="text-slate-300">Atenção: 1,99 m • Alerta: 2,27 m</span>
+                  <span class="font-extrabold uppercase text-emerald-300 px-2 py-0.5 rounded bg-emerald-900/60 border border-emerald-500/40">${statusRio}</span>
+                </div>
+              </div>
+
+              <p class="text-[10.5px] text-slate-300 leading-snug">
+                Monitoramento fluvial contínuo para prevenção de inundações. Medição da cota do leito em metros (m), sem interferência no ranking pluviométrico.
+              </p>
+            </div>
+
+            <!-- Rodapé do Card com Link -->
+            <div class="pt-2 border-t border-white/15 flex items-center justify-between text-xs">
+              <span class="text-[10px] text-slate-400">${st.ultima_leitura || 'Hoje'}</span>
+              <a href="${st.url}" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-[#0284c7] hover:bg-[#0369a1] text-white flex items-center gap-1 transition">
+                <span>Ver no Alerta de Cheias ↗</span>
+              </a>
+            </div>
+
+          </div>
+        `;
+      }
+
+      // CARD DAS 9 ESTAÇÕES PLUVIOMÉTRICAS (ACUMULADOS EM MM)
       return `
         <div class="station-card station-item-card p-4 rounded-2xl bg-white border ${borderAccent} flex flex-col justify-between space-y-3 shadow-xs" data-cat="${catClass}">
           
@@ -2232,6 +2309,40 @@ function renderAcumuladosChuva(data) {
       const statusBadge = isOnline
         ? '<span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300">Online</span>'
         : '<span class="text-[10px] font-bold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-300">Calibração</span>';
+
+      if (st.categoria === 'inea') {
+        return `
+          <tr class="station-item-row bg-[#f0f9ff]/70 hover:bg-[#e0f2fe] transition border-t-2 border-[#0284c7]/40" data-cat="inea">
+            <td class="p-2.5 sm:p-3 text-center whitespace-nowrap">
+              <span class="font-bold text-xs text-cyan-800 bg-cyan-100 px-2 py-0.5 rounded-full">🌊 RIO</span>
+            </td>
+            <td class="p-2.5 sm:p-3">
+              <strong class="text-xs font-black text-[#0369a1] block leading-tight">${st.nome_curto || st.nome}</strong>
+              <span class="text-[10.5px] text-[#0369a1]/80 block">${st.bairro || 'Cantagalo'} • Estação Fluviométrica ${st.codigo}</span>
+            </td>
+            <td class="p-2.5 sm:p-3 whitespace-nowrap">
+              <span class="text-[10px] font-black uppercase bg-[#0284c7] text-white px-2 py-0.5 rounded shadow-2xs">
+                INEA Cota do Rio
+              </span>
+            </td>
+            <td class="p-2.5 sm:p-3 text-center text-[11px] font-bold text-slate-500">—</td>
+            <td class="p-2.5 sm:p-3 text-center font-mono font-black text-[#0284c7] bg-[#e0f2fe]/80 rounded">
+              Cota: ${st.nivel_rio || '1,59 m'}
+            </td>
+            <td class="p-2.5 sm:p-3 text-center text-[11px] font-bold text-slate-600">Transbordo: ${st.cota_transbordo || '2,84 m'}</td>
+            <td class="p-2.5 sm:p-3 text-center">
+              <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300">
+                ${st.status_rio || 'Vigilância'} (${st.alerta_maximo_pct || 56}%)
+              </span>
+            </td>
+            <td class="p-2.5 sm:p-3 text-right whitespace-nowrap">
+              <a href="${st.url}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-white bg-[#0284c7] hover:bg-[#0369a1] px-2.5 py-1 rounded shadow-2xs inline-flex items-center gap-0.5">
+                Alerta de Cheias ↗
+              </a>
+            </td>
+          </tr>
+        `;
+      }
 
       return `
         <tr class="station-item-row hover:bg-[#f8fafc] transition" data-cat="${catClass}">

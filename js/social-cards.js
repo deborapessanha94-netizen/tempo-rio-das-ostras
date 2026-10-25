@@ -213,8 +213,12 @@ export function renderSocialCanvas() {
     );
   }
 
-  // Ordena pelo maior volume de chuva no horizonte selecionado
-  stations.sort((a, b) => {
+  // Separa as estações pluviométricas (chuva) da estação hidrológica (Rio Jundiá - nível do rio)
+  const rainStations = stations.filter(s => s.categoria !== 'inea');
+  const jundiaSt = stations.find(s => s.categoria === 'inea');
+
+  // Ordena rigorosamente as estações de chuva da maior para a menor em volume no horizonte
+  rainStations.sort((a, b) => {
     const valA = getStationRainVal(a, socialState.horizon);
     const valB = getStationRainVal(b, socialState.horizon);
     return valB - valA;
@@ -222,7 +226,14 @@ export function renderSocialCanvas() {
 
   // Limite de itens na tela para manter tipografia grande e respiração visual
   const maxItems = isStory ? 9 : 6;
-  const displayStations = stations.slice(0, maxItems);
+  let displayStations = [];
+
+  // Se busca textual ativa para Jundiá ou nenhuma busca restritiva, exibe Jundiá ao final com sua cota
+  if (jundiaSt && (!socialState.searchQuery || socialState.searchQuery.includes('jundi') || socialState.searchQuery.includes('inea'))) {
+    displayStations = [...rainStations.slice(0, maxItems - 1), jundiaSt];
+  } else {
+    displayStations = rainStations.slice(0, maxItems);
+  }
 
   // 3. Cabeçalho Oficial
   const topPad = isStory ? 160 : 100;
@@ -298,7 +309,7 @@ export function renderSocialCanvas() {
       redeTag = 'CEMADEN';
       codeStr = `PCD ${st.codigo.replace(/[^0-9]/g, '')}`;
     } else if (st.categoria === 'inea') {
-      redeTag = 'INEA ALERTA DE CHEIAS';
+      redeTag = 'INEA ALERTA DE CHEIAS • NÍVEL DO RIO';
       codeStr = 'INEA 2241036';
     } else {
       redeTag = 'WEATHER UNDERGROUND';
@@ -332,22 +343,45 @@ export function renderSocialCanvas() {
     ctx.font = 'bold 18px sans-serif';
     ctx.fillText(redeTag, leftPad, badgeY + 48);
 
-    // B. Coluna Central: Ícone Ciano + Valor da Chuva Grande
+    // B. Coluna Central: Ícone Ciano + Medição Oficial
     const midX = leftPad + 430;
-    
-    // Círculo Ciano
-    ctx.fillStyle = '#00d2ff';
-    ctx.beginPath();
-    ctx.arc(midX, rowY + 56, 17, 0, Math.PI * 2);
-    ctx.fill();
+    const isJundia = st.categoria === 'inea' || (st.codigo && st.codigo.includes('2241036'));
 
-    // Valor da Chuva
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '900 44px monospace';
-    ctx.fillText(rainStr, midX + 32, rowY + 70);
+    if (isJundia) {
+      // Para o Rio Jundiá: NÃO é acumulado em mm, é NÍVEL DO RIO em metros com cápsula de água
+      const riverLevel = st.nivel_rio ? st.nivel_rio.replace('.', ',') : '1,59 m';
 
-    // C. Coluna Direita: Pílula Informativa de Status / Horário
-    const pillTxt = st.categoria === 'inea' 
+      const capW = 95;
+      const capH = 34;
+      const capX = midX - 35;
+      const capY = rowY + 39;
+
+      const capGrad = ctx.createLinearGradient(capX, capY, capX + capW, capY);
+      capGrad.addColorStop(0, '#0284c7');
+      capGrad.addColorStop(1, '#00d2ff');
+      ctx.fillStyle = capGrad;
+      ctx.beginPath();
+      ctx.roundRect(capX, capY, capW, capH, 17);
+      ctx.fill();
+
+      // Nível do Rio em metros (ex: 1,59 m)
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 44px monospace';
+      ctx.fillText(riverLevel, capX + capW + 20, rowY + 70);
+    } else {
+      // Para Estações Pluviométricas: Círculo Ciano + Volume mm
+      ctx.fillStyle = '#00d2ff';
+      ctx.beginPath();
+      ctx.arc(midX, rowY + 56, 17, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 44px monospace';
+      ctx.fillText(rainStr, midX + 32, rowY + 70);
+    }
+
+    // C. Coluna Direita: Pílula Informativa de Status
+    const pillTxt = isJundia 
       ? `cota rio: ${st.nivel_rio || '1,59 m'}`
       : (st.vento_atual ? `vento: ${st.vento_atual} km/h` : 'ativa');
     

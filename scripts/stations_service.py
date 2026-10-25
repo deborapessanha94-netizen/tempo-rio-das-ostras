@@ -236,6 +236,8 @@ def collect_stations_network():
         "bairro": "Cantagalo / Sede Municipal",
         "rede": "INEA Alerta de Cheias",
         "categoria": "inea",
+        "tipo": "hidrologica",
+        "tipo_label": "Nível do Rio (Telemetria Fluvial)",
         "url": "https://alertadecheias.com.br/stations/2241036/full",
         "url_portal": "https://alertadecheias.com.br",
         "temp_atual": None,
@@ -269,10 +271,13 @@ def collect_stations_network():
             inea_entry["nivel_rio"] = f"{nivel:.2f} m"
             inea_entry["cota_transbordo"] = f"{cota_estacao:.2f} m"
             inea_entry["alerta_maximo_pct"] = round(pct, 1)
-            inea_entry["chuva_1h"] = safe_float(full_json.get("CHUVA_1H"), 0.0)
-            inea_entry["chuva_4h"] = safe_float(full_json.get("CHUVA_4H"), 0.0)
-            inea_entry["chuva_24h"] = safe_float(full_json.get("CHUVA_24H"), 0.0)
-            inea_entry["chuva_96h"] = safe_float(full_json.get("CHUVA_96H"), 0.0)
+            inea_entry["chuva_1h"] = None
+            inea_entry["chuva_4h"] = None
+            inea_entry["chuva_24h"] = None
+            inea_entry["chuva_96h"] = None
+
+
+
             inea_entry["ultima_leitura"] = full_json.get("DATA", "Hoje")
             if nivel >= 2.27:
                 inea_entry["status_rio"] = "ALERTA"
@@ -366,8 +371,9 @@ def collect_stations_network():
 
         stations.append(c_entry)
 
-    # Ordena estações rigorosamente da maior para a menor em volume (mm)
-    stations.sort(
+    # Separa as 9 estações pluviométricas e ordena da maior para a menor pelo volume (mm)
+    pluviometric_stations = [s for s in stations if s.get("categoria") != "inea"]
+    pluviometric_stations.sort(
         key=lambda s: (
             safe_float(s.get("chuva_24h", 0.0)),
             safe_float(s.get("chuva_96h", 0.0)),
@@ -375,17 +381,29 @@ def collect_stations_network():
         ),
         reverse=True
     )
-    for idx, s in enumerate(stations, start=1):
+    for idx, s in enumerate(pluviometric_stations, start=1):
         s["ranking"] = idx
+        s["tipo"] = "pluviometrica"
+        s["tipo_label"] = "Acumulado de Chuva"
 
-    # Métricas agregadas municipais
-    val_24h = [s["chuva_24h"] for s in stations if s.get("chuva_24h") is not None]
+    inea_entry["ranking"] = None
+    inea_entry["tipo"] = "hidrologica"
+    inea_entry["tipo_label"] = "Nível do Rio"
+
+    all_stations = pluviometric_stations + [inea_entry]
+
+    # Métricas agregadas municipais (calculadas apenas sobre as 9 estações pluviométricas)
+    val_24h = [s["chuva_24h"] for s in pluviometric_stations if s.get("chuva_24h") is not None]
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
-    max_st = max(stations, key=lambda s: s.get("chuva_24h", 0.0)) if stations else None
+    max_st = pluviometric_stations[0] if pluviometric_stations else None
 
     dataset = {
         "atualizacao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "total_estacoes": len(stations),
+        "total_estacoes": len(all_stations),
+        "total_pluviometricas": len(pluviometric_stations),
+        "total_hidrologicas": 1,
+        "estacao_rio_jundia": inea_entry,
+        "estacoes_pluviometricas": pluviometric_stations,
         "resumo": {
             "media_chuva_24h": media_24h,
             "maior_acumulado_24h": max_st.get("chuva_24h", 0.0) if max_st else 0.0,
@@ -398,7 +416,7 @@ def collect_stations_network():
             "cemaden_mapa": "https://mapainterativo.cemaden.gov.br/",
             "alerta_cheias_portal": "https://alertadecheias.com.br"
         },
-        "estacoes": stations
+        "estacoes": all_stations
     }
 
     # Salva dataset consolidado em data/acumulados_estacoes.json
