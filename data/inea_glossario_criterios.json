@@ -1,0 +1,73 @@
+{
+  "orgao": "Instituto Estadual do Ambiente - INEA",
+  "sistema": "Sistema de Alerta de Cheias",
+  "fonte": "https://alertadecheias.inea.rj.gov.br/termos.php",
+  "descricao": "Padrão Oficial de Terminologia e Critérios Meteorológicos do INEA-RJ",
+  "cobertura_do_ceu": {
+    "claro": "Estado do céu quando nenhuma nuvem ou obscurecimento são vistos ou detectados do ponto de observação.",
+    "parcialmente_nublado": "Nebulosidade notavelmente presente, mas o céu não está completamente coberto em nenhum momento do dia.",
+    "nublado": "Nebulosidade encobrindo o céu em sua maior parte.",
+    "encoberto": "Nebulosidade encobrindo o céu em sua totalidade."
+  },
+  "precipitacao": {
+    "fraca": {
+      "criterio": "< 5.0 mm/h",
+      "descricao": "Precipitação com intensidade inferior a 5.0 mm/h."
+    },
+    "moderada": {
+      "criterio": "5.0 a 25.0 mm/h",
+      "descricao": "Precipitação com intensidade superior a 5.0 e inferior a 25 mm/h."
+    },
+    "forte": {
+      "criterio": "25.1 a 50.0 mm/h",
+      "descricao": "Precipitação com intensidade superior a 25.1 e inferior a 50 mm/h."
+    },
+    "muito_forte": {
+      "criterio": "> 50.0 mm/h",
+      "descricao": "Precipitação com intensidade superior a 50.0 mm/h."
+    },
+    "pancadas_de_chuva": {
+      "criterio": "Convectiva / curta duração",
+      "descricao": "Precipitação intensa ocorrida em curto período de tempo e espacialmente restrita."
+    }
+  },
+  "tendencia_da_temperatura": {
+    "estavel": {
+      "criterio": "Variação até 2,9°C",
+      "descricao": "Temperatura máxima variando até 2,9ºC em relação ao dia anterior."
+    },
+    "declinio": {
+      "criterio": "Diminuição > 3,0°C",
+      "descricao": "Temperatura máxima diminuindo mais de 3ºC em relação ao dia anterior."
+    },
+    "elevacao": {
+      "criterio": "Aumento > 3,0°C",
+      "descricao": "Temperatura máxima aumentando mais de 3ºC em relação ao dia anterior."
+    }
+  },
+  "intensidade_do_vento": {
+    "fraco": {
+      "faixa_kmh": "Até 18,4 km/h",
+      "max_kmh": 18.4
+    },
+    "moderado": {
+      "faixa_kmh": "De 18,5 km/h até 51,9 km/h",
+      "min_kmh": 18.5,
+      "max_kmh": 51.9
+    },
+    "forte": {
+      "faixa_kmh": "De 52,0 km/h até 75,9 km/h",
+      "min_kmh": 52.0,
+      "max_kmh": 75.9
+    },
+    "muito_forte": {
+      "faixa_kmh": "Superior a 76,0 km/h",
+      "min_kmh": 76.0
+    }
+  },
+  "plantao_sala_de_situacao": {
+    "telefone": "(21) 2334-9307",
+    "email": "alertadecheias@gmail.com",
+    "regime": "Plantão 24 horas por dia, todos os dias"
+  }
+}
