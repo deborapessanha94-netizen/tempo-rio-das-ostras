@@ -61,7 +61,7 @@
     })();
   </script>
 </head>
-<body class="antialiased selection:bg-[#ffebe4] selection:text-black pb-12 min-h-screen bg-[#f4f6f8] text-[#1e293b]">
+<body class="antialiased selection:bg-[#ffebe4] selection:text-black pb-12 min-h-screen bg-[#f4f6f8] text-[#1e293b] overflow-x-hidden">
 
   <!-- ========================================================================= -->
   <!-- BARRA SUPERIOR INSTITUCIONAL: PADRÃO NÓRDICO CERÂMICO                     -->
@@ -108,7 +108,7 @@
         </a>
 
         <!-- Meteogramas Numéricos INMET & CPTEC (Ceramic Stoneware) -->
-        <button id="dock-btn-meteogramas" class="btn-action-outline flex items-center gap-1.5 text-xs font-bold cursor-pointer whitespace-nowrap" title="Ver Meteogramas Oficiais do INMET e CPTEC/INPE">
+        <button id="dock-btn-meteogramas" class="hidden sm:flex btn-action-outline items-center gap-1.5 text-xs font-bold cursor-pointer whitespace-nowrap" title="Ver Meteogramas Oficiais do INMET e CPTEC/INPE">
           <i data-lucide="line-chart" class="w-3.5 h-3.5 text-black"></i>
           <span class="hidden md:inline text-black">Meteogramas</span>
         </button>
@@ -127,288 +127,305 @@
   <!-- ========================================================================= -->
   <!-- BARRA DE NAVEGAÇÃO PRINCIPAL DO APLICATIVO (ABAS NÓRDICAS CERÂMICAS)      -->
   <!-- ========================================================================= -->
-  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-1">
-    <div class="flex items-center gap-1.5 sm:gap-2 p-1.5 bg-[#f5efe8]/90 rounded-2xl border border-[#b8a99a]/50 shadow-xs" role="tablist">
-      
-      <!-- Aba 1: Previsão & Tempo Geral -->
-      <button id="nav-tab-previsao" onclick="switchAppTab('previsao')" class="app-nav-tab active flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs flex-1 sm:flex-none" role="tab" aria-selected="true">
-        <i data-lucide="cloud-sun" class="w-4 h-4 text-black"></i>
-        <span>Previsão & Tempo</span>
+  <!-- ========================================================================= -->
+  <!-- NAVEGAÇÃO DE ABAS PRINCIPAIS (6 SEÇÕES DISTRIBUÍDAS - ZERO VAZIOS)       -->
+  <!-- ========================================================================= -->
+  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-3 sm:px-6 pt-3 pb-1">
+    <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-2 p-1.5 bg-[#f5efe8]/90 rounded-2xl border border-[#b8a99a]/50 shadow-xs" role="tablist">
+
+      <!-- Aba 1: Previsão & Tempo -->
+      <button id="nav-tab-previsao" onclick="switchAppTab('previsao')" class="app-nav-tab active flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs w-full text-center" role="tab" aria-selected="true">
+        <i data-lucide="cloud-sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Previsão & Tempo</span>
       </button>
 
-      <!-- Aba 2: Acumulados de Chuva (10 Estações) -->
-      <button id="nav-tab-chuva" onclick="switchAppTab('chuva')" class="app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none" role="tab" aria-selected="false">
-        <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
-        <span>Acumulados de Chuva</span>
-        <span id="nav-badge-chuva-count" class="text-[10px] px-2 py-0.5 rounded-full font-black bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black">10 Estações</span>
+      <!-- Aba 2: Acumulados de Chuva -->
+      <button id="nav-tab-chuva" onclick="switchAppTab('chuva')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+        <i data-lucide="cloud-rain" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Acumulados Chuva</span>
       </button>
 
-      <!-- Aba 3: Orla & Praias (Atalho) -->
-      <button id="nav-tab-orla" onclick="switchAppTab('orla')" class="app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none hidden sm:flex" role="tab" aria-selected="false">
-        <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
-        <span>Orla & Balneabilidade</span>
+      <!-- Aba 3: Nível do Rio Jundiá -->
+      <button id="nav-tab-rio" onclick="switchAppTab('rio')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+        <i data-lucide="waves" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Nível do Rio</span>
+      </button>
+
+      <!-- Aba 4: Orla & Praias -->
+      <button id="nav-tab-orla" onclick="switchAppTab('orla')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+        <i data-lucide="anchor" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Orla & Praias</span>
+      </button>
+
+      <!-- Aba 5: Alertas & Sinótico -->
+      <button id="nav-tab-alertas" onclick="switchAppTab('alertas')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Alertas & Sinótico</span>
+      </button>
+
+      <!-- Aba 6: Boletim Operacional -->
+      <button id="nav-tab-boletim" onclick="switchAppTab('boletim')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+        <i data-lucide="file-text" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+        <span class="leading-none whitespace-nowrap">Boletim 12 Turnos</span>
       </button>
 
     </div>
   </nav>
 
   <!-- ========================================================================= -->
-  <!-- VIEW 1: PREVISÃO & TEMPO (DASHBOARD GERAL COMPLETO)                       -->
+  <!-- VIEW 1: PREVISÃO & TEMPO GERAL                                           -->
   <!-- ========================================================================= -->
-  <div id="view-tab-previsao" class="app-tab-view space-y-0">
+  <div id="view-tab-previsao" class="app-tab-view space-y-6">
 
-  <!-- ========================================================================= -->
-  <!-- SEÇÃO DE ALERTAS OFICIAIS VIGENTES (INMET & MARINHA DO BRASIL)             -->
-  <!-- ========================================================================= -->
-  <section id="section-alertas-oficiais" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
-    <div class="modern-card p-5 sm:p-6 bg-white border border-[#e2e8f0]">
-      
-      <!-- Cabeçalho do Bloco de Alertas -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3 mb-4">
-        <div class="flex items-center gap-2.5">
-          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
-            <i data-lucide="shield-alert" class="w-4 h-4"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
-                Alertas Meteorológicos Oficiais Vigentes
-              </h2>
-              <span id="badge-total-alertas" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                3 Alertas Ativos
-              </span>
+    <!-- Status Cards: 3 Mini Atalhos Operacionais (Para Conexão Harmônica) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+        <!-- Mini Card 1: Alertas & Sinótico -->
+        <button onclick="switchAppTab('alertas')" class="p-4 bg-white rounded-2xl border border-[#cbd5e1] hover:border-[#f07a53] transition shadow-xs flex items-center justify-between text-left cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#fff2eb] text-[#d95d39] flex items-center justify-center shrink-0 shadow-2xs">
+              <i data-lucide="shield-alert" class="w-5 h-5"></i>
             </div>
-            <p class="text-xs font-normal text-[#64748b] mt-0.5">
-              Monitoramento contínuo: Instituto Nacional de Meteorologia (INMET) & Marinha do Brasil (CHM)
-            </p>
+            <div>
+              <div class="text-[10px] uppercase font-black text-black tracking-wider">Avisos Vigentes</div>
+              <div class="text-sm font-black text-black">Alertas & Sinótico</div>
+              <div class="text-[11px] font-medium text-black">INMET & Marinha do Brasil</div>
+            </div>
           </div>
-        </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-black group-hover:translate-x-1 transition"></i>
+        </button>
 
-        <div class="flex items-center gap-3 self-start sm:self-center">
-          <span class="text-xs font-normal text-[#64748b] flex items-center gap-1">
-            <i data-lucide="info" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            Área de Cobertura: Rio das Ostras & Litoral Norte
-          </span>
+        <!-- Mini Card 2: Nível do Rio Jundiá -->
+        <button onclick="switchAppTab('rio')" class="p-4 bg-white rounded-2xl border border-[#cbd5e1] hover:border-[#38bdf8] transition shadow-xs flex items-center justify-between text-left cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#e0f2fe] text-[#0284c7] flex items-center justify-center shrink-0 shadow-2xs">
+              <i data-lucide="waves" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase font-black text-black tracking-wider">Cota 1.59 m • Vigilância</div>
+              <div class="text-sm font-black text-black">Nível do Rio Jundiá</div>
+              <div class="text-[11px] font-medium text-black">Estação INEA n° 2241036</div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-black group-hover:translate-x-1 transition"></i>
+        </button>
 
-        </div>
+        <!-- Mini Card 3: Orla & Praias -->
+        <button onclick="switchAppTab('orla')" class="p-4 bg-white rounded-2xl border border-[#cbd5e1] hover:border-[#2dd4bf] transition shadow-xs flex items-center justify-between text-left cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#ccfbf1] text-[#0d9488] flex items-center justify-center shrink-0 shadow-2xs">
+              <i data-lucide="anchor" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-[10px] uppercase font-black text-black tracking-wider">Ondas 1.2 m • 11 Praias</div>
+              <div class="text-sm font-black text-black">Orla & Balneabilidade</div>
+              <div class="text-[11px] font-medium text-black">Marés & Condições INEA</div>
+            </div>
+          </div>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-black group-hover:translate-x-1 transition"></i>
+        </button>
       </div>
-
-      <!-- Grade dos Alertas Oficiais Ativos -->
-      <div id="container-alertas-principais" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
-        
-        <!-- Card 1: INMET -->
-        <div class="alert-card-inmet-amarelo p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
-              <div class="flex items-center gap-1 flex-wrap">
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
-                  INMET
-                </span>
-                <span class="text-xs font-semibold font-mono text-black truncate">
-                  Aviso nº 56159
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">Vigente Hoje</span>
-              </div>
-              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f97316]">
-                Alerta Amarelo • Perigo Potencial
-              </span>
-            </div>
-
-            <div class="flex items-baseline justify-between gap-1 flex-wrap">
-              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">Tempestade & Convecção Diurna</h3>
-              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
-                23/10/2026 às 08:45 até 23/10/2026 às 23:59
-              </span>
-            </div>
-          </div>
-
-          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
-            <div><strong class="font-bold text-black">Riscos:</strong> Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h) e granizo.</div>
-            <div><strong class="font-bold text-black">Orientação de Segurança:</strong> Não se abrigue sob árvores nem estacione próximo a torres de transmissão.</div>
-          </div>
-        </div>
-
-        <!-- Card 2: Marinha - Vento Forte (Aviso nº 781/2026) -->
-        <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
-              <div class="flex items-center gap-1 flex-wrap">
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
-                  MARINHA
-                </span>
-                <span class="text-xs font-semibold font-mono text-black truncate">
-                  Aviso nº 781/2026
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">
-                  Área Delta
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">
-                  VENTO FORTE
-                </span>
-              </div>
-              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1]">
-                CHM / SMM
-              </span>
-            </div>
-
-            <div class="flex items-baseline justify-between gap-1 flex-wrap">
-              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">VENTO FORTE • Área Costeira (Macaé a Caravelas)</h3>
-              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
-                De 24/10 às 21:00h até 25/10 às 21:00h
-              </span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-center text-xs">
-            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
-              <span class="text-[10px] uppercase font-bold text-black block">Rajadas / Vento</span>
-              <span class="text-xs font-bold font-mono text-black">62 a 74 km/h (Força 7/8)</span>
-            </div>
-            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
-              <span class="text-[10px] uppercase font-bold text-black block">Condição do Mar</span>
-              <span class="text-xs font-bold font-mono text-black">2,0 a 2,5 m (Agitado)</span>
-            </div>
-          </div>
-
-          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
-            <div><strong class="font-bold text-black">Restrição:</strong> Atenção a pescadores, navegantes e banhistas na orla costeira. Vento Força 7 com rajadas Força 8 (até 74 km/h).</div>
-          </div>
-        </div>
-
-        <!-- Card 3: Marinha - Mar Grosso (Aviso nº 778/2026) -->
-        <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
-              <div class="flex items-center gap-1 flex-wrap">
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
-                  MARINHA
-                </span>
-                <span class="text-xs font-semibold font-mono text-black truncate">
-                  Aviso nº 778/2026
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">
-                  Área Delta
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300">
-                  MAR GROSSO
-                </span>
-              </div>
-              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1]">
-                CHM / SMM
-              </span>
-            </div>
-
-            <div class="flex items-baseline justify-between gap-1 flex-wrap">
-              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">MAR GROSSO • Área Oceânica Delta (Bacia de Campos)</h3>
-              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
-                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
-                De 25/10 às 06:00h até 26/10 às 00:00h
-              </span>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2 text-center text-xs">
-            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
-              <span class="text-[10px] uppercase font-bold text-black block">Rajadas / Vento</span>
-              <span class="text-xs font-bold font-mono text-black">Até 45 km/h</span>
-            </div>
-            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
-              <span class="text-[10px] uppercase font-bold text-black block">Condição do Mar</span>
-              <span class="text-xs font-bold font-mono text-black">N/NW 3,0 a 3,5 m (Mar Grosso)</span>
-            </div>
-          </div>
-
-          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
-            <div><strong class="font-bold text-black">Restrição:</strong> Mar muito agitado com ondas de 3,0 a 3,5 m na bacia oceânica. Evite a navegação de pequenas e médias embarcações.</div>
-          </div>
-        </div>
-
-      </div>
-
     </div>
-  </section>
 
-  <!-- ========================================================================= -->
-  <!-- SEÇÃO DE PANORAMA SINÓTICO GERAL: PADRÃO NÓRDICO CERÂMICO                 -->
-  <!-- ========================================================================= -->
-  <section id="section-panorama-sinotico" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
-    <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-sm">
-      
-      <!-- Cabeçalho do Panorama Sinótico -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3">
-        <div class="flex items-center gap-2.5">
-          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
-            <i data-lucide="compass" class="w-4 h-4 text-black"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2 flex-wrap">
-              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
-                Panorama Sinótico Geral
-              </h2>
-              <span id="badge-periodo-sinotico" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                23/10 a 25/10
-              </span>
-            </div>
-            <p class="text-xs font-semibold text-black mt-0.5">
-              Análise técnica da dinâmica atmosférica, bacia hidrográfica e evolução regional (Carta CHM 12Z & Modelos ECMWF/GFS)
-            </p>
-          </div>
-        </div>
-
-        <!-- Ações do Panorama: Recolher / Expandir -->
-        <div class="flex items-center gap-2 self-start sm:self-center">
-          <button id="btn-toggle-sinopse" class="p-1.5 rounded-full border border-[#cbd5e1] text-black hover:bg-[#f1f5f9] cursor-pointer transition shadow-2xs" title="Minimizar / Expandir Panorama">
-            <i data-lucide="chevron-up" id="icon-toggle-sinopse" class="w-4 h-4 text-black"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Conteúdo do Panorama Sinótico: Cartões Nórdicos Cerâmicos Estruturados -->
-      <div id="container-conteudo-sinopse">
-        <div id="sinopse-texto-completo" class="p-3 sm:p-4 rounded-2xl bg-[#f4f6f8] border border-[#cbd5e1] space-y-3 shadow-inner">
+    <!-- Bloco Central: Hero Condições Atuais ao Vivo + Gráfico Horário 24h -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="space-y-6">
+        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO COMPACTO) -->
+        <div class="hero-card p-4 sm:p-5">
           
-          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
-            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
-                <i data-lucide="cloud-sun" class="w-3.5 h-3.5 text-black"></i>
-                <span>Dinâmica Atmosférica & Temperatura</span>
+          <!-- Topo do Hero Compacto -->
+          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/20 pb-2.5 mb-3">
+            <div class="flex items-center gap-2">
+              <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div>
+                <h1 class="text-sm sm:text-base font-bold text-black tracking-tight leading-none">
+                  Rio das Ostras, RJ
+                </h1>
+                <span class="text-[11px] font-normal text-black">Região dos Lagos • Costa do Sol</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <span id="hero-alert-pill" class="badge-title-orange text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase shadow-xs">
+                Alerta Oficial Vigente
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
+                24H
               </span>
             </div>
-            <p class="leading-relaxed text-justify text-sm text-black font-normal">O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 24°C na terça-feira (20/10), com acumulado pluviométrico diário previsto de 2.1 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quinta-feira (22/10).</p>
           </div>
 
-          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
-            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
+          <!-- Centro do Hero: Temperatura e Condição do Tempo Compactos -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
+            
+            <div class="space-y-1">
+              <div class="flex items-baseline gap-2.5">
+                <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">24°</span>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xl font-bold text-black leading-none">C</span>
+                  <span id="hero-sensacao" class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
+                </div>
+              </div>
+              
+              <div class="space-y-0.5">
+                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black leading-snug">
+                  Muitas nuvens com possibilidade de chuva isolada
+                </h3>
+                <p id="hero-subcondition" class="text-xs font-medium text-black">
+                  Chuva prevista: 2.1 mm • Rajadas 24 km/h na orla marítima
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-center sm:justify-end shrink-0">
+              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white text-black border-2 border-[#f07a53] shadow-sm">
+                <i data-lucide="cloud-rain" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Base do Hero: Grade de 6 Métricas Essenciais Compactas -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
+            
+            <!-- 1. Chuva -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
+                <span id="hero-chip-chuva-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
+                <span id="hero-chip-chuva-sub" class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
+              </div>
+            </div>
+
+            <!-- 2. Vento -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-slate">
+                <i data-lucide="wind" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
+                <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
+                <span id="hero-chip-vento-sub" class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
+              </div>
+            </div>
+
+            <!-- 3. Umidade -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="droplets" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
+                <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
+                <span id="hero-chip-umid-sub" class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
+              </div>
+            </div>
+
+            <!-- 4. Mar / Ondas -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-sandstone">
                 <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-                <span>Hidrografia, Rio Jundiá & Faixa Litorânea</span>
-              </span>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
+                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">0.7 a 1.2 m</span>
+                <span id="hero-chip-mar-sub" class="text-[9.5px] font-medium text-black">Moderado</span>
+              </div>
             </div>
-            <p class="leading-relaxed text-justify text-sm text-black font-normal">No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.9 m (Status: VIGILÂNCIA), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 45 km/h associadas às células convectivas da tarde.</p>
+
+            <!-- 5. Pressão -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-slate">
+                <i data-lucide="gauge" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
+                <span id="hero-chip-press-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
+                <span id="hero-chip-press-sub" class="text-[9.5px] font-medium text-black">Estável</span>
+              </div>
+            </div>
+
+            <!-- 6. Índice UV -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Índice UV</span>
+                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
+                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black">FPS recomendado</span>
+              </div>
+            </div>
+
           </div>
 
-          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
-            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
-              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
-                <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-black"></i>
-                <span>Tendência dos Próximos Dias & PLANCON</span>
-              </span>
-            </div>
-            <p class="leading-relaxed text-justify text-sm text-black font-normal">Para os dias subsequentes, na quarta-feira (21/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (4.8 mm acumulados, sem avisos meteorológicos vigentes). Na quinta-feira (22/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (5.2 mm acumulados, sob Alerta Amarelo de Tempestade nº 56118 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados oficiais do INMET, INEA e Open-Meteo para a cidade de Rio das Ostras.</p>
+          <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
+          <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black">
+            <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
+            <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 1 minuto">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span id="hero-sync-label">Atualizado a cada 1 minuto (Tempo Real)</span>
+            </span>
           </div>
 
         </div>
+
+
+        <!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
+        <div class="modern-card p-5 sm:p-6 space-y-4">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+                  <i data-lucide="activity" class="w-3.5 h-3.5"></i>
+                </div>
+                <h3 class="text-base font-bold text-black tracking-tight">
+                  Tendência Horária das Próximas 24 Horas
+                </h3>
+              </div>
+              <p class="text-xs font-normal text-[#64748b] mt-0.5">
+                Evolução contínua projetada pelos modelos numéricos de alta resolução
+              </p>
+            </div>
+
+            <!-- Seletores de Métrica em Cápsula Minimalista -->
+            <div class="flex items-center gap-1 bg-[#f1f5f9] p-1 rounded-full border border-[#e2e8f0] overflow-x-auto scrollbar-none">
+              <button class="bulletin-tab-btn tab-metric-btn active" data-metric="temperature">
+                Temperatura
+              </button>
+              <button class="bulletin-tab-btn tab-metric-btn" data-metric="precipitation">
+                Chuva
+              </button>
+              <button class="bulletin-tab-btn tab-metric-btn" data-metric="wind">
+                Vento
+              </button>
+              <button class="bulletin-tab-btn tab-metric-btn" data-metric="pressure">
+                Pressão
+              </button>
+              <button class="bulletin-tab-btn tab-metric-btn" data-metric="humidity">
+                Umidade
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas do Gráfico -->
+          <div class="relative w-full h-[250px] sm:h-[280px]">
+            <canvas id="bulletin-chart"></canvas>
+          </div>
+
+        </div>
+
+
       </div>
+    </main>
 
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- SEÇÃO DE PREVISÃO DOS PRÓXIMOS 3 DIAS (LOGO APÓS O PANORAMA SINÓTICO)     -->
-  <!-- ========================================================================= -->
+    <!-- Previsão Estendida 3 Dias -->
   <section id="section-previsao-3dias" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5">
     <div class="modern-card p-5 sm:p-6 space-y-4">
       
@@ -648,704 +665,9 @@
     </div>
   </section>
 
-  <!-- ========================================================================= -->
-  <!-- CONTAINER PRINCIPAL DO DASHBOARD (ESTRUTURA EM 2 COLUNAS)                 -->
-  <!-- ========================================================================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-5">
-    
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-      
-      <!-- ===================================================================== -->
-      <!-- COLUNA PRINCIPAL (ESQUERDA - 8 COLUNAS)                               -->
-      <!-- ===================================================================== -->
-      <section class="lg:col-span-8 space-y-6">
-        
-        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO COMPACTO) -->
-        <div class="hero-card p-4 sm:p-5">
-          
-          <!-- Topo do Hero Compacto -->
-          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/20 pb-2.5 mb-3">
-            <div class="flex items-center gap-2">
-              <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div>
-                <h1 class="text-sm sm:text-base font-bold text-black tracking-tight leading-none">
-                  Rio das Ostras, RJ
-                </h1>
-                <span class="text-[11px] font-normal text-black">Região dos Lagos • Costa do Sol</span>
-              </div>
-            </div>
 
-            <div class="flex items-center gap-1.5">
-              <span id="hero-alert-pill" class="badge-title-orange text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase shadow-xs">
-                Alerta Oficial Vigente
-              </span>
-              <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
-                24H
-              </span>
-            </div>
-          </div>
+  </div> <!-- /#view-tab-previsao -->
 
-          <!-- Centro do Hero: Temperatura e Condição do Tempo Compactos -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
-            
-            <div class="space-y-1">
-              <div class="flex items-baseline gap-2.5">
-                <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">24°</span>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-xl font-bold text-black leading-none">C</span>
-                  <span id="hero-sensacao" class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
-                </div>
-              </div>
-              
-              <div class="space-y-0.5">
-                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black leading-snug">
-                  Muitas nuvens com possibilidade de chuva isolada
-                </h3>
-                <p id="hero-subcondition" class="text-xs font-medium text-black">
-                  Chuva prevista: 2.1 mm • Rajadas 24 km/h na orla marítima
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-center sm:justify-end shrink-0">
-              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white text-black border-2 border-[#f07a53] shadow-sm">
-                <i data-lucide="cloud-rain" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Base do Hero: Grade de 6 Métricas Essenciais Compactas -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
-            
-            <!-- 1. Chuva -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
-                <span id="hero-chip-chuva-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
-                <span id="hero-chip-chuva-sub" class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
-              </div>
-            </div>
-
-            <!-- 2. Vento -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-slate">
-                <i data-lucide="wind" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
-                <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
-                <span id="hero-chip-vento-sub" class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
-              </div>
-            </div>
-
-            <!-- 3. Umidade -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="droplets" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
-                <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
-                <span id="hero-chip-umid-sub" class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
-              </div>
-            </div>
-
-            <!-- 4. Mar / Ondas -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-sandstone">
-                <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
-                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">0.7 a 1.2 m</span>
-                <span id="hero-chip-mar-sub" class="text-[9.5px] font-medium text-black">Moderado</span>
-              </div>
-            </div>
-
-            <!-- 5. Pressão -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-slate">
-                <i data-lucide="gauge" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
-                <span id="hero-chip-press-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
-                <span id="hero-chip-press-sub" class="text-[9.5px] font-medium text-black">Estável</span>
-              </div>
-            </div>
-
-            <!-- 6. Índice UV -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Índice UV</span>
-                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
-                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black">FPS recomendado</span>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
-          <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black">
-            <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
-            <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 1 minuto">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              <span id="hero-sync-label">Atualizado a cada 1 minuto (Tempo Real)</span>
-            </span>
-          </div>
-
-        </div>
-
-        <!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
-        <div class="modern-card p-5 sm:p-6 space-y-4">
-          
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/15 pb-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-                  <i data-lucide="activity" class="w-3.5 h-3.5"></i>
-                </div>
-                <h3 class="text-base font-bold text-black tracking-tight">
-                  Tendência Horária das Próximas 24 Horas
-                </h3>
-              </div>
-              <p class="text-xs font-normal text-[#64748b] mt-0.5">
-                Evolução contínua projetada pelos modelos numéricos de alta resolução
-              </p>
-            </div>
-
-            <!-- Seletores de Métrica em Cápsula Minimalista -->
-            <div class="flex items-center gap-1 bg-[#f1f5f9] p-1 rounded-full border border-[#e2e8f0] overflow-x-auto scrollbar-none">
-              <button class="bulletin-tab-btn tab-metric-btn active" data-metric="temperature">
-                Temperatura
-              </button>
-              <button class="bulletin-tab-btn tab-metric-btn" data-metric="precipitation">
-                Chuva
-              </button>
-              <button class="bulletin-tab-btn tab-metric-btn" data-metric="wind">
-                Vento
-              </button>
-              <button class="bulletin-tab-btn tab-metric-btn" data-metric="pressure">
-                Pressão
-              </button>
-              <button class="bulletin-tab-btn tab-metric-btn" data-metric="humidity">
-                Umidade
-              </button>
-            </div>
-          </div>
-
-          <!-- Canvas do Gráfico -->
-          <div class="relative w-full h-[250px] sm:h-[280px]">
-            <canvas id="bulletin-chart"></canvas>
-          </div>
-
-        </div>
-
-        <!-- CARD 2: CONDIÇÕES MARÍTIMAS, PRAIAS & TÁBUA DE MARÉS (CHM) / BALNEABILIDADE (INEA) -->
-        <div class="modern-card p-5 sm:p-6 space-y-4 bg-white border border-[#94a3b8]" id="card-condicoes-orla">
-          
-          <!-- Cabeçalho do Card com Título e Status Geral -->
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
-            <div class="flex items-center gap-2.5">
-              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-black text-black tracking-tight leading-tight">Condições da Orla & Praias</h3>
-                <span class="text-xs font-normal text-black">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
-              </div>
-            </div>
-            <span id="orla-status-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300">
-              Vento Forte & Mar Grosso (Avisos nº 778 e 781)
-            </span>
-          </div>
-
-          <!-- SELETOR DE NICHOS (3 ABAS SEGMENTADAS NÓRDICAS) -->
-          <div class="grid grid-cols-3 gap-1 bg-[#f5efe8]/80 p-1.5 rounded-2xl border border-[#b8a99a]/50 text-center" role="tablist">
-            <button id="orla-tab-btn-mar" onclick="switchOrlaTab('mar')" class="orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs" role="tab" aria-selected="true">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-              <span>Mar (3 Dias)</span>
-            </button>
-            <button id="orla-tab-btn-mares" onclick="switchOrlaTab('mares')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="compass" class="w-3.5 h-3.5 text-black"></i>
-              <span>Tábuas de Maré</span>
-            </button>
-            <button id="orla-tab-btn-balnear" onclick="switchOrlaTab('balnear')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-black"></i>
-              <span>Balneabilidade</span>
-            </button>
-          </div>
-
-          <!-- PAINEL 1: CONDIÇÕES DO MAR (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
-          <div id="orla-panel-mar" class="space-y-3.5">
-            <!-- Seletor de Dias (Hoje, Amanhã, D+2) -->
-            <div class="flex items-center justify-between gap-2 p-1.5 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-xs">
-              <span class="text-xs font-bold text-black flex items-center gap-1.5">
-                <i data-lucide="calendar" class="w-3.5 h-3.5 text-black"></i> Previsão:
-              </span>
-              <div class="flex items-center gap-1" id="orla-day-buttons">
-                <button type="button" onclick="selectOrlaDay('d0')" id="orla-day-btn-d0" class="orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer">
-                  Hoje (23/10)
-                </button>
-                <button type="button" onclick="selectOrlaDay('d1')" id="orla-day-btn-d1" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
-                  Amanhã (24/10)
-                </button>
-                <button type="button" onclick="selectOrlaDay('d2')" id="orla-day-btn-d2" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
-                  Domingo (25/10)
-                </button>
-              </div>
-            </div>
-
-            <!-- Quadro Resumo Executivo / Síntese Geral da Orla de Rio das Ostras -->
-            <div id="orla-summary-content" class="space-y-3">
-              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-[#ffebe4] border border-[#f07a53] flex items-center justify-center text-black">
-                      <i data-lucide="waves" class="w-4 h-4 text-black"></i>
-                    </div>
-                    <div>
-                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider">Panorama Geral em Rio das Ostras</span>
-                      <strong class="text-sm font-black text-black block" id="orla-geral-titulo">Avisos da Marinha Ativos na Orla (Delta)</strong>
-                    </div>
-                  </div>
-                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="orla-geral-badge">Vento & Mar Grosso</span>
-                </div>
-                
-                <p class="text-xs font-medium text-black leading-relaxed" id="orla-geral-descricao">
-                  Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica • Águas calmas e abrigadas nas enseadas.
-                </p>
-
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-black uppercase text-black">Enseadas Abrigadas</span>
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black">Calmo</span>
-                    </div>
-                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-enseada">0,3 a 0,7 m</strong>
-                    <span class="text-[10px] text-black font-medium block">Tartaruga, Centro, Bosque e Remanso</span>
-                  </div>
-                  
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-black uppercase text-black">Orla Oceânica</span>
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black">Moderado</span>
-                    </div>
-                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-oceanica">1,2 a 1,6 m</strong>
-                    <span class="text-[10px] text-black font-medium block">Costazul, Joana e Mar do Norte</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Botão Clicável de Destaque para abrir a lista completa das 11 Praias -->
-              <button type="button" onclick="openModalPraias('mar')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
-                <span class="flex items-center gap-2">
-                  <i data-lucide="list-checks" class="w-4 h-4 text-black"></i>
-                  <span>Ver Detalhamento Praia a Praia (11 Praias)</span>
-                </span>
-                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#f07a53]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- PAINEL 2: TÁBUAS DE MARÉ OFICIAL (CHM / MARINHA DO BRASIL) -->
-          <div id="orla-panel-mares" class="space-y-3.5 hidden">
-            <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
-              <div class="flex items-center justify-between flex-wrap gap-2">
-                <div class="flex items-center gap-2 text-xs font-black text-black">
-                  <div class="w-7 h-7 rounded-lg bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
-                    <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-                  </div>
-                  <span>Tábua de Marés Oficial (CHM / DHN)</span>
-                </div>
-                <span id="orla-proxima-mare" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53] shadow-2xs">
-                  Próxima: Baixa-mar às 04:52 (0,2 m)
-                </span>
-              </div>
-
-              <!-- Grid dos 4 Eventos de Maré do Dia (Nórdico Cerâmico) -->
-              <div id="orla-mares-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
-                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
-                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
-                  </span>
-                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">04:52</strong>
-                  <span class="text-[11px] font-bold text-black font-mono">0,20 m</span>
-                </div>
-                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
-                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
-                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
-                  </span>
-                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">12:01</strong>
-                  <span class="text-[11px] font-bold text-black font-mono">0,90 m</span>
-                </div>
-                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
-                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
-                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
-                  </span>
-                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">17:55</strong>
-                  <span class="text-[11px] font-bold text-black font-mono">0,40 m</span>
-                </div>
-                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
-                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
-                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
-                  </span>
-                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">23:11</strong>
-                  <span class="text-[11px] font-bold text-black font-mono">0,80 m</span>
-                </div>
-              </div>
-
-              <div class="p-2.5 bg-white/90 rounded-xl border border-[#cbd5e1] text-[11px] text-black space-y-1">
-                <div class="flex items-center justify-between font-bold text-black">
-                  <span>Estação Maregráfica Oficial</span>
-                  <span class="font-mono text-[10px] bg-[#f8fafc] px-2 py-0.5 rounded border border-[#cbd5e1]">Imbetiba / Macaé e Rio das Ostras</span>
-                </div>
-                <p class="text-[10.5px] text-black font-medium leading-snug">
-                  As previsões de maré são calculadas astronomicamente pelo Centro de Hidrografia da Marinha (CHM/DHN) e refletem as cotas de variação do nível do mar em Rio das Ostras.
-                </p>
-              </div>
-
-              <div class="flex items-center justify-between text-xs text-black pt-1 border-t border-[#dfb992]/20">
-                <span class="font-medium">Fonte: Marinha do Brasil (CHM / DHN)</span>
-                <a href="https://www.marinha.mil.br/chm/tabuas-de-mare" target="_blank" rel="noopener" class="text-black hover:underline font-bold bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
-                  Tábua Completa CHM ↗
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- PAINEL 3: BALNEABILIDADE OFICIAL DO INEA (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
-          <div id="orla-panel-balnear" class="space-y-3.5 hidden">
-            <div id="balnear-summary-content" class="space-y-3">
-              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
-                <div class="flex items-center justify-between flex-wrap gap-2">
-                  <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
-                      <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
-                    </div>
-                    <div>
-                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider" id="balnear-boletim-titulo">Boletim nº 20 (INEA)</span>
-                      <strong class="text-sm font-black text-black block" id="balnear-status-geral-txt">8 de 11 Praias Próprias para Banho (73%)</strong>
-                    </div>
-                  </div>
-                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="balnear-data-badge">Favorável</span>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-black uppercase text-black">Praias Próprias</span>
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black" id="balnear-proprias-count">8 Pontos</span>
-                    </div>
-                    <span class="text-[10.5px] text-black font-medium block">Tartarugas, Bosque, Centro, Costazul, Remanso, Joana, Mar do Norte e Areia Negra</span>
-                  </div>
-                  
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
-                    <div class="flex items-center justify-between">
-                      <span class="text-[10px] font-black uppercase text-black">Pontos de Atenção</span>
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black" id="balnear-improprias-count">3 Pontos</span>
-                    </div>
-                    <span class="text-[10.5px] text-black font-medium block">Boca da Barra (foz do rio) e Lagoa de Iriri (baixa renovação hídrica)</span>
-                  </div>
-                </div>
-
-                <p class="text-[11px] text-black font-medium leading-relaxed bg-white/90 p-2.5 rounded-xl border border-[#cbd5e1]" id="balnear-obs-tecnica">
-                  <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas fortes e próximo à saída de canais de drenagem pluvial.
-                </p>
-              </div>
-
-              <!-- Botão Clicável de Destaque para abrir a lista completa da Balneabilidade -->
-              <button type="button" onclick="openModalPraias('balnear')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
-                <span class="flex items-center gap-2">
-                  <i data-lucide="clipboard-check" class="w-4 h-4 text-black"></i>
-                  <span>Ver Relatório Oficial dos 11 Pontos de Balneabilidade (INEA)</span>
-                </span>
-                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#6d8ba6]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
-              </button>
-
-          <!-- Rodapé de Advertências & Links Oficiais -->
-          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
-            <span id="orla-aviso-resumo" class="font-medium text-black">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
-            <div class="flex items-center gap-2 flex-wrap">
-              <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-                Avisos CHM ↗
-              </a>
-              <a href="https://seirhi.inea.rj.gov.br/publico" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-                SEIRHI INEA ↗
-              </a>
-              <a href="https://www.instagram.com/rj_inea/" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-                Instagram INEA ↗
-              </a>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ===================================================================== -->
-      <!-- COLUNA LATERAL (DIREITA - 4 COLUNAS NO DESKTOP)                       -->
-      <!-- ===================================================================== -->
-      <aside class="lg:col-span-4 space-y-6">
-        
-        <!-- CARD 1: TELEMETRIA HIDROLÓGICA — RIO JUNDIÁ (INEA 224103620) -->
-        <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-4" id="card-telemetria-jundia">
-          
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
-            <div class="flex items-center gap-2.5">
-              <div id="jundia-icon-box" class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="waves" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-black tracking-tight">Rio Jundiá</h3>
-                <span id="jundia-leitura-tempo" class="text-xs font-normal text-black">Estação Telemétrica INEA nº 224103620</span>
-              </div>
-            </div>
-            <span id="jundia-header-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-              Vigilância
-            </span>
-          </div>
-
-          <!-- Cota Atual em Destaque -->
-          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 text-center space-y-1.5 shadow-xs">
-            <span class="text-[10px] uppercase font-bold text-black block tracking-wider">Cota Atual Registrada</span>
-            <span id="kpi-jundia-val" class="text-5xl font-extrabold font-mono text-black block tracking-tight">1,91 m</span>
-            <div class="flex items-center justify-center pt-0.5">
-              <span id="kpi-jundia-status" class="badge-title-orange text-[11px] px-3 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-                VIGILÂNCIA
-              </span>
-            </div>
-          </div>
-
-          <!-- Régua Visual das Cotas Oficiais do INEA -->
-          <div class="space-y-2 text-xs font-medium text-black">
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Atenção:</span>
-              <span id="jundia-cota-atencao" class="font-mono font-bold text-black bg-[#fef3c7] border border-[#d97706]/40 px-2.5 py-0.5 rounded-md">1,99 m</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Alerta:</span>
-              <span id="jundia-cota-alerta" class="font-mono font-bold text-black bg-[#ffedd5] border border-[#f97316]/40 px-2.5 py-0.5 rounded-md">2,27 m</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-black font-medium">Cota de Transbordo (Calha):</span>
-              <span id="jundia-cota-transbordo" class="font-mono font-bold text-black bg-[#ffe4e6] border border-[#e11d48]/40 px-2.5 py-0.5 rounded-md">2,84 m</span>
-            </div>
-
-            <!-- Barra de Progresso Visual da Régua -->
-            <div class="gauge-track mt-2 h-2.5 bg-[#e2e8f0] border border-[#cbd5e1] rounded-full overflow-hidden p-[1px]">
-              <div id="jundia-gauge-bar" class="h-full rounded-full bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6] transition-all duration-500" style="width: 67%;"></div>
-            </div>
-            <p id="jundia-mensagem-status" class="text-[11px] font-medium text-black pt-1 leading-tight">
-              Calha em regime seguro de vazante contínua com cota de 1,91 m (a 93 cm da cota de transbordo).
-            </p>
-          </div>
-
-          <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
-            <span class="font-medium text-black">Bacia Hidrográfica RH-VIII</span>
-            <a href="https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
-              Ver Telemetria INEA ↗
-            </a>
-          </div>
-
-        </div>
-
-        <!-- CARD 4: TELEFONES ÚTEIS & CONTATOS DE EMERGÊNCIA (PALETA NÓRDICA CERÂMICA) -->
-        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-4" id="card-telefones-uteis">
-          
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
-            <div class="flex items-center gap-2.5">
-              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
-                <i data-lucide="phone-call" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-extrabold text-black tracking-tight leading-tight">Central de Emergências</h3>
-                <span class="text-xs font-medium text-black">Atendimento 24 Horas Gratuito</span>
-              </div>
-            </div>
-            <span class="badge-title-orange text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
-              Ligação Gratuita
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2.5 text-xs">
-            <!-- 1. Defesa Civil (Terracota Coral) -->
-            <a href="tel:199" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
-              <div class="flex items-center justify-between">
-                <span class="text-black font-black text-xs uppercase tracking-wide">Defesa Civil</span>
-                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#f07a53]/40 text-black">Plantão</span>
-              </div>
-              <div class="flex items-baseline justify-between mt-2.5">
-                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">199</span>
-                <i data-lucide="shield-alert" class="w-5 h-5 text-black opacity-80"></i>
-              </div>
-            </a>
-
-            <!-- 2. Bombeiros (Warm Amber Stoneware) -->
-            <a href="tel:193" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#fef3c7] to-[#fee685] hover:brightness-95 border-2 border-[#d97706] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
-              <div class="flex items-center justify-between">
-                <span class="text-black font-black text-xs uppercase tracking-wide">Bombeiros</span>
-                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#d97706]/40 text-black">Resgate</span>
-              </div>
-              <div class="flex items-baseline justify-between mt-2.5">
-                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">193</span>
-                <i data-lucide="flame" class="w-5 h-5 text-black opacity-80"></i>
-              </div>
-            </a>
-
-            <!-- 3. SAMU (Nordic Slate Ice) -->
-            <a href="tel:192" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
-              <div class="flex items-center justify-between">
-                <span class="text-black font-black text-xs uppercase tracking-wide">SAMU</span>
-                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#6d8ba6]/40 text-black">Médico</span>
-              </div>
-              <div class="flex items-baseline justify-between mt-2.5">
-                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">192</span>
-                <i data-lucide="ambulance" class="w-5 h-5 text-black opacity-80"></i>
-              </div>
-            </a>
-
-            <!-- 4. Polícia Militar (Stoneware Sandstone) -->
-            <a href="tel:190" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] hover:brightness-95 border-2 border-[#b8a99a] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
-              <div class="flex items-center justify-between">
-                <span class="text-black font-black text-xs uppercase tracking-wide">Polícia Militar</span>
-                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#b8a99a]/40 text-black">32º BPM</span>
-              </div>
-              <div class="flex items-baseline justify-between mt-2.5">
-                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">190</span>
-                <i data-lucide="shield" class="w-5 h-5 text-black opacity-80"></i>
-              </div>
-            </a>
-          </div>
-
-          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
-            <span class="font-bold text-black flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-[#f07a53] live-pulse"></span>
-              Plantão de Emergência 24H
-            </span>
-            <button id="dock-btn-boletim" class="btn-coral-pill text-xs py-1.5 px-3 cursor-pointer font-bold shadow-xs flex items-center gap-1">
-              <span>Boletim Completo</span>
-              <span>→</span>
-            </button>
-          </div>
-
-        </div>
-
-        <!-- CARD 3: PRECIPITAÇÃO POR TURNO (PLANCON MUNICIPAL) -->
-        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
-          
-          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
-            <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-[#e0f2fe] border border-[#38bdf8] flex items-center justify-center text-black">
-                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
-              </div>
-              <div>
-                <h3 class="text-base font-bold text-black tracking-tight">
-                  Precipitação por Turno Operacional
-                </h3>
-                <p class="text-xs font-normal text-black">Distribuição estimada para os turnos do dia</p>
-              </div>
-            </div>
-
-            <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
-              Total 3D: 11.1 mm
-            </span>
-          </div>
-
-          <!-- Barrinhas de Chuva dos Turnos -->
-          <div id="chuva-turnos-bars" class="space-y-3 py-1">
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Madrugada</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.1 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 5%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Manhã</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.5 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 25%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Tarde</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">2.0 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 100%;"></div>
-              </div>
-            </div>
-            <div class="space-y-1.5">
-              <div class="flex justify-between items-center text-xs font-semibold">
-                <span class="text-black font-semibold">Noite</span>
-                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.0 mm</span>
-              </div>
-              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
-                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 0%;"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Síntese Multi-Fonte de Precipitação Oficial -->
-          <div id="chuva-multifonte-box" class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] space-y-1.5 text-xs">
-            <div class="flex items-center justify-between text-[11px] font-bold text-black border-b border-[#cbd5e1]/60 pb-1">
-              <span class="flex items-center gap-1 text-black font-bold">
-                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                Síntese Multi-Fonte de Precipitação
-              </span>
-              <span class="text-[9.5px] font-bold text-[#0369a1] bg-[#e0f2fe] px-1.5 py-0.5 rounded border border-[#bae6fd]">Sem Divergências</span>
-            </div>
-            <div class="space-y-1 text-[11px] text-black">
-              <div class="flex justify-between items-center">
-                <span class="text-black/80 font-medium">Modelos (Média Contínua):</span>
-                <span id="chuva-multifonte-media" class="font-mono font-bold text-black">8.3 mm hoje</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-black/80 font-medium">INMET (Alerta Tempestade):</span>
-                <span id="chuva-multifonte-alerta" class="font-mono font-bold text-[#b45309]">Até 50 mm/dia (20 a 30 mm/h)</span>
-              </div>
-              <div class="flex justify-between items-center">
-                <span class="text-black/80 font-medium">Telemetria Prévia (24h):</span>
-                <span id="chuva-multifonte-observado" class="font-mono font-bold text-black">CEMADEN: 10.2 mm • INEA: 8.0 mm</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black flex-wrap gap-2">
-            <span class="font-medium text-black">Modelo: CPTEC/INPE & COSMO</span>
-            <button id="btn-ver-boletim-modal-1" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
-              Ver Tabela Completa dos 12 Turnos →
-            </button>
-          </div>
-
-        </div>
-
-      </aside>
-
-    </div>
-
-  </main>
-
-    </div> <!-- /#view-tab-previsao -->
-
-  <!-- ========================================================================= -->
-  <!-- VIEW 2: ACUMULADOS DE CHUVA (10 ESTAÇÕES: WU, INEA, CEMADEN)             -->
-  <!-- ========================================================================= -->
   <div id="view-tab-chuva" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
     
     <!-- CARD 1: RESUMO EXECUTIVO DA REDE PLUVIOMÉTRICA & HIDROLÓGICA MUNICIPAL -->
@@ -1595,9 +917,978 @@
   </div> <!-- /#view-tab-chuva -->
 
 
+
   <!-- ========================================================================= -->
-  <!-- RODAPÉ INSTITUCIONAL NÓRDICO CERÂMICO                                     -->
+  <!-- VIEW 3: NÍVEL DO RIO JUNDIÁ (TELEMETRIA FLUVIAL & COTAS INEA)             -->
   <!-- ========================================================================= -->
+  <div id="view-tab-rio" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- Header Temático Hidrológico -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
+          <i data-lucide="waves" class="w-5 h-5 text-black"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
+              Telemetria & Cota do Rio Jundiá
+            </h2>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7]/40 uppercase tracking-wide">
+              Estação INEA 2241036
+            </span>
+          </div>
+          <p class="text-xs font-semibold text-black mt-0.5">
+            Monitoramento hidrológico fluvial oficial da bacia do Rio Jundiá em Rio das Ostras
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="https://alertadecheias.com.br/stations/2241036/full" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-[#ffebe4] border border-[#f07a53] hover:bg-[#fed7cc] transition shadow-xs cursor-pointer">
+          <i data-lucide="external-link" class="w-4 h-4 text-black"></i>
+          <span>Portal Alerta de Cheias INEA</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card de Telemetria do Rio Jundiá -->
+        <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-4" id="card-telemetria-jundia">
+          
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3">
+            <div class="flex items-center gap-2.5">
+              <div id="jundia-icon-box" class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-black tracking-tight">Rio Jundiá</h3>
+                <span id="jundia-leitura-tempo" class="text-xs font-normal text-black">Estação Telemétrica INEA nº 224103620</span>
+              </div>
+            </div>
+            <span id="jundia-header-badge" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+              Vigilância
+            </span>
+          </div>
+
+          <!-- Cota Atual em Destaque -->
+          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 text-center space-y-1.5 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-black block tracking-wider">Cota Atual Registrada</span>
+            <span id="kpi-jundia-val" class="text-5xl font-extrabold font-mono text-black block tracking-tight">1,91 m</span>
+            <div class="flex items-center justify-center pt-0.5">
+              <span id="kpi-jundia-status" class="badge-title-orange text-[11px] px-3 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                VIGILÂNCIA
+              </span>
+            </div>
+          </div>
+
+          <!-- Régua Visual das Cotas Oficiais do INEA -->
+          <div class="space-y-2 text-xs font-medium text-black">
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Atenção:</span>
+              <span id="jundia-cota-atencao" class="font-mono font-bold text-black bg-[#fef3c7] border border-[#d97706]/40 px-2.5 py-0.5 rounded-md">1,99 m</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Alerta:</span>
+              <span id="jundia-cota-alerta" class="font-mono font-bold text-black bg-[#ffedd5] border border-[#f97316]/40 px-2.5 py-0.5 rounded-md">2,27 m</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-black font-medium">Cota de Transbordo (Calha):</span>
+              <span id="jundia-cota-transbordo" class="font-mono font-bold text-black bg-[#ffe4e6] border border-[#e11d48]/40 px-2.5 py-0.5 rounded-md">2,84 m</span>
+            </div>
+
+            <!-- Barra de Progresso Visual da Régua -->
+            <div class="gauge-track mt-2 h-2.5 bg-[#e2e8f0] border border-[#cbd5e1] rounded-full overflow-hidden p-[1px]">
+              <div id="jundia-gauge-bar" class="h-full rounded-full bg-gradient-to-r from-[#3d4f61] to-[#6d8ba6] transition-all duration-500" style="width: 67%;"></div>
+            </div>
+            <p id="jundia-mensagem-status" class="text-[11px] font-medium text-black pt-1 leading-tight">
+              Calha em regime seguro de vazante contínua com cota de 1,91 m (a 93 cm da cota de transbordo).
+            </p>
+          </div>
+
+          <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
+            <span class="font-medium text-black">Bacia Hidrográfica RH-VIII</span>
+            <a href="https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
+              Ver Telemetria INEA ↗
+            </a>
+          </div>
+
+        </div>
+
+
+    <!-- Grid de 2 Colunas: Contexto Hidrológico & Protocolos de Cheia -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Coluna 1: Bacia RH-VIII & Dinâmica Fluvial -->
+      <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-xs">
+        <div class="flex items-center gap-2.5 border-b border-[#cbd5e1] pb-3">
+          <div class="w-8 h-8 rounded-lg bg-[#e0f2fe] text-[#0369a1] flex items-center justify-center shrink-0">
+            <i data-lucide="map" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-black text-black">Bacia Hidrográfica RH-VIII</h4>
+            <span class="text-[11px] font-normal text-black">Macaé e das Ostras • Escoamento e Foz</span>
+          </div>
+        </div>
+        <p class="text-xs text-black leading-relaxed">
+          O Rio Jundiá corta áreas urbanas e rurais de Rio das Ostras, banhando os bairros Cantagalo, Âncora, Cláudio Ribeiro e desaguando em direção à orla costeira. 
+        </p>
+        <div class="space-y-2 pt-1 text-xs">
+          <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#e2e8f0]">
+            <span class="font-bold text-black block mb-0.5">Influência das Marés Oceânicas:</span>
+            <span class="text-black">Em marés astronômicas altas (preamar), o refluxo das águas marinhas diminui o gradiente hidráulico do rio, desacelerando o escoamento pluvial e aumentando o tempo de retenção nos leitos.</span>
+          </div>
+          <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#e2e8f0]">
+            <span class="font-bold text-black block mb-0.5">Sensor Telemétrico Automático INEA:</span>
+            <span class="text-black">Estação 2241036 equipada com sensor de nível piezométrico/pressão com transmissão contínua ao INEA via telemetria satelital e celular GPRS.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna 2: Protocolo Operacional de Cheias & Cotas -->
+      <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-xs">
+        <div class="flex items-center gap-2.5 border-b border-[#cbd5e1] pb-3">
+          <div class="w-8 h-8 rounded-lg bg-[#fef3c7] text-[#b45309] flex items-center justify-center shrink-0">
+            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-black text-black">Escala Oficial de Estágios INEA</h4>
+            <span class="text-[11px] font-normal text-black">Classificação Operacional do Alerta de Cheias</span>
+          </div>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#f0fdf4] border border-[#86efac]">
+            <span class="font-bold text-black">Normal (&lt; 1,50 m):</span>
+            <span class="font-bold text-[#166534]">Calha segura • Fluxo livre</span>
+          </div>
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#f0fdf4] border border-[#86efac]">
+            <span class="font-bold text-black">Vigilância (1,50 m a 1,98 m):</span>
+            <span class="font-bold text-[#166534]">Nível atual (1,59 m) • Monitoramento</span>
+          </div>
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#fffbeb] border border-[#fde68a]">
+            <span class="font-bold text-black">Atenção (1,99 m a 2,26 m):</span>
+            <span class="font-bold text-[#b45309]">Prontidão das equipes operacionais</span>
+          </div>
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#fff7ed] border border-[#fdba74]">
+            <span class="font-bold text-black">Alerta (2,27 m a 2,83 m):</span>
+            <span class="font-bold text-[#c2410c]">Risco iminente de alagamentos</span>
+          </div>
+          <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#fef2f2] border border-[#fca5a5]">
+            <span class="font-bold text-black">Transbordo (≥ 2,84 m):</span>
+            <span class="font-bold text-[#b91c1c]">Extravasamento da calha</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /#view-tab-rio -->
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 4: ORLA & PRAIAS (MARÉ, ONDULAÇÃO & BALNEABILIDADE INEA)            -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-orla" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- Header da Aba Orla -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
+          <i data-lucide="anchor" class="w-5 h-5 text-black"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
+              Condições da Orla, Marés & Balneabilidade
+            </h2>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#ccfbf1] text-[#0f766e] border border-[#0d9488]/40 uppercase tracking-wide">
+              11 Praias Monitoradas
+            </span>
+          </div>
+          <p class="text-xs font-semibold text-black mt-0.5">
+            Previsão marítima CHM/Marinha do Brasil, tábua de marés astronômica e balneabilidade oficial INEA
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Completo de Condições da Orla & Praias -->
+        <div class="modern-card p-5 sm:p-6 space-y-4 bg-white border border-[#94a3b8]" id="card-condicoes-orla">
+          
+          <!-- Cabeçalho do Card com Título e Status Geral -->
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-black text-black tracking-tight leading-tight">Condições da Orla & Praias</h3>
+                <span class="text-xs font-normal text-black">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
+              </div>
+            </div>
+            <span id="orla-status-badge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300">
+              Vento Forte & Mar Grosso (Avisos nº 778 e 781)
+            </span>
+          </div>
+
+          <!-- SELETOR DE NICHOS (3 ABAS SEGMENTADAS NÓRDICAS) -->
+          <div class="grid grid-cols-3 gap-1 bg-[#f5efe8]/80 p-1.5 rounded-2xl border border-[#b8a99a]/50 text-center" role="tablist">
+            <button id="orla-tab-btn-mar" onclick="switchOrlaTab('mar')" class="orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs" role="tab" aria-selected="true">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
+              <span>Mar (3 Dias)</span>
+            </button>
+            <button id="orla-tab-btn-mares" onclick="switchOrlaTab('mares')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
+              <i data-lucide="compass" class="w-3.5 h-3.5 text-black"></i>
+              <span>Tábuas de Maré</span>
+            </button>
+            <button id="orla-tab-btn-balnear" onclick="switchOrlaTab('balnear')" class="orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-black"></i>
+              <span>Balneabilidade</span>
+            </button>
+          </div>
+
+          <!-- PAINEL 1: CONDIÇÕES DO MAR (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
+          <div id="orla-panel-mar" class="space-y-3.5">
+            <!-- Seletor de Dias (Hoje, Amanhã, D+2) -->
+            <div class="flex items-center justify-between gap-2 p-1.5 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-xs">
+              <span class="text-xs font-bold text-black flex items-center gap-1.5">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-black"></i> Previsão:
+              </span>
+              <div class="flex items-center gap-1" id="orla-day-buttons">
+                <button type="button" onclick="selectOrlaDay('d0')" id="orla-day-btn-d0" class="orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer">
+                  Hoje (23/10)
+                </button>
+                <button type="button" onclick="selectOrlaDay('d1')" id="orla-day-btn-d1" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
+                  Amanhã (24/10)
+                </button>
+                <button type="button" onclick="selectOrlaDay('d2')" id="orla-day-btn-d2" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
+                  Domingo (25/10)
+                </button>
+              </div>
+            </div>
+
+            <!-- Quadro Resumo Executivo / Síntese Geral da Orla de Rio das Ostras -->
+            <div id="orla-summary-content" class="space-y-3">
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#ffebe4] border border-[#f07a53] flex items-center justify-center text-black">
+                      <i data-lucide="waves" class="w-4 h-4 text-black"></i>
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider">Panorama Geral em Rio das Ostras</span>
+                      <strong class="text-sm font-black text-black block" id="orla-geral-titulo">Avisos da Marinha Ativos na Orla (Delta)</strong>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="orla-geral-badge">Vento & Mar Grosso</span>
+                </div>
+                
+                <p class="text-xs font-medium text-black leading-relaxed" id="orla-geral-descricao">
+                  Swell de E/SE • Ondulação média de 1,2 a 1,6 m na orla oceânica • Águas calmas e abrigadas nas enseadas.
+                </p>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Enseadas Abrigadas</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black">Calmo</span>
+                    </div>
+                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-enseada">0,3 a 0,7 m</strong>
+                    <span class="text-[10px] text-black font-medium block">Tartaruga, Centro, Bosque e Remanso</span>
+                  </div>
+                  
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Orla Oceânica</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black">Moderado</span>
+                    </div>
+                    <strong class="font-mono font-black text-black text-xs block" id="orla-ondas-oceanica">1,2 a 1,6 m</strong>
+                    <span class="text-[10px] text-black font-medium block">Costazul, Joana e Mar do Norte</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Botão Clicável de Destaque para abrir a lista completa das 11 Praias -->
+              <button type="button" onclick="openModalPraias('mar')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="list-checks" class="w-4 h-4 text-black"></i>
+                  <span>Ver Detalhamento Praia a Praia (11 Praias)</span>
+                </span>
+                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#f07a53]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- PAINEL 2: TÁBUAS DE MARÉ OFICIAL (CHM / MARINHA DO BRASIL) -->
+          <div id="orla-panel-mares" class="space-y-3.5 hidden">
+            <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+              <div class="flex items-center justify-between flex-wrap gap-2">
+                <div class="flex items-center gap-2 text-xs font-black text-black">
+                  <div class="w-7 h-7 rounded-lg bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
+                    <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
+                  </div>
+                  <span>Tábua de Marés Oficial (CHM / DHN)</span>
+                </div>
+                <span id="orla-proxima-mare" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53] shadow-2xs">
+                  Próxima: Baixa-mar às 04:52 (0,2 m)
+                </span>
+              </div>
+
+              <!-- Grid dos 4 Eventos de Maré do Dia (Nórdico Cerâmico) -->
+              <div id="orla-mares-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">04:52</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,20 m</span>
+                </div>
+                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">12:01</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,90 m</span>
+                </div>
+                <div class="p-2 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-down" class="w-3.5 h-3.5 text-black inline"></i> Baixa-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">17:55</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,40 m</span>
+                </div>
+                <div class="p-2 rounded-xl bg-[#ffebe4] border border-[#f97316]/60 text-center flex flex-col justify-center shadow-2xs">
+                  <span class="text-[10px] font-bold text-black uppercase flex items-center justify-center gap-0.5">
+                    <i data-lucide="arrow-up" class="w-3.5 h-3.5 text-black inline"></i> Preia-mar
+                  </span>
+                  <strong class="text-xs font-mono font-extrabold text-black mt-0.5">23:11</strong>
+                  <span class="text-[11px] font-bold text-black font-mono">0,80 m</span>
+                </div>
+              </div>
+
+              <div class="p-2.5 bg-white/90 rounded-xl border border-[#cbd5e1] text-[11px] text-black space-y-1">
+                <div class="flex items-center justify-between font-bold text-black">
+                  <span>Estação Maregráfica Oficial</span>
+                  <span class="font-mono text-[10px] bg-[#f8fafc] px-2 py-0.5 rounded border border-[#cbd5e1]">Imbetiba / Macaé e Rio das Ostras</span>
+                </div>
+                <p class="text-[10.5px] text-black font-medium leading-snug">
+                  As previsões de maré são calculadas astronomicamente pelo Centro de Hidrografia da Marinha (CHM/DHN) e refletem as cotas de variação do nível do mar em Rio das Ostras.
+                </p>
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-black pt-1 border-t border-[#dfb992]/20">
+                <span class="font-medium">Fonte: Marinha do Brasil (CHM / DHN)</span>
+                <a href="https://www.marinha.mil.br/chm/tabuas-de-mare" target="_blank" rel="noopener" class="text-black hover:underline font-bold bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
+                  Tábua Completa CHM ↗
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAINEL 3: BALNEABILIDADE OFICIAL DO INEA (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
+          <div id="orla-panel-balnear" class="space-y-3.5 hidden">
+            <div id="balnear-summary-content" class="space-y-3">
+              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
+                      <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
+                    </div>
+                    <div>
+                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider" id="balnear-boletim-titulo">Boletim nº 20 (INEA)</span>
+                      <strong class="text-sm font-black text-black block" id="balnear-status-geral-txt">8 de 11 Praias Próprias para Banho (73%)</strong>
+                    </div>
+                  </div>
+                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="balnear-data-badge">Favorável</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Praias Próprias</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black" id="balnear-proprias-count">8 Pontos</span>
+                    </div>
+                    <span class="text-[10.5px] text-black font-medium block">Tartarugas, Bosque, Centro, Costazul, Remanso, Joana, Mar do Norte e Areia Negra</span>
+                  </div>
+                  
+                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Pontos de Atenção</span>
+                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black" id="balnear-improprias-count">3 Pontos</span>
+                    </div>
+                    <span class="text-[10.5px] text-black font-medium block">Boca da Barra (foz do rio) e Lagoa de Iriri (baixa renovação hídrica)</span>
+                  </div>
+                </div>
+
+                <p class="text-[11px] text-black font-medium leading-relaxed bg-white/90 p-2.5 rounded-xl border border-[#cbd5e1]" id="balnear-obs-tecnica">
+                  <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas fortes e próximo à saída de canais de drenagem pluvial.
+                </p>
+              </div>
+
+              <!-- Botão Clicável de Destaque para abrir a lista completa da Balneabilidade -->
+              <button type="button" onclick="openModalPraias('balnear')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
+                <span class="flex items-center gap-2">
+                  <i data-lucide="clipboard-check" class="w-4 h-4 text-black"></i>
+                  <span>Ver Relatório Oficial dos 11 Pontos de Balneabilidade (INEA)</span>
+                </span>
+                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#6d8ba6]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
+              </button>
+
+          <!-- Rodapé de Advertências & Links Oficiais -->
+          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
+            <span id="orla-aviso-resumo" class="font-medium text-black">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                Avisos CHM ↗
+              </a>
+              <a href="https://seirhi.inea.rj.gov.br/publico" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                SEIRHI INEA ↗
+              </a>
+              <a href="https://www.instagram.com/rj_inea/" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                Instagram INEA ↗
+              </a>
+            </div>
+          </div>
+
+        </div>
+          </div> <!-- /#orla-panel-balnear -->
+        </div> <!-- /#card-condicoes-orla -->
+
+
+    <!-- Grid de 2 Colunas: Recomendações e Segurança Marítima -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-3 shadow-xs">
+        <div class="flex items-center gap-2.5 border-b border-[#cbd5e1] pb-3">
+          <div class="w-8 h-8 rounded-lg bg-[#ccfbf1] text-[#0f766e] flex items-center justify-center shrink-0">
+            <i data-lucide="life-buoy" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-black text-black">Segurança na Orla & Banhistas</h4>
+            <span class="text-[11px] font-normal text-black">Orientações aos Frequentadores das Praias</span>
+          </div>
+        </div>
+        <p class="text-xs text-black leading-relaxed">
+          Respeite sempre as bandeiras de sinalização fixadas pelos guarda-vidas. Em caso de maré alta ou ondas superiores a 1,5 metro, evite banho nas áreas de costão e canais de correntes de retorno (Costazul e Praiamar).
+        </p>
+      </div>
+
+      <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-3 shadow-xs">
+        <div class="flex items-center gap-2.5 border-b border-[#cbd5e1] pb-3">
+          <div class="w-8 h-8 rounded-lg bg-[#e0f2fe] text-[#0369a1] flex items-center justify-center shrink-0">
+            <i data-lucide="compass" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h4 class="text-sm font-black text-black">Apoio a Navegantes & Embarcações</h4>
+            <span class="text-[11px] font-normal text-black">Capitania dos Portos / CHM Rio de Janeiro</span>
+          </div>
+        </div>
+        <p class="text-xs text-black leading-relaxed">
+          Pequenas embarcações e praticantes de esportes náuticos devem consultar os avisos de mau tempo da Capitania dos Portos antes de se fazer ao mar, especialmente com ventos de quadrante Sudoeste/Sul.
+        </p>
+      </div>
+    </div>
+  </div> <!-- /#view-tab-orla -->
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 5: ALERTAS & SINÓTICO (AVISOS INMET/MARINHA & ATMOSFERA REGIONAL)   -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-alertas" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- Header da Aba Alertas -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
+          <i data-lucide="shield-alert" class="w-5 h-5 text-black"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
+              Alertas Meteorológicos Oficiais & Panorama Sinótico
+            </h2>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#fee2e2] text-[#991b1b] border border-[#dc2626]/40 uppercase tracking-wide">
+              Fontes Oficiais INMET & Marinha
+            </span>
+          </div>
+          <p class="text-xs font-semibold text-black mt-0.5">
+            Avisos meteorológicos vigentes, áreas sob atenção e análise técnica da Região dos Lagos
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de Alertas Oficiais Vigentes -->
+  <section id="section-alertas-oficiais" class="w-full">
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#e2e8f0]">
+      
+      <!-- Cabeçalho do Bloco de Alertas -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
+            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
+                Alertas Meteorológicos Oficiais Vigentes
+              </h2>
+              <span id="badge-total-alertas" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                3 Alertas Ativos
+              </span>
+            </div>
+            <p class="text-xs font-normal text-[#64748b] mt-0.5">
+              Monitoramento contínuo: Instituto Nacional de Meteorologia (INMET) & Marinha do Brasil (CHM)
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 self-start sm:self-center">
+          <span class="text-xs font-normal text-[#64748b] flex items-center gap-1">
+            <i data-lucide="info" class="w-3.5 h-3.5 text-[#64748b]"></i>
+            Área de Cobertura: Rio das Ostras & Litoral Norte
+          </span>
+
+        </div>
+      </div>
+
+      <!-- Grade dos Alertas Oficiais Ativos -->
+      <div id="container-alertas-principais" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+        
+        <!-- Card 1: INMET -->
+        <div class="alert-card-inmet-amarelo p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
+                  INMET
+                </span>
+                <span class="text-xs font-semibold font-mono text-black truncate">
+                  Aviso nº 56159
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">Rio das Ostras</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">Vigente Hoje</span>
+              </div>
+              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f97316]">
+                Alerta Amarelo • Perigo Potencial
+              </span>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-1 flex-wrap">
+              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">Tempestade & Convecção Diurna</h3>
+              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
+                23/10/2026 às 08:45 até 23/10/2026 às 23:59
+              </span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
+            <div><strong class="font-bold text-black">Riscos:</strong> Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h) e granizo.</div>
+            <div><strong class="font-bold text-black">Orientação de Segurança:</strong> Não se abrigue sob árvores nem estacione próximo a torres de transmissão.</div>
+          </div>
+        </div>
+
+        <!-- Card 2: Marinha - Vento Forte (Aviso nº 781/2026) -->
+        <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
+                  MARINHA
+                </span>
+                <span class="text-xs font-semibold font-mono text-black truncate">
+                  Aviso nº 781/2026
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">
+                  Área Delta
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#ffebe4] text-black border border-[#f97316]">
+                  VENTO FORTE
+                </span>
+              </div>
+              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1]">
+                CHM / SMM
+              </span>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-1 flex-wrap">
+              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">VENTO FORTE • Área Costeira (Macaé a Caravelas)</h3>
+              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
+                De 24/10 às 21:00h até 25/10 às 21:00h
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Rajadas / Vento</span>
+              <span class="text-xs font-bold font-mono text-black">62 a 74 km/h (Força 7/8)</span>
+            </div>
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Condição do Mar</span>
+              <span class="text-xs font-bold font-mono text-black">2,0 a 2,5 m (Agitado)</span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
+            <div><strong class="font-bold text-black">Restrição:</strong> Atenção a pescadores, navegantes e banhistas na orla costeira. Vento Força 7 com rajadas Força 8 (até 74 km/h).</div>
+          </div>
+        </div>
+
+        <!-- Card 3: Marinha - Mar Grosso (Aviso nº 778/2026) -->
+        <div class="alert-card-marinha p-3 sm:p-3.5 space-y-2 flex flex-col justify-between">
+          <div class="space-y-2">
+            <div class="flex items-center justify-between gap-1.5 border-b border-[#cbd5e1] pb-2 flex-wrap">
+              <div class="flex items-center gap-1 flex-wrap">
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-[#f1f5f9] text-black border border-[#cbd5e1] tracking-wide">
+                  MARINHA
+                </span>
+                <span class="text-xs font-semibold font-mono text-black truncate">
+                  Aviso nº 778/2026
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-[#eaf0f6] text-black border border-[#cbd5e1]">
+                  Área Delta
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-rose-50 text-rose-800 border border-rose-300">
+                  MAR GROSSO
+                </span>
+              </div>
+              <span class="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1]">
+                CHM / SMM
+              </span>
+            </div>
+
+            <div class="flex items-baseline justify-between gap-1 flex-wrap">
+              <h3 class="text-sm sm:text-base font-bold text-black font-heading leading-tight">MAR GROSSO • Área Oceânica Delta (Bacia de Campos)</h3>
+              <span class="text-[11px] font-medium text-black font-mono font-semibold whitespace-nowrap flex items-center gap-1 shrink-0">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-black"></i>
+                De 25/10 às 06:00h até 26/10 às 00:00h
+              </span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-center text-xs">
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Rajadas / Vento</span>
+              <span class="text-xs font-bold font-mono text-black">Até 45 km/h</span>
+            </div>
+            <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1]">
+              <span class="text-[10px] uppercase font-bold text-black block">Condição do Mar</span>
+              <span class="text-xs font-bold font-mono text-black">N/NW 3,0 a 3,5 m (Mar Grosso)</span>
+            </div>
+          </div>
+
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
+            <div><strong class="font-bold text-black">Restrição:</strong> Mar muito agitado com ondas de 3,0 a 3,5 m na bacia oceânica. Evite a navegação de pequenas e médias embarcações.</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+
+    <!-- Seção de Panorama Sinótico -->
+  <section id="section-panorama-sinotico" class="w-full">
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-sm">
+      
+      <!-- Cabeçalho do Panorama Sinótico -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#cbd5e1] pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs text-black">
+            <i data-lucide="compass" class="w-4 h-4 text-black"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-base sm:text-lg font-bold text-black tracking-tight font-heading">
+                Panorama Sinótico Geral
+              </h2>
+              <span id="badge-periodo-sinotico" class="badge-title-orange text-[11px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                23/10 a 25/10
+              </span>
+            </div>
+            <p class="text-xs font-semibold text-black mt-0.5">
+              Análise técnica da dinâmica atmosférica, bacia hidrográfica e evolução regional (Carta CHM 12Z & Modelos ECMWF/GFS)
+            </p>
+          </div>
+        </div>
+
+        <!-- Ações do Panorama: Recolher / Expandir -->
+        <div class="flex items-center gap-2 self-start sm:self-center">
+          <button id="btn-toggle-sinopse" class="p-1.5 rounded-full border border-[#cbd5e1] text-black hover:bg-[#f1f5f9] cursor-pointer transition shadow-2xs" title="Minimizar / Expandir Panorama">
+            <i data-lucide="chevron-up" id="icon-toggle-sinopse" class="w-4 h-4 text-black"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Conteúdo do Panorama Sinótico: Cartões Nórdicos Cerâmicos Estruturados -->
+      <div id="container-conteudo-sinopse">
+        <div id="sinopse-texto-completo" class="p-3 sm:p-4 rounded-2xl bg-[#f4f6f8] border border-[#cbd5e1] space-y-3 shadow-inner">
+          
+          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
+            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
+                <i data-lucide="cloud-sun" class="w-3.5 h-3.5 text-black"></i>
+                <span>Dinâmica Atmosférica & Temperatura</span>
+              </span>
+            </div>
+            <p class="leading-relaxed text-justify text-sm text-black font-normal">O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 23/10 (Sexta-feira) a 25/10 (Domingo) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 20°C ao amanhecer e máxima de 24°C na terça-feira (20/10), com acumulado pluviométrico diário previsto de 2.1 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quinta-feira (22/10).</p>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
+            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
+                <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
+                <span>Hidrografia, Rio Jundiá & Faixa Litorânea</span>
+              </span>
+            </div>
+            <p class="leading-relaxed text-justify text-sm text-black font-normal">No monitoramento hidrográfico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 2241036) registrou cota de 1.9 m (Status: VIGILÂNCIA), posicionando-se com margem de segurança de mais de 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. Nas últimas 24 horas, a rede telemétrica não registrou precipitação significativa (0,0 mm no Jundiá), permitindo o escoamento pleno das águas pluviais nos canais de drenagem dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil não registra avisos de mau tempo vigentes, apresentando mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 45 km/h associadas às células convectivas da tarde.</p>
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-2xl bg-white border border-[#cbd5e1] shadow-2xs space-y-2.5 transition hover:border-[#94a3b8]">
+            <div class="flex items-center gap-2 border-b border-[#e2e8f0] pb-2">
+              <span class="badge-title-orange text-[10.5px] font-bold uppercase px-2.5 py-0.5 rounded-full flex items-center gap-1.5 tracking-wider shadow-2xs">
+                <i data-lucide="calendar-clock" class="w-3.5 h-3.5 text-black"></i>
+                <span>Tendência dos Próximos Dias & PLANCON</span>
+              </span>
+            </div>
+            <p class="leading-relaxed text-justify text-sm text-black font-normal">Para os dias subsequentes, na quarta-feira (21/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (4.8 mm acumulados, sem avisos meteorológicos vigentes). Na quinta-feira (22/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (5.2 mm acumulados, sob Alerta Amarelo de Tempestade nº 56118 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados oficiais do INMET, INEA e Open-Meteo para a cidade de Rio das Ostras.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+
+  </div> <!-- /#view-tab-alertas -->
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 6: BOLETIM OPERACIONAL (PLANCON 12 TURNOS, EMERGÊNCIAS & DOWNLOADS) -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-boletim" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- Header da Aba Boletim -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
+          <i data-lucide="file-text" class="w-5 h-5 text-black"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
+              Boletim Operacional & Suporte de Emergência
+            </h2>
+            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#f1f5f9] text-[#334155] border border-[#cbd5e1] uppercase tracking-wide">
+              PLANCON Municipal • 12 Turnos
+            </span>
+          </div>
+          <p class="text-xs font-semibold text-black mt-0.5">
+            Precipitação por turnos operacionais de 2 horas, telefones úteis de pronta resposta e downloads oficiais
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid de 2 Colunas: Precipitação por Turnos PLANCON + Telefones Úteis -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8">
+        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
+          
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-xl bg-[#e0f2fe] border border-[#38bdf8] flex items-center justify-center text-black">
+                <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-black tracking-tight">
+                  Precipitação por Turno Operacional
+                </h3>
+                <p class="text-xs font-normal text-black">Distribuição estimada para os turnos do dia</p>
+              </div>
+            </div>
+
+            <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
+              Total 3D: 11.1 mm
+            </span>
+          </div>
+
+          <!-- Barrinhas de Chuva dos Turnos -->
+          <div id="chuva-turnos-bars" class="space-y-3 py-1">
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Madrugada</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.1 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 5%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Manhã</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.5 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 25%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Tarde</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">2.0 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 100%;"></div>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex justify-between items-center text-xs font-semibold">
+                <span class="text-black font-semibold">Noite</span>
+                <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">0.0 mm</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-[#f1f5f9] border border-[#cbd5e1]/60 overflow-hidden p-[1px]">
+                <div class="h-full rounded-full bg-gradient-to-r from-[#3b82f6] to-[#1d4ed8] transition-all duration-500" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Síntese Multi-Fonte de Precipitação Oficial -->
+          <div id="chuva-multifonte-box" class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] space-y-1.5 text-xs">
+            <div class="flex items-center justify-between text-[11px] font-bold text-black border-b border-[#cbd5e1]/60 pb-1">
+              <span class="flex items-center gap-1 text-black font-bold">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                Síntese Multi-Fonte de Precipitação
+              </span>
+              <span class="text-[9.5px] font-bold text-[#0369a1] bg-[#e0f2fe] px-1.5 py-0.5 rounded border border-[#bae6fd]">Sem Divergências</span>
+            </div>
+            <div class="space-y-1 text-[11px] text-black">
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">Modelos (Média Contínua):</span>
+                <span id="chuva-multifonte-media" class="font-mono font-bold text-black">8.3 mm hoje</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">INMET (Alerta Tempestade):</span>
+                <span id="chuva-multifonte-alerta" class="font-mono font-bold text-[#b45309]">Até 50 mm/dia (20 a 30 mm/h)</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-black/80 font-medium">Telemetria Prévia (24h):</span>
+                <span id="chuva-multifonte-observado" class="font-mono font-bold text-black">CEMADEN: 10.2 mm • INEA: 8.0 mm</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black flex-wrap gap-2">
+            <span class="font-medium text-black">Modelo: CPTEC/INPE & COSMO</span>
+            <button id="btn-ver-boletim-modal-1" class="text-black font-bold hover:underline cursor-pointer bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50 flex items-center gap-1">
+              Ver Tabela Completa dos 12 Turnos →
+            </button>
+          </div>
+
+        </div>
+
+      </aside>
+
+      </div>
+      <div class="lg:col-span-4">
+        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-4" id="card-telefones-uteis">
+          
+          <div class="flex items-center justify-between border-b border-[#dfb992]/20 pb-3 flex-wrap gap-2">
+            <div class="flex items-center gap-2.5">
+              <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
+                <i data-lucide="phone-call" class="w-4 h-4 text-black"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-black tracking-tight leading-tight">Central de Emergências</h3>
+                <span class="text-xs font-medium text-black">Atendimento 24 Horas Gratuito</span>
+              </div>
+            </div>
+            <span class="badge-title-orange text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+              Ligação Gratuita
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5 text-xs">
+            <!-- 1. Defesa Civil (Terracota Coral) -->
+            <a href="tel:199" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#ffebe4] to-[#ffdcd1] hover:brightness-95 border-2 border-[#f07a53] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Defesa Civil</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#f07a53]/40 text-black">Plantão</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">199</span>
+                <i data-lucide="shield-alert" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
+            </a>
+
+            <!-- 2. Bombeiros (Warm Amber Stoneware) -->
+            <a href="tel:193" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#fef3c7] to-[#fee685] hover:brightness-95 border-2 border-[#d97706] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Bombeiros</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#d97706]/40 text-black">Resgate</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">193</span>
+                <i data-lucide="flame" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
+            </a>
+
+            <!-- 3. SAMU (Nordic Slate Ice) -->
+            <a href="tel:192" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">SAMU</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#6d8ba6]/40 text-black">Médico</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">192</span>
+                <i data-lucide="ambulance" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
+            </a>
+
+            <!-- 4. Polícia Militar (Stoneware Sandstone) -->
+            <a href="tel:190" class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] hover:brightness-95 border-2 border-[#b8a99a] flex flex-col justify-between transition shadow-xs hover:scale-[1.02] group">
+              <div class="flex items-center justify-between">
+                <span class="text-black font-black text-xs uppercase tracking-wide">Polícia Militar</span>
+                <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-white/95 border border-[#b8a99a]/40 text-black">32º BPM</span>
+              </div>
+              <div class="flex items-baseline justify-between mt-2.5">
+                <span class="text-3xl font-mono font-black text-black group-hover:tracking-wider transition-all">190</span>
+                <i data-lucide="shield" class="w-5 h-5 text-black opacity-80"></i>
+              </div>
+            </a>
+          </div>
+
+          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
+            <span class="font-bold text-black flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#f07a53] live-pulse"></span>
+              Plantão de Emergência 24H
+            </span>
+            <button id="dock-btn-boletim" class="btn-coral-pill text-xs py-1.5 px-3 cursor-pointer font-bold shadow-xs flex items-center gap-1">
+              <span>Boletim Completo</span>
+              <span>→</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bloco Oficial de Downloads & Meteogramas -->
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] shadow-xs">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-base font-bold text-black">Downloads Oficiais & Meteogramas</h3>
+          <p class="text-xs text-black">Baixe os boletins em PDF gerados diariamente ou consulte os gráficos de alta resolução.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="btn-ver-boletim-modal-boletim" onclick="document.getElementById('modal-boletim-tecnico')?.classList.remove('hidden')" class="px-4 py-2 bg-[#f8fafc] hover:bg-[#e2e8f0] border border-[#cbd5e1] rounded-xl text-xs font-bold text-black transition flex items-center gap-2 cursor-pointer shadow-xs">
+            <i data-lucide="file-text" class="w-4 h-4 text-black"></i>
+            <span>Ver Boletim Técnico</span>
+          </button>
+          <button id="btn-open-meteogramas-boletim" onclick="document.getElementById('modal-meteogramas')?.classList.remove('hidden')" class="px-4 py-2 bg-[#ffebe4] hover:bg-[#fed7cc] border border-[#f07a53] rounded-xl text-xs font-bold text-black transition flex items-center gap-2 cursor-pointer shadow-xs">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-black"></i>
+            <span>Meteogramas INMET / CPTEC</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /#view-tab-boletim -->
+
   <footer class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-6 border-t-2 border-[#cbd5e1] mt-10 text-xs text-black">
     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
       
@@ -2036,6 +2327,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=103"></script>
+  <script type="module" src="js/app.js?v=104"></script>
 </body>
 </html>
