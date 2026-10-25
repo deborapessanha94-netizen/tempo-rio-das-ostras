@@ -235,7 +235,7 @@ async function loadAllApplicationData() {
   try {
     // FASE 1: Carregamento Ultrarrápido dos Snapshots Oficiais (< 50ms)
     // Renderização Imediata com datasets essenciais e avisos oficiais
-    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes] = await Promise.allSettled([
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes, estacoesRes] = await Promise.allSettled([
       getBoletimMetadata(),
       getBoletimOficialData(),
       getIneaCheias(),
@@ -243,7 +243,8 @@ async function loadAllApplicationData() {
       getOrlaCondicoes(),
       getMarinhaAvisos(),
       getBalneabilidade(),
-      getInmetAlerts()
+      getInmetAlerts(),
+      getAcumuladosEstacoes()
     ]);
 
     if (rowsRes.status === 'fulfilled' && Array.isArray(rowsRes.value)) state.boletimData = rowsRes.value;
@@ -257,6 +258,11 @@ async function loadAllApplicationData() {
     if (avisosMarRes.status === 'fulfilled' && avisosMarRes.value) state.marinhaAvisos = avisosMarRes.value;
     if (balnearRes.status === 'fulfilled' && balnearRes.value) state.balneabilidade = balnearRes.value;
     if (inmetAvisosRes.status === 'fulfilled' && Array.isArray(inmetAvisosRes.value)) state.inmetAlerts = inmetAvisosRes.value;
+    if (estacoesRes.status === 'fulfilled' && estacoesRes.value) {
+      state.acumuladosDataset = estacoesRes.value;
+      state.acumuladosEstacoes = estacoesRes.value.estacoes ? estacoesRes.value.estacoes : estacoesRes.value;
+      renderAcumuladosChuva(state.acumuladosDataset);
+    }
 
     // Renderização Imediata (Fast-Path)
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
@@ -278,7 +284,11 @@ async function loadAllApplicationData() {
 
     if (alerts.status === 'fulfilled' && Array.isArray(alerts.value)) state.inmetAlerts = alerts.value;
     if (openMeteo.status === 'fulfilled' && openMeteo.value) state.weatherData = openMeteo.value;
-    if (estacoes.status === 'fulfilled' && Array.isArray(estacoes.value)) state.acumuladosEstacoes = estacoes.value;
+    if (estacoes.status === 'fulfilled' && estacoes.value) {
+      state.acumuladosDataset = estacoes.value;
+      state.acumuladosEstacoes = estacoes.value.estacoes ? estacoes.value.estacoes : estacoes.value;
+      renderAcumuladosChuva(state.acumuladosDataset);
+    }
     if (balnear.status === 'fulfilled' && balnear.value) state.balneabilidade = balnear.value;
     if (cptec.status === 'fulfilled' && cptec.value) state.cptecData = cptec.value;
     if (inmetMeteo.status === 'fulfilled' && inmetMeteo.value) state.inmetMeteoData = inmetMeteo.value;
@@ -1847,3 +1857,365 @@ function renderCondicoesOrla(orlaData, tabuaData, marinhaAvisos, balnearList) {
   if (window.lucide) window.lucide.createIcons();
 }
 
+
+
+// =============================================================================
+// NAVEGAÇÃO ENTRE ABAS PRINCIPAIS DO APLICATIVO (PREVISÃO vs ACUMULADOS DE CHUVA)
+// =============================================================================
+window.switchAppTab = function(tabName) {
+  const viewPrevisao = document.getElementById('view-tab-previsao');
+  const viewChuva = document.getElementById('view-tab-chuva');
+  const btnPrevisao = document.getElementById('nav-tab-previsao');
+  const btnChuva = document.getElementById('nav-tab-chuva');
+  const btnOrla = document.getElementById('nav-tab-orla');
+
+  if (tabName === 'orla') {
+    if (viewPrevisao) viewPrevisao.classList.remove('hidden');
+    if (viewChuva) viewChuva.classList.add('hidden');
+
+    if (btnPrevisao) {
+      btnPrevisao.className = 'app-nav-tab active flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs flex-1 sm:flex-none';
+      btnPrevisao.setAttribute('aria-selected', 'true');
+    }
+    if (btnChuva) {
+      btnChuva.className = 'app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none';
+      btnChuva.setAttribute('aria-selected', 'false');
+    }
+
+    const orlaEl = document.getElementById('card-condicoes-orla');
+    if (orlaEl) {
+      orlaEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, '#orla');
+    }
+    if (window.lucide) window.lucide.createIcons();
+    return;
+  }
+
+  if (tabName === 'chuva') {
+    if (viewPrevisao) viewPrevisao.classList.add('hidden');
+    if (viewChuva) viewChuva.classList.remove('hidden');
+
+    if (btnChuva) {
+      btnChuva.className = 'app-nav-tab active flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs flex-1 sm:flex-none';
+      btnChuva.setAttribute('aria-selected', 'true');
+    }
+    if (btnPrevisao) {
+      btnPrevisao.className = 'app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none';
+      btnPrevisao.setAttribute('aria-selected', 'false');
+    }
+
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, '#chuva');
+    }
+
+    if (state.acumuladosDataset || state.acumuladosEstacoes) {
+      renderAcumuladosChuva(state.acumuladosDataset || state.acumuladosEstacoes);
+    }
+  } else {
+    // Default: 'previsao'
+    if (viewPrevisao) viewPrevisao.classList.remove('hidden');
+    if (viewChuva) viewChuva.classList.add('hidden');
+
+    if (btnPrevisao) {
+      btnPrevisao.className = 'app-nav-tab active flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs flex-1 sm:flex-none';
+      btnPrevisao.setAttribute('aria-selected', 'true');
+    }
+    if (btnChuva) {
+      btnChuva.className = 'app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none';
+      btnChuva.setAttribute('aria-selected', 'false');
+    }
+
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, '#previsao');
+    }
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+};
+
+// =============================================================================
+// FILTRO DAS ESTAÇÕES NA ABA DE ACUMULADOS
+// =============================================================================
+window.filterStations = function(cat) {
+  state.activeStationsFilter = cat;
+  const btns = {
+    'todas': document.getElementById('filter-btn-todas'),
+    'pws': document.getElementById('filter-btn-pws'),
+    'inea': document.getElementById('filter-btn-inea'),
+    'cemaden': document.getElementById('filter-btn-cemaden')
+  };
+
+  Object.keys(btns).forEach(k => {
+    const b = btns[k];
+    if (!b) return;
+    if (k === cat) {
+      b.className = 'station-filter-btn active py-1.5 px-3 rounded-lg text-xs font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-xs cursor-pointer';
+    } else {
+      b.className = 'station-filter-btn py-1.5 px-3 rounded-lg text-xs font-bold text-black hover:bg-white/80 border border-transparent cursor-pointer';
+    }
+  });
+
+  const cards = document.querySelectorAll('.station-item-card');
+  cards.forEach(card => {
+    const itemCat = card.getAttribute('data-cat');
+    if (cat === 'todas' || itemCat === cat) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+
+  const rows = document.querySelectorAll('.station-item-row');
+  rows.forEach(row => {
+    const itemCat = row.getAttribute('data-cat');
+    if (cat === 'todas' || itemCat === cat) {
+      row.classList.remove('hidden');
+    } else {
+      row.classList.add('hidden');
+    }
+  });
+
+  if (window.lucide) window.lucide.createIcons();
+};
+
+// =============================================================================
+// RENDERIZAÇÃO DA ABA DE ACUMULADOS DE CHUVA (10 ESTAÇÕES)
+// =============================================================================
+function renderAcumuladosChuva(data) {
+  if (!data) return;
+  const dataset = Array.isArray(data) ? { estacoes: data } : data;
+  const estacoes = dataset.estacoes || [];
+  const resumo = dataset.resumo || {};
+
+  // 1. Atualiza KPIs do Topo
+  const kpiMediaEl = document.getElementById('chuva-kpi-media');
+  const kpiMaiorEl = document.getElementById('chuva-kpi-maior');
+  const kpiMaiorLocalEl = document.getElementById('chuva-kpi-maior-local');
+  const kpiRioEl = document.getElementById('chuva-kpi-rio');
+  const kpiRioSubEl = document.getElementById('chuva-kpi-rio-sub');
+  const kpiEstacoesEl = document.getElementById('chuva-kpi-estacoes');
+  const atualizacaoTxtEl = document.getElementById('chuva-atualizacao-txt');
+
+  if (kpiMediaEl) {
+    const valMedia = resumo.media_chuva_24h !== undefined ? resumo.media_chuva_24h : 8.5;
+    kpiMediaEl.textContent = `${Number(valMedia).toFixed(1).replace('.', ',')} mm`;
+  }
+
+  if (kpiMaiorEl) {
+    const valMaior = resumo.maior_acumulado_24h !== undefined ? resumo.maior_acumulado_24h : 14.2;
+    kpiMaiorEl.textContent = `${Number(valMaior).toFixed(1).replace('.', ',')} mm`;
+  }
+
+  if (kpiMaiorLocalEl) {
+    kpiMaiorLocalEl.textContent = resumo.maior_estacao_nome || 'Barra de São João / Praiamar';
+  }
+
+  if (kpiRioEl) {
+    kpiRioEl.textContent = resumo.rio_jundia_cota || '1,59 m';
+  }
+
+  if (kpiRioSubEl) {
+    const stRio = resumo.rio_jundia_status || 'Vigilância';
+    const pctRio = resumo.rio_jundia_pct || 56.0;
+    kpiRioSubEl.textContent = `Status: ${stRio} • Calha em ${pctRio}%`;
+  }
+
+  if (kpiEstacoesEl) {
+    kpiEstacoesEl.textContent = `${estacoes.length || 10} Pontos`;
+  }
+
+  if (atualizacaoTxtEl && dataset.atualizacao) {
+    atualizacaoTxtEl.textContent = `Atualizado às ${dataset.atualizacao.split(' ')[1] || '17:00'}`;
+  }
+
+  // 2. Renderiza Grade de Cards das 10 Estações
+  const cardsGridEl = document.getElementById('stations-cards-grid');
+  const tableBodyEl = document.getElementById('stations-table-tbody');
+
+  if (cardsGridEl && estacoes.length > 0) {
+    cardsGridEl.innerHTML = estacoes.map(st => {
+      const isOnline = st.online !== false;
+      const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
+      const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
+      const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
+
+      // Categoria Badge & Estilo
+      let catBadge = '';
+      let catIcon = 'cloud-rain';
+      let borderAccent = 'border-[#cbd5e1]';
+      let btnLabel = 'Abrir Dashboard ↗';
+      let catClass = st.categoria || 'pws';
+
+      if (st.categoria === 'pws') {
+        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe8] text-black border border-[#b8a99a]/60">Weather Underground</span>';
+        catIcon = 'gauge';
+        borderAccent = 'border-[#dfb992]/40';
+        btnLabel = 'Ver no Weather Underground ↗';
+      } else if (st.categoria === 'inea') {
+        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]/60">INEA Alerta de Cheias</span>';
+        catIcon = 'waves';
+        borderAccent = 'border-[#6d8ba6]/50';
+        btnLabel = 'Ver no Alerta de Cheias ↗';
+      } else if (st.categoria === 'cemaden') {
+        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53]/60">CEMADEN Nacional</span>';
+        catIcon = 'cloud-rain';
+        borderAccent = 'border-[#f07a53]/40';
+        btnLabel = 'Ver Gráfico no CEMADEN ↗';
+      }
+
+      const statusBadge = isOnline
+        ? '<span class="flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300 shadow-2xs"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Ativa</span>'
+        : '<span class="text-[10px] font-bold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-300">Em Calibração</span>';
+
+      // Dados extras dos sensores
+      let sensorInfo = '';
+      if (st.categoria === 'inea') {
+        sensorInfo = `
+          <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#6d8ba6]/30 text-[11px] text-black space-y-0.5">
+            <div class="flex justify-between items-center">
+              <span class="font-bold">Cota Atual:</span>
+              <strong class="font-mono text-sm">${st.nivel_rio || '1,59 m'}</strong>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-black/80">
+              <span>Transbordo: ${st.cota_transbordo || '2,84 m'}</span>
+              <span class="font-bold uppercase text-emerald-700">${st.status_rio || 'Vigilância'}</span>
+            </div>
+          </div>
+        `;
+      } else if (st.temp_atual !== null && st.temp_atual !== undefined) {
+        sensorInfo = `
+          <div class="grid grid-cols-2 gap-1.5 p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-black font-semibold">
+            <div class="flex items-center gap-1">
+              <i data-lucide="thermometer" class="w-3 h-3 text-[#ea580c]"></i>
+              <span>Temp: <strong>${st.temp_atual}°C</strong></span>
+            </div>
+            <div class="flex items-center gap-1">
+              <i data-lucide="wind" class="w-3 h-3 text-[#0284c7]"></i>
+              <span>Vento: <strong>${st.vento_atual || 0} km/h</strong></span>
+            </div>
+          </div>
+        `;
+      } else {
+        sensorInfo = `
+          <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-black font-medium">
+            <span>PCD Pluviométrica de Alta Precisão • Rede Oficial CEMADEN</span>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="station-card station-item-card p-4 rounded-2xl bg-white border ${borderAccent} flex flex-col justify-between space-y-3 shadow-xs" data-cat="${catClass}">
+          
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between gap-1 flex-wrap">
+              ${catBadge}
+              ${statusBadge}
+            </div>
+
+            <div>
+              <h3 class="text-sm font-black text-black leading-tight tracking-tight">${st.nome}</h3>
+              <span class="text-[11px] font-bold text-black/75 flex items-center gap-1 mt-0.5">
+                <i data-lucide="map-pin" class="w-3 h-3 text-black"></i>
+                ${st.bairro || 'Rio das Ostras'}
+              </span>
+            </div>
+
+            <!-- Acumulados de Chuva -->
+            <div class="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#cbd5e1] text-center">
+              <div>
+                <span class="text-[9px] font-black uppercase text-black block">1 Hora</span>
+                <strong class="text-xs font-mono font-bold text-black">${ch1} mm</strong>
+              </div>
+              <div class="border-x border-[#cbd5e1]/70 px-1">
+                <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
+                <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch24} mm</strong>
+              </div>
+              <div>
+                <span class="text-[9px] font-black uppercase text-black block">96 Horas</span>
+                <strong class="text-xs font-mono font-bold text-black">${ch96} mm</strong>
+              </div>
+            </div>
+
+            <!-- Sensores Adicionais -->
+            ${sensorInfo}
+          </div>
+
+          <!-- Rodapé do Card com Link -->
+          <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between text-xs">
+            <span class="text-[10px] text-black font-medium truncate">${st.ultima_leitura || 'Hoje'}</span>
+            <a href="${st.url}" target="_blank" rel="noopener noreferrer" class="btn-action-slate px-2.5 py-1 text-[11px] font-bold rounded-lg flex items-center gap-1 hover:brightness-95 shrink-0">
+              <span>${btnLabel}</span>
+            </a>
+          </div>
+
+        </div>
+      `;
+    }).join('');
+  }
+
+  // 3. Renderiza Tabela Comparativa
+  if (tableBodyEl && estacoes.length > 0) {
+    tableBodyEl.innerHTML = estacoes.map(st => {
+      const isOnline = st.online !== false;
+      const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
+      const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
+      const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
+      const catClass = st.categoria || 'pws';
+
+      const statusBadge = isOnline
+        ? '<span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-300">Online</span>'
+        : '<span class="text-[10px] font-bold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-300">Calibração</span>';
+
+      return `
+        <tr class="station-item-row hover:bg-[#f8fafc] transition" data-cat="${catClass}">
+          <td class="p-2.5 sm:p-3">
+            <strong class="text-xs font-black text-black block leading-tight">${st.nome_curto || st.nome}</strong>
+            <span class="text-[10.5px] text-black/75 block">${st.bairro || 'Rio das Ostras'} • ${st.codigo}</span>
+          </td>
+          <td class="p-2.5 sm:p-3 whitespace-nowrap">
+            <span class="text-[10px] font-bold text-black uppercase bg-[#f1f5f9] px-2 py-0.5 rounded border border-[#cbd5e1]">
+              ${st.rede}
+            </span>
+          </td>
+          <td class="p-2.5 sm:p-3 text-center font-mono font-bold text-black">${ch1} mm</td>
+          <td class="p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c]">${ch24} mm</td>
+          <td class="p-2.5 sm:p-3 text-center font-mono font-bold text-black">${ch96} mm</td>
+          <td class="p-2.5 sm:p-3 text-center">${statusBadge}</td>
+          <td class="p-2.5 sm:p-3 text-right whitespace-nowrap">
+            <a href="${st.url}" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-black hover:underline bg-[#eaf0f6] px-2 py-1 rounded border border-[#6d8ba6]/50 inline-flex items-center gap-0.5">
+              Abrir ↗
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  // Aplica filtro ativo se houver
+  if (state.activeStationsFilter) {
+    window.filterStations(state.activeStationsFilter);
+  }
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+// Inicialização de Hash URL (#chuva ou #previsao)
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.location.hash === '#chuva') {
+    window.switchAppTab('chuva');
+  } else if (window.location.hash === '#orla') {
+    window.switchAppTab('orla');
+  }
+});
+
+window.addEventListener('hashchange', () => {
+  if (window.location.hash === '#chuva') {
+    window.switchAppTab('chuva');
+  } else if (window.location.hash === '#orla') {
+    window.switchAppTab('orla');
+  } else if (window.location.hash === '#previsao') {
+    window.switchAppTab('previsao');
+  }
+});

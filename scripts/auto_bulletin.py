@@ -644,7 +644,8 @@ def run_auto_bulletin_pipeline():
     if estacoes_path.exists():
         try:
             with open(estacoes_path, 'r', encoding='utf-8') as f:
-                estacoes_obs = json.load(f)
+                raw_st = json.load(f)
+                estacoes_obs = raw_st.get('estacoes', raw_st) if isinstance(raw_st, dict) else raw_st
         except Exception as e:
             print(f"[ESTACOES] Erro ao ler acumulados_estacoes.json: {e}")
 

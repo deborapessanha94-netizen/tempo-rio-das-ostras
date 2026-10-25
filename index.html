@@ -98,7 +98,7 @@
         <a href="tel:199" class="btn-emergency flex items-center gap-1.5 text-xs font-extrabold whitespace-nowrap" title="Ligue 199 para a Defesa Civil">
           <i data-lucide="phone-call" class="w-3.5 h-3.5 text-black"></i>
           <span class="font-extrabold text-black">199</span>
-          <span class="hidden lg:inline text-xs font-bold text-black whitespace-nowrap">• Defesa Civil</span>
+          <span class="hidden lg:inline text-xs font-bold text-black whitespace-nowrap">• Central 199</span>
         </a>
 
         <!-- Download Boletim Técnico PDF (Slate Ice Cerâmico) -->
@@ -123,6 +123,39 @@
 
     </div>
   </header>
+
+  <!-- ========================================================================= -->
+  <!-- BARRA DE NAVEGAÇÃO PRINCIPAL DO APLICATIVO (ABAS NÓRDICAS CERÂMICAS)      -->
+  <!-- ========================================================================= -->
+  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-4 sm:px-6 pt-3 pb-1">
+    <div class="flex items-center gap-1.5 sm:gap-2 p-1.5 bg-[#f5efe8]/90 rounded-2xl border border-[#b8a99a]/50 shadow-xs" role="tablist">
+      
+      <!-- Aba 1: Previsão & Tempo Geral -->
+      <button id="nav-tab-previsao" onclick="switchAppTab('previsao')" class="app-nav-tab active flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs flex-1 sm:flex-none" role="tab" aria-selected="true">
+        <i data-lucide="cloud-sun" class="w-4 h-4 text-black"></i>
+        <span>Previsão & Tempo</span>
+      </button>
+
+      <!-- Aba 2: Acumulados de Chuva (10 Estações) -->
+      <button id="nav-tab-chuva" onclick="switchAppTab('chuva')" class="app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none" role="tab" aria-selected="false">
+        <i data-lucide="cloud-rain" class="w-4 h-4 text-black"></i>
+        <span>Acumulados de Chuva</span>
+        <span id="nav-badge-chuva-count" class="text-[10px] px-2 py-0.5 rounded-full font-black bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black">10 Estações</span>
+      </button>
+
+      <!-- Aba 3: Orla & Praias (Atalho) -->
+      <button id="nav-tab-orla" onclick="switchAppTab('orla')" class="app-nav-tab flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer flex-1 sm:flex-none hidden sm:flex" role="tab" aria-selected="false">
+        <i data-lucide="anchor" class="w-4 h-4 text-black"></i>
+        <span>Orla & Balneabilidade</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 1: PREVISÃO & TEMPO (DASHBOARD GERAL COMPLETO)                       -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-previsao" class="app-tab-view space-y-0">
 
   <!-- ========================================================================= -->
   <!-- SEÇÃO DE ALERTAS OFICIAIS VIGENTES (INMET & MARINHA DO BRASIL)             -->
@@ -193,7 +226,7 @@
 
           <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs text-black leading-snug space-y-1 mt-1">
             <div><strong class="font-bold text-black">Riscos:</strong> Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h) e granizo.</div>
-            <div><strong class="font-bold text-black">Defesa Civil 199:</strong> Não se abrigue sob árvores. Em emergência ligue 199.</div>
+            <div><strong class="font-bold text-black">Orientação de Segurança:</strong> Não se abrigue sob árvores nem estacione próximo a torres de transmissão.</div>
           </div>
         </div>
 
@@ -1197,7 +1230,7 @@
           <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-xs text-black">
             <span class="font-bold text-black flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-[#f07a53] live-pulse"></span>
-              Plantão Defesa Civil 24H
+              Plantão de Emergência 24H
             </span>
             <button id="dock-btn-boletim" class="btn-coral-pill text-xs py-1.5 px-3 cursor-pointer font-bold shadow-xs flex items-center gap-1">
               <span>Boletim Completo</span>
@@ -1307,6 +1340,230 @@
     </div>
 
   </main>
+
+    </div> <!-- /#view-tab-previsao -->
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 2: ACUMULADOS DE CHUVA (10 ESTAÇÕES: WU, INEA, CEMADEN)             -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-chuva" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
+    
+    <!-- CARD 1: RESUMO EXECUTIVO DA REDE PLUVIOMÉTRICA & HIDROLÓGICA MUNICIPAL -->
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
+      
+      <!-- Cabeçalho do Card -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/20 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
+            <i data-lucide="cloud-rain" class="w-5 h-5 text-black"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h2 class="text-base sm:text-lg font-black text-black tracking-tight font-heading">
+                Rede Pluviométrica & Hidrológica Municipal
+              </h2>
+              <span class="badge-title-orange text-[10.5px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                10 Estações Ativas
+              </span>
+            </div>
+            <p class="text-xs text-black font-medium mt-0.5">
+              Monitoramento contínuo: Weather Underground (PWS), INEA Alerta de Cheias & CEMADEN Nacional
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 self-start sm:self-center">
+          <span class="text-xs font-bold text-black bg-[#f1f5f9] px-3 py-1 rounded-full border border-[#cbd5e1] flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 live-pulse"></span>
+            <span id="chuva-atualizacao-txt">Sincronizado em tempo real</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Grade dos 4 KPIs da Chuva -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
+        
+        <!-- KPI 1: Média Municipal 24h -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-1 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase tracking-wider text-black">Média Municipal (24h)</span>
+            <i data-lucide="droplets" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+          </div>
+          <span id="chuva-kpi-media" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">8.5 mm</span>
+          <span class="text-[10.5px] font-semibold text-black block">Média ponderada nos bairros</span>
+        </div>
+
+        <!-- KPI 2: Maior Acumulado 24h -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#fff7ed] to-[#ffedd5] border border-[#f97316]/40 space-y-1 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase tracking-wider text-black">Maior Acumulado (24h)</span>
+            <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+          </div>
+          <span id="chuva-kpi-maior" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">14.2 mm</span>
+          <span id="chuva-kpi-maior-local" class="text-[10.5px] font-bold text-black block truncate">Barra de São João / Praiamar</span>
+        </div>
+
+        <!-- KPI 3: Cota do Rio Jundiá -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] border border-[#22c55e]/40 space-y-1 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase tracking-wider text-black">Cota do Rio Jundiá</span>
+            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#16a34a]"></i>
+          </div>
+          <span id="chuva-kpi-rio" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">1.59 m</span>
+          <span id="chuva-kpi-rio-sub" class="text-[10.5px] font-bold text-black block">Status: Vigilância • Calha em 56%</span>
+        </div>
+
+        <!-- KPI 4: Rede Monitorada -->
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] border border-[#b8a99a]/50 space-y-1 shadow-2xs">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase tracking-wider text-black">Pontos Monitorados</span>
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
+          </div>
+          <span id="chuva-kpi-estacoes" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">10 Pontos</span>
+          <span class="text-[10.5px] font-bold text-black block">6 WU • 1 INEA • 3 CEMADEN</span>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- CARD 2: PORTAIS OFICIAIS & MAPAS INTERATIVOS DE REFERÊNCIA -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+      
+      <!-- Portal 1: CEMADEN Mapa Interativo Geral -->
+      <a href="https://mapainterativo.cemaden.gov.br/" target="_blank" rel="noopener noreferrer" class="station-card p-4 rounded-2xl bg-white border border-[#94a3b8] flex flex-col justify-between space-y-3 group hover:border-[#f07a53]">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]/50">
+              Nacional / CEMADEN
+            </span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 text-black group-hover:text-[#f07a53] transition"></i>
+          </div>
+          <h3 class="text-sm font-black text-black group-hover:text-[#ea580c] transition">CEMADEN — Mapa Interativo Geral</h3>
+          <p class="text-xs text-black font-normal leading-relaxed">
+            Plataforma geoespacial interativa com visualização dos radares, satélites e todas as PCDs pluviométricas do país.
+          </p>
+        </div>
+        <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between text-xs font-bold text-black">
+          <span>Abrir Mapa Interativo</span>
+          <span>↗</span>
+        </div>
+      </a>
+
+      <!-- Portal 2: INEA Portal Alerta de Cheias -->
+      <a href="https://alertadecheias.com.br" target="_blank" rel="noopener noreferrer" class="station-card p-4 rounded-2xl bg-white border border-[#94a3b8] flex flex-col justify-between space-y-3 group hover:border-[#f07a53]">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53]/50">
+              Estadual / INEA
+            </span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 text-black group-hover:text-[#f07a53] transition"></i>
+          </div>
+          <h3 class="text-sm font-black text-black group-hover:text-[#ea580c] transition">INEA — Portal Alerta de Cheias RJ</h3>
+          <p class="text-xs text-black font-normal leading-relaxed">
+            Portal oficial da Sala de Situação do INEA com cotas dos rios em tempo real e monitoramento das bacias hidrográficas.
+          </p>
+        </div>
+        <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between text-xs font-bold text-black">
+          <span>Acessar Portal INEA</span>
+          <span>↗</span>
+        </div>
+      </a>
+
+      <!-- Portal 3: Telemetria Completa da Estação 2241036 -->
+      <a href="https://alertadecheias.com.br/stations/2241036/full" target="_blank" rel="noopener noreferrer" class="station-card p-4 rounded-2xl bg-white border border-[#94a3b8] flex flex-col justify-between space-y-3 group hover:border-[#f07a53]">
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#fef3c7] text-black border border-[#d97706]/50">
+              Bacia RH-VIII
+            </span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 text-black group-hover:text-[#f07a53] transition"></i>
+          </div>
+          <h3 class="text-sm font-black text-black group-hover:text-[#ea580c] transition">Rio Jundiá — Estação 2241036 (Full)</h3>
+          <p class="text-xs text-black font-normal leading-relaxed">
+            Página de telemetria fluviométrica e pluviométrica contínua da estação telemétrica da sede municipal de Rio das Ostras.
+          </p>
+        </div>
+        <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between text-xs font-bold text-black">
+          <span>Ver Dados Completos</span>
+          <span>↗</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- CARD 3: LISTA & FILTRO DAS 10 ESTAÇÕES PLUVIOMÉTRICAS -->
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
+      
+      <!-- Topo dos Filtros -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#dfb992]/20 pb-4">
+        <div>
+          <h3 class="text-base font-black text-black tracking-tight leading-tight">
+            Estações da Rede Municipal & Entorno
+          </h3>
+          <span class="text-xs text-black font-medium">Selecione uma categoria para filtrar as estações</span>
+        </div>
+
+        <!-- Seletor de Categoria com Pills Nórdicas -->
+        <div class="flex items-center gap-1.5 p-1 bg-[#f5efe8]/90 rounded-xl border border-[#b8a99a]/50 overflow-x-auto scrollbar-none" role="tablist">
+          <button id="filter-btn-todas" onclick="filterStations('todas')" class="station-filter-btn active py-1.5 px-3 rounded-lg text-xs font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-xs cursor-pointer">
+            Todas (10)
+          </button>
+          <button id="filter-btn-pws" onclick="filterStations('pws')" class="station-filter-btn py-1.5 px-3 rounded-lg text-xs font-bold text-black hover:bg-white/80 border border-transparent cursor-pointer">
+            Weather Underground (6)
+          </button>
+          <button id="filter-btn-inea" onclick="filterStations('inea')" class="station-filter-btn py-1.5 px-3 rounded-lg text-xs font-bold text-black hover:bg-white/80 border border-transparent cursor-pointer">
+            INEA Cheias (1)
+          </button>
+          <button id="filter-btn-cemaden" onclick="filterStations('cemaden')" class="station-filter-btn py-1.5 px-3 rounded-lg text-xs font-bold text-black hover:bg-white/80 border border-transparent cursor-pointer">
+            CEMADEN PCDs (3)
+          </button>
+        </div>
+      </div>
+
+      <!-- Grade dos Cards das Estações (Renderizados Dinamicamente via JS com Fallback Completo) -->
+      <div id="stations-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Preenchido via app.js -->
+      </div>
+
+      <!-- Tabela Comparativa Completa dos Acumulados -->
+      <div class="pt-4 border-t border-[#cbd5e1] space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i data-lucide="table" class="w-4 h-4 text-black"></i>
+            <h4 class="text-xs sm:text-sm font-black text-black uppercase tracking-wider">
+              Tabela Comparativa de Acumulados
+            </h4>
+          </div>
+          <span class="text-[11px] font-bold text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1]">
+            Acumulados em mm
+          </span>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl border border-[#cbd5e1] bg-white">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-[#f8fafc] text-black font-black uppercase text-[10.5px] border-b border-[#cbd5e1]">
+              <tr>
+                <th class="p-2.5 sm:p-3">Estação & Local</th>
+                <th class="p-2.5 sm:p-3">Rede</th>
+                <th class="p-2.5 sm:p-3 text-center">Chuva 1h</th>
+                <th class="p-2.5 sm:p-3 text-center">Chuva 24h</th>
+                <th class="p-2.5 sm:p-3 text-center">Chuva 96h</th>
+                <th class="p-2.5 sm:p-3 text-center">Status</th>
+                <th class="p-2.5 sm:p-3 text-right">Dashboard</th>
+              </tr>
+            </thead>
+            <tbody id="stations-table-tbody" class="divide-y divide-[#e2e8f0] text-black font-medium">
+              <!-- Preenchido via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div> <!-- /#view-tab-chuva -->
+
 
   <!-- ========================================================================= -->
   <!-- RODAPÉ INSTITUCIONAL NÓRDICO CERÂMICO                                     -->
@@ -1497,7 +1754,7 @@
 
       <!-- Rodapé do Modal -->
       <div class="px-5 py-3 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between text-xs font-medium text-[#64748b]">
-        <span>Subsecretaria de Defesa Civil • Plantão 199</span>
+        <span>Boletim Meteorológico • @tempoemriodasostras</span>
         <button id="btn-close-modal-boletim-foot" class="px-4 py-1.5 rounded-full font-semibold btn-action-outline cursor-pointer">
           Fechar
         </button>
@@ -1621,6 +1878,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=99"></script>
+  <script type="module" src="js/app.js?v=100"></script>
 </body>
 </html>

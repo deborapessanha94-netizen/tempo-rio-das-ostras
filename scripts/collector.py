@@ -79,7 +79,16 @@ def format_date_br(d_str, h_str=None):
 # 1. ACUMULADOS DAS ESTAÇÕES (1, 4, 12, 24, 36, 48, 96 HORAS)
 # ==============================================================================
 def collect_all_stations():
-    print(">> [1/7] Coletando rede de estações meteorológicas e pluviométricas...")
+    print(">> [1/7] Coletando rede de estações meteorológicas e pluviométricas (10 estações)...")
+    try:
+        try:
+            from scripts.stations_service import collect_stations_network
+        except ImportError:
+            from stations_service import collect_stations_network
+        ds = collect_stations_network()
+        return ds.get("estacoes", [])
+    except Exception as e:
+        print(f"   [AVISO] Erro em stations_service: {e}")
     stations_data = []
 
     # 1.1 Estações Weather Underground PWS
