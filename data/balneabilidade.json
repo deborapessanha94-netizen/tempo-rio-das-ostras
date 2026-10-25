@@ -15,9 +15,7 @@
       "localizacao": "Em frente à Rua Jequitibá",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "13/01/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Bosque",
@@ -26,9 +24,7 @@
       "localizacao": "Em frente à Rua Figueira",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Centro (Av. Amazonas)",
@@ -37,9 +33,7 @@
       "localizacao": "Em frente à Avenida Estado do Amazonas",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Centro (R. Bento Costa Jr)",
@@ -49,9 +43,7 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "praia",
-      "motivo": "Próximo à drenagem urbana central",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "motivo": "Próximo à drenagem urbana central"
     },
     {
       "praia": "Praia de Costazul",
@@ -60,9 +52,7 @@
       "localizacao": "Em frente à Rua Servidão",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia da Joana",
@@ -71,9 +61,7 @@
       "localizacao": "Em frente à Rua Maria Amélia",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Remanso",
@@ -82,9 +70,7 @@
       "localizacao": "Canto direito da praia, próximo ao mirante",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia da Areia Negra",
@@ -93,9 +79,7 @@
       "localizacao": "À esquerda da Rua Amaral, próximo às pedras",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Mar do Norte",
@@ -104,9 +88,7 @@
       "localizacao": "Em frente à Rua F",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Praia do Cemitério",
@@ -115,9 +97,7 @@
       "localizacao": "Em frente à Rua da Prata",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia",
-      "ultima_coleta_seirhi": "11/02/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "tipo": "praia"
     },
     {
       "praia": "Boca da Barra",
@@ -127,9 +107,7 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "foz",
-      "motivo": "Desembocadura do Rio das Ostras / vazante pluvial",
-      "ultima_coleta_seirhi": "13/01/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "motivo": "Desembocadura do Rio das Ostras / vazante pluvial"
     },
     {
       "praia": "Lagoa de Iriri (Coca-Cola)",
@@ -139,11 +117,8 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "lagoa",
-      "motivo": "Corpo lagunar com baixa renovação hídrica",
-      "ultima_coleta_seirhi": "06/01/2026",
-      "status_seirhi": "Com amostragem mas sem classificação"
+      "motivo": "Corpo lagunar com baixa renovação hídrica"
     }
   ],
-  "seirhi_conectado": true,
-  "seirhi_total_estacoes": 12
+  "seirhi_conectado": false
 }
