@@ -58,12 +58,12 @@
       "rajadas": "Até 45 km/h",
       "mar_ondas": "N/NW 3,0 a 3,5 m (Mar Grosso)",
       "ondas": "N/NW 3,0 a 3,5 m (Mar Grosso)",
-      "inicio_utc": "2026-10-25T09:00:00Z",
-      "fim_utc": "2026-10-26T12:00:00Z",
-      "inicio_br": "25/10 às 06:00h",
-      "fim_br": "26/10 às 09:00h",
-      "periodo": "De 25/10 às 06:00h até 26/10 às 09:00h",
-      "validade": "Aviso nº 785/2026 válido até 26/10 às 09:00h",
+      "inicio_utc": "",
+      "fim_utc": "",
+      "inicio_br": "",
+      "fim_br": "",
+      "periodo": "Em vigor",
+      "validade": "Aviso nº 785/2026 válido até ",
       "restricao": "Mar muito agitado com ondas severas de 3,0 a 3,5 m. Evite a navegação.",
       "texto": "AVISO NR 785/2026 AVISO DE MAR GROSSO EMITIDO ÀS 241400 UTC OUT 2026 ÁREA OCEÂNICA ENTRE 22.6S040.6W, 25.3S037.3W, 22.2S034.3W E 20S037.6W A PARTIR DE 250900Z. ONDAS DE N/NW 3.0/3.5 METROS. VÁLIDO ATÉ 261200Z. ESTE AVISO SUBSTITUI O AVISO NR 778/2026."
     }
