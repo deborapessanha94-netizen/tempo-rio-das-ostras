@@ -76,8 +76,8 @@ def collect_stations_network():
     pws_list = [
         {
             "id": "IRIODA17",
-            "nome": "Defesa Civil Municipal (Praia da Tartaruga) - IRIODA17",
-            "nome_curto": "Defesa Civil Municipal (Tartaruga)",
+            "nome": "Praia da Tartaruga - IRIODA17",
+            "nome_curto": "Praia da Tartaruga",
             "bairro": "Praia da Tartaruga",
             "categoria": "Weather Underground",
             "url": "https://www.wunderground.com/dashboard/pws/IRIODA17"

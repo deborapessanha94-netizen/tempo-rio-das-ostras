@@ -16,8 +16,8 @@
   "estacoes": [
     {
       "codigo": "IRIODA17",
-      "nome": "Defesa Civil Municipal (Praia da Tartaruga) - IRIODA17",
-      "nome_curto": "Defesa Civil Municipal (Tartaruga)",
+      "nome": "Praia da Tartaruga - IRIODA17",
+      "nome_curto": "Praia da Tartaruga",
       "bairro": "Praia da Tartaruga",
       "rede": "PWS Weather Underground",
       "categoria": "pws",

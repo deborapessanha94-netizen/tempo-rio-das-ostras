@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>TEMPO em Rio das Ostras — Portal Oficial de Monitoramento & Defesa Civil</title>
+  <title>TEMPO em Rio das Ostras — Portal de Monitoramento Meteorológico & Marítimo</title>
   <link rel="icon" type="image/png" href="img/logo.png">
   
   <!-- Progressive Web App (PWA) 24/7 -->
@@ -397,7 +397,7 @@
                 <span>Tendência dos Próximos Dias & PLANCON</span>
               </span>
             </div>
-            <p class="leading-relaxed text-justify text-sm text-black font-normal">Para os dias subsequentes, na quarta-feira (21/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (4.8 mm acumulados, sem avisos meteorológicos vigentes). Na quinta-feira (22/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (5.2 mm acumulados, sob Alerta Amarelo de Tempestade nº 56118 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A Subsecretaria de Defesa Civil de Rio das Ostras mantém monitoramento preventivo ininterrupto no Centro de Operações (PLANCON), com canais de emergência pelo 199 e Bombeiros 193.</p>
+            <p class="leading-relaxed text-justify text-sm text-black font-normal">Para os dias subsequentes, na quarta-feira (21/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (4.8 mm acumulados, sem avisos meteorológicos vigentes). Na quinta-feira (22/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (5.2 mm acumulados, sob Alerta Amarelo de Tempestade nº 56118 do INMET). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados oficiais do INMET, INEA e Open-Meteo para a cidade de Rio das Ostras.</p>
           </div>
 
         </div>
@@ -481,7 +481,7 @@
             </p>
             <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70">
               <span id="day-card-btn-txt-0" class="hover:underline flex items-center gap-1">Ver detalhes técnicos</span>
-              <span class="text-[10px] text-black/50 uppercase tracking-wider">Defesa Civil</span>
+              <span class="text-[10px] text-black/50 uppercase tracking-wider">Monitoramento Oficial</span>
             </div>
           </div>
 
@@ -549,7 +549,7 @@
             </p>
             <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70">
               <span id="day-card-btn-txt-1" class="hover:underline flex items-center gap-1">Ver detalhes técnicos</span>
-              <span class="text-[10px] text-black/50 uppercase tracking-wider">Defesa Civil</span>
+              <span class="text-[10px] text-black/50 uppercase tracking-wider">Monitoramento Oficial</span>
             </div>
           </div>
 
@@ -617,7 +617,7 @@
             </p>
             <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70">
               <span id="day-card-btn-txt-2" class="hover:underline flex items-center gap-1">Ver detalhes técnicos</span>
-              <span class="text-[10px] text-black/50 uppercase tracking-wider">Defesa Civil</span>
+              <span class="text-[10px] text-black/50 uppercase tracking-wider">Monitoramento Oficial</span>
             </div>
           </div>
 
@@ -1372,7 +1372,11 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-2 self-start sm:self-center">
+        <div class="flex items-center gap-2 self-start sm:self-center flex-wrap">
+          <button onclick="openSocialModalChuva('24h')" class="flex items-center gap-1.5 py-1.5 px-3.5 rounded-xl text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs hover:brightness-95" title="Exportar imagem formatada para Post ou Stories do Instagram">
+            <i data-lucide="share-2" class="w-3.5 h-3.5 text-black"></i>
+            <span>Baixar Imagem Instagram</span>
+          </button>
           <span class="text-xs font-bold text-black bg-[#f1f5f9] px-3 py-1 rounded-full border border-[#cbd5e1] flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 live-pulse"></span>
             <span id="chuva-atualizacao-txt">Sincronizado em tempo real</span>
@@ -1575,7 +1579,7 @@
         <img src="img/logo-full.png" onerror="this.src='img/logo.png'" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
         <div>
           <span class="font-bold text-black text-sm block">TEMPO em Rio das Ostras</span>
-          <span class="text-xs text-black font-medium">Sempre consulte os órgãos oficiais e a defesa civil do seu município.</span>
+          <span class="text-xs text-black font-medium">Portal independente de monitoramento meteorológico e marítimo.</span>
         </div>
       </div>
 
@@ -1697,7 +1701,7 @@
           </div>
           <div>
             <h3 class="text-base font-bold text-black leading-tight">Boletim Meteorológico Operacional Completo</h3>
-            <span id="modal-boletim-periodo" class="text-xs text-[#64748b] font-normal">12 Turnos • Defesa Civil de Rio das Ostras</span>
+            <span id="modal-boletim-periodo" class="text-xs text-[#64748b] font-normal">12 Turnos • @tempoemriodasostras</span>
           </div>
         </div>
         <button id="btn-close-modal-boletim" class="p-1 rounded-lg text-[#64748b] hover:text-black cursor-pointer transition">
@@ -1877,7 +1881,135 @@
 
 
 
+    <!-- ========================================================================= -->
+  <!-- MODAL: EXPORTAR IMAGEM PARA INSTAGRAM (POST 4:5 & STORIES 9:16)           -->
+  <!-- ========================================================================= -->
+  <div id="modal-social-chuva" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
+    <div class="modern-card max-w-4xl w-full max-h-[94vh] flex flex-col shadow-2xl overflow-hidden bg-white border border-[#94a3b8] text-black" style="border-top: 4px solid #f07a53 !important;">
+      
+      <!-- Cabeçalho do Modal -->
+      <div class="px-5 py-3.5 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1] flex-wrap gap-2">
+        <div class="flex items-center gap-2.5">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs shrink-0">
+            <i data-lucide="instagram" class="w-4 h-4 text-black"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-black text-black leading-tight">Exportar Imagem para o Instagram</h3>
+              <span class="text-[10px] font-mono font-bold uppercase bg-[#eaf0f6] text-black border border-[#6d8ba6]/50 px-2 py-0.5 rounded-full">
+                @tempoemriodasostras
+              </span>
+            </div>
+            <span class="text-xs text-black/80 font-medium">Acumulados de chuva oficiais com pré-visualização antes do download</span>
+          </div>
+        </div>
+
+        <button onclick="closeSocialModalChuva()" class="p-1.5 rounded-lg text-black hover:bg-[#e2e8f0] cursor-pointer transition">
+          <i data-lucide="x" class="w-5 h-5 text-black"></i>
+        </button>
+      </div>
+
+      <!-- Barra de Controles e Filtros do Card -->
+      <div class="p-4 bg-[#f5efe8]/60 border-b border-[#cbd5e1] space-y-3 text-xs">
+        
+        <!-- Linha 1: Seletor de Formato (Post vs Stories) & Checkbox Ativas -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          
+          <!-- Seletor de Formato -->
+          <div class="flex items-center gap-2" role="tablist">
+            <span class="font-bold text-black text-xs">Formato:</span>
+            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="square" class="w-4 h-4 text-black"></i>
+              <span>Post (Feed 4:5)</span>
+            </button>
+            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="smartphone" class="w-4 h-4 text-black"></i>
+              <span>Stories (9:16)</span>
+            </button>
+          </div>
+
+          <!-- Checkbox: Apenas Estações Ativas -->
+          <label class="flex items-center gap-2 cursor-pointer font-bold text-black text-xs bg-white px-3 py-1.5 rounded-xl border border-[#cbd5e1] shadow-2xs self-start sm:self-center">
+            <input type="checkbox" id="social-filter-active-only" onchange="toggleOnlyActive(this.checked)" checked class="accent-[#f07a53] w-4 h-4 cursor-pointer">
+            <span>Apenas estações ativas / online</span>
+          </label>
+
+        </div>
+
+        <!-- Linha 2: Barra de Pesquisa de Horizonte e Presets Rápidos -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2.5 pt-1">
+          
+          <!-- Barra de Pesquisa de Intervalo -->
+          <div class="flex-1 flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-[#cbd5e1] shadow-2xs">
+            <i data-lucide="search" class="w-4 h-4 text-[#64748b] shrink-0"></i>
+            <input 
+              type="text" 
+              id="social-horizon-search" 
+              oninput="handleSocialSearch(this.value)" 
+              placeholder="Digite o intervalo de acumulado desejado (ex: 24h, 12h, 1h, 48h, 96h)..." 
+              class="w-full bg-transparent text-xs text-black font-semibold outline-none placeholder:text-black/50"
+            />
+          </div>
+
+          <!-- Pílulas de Horizontes Pré-definidos -->
+          <div class="flex items-center gap-1.5 shrink-0 overflow-x-auto scrollbar-none">
+            <span class="text-[11px] font-bold text-black/80">Atalhos:</span>
+            <button id="social-hz-btn-1h" onclick="setSocialHorizon('1h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer">1h</button>
+            <button id="social-hz-btn-4h" onclick="setSocialHorizon('4h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer">4h</button>
+            <button id="social-hz-btn-12h" onclick="setSocialHorizon('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer">12h</button>
+            <button id="social-hz-btn-24h" onclick="setSocialHorizon('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#f07a53] text-white border border-[#ea580c] shadow-xs cursor-pointer">24h</button>
+            <button id="social-hz-btn-48h" onclick="setSocialHorizon('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer">48h</button>
+            <button id="social-hz-btn-96h" onclick="setSocialHorizon('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer">96h</button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Corpo do Modal: Área de Pré-visualização com Zoom / Aspect Ratio -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-6 bg-[#040914] flex flex-col items-center justify-center min-h-[360px]">
+        
+        <div class="relative max-w-full flex items-center justify-center">
+          <img 
+            id="social-preview-image" 
+            src="" 
+            alt="Pré-visualização do Card de Chuva para Instagram" 
+            class="max-h-[56vh] w-auto rounded-xl shadow-2xl border border-[#1e293b] object-contain transition duration-200"
+          />
+        </div>
+
+        <p class="text-[11px] font-semibold text-[#94a3b8] mt-3 flex items-center gap-1.5">
+          <i data-lucide="eye" class="w-3.5 h-3.5 text-[#00c2ff]"></i>
+          Pré-visualização em tempo real. O arquivo PNG será baixado em resolução máxima (1080px).
+        </p>
+
+      </div>
+
+      <!-- Rodapé de Ações do Modal -->
+      <div class="px-5 py-3.5 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between gap-3 text-xs flex-wrap">
+        <span class="text-black font-semibold">
+          Canal Pessoal Oficial: <strong class="text-black font-extrabold">@tempoemriodasostras</strong>
+        </span>
+
+        <div class="flex items-center gap-2">
+          <button onclick="closeSocialModalChuva()" class="px-4 py-2 rounded-xl font-bold btn-action-outline cursor-pointer">
+            Fechar
+          </button>
+          
+          <button onclick="downloadSocialCard()" class="px-5 py-2 rounded-xl font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-sm hover:brightness-95 cursor-pointer flex items-center gap-2 transition hover:scale-[1.02]">
+            <i data-lucide="download" class="w-4 h-4 text-black"></i>
+            <span>Baixar Imagem (PNG)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <canvas id="social-export-canvas" class="hidden"></canvas>
+
+
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=100"></script>
+  <script type="module" src="js/app.js?v=101"></script>
 </body>
 </html>

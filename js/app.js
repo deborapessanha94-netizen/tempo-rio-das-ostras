@@ -1,3 +1,14 @@
+import {
+  setSocialStationsData,
+  openSocialModalChuva,
+  closeSocialModalChuva,
+  setSocialFormat,
+  setSocialHorizon,
+  handleSocialSearch,
+  toggleOnlyActive,
+  downloadSocialCard
+} from './social-cards.js';
+
 import { getWeatherCondition } from './weather-codes.js';
 // Controle Global de Abertura/Fechamento dos Cards dos 3 Dias
 window.toggleDayCard = function(idx) {
@@ -1985,6 +1996,7 @@ window.filterStations = function(cat) {
 // =============================================================================
 function renderAcumuladosChuva(data) {
   if (!data) return;
+  setSocialStationsData(data);
   const dataset = Array.isArray(data) ? { estacoes: data } : data;
   const estacoes = dataset.estacoes || [];
   const resumo = dataset.resumo || {};
