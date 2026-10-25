@@ -116,14 +116,14 @@
     "rajada_atual": null,
     "umidade_atual": null,
     "chuva_1h": 0.0,
-    "chuva_4h": 1.0,
-    "chuva_6h": 4.8,
+    "chuva_4h": 0.0,
+    "chuva_6h": 1.0,
     "chuva_12h": 9.8,
     "chuva_24h": 9.8,
     "chuva_36h": 9.9,
     "chuva_48h": 10.0,
     "chuva_96h": 24.6,
-    "ultima_leitura": "25/10/26 16:10",
+    "ultima_leitura": "25/10/26 19:10",
     "online": true
   },
   {
