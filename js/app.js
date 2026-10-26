@@ -6879,7 +6879,7 @@ window.switchOrlaTab = function(tabName) {
 };
 
 window.switchCemadenTab = function(tabName) {
-  const tabs = ['rj', 'geo', 'hidro', 'mapas'];
+  const tabs = ['rj', 'painel-rj', 'geo', 'hidro', 'mapas'];
   tabs.forEach(t => {
     const btn = document.getElementById(`cemaden-tab-btn-${t}`);
     const panel = document.getElementById(`cemaden-panel-${t}`);
@@ -11964,6 +11964,15 @@ const handleUrlHash = () => {
     setTimeout(() => {
       const sec = document.getElementById('section-cemaden-riscos');
       if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    }, 120);
+  }
+
+  if (rawHash === 'cemaden-painel' || rawHash === 'painel-rj') {
+    window.switchAppTab('alertas');
+    setTimeout(() => {
+      const sec = document.getElementById('section-cemaden-riscos');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+      if (window.switchCemadenTab) window.switchCemadenTab('painel-rj');
     }, 120);
   }
 };

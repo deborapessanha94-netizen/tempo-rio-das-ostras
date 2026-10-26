@@ -1,10 +1,10 @@
 with open('index.html', 'r', encoding='utf-8') as f:
-    text = f.read()
+    html = f.read()
 
-text = text.replace('styles.css?v=97', 'styles.css?v=98')
-text = text.replace('app.js?v=125', 'app.js?v=126')
+html = html.replace('css/styles.css?v=105', 'css/styles.css?v=106')
+html = html.replace('js/app.js?v=133', 'js/app.js?v=134')
 
 with open('index.html', 'w', encoding='utf-8') as f:
-    f.write(text)
+    f.write(html)
 
-print("Bumped cache-busters to v98 and v126")
+print("Bumped cache-busters to styles.css?v=106 and app.js?v=134")

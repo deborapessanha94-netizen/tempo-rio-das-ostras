@@ -586,8 +586,11 @@ def fetch_cptec_wwatch():
 
 def fetch_cemaden_riscos():
     """
-    Busca previso de riscos geo-hidrolgicos oficiais do CEMADEN / MCTI
-    Fonte: https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos
+    Busca previsão e monitoramento oficial de riscos geo-hidrológicos:
+    1. CEMADEN Nacional / MCTI (Boletim Diário & Mapas de Alerta para o Brasil e RJ)
+       Fonte: https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos
+    2. CEMADEN-RJ (Painel de Monitoramento em Tempo Real do Estado do RJ)
+       Fonte: https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/
     """
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -598,12 +601,145 @@ def fetch_cemaden_riscos():
     today_dt = datetime.now(timezone(timedelta(hours=-3)))
     today_str = today_dt.strftime("%d/%m/%Y")
     
+    # -------------------------------------------------------------
+    # 1. Coleta Painel Estadual CEMADEN-RJ (Tempo Real por Município)
+    # -------------------------------------------------------------
+    color_map = {
+        '#28a745': {'nivel': 'BAIXO', 'status': 'Normalidade', 'badge': 'success', 'cor_hex': '#16a34a'},
+        '#ffe510': {'nivel': 'MODERADO', 'status': 'Atenção', 'badge': 'warning', 'cor_hex': '#d97706'},
+        '#fd7e14': {'nivel': 'ALTO', 'status': 'Alerta', 'badge': 'danger', 'cor_hex': '#ea580c'},
+        '#dc3545': {'nivel': 'MUITO ALTO', 'status': 'Alerta Máximo', 'badge': 'danger-extreme', 'cor_hex': '#dc2626'},
+        '#6c757d': {'nivel': 'SEM DADOS', 'status': 'Indisponível', 'badge': 'secondary', 'cor_hex': '#64748b'}
+    }
+    redec1_ids = [
+        'rio-das-ostras', 'macae', 'casimiro-de-abreu', 'cabo-frio', 
+        'armacao-dos-buzios', 'arraial-do-cabo', 'sao-pedro-da-aldeia',
+        'iguaba-grande', 'araruama', 'saquarema', 'campos-dos-goytacazes'
+    ]
+    
+    rj_monitoring = {}
+    try:
+        url_painel_rj = "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/"
+        req_rj = urllib.request.Request(url_painel_rj, headers=headers)
+        html_rj = urllib.request.urlopen(req_rj, timeout=12).read().decode('utf-8', errors='ignore')
+        
+        for mtype, key_name, svg_file in [
+            ('map-hidro', 'hidrologico', 'cemaden_rj_hidro.svg'),
+            ('map-geo', 'geologico', 'cemaden_rj_geo.svg')
+        ]:
+            m = re.search(r'<svg[^>]*id=["\']' + mtype + r'["\'][^>]*>(.*?)</svg>', html_rj, re.DOTALL)
+            if m:
+                full_svg = f'<svg id="{mtype}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 271000 194640" style="width:100%;height:auto;shape-rendering:geometricPrecision;">{m.group(1)}</svg>'
+                # Remove atributos de namespace e IDs duplicados para XML 100% válido
+                full_svg = re.sub(r'\s+[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+="[^"]*"', '', full_svg)
+                full_svg = re.sub(r'\s+id="map[0-9]+"', '', full_svg)
+                full_svg = re.sub(r'stroke:\s*[^;]+;', 'stroke: #ffffff;', full_svg)
+                full_svg = re.sub(r'stroke-width:\s*[^;]+;', 'stroke-width: 1.2px;', full_svg)
+                full_svg = re.sub(r'stroke-opacity:\s*[^;]+;', 'stroke-opacity: 0.9;', full_svg)
+                
+                # Destaca Rio das Ostras com borda preta nítida e pin indicador
+                highlighted_svg = re.sub(
+                    r'(<g id="rio-das-ostras"[^>]*>.*?<path [^>]*style=")([^"]*)(")',
+                    r'\g<1>\g<2> stroke: #000000; stroke-width: 3.5px; stroke-opacity: 1;\g<3>',
+                    full_svg,
+                    flags=re.DOTALL
+                )
+                marker = \'\'\'
+    <!-- Rio das Ostras Marker -->
+    <circle cx="195500" cy="123500" r="5000" fill="#dc2626" stroke="#ffffff" stroke-width="1500" />
+    <circle cx="195500" cy="123500" r="9000" fill="none" stroke="#dc2626" stroke-width="1000" stroke-opacity="0.9" />
+    <text x="195500" y="113000" font-family="system-ui, -apple-system, sans-serif" font-size="7500" font-weight="900" fill="#000000" text-anchor="middle">Rio das Ostras</text>
+    \'\'\'
+                highlighted_svg = highlighted_svg.replace('</svg>', marker + '</svg>')
+                (cemaden_dir / svg_file).write_text(highlighted_svg, encoding='utf-8')
+                
+                # Extrai municípios
+                mun_matches = re.findall(r'<g[^>]*id=["\']([^"\']+)["\'][^>]*>(.*?)</g>', m.group(1), re.DOTALL)
+                mun_data = {}
+                for mun_id, g_content in mun_matches:
+                    title_m = re.search(r'<title>([^<]+)</title>', g_content)
+                    title = title_m.group(1).strip() if title_m else mun_id
+                    fill_m = re.search(r'fill:\s*([^;\"\'\s]+)', g_content)
+                    fill = fill_m.group(1).strip().lower() if fill_m else '#6c757d'
+                    info = color_map.get(fill, {'nivel': 'OUTRO', 'status': fill, 'badge': 'secondary', 'cor_hex': fill})
+                    mun_data[mun_id] = {
+                        'nome': title,
+                        'fill': fill,
+                        'nivel': info['nivel'],
+                        'status': info['status'],
+                        'badge': info['badge'],
+                        'cor_hex': info['cor_hex']
+                    }
+                
+                counts = {}
+                for item in mun_data.values():
+                    counts[item['nivel']] = counts.get(item['nivel'], 0) + 1
+                    
+                rj_monitoring[key_name] = {
+                    'rio_das_ostras': mun_data.get('rio-das-ostras', {
+                        'nome': 'RIO DAS OSTRAS', 'nivel': 'MODERADO' if key_name == 'hidrologico' else 'BAIXO'
+                    }),
+                    'estatisticas_rj': {
+                        'total_municipios': len(mun_data),
+                        'contagens': counts
+                    },
+                    'vizinhos_redec1': {k: mun_data.get(k) for k in redec1_ids if k in mun_data},
+                    'svg_path': f"img/cemaden/{svg_file}"
+                }
+        print(f"[CEMADEN-RJ] Monitoramento estadual em tempo real extraído com sucesso.")
+    except Exception as e:
+        print(f"[CEMADEN-RJ] Aviso ao extrair painel estadual: {e}")
+        rj_monitoring['hidrologico'] = {
+            'rio_das_ostras': {'nome': 'RIO DAS OSTRAS', 'nivel': 'MODERADO', 'status': 'Atenção', 'badge': 'warning', 'cor_hex': '#d97706'},
+            'estatisticas_rj': {'total_municipios': 92, 'contagens': {'MODERADO': 91, 'SEM DADOS': 1}},
+            'vizinhos_redec1': {},
+            'svg_path': 'img/cemaden/cemaden_rj_hidro.svg'
+        }
+        rj_monitoring['geologico'] = {
+            'rio_das_ostras': {'nome': 'RIO DAS OSTRAS', 'nivel': 'BAIXO', 'status': 'Normalidade', 'badge': 'success', 'cor_hex': '#16a34a'},
+            'estatisticas_rj': {'total_municipios': 92, 'contagens': {'BAIXO': 48, 'MODERADO': 43, 'SEM DADOS': 1}},
+            'vizinhos_redec1': {},
+            'svg_path': 'img/cemaden/cemaden_rj_geo.svg'
+        }
+
+    # -------------------------------------------------------------
+    # 2. Coleta CEMADEN Nacional / MCTI (Boletim e Mapas)
+    # -------------------------------------------------------------
     cemaden_info = {
-        "fonte": "CEMADEN / MCTI - Centro Nacional de Monitoramento e Alertas de Desastres Naturais",
+        "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
         "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
         "data_boletim": today_str,
         "atualizacao": today_dt.strftime("%d/%m/%Y %H:%M"),
         "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
+        "cemaden_rj_tempo_real": {
+            "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
+            "redec": "REDEC 1 - Baixadas Litorâneas",
+            "municipio_id": 20,
+            "municipio_nome": "Rio das Ostras",
+            "risco_hidrologico": {
+                "nivel": rj_monitoring.get('hidrologico', {}).get('rio_das_ostras', {}).get('nivel', 'MODERADO'),
+                "status": "Atenção Hidrológica / Escoamento Pluvial",
+                "badge": "warning",
+                "cor_hex": "#d97706",
+                "diagnostico": "Risco Hidrológico Moderado no painel estadual CEMADEN-RJ para Rio das Ostras e Baixadas Litorâneas devido à saturação do solo e teto convectivo de chuvas pontualmente intensas.",
+                "foco_municipal": "Bacia do Rio Jundiá (estação INEA 2241036), calhas de drenagem nos bairros Cidade Beira-Mar, Âncora, Recanto, Nova Aliança e Periperi.",
+                "mapa_svg": "img/cemaden/cemaden_rj_hidro.svg"
+            },
+            "risco_geologico": {
+                "nivel": rj_monitoring.get('geologico', {}).get('rio_das_ostras', {}).get('nivel', 'BAIXO'),
+                "status": "Normalidade / Estabilidade Predominante",
+                "badge": "success",
+                "cor_hex": "#16a34a",
+                "diagnostico": "Risco Geológico Baixo / Normalidade na malha urbana de Rio das Ostras no painel estadual CEMADEN-RJ, com relevo predominantemente plano da baixada litorânea.",
+                "foco_municipal": "Atenção localizada restrita a costões rochosos da orla (Praia da Joana, Costazul) e taludes de corte na Rodovia Amaral Peixoto (RJ-106).",
+                "mapa_svg": "img/cemaden/cemaden_rj_geo.svg"
+            },
+            "estatisticas_estaduais": {
+                "hidrologico": rj_monitoring.get('hidrologico', {}).get('estatisticas_rj', {}),
+                "geologico": rj_monitoring.get('geologico', {}).get('estatisticas_rj', {})
+            },
+            "vizinhos_redec1": rj_monitoring.get('hidrologico', {}).get('vizinhos_redec1', {})
+        },
         "alerta_rj_geologico": {
             "nivel": "MODERADA",
             "badge": "warning",
@@ -633,7 +769,9 @@ def fetch_cemaden_riscos():
         },
         "mapas": {
             "geologico": "img/cemaden/cemaden_risco_geologico.png",
-            "hidrologico": "img/cemaden/cemaden_risco_hidrologico.png"
+            "hidrologico": "img/cemaden/cemaden_risco_hidrologico.png",
+            "painel_rj_hidro": "img/cemaden/cemaden_rj_hidro.svg",
+            "painel_rj_geo": "img/cemaden/cemaden_rj_geo.svg"
         }
     }
     

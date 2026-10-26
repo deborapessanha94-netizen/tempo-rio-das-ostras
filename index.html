@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=105">
+  <link rel="stylesheet" href="css/styles.css?v=106">
 
 
 
@@ -7715,7 +7715,7 @@
       </a>
       <a href="#section-cemaden-riscos" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition text-black bg-[#fef3c7] border border-[#d97706] hover:bg-[#fde68a] shadow-2xs whitespace-nowrap flex items-center gap-1.5 shrink-0">
         <i data-lucide="mountain-snow" class="w-3.5 h-3.5 text-black"></i>
-        <span>Riscos Geo-Hidrológicos (CEMADEN)</span>
+        <span>Riscos Geo-Hidrológicos (CEMADEN & RJ)</span>
         <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500 text-white font-black">ALERTA RJ</span>
       </a>
       <a href="#section-cptec-probabilistica" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition text-black bg-white hover:bg-slate-100 border border-[#cbd5e1] shadow-2xs whitespace-nowrap flex items-center gap-1.5 shrink-0">
@@ -8409,6 +8409,9 @@
     <!-- ========================================================================= -->
     <!-- PREVISÃO DE RISCOS GEO-HIDROLÓGICOS (CEMADEN / MCTI) -->
     <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+    <!-- PREVISÃO DE RISCOS GEO-HIDROLÓGICOS (CEMADEN NACIONAL & CEMADEN-RJ) -->
+    <!-- ========================================================================= -->
     <section id="section-cemaden-riscos" class="w-full">
       <div class="modern-card p-5 sm:p-6 bg-white dark:bg-[#0d1527] border border-[#cbd5e1] dark:border-slate-800 space-y-4 shadow-sm">
         
@@ -8420,33 +8423,46 @@
             </div>
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
-                <h3 class="text-sm sm:text-base font-black text-black dark:text-white tracking-tight font-heading">
-                  Riscos Geo-Hidrológicos Oficiais (CEMADEN / MCTI)
-                </h3>
-                <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-700">
-                  Alerta no RJ Vigente
+                <h2 class="text-base sm:text-lg font-bold text-black dark:text-white tracking-tight font-heading">
+                  Riscos Geo-Hidrológicos Oficiais
+                </h2>
+                <span class="badge-title-orange text-[10.5px] px-2.5 py-0.5 rounded-full font-bold uppercase shadow-2xs">
+                  CEMADEN / MCTI
                 </span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
-                  Boletim 26/10/2026
+                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200 dark:bg-blue-950/70 dark:text-blue-300 dark:border-blue-800 shadow-2xs">
+                  CEMADEN-RJ Tempo Real
+                </span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
+                  REDEC 1 • Baixadas Litorâneas
                 </span>
               </div>
               <p class="text-xs font-semibold text-black dark:text-slate-300 mt-0.5">
-                Monitoramento nacional de desastres naturais: deslizamentos de encostas e inundações para o Estado do Rio de Janeiro e Rio das Ostras
+                Monitoramento integrado de desastres naturais: deslizamento de encostas e riscos hidrológicos para o Estado do Rio de Janeiro e Rio das Ostras
               </p>
             </div>
           </div>
           
-          <a href="https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos" target="_blank" rel="noopener noreferrer" class="self-start sm:self-center px-3 py-1.5 rounded-xl text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1.5 shrink-0 shadow-2xs">
-            <span>Portal Oficial CEMADEN</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-          </a>
+          <div class="flex items-center gap-2 shrink-0 self-start sm:self-center flex-wrap">
+            <a href="https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl text-xs font-bold text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition flex items-center gap-1.5 shadow-2xs">
+              <span>Painel CEMADEN-RJ</span>
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+            <a href="https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 hover:bg-amber-100 transition flex items-center gap-1.5 shadow-2xs">
+              <span>CEMADEN Nacional</span>
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
         </div>
 
         <!-- Seletor de Abas Internas do CEMADEN -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 bg-[#f5efe8]/80 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 text-center" role="tablist">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-[#f5efe8]/80 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 text-center" role="tablist">
           <button type="button" id="cemaden-tab-btn-rj" onclick="switchCemadenTab('rj')" class="cemaden-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#fef3c7] border-2 border-[#d97706] text-black shadow-xs" role="tab" aria-selected="true">
             <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-black"></i>
-            <span>Alertas RJ & Rio das Ostras</span>
+            <span>Síntese & Tempo Real</span>
+          </button>
+          <button type="button" id="cemaden-tab-btn-painel-rj" onclick="switchCemadenTab('painel-rj')" class="cemaden-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-800 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
+            <i data-lucide="map" class="w-3.5 h-3.5 text-black dark:text-slate-300"></i>
+            <span>Painel Estadual RJ</span>
           </button>
           <button type="button" id="cemaden-tab-btn-geo" onclick="switchCemadenTab('geo')" class="cemaden-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-800 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
             <i data-lucide="mountain" class="w-3.5 h-3.5 text-black dark:text-slate-300"></i>
@@ -8457,89 +8473,303 @@
             <span>Risco Hidrológico</span>
           </button>
           <button type="button" id="cemaden-tab-btn-mapas" onclick="switchCemadenTab('mapas')" class="cemaden-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-800 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
-            <i data-lucide="map" class="w-3.5 h-3.5 text-black dark:text-slate-300"></i>
-            <span>Mapas Oficiais</span>
+            <i data-lucide="layers" class="w-3.5 h-3.5 text-black dark:text-slate-300"></i>
+            <span>Mosaico de Mapas</span>
           </button>
         </div>
 
-        <!-- PAINEL 1: ALERTAS RJ & RIO DAS OSTRAS (DESTAQUE PRINCIPAL) -->
+        <!-- PAINEL 1: SÍNTESE & TEMPO REAL (CEMADEN-RJ + NACIONAL) -->
         <div id="cemaden-panel-rj" class="space-y-4">
-          <!-- Card de Destaque Oficial: Risco Geológico no RJ -->
-          <div class="p-4 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-800/80 space-y-3 shadow-xs">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-amber-200 dark:border-amber-800/60 pb-2.5">
-              <div class="flex items-center gap-2">
-                <span class="inline-block w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
-                <span class="text-xs font-black text-amber-950 dark:text-amber-200 uppercase tracking-wide">
-                  Alerta Oficial Vigente • Risco Geológico Moderado no RJ
+          
+          <!-- DUAL MONITOR: PAINEL CEMADEN-RJ EM TEMPO REAL -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            
+            <!-- Monitor 1: Risco Hidrológico CEMADEN-RJ -->
+            <div class="p-4 rounded-2xl bg-amber-50/90 dark:bg-amber-950/40 border-2 border-amber-300 dark:border-amber-700/80 space-y-2.5 shadow-xs">
+              <div class="flex items-center justify-between border-b border-amber-200 dark:border-amber-800/60 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="inline-block w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span class="text-xs font-black text-amber-950 dark:text-amber-200 uppercase tracking-wide">
+                    CEMADEN-RJ • Risco Hidrológico
+                  </span>
+                </div>
+                <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-amber-400 text-black border border-amber-500 uppercase shadow-2xs">
+                  MODERADO (AMARELO)
                 </span>
               </div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 dark:bg-amber-900 dark:text-amber-200 uppercase">
-                Movimentos de Massa / Deslizamentos
+              <p class="text-xs text-black dark:text-slate-200 leading-relaxed font-medium">
+                O painel estadual <strong>CEMADEN-RJ</strong> classifica <strong>Rio das Ostras</strong> e toda a <strong>REDEC 1 (Baixadas Litorâneas)</strong> em nível <strong>MODERADO</strong> para eventos hidrológicos (91 de 92 municípios do estado). Atenção para escoamento superficial pluvial, inundações graduais e alagamentos pontuais em calhas urbanas e bacias de drenagem lenta.
+              </p>
+              <div class="p-2.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-amber-200 dark:border-amber-900/60 text-[11px] text-black dark:text-slate-300 space-y-1">
+                <strong class="font-bold text-amber-900 dark:text-amber-300 block flex items-center gap-1">
+                  <i data-lucide="waves" class="w-3.5 h-3.5 text-amber-600"></i>
+                  Foco em Rio das Ostras:
+                </strong>
+                <span>• Bacia do Rio Jundiá (estação INEA 2241036 em cota regular 1,84 m)</span><br>
+                <span>• Calhas de drenagem urbana: Cidade Beira-Mar, Âncora, Recanto, Nova Aliança e Periperi</span>
+              </div>
+            </div>
+
+            <!-- Monitor 2: Risco de Deslizamento CEMADEN-RJ -->
+            <div class="p-4 rounded-2xl bg-emerald-50/90 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-700/80 space-y-2.5 shadow-xs">
+              <div class="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-800/60 pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="inline-block w-3 h-3 rounded-full bg-emerald-500"></span>
+                  <span class="text-xs font-black text-emerald-950 dark:text-emerald-200 uppercase tracking-wide">
+                    CEMADEN-RJ • Risco Deslizamento
+                  </span>
+                </div>
+                <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500 text-white border border-emerald-600 uppercase shadow-2xs">
+                  BAIXO / NORMALIDADE (VERDE)
+                </span>
+              </div>
+              <p class="text-xs text-black dark:text-slate-200 leading-relaxed font-medium">
+                No monitoramento estadual de movimentos de massa, <strong>Rio das Ostras</strong> opera em nível <strong>BAIXO / NORMALIDADE</strong>, refletindo a estabilidade geológica da planície costeira e relevo plano da baixada litorânea (48 municípios em Baixo no RJ, contrastando com áreas de serra em Moderado).
+              </p>
+              <div class="p-2.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-emerald-200 dark:border-emerald-900/60 text-[11px] text-black dark:text-slate-300 space-y-1">
+                <strong class="font-bold text-emerald-900 dark:text-emerald-300 block flex items-center gap-1">
+                  <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
+                  Pontos de Atenção Localizada:
+                </strong>
+                <span>• Costões rochosos e falésias da orla: Praia da Joana, Costazul e Praiamar</span><br>
+                <span>• Taludes de corte rodoviário: Rodovia Amaral Peixoto (RJ-106) e vias de expansão</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Card Alerta Macrorregional CEMADEN Nacional / MCTI -->
+          <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-2.5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+              <div class="flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 text-amber-600"></i>
+                <span class="text-xs font-black text-black dark:text-white uppercase tracking-wide">
+                  Boletim Nacional CEMADEN / MCTI — Enquadramento Macrorregional
+                </span>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 dark:bg-amber-900/80 dark:text-amber-200">
+                Alerta Estadual Geral: Moderado
+              </span>
+            </div>
+            <p class="text-xs text-black dark:text-slate-300 leading-relaxed italic bg-white dark:bg-slate-950 p-3 rounded-xl border border-slate-200 dark:border-slate-800">
+              "Considera-se <strong>MODERADA</strong> a possibilidade de ocorrência de eventos de movimentos de massa nas Regiões Geográficas Intermediárias de <strong>Rio de Janeiro (RJ)</strong>; São Paulo e São José dos Campos (SP), devido à presença de áreas com alta suscetibilidade a estes processos, aos acumulados registrados nos últimos dias e à previsão de chuvas que podem deflagrar deslizamentos pontuais em encostas."
+              <span class="block text-[10px] text-[#64748b] dark:text-slate-400 not-italic mt-1 font-semibold">— Boletim Técnico Diário CEMADEN / MCTI</span>
+            </p>
+          </div>
+
+          <!-- TABELA REGIONAL REDEC 1: MONITORAMENTO EM TEMPO REAL -->
+          <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 space-y-3">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#cbd5e1] dark:border-slate-800 pb-2">
+              <div class="flex items-center gap-2">
+                <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
+                <strong class="text-xs font-black text-black dark:text-white uppercase">
+                  REDEC 1 & Região dos Lagos — Status em Tempo Real CEMADEN-RJ
+                </strong>
+              </div>
+              <span class="text-[10px] font-bold text-slate-500">
+                11 Municípios Monitorados
               </span>
             </div>
 
-            <div class="text-xs text-black dark:text-slate-200 leading-relaxed font-medium space-y-2">
-              <p class="bg-white/80 dark:bg-slate-900/80 p-3 rounded-xl border border-amber-200 dark:border-amber-900/60 italic">
-                "Considera-se <strong>MODERADA</strong> a possibilidade de ocorrência de eventos de movimentos de massa nas Regiões Geográficas Intermediárias de <strong>Rio de Janeiro (RJ)</strong>; São Paulo e São José dos Campos (SP), devido à presença de áreas com alta suscetibilidade a estes processos, aos acumulados registrados nos últimos dias e à previsão de chuvas que podem deflagrar deslizamentos pontuais em encostas."
-                <span class="block text-[10px] text-[#64748b] dark:text-slate-400 not-italic mt-1">— Boletim Técnico Diário CEMADEN / MCTI</span>
-              </p>
-
-              <!-- Setores Locais de Atenção Geológica em Rio das Ostras -->
-              <div class="p-3.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
-                <strong class="text-xs font-black text-black dark:text-white block flex items-center gap-1.5">
-                  <i data-lucide="map-pin" class="w-3.5 h-3.5 text-amber-600"></i>
-                  Setores Mapeados com Atenção Geológica em Rio das Ostras:
-                </strong>
-                <ul class="text-[11px] text-black dark:text-slate-300 space-y-1.5 pl-1">
-                  <li class="flex items-start gap-1.5">
-                    <span class="text-amber-600 font-bold">•</span>
-                    <span><strong>Costões Rochosos & Encostas Costeiras:</strong> Praia da Joana, Costazul, Praiamar e Mirante da Baleia — atenção ao risco de rolamento de blocos rochosos e descalçamento superficial por intemperismo e ondas.</span>
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <span class="text-amber-600 font-bold">•</span>
-                    <span><strong>Taludes de Rodovia e Aterro:</strong> Margens da Rodovia Amaral Peixoto (RJ-106) e vias de corte íngreme com solo exposto nos bairros Cantagalo, Rocha Leão e Nova Cidade.</span>
-                  </li>
-                  <li class="flex items-start gap-1.5">
-                    <span class="text-amber-600 font-bold">•</span>
-                    <span><strong>Áreas Periurbanas de Encosta:</strong> Setores com declividade acentuada em Mar do Norte onde intervenções antrópicas (cortes e aterros) elevam a suscetibilidade a escorregamentos.</span>
-                  </li>
-                </ul>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-center text-xs">
+              
+              <!-- Rio das Ostras (Destaque) -->
+              <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-400 dark:border-amber-600 shadow-2xs">
+                <span class="font-black text-black dark:text-white block text-[11px] truncate">Rio das Ostras ★</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1.5 py-0.2 rounded bg-amber-400 text-black">Hidro: MODERADO</span>
+                  <span class="px-1.5 py-0.2 rounded bg-emerald-500 text-white">Geo: BAIXO</span>
+                </div>
               </div>
 
-              <!-- Recomendações Preventivas -->
-              <div class="p-2.5 rounded-xl bg-amber-100/60 dark:bg-amber-950/40 border border-amber-300/80 dark:border-amber-800 text-[11px] text-amber-950 dark:text-amber-200">
-                <strong>Orientações de Segurança:</strong> Em caso de aparecimento de trincas em paredes ou no solo, inclinação de postes/árvores ou estalos na encosta, saia imediatamente do imóvel e acione a Defesa Civil Municipal pelo telefone <strong>199</strong> ou Bombeiros <strong>193</strong>.
+              <!-- Macaé -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Macaé</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
               </div>
+
+              <!-- Casimiro de Abreu -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Casimiro de Abreu</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Cabo Frio -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Cabo Frio</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Armação dos Búzios -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Búzios</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Arraial do Cabo -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Arraial do Cabo</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- São Pedro da Aldeia -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">São Pedro da Aldeia</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Iguaba Grande -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Iguaba Grande</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Araruama -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Araruama</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Saquarema -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Saquarema</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Campos dos Goytacazes -->
+              <div class="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
+                <span class="font-bold text-black dark:text-slate-200 block text-[11px] truncate">Campos dos Goytacazes</span>
+                <div class="mt-1 flex flex-col gap-0.5 text-[9.5px] font-bold">
+                  <span class="px-1 py-0.2 rounded bg-amber-200 text-amber-950 dark:bg-amber-900 dark:text-amber-200">Hidro: Moderado</span>
+                  <span class="px-1 py-0.2 rounded bg-emerald-200 text-emerald-950 dark:bg-emerald-900 dark:text-emerald-200">Geo: Baixo</span>
+                </div>
+              </div>
+
+              <!-- Diagnóstico Regional -->
+              <div class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 flex flex-col justify-center">
+                <span class="font-black text-blue-900 dark:text-blue-300 block text-[10px]">Padrão Litorâneo</span>
+                <span class="text-[9px] text-blue-800 dark:text-blue-400 mt-0.5">Hidro Moderado em todas as baixadas</span>
+              </div>
+
             </div>
           </div>
 
-          <!-- Card de Cenário Hidrológico em Rio das Ostras -->
-          <div class="p-4 rounded-2xl bg-sky-50/70 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800/70 space-y-2.5 shadow-2xs">
-            <div class="flex items-center justify-between border-b border-sky-200 dark:border-sky-800/60 pb-2">
-              <strong class="text-xs font-black text-sky-950 dark:text-sky-200 flex items-center gap-1.5">
-                <i data-lucide="droplet" class="w-3.5 h-3.5 text-sky-600"></i>
-                Cenário Hidrológico Municipal (Rio Jundiá & Drenagem Urbana)
-              </strong>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-200">
-                Atenção Local
-              </span>
+          <!-- Orientações Preventivas -->
+          <div class="p-3 rounded-xl bg-amber-100/70 dark:bg-amber-950/50 border border-amber-300/80 dark:border-amber-800 text-[11px] text-black dark:text-amber-200 flex items-start gap-2">
+            <i data-lucide="shield-alert" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+            <div>
+              <strong>Orientações de Proteção Comunitária:</strong> Em caso de elevação súbita do nível d'água em córregos, extravasamento de bueiros ou surgimento de trincas em taludes e muros, acione imediatamente a Defesa Civil Municipal pelo <strong>199</strong> ou o Corpo de Bombeiros pelo <strong>193</strong>. Evite transitar por vias alagadas.
             </div>
-            <p class="text-[11px] text-black dark:text-slate-300 leading-relaxed font-medium">
-              O boletim nacional do CEMADEN não indica risco de inundações de grande porte em bacias regionais do RJ. No entanto, em âmbito local, mantém-se a <strong>atenção hidrológica contínua</strong> para enxurradas rápidas e alagamentos urbanos em caso de tempestades com pancadas de chuva de até 30 mm/h. Os bairros com maior suscetibilidade por drenagem lenta incluem <strong>Cidade Beira-Mar, Âncora, Recanto, Nova Aliança e Periperi</strong>. O Rio Jundiá (INEA estação 2241036) opera em cota regular (1,84 m).
-            </p>
+          </div>
+
+        </div>
+
+        <!-- PAINEL 2: MAPAS VETORIAIS DO PAINEL ESTADUAL CEMADEN-RJ -->
+        <div id="cemaden-panel-painel-rj" class="space-y-4 hidden">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#f8fafc] dark:bg-[#111a30] p-3 rounded-2xl border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-2">
+              <i data-lucide="map" class="w-4 h-4 text-blue-600"></i>
+              <div>
+                <strong class="text-xs font-black text-black dark:text-white block">
+                  Mapas Oficiais em Tempo Real do Estado do Rio de Janeiro (CEMADEN-RJ)
+                </strong>
+                <span class="text-[11px] text-[#64748b] dark:text-slate-400">
+                  Vetorização oficial dos 92 municípios fluminenses com destaque de localização de Rio das Ostras
+                </span>
+              </div>
+            </div>
+            <a href="https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition flex items-center gap-1.5 shrink-0 shadow-2xs">
+              <span>Abrir Painel Interativo CEMADEN-RJ</span>
+              <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Mapa Vetorial 1: Risco Hidrológico CEMADEN-RJ -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2.5">
+              <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="droplet" class="w-4 h-4 text-amber-600"></i>
+                  <strong class="text-xs font-black text-black dark:text-white">Risco Hidrológico por Município</strong>
+                </div>
+                <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-amber-400 text-black">
+                  Rio das Ostras: MODERADO
+                </span>
+              </div>
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-2 flex items-center justify-center">
+                <img src="img/cemaden/cemaden_rj_hidro.svg" alt="Mapa Risco Hidrológico CEMADEN-RJ" class="w-full max-h-[360px] object-contain">
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-black dark:text-slate-400 px-1 font-medium">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#28a745] inline-block"></span> Baixo (0)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#ffe510] border border-amber-500 inline-block"></span> Moderado (91) ★</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#fd7e14] inline-block"></span> Alto (0)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#dc3545] inline-block"></span> M. Alto (0)</span>
+              </div>
+            </div>
+
+            <!-- Mapa Vetorial 2: Risco Geológico CEMADEN-RJ -->
+            <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2.5">
+              <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="mountain" class="w-4 h-4 text-emerald-600"></i>
+                  <strong class="text-xs font-black text-black dark:text-white">Risco de Deslizamento por Município</strong>
+                </div>
+                <span class="text-[10px] font-black px-2 py-0.5 rounded-full bg-emerald-500 text-white">
+                  Rio das Ostras: BAIXO
+                </span>
+              </div>
+              <div class="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-2 flex items-center justify-center">
+                <img src="img/cemaden/cemaden_rj_geo.svg" alt="Mapa Risco Deslizamento CEMADEN-RJ" class="w-full max-h-[360px] object-contain">
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-black dark:text-slate-400 px-1 font-medium">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#28a745] inline-block"></span> Baixo (48) ★</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#ffe510] inline-block"></span> Moderado (43)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#fd7e14] inline-block"></span> Alto (0)</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-[#dc3545] inline-block"></span> M. Alto (0)</span>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- PAINEL 2: RISCO GEOLÓGICO COMPLETO -->
+        <!-- PAINEL 3: RISCO GEOLÓGICO COMPLETO (CEMADEN NACIONAL & LOCAL) -->
         <div id="cemaden-panel-geo" class="space-y-4 hidden">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
             <div class="space-y-3">
               <div class="flex items-center gap-2">
-                <span class="text-xs font-black text-black dark:text-white">Mapa Nacional de Risco Geológico (CEMADEN)</span>
+                <span class="text-xs font-black text-black dark:text-white">Mapa Nacional de Risco Geológico (CEMADEN / MCTI)</span>
                 <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Figura 2</span>
               </div>
               <p class="text-xs text-black dark:text-slate-300 leading-relaxed">
-                O mapa do CEMADEN destaca o <strong>Estado do Rio de Janeiro em nível Moderado (Amarelo)</strong> para movimentos de massa, integrando áreas com alta suscetibilidade, histórico de ocorrências e acumulados antecedentes combinados à previsão de chuva.
+                O mapa do CEMADEN destaca o <strong>Estado do Rio de Janeiro em nível Moderado (Amarelo)</strong> para movimentos de massa, integrando áreas com alta suscetibilidade, histórico de ocorrências e acumulados antecedentes combinados à previsão de chuva convectiva.
               </p>
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] space-y-1.5">
                 <div class="flex items-center justify-between">
@@ -8553,6 +8783,12 @@
                   <div class="p-1 rounded bg-[#fecaca] text-rose-950">Muito Alto</div>
                 </div>
               </div>
+              <!-- Setores Locais -->
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] space-y-1">
+                <strong class="font-bold text-black dark:text-white block">Setores com Atenção Geológica em Rio das Ostras:</strong>
+                <span class="text-[#64748b] dark:text-slate-400 block">• Costões rochosos: Praia da Joana, Costazul e Praiamar</span>
+                <span class="text-[#64748b] dark:text-slate-400 block">• Taludes de corte: Rodovia Amaral Peixoto (RJ-106), Cantagalo e Rocha Leão</span>
+              </div>
             </div>
             <div class="rounded-xl overflow-hidden border border-[#cbd5e1] dark:border-slate-800 bg-slate-50 flex items-center justify-center p-2">
               <img src="img/cemaden/cemaden_risco_geologico.png" alt="Mapa de Risco Geológico CEMADEN" class="w-full max-h-[380px] object-contain rounded-lg">
@@ -8560,21 +8796,26 @@
           </div>
         </div>
 
-        <!-- PAINEL 3: RISCO HIDROLÓGICO COMPLETO -->
+        <!-- PAINEL 4: RISCO HIDROLÓGICO COMPLETO (CEMADEN NACIONAL & LOCAL) -->
         <div id="cemaden-panel-hidro" class="space-y-4 hidden">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
             <div class="space-y-3">
               <div class="flex items-center gap-2">
-                <span class="text-xs font-black text-black dark:text-white">Mapa Nacional de Risco Hidrológico (CEMADEN)</span>
+                <span class="text-xs font-black text-black dark:text-white">Mapa Nacional de Risco Hidrológico (CEMADEN / MCTI)</span>
                 <span class="text-[10px] px-2 py-0.5 rounded-full bg-sky-100 text-sky-900 font-bold">Figura 1</span>
               </div>
               <p class="text-xs text-black dark:text-slate-300 leading-relaxed">
-                Mapeamento das possibilidades de ocorrência de eventos hidrológicos de grande magnitude (inundações graduais, enxurradas bruscas e alagamentos). No Estado do Rio de Janeiro, o cenário estadual geral permanece em nível regular, enquanto municípios vizinhos em MG e ES operam em nível moderado.
+                Mapeamento das possibilidades de ocorrência de eventos hidrológicos de grande magnitude (inundações graduais, enxurradas bruscas e alagamentos). No Estado do Rio de Janeiro, o boletim nacional do CEMADEN assinala estabilidade macrobacial, enquanto o monitoramento estadual CEMADEN-RJ eleva o nível para Moderado por saturação de solo e chuvas pontuais.
               </p>
               <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] space-y-1">
                 <strong class="font-bold text-black dark:text-white block">Estações Pluviométricas CEMADEN no Município:</strong>
                 <span class="text-[#64748b] dark:text-slate-400 block">• PCD 18789 — Palmital / Rio das Ostras</span>
                 <span class="text-[#64748b] dark:text-slate-400 block">• PCD Cantagalo • PCD Cidade Praiana • PCD Rocha Leão</span>
+              </div>
+              <div class="p-3 rounded-xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] space-y-1">
+                <strong class="font-bold text-black dark:text-white block">Monitoramento Telemétrico Fluvial (INEA):</strong>
+                <span class="text-[#64748b] dark:text-slate-400 block">• Estação 2241036 — Rio Jundiá (Cota Normal: 1,84 m / Alerta: 2,80 m)</span>
+                <span class="text-[#64748b] dark:text-slate-400 block">• Bacia Hidrográfica do Rio São João / Macaé</span>
               </div>
             </div>
             <div class="rounded-xl overflow-hidden border border-[#cbd5e1] dark:border-slate-800 bg-slate-50 flex items-center justify-center p-2">
@@ -8583,23 +8824,46 @@
           </div>
         </div>
 
-        <!-- PAINEL 4: MAPAS OFICIAIS LADO A LADO -->
+        <!-- PAINEL 5: MOSAICO DE MAPAS (COMPARAÇÃO 4 MAPAS) -->
         <div id="cemaden-panel-mapas" class="space-y-4 hidden">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Mapa 1: CEMADEN-RJ Hidrológico -->
             <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
               <div class="flex items-center justify-between">
-                <strong class="text-xs font-black text-black dark:text-white">Figura 1 — Risco Hidrológico Nacional</strong>
-                <span class="text-[10px] font-bold text-slate-500">CEMADEN</span>
+                <strong class="text-xs font-black text-black dark:text-white">1. Risco Hidrológico Estadual (Tempo Real)</strong>
+                <span class="text-[10px] font-bold text-amber-600">CEMADEN-RJ</span>
               </div>
-              <img src="img/cemaden/cemaden_risco_hidrologico.png" alt="Risco Hidrológico CEMADEN" class="w-full max-h-[340px] object-contain rounded-lg bg-white">
+              <img src="img/cemaden/cemaden_rj_hidro.svg" alt="Risco Hidrológico CEMADEN-RJ" class="w-full max-h-[300px] object-contain rounded-lg bg-white dark:bg-slate-950 p-1">
             </div>
+
+            <!-- Mapa 2: CEMADEN-RJ Geológico -->
             <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
               <div class="flex items-center justify-between">
-                <strong class="text-xs font-black text-black dark:text-white">Figura 2 — Risco Geológico Nacional</strong>
+                <strong class="text-xs font-black text-black dark:text-white">2. Risco de Deslizamento Estadual (Tempo Real)</strong>
+                <span class="text-[10px] font-bold text-emerald-600">CEMADEN-RJ</span>
+              </div>
+              <img src="img/cemaden/cemaden_rj_geo.svg" alt="Risco Deslizamento CEMADEN-RJ" class="w-full max-h-[300px] object-contain rounded-lg bg-white dark:bg-slate-950 p-1">
+            </div>
+
+            <!-- Mapa 3: CEMADEN Nacional Hidrológico -->
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <strong class="text-xs font-black text-black dark:text-white">3. Figura 1 — Risco Hidrológico Nacional</strong>
+                <span class="text-[10px] font-bold text-slate-500">CEMADEN / MCTI</span>
+              </div>
+              <img src="img/cemaden/cemaden_risco_hidrologico.png" alt="Risco Hidrológico CEMADEN" class="w-full max-h-[300px] object-contain rounded-lg bg-white">
+            </div>
+
+            <!-- Mapa 4: CEMADEN Nacional Geológico -->
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+              <div class="flex items-center justify-between">
+                <strong class="text-xs font-black text-black dark:text-white">4. Figura 2 — Risco Geológico Nacional</strong>
                 <span class="text-[10px] font-bold text-amber-600">Alerta no RJ</span>
               </div>
-              <img src="img/cemaden/cemaden_risco_geologico.png" alt="Risco Geológico CEMADEN" class="w-full max-h-[340px] object-contain rounded-lg bg-white">
+              <img src="img/cemaden/cemaden_risco_geologico.png" alt="Risco Geológico CEMADEN" class="w-full max-h-[300px] object-contain rounded-lg bg-white">
             </div>
+
           </div>
         </div>
 
@@ -8620,8 +8884,7 @@
 
 
 
-
-    <!-- ========================================================================= -->
+        <!-- ========================================================================= -->
     <!-- PREVISÃO PROBABILÍSTICA CPTEC/INPE: CHUVA INTENSA & TEMPO SEVERO (24H/48H) -->
     <!-- ========================================================================= -->
     <section id="section-cptec-probabilistica" class="w-full">
@@ -11757,7 +12020,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=133"></script>
+  <script type="module" src="js/app.js?v=134"></script>
 
 
 
