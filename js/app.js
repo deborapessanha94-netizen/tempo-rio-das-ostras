@@ -2685,3 +2685,22 @@ const handleUrlHash = () => {
 
 window.addEventListener('DOMContentLoaded', handleUrlHash);
 window.addEventListener('hashchange', handleUrlHash);
+
+// Suporte para abertura direta do Modal Social com horizonte via URL
+const handleUrlSocialParams = () => {
+  const params = new URLSearchParams(window.location.search);
+  const modalParam = params.get('modal');
+  const horizonParam = params.get('horizon') || params.get('h');
+  const fmtParam = params.get('fmt') || params.get('format');
+  if (modalParam === 'social' || modalParam === 'chuva' || horizonParam || fmtParam) {
+    setTimeout(() => {
+      if (window.openSocialModalChuva) {
+        window.openSocialModalChuva(horizonParam || '24h');
+        if (fmtParam && window.setSocialFormat) {
+          window.setSocialFormat(fmtParam);
+        }
+      }
+    }, 600);
+  }
+};
+window.addEventListener('DOMContentLoaded', handleUrlSocialParams);

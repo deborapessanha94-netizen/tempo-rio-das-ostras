@@ -7,9 +7,10 @@
 
 let socialState = {
   format: 'post', // 'post' (1080x1350) ou 'story' (1080x1920)
-  horizon: '24h', // '1h', '4h', '6h', '12h', '24h', '36h', '48h', '96h'
+  horizon: '24h', // label do horizonte: '24h', '23h', '12h', etc.
+  horizonHours: 24.0, // valor numérico em horas para cálculo em tempo real
   onlyActive: true,
-  searchQuery: '',
+  stationFilterText: '',
   stationsData: []
 };
 
@@ -26,15 +27,105 @@ export function setSocialStationsData(data) {
 }
 
 /**
+ * Parser inteligente de busca por horizonte ou estação:
+ * - Se o usuário digita números (ex: '23', '23h', '8 horas', '2 dias', '3d', '10-18'), extrai o horizonte de horas.
+ * - Se digita nome de bairro/estação (ex: 'tartaruga', 'palmital'), extrai o filtro de texto.
+ */
+function parseUserQuery(query) {
+  const clean = String(query || '').trim().toLowerCase();
+  if (!clean) {
+    return { isHorizon: false, hours: 24.0, horizonLabel: '24H', stationFilter: '' };
+  }
+
+  // 1. Dias (ex: '2 dias', '2d', '3 dias', '1 dia')
+  const dayMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:dias?|d)/i);
+  if (dayMatch) {
+    const dVal = parseFloat(dayMatch[1].replace(',', '.'));
+    const hVal = Math.round(dVal * 24 * 10) / 10;
+    const residual = clean.replace(dayMatch[0], '').trim();
+    const label = Number.isInteger(hVal) ? `${hVal}H` : `${hVal.toFixed(1)}H`;
+    return { isHorizon: true, hours: hVal, horizonLabel: label, stationFilter: residual };
+  }
+
+  // 2. Intervalo de horas (ex: 'das 10h às 18h', '10-18', '10 as 18')
+  const rangeMatch = clean.match(/(?:das\s*)?(\d{1,2})h?\s*(?:as|às|a|-)\s*(\d{1,2})h?/i);
+  if (rangeMatch) {
+    const h1 = parseFloat(rangeMatch[1]);
+    const h2 = parseFloat(rangeMatch[2]);
+    const diff = Math.max(1, Math.abs(h2 - h1));
+    const residual = clean.replace(rangeMatch[0], '').trim();
+    return { isHorizon: true, hours: diff, horizonLabel: `${diff}H`, stationFilter: residual };
+  }
+
+  // 3. Horas diretas (ex: '23', '23h', '23 horas', '1.5h', '8 hrs')
+  const hourMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:h(?:oras?|rs?)?)?/i);
+  if (hourMatch && hourMatch[1]) {
+    const hVal = parseFloat(hourMatch[1].replace(',', '.'));
+    const residual = clean.replace(hourMatch[0], '').trim();
+    const label = Number.isInteger(hVal) ? `${hVal}H` : `${hVal.toFixed(1)}H`;
+    return { isHorizon: true, hours: Math.max(0.1, hVal), horizonLabel: label, stationFilter: residual };
+  }
+
+  // 4. Se não digitou número nenhum (ex: 'tartaruga', 'palmital', 'online'), pesquisa por nome da estação
+  return { isHorizon: false, hours: socialState.horizonHours || 24.0, horizonLabel: (socialState.horizon || '24h').toUpperCase(), stationFilter: clean };
+}
+
+/**
+ * Calcula NA HORA o volume de chuva de qualquer estação para QUALQUER horizonte de horas H (ex: 23h, 8h, 72h)
+ * através da curva oficial multi-âncora de precipitação acumulada das estações.
+ */
+export function calculateStationRain(station, hours) {
+  if (hours <= 0) return 0.0;
+
+  const c1 = Number(station.chuva_1h !== undefined && station.chuva_1h !== null ? station.chuva_1h : 0.0);
+  const c4 = Number(station.chuva_4h !== undefined && station.chuva_4h !== null ? station.chuva_4h : c1);
+  const c6 = Number(station.chuva_6h !== undefined && station.chuva_6h !== null ? station.chuva_6h : (c4 + (Number(station.chuva_12h || c4) - c4) * 0.33));
+  const c12 = Number(station.chuva_12h !== undefined && station.chuva_12h !== null ? station.chuva_12h : c6);
+  const c24 = Number(station.chuva_24h !== undefined && station.chuva_24h !== null ? station.chuva_24h : c12);
+  const c36 = Number(station.chuva_36h !== undefined && station.chuva_36h !== null ? station.chuva_36h : c24);
+  const c48 = Number(station.chuva_48h !== undefined && station.chuva_48h !== null ? station.chuva_48h : c36);
+  const c96 = Number(station.chuva_96h !== undefined && station.chuva_96h !== null ? station.chuva_96h : c48);
+
+  const points = [
+    { h: 0.0, v: 0.0 },
+    { h: 1.0, v: c1 },
+    { h: 4.0, v: c4 },
+    { h: 6.0, v: c6 },
+    { h: 12.0, v: c12 },
+    { h: 24.0, v: c24 },
+    { h: 36.0, v: c36 },
+    { h: 48.0, v: c48 },
+    { h: 96.0, v: c96 }
+  ];
+
+  if (hours <= 0) return 0.0;
+  if (hours >= 96.0) return Number(c96.toFixed(1));
+
+  for (let i = 0; i < points.length - 1; i++) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    if (hours >= p1.h && hours <= p2.h) {
+      if (p2.h === p1.h) return Number(p1.v.toFixed(1));
+      const t = (hours - p1.h) / (p2.h - p1.h);
+      const val = p1.v + t * (p2.v - p1.v);
+      return Number(val.toFixed(1));
+    }
+  }
+
+  return Number(c24.toFixed(1));
+}
+
+/**
  * Abre o modal de exportação para redes sociais
  */
 export function openSocialModalChuva(initialHorizon = '24h') {
   const modal = document.getElementById('modal-social-chuva');
   if (!modal) return;
 
-  if (initialHorizon) {
-    socialState.horizon = initialHorizon.toLowerCase();
-  }
+  const parsed = parseUserQuery(initialHorizon);
+  socialState.horizon = parsed.horizonLabel.toLowerCase();
+  socialState.horizonHours = parsed.hours;
+  socialState.stationFilterText = '';
 
   // Sincroniza controles da UI
   const searchInput = document.getElementById('social-horizon-search');
@@ -44,6 +135,7 @@ export function openSocialModalChuva(initialHorizon = '24h') {
   if (activeCheck) activeCheck.checked = socialState.onlyActive;
 
   updateHorizonButtons(socialState.horizon);
+  updateActivePill(socialState.horizon);
   updateFormatButtons(socialState.format);
 
   modal.classList.remove('hidden');
@@ -76,28 +168,36 @@ export function setSocialFormat(format) {
 }
 
 /**
- * Define o horizonte de tempo (ex: '1h', '24h')
+ * Define o horizonte de tempo via atalho (ex: '1h', '24h')
  */
 export function setSocialHorizon(horizon) {
-  socialState.horizon = horizon.toLowerCase();
+  const parsed = parseUserQuery(horizon);
+  socialState.horizon = parsed.horizonLabel.toLowerCase();
+  socialState.horizonHours = parsed.hours;
+  socialState.stationFilterText = '';
+
   const searchInput = document.getElementById('social-horizon-search');
-  if (searchInput) searchInput.value = horizon;
+  if (searchInput) searchInput.value = socialState.horizon;
+
   updateHorizonButtons(socialState.horizon);
+  updateActivePill(socialState.horizon);
   renderSocialCanvas();
 }
 
 /**
- * Manipula a busca por texto do horizonte ou estação
+ * Manipula a busca por texto do horizonte ou estação NA HORA em tempo real
  */
 export function handleSocialSearch(query) {
-  const clean = String(query || '').trim().toLowerCase();
-  socialState.searchQuery = clean;
+  const parsed = parseUserQuery(query);
 
-  // Se o usuário digitou um horizonte reconhecido (ex: '1h', '24h', '12', '4h')
-  const matchedHorizon = clean.match(/^(1|4|6|12|24|36|48|96)h?$/i);
-  if (matchedHorizon) {
-    socialState.horizon = `${matchedHorizon[1]}h`;
+  if (parsed.isHorizon) {
+    socialState.horizonHours = parsed.hours;
+    socialState.horizon = parsed.horizonLabel.toLowerCase();
+    socialState.stationFilterText = parsed.stationFilter;
     updateHorizonButtons(socialState.horizon);
+    updateActivePill(socialState.horizon);
+  } else {
+    socialState.stationFilterText = parsed.stationFilter;
   }
 
   renderSocialCanvas();
@@ -140,23 +240,11 @@ function updateHorizonButtons(activeHz) {
   });
 }
 
-/**
- * Obtém o valor numérico de chuva para o horizonte selecionado
- */
-function getStationRainVal(station, horizon) {
-  const h = horizon.toLowerCase();
-  let v = 0.0;
-  if (h === '1h') v = station.chuva_1h;
-  else if (h === '4h') v = station.chuva_4h;
-  else if (h === '6h') v = station.chuva_6h || station.chuva_4h;
-  else if (h === '12h') v = station.chuva_12h;
-  else if (h === '24h') v = station.chuva_24h;
-  else if (h === '36h') v = station.chuva_36h;
-  else if (h === '48h') v = station.chuva_48h || station.chuva_24h;
-  else if (h === '96h') v = station.chuva_96h || station.chuva_24h;
-  else v = station.chuva_24h;
-
-  return Number(v !== undefined && v !== null ? v : 0.0);
+function updateActivePill(activeHz) {
+  const pill = document.getElementById('social-active-horizon-pill');
+  if (pill) {
+    pill.textContent = `Horizonte: ${activeHz.toUpperCase()}`;
+  }
 }
 
 /**
@@ -203,9 +291,9 @@ export function renderSocialCanvas() {
     stations = stations.filter(s => s.online !== false);
   }
 
-  // Filtro de busca textual se houver
-  if (socialState.searchQuery && !socialState.searchQuery.match(/^(1|4|6|12|24|36|48|96)h?$/i)) {
-    const q = socialState.searchQuery;
+  // Filtro de busca textual por nome de estação se digitado
+  if (socialState.stationFilterText) {
+    const q = socialState.stationFilterText.toLowerCase();
     stations = stations.filter(s => 
       (s.nome && s.nome.toLowerCase().includes(q)) ||
       (s.bairro && s.bairro.toLowerCase().includes(q)) ||
@@ -217,19 +305,21 @@ export function renderSocialCanvas() {
   const rainStations = stations.filter(s => s.categoria !== 'inea');
   const jundiaSt = stations.find(s => s.categoria === 'inea');
 
-  // Ordena rigorosamente as estações de chuva da maior para a menor em volume no horizonte
-  rainStations.sort((a, b) => {
-    const valA = getStationRainVal(a, socialState.horizon);
-    const valB = getStationRainVal(b, socialState.horizon);
-    return valB - valA;
+  // Calcula o valor de chuva NA HORA para o horizonte ativo em horas
+  const currentHours = socialState.horizonHours || 24.0;
+  rainStations.forEach(st => {
+    st._activeRainVal = calculateStationRain(st, currentHours);
   });
+
+  // Ordena rigorosamente as estações de chuva da MAIOR para a MENOR em volume no horizonte pesquisado
+  rainStations.sort((a, b) => b._activeRainVal - a._activeRainVal);
 
   // Limite de itens na tela para manter tipografia grande e respiração visual
   const maxItems = isStory ? 9 : 6;
   let displayStations = [];
 
   // Se busca textual ativa para Jundiá ou nenhuma busca restritiva, exibe Jundiá ao final com sua cota
-  if (jundiaSt && (!socialState.searchQuery || socialState.searchQuery.includes('jundi') || socialState.searchQuery.includes('inea'))) {
+  if (jundiaSt && (!socialState.stationFilterText || socialState.stationFilterText.includes('jundi') || socialState.stationFilterText.includes('inea'))) {
     displayStations = [...rainStations.slice(0, maxItems - 1), jundiaSt];
   } else {
     displayStations = rainStations.slice(0, maxItems);
@@ -284,14 +374,14 @@ export function renderSocialCanvas() {
   ctx.lineTo(rightPad, subY + 25);
   ctx.stroke();
 
-  // 4. Lista das Estações (Formato de Lista Limpa do Modelo)
+  // 4. Lista das Estações (Formato de Lista Limpa)
   const listStartY = subY + 55;
   const availableH = height - listStartY - (isStory ? 200 : 160);
   const rowHeight = Math.min(isStory ? 145 : 155, availableH / Math.max(displayStations.length, 1));
 
   displayStations.forEach((st, idx) => {
     const rowY = listStartY + idx * rowHeight;
-    const rainVal = getStationRainVal(st, socialState.horizon);
+    const rainVal = st._activeRainVal !== undefined ? st._activeRainVal : calculateStationRain(st, currentHours);
     const rainStr = `${rainVal.toFixed(1).replace('.', ',')} mm`;
 
     // Nome Amigável / Limpo da Estação
@@ -329,7 +419,7 @@ export function renderSocialCanvas() {
 
     ctx.fillStyle = 'rgba(2, 132, 199, 0.2)';
     ctx.strokeStyle = '#0284c7';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.roundRect(leftPad, badgeY, badgeW, badgeH, 6);
     ctx.fill();
@@ -338,14 +428,9 @@ export function renderSocialCanvas() {
     ctx.fillStyle = '#38bdf8';
     ctx.fillText(badgeTxt, leftPad + 12, badgeY + 20);
 
-    // Nome da Rede / Bairro abaixo
-    ctx.fillStyle = '#64748b';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText(redeTag, leftPad, badgeY + 48);
-
-    // B. Coluna Central: Ícone Ciano + Medição Oficial
-    const midX = leftPad + 430;
-    const isJundia = st.categoria === 'inea' || (st.codigo && st.codigo.includes('2241036'));
+    // B. Coluna Central: Indicador Visual e Volume
+    const midX = width * 0.54;
+    const isJundia = st.categoria === 'inea';
 
     if (isJundia) {
       // Para o Rio Jundiá: NÃO é acumulado em mm, é NÍVEL DO RIO em metros com cápsula de água
@@ -411,66 +496,56 @@ export function renderSocialCanvas() {
     ctx.stroke();
   });
 
-  // 5. Rodapé Institucional Oficial (@tempoemriodasostras)
-  const footerY = height - (isStory ? 120 : 90);
+  // 5. Rodapé Oficial
+  const footerY = height - (isStory ? 100 : 70);
 
   // Barra de acento ciano horizontal
   ctx.fillStyle = '#00d2ff';
   ctx.beginPath();
-  ctx.roundRect(leftPad, footerY - 30, 48, 6, 3);
+  ctx.roundRect(leftPad, footerY - 45, width - 160, 2, 1);
   ctx.fill();
 
-  // @tempoemriodasostras
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 30px sans-serif';
-  ctx.fillText('@tempoemriodasostras', leftPad, footerY + 8);
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('@tempoemriodasostras', leftPad, footerY);
 
   ctx.fillStyle = '#94a3b8';
-  ctx.font = '500 20px sans-serif';
-  ctx.fillText('Fontes: Estações de cada bairro • Rio das Ostras - RJ', leftPad, footerY + 38);
+  ctx.font = '400 20px sans-serif';
+  ctx.fillText('Fontes: Estações de cada bairro • Rio das Ostras - RJ', leftPad, footerY + 28);
 
-
-
-  // 6. Atualiza a Pré-visualização na UI
+  // Atualiza a imagem de pré-visualização no DOM
   const previewImg = document.getElementById('social-preview-image');
   if (previewImg) {
-    try {
-      previewImg.src = canvas.toDataURL('image/png');
-    } catch (e) {
-      console.warn('Erro ao gerar preview dataURL:', e);
-    }
+    previewImg.src = canvas.toDataURL('image/png');
   }
 }
 
 /**
- * Faz download da imagem gerada no formato atual
+ * Faz download da imagem gerada no canvas
  */
 export function downloadSocialCard() {
   const canvas = document.getElementById('social-export-canvas');
   if (!canvas) return;
 
-  const fmtName = socialState.format === 'story' ? 'stories' : 'post';
+  const fmtName = socialState.format === 'story' ? 'story' : 'post';
   const horizonName = socialState.horizon;
   const fileName = `acumulados_chuva_${horizonName}_${fmtName}_riodasostras.png`;
 
-  try {
-    const dataUrl = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.download = fileName;
-    link.href = dataUrl;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (e) {
-    console.error('Erro ao baixar imagem:', e);
-  }
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = canvas.toDataURL('image/png');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
-// Expõe funções no window para fácil chamada a partir do HTML
-window.openSocialModalChuva = openSocialModalChuva;
-window.closeSocialModalChuva = closeSocialModalChuva;
-window.setSocialFormat = setSocialFormat;
-window.setSocialHorizon = setSocialHorizon;
-window.handleSocialSearch = handleSocialSearch;
-window.toggleOnlyActive = toggleOnlyActive;
-window.downloadSocialCard = downloadSocialCard;
+// Expõe funções globalmente para interações do HTML
+if (typeof window !== 'undefined') {
+  window.openSocialModalChuva = openSocialModalChuva;
+  window.closeSocialModalChuva = closeSocialModalChuva;
+  window.setSocialFormat = setSocialFormat;
+  window.setSocialHorizon = setSocialHorizon;
+  window.handleSocialSearch = handleSocialSearch;
+  window.toggleOnlyActive = toggleOnlyActive;
+  window.downloadSocialCard = downloadSocialCard;
+}
