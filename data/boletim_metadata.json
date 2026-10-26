@@ -1582,8 +1582,8 @@
     }
   ],
   "kpis": {
-    "jundia_nivel": "1.82 m",
-    "jundia_status": "Atenção",
+    "jundia_nivel": "1.6 m",
+    "jundia_status": "VIGILÂNCIA",
     "chuva_3d": "6.4 mm",
     "aviso_marinha": "FORÇA 7",
     "pico_calor": "24°C",
