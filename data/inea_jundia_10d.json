@@ -29,18 +29,6 @@
       "chuva_30d": 13.2,
       "chuva_4h": 0.0,
       "chuva_96h": 0.2,
-      "datai": 202610161630,
-      "datetime_brt": "2026-10-16T13:30:00-03:00",
-      "nivel": 1.68
-    },
-    {
-      "chuva": 0.2,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.2,
-      "chuva_30d": 13.2,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.2,
       "datai": 202610161700,
       "datetime_brt": "2026-10-16T14:00:00-03:00",
       "nivel": 1.69

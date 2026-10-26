@@ -1,17 +1,17 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "26/10 (Segunda-feira) a 28/10 (Quarta-feira)",
-  "emissao": "26/10/2026 às 16:09h",
+  "emissao": "26/10/2026 às 16:43h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Sem avisos meteorológicos severos vigentes para hoje. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 789/2026) válidos a partir de None até 27/10 às 21:00h. Acumulado total de chuva previsto para o ciclo de 3 dias: 6.4 mm com temperatura máxima alcançando 24°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
     "observado_recente": {
       "cemaden_pcd_18789": {
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
-        "chuva_1h": 0.0,
-        "chuva_24h": 2.6,
-        "chuva_96h": 15.4,
-        "leitura": "26/10/26 16:10"
+        "chuva_1h": 0.4,
+        "chuva_24h": 3.0,
+        "chuva_96h": 15.8,
+        "leitura": "26/10/26 16:40"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -92,7 +92,7 @@
       "impacto": "Sem riscos meteorológicos severos previstos para hoje."
     }
   ],
-  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 26/10 (Segunda-feira) a 28/10 (Quarta-feira) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 19°C ao amanhecer e máxima de 24°C na segunda-feira (26/10), com precipitação diária prevista em 5.3 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quarta-feira (28/10).\n\nNo monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 2.6 mm em 24h e 15.4 mm em 96h) e a telemetria do INEA (8.0 mm em 24h e 20.8 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 60 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, na terça-feira (27/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (0.7 mm, sem avisos meteorológicos vigentes). Na quarta-feira (28/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (0.4 mm, sem avisos meteorológicos vigentes). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo.",
+  "sinopse_geral": "O panorama meteorológico regional sobre o município de Rio das Ostras e o litoral norte fluminense para o período de 26/10 (Segunda-feira) a 28/10 (Quarta-feira) é condicionado pela atuação de uma massa de ar quente e úmida tropical, combinada à circulação de brisas marítimas e ao forte aquecimento diurno. Esse padrão termodinâmico sustenta temperaturas elevadas e favorece o desenvolvimento de instabilidades convectivas a partir da tarde, sob influência de cavados em médios níveis da atmosfera e borda oeste do anticiclone subtropical do Atlântico Sul (Carta Sinótica CHM 12Z). As temperaturas oscilam entre mínima de 19°C ao amanhecer e máxima de 24°C na segunda-feira (26/10), com precipitação diária prevista em 5.3 mm (sem avisos meteorológicos vigentes). O gradiente térmico semanal evolui com calor persistente, alcançando pico de até 24°C na quarta-feira (28/10).\n\nNo monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 3.0 mm em 24h e 15.8 mm em 96h) e a telemetria do INEA (8.0 mm em 24h e 20.8 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 60 km/h associadas às células convectivas da tarde.\n\nPara os dias subsequentes, na terça-feira (27/10) a aproximação de instabilidades mantém variação de nuvens com máxima de 24°C e pancadas de chuva com trovoadas (0.7 mm, sem avisos meteorológicos vigentes). Na quarta-feira (28/10), o calor persiste com máxima de 24°C e gradual diminuição de instabilidades (0.4 mm, sem avisos meteorológicos vigentes). A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo. A infraestrutura de monitoramento meteorológico opera de forma contínua 24h na nuvem, com processamento automatizado e redundante dos dados do INMET, INEA e Open-Meteo.",
   "sinopse_estruturada": {
     "periodo": "26/10 (Segunda-feira) a 28/10 (Quarta-feira)",
     "evolucao_3_dias": [
@@ -106,7 +106,7 @@
         "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 5.3 mm com rajadas de vento de até 60 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (5.3 mm no dia). Pluviômetro CEMADEN registra 2.6 mm e o Rio Jundiá (INEA) cota de 1.82 m (Status: Atenção), em regime seguro de vazante contínua.",
+          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (5.3 mm no dia). Pluviômetro CEMADEN registra 3.0 mm e o Rio Jundiá (INEA) cota de 1.82 m (Status: Atenção), em regime seguro de vazante contínua.",
           "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em gradual elevação. Na região rural, oscilam entre 17°C e 22°C.",
           "A umidade relativa do ar oscila entre 82% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos predominantes de SW-W moderados com rajadas de até 60 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil)."
@@ -296,7 +296,7 @@
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
       "cota": "1.82 m",
       "status": "Atenção",
-      "texto": "No monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 2.6 mm em 24h e 15.4 mm em 96h) e a telemetria do INEA (8.0 mm em 24h e 20.8 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 60 km/h associadas às células convectivas da tarde.",
+      "texto": "No monitoramento hidrográfico e pluviométrico municipal, a Bacia do Rio Jundiá opera em regime de estabilidade e contínua vazante. A estação telemétrica municipal (INEA 224103620) registrou cota de 1.82 m (Status: Atenção), posicionando-se com margem de segurança de quase 1 metro abaixo da cota de transbordo (2,84 m) e com capacidade de calha em 60%. A análise multifonte de precipitação integra os pluviômetros do CEMADEN (PCD 18789 com 3.0 mm em 24h e 15.8 mm em 96h) e a telemetria do INEA (8.0 mm em 24h e 20.8 mm em 96h), evidenciando drenagem pluvial contínua nos canais dos bairros Âncora, Nova Esperança e adjacências. Na faixa litorânea (Área Delta - Farol de São Tomé a Cabo Frio), a Marinha do Brasil registra mar com ondas moderadas entre 1,2 e 1,6 m e ventos costeiros regulares com rajadas pontuais de até 60 km/h associadas às células convectivas da tarde.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
@@ -372,7 +372,7 @@
       "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 5.3 mm com rajadas de vento de até 60 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (5.3 mm no dia). Pluviômetro CEMADEN registra 2.6 mm e o Rio Jundiá (INEA) cota de 1.82 m (Status: Atenção), em regime seguro de vazante contínua.",
+        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (5.3 mm no dia). Pluviômetro CEMADEN registra 3.0 mm e o Rio Jundiá (INEA) cota de 1.82 m (Status: Atenção), em regime seguro de vazante contínua.",
         "Temperaturas variam entre mínima de 19°C ao amanhecer e máxima de 24°C à tarde em gradual elevação. Na região rural, oscilam entre 17°C e 22°C.",
         "A umidade relativa do ar oscila entre 82% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos predominantes de SW-W moderados com rajadas de até 60 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil)."
@@ -787,7 +787,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-26T16:09:40.942146"
+    "atualizado_em": "2026-10-26T16:44:09.436686"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -795,7 +795,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-10-26 16:09:57",
+    "data_coleta": "2026-10-26 16:44:27",
     "bulletin_info": {
       "disponivel": false,
       "arquivo": null,
@@ -1262,7 +1262,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-26T16:09:58.810274",
+    "atualizado_em": "2026-10-26T16:44:28.309234",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "20:55",
