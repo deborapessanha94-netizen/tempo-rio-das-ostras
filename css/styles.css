@@ -92,16 +92,18 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Logo Oficial */
 .site-logo {
-  height: 3.5rem;
+  height: 2.75rem;
   width: auto;
   max-width: 240px;
   object-fit: contain;
   display: block;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 @media (min-width: 640px) {
   .site-logo {
-    height: 3.75rem;
+    height: 3.25rem;
   }
 }
 
