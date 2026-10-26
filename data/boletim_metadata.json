@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "26/10 (Segunda-feira) a 28/10 (Quarta-feira)",
-  "emissao": "26/10/2026 às 21:10h",
+  "emissao": "26/10/2026 às 21:47h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.82 m. Sem avisos meteorológicos severos vigentes para hoje. Acumulado total de chuva previsto para o ciclo de 3 dias: 6.2 mm com temperatura máxima alcançando 26°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -787,7 +787,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-26T21:11:14.081372"
+    "atualizado_em": "2026-10-26T21:47:48.007282"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -795,7 +795,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-10-26 21:11:51",
+    "data_coleta": "2026-10-26 21:48:30",
     "bulletin_info": {
       "disponivel": false,
       "arquivo": null,
@@ -1282,7 +1282,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-10-26 00z",
-    "atualizacao": "26/10/2026 18:11",
+    "atualizacao": "26/10/2026 18:48",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -1368,7 +1368,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "26/10/2026",
-    "atualizacao": "26/10/2026 18:11",
+    "atualizacao": "26/10/2026 18:48",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -1544,7 +1544,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-26T21:11:52.285606",
+    "atualizado_em": "2026-10-26T21:48:31.603717",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "02:58",
