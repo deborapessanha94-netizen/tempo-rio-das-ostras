@@ -429,12 +429,7 @@ export function renderSocialCanvas() {
   ctx.font = '500 20px sans-serif';
   ctx.fillText('Fontes: Estações de cada bairro • Rio das Ostras - RJ', leftPad, footerY + 38);
 
-  // Portal à direita
-  const siteTxt = 'tempo-riodasostras.com.br';
-  ctx.font = '500 22px monospace';
-  ctx.fillStyle = '#64748b';
-  const siteW = ctx.measureText(siteTxt).width;
-  ctx.fillText(siteTxt, rightPad - siteW, footerY + 8);
+
 
   // 6. Atualiza a Pré-visualização na UI
   const previewImg = document.getElementById('social-preview-image');
