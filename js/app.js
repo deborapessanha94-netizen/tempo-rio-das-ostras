@@ -325,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   setupModalsAndDock();
+  initCptecProbabilistica();
 
 
 
@@ -688,33 +689,32 @@ function setupModalsAndDock() {
   if (btnCloseMeteo) btnCloseMeteo.addEventListener('click', closeMeteo);
   if (btnCloseMeteoFoot) btnCloseMeteoFoot.addEventListener('click', closeMeteo);
 
-  // Alternância de Abas: INMET COSMO vs CPTEC Multimodel
+  // Alternância de Abas: INMET COSMO vs CPTEC Multimodel vs Previsão Probabilística
   const tabInmet = document.getElementById('tab-btn-inmet-meteo');
   const tabCptec = document.getElementById('tab-btn-cptec-meteo');
+  const tabProb = document.getElementById('tab-btn-prob-meteo');
   const contentInmet = document.getElementById('tab-content-inmet-meteo');
   const contentCptec = document.getElementById('tab-content-cptec-meteo');
+  const contentProb = document.getElementById('tab-content-prob-meteo');
 
   if (tabInmet && tabCptec && contentInmet && contentCptec) {
     const activeTabClasses = 'px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-zinc-900 dark:border-sky-400 text-zinc-900 dark:text-white cursor-pointer flex items-center gap-2';
     const inactiveTabClasses = 'px-4 py-2 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white cursor-pointer flex items-center gap-2';
 
-    tabInmet.addEventListener('click', () => {
-      tabInmet.className = activeTabClasses;
-      tabCptec.className = inactiveTabClasses;
-      contentInmet.classList.remove('hidden');
-      contentCptec.classList.add('hidden');
+    const switchMeteoTab = (activeTab, activeContent) => {
+      [tabInmet, tabCptec, tabProb].forEach(t => { if (t) t.className = inactiveTabClasses; });
+      [contentInmet, contentCptec, contentProb].forEach(c => { if (c) c.classList.add('hidden'); });
+      if (activeTab) activeTab.className = activeTabClasses;
+      if (activeContent) activeContent.classList.remove('hidden');
       if (window.resetMeteoZoom) window.resetMeteoZoom();
       if (window.lucide) lucide.createIcons();
-    });
+    };
 
-    tabCptec.addEventListener('click', () => {
-      tabCptec.className = activeTabClasses;
-      tabInmet.className = inactiveTabClasses;
-      contentCptec.classList.remove('hidden');
-      contentInmet.classList.add('hidden');
-      if (window.resetMeteoZoom) window.resetMeteoZoom();
-      if (window.lucide) lucide.createIcons();
-    });
+    tabInmet.addEventListener('click', () => switchMeteoTab(tabInmet, contentInmet));
+    tabCptec.addEventListener('click', () => switchMeteoTab(tabCptec, contentCptec));
+    if (tabProb && contentProb) {
+      tabProb.addEventListener('click', () => switchMeteoTab(tabProb, contentProb));
+    }
   }
 
   // Suporte a abertura via query param ?modal=meteo ou hash #meteogramas
@@ -725,7 +725,11 @@ function setupModalsAndDock() {
       openMapaRj();
       setTimeout(() => { openMapaRj(); }, 350);
     }
-    if (mParam === 'meteo' || mParam === 'meteograma' || mParam === 'meteogramas' || window.location.hash === '#meteogramas') {
+    if (mParam === 'prob' || mParam === 'probabilistica' || window.location.hash === '#probabilistica') {
+      openMeteo();
+      setTimeout(() => { if (tabProb) tabProb.click(); }, 200);
+    }
+        if (mParam === 'meteo' || mParam === 'meteograma' || mParam === 'meteogramas' || window.location.hash === '#meteogramas') {
       setTimeout(() => { openMeteo(); }, 400);
     }
   } catch (err) {}
@@ -12431,3 +12435,189 @@ window.switchPlanconTab = function(tabName) {
 
 
 
+
+
+// ==========================================================================
+// PREVISÃO PROBABILÍSTICA CPTEC/INPE: CHUVA INTENSA & TEMPO SEVERO (24H/48H)
+// ==========================================================================
+export function initCptecProbabilistica() {
+  const mapImg = document.getElementById('img-cptec-prob-mapa');
+  const modalImg = document.getElementById('modal-img-cptec-prob');
+  const titleBadge = document.getElementById('badge-cptec-prob-title');
+  const downloadBtn = document.getElementById('btn-cptec-prob-download');
+  const legendGrid = document.getElementById('grid-legenda-items');
+
+  const btnTipoChuva = document.getElementById('btn-cptec-tipo-chuva');
+  const btnTipoSevero = document.getElementById('btn-cptec-tipo-severo');
+  const btnHoriz24 = document.getElementById('btn-cptec-horiz-24');
+  const btnHoriz48 = document.getElementById('btn-cptec-horiz-48');
+
+  const modalBtnChuva = document.getElementById('modal-prob-btn-chuva');
+  const modalBtnSevero = document.getElementById('modal-prob-btn-severo');
+  const modalBtn24 = document.getElementById('modal-prob-btn-24');
+  const modalBtn48 = document.getElementById('modal-prob-btn-48');
+
+  let currentTipo = 'chuva'; // 'chuva' | 'severo'
+  let currentHoriz = '24';   // '24' | '48'
+
+  const maps = {
+    'chuva_24': {
+      local: 'img/cptec/mapa_prev_prob_24h_chuvaintensa.png',
+      remote: 'https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_chuvaintensa.png',
+      title: 'Probabilidade de Chuva Intensa • 24 Horas',
+      download: 'cptec_previsao_chuva_intensa_24h.png'
+    },
+    'chuva_48': {
+      local: 'img/cptec/mapa_prev_prob_48h_chuvaintensa.png',
+      remote: 'https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_chuvaintensa.png',
+      title: 'Probabilidade de Chuva Intensa • 48 Horas',
+      download: 'cptec_previsao_chuva_intensa_48h.png'
+    },
+    'severo_24': {
+      local: 'img/cptec/mapa_prev_prob_24h_temposevero.png',
+      remote: 'https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png',
+      title: 'Probabilidade de Tempo Severo • 24 Horas',
+      download: 'cptec_previsao_tempo_severo_24h.png'
+    },
+    'severo_48': {
+      local: 'img/cptec/mapa_prev_prob_48h_temposevero.png',
+      remote: 'https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_temposevero.png',
+      title: 'Probabilidade de Tempo Severo • 48 Horas',
+      download: 'cptec_previsao_tempo_severo_48h.png'
+    }
+  };
+
+  const updateView = () => {
+    const key = `${currentTipo}_${currentHoriz}`;
+    const info = maps[key];
+    if (!info) return;
+
+    const fullSrc = `${info.local}?v=${Date.now()}`;
+    if (mapImg) {
+      mapImg.src = fullSrc;
+      mapImg.onerror = () => { mapImg.src = info.remote; };
+    }
+    if (modalImg) {
+      modalImg.src = fullSrc;
+      modalImg.onerror = () => { modalImg.src = info.remote; };
+    }
+    if (titleBadge) {
+      titleBadge.textContent = info.title;
+    }
+    if (downloadBtn) {
+      downloadBtn.href = info.local;
+      downloadBtn.download = info.download;
+    }
+
+    // Toggle styling for Main Tipo buttons
+    const activeTipoClass = 'btn-cptec-tipo px-3.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer flex items-center gap-1.5 bg-[#f07a53] text-white shadow-xs';
+    const inactiveTipoClass = 'btn-cptec-tipo px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer flex items-center gap-1.5';
+
+    if (btnTipoChuva && btnTipoSevero) {
+      if (currentTipo === 'chuva') {
+        btnTipoChuva.className = activeTipoClass;
+        btnTipoSevero.className = inactiveTipoClass;
+      } else {
+        btnTipoChuva.className = inactiveTipoClass;
+        btnTipoSevero.className = activeTipoClass;
+      }
+    }
+
+    // Toggle styling for Modal Tipo buttons
+    const modalActiveTipo = 'px-3 py-1 rounded-lg text-xs font-bold bg-[#f07a53] text-white transition cursor-pointer';
+    const modalInactiveTipo = 'px-3 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer';
+
+    if (modalBtnChuva && modalBtnSevero) {
+      if (currentTipo === 'chuva') {
+        modalBtnChuva.className = modalActiveTipo;
+        modalBtnSevero.className = modalInactiveTipo;
+      } else {
+        modalBtnChuva.className = modalInactiveTipo;
+        modalBtnSevero.className = modalActiveTipo;
+      }
+    }
+
+    // Toggle styling for Main Horiz buttons
+    const activeHorizClass = 'btn-cptec-horiz px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 shadow-xs';
+    const inactiveHorizClass = 'btn-cptec-horiz px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer';
+
+    if (btnHoriz24 && btnHoriz48) {
+      if (currentHoriz === '24') {
+        btnHoriz24.className = activeHorizClass;
+        btnHoriz48.className = inactiveHorizClass;
+      } else {
+        btnHoriz24.className = inactiveHorizClass;
+        btnHoriz48.className = activeHorizClass;
+      }
+    }
+
+    // Toggle styling for Modal Horiz buttons
+    const modalActiveHoriz = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-900 text-white dark:bg-sky-500 dark:text-slate-950 transition cursor-pointer';
+    const modalInactiveHoriz = 'px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 transition cursor-pointer';
+
+    if (modalBtn24 && modalBtn48) {
+      if (currentHoriz === '24') {
+        modalBtn24.className = modalActiveHoriz;
+        modalBtn48.className = modalInactiveHoriz;
+      } else {
+        modalBtn24.className = modalInactiveHoriz;
+        modalBtn48.className = modalActiveHoriz;
+      }
+    }
+
+    // Update legend
+    if (legendGrid) {
+      if (currentTipo === 'chuva') {
+        legendGrid.innerHTML = `
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#99ff99] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Baixa</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ffff66] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Moderada</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ff9933] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Alta</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ff3333] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Muito Alta</span>
+          </div>
+        `;
+      } else {
+        legendGrid.innerHTML = `
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#99ff99] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Tempestade</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ffff66] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Nível 1</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ff9933] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Nível 2</span>
+          </div>
+          <div class="flex items-center gap-1.5 p-1.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#ff3333] border border-slate-300 shrink-0"></span>
+            <span class="font-bold text-[11px] text-slate-800 dark:text-slate-200">Nível 3/4</span>
+          </div>
+        `;
+      }
+    }
+  };
+
+  const bindEvents = (elChuva, elSevero, el24, el48) => {
+    if (elChuva) elChuva.addEventListener('click', () => { currentTipo = 'chuva'; updateView(); });
+    if (elSevero) elSevero.addEventListener('click', () => { currentTipo = 'severo'; updateView(); });
+    if (el24) el24.addEventListener('click', () => { currentHoriz = '24'; updateView(); });
+    if (el48) el48.addEventListener('click', () => { currentHoriz = '48'; updateView(); });
+  };
+
+  bindEvents(btnTipoChuva, btnTipoSevero, btnHoriz24, btnHoriz48);
+  bindEvents(modalBtnChuva, modalBtnSevero, modalBtn24, modalBtn48);
+
+  updateView();
+}

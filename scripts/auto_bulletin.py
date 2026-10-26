@@ -431,13 +431,68 @@ def fetch_inmet_meteograma():
         "imagem_disponivel": out_img.exists()
     }
 
+
+def fetch_cptec_probabilistic_maps():
+    """Baixa e atualiza os 4 mapas de Previsão Probabilística oficiais do CPTEC/INPE:
+    1. Chuva Intensa 24h
+    2. Chuva Intensa 48h
+    3. Tempo Severo 24h
+    4. Tempo Severo 48h
+    """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Referer': 'https://www.cptec.inpe.br/'
+    }
+    urls = {
+        "chuva_24h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_chuvaintensa.png",
+        "chuva_48h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_chuvaintensa.png",
+        "severo_24h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png",
+        "severo_48h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_temposevero.png"
+    }
+    cptec_dir = Path("img/cptec")
+    cptec_dir.mkdir(parents=True, exist_ok=True)
+    
+    status_maps = {}
+    for key, url in urls.items():
+        fname = f"mapa_prev_prob_{key.split('_')[1]}_{'chuvaintensa' if 'chuva' in key else 'temposevero'}.png"
+        out_path = cptec_dir / fname
+        try:
+            req = urllib.request.Request(url, headers=headers)
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                data = resp.read()
+                with open(out_path, 'wb') as f:
+                    f.write(data)
+                status_maps[key] = {
+                    "ok": True,
+                    "tamanho_bytes": len(data),
+                    "arquivo": f"img/cptec/{fname}",
+                    "url_oficial": url
+                }
+                print(f"[CPTEC Probabilística] Mapa {key} sincronizado com sucesso ({len(data)} bytes)")
+        except Exception as e:
+            print(f"[CPTEC Probabilística] Aviso ao sincronizar {key}: {e}")
+            status_maps[key] = {
+                "ok": out_path.exists(),
+                "arquivo": f"img/cptec/{fname}",
+                "url_oficial": url
+            }
+            
+    return {
+        "fonte": "CPTEC/INPE - Nowcasting & Previsão Probabilística",
+        "url_portal": "https://www.cptec.inpe.br/",
+        "url_documentacao": "https://dataserver.cptec.inpe.br/dataserver_diptc/web/pdfs/informativos/criterios-previsao-probabilistica.pdf",
+        "mapas": status_maps
+    }
+
 def fetch_cptec_data():
     """Busca previsão e meteograma numérico do CPTEC/INPE para Rio das Ostras (ID 3866 / IBGE 3304524)"""
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         'Referer': 'https://www.cptec.inpe.br/'
     }
+    prob_maps = fetch_cptec_probabilistic_maps()
     cptec_info = {
+        "previsao_probabilistica": prob_maps,
         "cidade": "Rio das Ostras",
         "uf": "RJ",
         "id_cidade": 3866,
