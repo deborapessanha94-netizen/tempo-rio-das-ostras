@@ -2960,3 +2960,33 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// =============================================================================
+// NAVEGAÇÃO DE ABAS DO RESUMO DO PLANCON (VOLUMES, BAIRROS, NÍVEIS, PROTOCOLOS)
+// =============================================================================
+window.switchPlanconTab = function(tabName) {
+  const tabs = ['volumes', 'bairros', 'niveis', 'protocolos'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`plancon-tab-btn-${t}`);
+    const panel = document.getElementById(`plancon-panel-${t}`);
+    if (btn) {
+      if (t === tabName) {
+        btn.className = 'plancon-tab-btn active px-3.5 py-1.5 text-xs font-black rounded-lg transition whitespace-nowrap cursor-pointer flex items-center gap-1.5';
+        btn.setAttribute('aria-selected', 'true');
+      } else {
+        btn.className = 'plancon-tab-btn px-3.5 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap cursor-pointer flex items-center gap-1.5';
+        btn.setAttribute('aria-selected', 'false');
+      }
+    }
+    if (panel) {
+      if (t === tabName) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+  });
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+};
