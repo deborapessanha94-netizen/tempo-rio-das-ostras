@@ -1,11 +1,11 @@
 {
-  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 789/2026)",
-  "badge": "VENTO FORTE",
-  "badge_tipo": "warning",
-  "aviso_ativo": true,
-  "aviso_numero": "789/2026",
-  "aviso_tipo": "VENTO FORTE",
-  "mar_ondas": "2,0 a 2,5 m (Agitado)",
+  "status_geral": "Sem avisos de mau tempo vigentes na orla",
+  "badge": "NORMALIDADE",
+  "badge_tipo": "success",
+  "aviso_ativo": false,
+  "aviso_numero": null,
+  "aviso_tipo": "NORMALIDADE",
+  "mar_ondas": "1,2 a 1,6 m (Moderado)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
   "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
   "nota_rodape": "Em dias de aviso da Marinha, respeite as bandeiras de sinalização dos Guarda-Vidas do Corpo de Bombeiros (193).",
@@ -51,10 +51,10 @@
           "detalhe": "Swell de E • Entrada de vento forte a partir das 21h (Aviso nº 781)"
         },
         "d2": {
-          "estado": "Mar Grosso / Agitado",
+          "estado": "Moderado",
           "ondas": "1,0 a 1,4 m",
-          "badge": "danger",
-          "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Forte (nº 781) • Ondas severas e vento até 74 km/h"
+          "badge": "success",
+          "detalhe": "Swell de E/NE"
         }
       }
     },
@@ -76,10 +76,10 @@
           "detalhe": "Mar propício para caminhada; vento aumentando à noite"
         },
         "d2": {
-          "estado": "Moderado (Vento Forte NW/SW)",
-          "ondas": "0,9 a 1,3 m",
-          "badge": "warning",
-          "detalhe": "Enseada protegida de ondas gigantes, mas com rajadas fortes de vento na orla"
+          "estado": "Calmo",
+          "ondas": "0,5 a 0,8 m",
+          "badge": "success",
+          "detalhe": "Águas calmas na orla central"
         }
       }
     },
@@ -101,10 +101,10 @@
           "detalhe": "Mar calmo, condições boas para banho"
         },
         "d2": {
-          "estado": "Calmo a Moderado",
-          "ondas": "0,6 a 1,0 m",
-          "badge": "warning",
-          "detalhe": "Águas abrigadas de swell oceânico, atenção a rajadas de vento"
+          "estado": "Calmo",
+          "ondas": "0,3 a 0,5 m",
+          "badge": "success",
+          "detalhe": "Piscina natural calma"
         }
       }
     },
@@ -126,10 +126,10 @@
           "detalhe": "Águas mansas para lazer familiar"
         },
         "d2": {
-          "estado": "Calmo a Moderado",
-          "ondas": "0,6 a 0,9 m",
-          "badge": "warning",
-          "detalhe": "Protegida de ondas fortes; rajadas de vento presentes"
+          "estado": "Calmo",
+          "ondas": "0,3 a 0,5 m",
+          "badge": "success",
+          "detalhe": "Águas serenas"
         }
       }
     },
@@ -176,10 +176,10 @@
           "detalhe": "Águas mansas para stand-up paddle"
         },
         "d2": {
-          "estado": "Moderado com Vento",
-          "ondas": "0,7 a 1,1 m",
-          "badge": "warning",
-          "detalhe": "Atenção ao vento forte próximo ao costão de Costazul"
+          "estado": "Calmo",
+          "ondas": "0,4 a 0,6 m",
+          "badge": "success",
+          "detalhe": "Águas cristalinas"
         }
       }
     },
@@ -201,10 +201,10 @@
           "detalhe": "Águas calmas e temperatura agradável"
         },
         "d2": {
-          "estado": "Moderado",
-          "ondas": "0,7 a 1,0 m",
-          "badge": "warning",
-          "detalhe": "Resguardo parcial dos costões com vento forte na faixa de areia"
+          "estado": "Calmo",
+          "ondas": "0,4 a 0,6 m",
+          "badge": "success",
+          "detalhe": "Mar sereno"
         }
       }
     },
@@ -226,10 +226,10 @@
           "detalhe": "Mar aberto, ondulação constante e vento à noite"
         },
         "d2": {
-          "estado": "Muito Agitado (Mar Grosso)",
+          "estado": "Moderado",
           "ondas": "0,7 a 1,1 m",
-          "badge": "danger",
-          "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Força 7/8 (nº 781) • Evite banho e navegação"
+          "badge": "success",
+          "detalhe": "Ondas regulares"
         }
       }
     },
@@ -251,10 +251,10 @@
           "detalhe": "Águas calmas para caminhada"
         },
         "d2": {
-          "estado": "Calmo a Moderado",
-          "ondas": "0,6 a 0,9 m",
-          "badge": "warning",
-          "detalhe": "Atenção para pequenas embarcações e barcos de pesca fundeados"
+          "estado": "Calmo",
+          "ondas": "0,3 a 0,5 m",
+          "badge": "success",
+          "detalhe": "Mar calmo"
         }
       }
     },
@@ -276,10 +276,10 @@
           "detalhe": "Correnteza nas trocas de maré e vento aumentando à noite"
         },
         "d2": {
-          "estado": "Muito Agitado / Perigo de Correnteza",
-          "ondas": "1,4 a 2,0 m",
-          "badge": "danger",
-          "detalhe": "Confluência crítica de mar grosso com vazante fluvial e ventos até 74 km/h"
+          "estado": "Moderado",
+          "ondas": "0,5 a 0,9 m",
+          "badge": "warning",
+          "detalhe": "Escoamento fluvial estabilizado"
         }
       }
     },
@@ -301,10 +301,10 @@
           "detalhe": "Ondulação aumentando no final do dia"
         },
         "d2": {
-          "estado": "Muito Agitado",
+          "estado": "Moderado",
           "ondas": "0,8 a 1,2 m",
-          "badge": "danger",
-          "detalhe": "Mar aberto selvagem sob aviso da Marinha de Mar Grosso e Vento Forte"
+          "badge": "success",
+          "detalhe": "Mar aberto limpo"
         }
       }
     }
