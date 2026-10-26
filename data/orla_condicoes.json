@@ -1,9 +1,9 @@
 {
-  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 781/2026 e 782/2026 e 785/2026)",
+  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 782/2026 e 785/2026)",
   "badge": "VENTO FORTE & MAR GROSSO",
   "badge_tipo": "danger",
   "aviso_ativo": true,
-  "aviso_numero": "781/2026 e 782/2026 e 785/2026",
+  "aviso_numero": "782/2026 e 785/2026",
   "aviso_tipo": "VENTO FORTE E MAR GROSSO",
   "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
@@ -13,23 +13,23 @@
     {
       "key": "d0",
       "rotulo": "Hoje",
-      "data_iso": "2026-10-25",
-      "data_br": "25/10",
-      "dia_semana": "Domingo"
-    },
-    {
-      "key": "d1",
-      "rotulo": "Amanhã",
       "data_iso": "2026-10-26",
       "data_br": "26/10",
       "dia_semana": "Segunda"
     },
     {
-      "key": "d2",
-      "rotulo": "Depois de amanhã",
+      "key": "d1",
+      "rotulo": "Amanhã",
       "data_iso": "2026-10-27",
       "data_br": "27/10",
       "dia_semana": "Terça"
+    },
+    {
+      "key": "d2",
+      "rotulo": "Depois de amanhã",
+      "data_iso": "2026-10-28",
+      "data_br": "28/10",
+      "dia_semana": "Quarta"
     }
   ],
   "praias_condicoes": [
@@ -390,7 +390,7 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-10-25",
+    "data": "2026-10-26",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "02:18",
@@ -400,26 +400,26 @@
     "mares_do_dia": [
       {
         "tipo": "PREAMAR",
-        "hora": "01:40",
-        "altura": 1.51,
+        "hora": "02:18",
+        "altura": 1.52,
         "rotulo": "Preia-mar (1,5 m)"
       },
       {
         "tipo": "BAIXA-MAR",
-        "hora": "08:11",
-        "altura": 0.22,
-        "rotulo": "Baixa-mar (0,2 m)"
+        "hora": "08:50",
+        "altura": 0.25,
+        "rotulo": "Baixa-mar (0,3 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "14:00",
-        "altura": 1.41,
+        "hora": "14:30",
+        "altura": 1.38,
         "rotulo": "Preia-mar (1,4 m)"
       },
       {
         "tipo": "BAIXA-MAR",
-        "hora": "20:20",
-        "altura": 0.24,
+        "hora": "20:55",
+        "altura": 0.23,
         "rotulo": "Baixa-mar (0,2 m)"
       }
     ]
