@@ -652,6 +652,34 @@ function setupModalsAndDock() {
     }
   };
 
+  // Modal 5: Mapa do Estado do Rio de Janeiro (Localização de Rio das Ostras)
+  const modalMapaRj = document.getElementById('modal-mapa-rj');
+  const btnOpenMapaRj = document.getElementById('btn-hero-mapa-rj');
+  const btnCloseMapaRj = document.getElementById('btn-close-modal-mapa-rj');
+  const btnCloseMapaRjFoot = document.getElementById('btn-close-modal-mapa-rj-foot');
+
+  const openMapaRj = () => {
+    if (modalMapaRj) {
+      modalMapaRj.classList.remove('hidden');
+      modalMapaRj.classList.add('flex');
+      if (window.lucide) lucide.createIcons();
+    }
+  };
+
+  const closeMapaRj = () => {
+    if (modalMapaRj) {
+      modalMapaRj.classList.add('hidden');
+      modalMapaRj.classList.remove('flex');
+    }
+  };
+
+  window.openMapaRjModal = openMapaRj;
+  window.closeMapaRjModal = closeMapaRj;
+
+  if (btnOpenMapaRj) btnOpenMapaRj.addEventListener('click', openMapaRj);
+  if (btnCloseMapaRj) btnCloseMapaRj.addEventListener('click', closeMapaRj);
+  if (btnCloseMapaRjFoot) btnCloseMapaRjFoot.addEventListener('click', closeMapaRj);
+
   window.openMeteoModal = openMeteo;
   window.closeMeteoModal = closeMeteo;
 
@@ -693,6 +721,10 @@ function setupModalsAndDock() {
   try {
     const searchParams = new URLSearchParams(window.location.search);
     const mParam = (searchParams.get('modal') || '').toLowerCase();
+    if (mParam === 'mapa' || mParam === 'mapa-rj' || window.location.hash === '#mapa-rj') {
+      openMapaRj();
+      setTimeout(() => { openMapaRj(); }, 350);
+    }
     if (mParam === 'meteo' || mParam === 'meteograma' || mParam === 'meteogramas' || window.location.hash === '#meteogramas') {
       setTimeout(() => { openMeteo(); }, 400);
     }
@@ -1014,6 +1046,7 @@ function setupModalsAndDock() {
 
 
       closeMeteo();
+      closeMapaRj();
 
 
 
@@ -1033,7 +1066,7 @@ function setupModalsAndDock() {
 
 
 
-  [modalBoletim, modalMeteo].forEach(m => {
+  [modalBoletim, modalMeteo, modalMapaRj].forEach(m => {
 
 
 

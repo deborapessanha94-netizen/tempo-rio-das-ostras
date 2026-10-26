@@ -1632,3 +1632,37 @@ html.dark #modal-meteogramas thead {
   background-color: #131d35 !important;
   color: #94a3b8 !important;
 }
+
+/* ========================================================================= */
+/* MODAL: MAPA DO ESTADO DO RIO DE JANEIRO (RIO DAS OSTRAS)                  */
+/* ========================================================================= */
+#modal-mapa-rj .modern-card {
+  max-width: min(52rem, calc(100vw - 1.5rem)) !important;
+  width: 100% !important;
+  margin: auto !important;
+}
+
+html.dark #modal-mapa-rj .modern-card {
+  background-color: #0d1527 !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark #modal-mapa-rj .bg-[#f8fafc] {
+  background-color: #111a30 !important;
+  border-color: #1e293b !important;
+}
+
+html.dark #modal-mapa-rj .bg-white {
+  background-color: #0d1527 !important;
+}
+
+html.dark #modal-mapa-rj .border-b,
+html.dark #modal-mapa-rj .border-t,
+html.dark #modal-mapa-rj .border-[#cbd5e1] {
+  border-color: #1e293b !important;
+}
+
+html.dark #modal-mapa-rj h3 {
+  color: #f8fafc !important;
+}
