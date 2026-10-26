@@ -231,9 +231,7 @@ import { renderBulletinChart } from './charts.js?v=121';
 
 
 const state = {
-
-
-
+  inmetForecast: null,
   jundia10dData: null,
 
 
@@ -1375,7 +1373,7 @@ async function loadAllApplicationData() {
 
 
 
-    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes, estacoesRes, inea10dRes] = await Promise.allSettled([
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes, estacoesRes, inea10dRes, inmetPrevRes] = await Promise.allSettled([
 
 
 
@@ -1415,10 +1413,8 @@ async function loadAllApplicationData() {
 
 
 
-      getIneaJundia10d()
-
-
-
+      getIneaJundia10d(),
+      getInmetForecast()
     ]);
 
 
@@ -1432,6 +1428,7 @@ async function loadAllApplicationData() {
 
 
     if (metaRes.status === 'fulfilled' && metaRes.value) state.boletimMetadata = metaRes.value;
+    if (inmetPrevRes.status === 'fulfilled' && inmetPrevRes.value) state.inmetForecast = inmetPrevRes.value;
 
 
 
@@ -1983,6 +1980,163 @@ function toIsoDate(str) {
 
 
 
+
+/**
+ * Resolução dinâmica e integrada da Condição do Céu no Momento e do Ícone da Previsão
+ * Cruza o Boletim Oficial, Previsão INMET (período atual), e telemetria Open-Meteo.
+ */
+export function resolveSkyAndHeroWeather(meta, inmetForecast, weather) {
+  const d0 = meta?.dias_resumo?.[0];
+  const subTitle = d0?.subtitulo || '';
+  const ceuVal = d0?.pilares?.ceu?.val || '';
+  const chuvaVal = d0?.pilares?.chuva?.val || '';
+
+  const hour = new Date().getHours();
+  const isDay = weather?.current?.is_day !== undefined ? (weather.current.is_day === 1) : (hour >= 6 && hour < 18);
+  const periodKey = (hour >= 6 && hour < 12) ? 'manha' : (hour >= 12 && hour < 18) ? 'tarde' : 'noite';
+
+  let inmetResumo = '';
+  if (inmetForecast && inmetForecast['3304524']) {
+    const roDates = Object.keys(inmetForecast['3304524']);
+    if (roDates.length > 0) {
+      const todayForecast = inmetForecast['3304524'][roDates[0]];
+      const currentPeriod = todayForecast?.[periodKey] || todayForecast?.['manha'] || todayForecast?.['tarde'] || todayForecast?.['noite'];
+      if (currentPeriod?.resumo) {
+        inmetResumo = currentPeriod.resumo;
+      }
+    }
+  }
+
+  const curWeatherCode = weather?.current?.weather_code;
+  const curPrecip = weather?.current?.precipitation || 0;
+
+  // Texto consolidado para análise semântica
+  const combined = `${inmetResumo} ${subTitle} ${ceuVal} ${chuvaVal}`.toLowerCase();
+
+  // 1. Trovoadas / Tempestades / Raios
+  if (
+    combined.includes('trovoada') ||
+    combined.includes('tempestade') ||
+    combined.includes('raio') ||
+    combined.includes('temporal') ||
+    combined.includes('elétrica') ||
+    [95, 96, 99, 82].includes(curWeatherCode)
+  ) {
+    return {
+      icon: 'cloud-lightning',
+      sky: isDay ? 'Céu Carregado com Risco de Trovoadas e Raios' : 'Céu Noturno Carregado com Trovoadas',
+      condition: inmetResumo || subTitle || 'Muitas nuvens com pancadas de chuva e trovoadas',
+      color: 'text-amber-500 dark:text-amber-400'
+    };
+  }
+
+  // 2. Chuva / Pancadas de Chuva
+  if (
+    combined.includes('pancada') ||
+    combined.includes('chuva forte') ||
+    combined.includes('chuva moderada') ||
+    combined.includes('chuva contínua') ||
+    combined.includes('pancadas') ||
+    [61, 63, 65, 80, 81].includes(curWeatherCode) ||
+    curPrecip > 0.5
+  ) {
+    return {
+      icon: 'cloud-rain',
+      sky: 'Céu Encoberto com Pancadas de Chuva',
+      condition: inmetResumo || subTitle || 'Nublado com Pancadas de Chuva',
+      color: 'text-blue-500 dark:text-blue-400'
+    };
+  }
+
+  // 3. Chuvisco / Garoa / Chuva Leve
+  if (
+    combined.includes('garoa') ||
+    combined.includes('chuvisco') ||
+    combined.includes('chuva leve') ||
+    combined.includes('chuva fina') ||
+    combined.includes('chuva fraca') ||
+    [51, 53, 55].includes(curWeatherCode)
+  ) {
+    return {
+      icon: 'cloud-drizzle',
+      sky: 'Céu Úmido com Garoa / Chuvisco',
+      condition: subTitle || 'Nublado com Chuviscos',
+      color: 'text-cyan-500 dark:text-cyan-400'
+    };
+  }
+
+  // 4. Nevoeiro / Neblina
+  if (
+    combined.includes('nevoeiro') ||
+    combined.includes('neblina') ||
+    [45, 48].includes(curWeatherCode)
+  ) {
+    return {
+      icon: 'cloud-fog',
+      sky: 'Nevoeiro Litorâneo e Visibilidade Reduzida',
+      condition: 'Nevoeiro Litorâneo',
+      color: 'text-slate-400 dark:text-slate-300'
+    };
+  }
+
+  // 5. Sol entre nuvens / Parcialmente Nublado
+  if (
+    combined.includes('parcialmente nublado') ||
+    combined.includes('sol entre nuvens') ||
+    combined.includes('aberturas de sol') ||
+    combined.includes('variação de nebulosidade') ||
+    curWeatherCode === 2
+  ) {
+    return {
+      icon: isDay ? 'cloud-sun' : 'cloud-moon',
+      sky: isDay ? 'Sol entre Nuvens com Nebulosidade Variável' : 'Noite com Nuvens Dispersas',
+      condition: isDay ? 'Parcialmente Nublado / Sol com Nuvens' : 'Parcialmente Nublado',
+      color: isDay ? 'text-amber-500 dark:text-amber-400' : 'text-indigo-300 dark:text-indigo-200'
+    };
+  }
+
+  // 6. Céu Limpo / Sol Pleno / Céu Claro / Poucas Nuvens
+  if (
+    combined.includes('céu claro') ||
+    combined.includes('céu limpo') ||
+    combined.includes('sol pleno') ||
+    combined.includes('ensolarado') ||
+    combined.includes('poucas nuvens') ||
+    combined.includes('predomínio de sol') ||
+    [0, 1].includes(curWeatherCode)
+  ) {
+    return {
+      icon: isDay ? 'sun' : 'moon',
+      sky: isDay ? 'Céu Aberto e Ensolarado (Sol Pleno)' : 'Céu Limpo e Noite Estrelada',
+      condition: isDay ? 'Ensolarado / Céu Aberto' : 'Céu Limpo / Noite Clara',
+      color: isDay ? 'text-amber-500 dark:text-amber-400' : 'text-indigo-400 dark:text-indigo-300'
+    };
+  }
+
+  // 7. Nublado / Encoberto sem chuva
+  if (
+    combined.includes('encoberto') ||
+    combined.includes('nublado') ||
+    combined.includes('muitas nuvens') ||
+    curWeatherCode === 3
+  ) {
+    return {
+      icon: 'cloud',
+      sky: 'Céu Encoberto a Nublado (Muitas Nuvens)',
+      condition: 'Encoberto / Nublado',
+      color: 'text-slate-600 dark:text-slate-300'
+    };
+  }
+
+  // Fallback padrão seguro
+  return {
+    icon: isDay ? 'cloud-sun' : 'cloud-moon',
+    sky: 'Variação de Nebulosidade',
+    condition: subTitle || 'Tempo Variável',
+    color: 'text-amber-500 dark:text-amber-400'
+  };
+}
+
 function renderDashboardUI(meta, rows, weather) {
 
 
@@ -2008,45 +2162,25 @@ function renderDashboardUI(meta, rows, weather) {
 
 
   const condEl = document.getElementById('hero-condition');
-
-
-
   const subcondEl = document.getElementById('hero-subcondition');
-
-
-
   const heroAlertPill = document.getElementById('hero-alert-pill');
-
-
-
   const heroIcon = document.getElementById('hero-weather-icon');
+  const heroSkyEl = document.getElementById('hero-sky-condition');
 
+  // Resolução Integrada e Semântica do Céu no Momento e Ícone de Acordo com a Previsão
+  const heroWeather = resolveSkyAndHeroWeather(meta, state.inmetForecast, weather);
 
-
-  if (heroIcon && primeiroDia?.pilares?.ceu?.icon) {
-
-
-
-    heroIcon.innerHTML = `<i data-lucide="${primeiroDia.pilares.ceu.icon}" class="w-8 h-8 sm:w-9 sm:h-9"></i>`;
-
-
-
+  if (heroSkyEl) {
+    heroSkyEl.textContent = heroWeather.sky;
   }
 
-
-
-
-
-
-
   if (condEl) {
+    condEl.textContent = heroWeather.condition;
+  }
 
-
-
-    condEl.textContent = primeiroDia?.subtitulo?.split('•')?.[0]?.trim() || 'Parcialmente Nublado';
-
-
-
+  if (heroIcon) {
+    heroIcon.innerHTML = `<i data-lucide="${heroWeather.icon}" class="w-8 h-8 sm:w-9 sm:h-9 ${heroWeather.color}"></i>`;
+    if (window.lucide) window.lucide.createIcons();
   }
 
 
@@ -2379,35 +2513,7 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-  // Atualiza Condição do Tempo e Ícone com base no código WMO em tempo real
-
-
-
-  if (weatherCode !== undefined) {
-
-
-
-    const wmo = getWeatherCondition(weatherCode);
-
-
-
-    if (condEl && wmo?.label) condEl.textContent = wmo.label;
-
-
-
-    if (heroIcon && wmo?.icon) {
-
-
-
-      heroIcon.innerHTML = `<i data-lucide="${wmo.icon}" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>`;
-
-
-
-    }
-
-
-
-  }
+  // Condição e ícone já resolvidos harmonicamente por resolveSkyAndHeroWeather
 
 
 
@@ -3622,9 +3728,7 @@ function renderDashboardUI(meta, rows, weather) {
 
 
   renderChuvaTurnosBars(rows);
-
-
-
+  if (window.lucide) window.lucide.createIcons();
 }
 
 

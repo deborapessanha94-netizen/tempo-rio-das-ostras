@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=98">
+  <link rel="stylesheet" href="css/styles.css?v=99">
 
 
 
@@ -998,15 +998,37 @@
 
 
 
-              <div class="space-y-0.5">
+              <div class="space-y-1">
 
 
 
-                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black leading-snug">
+                <!-- Condição do Céu no Momento -->
+
+                <div class="flex items-center gap-1.5 flex-wrap">
+
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800/60 shadow-2xs">
+
+                    <i data-lucide="eye" class="w-3 h-3 text-orange-600 dark:text-orange-400"></i>
+
+                    <span>Céu no Momento</span>
+
+                  </span>
+
+                  <span id="hero-sky-condition" class="text-xs font-semibold text-black dark:text-slate-200">
+
+                    Céu Carregado com Trovoadas e Raios
+
+                  </span>
+
+                </div>
 
 
 
-                  Muitas nuvens com possibilidade de chuva isolada
+                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black dark:text-white leading-snug">
+
+
+
+                  Muitas nuvens com pancadas de chuva e trovoadas
 
 
 
@@ -1014,11 +1036,11 @@
 
 
 
-                <p id="hero-subcondition" class="text-xs font-medium text-black">
+                <p id="hero-subcondition" class="text-xs font-medium text-black dark:text-slate-300">
 
 
 
-                  Chuva prevista: 2.1 mm • Rajadas 24 km/h na orla marítima
+                  Chuva prevista: 7.3 mm (Até 50 mm em tempestade) • Rajadas 64 km/h na orla marítima
 
 
 
@@ -1042,14 +1064,8 @@
 
 
 
-              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white text-black border-2 border-[#f07a53] shadow-sm">
-
-
-
-                <i data-lucide="cloud-rain" class="w-8 h-8 sm:w-9 sm:h-9 text-black"></i>
-
-
-
+              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-[#192439] text-black dark:text-white border-2 border-[#f07a53] shadow-sm">
+                <i data-lucide="cloud-lightning" class="w-8 h-8 sm:w-9 sm:h-9 text-amber-500 dark:text-amber-400"></i>
               </div>
 
 
@@ -11267,7 +11283,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=126"></script>
+  <script type="module" src="js/app.js?v=127"></script>
 
 
 
