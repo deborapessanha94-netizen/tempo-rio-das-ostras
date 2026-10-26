@@ -57,7 +57,14 @@
         "taxa_horaria_pico": "< 5 mm/h"
       }
     ],
-    "conclusao_sem_pontas_soltas": "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade e o teto quantitativo de pico convectivo especificado nos alertas oficiais do INMET, eliminando divergências aparentes e integrando os acumulados antecedentes das estações de monitoramento (CEMADEN e INEA)."
+    "conclusao_sem_pontas_soltas": "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade e o teto quantitativo de pico convectivo especificado nos alertas oficiais do INMET, eliminando divergências aparentes e integrando os acumulados antecedentes das estações de monitoramento (CEMADEN e INEA).",
+    "acumulado_3dias_media": 17.4,
+    "acumulado_3dias_formula": "9.2 mm (Hoje) + 7.1 mm (Amanhã) + 1.1 mm (D+2) = 17.4 mm",
+    "dias_somados": [
+      9.2,
+      7.1,
+      1.1
+    ]
   },
   "alertas_estruturados": [
     {

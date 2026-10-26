@@ -1768,9 +1768,52 @@
               </div>
             </div>
 
-            <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
-              Total 3D: 11.1 mm
-            </span>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span id="badge-hoje-chuva" class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-[#f1f5f9] text-black border border-[#cbd5e1] shadow-2xs">
+                Hoje: 9.2 mm
+              </span>
+              <span id="badge-total-chuva" class="text-xs font-mono font-bold px-3 py-1 rounded-full bg-[#e0f2fe] text-black border border-[#38bdf8] shadow-xs">
+                Total 3D: 17.4 mm
+              </span>
+            </div>
+          </div>
+
+          <!-- Seletor e Somatório dos 3 Dias (Hoje + 2 Dias à Frente) -->
+          <div class="p-2.5 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] space-y-2">
+            <div class="flex items-center justify-between text-xs font-bold text-black flex-wrap gap-1">
+              <span class="flex items-center gap-1.5">
+                <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+                <span>Somatório para 3 Dias (Hoje + 2 Dias à Frente):</span>
+              </span>
+              <span id="chuva-formula-3d" class="font-mono text-xs text-black font-extrabold bg-white px-2 py-0.5 rounded border border-[#cbd5e1]">
+                9,2 + 7,1 + 1,1 = 17,4 mm
+              </span>
+            </div>
+
+            <!-- Botões de Seleção de Dia -->
+            <div class="grid grid-cols-3 gap-2" id="chuva-turnos-day-selector">
+              <button type="button" onclick="selectTurnoDay(0)" id="btn-turno-day-0" class="p-2 rounded-xl text-left border-2 border-[#0284c7] bg-[#f0f9ff] text-black transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">Hoje (D0)</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-0-name">Domingo</span>
+                  <span id="lbl-turno-day-0-val" class="font-mono text-[#0369a1]">9,2 mm</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectTurnoDay(1)" id="btn-turno-day-1" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">Amanhã (D1)</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-1-name">Segunda</span>
+                  <span id="lbl-turno-day-1-val" class="font-mono text-black">7,1 mm</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectTurnoDay(2)" id="btn-turno-day-2" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+2 (2 Dias à Frente)</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-2-name">Terça</span>
+                  <span id="lbl-turno-day-2-val" class="font-mono text-black">1,1 mm</span>
+                </div>
+              </button>
+            </div>
           </div>
 
           <!-- Barrinhas de Chuva dos Turnos -->

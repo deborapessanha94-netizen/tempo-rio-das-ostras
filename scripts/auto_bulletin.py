@@ -1526,6 +1526,9 @@ def run_auto_bulletin_pipeline():
                 "taxa_horaria_pico": d.get('taxa_horaria_pico', '< 5 mm/h')
             } for d in dias_3
         ],
+        "acumulado_3dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
+        "acumulado_3dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2) = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "dias_somados": [d['chuva_tot'] for d in dias_3],
         "conclusao_sem_pontas_soltas": (
             "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade "
             "e o teto quantitativo de pico convectivo especificado nos alertas oficiais do INMET, eliminando divergências aparentes "

@@ -1064,19 +1064,95 @@ function renderAlertasPrincipais(inmetAlerts, marinhaAvisos) {
 function renderChuvaTurnosBars(rows) {
   const container = document.getElementById('chuva-turnos-bars');
   const badgeTotal = document.getElementById('badge-total-chuva');
+  const badgeHoje = document.getElementById('badge-hoje-chuva');
+  const formulaEl = document.getElementById('chuva-formula-3d');
 
   if (!container || !rows || rows.length === 0) return;
 
-  const totalGeral = rows.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  state.currentTurnoRows = rows;
+  if (state.selectedTurnoDay === undefined) state.selectedTurnoDay = 0;
+
+  // Separação rigorosa dos 3 dias (4 turnos para cada dia = 12 turnos)
+  const d0_turnos = rows.slice(0, 4);
+  const d1_turnos = rows.slice(4, 8);
+  const d2_turnos = rows.slice(8, 12);
+
+  const tot0 = d0_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const tot1 = d1_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const tot2 = d2_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const totalGeral = tot0 + tot1 + tot2;
+
+  // Atualiza badges no cabeçalho do card
+  if (badgeHoje) {
+    badgeHoje.textContent = `Hoje: ${tot0.toFixed(1)} mm`;
+  }
   if (badgeTotal) {
     badgeTotal.textContent = `Total 3D: ${totalGeral.toFixed(1)} mm`;
   }
 
-  // Pega os 4 turnos do primeiro dia (Hoje)
-  const turnosHoje = rows.slice(0, 4);
-  const maxChuva = Math.max(...turnosHoje.map(r => parseFloat(r.chuva_media) || 0), 10);
+  // Atualiza a fórmula visível
+  if (formulaEl) {
+    formulaEl.textContent = `${tot0.toFixed(1)} + ${tot1.toFixed(1)} + ${tot2.toFixed(1)} = ${totalGeral.toFixed(1)} mm`;
+  }
 
-  container.innerHTML = turnosHoje.map(r => {
+  // Atualiza os botões seletores dos 3 dias
+  const l0Name = document.getElementById('lbl-turno-day-0-name');
+  const l0Val = document.getElementById('lbl-turno-day-0-val');
+  const l1Name = document.getElementById('lbl-turno-day-1-name');
+  const l1Val = document.getElementById('lbl-turno-day-1-val');
+  const l2Name = document.getElementById('lbl-turno-day-2-name');
+  const l2Val = document.getElementById('lbl-turno-day-2-val');
+
+  if (l0Name) l0Name.textContent = d0_turnos[0]?.dia_semana || 'Hoje';
+  if (l0Val) l0Val.textContent = `${tot0.toFixed(1)} mm`;
+  if (l1Name) l1Name.textContent = d1_turnos[0]?.dia_semana || 'Amanhã';
+  if (l1Val) l1Val.textContent = `${tot1.toFixed(1)} mm`;
+  if (l2Name) l2Name.textContent = d2_turnos[0]?.dia_semana || 'D+2';
+  if (l2Val) l2Val.textContent = `${tot2.toFixed(1)} mm`;
+
+  // Renderiza os turnos do dia atualmente selecionado (0 = Hoje, 1 = Amanhã, 2 = D+2)
+  renderSelectedTurnoDayBars();
+
+  // Atualiza a caixinha de Síntese Multi-Fonte de Precipitação
+  const mfMedia = document.getElementById('chuva-multifonte-media');
+  const mfAlerta = document.getElementById('chuva-multifonte-alerta');
+  const mfObs = document.getElementById('chuva-multifonte-observado');
+  const metaMf = state.boletimMetadata?.analise_precipitacao_multifonte;
+
+  if (metaMf) {
+    const hojePrev = metaMf.previsto_por_dia?.[0];
+    const obsRecente = metaMf.observado_recente;
+    if (mfMedia && hojePrev) {
+      mfMedia.textContent = `${tot0.toFixed(1)} mm hoje (${totalGeral.toFixed(1)} mm nos 3 dias: Hoje ${tot0.toFixed(1)} + Amanhã ${tot1.toFixed(1)} + D+2 ${tot2.toFixed(1)})`;
+    }
+    if (mfAlerta && hojePrev) {
+      mfAlerta.textContent = hojePrev.tem_alerta_inmet 
+        ? `Até ${hojePrev.chuva_pico_convectivo_mm} mm/dia (${hojePrev.taxa_horaria_pico})`
+        : 'Sem alerta de tempestade';
+    }
+    if (mfObs && obsRecente) {
+      const cem = obsRecente.cemaden_pcd_18789;
+      const inea = obsRecente.inea_rio_jundia;
+      mfObs.textContent = `CEMADEN: ${cem?.chuva_24h || 10.2} mm • INEA: ${inea?.chuva_24h || 8.0} mm (24h)`;
+    }
+  }
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
+}
+
+function renderSelectedTurnoDayBars() {
+  const container = document.getElementById('chuva-turnos-bars');
+  const rows = state.currentTurnoRows;
+  if (!container || !rows) return;
+
+  const dayIdx = state.selectedTurnoDay || 0;
+  const startIdx = dayIdx * 4;
+  const turnosDia = rows.slice(startIdx, startIdx + 4);
+  const maxChuva = Math.max(...turnosDia.map(r => parseFloat(r.chuva_media) || 0), 8);
+
+  container.innerHTML = turnosDia.map(r => {
     const val = parseFloat(r.chuva_media) || 0;
     const perc = Math.min(Math.round((val / maxChuva) * 100), 100);
     const hasAlert = r.alerta_tempestade && r.chuva_max && parseFloat(r.chuva_max) > 5;
@@ -1103,34 +1179,25 @@ function renderChuvaTurnosBars(rows) {
     `;
   }).join('');
 
-  // Atualiza a caixinha de Síntese Multi-Fonte de Precipitação se os elementos existirem
-  const mfMedia = document.getElementById('chuva-multifonte-media');
-  const mfAlerta = document.getElementById('chuva-multifonte-alerta');
-  const mfObs = document.getElementById('chuva-multifonte-observado');
-  const metaMf = state.boletimMetadata?.analise_precipitacao_multifonte;
+  // Atualiza estilo visual dos 3 botões seletores
+  [0, 1, 2].forEach(idx => {
+    const btn = document.getElementById(`btn-turno-day-${idx}`);
+    if (btn) {
+      if (idx === dayIdx) {
+        btn.className = 'p-2 rounded-xl text-left border-2 border-[#0284c7] bg-[#f0f9ff] text-black transition shadow-2xs cursor-pointer';
+      } else {
+        btn.className = 'p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer';
+      }
+    }
+  });
 
-  if (metaMf) {
-    const hojePrev = metaMf.previsto_por_dia?.[0];
-    const obsRecente = metaMf.observado_recente;
-    if (mfMedia && hojePrev) {
-      mfMedia.textContent = `${hojePrev.chuva_media_modelos_mm} mm hoje (${totalGeral.toFixed(1)} mm em 3D)`;
-    }
-    if (mfAlerta && hojePrev) {
-      mfAlerta.textContent = hojePrev.tem_alerta_inmet 
-        ? `Até ${hojePrev.chuva_pico_convectivo_mm} mm/dia (${hojePrev.taxa_horaria_pico})`
-        : 'Sem alerta de tempestade';
-    }
-    if (mfObs && obsRecente) {
-      const cem = obsRecente.cemaden_pcd_18789;
-      const inea = obsRecente.inea_rio_jundia;
-      mfObs.textContent = `CEMADEN: ${cem?.chuva_24h || 10.2} mm • INEA: ${inea?.chuva_24h || 8.0} mm (24h)`;
-    }
-  }
-
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
+  if (window.lucide) window.lucide.createIcons();
 }
+
+window.selectTurnoDay = function(dayIdx) {
+  state.selectedTurnoDay = dayIdx;
+  renderSelectedTurnoDayBars();
+};
 
 /**
  * 8. Telemetria Hidrológica do Rio Jundiá
