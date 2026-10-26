@@ -778,7 +778,7 @@ function renderDashboardUI(meta, rows, weather) {
               <span id="day-card-btn-txt-${idx}" class="hover:underline flex items-center gap-1">
                 Ver detalhes técnicos
               </span>
-              <span class="text-[10px] text-black/50 uppercase tracking-wider">Defesa Civil</span>
+              <span class="text-[10px] text-black/60 dark:text-slate-400 uppercase tracking-wider font-semibold">Boletim Oficial</span>
             </div>
           </div>
 
