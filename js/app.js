@@ -12082,6 +12082,20 @@ const handleUrlScrollParam = () => {
       }, 800);
       return;
     }
+    if (scrollVal === 'plancon' || scrollVal === 'plancon-panel-volumes') {
+      setTimeout(() => {
+        const el = document.getElementById('plancon-panel-volumes');
+        if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }, 800);
+      return;
+    }
+    const directEl = document.getElementById(scrollVal);
+    if (directEl) {
+      setTimeout(() => {
+        directEl.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }, 800);
+      return;
+    }
     const y = parseInt(scrollVal, 10);
 
 

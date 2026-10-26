@@ -1440,6 +1440,17 @@ html.dark .plancon-card-n5 {
 html.dark .plancon-card-n5 strong { color: #f8fafc !important; }
 html.dark .plancon-card-n5 span { color: #c084fc !important; }
 
+html.dark [class*="plancon-card-n"] p {
+  color: #e2e8f0 !important;
+}
+html.dark [class*="plancon-card-n"] p strong {
+  color: #ffffff !important;
+}
+html.dark [class*="plancon-card-n"] p .text-black\/85,
+html.dark [class*="plancon-card-n"] p .text-black\/75 {
+  color: #cbd5e1 !important;
+}
+
 /* 7. Botões e Controles: Máximo Contraste */
 html.dark .tab-metric-btn.active,
 html.dark .station-filter-btn.active,
