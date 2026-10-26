@@ -613,3 +613,42 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.08);
 }
+
+
+/* ========================================================================= */
+/* BARRA FIXA DE NAVEGAÇÃO E ABAS (STICKY NAVIGATION NO SCROLL)             */
+/* ========================================================================= */
+#app-sticky-navigation {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(244, 246, 248, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid rgba(203, 213, 225, 0.7);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease-in-out;
+}
+
+body.scrolled-down #site-header {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  transition: all 0.2s ease-in-out;
+}
+
+body.scrolled-down .site-logo {
+  height: 2.25rem !important;
+  transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 639px) {
+  body.scrolled-down #site-header {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden;
+    margin: 0;
+    border-bottom: none !important;
+  }
+}

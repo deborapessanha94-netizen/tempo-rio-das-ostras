@@ -88,7 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAllApplicationData();
   startAutoSync();
 
-
+  // Acompanhamento suave no scroll da barra de abas e cabeçalho fixo
+  const onScroll = () => {
+    if (window.scrollY > 30) {
+      document.body.classList.add('scrolled-down');
+    } else {
+      document.body.classList.remove('scrolled-down');
+    }
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 });
 
 /**
@@ -1954,6 +1963,11 @@ window.switchAppTab = function(tabName) {
   const ALL_TABS = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'];
   const target = ALL_TABS.includes(tabName) ? tabName : 'previsao';
 
+  // Se o usuário estiver rolado muito abaixo, rola suavemente ao topo do conteúdo
+  if (window.scrollY > 120) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   ALL_TABS.forEach(t => {
     const view = document.getElementById('view-tab-' + t);
     const btn = document.getElementById('nav-tab-' + t);
@@ -2871,3 +2885,17 @@ const handleUrlSocialParams = () => {
   }
 };
 window.addEventListener('DOMContentLoaded', handleUrlSocialParams);
+
+// Suporte para scroll via URL (?scroll=750)
+const handleUrlScrollParam = () => {
+  const scrollVal = new URLSearchParams(window.location.search).get('scroll');
+  if (scrollVal) {
+    const y = parseInt(scrollVal, 10);
+    if (!isNaN(y)) {
+      setTimeout(() => {
+        window.scrollTo({ top: y, behavior: 'instant' });
+      }, 700);
+    }
+  }
+};
+window.addEventListener('DOMContentLoaded', handleUrlScrollParam);

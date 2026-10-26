@@ -64,9 +64,10 @@
 <body class="antialiased selection:bg-[#ffebe4] selection:text-black pb-12 min-h-screen bg-[#f4f6f8] text-[#1e293b] overflow-x-hidden">
 
   <!-- ========================================================================= -->
-  <!-- BARRA SUPERIOR INSTITUCIONAL: PADRÃO NÓRDICO CERÂMICO                     -->
+  <!-- BARRA SUPERIOR INSTITUCIONAL & ABAS FIXAS AO ROLAR A PÁGINA (STICKY)      -->
   <!-- ========================================================================= -->
-  <header id="site-header" class="sticky top-0 z-40 backdrop-blur-md">
+  <div id="app-sticky-navigation" class="sticky top-0 z-40 bg-[#f4f6f8]/96 backdrop-blur-md border-b border-[#cbd5e1]/70 shadow-xs transition-all duration-200">
+  <header id="site-header" class="relative z-40 transition-all duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
       
       <!-- Marca Oficial: Logo e Título Institucional -->
@@ -130,7 +131,7 @@
   <!-- ========================================================================= -->
   <!-- NAVEGAÇÃO DE ABAS PRINCIPAIS (6 SEÇÕES DISTRIBUÍDAS - ZERO VAZIOS)       -->
   <!-- ========================================================================= -->
-  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-3 sm:px-6 pt-3 pb-1">
+  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-3 sm:px-6 pt-1.5 pb-2.5">
     <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-2 p-1.5 bg-[#f5efe8]/90 rounded-2xl border border-[#b8a99a]/50 shadow-xs" role="tablist">
 
       <!-- Aba 1: Previsão & Tempo -->
@@ -171,6 +172,7 @@
 
     </div>
   </nav>
+  </div> <!-- /#app-sticky-navigation -->
 
   <!-- ========================================================================= -->
   <!-- VIEW 1: PREVISÃO & TEMPO GERAL                                           -->
@@ -2450,6 +2452,6 @@
 
 
   <!-- Scripts da Aplicação com Cache-Busting -->
-  <script type="module" src="js/app.js?v=111"></script>
+  <script type="module" src="js/app.js?v=115"></script>
 </body>
 </html>
