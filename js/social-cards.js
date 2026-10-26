@@ -468,7 +468,7 @@ export function renderSocialCanvas() {
     // C. Coluna Direita: Pílula Informativa de Status
     const pillTxt = isJundia 
       ? `cota rio: ${st.nivel_rio || '1,59 m'}`
-      : (st.vento_atual ? `vento: ${st.vento_atual} km/h` : 'ativa');
+      : (st.vento_atual ? (st.rajada_atual ? `vento: ${st.vento_atual} | raj: ${st.rajada_atual} km/h` : `vento: ${st.vento_atual} km/h`) : 'ativa');
     
     ctx.font = 'bold 20px monospace';
     const pillW = ctx.measureText(pillTxt).width + 36;

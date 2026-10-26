@@ -36,7 +36,7 @@ SSL_CTX = ssl.create_default_context()
 SSL_CTX.check_hostname = False
 SSL_CTX.verify_mode = ssl.CERT_NONE
 
-WUNDERGROUND_API_KEY = "e1f10a1e78da46f5b10a1e78da96f525"
+WUNDERGROUND_API_KEY = "ff90f212a6984a7390f212a698ea73cc"
 
 def fetch_url(url, timeout=12, is_json=False):
     req = urllib.request.Request(url, headers=HEADERS)
