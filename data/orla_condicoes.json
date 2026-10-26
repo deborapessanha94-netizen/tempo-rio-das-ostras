@@ -1,11 +1,11 @@
 {
-  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 782/2026 e 785/2026)",
-  "badge": "VENTO FORTE & MAR GROSSO",
-  "badge_tipo": "danger",
+  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 782/2026)",
+  "badge": "VENTO FORTE",
+  "badge_tipo": "warning",
   "aviso_ativo": true,
-  "aviso_numero": "782/2026 e 785/2026",
-  "aviso_tipo": "VENTO FORTE E MAR GROSSO",
-  "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
+  "aviso_numero": "782/2026",
+  "aviso_tipo": "VENTO FORTE",
+  "mar_ondas": "2,0 a 2,5 m (Agitado)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
   "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
   "nota_rodape": "Em dias de aviso da Marinha, respeite as bandeiras de sinalização dos Guarda-Vidas do Corpo de Bombeiros (193).",
@@ -52,7 +52,7 @@
         },
         "d2": {
           "estado": "Mar Grosso / Agitado",
-          "ondas": "2,0 a 2,8 m (3,5 m ao largo)",
+          "ondas": "1,0 a 1,4 m",
           "badge": "danger",
           "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Forte (nº 781) • Ondas severas e vento até 74 km/h"
         }
@@ -151,10 +151,10 @@
           "detalhe": "Águas cristalinas para mergulho livre"
         },
         "d2": {
-          "estado": "Moderado nas Pontas",
-          "ondas": "0,8 a 1,2 m",
-          "badge": "warning",
-          "detalhe": "Ondulação entrando nas pontas rochosas sob aviso da Marinha"
+          "estado": "Calmo",
+          "ondas": "0,4 a 0,6 m",
+          "badge": "success",
+          "detalhe": "Mar muito calmo"
         }
       }
     },
@@ -227,7 +227,7 @@
         },
         "d2": {
           "estado": "Muito Agitado (Mar Grosso)",
-          "ondas": "2,2 a 3,0 m (3,5 m ao largo)",
+          "ondas": "0,7 a 1,1 m",
           "badge": "danger",
           "detalhe": "Aviso de Mar Grosso (nº 778) e Vento Força 7/8 (nº 781) • Evite banho e navegação"
         }
@@ -302,7 +302,7 @@
         },
         "d2": {
           "estado": "Muito Agitado",
-          "ondas": "2,0 a 2,8 m",
+          "ondas": "0,8 a 1,2 m",
           "badge": "danger",
           "detalhe": "Mar aberto selvagem sob aviso da Marinha de Mar Grosso e Vento Forte"
         }
