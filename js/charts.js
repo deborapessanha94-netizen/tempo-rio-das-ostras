@@ -534,7 +534,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
     const validVals = [...vRaj, ...vMed].filter(v => typeof v === 'number' && !isNaN(v));
     const maxVal = validVals.length ? Math.max(...validVals) : 45;
     // Garante folga superior proporcional para que as rajadas e pontos fiquem 100% visíveis sem corte
-    const yMax = Math.max(60, Math.ceil((maxVal + 10) / 10) * 10);
+    const yMax = Math.max(70, Math.ceil((maxVal + 15) / 10) * 10);
 
     config = {
       type: 'bar',
@@ -560,6 +560,7 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
             pointBorderColor: '#ffffff',
             pointRadius: 4.5,
             pointHoverRadius: 6,
+            tension: 0.22,
             fill: false,
             clip: false
           }
@@ -567,10 +568,11 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
       },
       options: {
         ...getCommonOptions('Velocidade (km/h)'),
+        clip: false,
         layout: {
           padding: {
-            top: 15,
-            right: 8,
+            top: 25,
+            right: 12,
             bottom: 4,
             left: 4
           }

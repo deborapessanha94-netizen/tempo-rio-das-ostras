@@ -218,7 +218,7 @@ import {
 
 
 
-import { renderBulletinChart } from './charts.js?v=121';
+import { renderBulletinChart } from './charts.js?v=136';
 
 
 
