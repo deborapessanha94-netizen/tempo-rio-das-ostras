@@ -747,7 +747,7 @@
       </a>
 
       <!-- Portal 3: Telemetria Completa da Estação 2241036 -->
-      <a href="https://alertadecheias.com.br/stations/2241036/full" target="_blank" rel="noopener noreferrer" class="station-card p-4 rounded-2xl bg-white border border-[#94a3b8] flex flex-col justify-between space-y-3 group hover:border-[#f07a53]">
+      <a href="https://alertadecheias.com.br/#/stations-info?station=2241036" target="_blank" rel="noopener noreferrer" class="station-card p-4 rounded-2xl bg-white border border-[#94a3b8] flex flex-col justify-between space-y-3 group hover:border-[#f07a53]">
         <div class="space-y-1.5">
           <div class="flex items-center justify-between">
             <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full bg-[#fef3c7] text-black border border-[#d97706]/50">
@@ -893,7 +893,7 @@
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <a href="https://alertadecheias.com.br/stations/2241036/full" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-[#ffebe4] border border-[#f07a53] hover:bg-[#fed7cc] transition shadow-xs cursor-pointer">
+        <a href="https://alertadecheias.com.br/#/stations-info?station=2241036" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-[#ffebe4] border border-[#f07a53] hover:bg-[#fed7cc] transition shadow-xs cursor-pointer">
           <i data-lucide="external-link" class="w-4 h-4 text-black"></i>
           <span>Portal Alerta de Cheias INEA</span>
         </a>
@@ -955,12 +955,128 @@
 
           <div class="pt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-xs font-normal text-black">
             <span class="font-medium text-black">Bacia Hidrográfica RH-VIII</span>
-            <a href="https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
+            <a href="https://alertadecheias.com.br/#/stations-info?station=2241036" target="_blank" rel="noopener" class="text-black font-bold hover:underline flex items-center gap-1 bg-[#eaf0f6] px-2.5 py-1 rounded-lg border border-[#6d8ba6]/50">
               Ver Telemetria INEA ↗
             </a>
           </div>
 
         </div>
+
+    <!-- Card: Tabela Telemétrica do Rio Jundiá Hora a Hora (Padrão Oficial INEA) -->
+    <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-4 shadow-xs" id="card-tabela-rio-jundia">
+      
+      <!-- Cabeçalho da Tabela com Filtros e Ações -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-[#cbd5e1] pb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-[#e0f2fe] text-[#0284c7] flex items-center justify-center shrink-0 shadow-2xs">
+            <i data-lucide="table-properties" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 class="text-base sm:text-lg font-black text-black tracking-tight">
+                Leituras Telemétricas do Rio Hora a Hora
+              </h3>
+              <span id="rio-badge-total-leituras" class="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#f1f5f9] text-black border border-[#cbd5e1] uppercase">
+                40 leituras hoje
+              </span>
+            </div>
+            <p class="text-xs text-black font-medium mt-0.5">
+              Monitoramento hidrológico com histórico telemétrico de 10 dias da Estação INEA 2241036
+            </p>
+          </div>
+        </div>
+
+        <!-- Barra de Ações: Seletor de Data, Intervalo e Exportar CSV -->
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-start lg:justify-end">
+          <!-- Seletor de Data -->
+          <div class="flex items-center gap-1.5 bg-[#f8fafc] border border-[#cbd5e1] rounded-xl px-2.5 py-1.5">
+            <i data-lucide="calendar" class="w-4 h-4 text-black"></i>
+            <span class="text-xs font-bold text-black hidden sm:inline">Dia:</span>
+            <select id="rio-filter-date" onchange="onRioDateFilterChange(this.value)" class="text-xs font-bold text-black bg-transparent outline-none cursor-pointer">
+              <!-- Preenchido dinamicamente via JS -->
+            </select>
+          </div>
+
+          <!-- Filtro de Intervalo (Hora a hora vs 30 min) -->
+          <div class="inline-flex rounded-xl bg-[#f1f5f9] p-0.5 border border-[#cbd5e1]">
+            <button id="rio-btn-interval-hourly" onclick="setRioIntervalMode('hourly')" class="px-2.5 py-1 text-xs font-bold rounded-lg transition bg-white text-black shadow-2xs cursor-pointer">
+              Hora a hora
+            </button>
+            <button id="rio-btn-interval-all" onclick="setRioIntervalMode('all')" class="px-2.5 py-1 text-xs font-medium text-black rounded-lg transition hover:text-black cursor-pointer">
+              Todas (30 min)
+            </button>
+          </div>
+
+          <!-- Botão Exportar CSV -->
+          <button onclick="exportRioTableCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-black bg-white border border-[#cbd5e1] hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-black"></i>
+            <span>Exportar CSV</span>
+          </button>
+
+          <!-- Link Direto para o Site do INEA -->
+          <a href="https://alertadecheias.com.br/#/stations-info?station=2241036" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-black bg-[#e0f2fe] border border-[#38bdf8] hover:bg-[#bae6fd] transition shadow-2xs cursor-pointer">
+            <i data-lucide="external-link" class="w-3.5 h-3.5 text-black"></i>
+            <span>Abrir no INEA</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mini Faixa de KPIs Resumo do Dia Selecionado -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-center">
+          <span class="text-[10px] uppercase font-bold text-black tracking-wider block">Cota Mínima do Dia</span>
+          <span id="rio-kpi-dia-min" class="text-base sm:text-lg font-black font-mono text-black">--</span>
+        </div>
+        <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-center">
+          <span class="text-[10px] uppercase font-bold text-black tracking-wider block">Cota Máxima do Dia</span>
+          <span id="rio-kpi-dia-max" class="text-base sm:text-lg font-black font-mono text-black">--</span>
+        </div>
+        <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-center">
+          <span class="text-[10px] uppercase font-bold text-black tracking-wider block">Variação da Lâmina</span>
+          <span id="rio-kpi-dia-var" class="text-base sm:text-lg font-black font-mono text-black">--</span>
+        </div>
+        <div class="p-3 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] text-center">
+          <span class="text-[10px] uppercase font-bold text-black tracking-wider block">Chuva Acum. no Dia</span>
+          <span id="rio-kpi-dia-chuva" class="text-base sm:text-lg font-black font-mono text-black">--</span>
+        </div>
+      </div>
+
+      <!-- Container da Tabela com Scroll e Cabeçalho Fixo -->
+      <div class="overflow-x-auto rounded-xl border border-[#cbd5e1] max-h-[480px] overflow-y-auto shadow-2xs">
+        <table class="w-full text-xs text-left text-black border-collapse">
+          <thead class="sticky top-0 bg-[#f1f5f9] text-black border-b border-[#cbd5e1] z-10 shadow-2xs">
+            <tr>
+              <th scope="col" class="py-2.5 px-3.5 font-bold whitespace-nowrap">Data / Hora</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Nível da Cota</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Estágio</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Tendência</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Chuva Última</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Chuva 1h</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Chuva 4h</th>
+              <th scope="col" class="py-2.5 px-3 font-bold whitespace-nowrap">Chuva 24h</th>
+              <th scope="col" class="py-2.5 px-3.5 font-bold whitespace-nowrap">Folga p/ Transbordo</th>
+            </tr>
+          </thead>
+          <tbody id="rio-tabela-tbody" class="divide-y divide-[#e2e8f0] bg-white font-medium">
+            <!-- Linhas preenchidas dinamicamente via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rodapé da Tabela com Legenda e Fonte Oficial -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 text-[11px] text-black font-medium border-t border-[#cbd5e1]">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="font-bold text-black">Legenda de Cotas:</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#10b981]"></span> &lt; 1,99 m Normal/Vigilância</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#f59e0b]"></span> ≥ 1,99 m Atenção</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#f97316]"></span> ≥ 2,27 m Alerta</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#ef4444]"></span> ≥ 2,84 m Transbordo</span>
+        </div>
+        <span class="text-black font-semibold">Fonte: Sistema de Alerta de Cheias — INEA RJ</span>
+      </div>
+
+    </div>
+
 
 
     <!-- Grid de 2 Colunas: Contexto Hidrológico & Protocolos de Cheia -->

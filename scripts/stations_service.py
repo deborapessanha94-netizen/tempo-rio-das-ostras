@@ -238,7 +238,7 @@ def collect_stations_network():
         "categoria": "inea",
         "tipo": "hidrologica",
         "tipo_label": "Nível do Rio (Telemetria Fluvial)",
-        "url": "https://alertadecheias.com.br/stations/2241036/full",
+        "url": "https://alertadecheias.com.br/#/stations-info?station=2241036",
         "url_portal": "https://alertadecheias.com.br",
         "temp_atual": None,
         "vento_atual": None,
@@ -285,6 +285,18 @@ def collect_stations_network():
                 inea_entry["status_rio"] = "ATENÇÃO"
             else:
                 inea_entry["status_rio"] = "VIGILÂNCIA"
+
+        # Coleta também o histórico telemétrico de 10 dias / hora a hora
+        try:
+            ten_days_json = fetch_url_data("https://alertadecheias.com.br/stations/2241036/10d", timeout=12, is_json=True)
+            if ten_days_json and isinstance(ten_days_json, dict) and "dados" in ten_days_json:
+                with open(DATA_DIR / "inea_jundia_10d.json", "w", encoding="utf-8") as f_10d:
+                    json.dump(ten_days_json, f_10d, ensure_ascii=False, indent=2)
+                # Anexa as últimas 24 leituras diretamente no objeto para carregamento rápido
+                inea_entry["historico_recente"] = ten_days_json.get("dados", [])[-24:]
+        except Exception as e_10d:
+            print(f"   [AVISO] Erro ao sincronizar histórico 10d do Rio Jundiá: {e_10d}")
+
     except Exception as e:
         print(f"   [AVISO] Erro ao consultar API alertadecheias.com.br: {e}")
 

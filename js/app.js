@@ -48,14 +48,18 @@ import {
   getTabuaMares, 
   getCptecData, 
   getInmetMeteogramaData, 
+  getIneaJundia10d, 
   COTAS_INEA_OFICIAIS, 
   RIO_DAS_OSTRAS_COORDS 
-} from './api.js?v=62';
+} from './api.js?v=63';
 
 import { renderBulletinChart } from './charts.js?v=89';
 
 // Estado global da aplicação
 const state = {
+  jundia10dData: null,
+  rioSelectedDate: null,
+  rioIntervalMode: 'hourly',
   boletimData: [],
   boletimMetadata: null,
   ineaCheias: [],
@@ -246,7 +250,7 @@ async function loadAllApplicationData() {
   try {
     // FASE 1: Carregamento Ultrarrápido dos Snapshots Oficiais (< 50ms)
     // Renderização Imediata com datasets essenciais e avisos oficiais
-    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes, estacoesRes] = await Promise.allSettled([
+    const [metaRes, rowsRes, ineaRes, tabuaRes, orlaRes, avisosMarRes, balnearRes, inmetAvisosRes, estacoesRes, inea10dRes] = await Promise.allSettled([
       getBoletimMetadata(),
       getBoletimOficialData(),
       getIneaCheias(),
@@ -255,7 +259,8 @@ async function loadAllApplicationData() {
       getMarinhaAvisos(),
       getBalneabilidade(),
       getInmetAlerts(),
-      getAcumuladosEstacoes()
+      getAcumuladosEstacoes(),
+      getIneaJundia10d()
     ]);
 
     if (rowsRes.status === 'fulfilled' && Array.isArray(rowsRes.value)) state.boletimData = rowsRes.value;
@@ -273,6 +278,11 @@ async function loadAllApplicationData() {
       state.acumuladosDataset = estacoesRes.value;
       state.acumuladosEstacoes = estacoesRes.value.estacoes ? estacoesRes.value.estacoes : estacoesRes.value;
       renderAcumuladosChuva(state.acumuladosDataset);
+    }
+
+    if (inea10dRes.status === 'fulfilled' && inea10dRes.value) {
+      state.jundia10dData = inea10dRes.value;
+      initRioHourlyTable(state.jundia10dData);
     }
 
     // Renderização Imediata (Fast-Path)
@@ -1904,6 +1914,10 @@ window.switchAppTab = function(tabName) {
     if (state.acumuladosDataset || state.acumuladosEstacoes) {
       renderAcumuladosChuva(state.acumuladosDataset || state.acumuladosEstacoes);
     }
+  } else if (target === 'rio') {
+    if (state.jundia10dData) {
+      initRioHourlyTable(state.jundia10dData);
+    }
   } else if (target === 'previsao') {
     if (state.boletimData) {
       updateBulletinChart();
@@ -2346,6 +2360,252 @@ function renderAcumuladosChuva(data) {
 
   if (window.lucide) window.lucide.createIcons();
 }
+
+
+/**
+ * ============================================================================
+ * MÓDULO DE TELEMETRIA HORA A HORA DO RIO JUNDIÁ (ESTAÇÃO OFICIAL INEA 2241036)
+ * ============================================================================
+ */
+
+function initRioHourlyTable(dataset) {
+  if (!dataset || !dataset.dados || !Array.isArray(dataset.dados) || dataset.dados.length === 0) {
+    return;
+  }
+
+  // Agrupa todas as medições por data (YYYY-MM-DD)
+  const dateGroups = {};
+  dataset.dados.forEach(item => {
+    const dt = item.datetime_brt || '';
+    if (!dt) return;
+    const dateKey = dt.substring(0, 10);
+    if (!dateGroups[dateKey]) dateGroups[dateKey] = [];
+    dateGroups[dateKey].push(item);
+  });
+
+  const availableDates = Object.keys(dateGroups).sort().reverse();
+  if (availableDates.length === 0) return;
+
+  // Se não houver data selecionada, seleciona a mais recente
+  if (!state.rioSelectedDate || !availableDates.includes(state.rioSelectedDate)) {
+    state.rioSelectedDate = availableDates[0];
+  }
+
+  // Popula o seletor de datas
+  const selectEl = document.getElementById('rio-filter-date');
+  if (selectEl) {
+    const todayStr = new Date().toISOString().substring(0, 10);
+    selectEl.innerHTML = availableDates.map((dStr, idx) => {
+      const parts = dStr.split('-');
+      const formatted = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      let label = formatted;
+      if (idx === 0) label = `${formatted} (Mais Recente)`;
+      else if (dStr === todayStr) label = `${formatted} (Hoje)`;
+      return `<option value="${dStr}" ${dStr === state.rioSelectedDate ? 'selected' : ''}>${label}</option>`;
+    }).join('');
+  }
+
+  renderRioHourlyTable();
+}
+
+window.onRioDateFilterChange = function(newDate) {
+  state.rioSelectedDate = newDate;
+  renderRioHourlyTable();
+};
+
+window.setRioIntervalMode = function(mode) {
+  state.rioIntervalMode = mode;
+  const btnHourly = document.getElementById('rio-btn-interval-hourly');
+  const btnAll = document.getElementById('rio-btn-interval-all');
+
+  if (btnHourly && btnAll) {
+    if (mode === 'hourly') {
+      btnHourly.className = 'px-2.5 py-1 text-xs font-bold rounded-lg transition bg-white text-black shadow-2xs cursor-pointer';
+      btnAll.className = 'px-2.5 py-1 text-xs font-medium text-black rounded-lg transition hover:text-black cursor-pointer';
+    } else {
+      btnAll.className = 'px-2.5 py-1 text-xs font-bold rounded-lg transition bg-white text-black shadow-2xs cursor-pointer';
+      btnHourly.className = 'px-2.5 py-1 text-xs font-medium text-black rounded-lg transition hover:text-black cursor-pointer';
+    }
+  }
+
+  renderRioHourlyTable();
+};
+
+function renderRioHourlyTable() {
+  const tbodyEl = document.getElementById('rio-tabela-tbody');
+  const kpiMinEl = document.getElementById('rio-kpi-dia-min');
+  const kpiMaxEl = document.getElementById('rio-kpi-dia-max');
+  const kpiVarEl = document.getElementById('rio-kpi-dia-var');
+  const kpiChuvaEl = document.getElementById('rio-kpi-dia-chuva');
+  const badgeTotalEl = document.getElementById('rio-badge-total-leituras');
+
+  if (!tbodyEl) return;
+
+  const dataset = state.jundia10dData;
+  if (!dataset || !dataset.dados || !Array.isArray(dataset.dados)) {
+    tbodyEl.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-black/70">Carregando dados telemétricos da estação...</td></tr>`;
+    return;
+  }
+
+  // Filtra dados da data selecionada
+  const dayItems = dataset.dados.filter(item => (item.datetime_brt || '').startsWith(state.rioSelectedDate));
+
+  if (dayItems.length === 0) {
+    tbodyEl.innerHTML = `<tr><td colspan="9" class="py-8 text-center text-black/70">Nenhuma leitura encontrada para este dia.</td></tr>`;
+    return;
+  }
+
+  // Ordena cronologicamente para cálculo de tendências (antigo -> novo)
+  const chronoItems = dayItems.slice().sort((a, b) => {
+    const tA = new Date(a.datetime_brt || 0).getTime();
+    const tB = new Date(b.datetime_brt || 0).getTime();
+    return tA - tB;
+  });
+
+  // KPIs do Dia
+  const nivels = chronoItems.map(x => Number(x.nivel)).filter(n => !isNaN(n));
+  const minNivel = nivels.length > 0 ? Math.min(...nivels) : 1.59;
+  const maxNivel = nivels.length > 0 ? Math.max(...nivels) : 1.59;
+  const varNivel = maxNivel - minNivel;
+  const maxChuva24 = Math.max(...chronoItems.map(x => Number(x.chuva_24h || 0)));
+
+  if (kpiMinEl) kpiMinEl.textContent = `${minNivel.toFixed(2).replace('.', ',')} m`;
+  if (kpiMaxEl) kpiMaxEl.textContent = `${maxNivel.toFixed(2).replace('.', ',')} m`;
+  if (kpiVarEl) kpiVarEl.textContent = `${varNivel.toFixed(2).replace('.', ',')} m`;
+  if (kpiChuvaEl) kpiChuvaEl.textContent = `${maxChuva24.toFixed(1).replace('.', ',')} mm`;
+  if (badgeTotalEl) badgeTotalEl.textContent = `${dayItems.length} leituras no dia`;
+
+  // Se modo horário, filtra para 1 leitura por hora (mantém a leitura de cada hora cheia)
+  let displayItems = [];
+  if (state.rioIntervalMode === 'hourly') {
+    const hoursMap = new Map();
+    // Itera do mais recente ao mais antigo
+    for (let i = chronoItems.length - 1; i >= 0; i--) {
+      const it = chronoItems[i];
+      const dtStr = it.datetime_brt || '';
+      const hour = dtStr.substring(11, 13);
+      if (!hoursMap.has(hour)) {
+        hoursMap.set(hour, it);
+      }
+    }
+    displayItems = Array.from(hoursMap.values());
+  } else {
+    displayItems = chronoItems.slice().reverse();
+  }
+
+  // Transbordo constante da estação INEA 2241036
+  const cotaTransbordo = 2.84;
+
+  tbodyEl.innerHTML = displayItems.map(item => {
+    const dt = item.datetime_brt || '';
+    const datePart = dt.substring(0, 10).split('-').reverse().join('/');
+    const timePart = dt.substring(11, 16);
+    const nivel = Number(item.nivel || 0);
+
+    // Localiza item imediatamente anterior na ordem cronológica para tendência
+    const curIdx = chronoItems.findIndex(x => x.datetime_brt === item.datetime_brt);
+    let trendHtml = '<span class="text-black/60 font-medium">— Estável</span>';
+    if (curIdx > 0) {
+      const prev = chronoItems[curIdx - 1];
+      const diff = nivel - Number(prev.nivel || 0);
+      if (diff > 0.005) {
+        trendHtml = `<span class="inline-flex items-center gap-0.5 font-bold text-[#ea580c]"><i data-lucide="arrow-up" class="w-3.5 h-3.5"></i> +${diff.toFixed(2).replace('.', ',')} m</span>`;
+      } else if (diff < -0.005) {
+        trendHtml = `<span class="inline-flex items-center gap-0.5 font-bold text-[#0284c7]"><i data-lucide="arrow-down" class="w-3.5 h-3.5"></i> ${diff.toFixed(2).replace('.', ',')} m</span>`;
+      }
+    }
+
+    // Estágio Oficial INEA
+    let statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#ecfdf5] text-[#065f46] border border-[#a7f3d0]">Vigilância</span>';
+    if (nivel >= 2.84) {
+      statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#ffe4e6] text-[#9f1239] border border-[#fecdd3] animate-pulse">Transbordo</span>';
+    } else if (nivel >= 2.27) {
+      statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#ffedd5] text-[#9a3412] border border-[#fed7aa]">Alerta</span>';
+    } else if (nivel >= 1.99) {
+      statusBadge = '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-[#fef3c7] text-[#92400e] border border-[#fde68a]">Atenção</span>';
+    }
+
+    const folga = Math.max(0, cotaTransbordo - nivel).toFixed(2).replace('.', ',');
+    const chUltima = Number(item.chuva_15min !== undefined ? item.chuva_15min : (item.chuva || 0)).toFixed(1).replace('.', ',');
+    const ch1 = Number(item.chuva_1h || 0).toFixed(1).replace('.', ',');
+    const ch4 = Number(item.chuva_4h || 0).toFixed(1).replace('.', ',');
+    const ch24 = Number(item.chuva_24h || 0).toFixed(1).replace('.', ',');
+
+    return `
+      <tr class="hover:bg-[#f8fafc] transition border-b border-[#e2e8f0]">
+        <td class="py-2 px-3.5 whitespace-nowrap">
+          <div class="font-black text-black text-xs">${timePart}</div>
+          <div class="text-[10px] text-black/60">${datePart}</div>
+        </td>
+        <td class="py-2 px-3 whitespace-nowrap">
+          <span class="font-mono text-sm font-black text-black">${nivel.toFixed(2).replace('.', ',')} m</span>
+        </td>
+        <td class="py-2 px-3 whitespace-nowrap">${statusBadge}</td>
+        <td class="py-2 px-3 whitespace-nowrap text-xs">${trendHtml}</td>
+        <td class="py-2 px-3 whitespace-nowrap font-mono text-black font-semibold">${chUltima} mm</td>
+        <td class="py-2 px-3 whitespace-nowrap font-mono text-black font-semibold">${ch1} mm</td>
+        <td class="py-2 px-3 whitespace-nowrap font-mono text-black font-semibold">${ch4} mm</td>
+        <td class="py-2 px-3 whitespace-nowrap font-mono text-black font-bold text-[#ea580c]">${ch24} mm</td>
+        <td class="py-2 px-3.5 whitespace-nowrap">
+          <span class="font-mono text-xs font-bold text-black">${folga} m</span>
+          <span class="text-[10px] text-black/60 block">margem de segurança</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  if (window.lucide) window.lucide.createIcons();
+}
+
+window.exportRioTableCSV = function() {
+  const dataset = state.jundia10dData;
+  if (!dataset || !dataset.dados) {
+    alert("Dados telemétricos indisponíveis para exportação.");
+    return;
+  }
+
+  const selectedDate = state.rioSelectedDate || new Date().toISOString().substring(0, 10);
+  const items = dataset.dados.filter(item => (item.datetime_brt || '').startsWith(selectedDate));
+  
+  if (items.length === 0) {
+    alert("Nenhuma medição encontrada na data selecionada.");
+    return;
+  }
+
+  const rows = [
+    ["Estacao", "Data_Hora", "Nivel_m", "Status", "Chuva_Ultima_mm", "Chuva_1h_mm", "Chuva_4h_mm", "Chuva_24h_mm", "Margem_Transbordo_m"]
+  ];
+
+  items.forEach(it => {
+    const dt = it.datetime_brt || '';
+    const nivel = Number(it.nivel || 0);
+    let st = "Vigilancia";
+    if (nivel >= 2.84) st = "Transbordo";
+    else if (nivel >= 2.27) st = "Alerta";
+    else if (nivel >= 1.99) st = "Atencao";
+    const folga = Math.max(0, 2.84 - nivel).toFixed(2);
+    rows.push([
+      "INEA 2241036 (Rio Jundia)",
+      dt,
+      nivel.toFixed(2),
+      st,
+      Number(it.chuva_15min || 0).toFixed(1),
+      Number(it.chuva_1h || 0).toFixed(1),
+      Number(it.chuva_4h || 0).toFixed(1),
+      Number(it.chuva_24h || 0).toFixed(1),
+      folga
+    ]);
+  });
+
+  const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `rio-jundia-telemetria-${selectedDate}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
 
 // Inicialização de Hash URL (#chuva ou #previsao)
 const handleUrlHash = () => {

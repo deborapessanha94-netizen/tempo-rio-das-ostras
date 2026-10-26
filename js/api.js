@@ -528,3 +528,15 @@ export async function getTabuaMares() {
   } catch (e) {}
   return null;
 }
+
+/**
+ * Obtém os dados telemétricos hora a hora dos últimos 10 dias da estação Rio Jundiá (INEA 2241036)
+ */
+export async function getIneaJundia10d() {
+  const ts = Date.now();
+  try {
+    const res = await fetch(`./data/inea_jundia_10d.json?t=${ts}`, { cache: 'no-store' });
+    if (res.ok) return await res.json();
+  } catch (e) {}
+  return null;
+}
