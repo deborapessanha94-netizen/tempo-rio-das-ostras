@@ -1,0 +1,87 @@
+{
+  "fonte": "CPTEC/INPE - Modelo Numérico de Ondas WAVEWATCH III (WW3)",
+  "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
+  "modelo": "Wwatch",
+  "rodada": "2026-10-26 00z",
+  "atualizacao": "26/10/2026 16:23",
+  "produtos": {
+    "alt_onda": "Altura Significativa e Direção das Ondas",
+    "per_pico": "Período e Direção de Pico das Ondas",
+    "windsea": "Direção e Intensidade de Mar de Vento",
+    "vento": "Vento à Superfície"
+  },
+  "horizontes": [
+    "000",
+    "024",
+    "048",
+    "072"
+  ],
+  "regioes": {
+    "sud": "Sudeste (Costa do Rio de Janeiro / Bacia de Campos / Rio das Ostras)",
+    "bra": "Costa Brasileira"
+  },
+  "arquivos": {
+    "alt_onda_sud_000": {
+      "arquivo": "img/cptec/wwatch_alt_onda_sud_000h.png",
+      "tamanho_bytes": 224495,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/26/00/Wwatch_alt_onda_sud_2026102600z_000z.png",
+      "ok": true
+    },
+    "alt_onda_sud_024": {
+      "arquivo": "img/cptec/wwatch_alt_onda_sud_024h.png",
+      "tamanho_bytes": 221892,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/26/00/Wwatch_alt_onda_sud_2026102600z_024z.png",
+      "ok": true
+    },
+    "alt_onda_sud_048": {
+      "arquivo": "img/cptec/wwatch_alt_onda_sud_048h.png",
+      "tamanho_bytes": 218710,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/26/00/Wwatch_alt_onda_sud_2026102600z_048z.png",
+      "ok": true
+    },
+    "alt_onda_sud_072": {
+      "arquivo": "img/cptec/wwatch_alt_onda_sud_072h.png",
+      "tamanho_bytes": 216344,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/26/00/Wwatch_alt_onda_sud_2026102600z_072z.png",
+      "ok": true
+    },
+    "per_pico_sud_000": {
+      "arquivo": "img/cptec/wwatch_per_pico_sud_000h.png",
+      "tamanho_bytes": 263026,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/26/00/Wwatch_per_pico_sud_2026102600z_000z.png",
+      "ok": true
+    },
+    "per_pico_sud_024": {
+      "arquivo": "img/cptec/wwatch_per_pico_sud_024h.png",
+      "tamanho_bytes": 249715,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/26/00/Wwatch_per_pico_sud_2026102600z_024z.png",
+      "ok": true
+    },
+    "windsea_sud_000": {
+      "arquivo": "img/cptec/wwatch_windsea_sud_000h.png",
+      "tamanho_bytes": 209815,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/26/00/Wwatch_windsea_sud_2026102600z_000z.png",
+      "ok": true
+    },
+    "windsea_sud_024": {
+      "arquivo": "img/cptec/wwatch_windsea_sud_024h.png",
+      "tamanho_bytes": 209274,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/26/00/Wwatch_windsea_sud_2026102600z_024z.png",
+      "ok": true
+    },
+    "alt_onda_bra_000": {
+      "arquivo": "img/cptec/wwatch_alt_onda_bra_000h.png",
+      "tamanho_bytes": 264076,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/26/00/Wwatch_alt_onda_bra_2026102600z_000z.png",
+      "ok": true
+    }
+  },
+  "consenso_costeiro": {
+    "setor": "Rio das Ostras - RJ (Área Delta)",
+    "ondas_ww3": "1,2 a 1,5 m",
+    "periodo_ww3": "8 a 10 s",
+    "direcao_ww3": "SE / E (Sudeste / Leste)",
+    "mar_de_vento": "0,4 a 0,7 m",
+    "analise_tecnica": "Modelo WW3 indica predomínio de swell de SE (ondulações de 8 a 10s) combinado a mar de vento fraco/moderado de E/NE gerado pelos ventos costeiros da Alta Subtropical do Atlântico Sul (ASAS). As praias de mar aberto como Costazul e Mar do Norte apresentam arrebentação regular de 1,2 a 1,6 m, enquanto as enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) mantêm condições moderadas a brandas (0,4 a 0,8 m)."
+  }
+}
