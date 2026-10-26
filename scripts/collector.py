@@ -983,6 +983,24 @@ def run_daily_collection():
     print("====================================================================")
     print("   MOTOR DIÁRIO DAS 17:00 — SÍNTESE METEOROLÓGICA DE RIO DAS OSTRAS")
     print("====================================================================")
+    # Sincroniza telemetria oficial do Rio Jundiá (INEA Cheias & 10d)
+    try:
+        try:
+            from scripts.sync_data import sync_inea_cheias
+        except ImportError:
+            from sync_data import sync_inea_cheias
+        sync_inea_cheias()
+    except Exception as e:
+        print(f"   [AVISO] Falha ao sincronizar INEA cheias: {e}")
+
+    try:
+        import subprocess
+        j10d_script = BASE_DIR / "scripts" / "sync_jundia_10d.py"
+        if j10d_script.exists():
+            subprocess.run(["python", str(j10d_script)], timeout=20)
+    except Exception as e:
+        print(f"   [AVISO] Falha ao rodar sync_jundia_10d: {e}")
+
     stations = collect_all_stations()
     avisos, prev_turnos = collect_inmet_data()
     marinha = collect_marinha_data()

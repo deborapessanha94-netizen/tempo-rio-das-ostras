@@ -654,8 +654,8 @@ def run_auto_bulletin_pipeline():
     cemaden_96h = float(cemaden_st.get('chuva_96h', 22.0)) if cemaden_st else 22.0
 
     inea_pluv_st = next((s for s in estacoes_obs if '2241036' in str(s.get('codigo', ''))), None)
-    inea_ch24 = float(inea_pluv_st.get('chuva_24h', 8.0)) if inea_pluv_st else 8.0
-    inea_ch96 = float(inea_pluv_st.get('chuva_96h', 20.8)) if inea_pluv_st else 20.8
+    inea_ch24 = float(inea_pluv_st.get('chuva_24h') or 8.0) if inea_pluv_st else 8.0
+    inea_ch96 = float(inea_pluv_st.get('chuva_96h') or 20.8) if inea_pluv_st else 20.8
 
     for day_idx in range(3):
         day_date_iso = om['daily']['time'][day_idx]
@@ -1499,14 +1499,14 @@ def run_auto_bulletin_pipeline():
         "observado_recente": {
             "cemaden_pcd_18789": {
                 "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
-                "chuva_1h": float(cemaden_st.get('chuva_1h', 0.0)) if cemaden_st else 0.0,
+                "chuva_1h": float(cemaden_st.get('chuva_1h') or 0.0) if cemaden_st else 0.0,
                 "chuva_24h": cemaden_24h,
                 "chuva_96h": cemaden_96h,
                 "leitura": cemaden_st.get('ultima_leitura', 'Hoje') if cemaden_st else 'Hoje'
             },
             "inea_rio_jundia": {
                 "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
-                "chuva_1h": float(inea_pluv_st.get('chuva_1h', 0.2)) if inea_pluv_st else 0.2,
+                "chuva_1h": float(inea_pluv_st.get('chuva_1h') or 0.0) if inea_pluv_st else 0.0,
                 "chuva_24h": inea_ch24,
                 "chuva_96h": inea_ch96,
                 "nivel_m": jundia_nivel_txt,

@@ -44,7 +44,9 @@ jobs:
 
       - name: Executar Coleta e Síntese Completa de Todas as Fontes Oficiais
         run: |
-          python scripts/collector.py
+          python scripts/sync_jundia_10d.py || true
+          python scripts/sync_data.py || true
+          python scripts/collector.py || true
 
       - name: Salvar Dados e Boletins Atualizados no Repositório
         run: |
