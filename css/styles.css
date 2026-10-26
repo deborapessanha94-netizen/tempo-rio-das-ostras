@@ -1747,3 +1747,69 @@ html.dark #orla-panel-wwatch .bg-teal-100 {
   background-color: #134e4a !important;
   color: #5eead4 !important;
 }
+
+/* CEMADEN Geo-hidrológicos Controls & Dark Mode */
+.cemaden-tab-btn {
+  border: 1.5px solid transparent;
+  outline: none;
+  cursor: pointer;
+  user-select: none;
+  border-radius: 9999px !important;
+  transition: all 0.2s ease;
+  font-weight: 700 !important;
+  background-color: transparent;
+}
+
+.cemaden-tab-btn.active {
+  background: #fef3c7 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border: 1.5px solid #d97706 !important;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15) !important;
+}
+
+.cemaden-tab-btn:not(.active):hover {
+  background-color: #f1f5f9 !important;
+}
+
+html.dark .cemaden-tab-btn.active {
+  background: #3b280c !important;
+  border-color: #f59e0b !important;
+  color: #fef3c7 !important;
+}
+
+html.dark .cemaden-tab-btn:not(.active):hover {
+  background-color: #1e293b !important;
+}
+
+html.dark #section-cemaden-riscos .bg-white {
+  background-color: #0d1527 !important;
+  border-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark #section-cemaden-riscos .bg-slate-50 {
+  background-color: #111a30 !important;
+}
+
+html.dark #section-cemaden-riscos h3,
+html.dark #section-cemaden-riscos h4,
+html.dark #section-cemaden-riscos strong,
+html.dark #section-cemaden-riscos span,
+html.dark #section-cemaden-riscos p,
+html.dark #section-cemaden-riscos li {
+  color: #f1f5f9 !important;
+}
+
+html.dark #section-cemaden-riscos .text-amber-950 {
+  color: #fef08a !important;
+}
+
+html.dark #section-cemaden-riscos .text-sky-950 {
+  color: #7dd3fc !important;
+}
+
+html.dark #section-cemaden-riscos .border-[#cbd5e1],
+html.dark #section-cemaden-riscos .border-slate-200 {
+  border-color: #1e293b !important;
+}

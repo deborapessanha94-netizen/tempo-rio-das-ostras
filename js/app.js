@@ -6878,6 +6878,34 @@ window.switchOrlaTab = function(tabName) {
 
 };
 
+window.switchCemadenTab = function(tabName) {
+  const tabs = ['rj', 'geo', 'hidro', 'mapas'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`cemaden-tab-btn-${t}`);
+    const panel = document.getElementById(`cemaden-panel-${t}`);
+    if (btn) {
+      if (t === tabName) {
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        btn.className = 'cemaden-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#fef3c7] border-2 border-[#d97706] text-black shadow-xs';
+      } else {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+        btn.className = 'cemaden-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black dark:text-slate-300 hover:bg-white/80 dark:hover:bg-slate-800 border-2 border-transparent cursor-pointer';
+      }
+    }
+    if (panel) {
+      if (t === tabName) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+  });
+  if (window.lucide) window.lucide.createIcons();
+};
+
+
 
 
 
@@ -11929,6 +11957,14 @@ const handleUrlHash = () => {
     if (window.switchOrlaTab) {
       setTimeout(() => window.switchOrlaTab('wwatch'), 100);
     }
+  }
+
+  if (rawHash === 'cemaden' || qTab === 'cemaden' || rawHash === 'riscos' || rawHash === 'geohidro') {
+    window.switchAppTab('alertas');
+    setTimeout(() => {
+      const sec = document.getElementById('section-cemaden-riscos');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth' });
+    }, 120);
   }
 };
 

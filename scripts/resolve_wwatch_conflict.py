@@ -4,6 +4,7 @@ import subprocess
 conflicted = [
     "data/boletim_metadata.json",
     "data/boletim_oficial.json",
+    "data/cptec_wwatch.json",
     "data/inea_alerta_cheias_boletim.json",
     "data/inmet_meteograma.json",
     "data/tabua_mares.json",
@@ -12,7 +13,6 @@ conflicted = [
 ]
 
 for f in conflicted:
-    # In git rebase, --theirs corresponds to the commit being applied (our commit)
     res = subprocess.run(["git", "checkout", "--theirs", f], capture_output=True, text=True)
     print(f"Checkout --theirs {f}: {res.returncode}")
 
