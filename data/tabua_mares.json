@@ -7,12 +7,12 @@
   "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
   "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
   "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "atualizado_em": "2026-10-26T20:46:48.293767",
+  "atualizado_em": "2026-10-26T21:01:31.434658",
   "proxima_mare": {
-    "tipo": "BAIXA-MAR",
-    "hora": "20:55",
-    "altura": 0.23,
-    "rotulo": "Baixa-mar (0,2 m)"
+    "tipo": "PREAMAR",
+    "hora": "02:58",
+    "altura": 1.48,
+    "rotulo": "Preia-mar (1,5 m)"
   },
   "dias": [
     {
