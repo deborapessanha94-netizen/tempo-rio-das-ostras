@@ -2899,3 +2899,64 @@ const handleUrlScrollParam = () => {
   }
 };
 window.addEventListener('DOMContentLoaded', handleUrlScrollParam);
+
+// =============================================================================
+// GERENCIADOR DE TEMA ESCURO / CLARO (DARK MODE 24/7)
+// =============================================================================
+window.toggleTheme = function() {
+  const isDark = document.documentElement.classList.toggle('dark');
+  try {
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  } catch (e) {}
+
+  window.updateThemeIcon(isDark);
+
+  // Se houver gráficos Chart.js ativos, recarrega para adaptar cores
+  if (typeof updateBulletinChart === 'function' && state.boletimData) {
+    updateBulletinChart();
+  }
+  if (state.activeChartCanvas && state.activeHourlyData) {
+    // Redesenha gráfico horário da métrica ativa
+    const activeBtn = document.querySelector('.tab-metric-btn.active');
+    const metric = activeBtn ? activeBtn.getAttribute('data-metric') : 'temperature';
+    if (window.renderHourlyChart) {
+      window.renderHourlyChart(state.activeChartCanvas, metric, state.activeHourlyData);
+    }
+  }
+};
+
+window.updateThemeIcon = function(isDark) {
+  const btn = document.getElementById('btn-theme-toggle');
+  const icon = document.getElementById('theme-icon');
+  if (!icon) return;
+
+  if (isDark) {
+    icon.setAttribute('data-lucide', 'sun');
+    if (btn) btn.setAttribute('title', 'Alternar para modo claro');
+  } else {
+    icon.setAttribute('data-lucide', 'moon');
+    if (btn) btn.setAttribute('title', 'Alternar para modo escuro');
+  }
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+};
+
+// Sincroniza ícone na inicialização do DOM
+document.addEventListener('DOMContentLoaded', () => {
+  const isDark = document.documentElement.classList.contains('dark');
+  window.updateThemeIcon(isDark);
+
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        if (e.matches) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        window.updateThemeIcon(e.matches);
+      }
+    });
+  }
+});

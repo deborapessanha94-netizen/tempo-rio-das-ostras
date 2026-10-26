@@ -32,6 +32,24 @@ export function renderHourlyChart(canvas, metric, hourlyData) {
 }
 
 function getColors() {
+  const isDark = typeof document !== 'undefined' && document.documentElement && document.documentElement.classList.contains('dark');
+  if (isDark) {
+    return {
+      primary: '#94a3b8',        /* Slate Claro */
+      secondary: '#f07a53',      /* Laranja Vibrante da Paleta */
+      tertiary: '#cbd5e1',       /* Slate Médio */
+      rain: '#38bdf8',           /* Azul Chuva Vibrante */
+      rainFill: 'rgba(56, 189, 248, 0.45)',
+      rainBorder: '#0284c7',
+      barFill: 'rgba(148, 163, 184, 0.35)',
+      barBorder: '#94a3b8',
+      gradStart: 'rgba(148, 163, 184, 0.28)',
+      gradEnd: 'rgba(148, 163, 184, 0.02)',
+      text: '#f8fafc',           /* Texto Branco Puro */
+      textMuted: '#cbd5e1',      /* Texto Slate Claro */
+      grid: 'rgba(51, 65, 85, 0.45)' /* Linhas de grade sutis dark */
+    };
+  }
   return {
     primary: '#334155',        /* Cinza Escuro Slate */
     secondary: '#ea580c',      /* Laranja Vibrante da Paleta */

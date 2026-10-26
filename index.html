@@ -20,10 +20,32 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+
+  <!-- Inicializacao Imediata do Tema (Prevencao de FOUC / Tela Branca) -->
+  <script>
+    (function() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlTheme = params.get('theme');
+        var savedTheme = urlTheme || localStorage.getItem('theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
 
 
   <!-- Estilos Profissionais Modernos -->
-  <link rel="stylesheet" href="css/styles.css?v=89">
+  <link rel="stylesheet" href="css/styles.css?v=92">
 
   <!-- Lucide Icons -->
     <!-- Lucide Icons com CDN primrio, CDN redundante e inicializador imediato -->
@@ -116,6 +138,11 @@
 
 
         <!-- Sincronizar Agora (Circular Pill) -->
+        <!-- Alternar Modo Escuro / Claro -->
+        <button id="btn-theme-toggle" onclick="toggleTheme()" class="btn-action-outline p-2 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full" title="Alternar entre modo claro e modo escuro" aria-label="Alternar modo escuro">
+          <i id="theme-icon" data-lucide="moon" class="w-3.5 h-3.5 text-black"></i>
+        </button>
+
         <button id="btn-sync-now" class="btn-action-outline p-2 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full" title="Sincronizar dados agora">
           <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-black"></i>
         </button>
