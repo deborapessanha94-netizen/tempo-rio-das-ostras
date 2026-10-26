@@ -2624,6 +2624,159 @@ function renderRioHourlyTable() {
   if (window.lucide) window.lucide.createIcons();
 }
 
+// =============================================================================
+// EXPORTAÇÃO DE PLANILHAS (CSV / EXCEL COM UTF-8 BOM)
+// =============================================================================
+
+// Exporta a Tabela Comparativa Completa de Acumulados de Chuva
+window.exportAcumuladosCSV = async function() {
+  let data = state.stationsRawData || state.acumuladosDataset;
+  if (!data) {
+    try {
+      const res = await fetch('data/acumulados_estacoes.json');
+      if (res.ok) {
+        data = await res.json();
+      }
+    } catch (e) {
+      console.warn("Falha ao buscar acumulados para exportação:", e);
+    }
+  }
+
+  if (!data) {
+    alert("Dados das estações pluviométricas indisponíveis para download.");
+    return;
+  }
+
+  const dataset = Array.isArray(data) ? { estacoes: data } : data;
+  const rawEstacoes = dataset.estacoes || [];
+
+  // Separa estações pluviométricas e hidrológica
+  const pluviometricas = rawEstacoes.filter(s => s.categoria !== 'inea');
+  const jundiaSt = rawEstacoes.find(s => s.categoria === 'inea') || dataset.estacao_rio_jundia;
+
+  // Respeita a ordenação ativa da tabela (1h, 24h ou 96h)
+  const metricKey = state.stationsSortMetric === '1h' ? 'chuva_1h' : (state.stationsSortMetric === '96h' ? 'chuva_96h' : 'chuva_24h');
+  
+  const estacoesPluviais = pluviometricas.slice().sort((a, b) => {
+    const valA = Number(a[metricKey] !== undefined && a[metricKey] !== null ? a[metricKey] : 0.0);
+    const valB = Number(b[metricKey] !== undefined && b[metricKey] !== null ? b[metricKey] : 0.0);
+    if (valB !== valA) return valB - valA;
+    return Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0);
+  });
+
+  const estacoes = jundiaSt ? [...estacoesPluviais, jundiaSt] : estacoesPluviais;
+
+  // Montagem das Linhas da Planilha
+  const rows = [];
+  rows.push([
+    "Ranking (#)",
+    "Estação",
+    "Bairro / Referência",
+    "Código PCD",
+    "Rede de Telemetria",
+    "Tipo de Monitoramento",
+    "Chuva 1h (mm)",
+    "Chuva 4h (mm)",
+    "Chuva 6h (mm)",
+    "Chuva 12h (mm)",
+    "Chuva 24h (mm)",
+    "Chuva 36h (mm)",
+    "Chuva 48h (mm)",
+    "Chuva 96h (mm)",
+    "Nível do Rio (m)",
+    "Cota Transbordo (m)",
+    "Status Fluvial / Calha",
+    "Status Operacional",
+    "Temperatura (°C)",
+    "Vento (km/h)",
+    "Umidade (%)",
+    "Última Leitura / Atualização",
+    "Link Oficial do Sensor"
+  ]);
+
+  estacoes.forEach((st, idx) => {
+    const isInea = st.categoria === 'inea';
+    const rank = isInea ? "—" : String(idx + 1);
+    const nome = st.nome || "";
+    const bairro = st.bairro || "";
+    const codigo = st.codigo || "";
+    const rede = isInea ? "INEA Alerta de Cheias" : (st.rede || "PWS Weather Underground");
+    const tipo = isInea ? "Nível do Rio (Hidrológica)" : "Pluviométrica (Acumulados)";
+
+    const ch1 = isInea ? "—" : Number(st.chuva_1h || 0).toFixed(1).replace('.', ',');
+    const ch4 = isInea ? "—" : (st.chuva_4h !== null && st.chuva_4h !== undefined ? Number(st.chuva_4h).toFixed(1).replace('.', ',') : "—");
+    const ch6 = isInea ? "—" : (st.chuva_6h !== null && st.chuva_6h !== undefined ? Number(st.chuva_6h).toFixed(1).replace('.', ',') : "—");
+    const ch12 = isInea ? "—" : (st.chuva_12h !== null && st.chuva_12h !== undefined ? Number(st.chuva_12h).toFixed(1).replace('.', ',') : "—");
+    const ch24 = isInea ? "—" : Number(st.chuva_24h || 0).toFixed(1).replace('.', ',');
+    const ch36 = isInea ? "—" : (st.chuva_36h !== null && st.chuva_36h !== undefined ? Number(st.chuva_36h).toFixed(1).replace('.', ',') : "—");
+    const ch48 = isInea ? "—" : (st.chuva_48h !== null && st.chuva_48h !== undefined ? Number(st.chuva_48h).toFixed(1).replace('.', ',') : "—");
+    const ch96 = isInea ? "—" : Number(st.chuva_96h || 0).toFixed(1).replace('.', ',');
+
+    const nivelRio = isInea ? (st.nivel_rio || "1,61 m") : "—";
+    const cotaTransbordo = isInea ? (st.cota_transbordo || "2,84 m") : "—";
+    const statusFluvial = isInea ? `${st.status_rio || 'Vigilância'} (${st.alerta_maximo_pct || 56}%)` : "—";
+    const statusOp = st.online !== false ? "Online" : "Calibração";
+
+    const temp = (st.temp_atual !== null && st.temp_atual !== undefined) ? Number(st.temp_atual).toFixed(1).replace('.', ',') : "—";
+    const vento = (st.vento_atual !== null && st.vento_atual !== undefined) ? Number(st.vento_atual).toFixed(1).replace('.', ',') : "—";
+    const umidade = (st.umidade_atual !== null && st.umidade_atual !== undefined) ? `${st.umidade_atual}%` : "—";
+    const leitura = st.ultima_leitura || (dataset.atualizacao || "");
+    const link = st.url || "";
+
+    rows.push([
+      rank,
+      nome,
+      bairro,
+      codigo,
+      rede,
+      tipo,
+      ch1,
+      ch4,
+      ch6,
+      ch12,
+      ch24,
+      ch36,
+      ch48,
+      ch96,
+      nivelRio,
+      cotaTransbordo,
+      statusFluvial,
+      statusOp,
+      temp,
+      vento,
+      umidade,
+      leitura,
+      link
+    ]);
+  });
+
+  // UTF-8 BOM + separador ';' para compatibilidade direta com Excel PT-BR
+  const csvContent = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const dataHoje = new Date().toISOString().substring(0, 10);
+  a.href = url;
+  a.download = `acumulados-chuva-rio-das-ostras-${dataHoje}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Feedback visual no botão
+  const btn = document.getElementById('btn-export-acumulados-csv');
+  if (btn) {
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-700"></i><span class="text-emerald-800 font-extrabold">Planilha Baixada!</span>`;
+    if (window.lucide) window.lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = originalContent;
+      if (window.lucide) window.lucide.createIcons();
+    }, 2200);
+  }
+};
+
+// Exporta a Tabela Horária do Rio Jundiá
 window.exportRioTableCSV = function() {
   const dataset = state.jundia10dData;
   if (!dataset || !dataset.dados) {
@@ -2640,38 +2793,52 @@ window.exportRioTableCSV = function() {
   }
 
   const rows = [
-    ["Estacao", "Data_Hora", "Nivel_m", "Status", "Chuva_Ultima_mm", "Chuva_1h_mm", "Chuva_4h_mm", "Chuva_24h_mm", "Margem_Transbordo_m"]
+    ["Estação", "Data e Hora", "Nível da Cota (m)", "Status Fluvial", "Chuva Recente (mm)", "Chuva 1h (mm)", "Chuva 4h (mm)", "Chuva 24h (mm)", "Folga p/ Transbordo (m)"]
   ];
 
   items.forEach(it => {
-    const dt = it.datetime_brt || '';
+    const dt = it.datetime_brt ? it.datetime_brt.replace('T', ' ').substring(0, 16) : '';
     const nivel = Number(it.nivel || 0);
-    let st = "Vigilancia";
+    let st = "Vigilância";
     if (nivel >= 2.84) st = "Transbordo";
     else if (nivel >= 2.27) st = "Alerta";
-    else if (nivel >= 1.99) st = "Atencao";
-    const folga = Math.max(0, 2.84 - nivel).toFixed(2);
+    else if (nivel >= 1.99) st = "Atenção";
+    const folga = Math.max(0, 2.84 - nivel).toFixed(2).replace('.', ',');
     rows.push([
-      "INEA 2241036 (Rio Jundia)",
+      "INEA 2241036 (Rio Jundiá)",
       dt,
-      nivel.toFixed(2),
+      nivel.toFixed(2).replace('.', ','),
       st,
-      Number(it.chuva_15min || 0).toFixed(1),
-      Number(it.chuva_1h || 0).toFixed(1),
-      Number(it.chuva_4h || 0).toFixed(1),
-      Number(it.chuva_24h || 0).toFixed(1),
+      Number(it.chuva_15min || 0).toFixed(1).replace('.', ','),
+      Number(it.chuva_1h || 0).toFixed(1).replace('.', ','),
+      Number(it.chuva_4h || 0).toFixed(1).replace('.', ','),
+      Number(it.chuva_24h || 0).toFixed(1).replace('.', ','),
       folga
     ]);
   });
 
-  const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
-  const encodedUri = encodeURI(csvContent);
+  const csvContent = "\uFEFF" + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(";")).join("\r\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
+  link.setAttribute("href", url);
   link.setAttribute("download", `rio-jundia-telemetria-${selectedDate}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  // Feedback visual no botão
+  const btn = document.getElementById('btn-export-rio-csv');
+  if (btn) {
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-700"></i><span class="text-emerald-800 font-extrabold">Planilha Baixada!</span>`;
+    if (window.lucide) window.lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = originalContent;
+      if (window.lucide) window.lucide.createIcons();
+    }, 2200);
+  }
 };
 
 // Inicialização de Hash URL (#chuva ou #previsao)
