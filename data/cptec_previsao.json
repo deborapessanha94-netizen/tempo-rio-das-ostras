@@ -1,4 +1,35 @@
 {
+  "previsao_probabilistica": {
+    "fonte": "CPTEC/INPE - Nowcasting & Previsão Probabilística",
+    "url_portal": "https://www.cptec.inpe.br/",
+    "url_documentacao": "https://dataserver.cptec.inpe.br/dataserver_diptc/web/pdfs/informativos/criterios-previsao-probabilistica.pdf",
+    "mapas": {
+      "chuva_24h": {
+        "ok": true,
+        "tamanho_bytes": 336635,
+        "arquivo": "img/cptec/mapa_prev_prob_24h_chuvaintensa.png",
+        "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_chuvaintensa.png"
+      },
+      "chuva_48h": {
+        "ok": true,
+        "tamanho_bytes": 342857,
+        "arquivo": "img/cptec/mapa_prev_prob_48h_chuvaintensa.png",
+        "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_chuvaintensa.png"
+      },
+      "severo_24h": {
+        "ok": true,
+        "tamanho_bytes": 327271,
+        "arquivo": "img/cptec/mapa_prev_prob_24h_temposevero.png",
+        "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png"
+      },
+      "severo_48h": {
+        "ok": true,
+        "tamanho_bytes": 325286,
+        "arquivo": "img/cptec/mapa_prev_prob_48h_temposevero.png",
+        "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_temposevero.png"
+      }
+    }
+  },
   "cidade": "Rio das Ostras",
   "uf": "RJ",
   "id_cidade": 3866,
@@ -19,8 +50,8 @@
     "vento": "7",
     "umidade": 82,
     "temperatura_prev": "24",
-    "sensacao_termica": "23",
-    "hora_atual": "2026-10-26T18:00:00.000Z"
+    "sensacao_termica": "22",
+    "hora_atual": "2026-10-26T19:00:00.000Z"
   },
   "proximos_dias": [
     {
