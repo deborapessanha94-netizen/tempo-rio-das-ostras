@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=101">
+  <link rel="stylesheet" href="css/styles.css?v=102">
 
 
 
@@ -390,11 +390,15 @@
 
 
 
-            <span class="text-base sm:text-lg font-extrabold text-black tracking-tight font-heading">Rio das Ostras</span>
+            <div class="flex items-center gap-2">
+              <span class="text-base sm:text-lg font-extrabold text-black dark:text-white tracking-tight font-heading">Rio das Ostras</span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shadow-2xs" title="Estação do Ano Vigente no Hemisfério Sul">
+                <span>🌸</span>
+                <span>Primavera</span>
+              </span>
+            </div>
 
-
-
-          <p class="text-xs font-semibold text-black truncate">Portal Integrado de Meteorologia, Alerta Hidrológico & Marítimo</p>
+          <p class="text-xs font-semibold text-black dark:text-slate-300 truncate">Portal Integrado de Meteorologia, Alerta Hidrológico & Marítimo</p>
 
 
 
@@ -882,19 +886,17 @@
 
 
 
-                <h1 class="text-sm sm:text-base font-bold text-black tracking-tight leading-none">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h1 class="text-sm sm:text-base font-bold text-black dark:text-white tracking-tight leading-none">
+                    Rio das Ostras, RJ
+                  </h1>
+                  <span id="hero-estacao-ano" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shadow-2xs" title="Estação do Ano Vigente no Hemisfério Sul">
+                    <span>🌸</span>
+                    <span id="hero-estacao-txt">Estação: Primavera</span>
+                  </span>
+                </div>
 
-
-
-                  Rio das Ostras, RJ
-
-
-
-                </h1>
-
-
-
-                <span class="text-[11px] font-normal text-black">Região dos Lagos • Costa do Sol</span>
+                <span class="text-[11px] font-normal text-black dark:text-slate-300">Região dos Lagos • Costa do Sol • Estação Telemétrica Sede</span>
 
 
 
@@ -1116,7 +1118,7 @@
 
 
 
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
 
 
 
@@ -1365,45 +1367,39 @@
 
 
             <!-- 6. Índice UV -->
-
-
-
             <div class="metric-chip">
-
-
-
               <div class="metric-icon-wrap metric-icon-coral">
-
-
-
                 <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
-
-
-
               </div>
-
-
-
               <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Índice UV</span>
-
-
-
-                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black font-mono block">7 - Alto</span>
-
-
-
-                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black">FPS recomendado</span>
-
-
-
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Índice UV</span>
+                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black dark:text-white font-mono block">7 - Alto</span>
+                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300">FPS recomendado</span>
               </div>
+            </div>
 
+            <!-- 7. Nascer e Pôr do Sol (Com Emojis e Ícone Lucide) -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="sunrise" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Nascer & Pôr do Sol</span>
+                <span id="hero-chip-sol-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌅 05:04 • 🌇 17:57</span>
+                <span id="hero-chip-sol-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">12h 53m de Sol</span>
+              </div>
+            </div>
 
-
+            <!-- 8. Fase da Lua do Dia (Com Emoji e Ícone Lucide) -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-slate">
+                <i data-lucide="moon" class="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Fase da Lua</span>
+                <span id="hero-chip-lua-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌕 Lua Cheia</span>
+                <span id="hero-chip-lua-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">Ilum. 100% • Noite</span>
+              </div>
             </div>
 
 
@@ -11191,7 +11187,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=129"></script>
+  <script type="module" src="js/app.js?v=130"></script>
 
 
 

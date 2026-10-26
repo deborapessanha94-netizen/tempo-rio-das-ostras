@@ -1575,6 +1575,18 @@ def run_auto_bulletin_pipeline():
             "tem_meteograma_multimodel": bool(cptec_data.get('meteograma_multimodel'))
         },
         "impactos_bairros": impactos_bairros,
+        "astronomia": {
+            "estacao_ano": "Primavera",
+            "estacao_emoji": "🌸",
+            "nascer_sol": "05:04",
+            "por_sol": "17:57",
+            "duracao_dia": "12h 53m",
+            "fase_lua": "Lua Cheia",
+            "fase_lua_emoji": "🌕",
+            "iluminacao_lua": "99%",
+            "idade_lua_dias": 15.4,
+            "visibilidade_lua": "Visível a noite toda"
+        },
         "kpis": {
             "jundia_nivel": f"{jundia_nivel_txt} m",
             "jundia_status": jundia_status_txt,

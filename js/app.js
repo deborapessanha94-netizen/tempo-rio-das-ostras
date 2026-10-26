@@ -2018,6 +2018,102 @@ export function resolveSkyAndHeroWeather(meta, inmetForecast, weather) {
   };
 }
 
+
+/**
+ * Funções Astronômicas Oficiais para Rio das Ostras - RJ
+ * Hemisfério Sul, Coordenadas: Lat -22.5264, Lon -41.9456
+ */
+export function getSouthernSeason(date = new Date()) {
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  const md = m * 100 + d;
+  if (md >= 320 && md < 621) return { name: 'Outono', emoji: '🍂', full: 'Estação: Outono' };
+  if (md >= 621 && md < 922) return { name: 'Inverno', emoji: '❄️', full: 'Estação: Inverno' };
+  if (md >= 922 && md < 1221) return { name: 'Primavera', emoji: '🌸', full: 'Estação: Primavera' };
+  return { name: 'Verão', emoji: '☀️', full: 'Estação: Verão' };
+}
+
+export function getMoonPhaseData(date = new Date()) {
+  const ref = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
+  const diffDays = (date.getTime() - ref.getTime()) / (1000 * 60 * 60 * 24);
+  const synodicMonth = 29.53058867;
+  let phase = (diffDays / synodicMonth) % 1;
+  if (phase < 0) phase += 1;
+  const age = phase * synodicMonth;
+  const illumination = Math.round((1 - Math.cos(phase * 2 * Math.PI)) / 2 * 100);
+
+  let name = 'Lua Nova';
+  let emoji = '🌑';
+  let desc = 'Céu Escuro • Visada Estelar';
+
+  if (phase < 0.03 || phase > 0.97) {
+    name = 'Lua Nova';
+    emoji = '🌑';
+    desc = 'Iluminação 0% • Céu Escuro';
+  } else if (phase < 0.22) {
+    name = 'Crescente';
+    emoji = '🌒';
+    desc = `Iluminação ${illumination}% • Início de Noite`;
+  } else if (phase < 0.28) {
+    name = 'Quarto Crescente';
+    emoji = '🌓';
+    desc = `Iluminação ${illumination}% • Meio Céu`;
+  } else if (phase < 0.47) {
+    name = 'Crescente Gibosa';
+    emoji = '🌔';
+    desc = `Iluminação ${illumination}% • Muito Brilhante`;
+  } else if (phase < 0.53) {
+    name = 'Lua Cheia';
+    emoji = '🌕';
+    desc = `Iluminação ${illumination}% • Noite Toda`;
+  } else if (phase < 0.72) {
+    name = 'Minguante Gibosa';
+    emoji = '🌖';
+    desc = `Iluminação ${illumination}% • Madrugada`;
+  } else if (phase < 0.78) {
+    name = 'Quarto Minguante';
+    emoji = '🌗';
+    desc = `Iluminação ${illumination}% • Fim de Noite`;
+  } else {
+    name = 'Minguante';
+    emoji = '🌘';
+    desc = `Iluminação ${illumination}% • Antes da Alvorada`;
+  }
+
+  return { name, emoji, illumination, age, desc };
+}
+
+export function getSunTimesRioDasOstras(date = new Date()) {
+  const lat = -22.5264;
+  const lon = -41.9456;
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff = date - start;
+  const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const decl = 23.45 * Math.sin((360 / 365 * (dayOfYear - 81)) * Math.PI / 180);
+  const b = (360 / 365 * (dayOfYear - 81)) * Math.PI / 180;
+  const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
+  const latRad = lat * Math.PI / 180;
+  const declRad = decl * Math.PI / 180;
+  const cosOmega = (Math.cos(90.833 * Math.PI / 180) - Math.sin(latRad) * Math.sin(declRad)) / (Math.cos(latRad) * Math.cos(declRad));
+  const omega = Math.acos(Math.max(-1, Math.min(1, cosOmega))) * 180 / Math.PI;
+  const solarNoonUtc = 12 - (lon / 15) - (eot / 60);
+  const sunriseUtc = solarNoonUtc - (omega / 15);
+  const sunsetUtc = solarNoonUtc + (omega / 15);
+  const sunriseLocal = sunriseUtc - 3;
+  const sunsetLocal = sunsetUtc - 3;
+  const srh = Math.floor(sunriseLocal);
+  const srm = Math.floor((sunriseLocal - srh) * 60);
+  const ssh = Math.floor(sunsetLocal);
+  const ssm = Math.floor((sunsetLocal - ssh) * 60);
+  const durHours = Math.floor(sunsetLocal - sunriseLocal);
+  const durMin = Math.floor(((sunsetLocal - sunriseLocal) - durHours) * 60);
+  return {
+    sunrise: `${String(srh).padStart(2, '0')}:${String(srm).padStart(2, '0')}`,
+    sunset: `${String(ssh).padStart(2, '0')}:${String(ssm).padStart(2, '0')}`,
+    duration: `${durHours}h ${String(durMin).padStart(2, '0')}m`
+  };
+}
+
 function renderDashboardUI(meta, rows, weather) {
 
 
@@ -2691,6 +2787,54 @@ function renderDashboardUI(meta, rows, weather) {
 
 
     chipUvSub.textContent = 'FPS recomendado';
+  }
+
+  // Atualiza Estação do Ano Vigente (Hemisfério Sul)
+  const heroEstacaoTxt = document.getElementById('hero-estacao-txt');
+  const seasonData = getSouthernSeason();
+  if (heroEstacaoTxt) {
+    heroEstacaoTxt.textContent = `Estação: ${seasonData.name}`;
+  }
+
+  // Atualiza Sol (Nascer e Pôr com Emojis)
+  const chipSolVal = document.getElementById('hero-chip-sol-val');
+  const chipSolSub = document.getElementById('hero-chip-sol-sub');
+  const astroSun = getSunTimesRioDasOstras();
+  
+  let sunriseStr = astroSun.sunrise;
+  let sunsetStr = astroSun.sunset;
+  if (weather?.daily?.sunrise?.[0]) {
+    try {
+      sunriseStr = weather.daily.sunrise[0].split('T')[1].slice(0, 5);
+    } catch (e) {}
+  }
+  if (weather?.daily?.sunset?.[0]) {
+    try {
+      sunsetStr = weather.daily.sunset[0].split('T')[1].slice(0, 5);
+    } catch (e) {}
+  }
+
+  if (chipSolVal) {
+    chipSolVal.textContent = `🌅 ${sunriseStr} • 🌇 ${sunsetStr}`;
+  }
+  if (chipSolSub) {
+    chipSolSub.textContent = `${astroSun.duration} de Sol`;
+  }
+
+  // Atualiza Fase da Lua do Dia
+  const chipLuaVal = document.getElementById('hero-chip-lua-val');
+  const chipLuaSub = document.getElementById('hero-chip-lua-sub');
+  const moonData = getMoonPhaseData();
+  if (chipLuaVal) {
+    chipLuaVal.textContent = `${moonData.emoji} ${moonData.name}`;
+  }
+  if (chipLuaSub) {
+    chipLuaSub.textContent = `Ilum. ${moonData.illumination}% • Noite`;
+  }
+
+  if (window.lucide) {
+    window.lucide.createIcons();
+
 
 
 
