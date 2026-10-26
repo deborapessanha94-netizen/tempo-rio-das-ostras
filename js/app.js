@@ -30,7 +30,9 @@ import {
 
 
 
-  downloadSocialCard
+  downloadSocialCard,
+
+  calculateStationRain
 
 
 
@@ -8857,81 +8859,98 @@ state.stationsRawData = null;
 
 
 
-window.sortStationsBy = function(metric) {
-
-
-
-  state.stationsSortMetric = metric;
-
-
-
-
-
-
-
-  ['1h', '24h', '96h'].forEach(m => {
-
-
-
-    const btn = document.getElementById(`sort-btn-${m}`);
-
-
-
-    if (btn) {
-
-
-
-      if (m === metric) {
-
-
-
-        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-2xs cursor-pointer';
-
-
-
-      } else {
-
-
-
-        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer';
-
-
-
-      }
-
-
-
-    }
-
-
-
-  });
-
-
-
-
-
-
-
-  if (state.stationsRawData) {
-
-
-
-    renderAcumuladosChuva(state.stationsRawData);
-
-
-
+window.getStationHorizonLabel = function(metric) {
+  if (metric === '1h') return '1 Hora';
+  if (metric === '4h') return '4 Horas';
+  if (metric === '12h') return '12 Horas';
+  if (metric === '24h') return '24 Horas';
+  if (metric === '48h') return '48 Horas';
+  if (metric === '96h') return '96 Horas';
+  const hNum = parseFloat(String(metric || '').replace(/[^\d.]/g, ''));
+  if (!isNaN(hNum) && hNum > 0) {
+    return Number.isInteger(hNum) ? `${hNum} Horas` : `${hNum.toFixed(1)} Horas`;
   }
-
-
-
+  return '24 Horas';
 };
 
+window.getStationRainForMetric = function(st, metric) {
+  if (!st) return 0.0;
+  if (metric === '1h') return Number(st.chuva_1h !== undefined && st.chuva_1h !== null ? st.chuva_1h : 0.0);
+  if (metric === '4h') return Number(st.chuva_4h !== undefined && st.chuva_4h !== null ? st.chuva_4h : st.chuva_1h || 0.0);
+  if (metric === '12h') return Number(st.chuva_12h !== undefined && st.chuva_12h !== null ? st.chuva_12h : st.chuva_24h || 0.0);
+  if (metric === '24h') return Number(st.chuva_24h !== undefined && st.chuva_24h !== null ? st.chuva_24h : 0.0);
+  if (metric === '48h') return Number(st.chuva_48h !== undefined && st.chuva_48h !== null ? st.chuva_48h : st.chuva_24h || 0.0);
+  if (metric === '96h') return Number(st.chuva_96h !== undefined && st.chuva_96h !== null ? st.chuva_96h : 0.0);
+  const hNum = parseFloat(String(metric || '').replace(/[^\d.]/g, ''));
+  if (!isNaN(hNum) && hNum > 0) {
+    if (typeof calculateStationRain === 'function') {
+      return calculateStationRain(st, hNum);
+    }
+    return Number(st.chuva_24h || 0.0);
+  }
+  return Number(st.chuva_24h || 0.0);
+};
 
+window.sortStationsBy = function(metric) {
+  state.stationsSortMetric = metric || '24h';
+  const activeLabel = window.getStationHorizonLabel(state.stationsSortMetric);
 
+  const activeLabelEl = document.getElementById('active-station-horizon-label');
+  if (activeLabelEl) activeLabelEl.textContent = activeLabel;
 
+  const standardMetrics = ['1h', '4h', '12h', '24h', '48h', '96h'];
+  standardMetrics.forEach(m => {
+    const btn = document.getElementById(`sort-btn-${m}`);
+    if (btn) {
+      if (m === state.stationsSortMetric) {
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] text-black dark:text-orange-200 shadow-2xs cursor-pointer transition';
+      } else {
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition';
+      }
+    }
+  });
 
+  const customWrapper = document.getElementById('custom-horizon-wrapper');
+  const customInput = document.getElementById('custom-station-horizon-input');
+  if (standardMetrics.includes(state.stationsSortMetric)) {
+    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-2 py-0.5 rounded-lg text-xs transition';
+    if (customInput) customInput.value = '';
+  } else {
+    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] px-2 py-0.5 rounded-lg text-xs transition';
+  }
 
+  if (state.stationsRawData) {
+    renderAcumuladosChuva(state.stationsRawData);
+  }
+};
+
+window.handleCustomStationHorizon = function(val) {
+  const hNum = parseFloat(String(val || '').replace(',', '.'));
+  if (!isNaN(hNum) && hNum > 0 && hNum <= 96) {
+    state.stationsSortMetric = `${hNum}h`;
+    const activeLabel = window.getStationHorizonLabel(state.stationsSortMetric);
+
+    const activeLabelEl = document.getElementById('active-station-horizon-label');
+    if (activeLabelEl) activeLabelEl.textContent = activeLabel;
+
+    const standardMetrics = ['1h', '4h', '12h', '24h', '48h', '96h'];
+    standardMetrics.forEach(m => {
+      const btn = document.getElementById(`sort-btn-${m}`);
+      if (btn) {
+        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition';
+      }
+    });
+
+    const customWrapper = document.getElementById('custom-horizon-wrapper');
+    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] px-2 py-0.5 rounded-lg text-xs transition';
+
+    if (state.stationsRawData) {
+      renderAcumuladosChuva(state.stationsRawData);
+    }
+  } else if (!val || String(val).trim() === '') {
+    window.sortStationsBy('24h');
+  }
+};
 
 // RENDERIZAÇÃO DA ABA DE ACUMULADOS DE CHUVA (10 ESTAÇÕES)
 
@@ -8993,210 +9012,44 @@ function renderAcumuladosChuva(data) {
 
 
 
-  const metricKey = state.stationsSortMetric === '1h' ? 'chuva_1h' : (state.stationsSortMetric === '96h' ? 'chuva_96h' : 'chuva_24h');
-
-
-
-  
-
-
+  const activeMetric = state.stationsSortMetric || '24h';
+  const activeHorizonLabel = window.getStationHorizonLabel(activeMetric);
 
   const estacoesPluviais = pluviometricas.slice().sort((a, b) => {
-
-
-
-    const valA = Number(a[metricKey] !== undefined && a[metricKey] !== null ? a[metricKey] : 0.0);
-
-
-
-    const valB = Number(b[metricKey] !== undefined && b[metricKey] !== null ? b[metricKey] : 0.0);
-
-
-
+    const valA = window.getStationRainForMetric(a, activeMetric);
+    const valB = window.getStationRainForMetric(b, activeMetric);
     if (valB !== valA) return valB - valA;
-
-
-
     return Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0);
-
-
-
   });
 
-
-
-
-
-
-
   // Lista consolidada para renderização: 9 estações pluviométricas ordenadas + Rio Jundiá
-
-
-
   const estacoes = jundiaSt ? [...estacoesPluviais, jundiaSt] : estacoesPluviais;
 
-
-
   // 1. Atualiza KPIs do Topo
-
-
-
   const kpiMediaEl = document.getElementById('chuva-kpi-media');
-
-
-
   const kpiMaiorEl = document.getElementById('chuva-kpi-maior');
-
-
-
   const kpiMaiorLocalEl = document.getElementById('chuva-kpi-maior-local');
-
-
-
   const kpiRioEl = document.getElementById('chuva-kpi-rio');
-
-
-
   const kpiRioSubEl = document.getElementById('chuva-kpi-rio-sub');
-
-
-
   const kpiEstacoesEl = document.getElementById('chuva-kpi-estacoes');
-
-
-
   const atualizacaoTxtEl = document.getElementById('chuva-atualizacao-txt');
 
-
-
-
-
-
-
-  if (kpiMediaEl) {
-
-
-
-    const valMedia = resumo.media_chuva_24h !== undefined ? resumo.media_chuva_24h : 8.5;
-
-
-
-    kpiMediaEl.textContent = `${Number(valMedia).toFixed(1).replace('.', ',')} mm`;
-
-
-
+  if (kpiMediaEl && estacoesPluviais.length > 0) {
+    const sumVals = estacoesPluviais.reduce((acc, s) => acc + window.getStationRainForMetric(s, activeMetric), 0);
+    const avgVal = sumVals / estacoesPluviais.length;
+    kpiMediaEl.textContent = `${avgVal.toFixed(1).replace('.', ',')} mm`;
+    const kpiMediaLabelEl = document.getElementById('chuva-kpi-media-label');
+    if (kpiMediaLabelEl) kpiMediaLabelEl.textContent = `Média Municipal (${activeHorizonLabel})`;
   }
 
-
-
-
-
-
-
-  if (kpiMaiorEl) {
-
-
-
-    const valMaior = resumo.maior_acumulado_24h !== undefined ? resumo.maior_acumulado_24h : 14.2;
-
-
-
-    kpiMaiorEl.textContent = `${Number(valMaior).toFixed(1).replace('.', ',')} mm`;
-
-
-
+  if (kpiMaiorEl && estacoesPluviais.length > 0) {
+    const maiorSt = estacoesPluviais[0];
+    const valMaior = window.getStationRainForMetric(maiorSt, activeMetric);
+    kpiMaiorEl.textContent = `${valMaior.toFixed(1).replace('.', ',')} mm`;
+    if (kpiMaiorLocalEl) kpiMaiorLocalEl.textContent = maiorSt.nome_curto || maiorSt.nome;
+    const kpiMaiorLabelEl = document.getElementById('chuva-kpi-maior-label');
+    if (kpiMaiorLabelEl) kpiMaiorLabelEl.textContent = `Maior Acumulado (${activeHorizonLabel})`;
   }
-
-
-
-
-
-
-
-  if (kpiMaiorLocalEl) {
-
-
-
-    kpiMaiorLocalEl.textContent = resumo.maior_estacao_nome || 'Barra de São João / Praiamar';
-
-
-
-  }
-
-
-
-
-
-
-
-  if (kpiRioEl) {
-
-
-
-    kpiRioEl.textContent = resumo.rio_jundia_cota || '1,59 m';
-
-
-
-  }
-
-
-
-
-
-
-
-  if (kpiRioSubEl) {
-
-
-
-    const stRio = resumo.rio_jundia_status || 'Vigilância';
-
-
-
-    const pctRio = resumo.rio_jundia_pct || 56.0;
-
-
-
-    kpiRioSubEl.textContent = `Status: ${stRio} • Calha em ${pctRio}%`;
-
-
-
-  }
-
-
-
-
-
-
-
-  if (kpiEstacoesEl) {
-
-
-
-    kpiEstacoesEl.textContent = `${estacoes.length || 10} Pontos`;
-
-
-
-  }
-
-
-
-
-
-
-
-  if (atualizacaoTxtEl) {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    atualizacaoTxtEl.textContent = `Atualizado às ${hh}:${mm} (Tempo Real)`;
-  }
-
-
-
-
-
-
 
   // 2. Renderiza Grade de Cards das 10 Estações
 
@@ -9903,68 +9756,61 @@ function renderAcumuladosChuva(data) {
 
 
             <!-- Acumulados de Chuva -->
+            ${(() => {
+              const valActive = window.getStationRainForMetric(st, activeMetric).toFixed(1).replace('.', ',');
+              let col1Html = `
+                <div>
+                  <span class="text-[9px] font-black uppercase text-black block">1 Hora</span>
+                  <strong class="text-xs font-mono font-bold text-black">${ch1} mm</strong>
+                </div>`;
+              let col2Html = `
+                <div class="border-x border-[#cbd5e1]/70 px-1">
+                  <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
+                  <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch24} mm</strong>
+                </div>`;
+              let col3Html = `
+                <div>
+                  <span class="text-[9px] font-black uppercase text-black block">96 Horas</span>
+                  <strong class="text-xs font-mono font-bold text-black">${ch96} mm</strong>
+                </div>`;
 
+              if (activeMetric === '1h') {
+                col1Html = `
+                  <div class="bg-[#ffebe4]/70 rounded-md py-0.5">
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">1 Hora</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch1} mm</strong>
+                  </div>`;
+                col2Html = `
+                  <div class="border-x border-[#cbd5e1]/70 px-1">
+                    <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
+                    <strong class="text-xs font-mono font-bold text-black">${ch24} mm</strong>
+                  </div>`;
+              } else if (activeMetric === '96h') {
+                col2Html = `
+                  <div class="border-x border-[#cbd5e1]/70 px-1">
+                    <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
+                    <strong class="text-xs font-mono font-bold text-black">${ch24} mm</strong>
+                  </div>`;
+                col3Html = `
+                  <div class="bg-[#ffebe4]/70 rounded-md py-0.5">
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">96 Horas</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch96} mm</strong>
+                  </div>`;
+              } else if (activeMetric !== '24h') {
+                col2Html = `
+                  <div class="border-x border-[#cbd5e1]/70 px-1 bg-[#ffebe4]/70 rounded-md py-0.5">
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">${activeHorizonLabel}</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${valActive} mm</strong>
+                  </div>`;
+              }
 
-
-            <div class="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#cbd5e1] text-center">
-
-
-
-              <div>
-
-
-
-                <span class="text-[9px] font-black uppercase text-black block">1 Hora</span>
-
-
-
-                <strong class="text-xs font-mono font-bold text-black">${ch1} mm</strong>
-
-
-
-              </div>
-
-
-
-              <div class="border-x border-[#cbd5e1]/70 px-1">
-
-
-
-                <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
-
-
-
-                <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch24} mm</strong>
-
-
-
-              </div>
-
-
-
-              <div>
-
-
-
-                <span class="text-[9px] font-black uppercase text-black block">96 Horas</span>
-
-
-
-                <strong class="text-xs font-mono font-bold text-black">${ch96} mm</strong>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
+              return `
+                <div class="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#cbd5e1] text-center">
+                  ${col1Html}
+                  ${col2Html}
+                  ${col3Html}
+                </div>`;
+            })()}
 
             <!-- Sensores Adicionais -->
 
@@ -10039,6 +9885,38 @@ function renderAcumuladosChuva(data) {
 
 
   if (tableBodyEl && estacoes.length > 0) {
+    const th1 = document.getElementById('th-chuva-1h');
+    const thMid = document.getElementById('th-chuva-mid');
+    const th96 = document.getElementById('th-chuva-96h');
+    const arrow1 = document.getElementById('th-arrow-1h');
+    const arrowMid = document.getElementById('th-arrow-mid');
+    const arrow96 = document.getElementById('th-arrow-96h');
+
+    if (th1 && thMid && th96) {
+      th1.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      th96.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      if (arrow1) arrow1.textContent = '↕';
+      if (arrowMid) arrowMid.textContent = '↕';
+      if (arrow96) arrow96.textContent = '↕';
+
+      if (activeMetric === '1h') {
+        th1.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        if (arrow1) arrow1.textContent = '↓';
+        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↕</span>`;
+      } else if (activeMetric === '96h') {
+        th96.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        if (arrow96) arrow96.textContent = '↓';
+        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↕</span>`;
+      } else if (activeMetric === '24h') {
+        thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↓</span>`;
+      } else {
+        thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        thMid.innerHTML = `Chuva ${activeHorizonLabel} <span id="th-arrow-mid">↓</span>`;
+      }
+    }
+
 
 
 
@@ -10286,15 +10164,30 @@ function renderAcumuladosChuva(data) {
 
 
 
-          <td class="p-2.5 sm:p-3 text-center font-mono font-bold text-black">${ch1} mm</td>
+          ${(() => {
+            const valActive = window.getStationRainForMetric(st, activeMetric).toFixed(1).replace('.', ',');
+            let td1Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let td96Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let midValStr = `${ch24} mm`;
 
+            if (activeMetric === '1h') {
+              td1Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            } else if (activeMetric === '96h') {
+              td96Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            } else if (activeMetric === '24h') {
+              tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            } else {
+              tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+              midValStr = `${valActive} mm`;
+            }
 
-
-          <td class="p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c]">${ch24} mm</td>
-
-
-
-          <td class="p-2.5 sm:p-3 text-center font-mono font-bold text-black">${ch96} mm</td>
+            return `
+              <td class="${td1Class}">${ch1} mm</td>
+              <td class="${tdMidClass}">${midValStr}</td>
+              <td class="${td96Class}">${ch96} mm</td>
+            `;
+          })()}
 
 
 
@@ -12041,6 +11934,15 @@ const handleUrlHash = () => {
     window.switchAppTab(targetTab);
   }
 
+  const qHorizon = params.get('horizon') || params.get('h') || params.get('sort');
+  if (qHorizon) {
+    setTimeout(() => {
+      if (typeof window.sortStationsBy === 'function') {
+        window.sortStationsBy(qHorizon);
+      }
+    }, 200);
+  }
+
   if (rawHash === 'wwatch' || qTab === 'wwatch' || rawHash === 'ondas') {
     window.switchAppTab('orla');
     if (window.switchOrlaTab) {
@@ -12108,7 +12010,7 @@ const handleUrlSocialParams = () => {
 
 
 
-  if (modalParam === 'social' || modalParam === 'chuva' || horizonParam || fmtParam) {
+  if (modalParam === 'social' || (modalParam === 'chuva' && !params.get('tab'))) {
 
 
 

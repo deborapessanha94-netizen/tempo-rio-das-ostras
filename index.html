@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=108">
+  <link rel="stylesheet" href="css/styles.css?v=109">
 
 
 
@@ -4308,7 +4308,7 @@
 
 
 
-            <span class="text-[10px] font-black uppercase tracking-wider text-black">Média Municipal (24h)</span>
+            <span id="chuva-kpi-media-label" class="text-[10px] font-black uppercase tracking-wider text-black">Média Municipal (24h)</span>
 
 
 
@@ -4348,7 +4348,7 @@
 
 
 
-            <span class="text-[10px] font-black uppercase tracking-wider text-black">Maior Acumulado (24h)</span>
+            <span id="chuva-kpi-maior-label" class="text-[10px] font-black uppercase tracking-wider text-black">Maior Acumulado (24h)</span>
 
 
 
@@ -4848,69 +4848,52 @@
 
 
 
-      <!-- Barra de Ordenação por Período -->
-
-
-
-      <div class="flex items-center justify-end gap-2 pt-1 text-xs">
-
-
-
-        <div class="flex items-center gap-1.5" role="tablist">
-
-
-
-          <span class="text-[11px] font-bold text-black/80">Ordenar por:</span>
-
-
-
-          <button id="sort-btn-24h" onclick="sortStationsBy('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-2xs cursor-pointer">
-
-
-
+      <!-- Barra de Seleção de Horizonte de Tempo (Acumulados de Chuva) -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-[#cbd5e1]/40 dark:border-slate-800 text-xs">
+        <div class="flex items-center gap-2">
+          <i data-lucide="clock" class="w-4 h-4 text-[#f07a53] shrink-0"></i>
+          <span class="text-xs font-black text-black dark:text-white">Horizonte de Tempo:</span>
+          <span id="active-station-horizon-label" class="text-[11px] font-mono font-bold bg-[#ffebe4] dark:bg-orange-950/60 text-[#d95d39] dark:text-orange-300 border border-[#f07a53] px-2 py-0.5 rounded-md">
             24 Horas
-
-
-
-          </button>
-
-
-
-          <button id="sort-btn-1h" onclick="sortStationsBy('1h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer">
-
-
-
-            1 Hora
-
-
-
-          </button>
-
-
-
-          <button id="sort-btn-96h" onclick="sortStationsBy('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer">
-
-
-
-            96 Horas
-
-
-
-          </button>
-
-
-
+          </span>
         </div>
 
+        <div class="flex flex-wrap items-center gap-1.5" role="tablist">
+          <button id="sort-btn-1h" onclick="sortStationsBy('1h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
+            1 Hora
+          </button>
+          <button id="sort-btn-4h" onclick="sortStationsBy('4h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
+            4 Horas
+          </button>
+          <button id="sort-btn-12h" onclick="sortStationsBy('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
+            12 Horas
+          </button>
+          <button id="sort-btn-24h" onclick="sortStationsBy('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] text-black dark:text-orange-200 shadow-2xs cursor-pointer transition">
+            24 Horas
+          </button>
+          <button id="sort-btn-48h" onclick="sortStationsBy('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
+            48 Horas
+          </button>
+          <button id="sort-btn-96h" onclick="sortStationsBy('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
+            96 Horas
+          </button>
 
-
+          <div id="custom-horizon-wrapper" class="flex items-center gap-1 bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-2 py-0.5 rounded-lg text-xs transition">
+            <span class="text-[10.5px] font-bold text-black/70 dark:text-slate-300">Outro:</span>
+            <input 
+              type="number" 
+              id="custom-station-horizon-input" 
+              min="1" 
+              max="96" 
+              placeholder="horas" 
+              class="w-12 bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded text-xs font-black text-black dark:text-white border border-[#cbd5e1] dark:border-slate-700 outline-none text-center" 
+              oninput="handleCustomStationHorizon(this.value)"
+              title="Digite a quantidade de horas (ex: 6, 18, 36, 72)"
+            />
+            <span class="text-[10px] font-bold text-black/70 dark:text-slate-400">h</span>
+          </div>
+        </div>
       </div>
-
-
-
-
-
-
 
       <!-- Grade dos Cards das Estações (Renderizados Dinamicamente via JS com Fallback Completo) -->
 
@@ -5060,15 +5043,9 @@
 
 
 
-                <th class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100" onclick="sortStationsBy('1h')" title="Clique para ordenar por 1h">Chuva 1h ↕</th>
-
-
-
-                <th class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60" onclick="sortStationsBy('24h')" title="Clique para ordenar por 24h">Chuva 24h ↓</th>
-
-
-
-                <th class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100" onclick="sortStationsBy('96h')" title="Clique para ordenar por 96h">Chuva 96h ↕</th>
+                <th id="th-chuva-1h" class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition" onclick="sortStationsBy('1h')" title="Clique para ordenar por 1h">Chuva 1h <span id="th-arrow-1h">↕</span></th>
+                <th id="th-chuva-mid" class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition" onclick="sortStationsBy('24h')" title="Clique para ordenar por 24h">Chuva 24h <span id="th-arrow-mid">↓</span></th>
+                <th id="th-chuva-96h" class="p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition" onclick="sortStationsBy('96h')" title="Clique para ordenar por 96h">Chuva 96h <span id="th-arrow-96h">↕</span></th>
 
 
 
@@ -12057,7 +12034,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=136"></script>
+  <script type="module" src="js/app.js?v=137"></script>
 
 
 
