@@ -280,6 +280,141 @@ def fetch_inea_cheias():
 
     return stations
 
+def fetch_inea_macae_ostras():
+    """
+    Coleta dados oficiais telemétricos das estações fluviais e lagunares
+    da Bacia dos Rios Macaé e das Ostras do INEA Alerta de Cheias:
+    https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php
+    """
+    url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    }
+    
+    try:
+        req = urllib.request.Request(url, headers=headers)
+        with urllib.request.urlopen(req, timeout=12) as resp:
+            html = resp.read().decode('utf-8', errors='ignore')
+    except Exception as e:
+        print(f"[INEA Macaé/Ostras] Erro ao baixar HTML: {e}")
+        return None
+
+    tables = re.findall(r'<table[^>]*>(.*?)</table>', html, re.DOTALL | re.IGNORECASE)
+    all_estacoes = []
+    
+    for t in tables:
+        rows = re.findall(r'<tr[^>]*>(.*?)</tr>', t, re.DOTALL | re.IGNORECASE)
+        for r in rows:
+            cells = re.findall(r'<t[hd][^>]*>(.*?)</t[hd]>', r, re.DOTALL | re.IGNORECASE)
+            if len(cells) < 13:
+                continue
+            
+            clean_cells = [re.sub(r'<[^>]+>', ' ', cell).strip() for cell in cells]
+            clean_cells = [re.sub(r'\s+', ' ', cell.replace('&nbsp;', ' ')) for cell in clean_cells]
+            
+            municipio = clean_cells[0]
+            if 'Município' in municipio or 'Municipio' in municipio or 'Último' in municipio or 'Ultimo' in municipio:
+                continue
+                
+            curso_agua = clean_cells[1]
+            nome_estacao = clean_cells[2]
+            
+            img_trend = re.findall(r'imagens/(subindo|descendo|estavel)\.png', cells[3], re.IGNORECASE)
+            tendencia = img_trend[0].capitalize() if img_trend else "Estável"
+            
+            ultima_leitura = clean_cells[4]
+            status_monitoramento = clean_cells[5].upper()
+            
+            chuva_1h = clean_cells[7]
+            chuva_4h = clean_cells[8]
+            chuva_24h = clean_cells[9]
+            
+            nivel_atual = clean_cells[12]
+            nivel_15min = clean_cells[13] if len(clean_cells) > 13 else "-"
+            
+            link_m = re.findall(r'href=["\']([^"\']+)["\']', cells[-1]) if cells else []
+            link_estacao = ("https://alertadecheias.inea.rj.gov.br/dados/" + link_m[0]) if link_m else url
+            
+            is_vigilancia = 'VIGIL' in status_monitoramento
+            fora_seguranca = not is_vigilancia
+            
+            status_normalizado = "VIGILÂNCIA"
+            cor_badge = "success"
+            if 'ALERTA M' in status_monitoramento or 'TRANSBORD' in status_monitoramento:
+                status_normalizado = "ALERTA MÁXIMO"
+                cor_badge = "danger-extreme"
+            elif 'ALERTA' in status_monitoramento:
+                status_normalizado = "ALERTA"
+                cor_badge = "danger"
+            elif 'ATEN' in status_monitoramento:
+                status_normalizado = "ATENÇÃO"
+                cor_badge = "warning"
+                
+            estacao_data = {
+                "municipio": municipio,
+                "curso_agua": curso_agua,
+                "estacao": nome_estacao,
+                "tendencia": tendencia,
+                "leitura": ultima_leitura,
+                "status_bruto": status_monitoramento,
+                "status": status_normalizado,
+                "cor_badge": cor_badge,
+                "fora_limite_seguranca": fora_seguranca,
+                "nivel_atual_m": nivel_atual,
+                "nivel_15min_m": nivel_15min,
+                "chuva_24h_mm": chuva_24h,
+                "link": link_estacao
+            }
+            all_estacoes.append(estacao_data)
+            
+    macae_fora_limite = [
+        e for e in all_estacoes 
+        if e['municipio'].lower() == 'macaé' and e['fora_limite_seguranca']
+    ]
+    friburgo_fora_limite = [
+        e for e in all_estacoes
+        if 'friburgo' in e['municipio'].lower() and e['fora_limite_seguranca']
+    ]
+    ostras_estacoes = [
+        e for e in all_estacoes 
+        if 'ostras' in e['municipio'].lower()
+    ]
+    
+    now_dt = datetime.now(timezone(timedelta(hours=-3)))
+    tem_elevacao_macae = len(macae_fora_limite) > 0
+    maior_nivel_macae = "NORMAL"
+    if any(e['status'] == 'ALERTA MÁXIMO' for e in macae_fora_limite):
+        maior_nivel_macae = "ALERTA MÁXIMO"
+    elif any(e['status'] == 'ALERTA' for e in macae_fora_limite):
+        maior_nivel_macae = "ALERTA"
+    elif any(e['status'] == 'ATENÇÃO' for e in macae_fora_limite):
+        maior_nivel_macae = "ATENÇÃO"
+        
+    resultado = {
+        "fonte": "INEA - Sistema de Alerta de Cheias",
+        "url_oficial": url,
+        "atualizacao": now_dt.strftime("%d/%m/%Y %H:%M"),
+        "bacia": "Rios Macaé e das Ostras",
+        "alerta_macae": {
+            "tem_elevacao_fora_limite": tem_elevacao_macae,
+            "maior_nivel": maior_nivel_macae,
+            "qtd_estacoes_elevadas": len(macae_fora_limite),
+            "estacoes_afetadas": macae_fora_limite,
+            "resumo_texto": (
+                f"{len(macae_fora_limite)} estação(ões) em Macaé fora da cota de segurança ({maior_nivel_macae}): " +
+                ", ".join([f"{e['estacao']} ({e['status']}: {e['nivel_atual_m']} m)" if e['nivel_atual_m'] != '-' else f"{e['estacao']} ({e['status']})" for e in macae_fora_limite])
+            ) if tem_elevacao_macae else "Todas as estações de rios em Macaé operam dentro dos limites normais de segurança (Vigilância)."
+        },
+        "alerta_friburgo_cabeceiras": {
+            "tem_elevacao": len(friburgo_fora_limite) > 0,
+            "estacoes_afetadas": friburgo_fora_limite
+        },
+        "estacoes_rio_das_ostras": ostras_estacoes,
+        "todas_estacoes": all_estacoes
+    }
+    return resultado
+
+
 def format_inmet_date(dt_str):
     if not dt_str: return ""
     try:
@@ -644,12 +779,12 @@ def fetch_cemaden_riscos():
                     full_svg,
                     flags=re.DOTALL
                 )
-                marker = \'\'\'
+                marker = '''
     <!-- Rio das Ostras Marker -->
     <circle cx="195500" cy="123500" r="5000" fill="#dc2626" stroke="#ffffff" stroke-width="1500" />
     <circle cx="195500" cy="123500" r="9000" fill="none" stroke="#dc2626" stroke-width="1000" stroke-opacity="0.9" />
     <text x="195500" y="113000" font-family="system-ui, -apple-system, sans-serif" font-size="7500" font-weight="900" fill="#000000" text-anchor="middle">Rio das Ostras</text>
-    \'\'\'
+    '''
                 highlighted_svg = highlighted_svg.replace('</svg>', marker + '</svg>')
                 (cemaden_dir / svg_file).write_text(highlighted_svg, encoding='utf-8')
                 
@@ -885,6 +1020,7 @@ def run_auto_bulletin_pipeline():
 
     # Busca INEA, INMET Avisos, Previsão INMET, Meteograma Dinâmico INMET e CPTEC/INPE
     inea_stations = fetch_inea_cheias()
+    inea_macae_ostras_data = fetch_inea_macae_ostras()
     inmet_alerts = fetch_inmet_alerts()
     inmet_forecast = fetch_inmet_forecast()
     inmet_meteograma = fetch_inmet_meteograma()
@@ -918,6 +1054,9 @@ def run_auto_bulletin_pipeline():
     if inea_stations:
         with open(DATA_DIR / "inea_cheias.json", 'w', encoding='utf-8') as f:
             json.dump(inea_stations, f, ensure_ascii=False, indent=2)
+    if inea_macae_ostras_data:
+        with open(DATA_DIR / "inea_macae_ostras.json", 'w', encoding='utf-8') as f:
+            json.dump(inea_macae_ostras_data, f, ensure_ascii=False, indent=2)
 
     if inmet_alerts:
         with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:
@@ -1962,6 +2101,7 @@ def run_auto_bulletin_pipeline():
         },
         "inmet_meteograma": inmet_meteograma,
         "inea_boletim_hidrometeorologico": inea_boletim_data,
+        "inea_macae_ostras": inea_macae_ostras_data,
         "orla_condicoes": orla_condicoes,
         "cptec_wwatch": cptec_wwatch_data,
         "cemaden_riscos": cemaden_riscos_data,

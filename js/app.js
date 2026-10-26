@@ -5836,6 +5836,95 @@ function renderJundiaTelemetry(stations) {
 
 
 
+
+function renderMacaeNotification(stations) {
+  const bannerEl = document.getElementById('notificacao-rios-macae');
+  const badgeEl = document.getElementById('badge-macae-status');
+  const textEl = document.getElementById('texto-macae-detalhe');
+  const navDotEl = document.getElementById('nav-badge-rio-macae');
+
+  if (!bannerEl) return;
+
+  // Se não recebeu estações diretamente, tenta do metadata
+  let list = stations;
+  if ((!list || !list.length) && window.state?.boletimMetadata?.inea_macae_ostras?.todas_estacoes) {
+    list = window.state.boletimMetadata.inea_macae_ostras.todas_estacoes;
+  }
+  if (!list || !Array.isArray(list)) return;
+
+  // Filtra estações de Macaé
+  const macaeStations = list.filter(s => {
+    const muni = (s.municipio || '').toLowerCase();
+    const curso = (s.curso_dagua || s.curso_agua || '').toLowerCase();
+    const nome = (s.nome_estacao || s.estacao || '').toLowerCase();
+    return (muni.includes('maca') || curso.includes('sana') || curso.includes('imboassica') || nome.includes('sana') || nome.includes('imboassica') || nome.includes('baião') || nome.includes('glicério') || nome.includes('são pedro')) && !s.eh_rio_das_ostras && !nome.includes('jundi');
+  });
+
+  // Filtra as que estão fora do limite de segurança (status diferente de VIGILÂNCIA)
+  const elevated = macaeStations.filter(s => {
+    const st = (s.status || '').toUpperCase();
+    return !st.includes('VIGIL');
+  });
+
+  if (elevated.length > 0) {
+    if (navDotEl) navDotEl.classList.remove('hidden');
+    bannerEl.classList.remove('hidden');
+
+    const hasMax = elevated.some(s => {
+      const st = (s.status || '').toUpperCase();
+      return st.includes('MÁXIMO') || st.includes('MAXIMO') || st.includes('TRANSBORD');
+    });
+    const hasAlerta = elevated.some(s => (s.status || '').toUpperCase() === 'ALERTA');
+
+    let badgeText = 'Elevação Fora da Segurança';
+    let badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-full uppercase shadow-2xs';
+    let bannerBorder = 'border-amber-300 dark:border-amber-700/80 bg-amber-50/95 dark:bg-amber-950/40';
+
+    if (hasMax) {
+      badgeText = 'Alerta Máximo em Macaé';
+      badgeClass += ' bg-rose-500 text-white border border-rose-600 animate-pulse';
+      bannerBorder = 'border-rose-300 dark:border-rose-800 bg-rose-50/95 dark:bg-rose-950/40';
+    } else if (hasAlerta) {
+      badgeText = 'Alerta Hidrológico em Macaé';
+      badgeClass += ' bg-orange-500 text-white border border-orange-600';
+      bannerBorder = 'border-orange-300 dark:border-orange-800 bg-orange-50/95 dark:bg-orange-950/40';
+    } else {
+      badgeText = 'Atenção em Macaé';
+      badgeClass += ' bg-amber-400 text-black border border-amber-500';
+      bannerBorder = 'border-amber-300 dark:border-amber-700/80 bg-amber-50/95 dark:bg-amber-950/40';
+    }
+
+    if (badgeEl) {
+      badgeEl.textContent = badgeText;
+      badgeEl.className = badgeClass;
+    }
+
+    bannerEl.className = `p-3 sm:p-3.5 rounded-2xl ${bannerBorder} shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition`;
+
+    if (textEl) {
+      const summaryList = elevated.map(s => {
+        const nome = s.nome_estacao || s.estacao || 'Estação';
+        const st = (s.status || '').toLowerCase();
+        const nivel = s.nivel_rio || s.nivel_atual_m;
+        const nvStr = (nivel && nivel !== '-' && nivel !== '—') ? ` • ${nivel} m` : '';
+        return `${nome} (${st}${nvStr})`;
+      }).join(', ');
+      textEl.innerHTML = `<strong>${elevated.length} estação(ões) em Macaé fora da cota de segurança:</strong> ${summaryList}.`;
+    }
+  } else {
+    if (navDotEl) navDotEl.classList.add('hidden');
+    bannerEl.className = 'p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 shadow-2xs flex items-center justify-between gap-2 transition text-xs';
+    if (badgeEl) {
+      badgeEl.textContent = 'Normalidade';
+      badgeEl.className = 'text-[9.5px] font-black px-2 py-0.5 rounded-full bg-emerald-500 text-white';
+    }
+    if (textEl) {
+      textEl.innerHTML = '<strong>Rios de Macaé:</strong> Todas as estações operam dentro dos limites normais de segurança (Vigilância).';
+    }
+  }
+}
+
+
 /**
 
 

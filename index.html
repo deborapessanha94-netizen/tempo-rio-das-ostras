@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=106">
+  <link rel="stylesheet" href="css/styles.css?v=107">
 
 
 
@@ -715,6 +715,7 @@
 
 
         <span class="leading-none whitespace-nowrap">Nível do Rio</span>
+        <span id="nav-badge-rio-macae" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-0.5 shrink-0" title="Aviso: Rios de Macaé fora da cota de segurança"></span>
 
 
 
@@ -5267,7 +5268,43 @@
 
 
 
-    <!-- Card de Telemetria do Rio Jundiá -->
+
+    <!-- ========================================================================= -->
+    <!-- NOTIFICAÇÃO COMPACTA: ELEVAÇÃO DE RIOS EM MACAÉ (INFLUÊNCIA REGIONAL)     -->
+    <!-- ========================================================================= -->
+    <div id="notificacao-rios-macae" class="p-3 sm:p-3.5 rounded-2xl bg-amber-50/95 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition">
+      <div class="flex items-start sm:items-center gap-2.5 min-w-0">
+        <div class="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+          <i data-lucide="bell-ring" class="w-4 h-4 text-amber-600 dark:text-amber-400 animate-pulse"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="text-xs font-black text-amber-950 dark:text-amber-200 uppercase tracking-tight">
+              Aviso Hidrológico • Rios de Macaé
+            </span>
+            <span id="badge-macae-status" class="text-[9.5px] font-black px-2 py-0.5 rounded-full bg-amber-400 text-black border border-amber-500 uppercase shadow-2xs">
+              Elevação Fora da Segurança
+            </span>
+            <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              Bacia Hidrográfica Vizinha (Influência Regional)
+            </span>
+          </div>
+          <p id="texto-macae-detalhe" class="text-xs text-black dark:text-slate-200 mt-0.5 leading-snug font-medium">
+            <strong>5 estações em Macaé com elevação:</strong> Lagoa de Imboassica (Alerta Máximo • 1,50 m), Ponte do Baião (Atenção • 1,81 m), Barra do Sana (Atenção • 1,32 m), São Pedro (Atenção • 0,74 m) e Glicério (Atenção).
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+        <a href="https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl text-xs font-bold text-amber-950 dark:text-amber-100 bg-amber-200/80 hover:bg-amber-300/80 dark:bg-amber-900/60 dark:hover:bg-amber-800/60 border border-amber-300 dark:border-amber-700 transition flex items-center gap-1.5 shadow-2xs whitespace-nowrap" title="Verificar valores oficiais no site do INEA">
+          <span>Verificar Valores no INEA</span>
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+    </div>
+
+
+        <!-- Card de Telemetria do Rio Jundiá -->
 
 
 
@@ -12020,7 +12057,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=134"></script>
+  <script type="module" src="js/app.js?v=135"></script>
 
 
 
