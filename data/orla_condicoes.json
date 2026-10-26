@@ -1,9 +1,9 @@
 {
-  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 782/2026)",
+  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 789/2026)",
   "badge": "VENTO FORTE",
   "badge_tipo": "warning",
   "aviso_ativo": true,
-  "aviso_numero": "782/2026",
+  "aviso_numero": "789/2026",
   "aviso_tipo": "VENTO FORTE",
   "mar_ondas": "2,0 a 2,5 m (Agitado)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
@@ -392,10 +392,10 @@
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
     "data": "2026-10-26",
     "proxima_mare": {
-      "tipo": "PREAMAR",
-      "hora": "14:30",
-      "altura": 1.38,
-      "rotulo": "Preia-mar (1,4 m)"
+      "tipo": "BAIXA-MAR",
+      "hora": "20:55",
+      "altura": 0.23,
+      "rotulo": "Baixa-mar (0,2 m)"
     },
     "mares_do_dia": [
       {
