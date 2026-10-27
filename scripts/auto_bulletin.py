@@ -1802,7 +1802,7 @@ def run_auto_bulletin_pipeline():
 
         dias_resumo.append({
             "dia": f"{d['dia_semana'].upper()} — {d['date_br']}",
-            "subtitulo": f"{sub_desc} • Máxima de {d['t_max']:.0f}°C • Chuva: {faixa_sub}",
+            "subtitulo": sub_desc,
             "badge": badge,
             "badge_tipo": badge_tipo,
             "descricao": desc_card,

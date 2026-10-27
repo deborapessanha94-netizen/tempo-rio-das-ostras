@@ -1892,7 +1892,8 @@ function toIsoDate(str) {
  */
 export function resolveSkyAndHeroWeather(meta, inmetForecast, weather) {
   const d0 = meta?.dias_resumo?.[0];
-  const subTitle = d0?.subtitulo || '';
+  const rawSubTitle = d0?.subtitulo || '';
+  const subTitle = rawSubTitle.split(/\s*(?:[-—•]|\s{2,})\s*(?:M[áa]xima|Chuva)/i)[0].trim();
   const ceuVal = d0?.pilares?.ceu?.val || '';
   const chuvaVal = d0?.pilares?.chuva?.val || '';
 
@@ -2176,7 +2177,8 @@ function renderDashboardUI(meta, rows, weather) {
   }
 
   if (condEl) {
-    condEl.textContent = heroWeather.condition;
+    const rawCond = heroWeather.condition || 'Muitas nuvens com possibilidade de chuva isolada';
+    condEl.textContent = rawCond.split(/\s*(?:[-—•]|\s{2,})\s*(?:M[áa]xima|Chuva)/i)[0].trim();
   }
 
   if (heroIcon) {

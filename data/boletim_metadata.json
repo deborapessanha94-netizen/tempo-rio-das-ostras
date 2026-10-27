@@ -365,11 +365,11 @@
   ],
   "dias_resumo": [
     {
-      "dia": "TERÇA-FEIRA — 27/10/2026",
-      "subtitulo": "Poucas nuvens • Máxima de 24°C • Chuva: 0.9 mm",
-      "badge": "OBSERVAÇÃO",
-      "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 18°C e máxima de 24°C. Volume pluviométrico diário estimado em 0.9 mm com rajadas de vento de até 36 km/h na faixa litorânea.",
+      "dia": "SEGUNDA-FEIRA — 26/10/2026",
+      "subtitulo": "Muitas nuvens com possibilidade de chuva isolada",
+      "badge": "AVISO / ATENÇÃO",
+      "badge_tipo": "warning",
+      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 19°C e máxima de 24°C. Volume pluviométrico diário estimado em 4.9 mm com rajadas de vento de até 61 km/h na faixa litorânea.",
       "informe_populacao": [
         "Nesta terça-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
         "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (0.9 mm no dia). Pluviômetro CEMADEN registra 2.6 mm e o Rio Jundiá (INEA) cota de 1.82 m (Status: Atenção), em regime seguro de vazante contínua.",
@@ -415,6 +415,62 @@
         },
         "agua_precipitavel": {
           "label": "ÁGUA PRECIPITÁVEL (VIME)",
+          "val": "10.3 mm",
+          "icon": "droplets"
+        }
+      }
+    },
+    {
+      "dia": "TERÇA-FEIRA — 27/10/2026",
+      "subtitulo": "Poucas nuvens",
+      "badge": "OBSERVAÇÃO",
+      "badge_tipo": "info",
+      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 17°C e máxima de 24°C. Volume pluviométrico diário estimado em 1.0 mm com rajadas de vento de até 39 km/h na faixa litorânea.",
+      "informe_populacao": [
+        "Nesta terça-feira, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico gradual.",
+        "Previsão de chuva fraca ou isolada (1.0 mm no dia). O Rio Jundiá permanece seguro com nível de 1.82 m.",
+        "Temperaturas variam entre mínima de 17°C ao amanhecer e máxima de 24°C à tarde em moderada elevação. Na região rural, oscilam entre 15°C e 22°C.",
+        "A umidade relativa do ar oscila entre 60% nas horas mais quentes da tarde e 80% na madrugada (Ar Moderadamente Úmido).",
+        "Ventos de SE-SW rondando para NW-N moderados com rajadas de até 39 km/h na orla (Sem avisos meteorológicos vigentes)."
+      ],
+      "pilares": {
+        "ceu": {
+          "label": "CÉU",
+          "val": "Garoa Fraca",
+          "icon": "cloud-drizzle"
+        },
+        "temp": {
+          "label": "TEMPERATURA",
+          "val": "17° a 24°C",
+          "icon": "thermometer"
+        },
+        "umid": {
+          "label": "UMIDADE",
+          "val": "60% a 80%",
+          "icon": "droplets"
+        },
+        "vento": {
+          "label": "VENTO & RAJADAS",
+          "val": "Rajadas 39 km/h",
+          "icon": "wind"
+        },
+        "chuva": {
+          "label": "CHUVA",
+          "val": "1.0 mm",
+          "icon": "cloud-drizzle"
+        },
+        "mar": {
+          "label": "MAR E PRAIA",
+          "val": "0.8 a 0.9 m",
+          "icon": "waves"
+        },
+        "uv": {
+          "label": "ÍNDICE UV (CPTEC)",
+          "val": "UV 13.0 (Extremo)",
+          "icon": "sun"
+        },
+        "agua_precipitavel": {
+          "label": "ÁGUA PRECIPITÁVEL (VIME)",
           "val": "8.4 mm",
           "icon": "droplets"
         }
@@ -422,7 +478,7 @@
     },
     {
       "dia": "QUARTA-FEIRA — 28/10/2026",
-      "subtitulo": "Encoberto • Máxima de 24°C • Chuva: 0.4 mm",
+      "subtitulo": "Nublado",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
       "descricao": "Previsão de nevoeiro com visibilidade reduzida sobre Rio das Ostras. Temperaturas variando entre mínima de 17°C e máxima de 24°C. Volume pluviométrico diário estimado em 0.4 mm com rajadas de vento de até 41 km/h na faixa litorânea.",

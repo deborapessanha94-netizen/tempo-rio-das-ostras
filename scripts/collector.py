@@ -663,7 +663,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
 
         dias_resumo.append({
             "dia": f"{dia_semana.upper()} — {d_curr.strftime('%d/%m/%Y')}",
-            "subtitulo": f"{resumo_dia} • Máxima de {t_max_base}°C e Chuva de {ch_tot_dia} mm",
+            "subtitulo": resumo_dia,
             "badge": badge_nome,
             "badge_tipo": badge_t,
             "descricao": f"Previsão de {resumo_dia.lower()} sobre Rio das Ostras. Temperaturas entre mínima de {t_min_base}°C e máxima de {t_max_base}°C. Volume pluviométrico estimado em {ch_tot_dia} mm com rajadas de até {max_raj_dia} km/h.",
