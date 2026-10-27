@@ -3432,6 +3432,23 @@ function renderDashboardUI(meta, rows, weather) {
 
       }
 
+      // Detalhamento Térmico, Umidade e Ventos (Segunda parte do texto oficial agrupada)
+      let detalhamentoHtml = '';
+      if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2) {
+        const detalheLinhas = d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ');
+        if (detalheLinhas) {
+          detalhamentoHtml = `
+            <div class="p-3.5 rounded-xl ${theme.subCardBg} text-xs space-y-2 leading-relaxed">
+              <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Térmico, Umidade e Ventos</span>
+              <p class="text-black dark:text-slate-200 font-normal leading-relaxed text-justify">
+                ${detalheLinhas}
+              </p>
+            </div>
+          `;
+        }
+      }
+
+
 
 
 
@@ -3574,143 +3591,44 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-          <!-- O TEXTINHO DA PREVISÃO OFICIAL (Visível de cara no card) -->
-
-
-
-          <div class="pt-2 border-t border-black/10 space-y-1">
-
-
-
-            <p class="text-xs text-black/90 font-medium leading-relaxed">
-
-
-
+          <!-- O TEXTO DA PREVISÃO OFICIAL (As duas partes juntas) -->
+          <div class="pt-2 border-t border-black/10 space-y-2">
+            <p class="text-xs text-black/90 dark:text-slate-100 font-medium leading-relaxed">
               ${informeResumo}
-
-
-
             </p>
 
+            ${detalhamentoHtml}
 
-
-            <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70">
-
-
-
+            <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70 dark:text-slate-300">
               <span id="day-card-btn-txt-${idx}" class="hover:underline flex items-center gap-1">
-
-
-
                 Ver detalhes técnicos
-
-
-
               </span>
-
-
-
               <span class="text-[10px] text-black/60 dark:text-slate-400 uppercase tracking-wider font-semibold">Boletim Oficial</span>
-
-
-
             </div>
-
-
-
           </div>
-
-
-
-
-
-
-
           
-
-
-
-          <!-- Acordeão com os Pilares Oficiais Expandidos -->
-
-
-
+          <!-- Quadrinhos dos Pilares Oficiais Expandidos Abaixo do Texto -->
           <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-3 border-t border-current/15 space-y-2.5">
-
-
-
             <div class="grid grid-cols-2 gap-2 text-xs">
-
-
-
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
-
-
-
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Céu</span>
-
-
-
-                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
-
-
-
+                <span class="font-bold text-xs block text-black dark:text-white leading-tight mt-0.5">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
               </div>
-
-
-
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
-
-
-
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Chuva</span>
-
-
-
-                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
-
-
-
+                <span class="font-bold text-xs block text-black dark:text-white leading-tight mt-0.5">${cleanBulletinText(d.pilares?.chuva?.val || '—')}</span>
               </div>
-
-
-
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
-
-
-
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Vento</span>
-
-
-
-                <span class="font-bold text-xs block text-black leading-tight mt-0.5">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
-
-
-
+                <span class="font-bold text-xs block text-black dark:text-white leading-tight mt-0.5">${cleanBulletinText(d.pilares?.vento?.val || '—')}</span>
               </div>
-
-
-
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
-
-
-
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Mar na Orla</span>
-
-
-
-                <span class="font-extrabold text-xs block text-black leading-tight mt-0.5">${marInfo.ondas} • ${marInfo.estado}</span>
-
-
-
-                <span class="text-[10px] text-black/75 font-medium block leading-snug mt-1">${marInfo.detalhe}</span>
-
-
-
+                <span class="font-extrabold text-xs block text-black dark:text-white leading-tight mt-0.5">${marInfo.ondas} • ${marInfo.estado}</span>
+                <span class="text-[10px] text-black/75 dark:text-slate-300 font-medium block leading-snug mt-1">${marInfo.detalhe}</span>
               </div>
-
-
-
             </div>
+          </div>
 
 
 
