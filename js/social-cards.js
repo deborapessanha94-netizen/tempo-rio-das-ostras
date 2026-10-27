@@ -27,7 +27,13 @@ export function getStationWindAndGust(st, allStations) {
     const r = (st.rajada_atual !== null && st.rajada_atual !== undefined && !isNaN(Number(st.rajada_atual)))
       ? Math.round(Number(st.rajada_atual))
       : v;
-    return { vento: v, rajada: r };
+    const rMax = (st.rajada_max_24h !== null && st.rajada_max_24h !== undefined && !isNaN(Number(st.rajada_max_24h)))
+      ? Math.round(Number(st.rajada_max_24h))
+      : Math.max(r, v);
+    const vMax = (st.vento_max_24h !== null && st.vento_max_24h !== undefined && !isNaN(Number(st.vento_max_24h)))
+      ? Math.round(Number(st.vento_max_24h))
+      : v;
+    return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
   }
 
   // Se for Rio Jundiá (Cantagalo), usa o vento da estação Cantagalo (IRIODA16)
@@ -36,7 +42,9 @@ export function getStationWindAndGust(st, allStations) {
     if (canta && canta.vento_atual !== null && canta.vento_atual !== undefined) {
       const v = Math.round(Number(canta.vento_atual));
       const r = Math.round(Number(canta.rajada_atual || canta.vento_atual));
-      return { vento: v, rajada: r };
+      const rMax = Math.round(Number(canta.rajada_max_24h || r));
+      const vMax = Math.round(Number(canta.vento_max_24h || v));
+      return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
     }
   }
 
@@ -46,7 +54,9 @@ export function getStationWindAndGust(st, allStations) {
     if (rocha && rocha.vento_atual !== null && rocha.vento_atual !== undefined) {
       const v = Math.round(Number(rocha.vento_atual));
       const r = Math.round(Number(rocha.rajada_atual || rocha.vento_atual));
-      return { vento: v, rajada: r };
+      const rMax = Math.round(Number(rocha.rajada_max_24h || r));
+      const vMax = Math.round(Number(rocha.vento_max_24h || v));
+      return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
     }
   }
 
@@ -55,10 +65,12 @@ export function getStationWindAndGust(st, allStations) {
   if (withWind.length > 0) {
     const avgV = Math.round(withWind.reduce((acc, s) => acc + Number(s.vento_atual), 0) / withWind.length);
     const avgR = Math.round(withWind.reduce((acc, s) => acc + Number(s.rajada_atual || s.vento_atual), 0) / withWind.length);
-    return { vento: avgV, rajada: avgR };
+    const avgRMax = Math.round(withWind.reduce((acc, s) => acc + Number(s.rajada_max_24h || s.rajada_atual || s.vento_atual), 0) / withWind.length);
+    const avgVMax = Math.round(withWind.reduce((acc, s) => acc + Number(s.vento_max_24h || s.vento_atual), 0) / withWind.length);
+    return { vento: avgV, rajada: avgR, vento_max: avgVMax, rajada_max: avgRMax };
   }
 
-  return { vento: 5, rajada: 12 };
+  return { vento: 5, rajada: 12, vento_max: 20, rajada_max: 30 };
 }
 
 /**
@@ -655,7 +667,7 @@ export function renderSocialCanvas() {
 
     // C. Coluna Direita: VENTO E RAJADA (Nunca exibe "ativa"!)
     const windInfo = getStationWindAndGust(st, socialState.stationsData);
-    const pillTxt = `vento: ${windInfo.vento} • raj: ${windInfo.rajada} km/h`;
+    const pillTxt = `agora: ${windInfo.vento} • raj máx: ${windInfo.rajada_max} km/h`;
 
     ctx.font = isStory ? 'bold 19px monospace' : 'bold 16px monospace';
     const pillW = ctx.measureText(pillTxt).width + 30;

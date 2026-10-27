@@ -9313,28 +9313,35 @@ function renderAcumuladosChuva(data) {
 
       } else if ((st.temp_atual !== null && st.temp_atual !== undefined) || (st.vento_atual !== null && st.vento_atual !== undefined)) {
         const tempVal = (st.temp_atual !== null && st.temp_atual !== undefined) ? `${st.temp_atual}°C` : '—';
-        const ventoVal = (st.vento_atual !== null && st.vento_atual !== undefined) ? `${st.vento_atual} km/h` : '0 km/h';
-        const rajadaVal = (st.rajada_atual !== null && st.rajada_atual !== undefined) ? `${st.rajada_atual} km/h` : ventoVal;
+        const ventoAgora = (st.vento_atual !== null && st.vento_atual !== undefined) ? `${st.vento_atual} km/h` : '0 km/h';
+        const rajadaAgora = (st.rajada_atual !== null && st.rajada_atual !== undefined) ? `${st.rajada_atual} km/h` : ventoAgora;
+        const rajadaMax = (st.rajada_max_24h !== null && st.rajada_max_24h !== undefined) ? `${st.rajada_max_24h} km/h` : rajadaAgora;
+        const ventoMax = (st.vento_max_24h !== null && st.vento_max_24h !== undefined) ? `${st.vento_max_24h} km/h` : ventoAgora;
 
         sensorInfo = `
-          <div class="grid grid-cols-3 gap-1 p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10px] sm:text-[10.5px] text-black font-semibold items-center text-center">
-            <div class="flex items-center justify-center gap-1" title="Temperatura Atual">
-              <i data-lucide="thermometer" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <span class="truncate">Temp: <strong>${tempVal}</strong></span>
+          <div class="p-2 sm:p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[9.5px] sm:text-[10.5px] text-black font-semibold space-y-1.5 shadow-sm">
+            <div class="flex items-center justify-between gap-1 flex-wrap">
+              <span class="flex items-center gap-1 text-black whitespace-nowrap" title="Temperatura Atual">
+                <i data-lucide="thermometer" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+                Temp: <strong>${tempVal}</strong>
+              </span>
+              <span class="flex items-center gap-1 text-[#0284c7] whitespace-nowrap" title="Vento no Momento (Sustentado)">
+                <i data-lucide="wind" class="w-3.5 h-3.5 shrink-0"></i>
+                Vento agora: <strong>${ventoAgora}</strong>
+              </span>
             </div>
-            <div class="flex items-center justify-center gap-1 border-x border-[#cbd5e1]/70 px-0.5" title="Vento Sustentado">
-              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <span class="truncate">Vento: <strong>${ventoVal}</strong></span>
-            </div>
-            <div class="flex items-center justify-center gap-1" title="Rajada de Vento Máxima">
-              <i data-lucide="wind" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <span class="truncate">Rajada: <strong>${rajadaVal}</strong></span>
+            <div class="flex items-center justify-between pt-1 border-t border-[#cbd5e1]/70 text-[9px] sm:text-[9.5px] flex-wrap gap-1">
+              <span class="flex items-center gap-1 text-black/80 whitespace-nowrap" title="Rajada registrada no momento">
+                <i data-lucide="activity" class="w-3 h-3 text-cyan-600 shrink-0"></i>
+                Rajada agora: <strong>${rajadaAgora}</strong>
+              </span>
+              <span class="flex items-center gap-1 text-[#b91c1c] font-bold whitespace-nowrap" title="Maior rajada registrada nas últimas 24h">
+                <i data-lucide="zap" class="w-3 h-3 text-[#b91c1c] shrink-0"></i>
+                Maior rajada: <strong>${rajadaMax}</strong>
+              </span>
             </div>
           </div>
         `;
-
-
-
       } else {
 
 
@@ -10109,7 +10116,7 @@ function renderAcumuladosChuva(data) {
 
 
             <span class="text-[10.5px] text-black/75 block">${st.bairro || 'Rio das Ostras'} • ${st.codigo}</span>
-            ${(st.vento_atual !== null && st.vento_atual !== undefined) ? `<span class="text-[9.5px] font-bold text-[#0284c7] block mt-0.5">💨 Vento: ${st.vento_atual} km/h • Rajada: ${(st.rajada_atual !== null && st.rajada_atual !== undefined) ? st.rajada_atual : st.vento_atual} km/h</span>` : ''}
+            ${(st.vento_atual !== null && st.vento_atual !== undefined) ? `<span class="text-[9.5px] font-bold text-[#0284c7] block mt-0.5">💨 No momento: ${st.vento_atual} km/h (rajada ${(st.rajada_atual !== null && st.rajada_atual !== undefined) ? st.rajada_atual : st.vento_atual} km/h) • <span class="text-[#b91c1c]">⚡ Maior registro 24h: ${(st.rajada_max_24h !== null && st.rajada_max_24h !== undefined) ? st.rajada_max_24h : ((st.rajada_atual !== null && st.rajada_atual !== undefined) ? st.rajada_atual : st.vento_atual)} km/h</span></span>` : ''}
 
 
 
@@ -11284,6 +11291,8 @@ window.exportAcumuladosCSV = async function() {
 
     "Rajada (km/h)",
 
+    "Maior Rajada 24h (km/h)",
+
 
 
     "Umidade (%)",
@@ -11404,6 +11413,7 @@ window.exportAcumuladosCSV = async function() {
 
     const vento = (st.vento_atual !== null && st.vento_atual !== undefined) ? Number(st.vento_atual).toFixed(1).replace('.', ',') : "—";
     const rajada = (st.rajada_atual !== null && st.rajada_atual !== undefined) ? Number(st.rajada_atual).toFixed(1).replace('.', ',') : (st.vento_atual ? Number(st.vento_atual).toFixed(1).replace('.', ',') : "—");
+    const rajadaMax = (st.rajada_max_24h !== null && st.rajada_max_24h !== undefined) ? Number(st.rajada_max_24h).toFixed(1).replace(".", ",") : rajada;
 
 
 
@@ -11506,6 +11516,8 @@ window.exportAcumuladosCSV = async function() {
       vento,
 
       rajada,
+
+      rajadaMax,
 
       umidade,
 

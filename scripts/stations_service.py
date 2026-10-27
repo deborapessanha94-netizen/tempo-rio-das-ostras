@@ -137,6 +137,8 @@ def collect_stations_network():
             "temp_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
+            "vento_max_24h": None,
+            "rajada_max_24h": None,
             "umidade_atual": None,
             "pressao_atual": None,
             "chuva_1h": 0.0,
@@ -222,9 +224,37 @@ def collect_stations_network():
                         entry["chuva_36h"] = h36
                         entry["chuva_48h"] = h48
                         entry["chuva_96h"] = h96
+                # Calcula extremos de vento e rajada registrados nas últimas 24h
+                try:
+                    last_dt = datetime.strptime(sorted_obs[-1].get("obsTimeLocal", ""), "%Y-%m-%d %H:%M:%S")
+                    cutoff_24h = last_dt - timedelta(hours=24)
+                    obs_24h = [o for o in sorted_obs if o.get("obsTimeLocal") and datetime.strptime(o.get("obsTimeLocal"), "%Y-%m-%d %H:%M:%S") >= cutoff_24h]
+                    if obs_24h:
+                        v_vals = [safe_float(o.get("metric", {}).get("windspeedHigh"), None) for o in obs_24h if o.get("metric", {}).get("windspeedHigh") is not None]
+                        g_vals = [safe_float(o.get("metric", {}).get("windgustHigh"), None) for o in obs_24h if o.get("metric", {}).get("windgustHigh") is not None]
+                        if v_vals:
+                            entry["vento_max_24h"] = round(max(v_vals))
+                        if g_vals:
+                            entry["rajada_max_24h"] = round(max(g_vals))
+                except Exception:
+                    pass
+
+                if entry.get("rajada_atual") is not None:
+                    curr_g = safe_float(entry.get("rajada_atual"), 0.0)
+                    if entry.get("rajada_max_24h") is None or curr_g > entry["rajada_max_24h"]:
+                        entry["rajada_max_24h"] = round(curr_g)
+                if entry.get("vento_atual") is not None:
+                    curr_v = safe_float(entry.get("vento_atual"), 0.0)
+                    if entry.get("vento_max_24h") is None or curr_v > entry["vento_max_24h"]:
+                        entry["vento_max_24h"] = round(curr_v)
+
         except Exception:
             pass
 
+        if entry.get("vento_atual") is not None and entry.get("vento_max_24h") is None:
+            entry["vento_max_24h"] = round(safe_float(entry["vento_atual"], 0.0))
+        if entry.get("rajada_atual") is not None and entry.get("rajada_max_24h") is None:
+            entry["rajada_max_24h"] = round(safe_float(entry["rajada_atual"], 0.0))
         stations.append(entry)
 
     # 2. Estação Hidrológica e Cota do Rio (INEA)
@@ -243,6 +273,8 @@ def collect_stations_network():
         "temp_atual": None,
         "vento_atual": None,
         "rajada_atual": None,
+        "vento_max_24h": None,
+        "rajada_max_24h": None,
         "umidade_atual": None,
         "chuva_1h": 0.0,
         "chuva_4h": 0.0,
@@ -348,6 +380,8 @@ def collect_stations_network():
             "temp_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
+            "vento_max_24h": None,
+            "rajada_max_24h": None,
             "umidade_atual": None,
             "chuva_1h": 0.0,
             "chuva_4h": 0.0,
@@ -401,8 +435,48 @@ def collect_stations_network():
     inea_entry["ranking"] = None
     inea_entry["tipo"] = "hidrologica"
     inea_entry["tipo_label"] = "Nível do Rio"
+    # Preenche vento atual e extremos registrados para estações puramente pluviométricas/hidrológicas
+    canta_st = next((s for s in stations if s.get("codigo") == "IRIODA16"), None)
+    if canta_st and canta_st.get("vento_atual") is not None:
+        inea_entry["vento_atual"] = canta_st.get("vento_atual")
+        inea_entry["rajada_atual"] = canta_st.get("rajada_atual")
+        inea_entry["vento_max_24h"] = canta_st.get("vento_max_24h")
+        inea_entry["rajada_max_24h"] = canta_st.get("rajada_max_24h")
+
+    rocha_st = next((s for s in stations if s.get("codigo") == "IRIODA15"), None)
+    for ct_entry in stations:
+        if ct_entry.get("categoria") == "cemaden":
+            if rocha_st and rocha_st.get("vento_atual") is not None:
+                ct_entry["vento_atual"] = rocha_st.get("vento_atual")
+                ct_entry["rajada_atual"] = rocha_st.get("rajada_atual")
+                ct_entry["vento_max_24h"] = rocha_st.get("vento_max_24h")
+                ct_entry["rajada_max_24h"] = rocha_st.get("rajada_max_24h")
+
+    costazul_st = next((s for s in stations if s.get("codigo") == "IRIODA6"), None)
+    for p_entry in stations:
+        if p_entry.get("codigo") == "IRIODA5" and p_entry.get("vento_atual") is None:
+            if costazul_st and costazul_st.get("vento_atual") is not None:
+                p_entry["vento_atual"] = costazul_st.get("vento_atual")
+                p_entry["rajada_atual"] = costazul_st.get("rajada_atual")
+                p_entry["vento_max_24h"] = costazul_st.get("vento_max_24h")
+                p_entry["rajada_max_24h"] = costazul_st.get("rajada_max_24h")
+
+    # Média regional caso reste alguma estação sem vento
+    pws_with_wind = [s for s in stations if s.get("vento_atual") is not None]
+    if pws_with_wind:
+        avg_v = round(sum(safe_float(s.get("vento_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
+        avg_r = round(sum(safe_float(s.get("rajada_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
+        avg_vmax = round(sum(safe_float(s.get("vento_max_24h") or s.get("vento_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
+        avg_rmax = round(sum(safe_float(s.get("rajada_max_24h") or s.get("rajada_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
+        for s in stations:
+            if s.get("vento_atual") is None:
+                s["vento_atual"] = avg_v
+                s["rajada_atual"] = avg_r
+                s["vento_max_24h"] = avg_vmax
+                s["rajada_max_24h"] = avg_rmax
 
     all_stations = pluviometric_stations + [inea_entry]
+
 
     # Métricas agregadas municipais (calculadas apenas sobre as 9 estações pluviométricas)
     val_24h = [s["chuva_24h"] for s in pluviometric_stations if s.get("chuva_24h") is not None]
