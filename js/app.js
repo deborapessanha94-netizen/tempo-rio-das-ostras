@@ -5799,21 +5799,21 @@ function renderMacaeNotification(stations) {
     const hasAlerta = elevated.some(s => (s.status || '').toUpperCase() === 'ALERTA');
 
     let badgeText = 'Elevação Fora da Segurança';
-    let badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-full uppercase shadow-2xs';
-    let bannerBorder = 'border-amber-300 dark:border-amber-700/80 bg-amber-50/95 dark:bg-amber-950/40';
+    let badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide bg-[#ffebe4] dark:bg-[#7c2d12]/30 text-[#c2410c] dark:text-[#ffedd5] border border-[#f07a53]/40';
+    let leftBorder = 'border-l-4 border-l-[#ea580c]';
 
     if (hasMax) {
       badgeText = 'Alerta Máximo em Macaé';
-      badgeClass += ' bg-rose-500 text-white border border-rose-600 animate-pulse';
-      bannerBorder = 'border-rose-300 dark:border-rose-800 bg-rose-50/95 dark:bg-rose-950/40';
+      badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-300 dark:border-rose-800';
+      leftBorder = 'border-l-4 border-l-rose-600';
     } else if (hasAlerta) {
       badgeText = 'Alerta Hidrológico em Macaé';
-      badgeClass += ' bg-orange-500 text-white border border-orange-600';
-      bannerBorder = 'border-orange-300 dark:border-orange-800 bg-orange-50/95 dark:bg-orange-950/40';
+      badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide bg-orange-50 text-orange-700 dark:bg-orange-950/40 dark:text-orange-300 border border-orange-300 dark:border-orange-800';
+      leftBorder = 'border-l-4 border-l-[#ea580c]';
     } else {
       badgeText = 'Atenção em Macaé';
-      badgeClass += ' bg-amber-400 text-black border border-amber-500';
-      bannerBorder = 'border-amber-300 dark:border-amber-700/80 bg-amber-50/95 dark:bg-amber-950/40';
+      badgeClass = 'text-[9.5px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide bg-[#ffebe4] dark:bg-[#7c2d12]/30 text-[#c2410c] dark:text-[#ffedd5] border border-[#f07a53]/40';
+      leftBorder = 'border-l-4 border-l-[#ea580c]';
     }
 
     if (badgeEl) {
@@ -5821,7 +5821,7 @@ function renderMacaeNotification(stations) {
       badgeEl.className = badgeClass;
     }
 
-    bannerEl.className = `p-3 sm:p-3.5 rounded-2xl ${bannerBorder} shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition`;
+    bannerEl.className = `py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl bg-[#f8fafc] dark:bg-[#0f172a] border border-[#cbd5e1] dark:border-[#334155] ${leftBorder} shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 transition text-black dark:text-slate-100`;
 
     if (textEl) {
       const summaryList = elevated.map(s => {
@@ -5835,10 +5835,10 @@ function renderMacaeNotification(stations) {
     }
   } else {
     if (navDotEl) navDotEl.classList.add('hidden');
-    bannerEl.className = 'p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 shadow-2xs flex items-center justify-between gap-2 transition text-xs';
+    bannerEl.className = 'py-2 px-3 sm:py-2.5 sm:px-3.5 rounded-xl bg-[#f8fafc] dark:bg-[#0f172a] border border-[#cbd5e1] dark:border-[#334155] border-l-4 border-l-emerald-600 shadow-xs flex items-center justify-between gap-2 transition text-xs text-black dark:text-slate-100';
     if (badgeEl) {
       badgeEl.textContent = 'Normalidade';
-      badgeEl.className = 'text-[9.5px] font-black px-2 py-0.5 rounded-full bg-emerald-500 text-white';
+      badgeEl.className = 'text-[9.5px] font-black px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700';
     }
     if (textEl) {
       textEl.innerHTML = '<strong>Rios de Macaé:</strong> Todas as estações operam dentro dos limites normais de segurança (Vigilância).';
