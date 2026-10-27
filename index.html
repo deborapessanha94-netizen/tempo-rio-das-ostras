@@ -3890,177 +3890,48 @@
 
 
 
-      <!-- Grade dos 4 KPIs da Chuva -->
-
-
-
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
-
-
-
+      <!-- Grade dos 4 KPIs da Chuva (Compacta, Harmônica e Proporcional) -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 text-xs">
         
-
-
-
         <!-- KPI 1: Média Municipal 24h -->
-
-
-
-        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-1 shadow-2xs">
-
-
-
-          <div class="flex items-center justify-between">
-
-
-
-            <span id="chuva-kpi-media-label" class="text-[10px] font-black uppercase tracking-wider text-black">Média Municipal (24h)</span>
-
-
-
-            <i data-lucide="droplets" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-
-
-
+        <div class="p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/35 space-y-0.5 shadow-2xs">
+          <div class="flex items-center justify-between gap-1">
+            <span id="chuva-kpi-media-label" class="text-[9.5px] sm:text-[10px] font-extrabold uppercase tracking-wider text-black/85">Média Municipal (24h)</span>
+            <i data-lucide="droplets" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
           </div>
-
-
-
-          <span id="chuva-kpi-media" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">8.5 mm</span>
-
-
-
-          <span class="text-[10.5px] font-semibold text-black block">Média ponderada nos bairros</span>
-
-
-
+          <span id="chuva-kpi-media" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">8.5 mm</span>
+          <span class="text-[9.5px] sm:text-[10px] font-medium text-black/75 block truncate">Média ponderada nos bairros</span>
         </div>
-
-
-
-
-
-
 
         <!-- KPI 2: Maior Acumulado 24h -->
-
-
-
-        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#fff7ed] to-[#ffedd5] border border-[#f97316]/40 space-y-1 shadow-2xs">
-
-
-
-          <div class="flex items-center justify-between">
-
-
-
-            <span id="chuva-kpi-maior-label" class="text-[10px] font-black uppercase tracking-wider text-black">Maior Acumulado (24h)</span>
-
-
-
-            <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-
-
-
+        <div class="p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-[#fff7ed] to-[#ffedd5] border border-[#f97316]/35 space-y-0.5 shadow-2xs">
+          <div class="flex items-center justify-between gap-1">
+            <span id="chuva-kpi-maior-label" class="text-[9.5px] sm:text-[10px] font-extrabold uppercase tracking-wider text-black/85">Maior Acumulado (24h)</span>
+            <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
           </div>
-
-
-
-          <span id="chuva-kpi-maior" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">14.2 mm</span>
-
-
-
-          <span id="chuva-kpi-maior-local" class="text-[10.5px] font-bold text-black block truncate">Barra de São João / Praiamar</span>
-
-
-
+          <span id="chuva-kpi-maior" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">14.2 mm</span>
+          <span id="chuva-kpi-maior-local" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block truncate">Barra de São João / Praiamar</span>
         </div>
-
-
-
-
-
-
 
         <!-- KPI 3: Cota do Rio Jundiá -->
-
-
-
-        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] border border-[#22c55e]/40 space-y-1 shadow-2xs">
-
-
-
-          <div class="flex items-center justify-between">
-
-
-
-            <span class="text-[10px] font-black uppercase tracking-wider text-black">Cota do Rio Jundiá</span>
-
-
-
-            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#16a34a]"></i>
-
-
-
+        <div class="p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-[#f0fdf4] to-[#dcfce7] border border-[#22c55e]/35 space-y-0.5 shadow-2xs">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[9.5px] sm:text-[10px] font-extrabold uppercase tracking-wider text-black/85">Cota do Rio Jundiá</span>
+            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
           </div>
-
-
-
-          <span id="chuva-kpi-rio" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">1.59 m</span>
-
-
-
-          <span id="chuva-kpi-rio-sub" class="text-[10.5px] font-bold text-black block">Status: Vigilância • Calha em 56%</span>
-
-
-
+          <span id="chuva-kpi-rio" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">1.59 m</span>
+          <span id="chuva-kpi-rio-sub" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block truncate">Status: Vigilância • Calha em 56%</span>
         </div>
-
-
-
-
-
-
 
         <!-- KPI 4: Rede Monitorada -->
-
-
-
-        <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] border border-[#b8a99a]/50 space-y-1 shadow-2xs">
-
-
-
-          <div class="flex items-center justify-between">
-
-
-
-            <span class="text-[10px] font-black uppercase tracking-wider text-black">Pontos Monitorados</span>
-
-
-
-            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
-
-
-
+        <div class="p-2.5 sm:p-3 rounded-xl bg-gradient-to-br from-[#f5efe8] to-[#ebe2d7] border border-[#b8a99a]/40 space-y-0.5 shadow-2xs">
+          <div class="flex items-center justify-between gap-1">
+            <span class="text-[9.5px] sm:text-[10px] font-extrabold uppercase tracking-wider text-black/85">Pontos Monitorados</span>
+            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black shrink-0"></i>
           </div>
-
-
-
-          <span id="chuva-kpi-estacoes" class="text-3xl sm:text-4xl font-extrabold font-mono text-black block tracking-tight">10 Pontos</span>
-
-
-
-          <span class="text-[10.5px] font-bold text-black block">6 WU • 1 INEA • 3 CEMADEN</span>
-
-
-
+          <span id="chuva-kpi-estacoes" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">10 Pontos</span>
+          <span class="text-[9.5px] sm:text-[10px] font-medium text-black/75 block truncate">6 WU • 1 INEA • 3 CEMADEN</span>
         </div>
-
-
-
-
-
-
 
       </div>
 

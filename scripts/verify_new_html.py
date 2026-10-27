@@ -1,7 +1,10 @@
 import re
+import sys
 from collections import Counter
 
-with open('index.html', 'r', encoding='utf-8') as f:
+filename = sys.argv[1] if len(sys.argv) > 1 else 'index.html'
+
+with open(filename, 'r', encoding='utf-8') as f:
     content = f.read()
 
 # 1. Check all expected view IDs
