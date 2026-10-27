@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=110">
+  <link rel="stylesheet" href="css/styles.css?v=111">
 
 
 
@@ -11252,101 +11252,54 @@
 
 
 
-        <!-- Linha 1: Seletor de Formato (Post vs Stories) & Checkbox Ativas -->
-
-
-
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-
-
-
-          
-
-
+        <!-- Linha 1: Seletor de Formato (Post vs Stories) & Seletor de Estações -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
 
           <!-- Seletor de Formato -->
-
-
-
-          <div class="flex items-center gap-2" role="tablist">
-
-
-
+          <div class="flex items-center gap-2 shrink-0" role="tablist">
             <span class="font-bold text-black text-xs">Formato:</span>
-
-
-
-            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1.5">
-
-
-
-              <i data-lucide="square" class="w-4 h-4 text-black"></i>
-
-
-
+            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="square" class="w-3.5 h-3.5 text-black"></i>
               <span>Post (Feed 4:5)</span>
-
-
-
             </button>
-
-
-
-            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer flex items-center gap-1.5">
-
-
-
-              <i data-lucide="smartphone" class="w-4 h-4 text-black"></i>
-
-
-
+            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-[#f1f5f9] border border-[#cbd5e1] text-black hover:bg-white cursor-pointer flex items-center gap-1.5">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
               <span>Stories (9:16)</span>
-
-
-
             </button>
-
-
-
           </div>
 
-
-
-
-
-
-
-          <!-- Checkbox: Apenas Estações Ativas -->
-
-
-
-          <label class="flex items-center gap-2 cursor-pointer font-bold text-black text-xs bg-white px-3 py-1.5 rounded-xl border border-[#cbd5e1] shadow-2xs self-start sm:self-center">
-
-
-
-            <input type="checkbox" id="social-filter-active-only" onchange="toggleOnlyActive(this.checked)" checked class="accent-[#f07a53] w-4 h-4 cursor-pointer">
-
-
-
-            <span>Apenas estações ativas / online</span>
-
-
-
-          </label>
-
-
-
-
-
-
+          <!-- Seletor de Estações Ativas / Todas e Atualizar Dados -->
+          <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+            <span class="font-bold text-black text-xs">Estações:</span>
+            <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white border border-[#ea580c] shadow-xs cursor-pointer flex items-center gap-1">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              <span>Todas (10 Estações)</span>
+            </button>
+            <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-[#f1f5f9] text-black hover:bg-white border border-[#cbd5e1] cursor-pointer flex items-center gap-1">
+              <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <span>Apenas Ativas</span>
+            </button>
+            <button onclick="refreshSocialStationsData()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#f8fafc] border border-[#cbd5e1] shadow-2xs cursor-pointer flex items-center gap-1.5" title="Sincronizar medições e ventos mais recentes">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+              <span>Atualizar</span>
+            </button>
+          </div>
 
         </div>
 
-
-
-
-
-
+        <!-- Linha de Chips Interativos de Estações -->
+        <div class="pt-2 border-t border-[#cbd5e1]/60">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <span class="text-[11px] font-bold text-black/80 flex items-center gap-1">
+              <i data-lucide="sliders-horizontal" class="w-3 h-3 text-[#ea580c]"></i>
+              Personalizar estações incluídas na imagem:
+            </span>
+            <span id="social-selected-count" class="text-[10px] font-mono font-bold bg-[#f1f5f9] px-2 py-0.5 rounded text-black border border-[#cbd5e1]">10 de 10 selecionadas</span>
+          </div>
+          <div id="social-station-chips" class="flex items-center gap-1.5 flex-wrap">
+            <!-- Chips gerados dinamicamente via JS -->
+          </div>
+        </div>
 
         <!-- Linha 2: Barra de Pesquisa de Horizonte e Presets Rápidos -->
 
@@ -11656,7 +11609,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=139"></script>
+  <script type="module" src="js/app.js?v=140"></script>
 
 
 
