@@ -8783,6 +8783,7 @@ window.getStationHorizonLabel = function(metric) {
   if (metric === '4h') return '4 Horas';
   if (metric === '12h') return '12 Horas';
   if (metric === '24h') return '24 Horas';
+  if (metric === '36h') return '36 Horas';
   if (metric === '48h') return '48 Horas';
   if (metric === '96h') return '96 Horas';
   const hNum = parseFloat(String(metric || '').replace(/[^\d.]/g, ''));
@@ -8798,6 +8799,7 @@ window.getStationRainForMetric = function(st, metric) {
   if (metric === '4h') return Number(st.chuva_4h !== undefined && st.chuva_4h !== null ? st.chuva_4h : st.chuva_1h || 0.0);
   if (metric === '12h') return Number(st.chuva_12h !== undefined && st.chuva_12h !== null ? st.chuva_12h : st.chuva_24h || 0.0);
   if (metric === '24h') return Number(st.chuva_24h !== undefined && st.chuva_24h !== null ? st.chuva_24h : 0.0);
+  if (metric === '36h') return Number(st.chuva_36h !== undefined && st.chuva_36h !== null ? st.chuva_36h : ((Number(st.chuva_24h || 0) + Number(st.chuva_48h || 0)) / 2));
   if (metric === '48h') return Number(st.chuva_48h !== undefined && st.chuva_48h !== null ? st.chuva_48h : st.chuva_24h || 0.0);
   if (metric === '96h') return Number(st.chuva_96h !== undefined && st.chuva_96h !== null ? st.chuva_96h : 0.0);
   const hNum = parseFloat(String(metric || '').replace(/[^\d.]/g, ''));
@@ -9021,13 +9023,9 @@ function renderAcumuladosChuva(data) {
 
 
       const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
-
-
-
       const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
-
-
-
+      const ch36 = Number(st.chuva_36h !== undefined && st.chuva_36h !== null ? st.chuva_36h : 0.0).toFixed(1).replace('.', ',');
+      const ch48 = Number(st.chuva_48h !== undefined && st.chuva_48h !== null ? st.chuva_48h : 0.0).toFixed(1).replace('.', ',');
       const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
 
 
@@ -9560,43 +9558,39 @@ function renderAcumuladosChuva(data) {
               const valActive = window.getStationRainForMetric(st, activeMetric).toFixed(1).replace('.', ',');
               let col1Html = `
                 <div>
-                  <span class="text-[9px] font-black uppercase text-black block">1 Hora</span>
-                  <strong class="text-xs font-mono font-bold text-black">${ch1} mm</strong>
+                  <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
+                  <strong class="text-xs font-mono font-bold text-black">${ch24} mm</strong>
                 </div>`;
               let col2Html = `
                 <div class="border-x border-[#cbd5e1]/70 px-1">
-                  <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
-                  <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch24} mm</strong>
+                  <span class="text-[9px] font-black uppercase text-black block">36 Horas</span>
+                  <strong class="text-xs font-mono font-bold text-black">${ch36} mm</strong>
                 </div>`;
               let col3Html = `
                 <div>
-                  <span class="text-[9px] font-black uppercase text-black block">96 Horas</span>
-                  <strong class="text-xs font-mono font-bold text-black">${ch96} mm</strong>
+                  <span class="text-[9px] font-black uppercase text-black block">48 Horas</span>
+                  <strong class="text-xs font-mono font-bold text-black">${ch48} mm</strong>
                 </div>`;
 
-              if (activeMetric === '1h') {
+              if (activeMetric === '24h') {
                 col1Html = `
                   <div class="bg-[#ffebe4]/70 rounded-md py-0.5">
-                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">1 Hora</span>
-                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch1} mm</strong>
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">24 Horas</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch24} mm</strong>
                   </div>`;
+              } else if (activeMetric === '36h') {
                 col2Html = `
-                  <div class="border-x border-[#cbd5e1]/70 px-1">
-                    <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
-                    <strong class="text-xs font-mono font-bold text-black">${ch24} mm</strong>
+                  <div class="border-x border-[#cbd5e1]/70 px-1 bg-[#ffebe4]/70 rounded-md py-0.5">
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">36 Horas</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch36} mm</strong>
                   </div>`;
-              } else if (activeMetric === '96h') {
-                col2Html = `
-                  <div class="border-x border-[#cbd5e1]/70 px-1">
-                    <span class="text-[9px] font-black uppercase text-black block">24 Horas</span>
-                    <strong class="text-xs font-mono font-bold text-black">${ch24} mm</strong>
-                  </div>`;
+              } else if (activeMetric === '48h') {
                 col3Html = `
                   <div class="bg-[#ffebe4]/70 rounded-md py-0.5">
-                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">96 Horas</span>
-                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch96} mm</strong>
+                    <span class="text-[9px] font-black uppercase text-[#ea580c] block">48 Horas</span>
+                    <strong class="text-sm font-mono font-extrabold text-[#ea580c]">${ch48} mm</strong>
                   </div>`;
-              } else if (activeMetric !== '24h') {
+              } else {
                 col2Html = `
                   <div class="border-x border-[#cbd5e1]/70 px-1 bg-[#ffebe4]/70 rounded-md py-0.5">
                     <span class="text-[9px] font-black uppercase text-[#ea580c] block">${activeHorizonLabel}</span>
@@ -9685,35 +9679,36 @@ function renderAcumuladosChuva(data) {
 
 
   if (tableBodyEl && estacoes.length > 0) {
-    const th1 = document.getElementById('th-chuva-1h');
-    const thMid = document.getElementById('th-chuva-mid');
-    const th96 = document.getElementById('th-chuva-96h');
-    const arrow1 = document.getElementById('th-arrow-1h');
-    const arrowMid = document.getElementById('th-arrow-mid');
-    const arrow96 = document.getElementById('th-arrow-96h');
+    const th24 = document.getElementById('th-chuva-24h') || document.getElementById('th-chuva-1h');
+    const th36 = document.getElementById('th-chuva-36h') || document.getElementById('th-chuva-mid');
+    const th48 = document.getElementById('th-chuva-48h') || document.getElementById('th-chuva-96h');
+    const arrow24 = document.getElementById('th-arrow-24h') || document.getElementById('th-arrow-1h');
+    const arrow36 = document.getElementById('th-arrow-36h') || document.getElementById('th-arrow-mid');
+    const arrow48 = document.getElementById('th-arrow-48h') || document.getElementById('th-arrow-96h');
 
-    if (th1 && thMid && th96) {
-      th1.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
-      thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
-      th96.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
-      if (arrow1) arrow1.textContent = '↕';
-      if (arrowMid) arrowMid.textContent = '↕';
-      if (arrow96) arrow96.textContent = '↕';
+    if (th24 && th36 && th48) {
+      th24.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      th36.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      th48.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 transition';
+      if (arrow24) arrow24.textContent = '↕';
+      if (arrow36) arrow36.textContent = '↕';
+      if (arrow48) arrow48.textContent = '↕';
 
-      if (activeMetric === '1h') {
-        th1.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
-        if (arrow1) arrow1.textContent = '↓';
-        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↕</span>`;
-      } else if (activeMetric === '96h') {
-        th96.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
-        if (arrow96) arrow96.textContent = '↓';
-        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↕</span>`;
-      } else if (activeMetric === '24h') {
-        thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
-        thMid.innerHTML = `Chuva 24h <span id="th-arrow-mid">↓</span>`;
+      if (activeMetric === '24h') {
+        th24.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        if (arrow24) arrow24.textContent = '↓';
+        th36.innerHTML = `Chuva 36h <span id="th-arrow-36h">↕</span>`;
+      } else if (activeMetric === '36h') {
+        th36.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        if (arrow36) arrow36.textContent = '↓';
+        th36.innerHTML = `Chuva 36h <span id="th-arrow-36h">↓</span>`;
+      } else if (activeMetric === '48h') {
+        th48.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        if (arrow48) arrow48.textContent = '↓';
+        th36.innerHTML = `Chuva 36h <span id="th-arrow-36h">↕</span>`;
       } else {
-        thMid.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
-        thMid.innerHTML = `Chuva ${activeHorizonLabel} <span id="th-arrow-mid">↓</span>`;
+        th36.className = 'p-2.5 sm:p-3 text-center cursor-pointer hover:bg-zinc-100 bg-[#ffebe4]/60 text-[#ea580c] font-black transition';
+        th36.innerHTML = `Chuva ${activeHorizonLabel} <span id="th-arrow-36h">↓</span>`;
       }
     }
 
@@ -9745,13 +9740,9 @@ function renderAcumuladosChuva(data) {
 
 
       const ch1 = Number(st.chuva_1h || 0.0).toFixed(1).replace('.', ',');
-
-
-
       const ch24 = Number(st.chuva_24h || 0.0).toFixed(1).replace('.', ',');
-
-
-
+      const ch36 = Number(st.chuva_36h !== undefined && st.chuva_36h !== null ? st.chuva_36h : 0.0).toFixed(1).replace('.', ',');
+      const ch48 = Number(st.chuva_48h !== undefined && st.chuva_48h !== null ? st.chuva_48h : 0.0).toFixed(1).replace('.', ',');
       const ch96 = Number(st.chuva_96h || 0.0).toFixed(1).replace('.', ',');
 
 
@@ -9967,26 +9958,26 @@ function renderAcumuladosChuva(data) {
 
           ${(() => {
             const valActive = window.getStationRainForMetric(st, activeMetric).toFixed(1).replace('.', ',');
-            let td1Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
-            let tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
-            let td96Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
-            let midValStr = `${ch24} mm`;
+            let td24Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let td36Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let td48Class = "p-2.5 sm:p-3 text-center font-mono font-bold text-black";
+            let midValStr = `${ch36} mm`;
 
-            if (activeMetric === '1h') {
-              td1Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
-            } else if (activeMetric === '96h') {
-              td96Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
-            } else if (activeMetric === '24h') {
-              tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            if (activeMetric === '24h') {
+              td24Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            } else if (activeMetric === '36h') {
+              td36Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+            } else if (activeMetric === '48h') {
+              td48Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
             } else {
-              tdMidClass = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
+              td36Class = "p-2.5 sm:p-3 text-center font-mono font-black text-[#ea580c] bg-[#ffebe4]/40";
               midValStr = `${valActive} mm`;
             }
 
             return `
-              <td class="${td1Class}">${ch1} mm</td>
-              <td class="${tdMidClass}">${midValStr}</td>
-              <td class="${td96Class}">${ch96} mm</td>
+              <td class="${td24Class}">${ch24} mm</td>
+              <td class="${td36Class}">${midValStr}</td>
+              <td class="${td48Class}">${ch48} mm</td>
             `;
           })()}
 
