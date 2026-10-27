@@ -216,6 +216,11 @@ export async function openSocialModalChuva(initialHorizon = '24h') {
   // Renderiza o card imediatamente
   renderSocialCanvas();
 
+  const previewContainer = document.getElementById('social-preview-container');
+  if (previewContainer) {
+    previewContainer.scrollTop = 0;
+  }
+
   if (window.lucide) window.lucide.createIcons();
 }
 
@@ -237,6 +242,10 @@ export function setSocialFormat(format) {
   socialState.format = format;
   updateFormatButtons(format);
   renderSocialCanvas();
+  const previewContainer = document.getElementById('social-preview-container');
+  if (previewContainer) {
+    previewContainer.scrollTop = 0;
+  }
 }
 
 /**
@@ -736,6 +745,18 @@ export function downloadSocialCard() {
   document.body.removeChild(link);
 }
 
+/**
+ * Baixa diretamente o card no formato especificado ('post' ou 'story')
+ */
+export async function downloadSocialFormat(format) {
+  if (format && (format === 'post' || format === 'story')) {
+    setSocialFormat(format);
+  }
+  // Pequeno intervalo para renderização do canvas
+  await new Promise(resolve => setTimeout(resolve, 80));
+  downloadSocialCard();
+}
+
 // Expõe funções globalmente para interações do HTML
 if (typeof window !== 'undefined') {
   window.openSocialModalChuva = openSocialModalChuva;
@@ -748,5 +769,6 @@ if (typeof window !== 'undefined') {
   window.toggleStationSelection = toggleStationSelection;
   window.refreshSocialStationsData = refreshSocialStationsData;
   window.downloadSocialCard = downloadSocialCard;
+  window.downloadSocialFormat = downloadSocialFormat;
   window.getStationWindAndGust = getStationWindAndGust;
 }
