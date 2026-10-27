@@ -11783,6 +11783,14 @@ const handleUrlHash = () => {
     }
   }
 
+  if (rawHash === 'sinopse' || rawHash === 'panorama' || rawHash === 'sinotico' || rawHash === 'section-panorama-sinotico' || qTab === 'sinopse' || qTab === 'panorama') {
+    window.switchAppTab('previsao');
+    setTimeout(() => {
+      const sec = document.getElementById('section-panorama-sinotico');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 150);
+  }
+
   if (rawHash === 'cemaden' || qTab === 'cemaden' || rawHash === 'riscos' || rawHash === 'geohidro') {
     window.switchAppTab('alertas');
     setTimeout(() => {
@@ -11909,10 +11917,11 @@ const handleUrlScrollParam = () => {
 
   if (scrollVal) {
     if (scrollVal === 'sinopse' || scrollVal === 'section-panorama-sinotico') {
+      window.switchAppTab('previsao');
       setTimeout(() => {
         const el = document.getElementById('section-panorama-sinotico');
         if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' });
-      }, 800);
+      }, 500);
       return;
     }
     if (scrollVal === 'plancon' || scrollVal === 'plancon-panel-volumes') {
