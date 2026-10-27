@@ -6773,7 +6773,8 @@ window.switchOrlaTab = function(tabName) {
 
 
 
-  const tabs = ['mar', 'wwatch', 'mares', 'balnear'];
+  if (tabName === 'wwatch') tabName = 'mar';
+  const tabs = ['mar', 'mares', 'balnear'];
 
 
 
@@ -6809,7 +6810,7 @@ window.switchOrlaTab = function(tabName) {
 
 
 
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs';
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs';
 
 
 
@@ -6817,7 +6818,7 @@ window.switchOrlaTab = function(tabName) {
 
 
 
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#eaf0f6] border-2 border-[#6d8ba6] text-black shadow-xs';
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#eaf0f6] border-2 border-[#6d8ba6] text-black shadow-xs';
 
 
 
@@ -6825,7 +6826,7 @@ window.switchOrlaTab = function(tabName) {
 
 
 
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-black transition cursor-pointer bg-[#f5efe8] border-2 border-[#b8a99a] text-black shadow-xs';
+          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#f5efe8] border-2 border-[#b8a99a] text-black shadow-xs';
 
 
 
@@ -6845,7 +6846,7 @@ window.switchOrlaTab = function(tabName) {
 
 
 
-        btn.className = 'orla-tab-btn flex items-center justify-center gap-1.5 py-2 px-1 rounded-full text-xs font-bold transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer';
+        btn.className = 'orla-tab-btn flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer';
 
 
 
@@ -11778,7 +11779,7 @@ const handleUrlHash = () => {
   if (rawHash === 'wwatch' || qTab === 'wwatch' || rawHash === 'ondas') {
     window.switchAppTab('orla');
     if (window.switchOrlaTab) {
-      setTimeout(() => window.switchOrlaTab('wwatch'), 100);
+      setTimeout(() => window.switchOrlaTab('mar'), 100);
     }
   }
 
