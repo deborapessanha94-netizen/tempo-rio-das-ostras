@@ -4064,44 +4064,27 @@
         <div class="flex items-center gap-2">
           <i data-lucide="clock" class="w-4 h-4 text-[#f07a53] shrink-0"></i>
           <span class="text-xs font-black text-black dark:text-white">Horizonte de Tempo:</span>
-          <span id="active-station-horizon-label" class="text-[11px] font-mono font-bold bg-[#ffebe4] dark:bg-orange-950/60 text-[#d95d39] dark:text-orange-300 border border-[#f07a53] px-2 py-0.5 rounded-md">
+          <span id="active-station-horizon-label" class="text-[11px] font-mono font-bold bg-[#ffebe4] dark:bg-orange-950/60 text-[#d95d39] dark:text-orange-300 border border-[#f07a53] px-2.5 py-0.5 rounded-md shadow-2xs">
             24 Horas
           </span>
         </div>
 
-        <div class="flex flex-wrap items-center gap-1.5" role="tablist">
-          <button id="sort-btn-1h" onclick="sortStationsBy('1h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
-            1 Hora
-          </button>
-          <button id="sort-btn-4h" onclick="sortStationsBy('4h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
-            4 Horas
-          </button>
-          <button id="sort-btn-12h" onclick="sortStationsBy('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
-            12 Horas
-          </button>
-          <button id="sort-btn-24h" onclick="sortStationsBy('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] text-black dark:text-orange-200 shadow-2xs cursor-pointer transition">
-            24 Horas
-          </button>
-          <button id="sort-btn-48h" onclick="sortStationsBy('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
-            48 Horas
-          </button>
-          <button id="sort-btn-96h" onclick="sortStationsBy('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition">
-            96 Horas
-          </button>
-
-          <div id="custom-horizon-wrapper" class="flex items-center gap-1 bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-2 py-0.5 rounded-lg text-xs transition">
-            <span class="text-[10.5px] font-bold text-black/70 dark:text-slate-300">Outro:</span>
+        <div class="flex items-center gap-2">
+          <div id="custom-horizon-wrapper" class="flex items-center gap-1.5 bg-[#f8fafc] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-3 py-1 rounded-xl text-xs transition shadow-2xs">
+            <span class="text-xs font-bold text-black dark:text-slate-200">Definir horizonte:</span>
             <input 
               type="number" 
               id="custom-station-horizon-input" 
               min="1" 
               max="96" 
-              placeholder="horas" 
-              class="w-12 bg-white dark:bg-slate-900 px-1.5 py-0.5 rounded text-xs font-black text-black dark:text-white border border-[#cbd5e1] dark:border-slate-700 outline-none text-center" 
+              value="24"
+              placeholder="24" 
+              class="w-14 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-lg text-xs font-black font-mono text-black dark:text-white border border-[#94a3b8] dark:border-slate-600 outline-none text-center focus:border-[#f07a53] focus:ring-1 focus:ring-[#f07a53]" 
               oninput="handleCustomStationHorizon(this.value)"
-              title="Digite a quantidade de horas (ex: 6, 18, 36, 72)"
+              onblur="if(!this.value || this.value < 1){ this.value = 24; handleCustomStationHorizon(24); }"
+              title="Digite a quantidade de horas desejada (ex: 1 a 96 horas)"
             />
-            <span class="text-[10px] font-bold text-black/70 dark:text-slate-400">h</span>
+            <span class="text-xs font-bold text-black/80 dark:text-slate-300">horas</span>
           </div>
         </div>
       </div>
@@ -11198,7 +11181,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=145"></script>
+  <script type="module" src="js/app.js?v=146"></script>
 
 
 

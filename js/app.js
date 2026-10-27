@@ -8818,25 +8818,10 @@ window.sortStationsBy = function(metric) {
   const activeLabelEl = document.getElementById('active-station-horizon-label');
   if (activeLabelEl) activeLabelEl.textContent = activeLabel;
 
-  const standardMetrics = ['1h', '4h', '12h', '24h', '48h', '96h'];
-  standardMetrics.forEach(m => {
-    const btn = document.getElementById(`sort-btn-${m}`);
-    if (btn) {
-      if (m === state.stationsSortMetric) {
-        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] text-black dark:text-orange-200 shadow-2xs cursor-pointer transition';
-      } else {
-        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition';
-      }
-    }
-  });
-
-  const customWrapper = document.getElementById('custom-horizon-wrapper');
   const customInput = document.getElementById('custom-station-horizon-input');
-  if (standardMetrics.includes(state.stationsSortMetric)) {
-    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-2 py-0.5 rounded-lg text-xs transition';
-    if (customInput) customInput.value = '';
-  } else {
-    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] px-2 py-0.5 rounded-lg text-xs transition';
+  if (customInput && document.activeElement !== customInput) {
+    const numOnly = String(state.stationsSortMetric || '24').replace(/[^\d.]/g, '');
+    customInput.value = numOnly || '24';
   }
 
   if (state.stationsRawData) {
@@ -8845,30 +8830,19 @@ window.sortStationsBy = function(metric) {
 };
 
 window.handleCustomStationHorizon = function(val) {
-  const hNum = parseFloat(String(val || '').replace(',', '.'));
-  if (!isNaN(hNum) && hNum > 0 && hNum <= 96) {
+  if (!val || String(val).trim() === '') return;
+  let hNum = parseFloat(String(val || '').replace(',', '.'));
+  if (!isNaN(hNum) && hNum > 0) {
+    if (hNum > 96) hNum = 96;
     state.stationsSortMetric = `${hNum}h`;
     const activeLabel = window.getStationHorizonLabel(state.stationsSortMetric);
 
     const activeLabelEl = document.getElementById('active-station-horizon-label');
     if (activeLabelEl) activeLabelEl.textContent = activeLabel;
 
-    const standardMetrics = ['1h', '4h', '12h', '24h', '48h', '96h'];
-    standardMetrics.forEach(m => {
-      const btn = document.getElementById(`sort-btn-${m}`);
-      if (btn) {
-        btn.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 text-black dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700 cursor-pointer transition';
-      }
-    });
-
-    const customWrapper = document.getElementById('custom-horizon-wrapper');
-    if (customWrapper) customWrapper.className = 'flex items-center gap-1 bg-[#ffebe4] dark:bg-orange-950/60 border border-[#f07a53] px-2 py-0.5 rounded-lg text-xs transition';
-
     if (state.stationsRawData) {
       renderAcumuladosChuva(state.stationsRawData);
     }
-  } else if (!val || String(val).trim() === '') {
-    window.sortStationsBy('24h');
   }
 };
 
