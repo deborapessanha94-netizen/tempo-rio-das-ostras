@@ -475,6 +475,14 @@ def collect_stations_network():
                 s["vento_max_24h"] = avg_vmax
                 s["rajada_max_24h"] = avg_rmax
 
+    # Temperatura regional para PCDs/INEA sem sensor termometrico proprio
+    pws_with_temp = [s for s in stations if s.get('temp_atual') is not None]
+    if pws_with_temp:
+        avg_temp = round(sum(safe_float(s.get('temp_atual'), 20.0) for s in pws_with_temp) / len(pws_with_temp))
+        for s in stations:
+            if s.get('temp_atual') is None and s.get('online') is not False:
+                s['temp_atual'] = avg_temp
+
     all_stations = pluviometric_stations + [inea_entry]
 
 

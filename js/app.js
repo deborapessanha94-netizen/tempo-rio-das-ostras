@@ -6728,25 +6728,24 @@ function setupPWA() {
 
 
 function startAutoSync() {
-
-
-
-  // Sincronização periódica a cada 1 minuto (60 segundos)
-
-
-
+  // Sincronização periódica geral a cada 1 minuto (60 segundos)
   setInterval(() => {
-
-
-
     loadAllApplicationData();
-
-
-
   }, 60 * 1000);
 
-
-
+  // Sincronização em tempo real das 10 estações de 1 em 1 minuto
+  setInterval(async () => {
+    try {
+      const fresh = await getAcumuladosEstacoes();
+      if (fresh && (Array.isArray(fresh) ? fresh.length > 0 : (fresh.estacoes && fresh.estacoes.length > 0))) {
+        state.acumuladosDataset = fresh;
+        state.acumuladosEstacoes = fresh.estacoes ? fresh.estacoes : fresh;
+        renderAcumuladosChuva(fresh);
+      }
+    } catch (e) {
+      console.warn('[Auto-Sync] Erro ao sincronizar estacoes:', e);
+    }
+  }, 60 * 1000);
 }
 
 
@@ -8927,6 +8926,10 @@ function renderAcumuladosChuva(data) {
   const kpiRioSubEl = document.getElementById('chuva-kpi-rio-sub');
   const kpiEstacoesEl = document.getElementById('chuva-kpi-estacoes');
   const atualizacaoTxtEl = document.getElementById('chuva-atualizacao-txt');
+  if (atualizacaoTxtEl) {
+    const nowTimeStr = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    atualizacaoTxtEl.textContent = 'Atualizado às ' + nowTimeStr + ' (Tempo Real)';
+  }
 
   if (kpiMediaEl && estacoesPluviais.length > 0) {
     const sumVals = estacoesPluviais.reduce((acc, s) => acc + window.getStationRainForMetric(s, activeMetric), 0);
