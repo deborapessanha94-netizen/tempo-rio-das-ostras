@@ -9088,65 +9088,17 @@ function renderAcumuladosChuva(data) {
 
 
       if (st.categoria === 'pws') {
-
-
-
-        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f5efe8] text-black border border-[#b8a99a]/60">Weather Underground</span>';
-
-
-
         catIcon = 'gauge';
-
-
-
         borderAccent = 'border-[#dfb992]/40';
-
-
-
         btnLabel = 'Ver no Weather Underground ↗';
-
-
-
       } else if (st.categoria === 'inea') {
-
-
-
-        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]/60">INEA Alerta de Cheias</span>';
-
-
-
         catIcon = 'waves';
-
-
-
         borderAccent = 'border-[#6d8ba6]/50';
-
-
-
         btnLabel = 'Ver no Alerta de Cheias ↗';
-
-
-
       } else if (st.categoria === 'cemaden') {
-
-
-
-        catBadge = '<span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#ffebe4] text-black border border-[#f07a53]/60">CEMADEN Nacional</span>';
-
-
-
         catIcon = 'cloud-rain';
-
-
-
         borderAccent = 'border-[#f07a53]/40';
-
-
-
         btnLabel = 'Ver Gráfico no CEMADEN ↗';
-
-
-
       }
 
 
@@ -9347,25 +9299,7 @@ function renderAcumuladosChuva(data) {
 
 
                   <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black bg-[#e0f2fe] text-[#0369a1] border border-[#38bdf8]/40 shadow-2xs flex items-center gap-1">
-
-
-
                     <i data-lucide="waves" class="w-3 h-3 text-[#0284c7]"></i> NÍVEL DO RIO
-
-
-
-                  </span>
-
-
-
-                  <span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full bg-[#f1f5f9] text-[#334155] border border-[#cbd5e1]">
-
-
-
-                    INEA Alerta de Cheias
-
-
-
                   </span>
 
 
@@ -9595,17 +9529,7 @@ function renderAcumuladosChuva(data) {
 
 
               <div class="flex items-center gap-1.5 flex-wrap">
-
-
-
                 ${rankBadge}
-
-
-
-                ${catBadge}
-
-
-
               </div>
 
 
