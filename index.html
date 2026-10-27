@@ -4060,32 +4060,23 @@
 
 
       <!-- Barra de Seleção de Horizonte de Tempo (Acumulados de Chuva) -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-[#cbd5e1]/40 dark:border-slate-800 text-xs">
-        <div class="flex items-center gap-2">
-          <i data-lucide="clock" class="w-4 h-4 text-[#f07a53] shrink-0"></i>
-          <span class="text-xs font-black text-black dark:text-white">Horizonte de Tempo:</span>
-          <span id="active-station-horizon-label" class="text-[11px] font-mono font-bold bg-[#ffebe4] dark:bg-orange-950/60 text-[#d95d39] dark:text-orange-300 border border-[#f07a53] px-2.5 py-0.5 rounded-md shadow-2xs">
-            24 Horas
-          </span>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <div id="custom-horizon-wrapper" class="flex items-center gap-1.5 bg-[#f8fafc] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-3 py-1 rounded-xl text-xs transition shadow-2xs">
-            <span class="text-xs font-bold text-black dark:text-slate-200">Definir horizonte:</span>
-            <input 
-              type="number" 
-              id="custom-station-horizon-input" 
-              min="1" 
-              max="96" 
-              value="24"
-              placeholder="24" 
-              class="w-14 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-lg text-xs font-black font-mono text-black dark:text-white border border-[#94a3b8] dark:border-slate-600 outline-none text-center focus:border-[#f07a53] focus:ring-1 focus:ring-[#f07a53]" 
-              oninput="handleCustomStationHorizon(this.value)"
-              onblur="if(!this.value || this.value < 1){ this.value = 24; handleCustomStationHorizon(24); }"
-              title="Digite a quantidade de horas desejada (ex: 1 a 96 horas)"
-            />
-            <span class="text-xs font-bold text-black/80 dark:text-slate-300">horas</span>
-          </div>
+      <div class="flex items-center justify-end pt-2 border-t border-[#cbd5e1]/40 dark:border-slate-800 text-xs">
+        <div id="custom-horizon-wrapper" class="flex items-center gap-1.5 bg-[#f8fafc] dark:bg-slate-800/80 border border-[#cbd5e1] dark:border-slate-700 px-3 py-1 rounded-xl text-xs transition shadow-2xs">
+          <i data-lucide="clock" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
+          <span class="text-xs font-bold text-black dark:text-slate-200">Horizonte de tempo:</span>
+          <input 
+            type="number" 
+            id="custom-station-horizon-input" 
+            min="1" 
+            max="96" 
+            value="24"
+            placeholder="24" 
+            class="w-14 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-lg text-xs font-black font-mono text-black dark:text-white border border-[#94a3b8] dark:border-slate-600 outline-none text-center focus:border-[#f07a53] focus:ring-1 focus:ring-[#f07a53]" 
+            oninput="handleCustomStationHorizon(this.value)"
+            onblur="if(!this.value || this.value < 1){ this.value = 24; handleCustomStationHorizon(24); }"
+            title="Digite a quantidade de horas desejada (ex: 1 a 96 horas)"
+          />
+          <span class="text-xs font-bold text-black/80 dark:text-slate-300">horas</span>
         </div>
       </div>
 
@@ -11181,7 +11172,7 @@
 
 
 
-  <script type="module" src="js/app.js?v=146"></script>
+  <script type="module" src="js/app.js?v=147"></script>
 
 
 
