@@ -6733,6 +6733,13 @@ function startAutoSync() {
     loadAllApplicationData();
   }, 60 * 1000);
 
+  // Sincronização contínua da telemetria do Rio Jundiá a cada 5 minutos (300 segundos)
+  setInterval(() => {
+    if (typeof window.refreshRioHourlyData === 'function') {
+      window.refreshRioHourlyData();
+    }
+  }, 5 * 60 * 1000);
+
   // Sincronização em tempo real das 10 estações de 1 em 1 minuto
   setInterval(async () => {
     try {
@@ -8423,6 +8430,7 @@ window.switchAppTab = function(tabName) {
 
 
       if (view) view.classList.remove('hidden');
+      if (t === 'rio' && typeof window.refreshRioHourlyData === 'function') { window.refreshRioHourlyData(); }
 
 
 
@@ -10086,6 +10094,30 @@ function renderAcumuladosChuva(data) {
 
 
 
+
+
+window.updateRioSyncIndicator = function() {
+  const syncTextEl = document.getElementById('rio-sync-text');
+  if (syncTextEl) {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    syncTextEl.textContent = `Atualizado às ${hh}:${mm} (a cada 5 min)`;
+  }
+};
+
+window.refreshRioHourlyData = async function(isManual = false) {
+  try {
+    const fresh10d = await getIneaJundia10d();
+    if (fresh10d && fresh10d.dados && fresh10d.dados.length > 0) {
+      state.jundia10dData = fresh10d;
+      initRioHourlyTable(fresh10d);
+    }
+    window.updateRioSyncIndicator();
+  } catch (e) {
+    console.warn('[Auto-Sync] Erro ao sincronizar Rio Jundiá:', e);
+  }
+};
 
 function initRioHourlyTable(dataset) {
 
