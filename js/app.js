@@ -6169,6 +6169,8 @@ function updateBulletinChart() {
 
 
 }
+window.updateBulletinChart = updateBulletinChart;
+window.state = state;
 
 
 
@@ -8514,6 +8516,42 @@ window.switchAppTab = function(tabName) {
 
 
 
+
+  // Garante que apenas a sub-seção ativa deste painel fique visível (roteamento exclusivo)
+  if (window.SUB_SECTIONS_CONFIG && window.SUB_SECTIONS_CONFIG[target]) {
+    const activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[target]) || window.SUB_SECTIONS_CONFIG[target].default;
+    const conf = window.SUB_SECTIONS_CONFIG[target];
+    conf.sections.forEach(sId => {
+      const el = document.getElementById(sId);
+      if (!el) return;
+      if (target === 'boletim') {
+        const turnosCol = document.getElementById('section-boletim-turnos-col');
+        const telCol = document.getElementById('section-boletim-telefones-col');
+        if (activeSub === 'section-boletim-turnos') {
+          if (turnosCol) { turnosCol.classList.remove('hidden', 'lg:col-span-8'); turnosCol.classList.add('w-full', 'lg:col-span-12'); }
+          if (telCol) telCol.classList.add('hidden');
+        } else if (activeSub === 'section-boletim-telefones') {
+          if (telCol) { telCol.classList.remove('hidden', 'lg:col-span-4'); telCol.classList.add('w-full', 'lg:col-span-12'); }
+          if (turnosCol) turnosCol.classList.add('hidden');
+        }
+        return;
+      }
+      if (sId === activeSub) {
+        el.classList.remove('hidden');
+      } else {
+        el.classList.add('hidden');
+      }
+    });
+
+    const parentView = document.getElementById('view-tab-' + target);
+    if (parentView) {
+      parentView.querySelectorAll('.section-subnav-pill').forEach(p => {
+        const pAttr = p.getAttribute('onclick') || '';
+        if (pAttr.includes(`'${activeSub}'`)) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+    }
+  }
   if (window.lucide) {
 
 
@@ -12673,11 +12711,223 @@ window.toggleNavDropdown = function(tabName, event) {
   }
 };
 
-window.handleNavTabClick = function(tabName, event) {
-  window.closeAllNavDropdowns();
+// =========================================================================
+// SISTEMA DE ROTEAMENTO EXCLUSIVO DE SUB-SEÇÕES ESTILO INMET
+// Exibe SOMENTE o módulo selecionado na lista no momento
+// =========================================================================
+
+window.SUB_SECTIONS_CONFIG = {
+  previsao: {
+    default: 'section-hero-previsao',
+    sections: [
+      'section-hero-previsao',
+      'section-graficos-tendencia',
+      'section-previsao-3dias',
+      'section-panorama-sinotico',
+      'section-plancon-resumo'
+    ]
+  },
+  chuva: {
+    default: 'section-chuva-resumo',
+    sections: [
+      'section-chuva-resumo',
+      'section-chuva-cards',
+      'section-chuva-tabela'
+    ]
+  },
+  rio: {
+    default: 'card-telemetria-jundia',
+    sections: [
+      'card-telemetria-jundia',
+      'card-tabela-rio-jundia',
+      'section-rio-macae'
+    ]
+  },
+  orla: {
+    default: 'orla-panel-mar',
+    sections: [
+      'orla-panel-mar',
+      'orla-panel-mares',
+      'orla-panel-balnear'
+    ]
+  },
+  alertas: {
+    default: 'section-alertas-oficiais',
+    sections: [
+      'section-alertas-oficiais',
+      'section-cemaden-riscos',
+      'section-cptec-probabilistica'
+    ]
+  },
+  boletim: {
+    default: 'section-boletim-turnos',
+    sections: [
+      'section-boletim-turnos',
+      'section-boletim-telefones'
+    ]
+  }
+};
+
+window.state = window.state || {};
+window.state.activeSubSections = window.state.activeSubSections || {
+  previsao: 'section-hero-previsao',
+  chuva: 'section-chuva-resumo',
+  rio: 'card-telemetria-jundia',
+  orla: 'orla-panel-mar',
+  alertas: 'section-alertas-oficiais',
+  boletim: 'section-boletim-turnos'
+};
+
+/**
+ * Exibe EXCLUSIVAMENTE a sub-seção selecionada, ocultando todas as outras daquela tela
+ */
+window.switchSubSection = function(tabName, sectionId) {
+  const config = window.SUB_SECTIONS_CONFIG[tabName];
+  if (!config) return;
+
+  const targetId = sectionId || window.state.activeSubSections[tabName] || config.default;
+  window.state.activeSubSections[tabName] = targetId;
+
+  // 1. Ativa a aba principal caso ainda não esteja visível
   if (typeof window.switchAppTab === 'function') {
     window.switchAppTab(tabName);
   }
+
+  // 2. Oculta todas as outras seções e exibe apenas a selecionada
+  config.sections.forEach(sId => {
+    const el = document.getElementById(sId);
+    if (!el) return;
+
+    if (tabName === 'boletim') {
+      const turnosCol = document.getElementById('section-boletim-turnos-col');
+      const telCol = document.getElementById('section-boletim-telefones-col');
+      if (targetId === 'section-boletim-turnos') {
+        if (turnosCol) {
+          turnosCol.classList.remove('hidden', 'lg:col-span-8');
+          turnosCol.classList.add('w-full', 'lg:col-span-12');
+        }
+        if (telCol) telCol.classList.add('hidden');
+      } else if (targetId === 'section-boletim-telefones') {
+        if (telCol) {
+          telCol.classList.remove('hidden', 'lg:col-span-4');
+          telCol.classList.add('w-full', 'lg:col-span-12');
+        }
+        if (turnosCol) turnosCol.classList.add('hidden');
+      }
+      return;
+    }
+
+    if (sId === targetId) {
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+  });
+
+  // 3. Caso especial para Aba Orla (abas integradas de mar, marés e balneabilidade)
+  if (tabName === 'orla') {
+    if (targetId === 'orla-panel-mar' && typeof window.switchOrlaTab === 'function') {
+      window.switchOrlaTab('mar');
+    } else if (targetId === 'orla-panel-mares' && typeof window.switchOrlaTab === 'function') {
+      window.switchOrlaTab('mares');
+    } else if (targetId === 'orla-panel-balnear' && typeof window.switchOrlaTab === 'function') {
+      window.switchOrlaTab('balnear');
+    }
+  }
+
+  // 4. Atualiza destaque visual nas pílulas de sub-navegação ("Abinhas")
+  const parentView = document.getElementById(`view-tab-${tabName}`);
+  if (parentView) {
+    const pills = parentView.querySelectorAll('.section-subnav-pill');
+    pills.forEach(p => {
+      const pAttr = p.getAttribute('onclick') || '';
+      if (pAttr.includes(`'${targetId}'`)) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+  }
+
+  // 5. Atualiza destaque nos itens do menu dropdown (desktop e mobile)
+  document.querySelectorAll(`.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item`).forEach(item => {
+    const itemClick = item.getAttribute('onclick') || '';
+    if (itemClick.includes(`'${targetId}'`)) {
+      item.classList.add('active-subitem');
+    } else {
+      item.classList.remove('active-subitem');
+    }
+  });
+
+  // 6. Fecha dropdowns
+  window.closeAllNavDropdowns();
+
+  // 7. Redesenha gráficos se Gráficos de Tendência for ativado
+  if (targetId === 'section-graficos-tendencia') {
+    setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      if (typeof window.updateBulletinChart === 'function') {
+        window.updateBulletinChart();
+      }
+    }, 60);
+  }
+
+  // 8. Rola suavemente até o topo da área de conteúdo
+  const stickyNav = document.getElementById('app-sticky-navigation');
+  const navHeight = stickyNav ? stickyNav.offsetHeight : 95;
+  const targetTop = parentView ? parentView.getBoundingClientRect().top + window.pageYOffset - (navHeight + 10) : 0;
+  window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+};
+
+/**
+ * Exibe todas as seções da página juntas (modo contínuo)
+ */
+window.showAllSubSections = function(tabName) {
+  const config = window.SUB_SECTIONS_CONFIG[tabName];
+  if (!config) return;
+
+  if (typeof window.switchAppTab === 'function') {
+    window.switchAppTab(tabName);
+  }
+
+  config.sections.forEach(sId => {
+    const el = document.getElementById(sId);
+    if (el) el.classList.remove('hidden');
+  });
+
+  if (tabName === 'boletim') {
+    const turnosCol = document.getElementById('section-boletim-turnos-col');
+    const telCol = document.getElementById('section-boletim-telefones-col');
+    if (turnosCol) {
+      turnosCol.classList.remove('hidden', 'lg:col-span-12', 'w-full');
+      turnosCol.classList.add('lg:col-span-8');
+    }
+    if (telCol) {
+      telCol.classList.remove('hidden', 'lg:col-span-12', 'w-full');
+      telCol.classList.add('lg:col-span-4');
+    }
+  }
+
+  const parentView = document.getElementById(`view-tab-${tabName}`);
+  if (parentView) {
+    const pills = parentView.querySelectorAll('.section-subnav-pill');
+    pills.forEach(p => {
+      const pAttr = p.getAttribute('onclick') || '';
+      if (pAttr.includes('showAllSubSections')) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+  }
+
+  window.closeAllNavDropdowns();
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+    if (typeof window.updateBulletinChart === 'function') {
+      window.updateBulletinChart();
+    }
+  }, 60);
 };
 
 window.navigateSubSection = function(tabName, sectionId, event) {
@@ -12685,36 +12935,32 @@ window.navigateSubSection = function(tabName, sectionId, event) {
     event.preventDefault();
     event.stopPropagation();
   }
-  window.closeAllNavDropdowns();
-  if (typeof window.switchAppTab === 'function') {
-    window.switchAppTab(tabName);
-  }
-  setTimeout(() => {
-    window.scrollToSection(sectionId);
-  }, 120);
+  window.switchSubSection(tabName, sectionId);
 };
 
 window.scrollToSection = function(sectionId) {
+  // Procura em qual aba essa sectionId reside
+  for (const [tName, conf] of Object.entries(window.SUB_SECTIONS_CONFIG)) {
+    if (conf.sections.includes(sectionId)) {
+      window.switchSubSection(tName, sectionId);
+      return;
+    }
+  }
+  // Fallback caso não seja uma sub-seção cadastrada
   const el = document.getElementById(sectionId);
   if (!el) return;
+  el.classList.remove('hidden');
   const stickyNav = document.getElementById('app-sticky-navigation');
   const navHeight = stickyNav ? stickyNav.offsetHeight : 95;
   const targetTop = el.getBoundingClientRect().top + window.pageYOffset - (navHeight + 15);
   window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+};
 
-  // Atualiza destaque na sub-navegação em pílulas
-  const parentView = el.closest('.app-tab-view');
-  if (parentView) {
-    const pills = parentView.querySelectorAll('.section-subnav-pill');
-    pills.forEach(p => {
-      const pAttr = p.getAttribute('onclick') || '';
-      if (pAttr.includes(sectionId)) {
-        p.classList.add('active');
-      } else {
-        p.classList.remove('active');
-      }
-    });
-  }
+window.handleNavTabClick = function(tabName, event) {
+  if (event) event.stopPropagation();
+  window.closeAllNavDropdowns();
+  const activeSub = (window.state.activeSubSections && window.state.activeSubSections[tabName]) || window.SUB_SECTIONS_CONFIG[tabName]?.default;
+  window.switchSubSection(tabName, activeSub);
 };
 
 document.addEventListener('click', (e) => {
@@ -12727,4 +12973,14 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     window.closeAllNavDropdowns();
   }
+});
+
+// Inicialização do roteamento exclusivo no carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
+  const initialTab = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'].includes(hash) ? hash : 'previsao';
+  const initialSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[initialTab]) || window.SUB_SECTIONS_CONFIG[initialTab]?.default;
+  setTimeout(() => {
+    window.switchSubSection(initialTab, initialSub);
+  }, 50);
 });

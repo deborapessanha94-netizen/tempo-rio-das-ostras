@@ -1872,6 +1872,19 @@ html.dark .nav-dropdown-item {
   color: #ea580c;
 }
 
+.nav-dropdown-item.active-subitem {
+  background-color: #ffebe4 !important;
+  color: #c2410c !important;
+  font-weight: 800 !important;
+  border-left: 3.5px solid #ea580c !important;
+}
+
+html.dark .nav-dropdown-item.active-subitem {
+  background-color: #332018 !important;
+  color: #fb923c !important;
+  border-left: 3.5px solid #f97316 !important;
+}
+
 html.dark .nav-dropdown-item:hover {
   background-color: rgba(240, 122, 83, 0.2) !important;
   color: #f07a53 !important;
