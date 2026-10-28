@@ -578,11 +578,12 @@
 
 
 
-        <button id="btn-sync-now" class="btn-action-outline p-2 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full" title="Sincronizar dados agora">
+        <button id="btn-sync-now" class="btn-action-outline px-2.5 py-1.5 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full flex items-center gap-1.5" title="Sincronizar dados agora (ciclo automático de 5 min)">
 
 
 
           <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-black"></i>
+          <span id="header-sync-countdown" class="font-mono text-[10.5px] font-bold text-sky-700">05:00</span>
 
 
 
@@ -1425,7 +1426,7 @@
 
 
 
-            <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 1 minuto">
+            <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 5 minutos">
 
 
 
@@ -1433,7 +1434,7 @@
 
 
 
-              <span id="hero-sync-label">Atualizado a cada 1 minuto (Tempo Real)</span>
+              <span id="hero-sync-label">Atualização a cada 5 min (Tempo Real)</span>
 
 
 

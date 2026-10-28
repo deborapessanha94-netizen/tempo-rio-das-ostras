@@ -2892,7 +2892,7 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-    heroSyncLabel.textContent = `Atualizado às ${hh}:${mm} (Tempo Real • 1 em 1 min)`;
+    heroSyncLabel.textContent = `Atualizado às ${hh}:${mm} (Tempo Real • 5 em 5 min)`;
     const chuvaLiveEl = document.getElementById("chuva-atualizacao-txt");
     if (chuvaLiveEl) chuvaLiveEl.textContent = `Atualizado às ${hh}:${mm} (Tempo Real)`;
 
@@ -6356,6 +6356,7 @@ function setupActionButtons() {
 
 
       if (icon) icon.classList.add('animate-spin');
+      if (typeof window.resetSyncCountdown === 'function') window.resetSyncCountdown();
 
 
 
@@ -6727,32 +6728,45 @@ function setupPWA() {
 
 
 
+const REFRESH_INTERVAL_SECONDS = 300; // 5 minutos (mesmo parâmetro de clima-rio-das-ostras)
+let countdownSeconds = REFRESH_INTERVAL_SECONDS;
+
+function formatCountdown(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function updateCountdownUI() {
+  const cdEl = document.getElementById('header-sync-countdown');
+  if (cdEl) cdEl.textContent = formatCountdown(countdownSeconds);
+}
+
+window.resetSyncCountdown = function() {
+  countdownSeconds = REFRESH_INTERVAL_SECONDS;
+  updateCountdownUI();
+};
+
 function startAutoSync() {
-  // Sincronização periódica geral a cada 1 minuto (60 segundos)
+  // Timer de contagem regressiva e sincronização contínua de 5 em 5 minutos (300 segundos)
   setInterval(() => {
-    loadAllApplicationData();
-  }, 60 * 1000);
-
-  // Sincronização contínua da telemetria do Rio Jundiá a cada 5 minutos (300 segundos)
-  setInterval(() => {
-    if (typeof window.refreshRioHourlyData === 'function') {
-      window.refreshRioHourlyData();
-    }
-  }, 5 * 60 * 1000);
-
-  // Sincronização em tempo real das 10 estações de 1 em 1 minuto
-  setInterval(async () => {
-    try {
-      const fresh = await getAcumuladosEstacoes();
-      if (fresh && (Array.isArray(fresh) ? fresh.length > 0 : (fresh.estacoes && fresh.estacoes.length > 0))) {
-        state.acumuladosDataset = fresh;
-        state.acumuladosEstacoes = fresh.estacoes ? fresh.estacoes : fresh;
-        renderAcumuladosChuva(fresh);
+    countdownSeconds--;
+    if (countdownSeconds <= 0) {
+      countdownSeconds = REFRESH_INTERVAL_SECONDS;
+      loadAllApplicationData();
+      if (typeof window.refreshRioHourlyData === 'function') {
+        window.refreshRioHourlyData();
       }
-    } catch (e) {
-      console.warn('[Auto-Sync] Erro ao sincronizar estacoes:', e);
+      getAcumuladosEstacoes().then(fresh => {
+        if (fresh && (Array.isArray(fresh) ? fresh.length > 0 : (fresh.estacoes && fresh.estacoes.length > 0))) {
+          state.acumuladosDataset = fresh;
+          state.acumuladosEstacoes = fresh.estacoes ? fresh.estacoes : fresh;
+          renderAcumuladosChuva(fresh);
+        }
+      }).catch(e => console.warn('[Auto-Sync] Erro ao sincronizar estacoes:', e));
     }
-  }, 60 * 1000);
+    updateCountdownUI();
+  }, 1000);
 }
 
 
