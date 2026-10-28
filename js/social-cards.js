@@ -760,6 +760,7 @@ export async function downloadSocialFormat(format) {
 // Expõe funções globalmente para interações do HTML
 if (typeof window !== 'undefined') {
   window.openSocialModalChuva = openSocialModalChuva;
+  window.openSocialModal = openSocialModalChuva;
   window.closeSocialModalChuva = closeSocialModalChuva;
   window.setSocialFormat = setSocialFormat;
   window.setSocialHorizon = setSocialHorizon;

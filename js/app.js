@@ -6171,6 +6171,8 @@ function updateBulletinChart() {
 }
 window.updateBulletinChart = updateBulletinChart;
 window.state = state;
+window.openSocialModal = openSocialModalChuva;
+window.openSocialModalChuva = openSocialModalChuva;
 
 
 
