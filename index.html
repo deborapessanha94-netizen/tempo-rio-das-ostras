@@ -366,7 +366,7 @@
 
 
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-2.5 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4">
 
 
 
@@ -466,7 +466,7 @@
 
 
 
-      <div class="flex items-center gap-2 sm:gap-2.5 text-sm">
+      <div class="flex items-center gap-1 sm:gap-2.5 text-sm">
 
 
 
@@ -478,7 +478,7 @@
 
 
 
-        <a href="tel:199" class="btn-emergency flex items-center gap-1.5 text-xs font-extrabold whitespace-nowrap" title="Ligue 199 para a Defesa Civil">
+        <a href="tel:199" class="btn-emergency flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 text-xs font-extrabold whitespace-nowrap" title="Ligue 199 para a Defesa Civil">
 
 
 
@@ -506,7 +506,7 @@
 
 
 
-        <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-action-slate flex items-center gap-1.5 text-xs font-bold whitespace-nowrap" title="Baixar PDF do Boletim Técnico Oficial">
+        <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-action-slate flex items-center gap-1.5 px-2 sm:px-3 text-xs font-bold whitespace-nowrap" title="Baixar PDF do Boletim Técnico Oficial">
 
 
 
@@ -514,7 +514,7 @@
 
 
 
-          <span class="hidden md:inline text-black">Boletim</span> <span class="font-semibold text-black">(PDF)</span>
+          <span class="hidden md:inline text-black">Boletim</span> <span class="hidden sm:inline font-semibold text-black">(PDF)</span>
 
 
 
@@ -530,7 +530,7 @@
 
 
 
-        <button id="dock-btn-meteogramas" class="flex btn-action-outline items-center gap-1.5 text-xs font-bold cursor-pointer whitespace-nowrap" title="Ver Meteogramas Oficiais do INMET e CPTEC/INPE">
+        <button id="dock-btn-meteogramas" class="hidden sm:flex btn-action-outline items-center gap-1.5 text-xs font-bold cursor-pointer whitespace-nowrap" title="Ver Meteogramas Oficiais do INMET e CPTEC/INPE">
 
 
 
@@ -578,7 +578,7 @@
 
 
 
-        <button id="btn-sync-now" class="btn-action-outline px-2.5 py-1.5 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full flex items-center gap-1.5" title="Sincronizar dados agora (ciclo automático de 5 min)">
+        <button id="btn-sync-now" class="btn-action-outline px-2 sm:px-2.5 py-1 sm:py-1.5 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full flex items-center gap-1 sm:gap-1.5" title="Sincronizar dados agora (ciclo automático de 5 min)">
 
 
 
@@ -639,167 +639,295 @@
 
 
 
-  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-3 sm:px-6 pt-1.5 pb-2.5">
-
-
-
-    <div class="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-2 p-1.5 bg-[#f5efe8]/90 rounded-2xl border border-[#b8a99a]/50 shadow-xs" role="tablist">
-
-
-
-
-
-
-
-      <!-- Aba 1: Previsão & Tempo -->
-
-
-
-      <button id="nav-tab-previsao" onclick="switchAppTab('previsao')" class="app-nav-tab active flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs w-full text-center" role="tab" aria-selected="true">
-
-
-
-        <i data-lucide="cloud-sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Previsão & Tempo</span>
-
-
-
-      </button>
-
-
-
-
-
-
-
-      <!-- Aba 2: Acumulados de Chuva -->
-
-
-
-      <button id="nav-tab-chuva" onclick="switchAppTab('chuva')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-
-
-
-        <i data-lucide="cloud-rain" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Acumulados Chuva</span>
-
-
-
-      </button>
-
-
-
-
-
-
-
-      <!-- Aba 3: Nível do Rio Jundiá -->
-
-
-
-      <button id="nav-tab-rio" onclick="switchAppTab('rio')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-
-
-
-        <i data-lucide="waves" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Nível do Rio</span>
-        <span id="nav-badge-rio-macae" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-0.5 shrink-0" title="Aviso: Rios de Macaé fora da cota de segurança"></span>
-
-
-
-      </button>
-
-
-
-
-
-
-
-      <!-- Aba 4: Orla & Praias -->
-
-
-
-      <button id="nav-tab-orla" onclick="switchAppTab('orla')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-
-
-
-        <i data-lucide="anchor" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Orla & Praias</span>
-
-
-
-      </button>
-
-
-
-
-
-
-
-      <!-- Aba 5: Alertas & Sinótico -->
-
-
-
-      <button id="nav-tab-alertas" onclick="switchAppTab('alertas')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-
-
-
-        <i data-lucide="shield-alert" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Alertas & Sinótico</span>
-
-
-
-      </button>
-
-
-
-
-
-
-
-      <!-- Aba 6: Boletim Operacional -->
-
-
-
-      <button id="nav-tab-boletim" onclick="switchAppTab('boletim')" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-
-
-
-        <i data-lucide="file-text" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-
-
-
-        <span class="leading-none whitespace-nowrap">Boletim 12 Turnos</span>
-
-
-
-      </button>
-
-
-
-
-
-
+  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-2 sm:px-6 pt-1.5 pb-2.5">
+    <div class="w-full flex items-center gap-1.5 sm:gap-2 overflow-x-auto lg:overflow-visible no-scrollbar lg:grid lg:grid-cols-6 p-1.5 bg-[#f5efe8]/90 dark:bg-slate-900/90 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 shadow-xs" role="tablist">
+
+      <!-- Aba 1: Previsão & Tempo com Dropdown INMET -->
+      <div id="nav-wrapper-previsao" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-previsao" onclick="handleNavTabClick('previsao', event)" class="app-nav-tab active flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs w-full text-center" role="tab" aria-selected="true">
+            <i data-lucide="cloud-sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Previsão & Tempo</span>
+            <span onclick="toggleNavDropdown('previsao', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Previsão e Tempo">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu left-0">
+          <div class="nav-dropdown-header">
+            <span>Previsão & Tempo • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('previsao', 'section-hero-previsao', event)" class="nav-dropdown-item">
+              <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
+              <div>
+                <span>Tempo Agora</span>
+                <span class="nav-dropdown-item-desc">Condições em tempo real, temperatura e sensação</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item">
+              <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Gráficos de Tendência</span>
+                <span class="nav-dropdown-item-desc">Evolução horária de 72h (Temp, Chuva, Vento)</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('previsao', 'section-previsao-3dias', event)" class="nav-dropdown-item">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Previsão dos Próximos Dias</span>
+                <span class="nav-dropdown-item-desc">Cards operacionais de 3 dias com mar e detalhes</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item">
+              <i data-lucide="compass" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
+              <div>
+                <span>Panorama Sinótico Geral</span>
+                <span class="nav-dropdown-item-desc">Diagnóstico sinótico e termodinâmico de mesoescala</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('previsao', 'section-plancon-resumo', event)" class="nav-dropdown-item">
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
+              <div>
+                <span>Plano de Contingência (PLANCON)</span>
+                <span class="nav-dropdown-item-desc">Níveis e protocolos operacionais da Defesa Civil</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 2: Acumulados de Chuva com Dropdown INMET -->
+      <div id="nav-wrapper-chuva" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-chuva" onclick="handleNavTabClick('chuva', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="cloud-rain" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Acumulados Chuva</span>
+            <span onclick="toggleNavDropdown('chuva', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Acumulados de Chuva">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
+          <div class="nav-dropdown-header">
+            <span>Acumulados Chuva • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('chuva', 'section-chuva-resumo', event)" class="nav-dropdown-item">
+              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Resumo & KPIs de Chuva</span>
+                <span class="nav-dropdown-item-desc">Média municipal, maior acumulado e total de pontos</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('chuva', 'section-chuva-cards', event)" class="nav-dropdown-item">
+              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>10 Estações da Rede</span>
+                <span class="nav-dropdown-item-desc">Cards com acumulados de 24h, 36h, 48h e ventos</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('chuva', 'section-chuva-tabela', event)" class="nav-dropdown-item">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
+              <div>
+                <span>Tabela Comparativa</span>
+                <span class="nav-dropdown-item-desc">Comparativo ordenado e exportação para planilha</span>
+              </div>
+            </a>
+            <a onclick="window.closeAllNavDropdowns(); window.switchAppTab('chuva'); window.openSocialModal && window.openSocialModal()" class="nav-dropdown-item">
+              <i data-lucide="share-2" class="w-3.5 h-3.5 text-[#059669] shrink-0"></i>
+              <div>
+                <span>Card Oficial Diário</span>
+                <span class="nav-dropdown-item-desc">Gerador de imagem oficial para Instagram Story/Post</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 3: Nível do Rio com Dropdown INMET -->
+      <div id="nav-wrapper-rio" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-rio" onclick="handleNavTabClick('rio', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="waves" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Nível do Rio</span>
+            <span id="nav-badge-rio-macae" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-0.5 shrink-0" title="Aviso: Rios de Macaé fora da cota de segurança"></span>
+            <span onclick="toggleNavDropdown('rio', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Nível do Rio">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
+          <div class="nav-dropdown-header">
+            <span>Nível do Rio • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('rio', 'card-telemetria-jundia', event)" class="nav-dropdown-item">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Cota Atual & Calha do Rio</span>
+                <span class="nav-dropdown-item-desc">Nível do Rio Jundiá em metros, ocupação e status</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('rio', 'card-tabela-rio-jundia', event)" class="nav-dropdown-item">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Histórico Telemétrico 24h & 10d</span>
+                <span class="nav-dropdown-item-desc">Série de medições horárias e de 15 em 15 min do INEA</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('rio', 'section-rio-macae', event)" class="nav-dropdown-item">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
+              <div>
+                <span>Rios da Região (Macaé)</span>
+                <span class="nav-dropdown-item-desc">Monitoramento preventivo da bacia hidrográfica vizinha</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 4: Orla & Praias com Dropdown INMET -->
+      <div id="nav-wrapper-orla" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-orla" onclick="handleNavTabClick('orla', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="anchor" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Orla & Praias</span>
+            <span onclick="toggleNavDropdown('orla', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Orla & Praias">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu right-0 sm:left-auto lg:right-auto lg:left-0">
+          <div class="nav-dropdown-header">
+            <span>Orla & Praias • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="window.closeAllNavDropdowns(); window.switchAppTab('orla'); window.switchOrlaTab && window.switchOrlaTab('mar')" class="nav-dropdown-item">
+              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Condições do Mar & Ondas</span>
+                <span class="nav-dropdown-item-desc">Wavewatch III, altura de ondas, swell e enseadas</span>
+              </div>
+            </a>
+            <a onclick="window.closeAllNavDropdowns(); window.switchAppTab('orla'); window.switchOrlaTab && window.switchOrlaTab('mares')" class="nav-dropdown-item">
+              <i data-lucide="moon" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Tábua de Marés</span>
+                <span class="nav-dropdown-item-desc">Horários oficiais de preamar e baixa-mar na costa</span>
+              </div>
+            </a>
+            <a onclick="window.closeAllNavDropdowns(); window.switchAppTab('orla'); window.switchOrlaTab && window.switchOrlaTab('balnear')" class="nav-dropdown-item">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
+              <div>
+                <span>Balneabilidade das Praias</span>
+                <span class="nav-dropdown-item-desc">Boletim oficial do INEA para banhistas e orla</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 5: Alertas & Sinótico com Dropdown INMET -->
+      <div id="nav-wrapper-alertas" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-alertas" onclick="handleNavTabClick('alertas', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="shield-alert" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Alertas & Sinótico</span>
+            <span onclick="toggleNavDropdown('alertas', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Alertas e Sinótico">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu right-0">
+          <div class="nav-dropdown-header">
+            <span>Alertas & Sinótico • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('alertas', 'section-alertas-oficiais', event)" class="nav-dropdown-item">
+              <i data-lucide="alert-octagon" class="w-3.5 h-3.5 text-[#dc2626] shrink-0"></i>
+              <div>
+                <span>Alertas Meteorológicos Vigentes</span>
+                <span class="nav-dropdown-item-desc">Avisos oficiais em vigor (INMET / CPTEC / Defesa Civil)</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('alertas', 'section-cemaden-riscos', event)" class="nav-dropdown-item">
+              <i data-lucide="mountain" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
+              <div>
+                <span>Riscos Geo-Hidrológicos (CEMADEN)</span>
+                <span class="nav-dropdown-item-desc">Vigilância de deslizamentos, inundações e enxurradas</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('alertas', 'section-cptec-probabilistica', event)" class="nav-dropdown-item">
+              <i data-lucide="map" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Cartas Sinóticas da Marinha</span>
+                <span class="nav-dropdown-item-desc">Análise de pressão e frentes no litoral fluminense</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aba 6: Boletim 12 Turnos com Dropdown INMET -->
+      <div id="nav-wrapper-boletim" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-boletim" onclick="handleNavTabClick('boletim', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="file-text" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
+            <span class="leading-none whitespace-nowrap">Boletim 12 Turnos</span>
+            <span onclick="toggleNavDropdown('boletim', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções do Boletim">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu right-0">
+          <div class="nav-dropdown-header">
+            <span>Boletim 12 Turnos • Seções</span>
+            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('boletim', 'section-boletim-turnos', event)" class="nav-dropdown-item">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Previsão Operacional 12 Turnos</span>
+                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para os 3 dias</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('boletim', 'section-boletim-telefones', event)" class="nav-dropdown-item">
+              <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Telefones Úteis & Pronta Resposta</span>
+                <span class="nav-dropdown-item-desc">Central 199 Defesa Civil, Bombeiros e Guarda Municipal</span>
+              </div>
+            </a>
+            <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="nav-dropdown-item">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
+              <div>
+                <span>Baixar Boletim em PDF</span>
+                <span class="nav-dropdown-item-desc">Download do relatório técnico oficial de Rio das Ostras</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
 
     </div>
 
-
-
+    <!-- PAINEL DROPDOWN MOBILE (LISTINHA ESTILO INMET EM DISPOSITIVOS MÓVEIS) -->
+    <div id="mobile-dropdown-panel" class="hidden lg:hidden w-full mt-2 p-2 bg-white dark:bg-[#0f172a] rounded-2xl border border-[#cbd5e1] dark:border-[#334155] shadow-2xl transition-all duration-200">
+      <div id="mobile-dropdown-content" class="space-y-1"></div>
+    </div>
   </nav>
 
 
@@ -825,6 +953,35 @@
 
 
   <div id="view-tab-previsao" class="app-tab-view space-y-6">
+    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
+      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
+          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Abas da Página:</span>
+          <button type="button" onclick="scrollToSection('section-hero-previsao')" class="section-subnav-pill active flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f07a53]"></i>
+            <span>Tempo Agora</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-graficos-tendencia')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Gráficos de Tendência</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-previsao-3dias')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Previsão 3 Dias</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-panorama-sinotico')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="compass" class="w-3.5 h-3.5 text-[#d97706]"></i>
+            <span>Panorama Sinótico</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-plancon-resumo')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="shield" class="w-3.5 h-3.5 text-[#16a34a]"></i>
+            <span>PLANCON</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -848,7 +1005,7 @@
 
 
 
-        <div class="hero-card p-4 sm:p-5">
+        <div id="section-hero-previsao" class="hero-card p-4 sm:p-5">
 
 
 
@@ -1463,10 +1620,7 @@
 
 
         <!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
-
-
-
-        <div class="modern-card p-5 sm:p-6 space-y-4">
+        <div id="section-graficos-tendencia" class="modern-card p-5 sm:p-6 space-y-4">
 
 
 
@@ -3848,6 +4002,31 @@
 
 
   <div id="view-tab-chuva" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
+    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
+      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
+          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Abas da Página:</span>
+          <button type="button" onclick="scrollToSection('section-chuva-resumo')" class="section-subnav-pill active flex items-center gap-1.5">
+            <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Resumo & KPIs</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-chuva-cards')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>10 Estações Pluviométricas</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-chuva-tabela')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="table" class="w-3.5 h-3.5 text-[#d97706]"></i>
+            <span>Tabela Comparativa</span>
+          </button>
+          <button type="button" onclick="window.openSocialModal && window.openSocialModal()" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="share-2" class="w-3.5 h-3.5 text-[#059669]"></i>
+            <span>Card Instagram Diário</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -3856,10 +4035,7 @@
 
 
     <!-- CARD 1: RESUMO EXECUTIVO DA REDE PLUVIOMÉTRICA & HIDROLÓGICA MUNICIPAL -->
-
-
-
-    <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
+    <div id="section-chuva-resumo" class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
 
 
 
@@ -4053,10 +4229,7 @@
     </div>
 
     <!-- CARD 3: LISTA & FILTRO DAS 10 ESTAÇÕES PLUVIOMÉTRICAS -->
-
-
-
-    <div class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
+    <div id="section-chuva-cards" class="modern-card p-5 sm:p-6 bg-white border border-[#94a3b8] space-y-5 shadow-xs">
 
 
 
@@ -4210,10 +4383,7 @@
 
 
       <!-- Tabela Comparativa Completa dos Acumulados -->
-
-
-
-      <div class="pt-4 border-t border-[#cbd5e1] space-y-3">
+      <div id="section-chuva-tabela" class="pt-4 border-t border-[#cbd5e1] space-y-3">
 
 
 
@@ -4424,6 +4594,27 @@
 
 
   <div id="view-tab-rio" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
+      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
+          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Abas da Página:</span>
+          <button type="button" onclick="scrollToSection('card-telemetria-jundia')" class="section-subnav-pill active flex items-center gap-1.5">
+            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Cota & Calha Atual</span>
+          </button>
+          <button type="button" onclick="scrollToSection('card-tabela-rio-jundia')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Histórico 24h & 10 Dias</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-rio-macae')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-[#d97706]"></i>
+            <span>Rios da Região (Macaé)</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -5271,7 +5462,7 @@
 
 
 
-      <div class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-xs">
+      <div id="section-rio-macae" class="modern-card p-5 sm:p-6 bg-white border border-[#cbd5e1] space-y-4 shadow-xs">
 
 
 
@@ -6710,6 +6901,27 @@
 
 
   <div id="view-tab-alertas" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
+      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
+          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Abas da Página:</span>
+          <button type="button" onclick="scrollToSection('section-alertas-oficiais')" class="section-subnav-pill active flex items-center gap-1.5">
+            <i data-lucide="alert-octagon" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Alertas Oficiais Vigentes</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-cemaden-riscos')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="mountain" class="w-3.5 h-3.5 text-[#d97706]"></i>
+            <span>Riscos Geo-Hidrológicos (CEMADEN)</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-cptec-probabilistica')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="map" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Cartas Sinóticas da Marinha</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -8148,6 +8360,27 @@
 
 
   <div id="view-tab-boletim" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
+      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
+          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Abas da Página:</span>
+          <button type="button" onclick="scrollToSection('section-boletim-turnos')" class="section-subnav-pill active flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Previsão 12 Turnos</span>
+          </button>
+          <button type="button" onclick="scrollToSection('section-boletim-telefones')" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Telefones Úteis & Pronta Resposta</span>
+          </button>
+          <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="section-subnav-pill flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-[#16a34a]"></i>
+            <span>Baixar Boletim em PDF</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -8251,7 +8484,7 @@
 
 
 
-        <div class="modern-card p-5 sm:p-6 space-y-4" id="card-chuva-turnos">
+        <div class="modern-card p-5 sm:p-6 space-y-4" id="section-boletim-turnos">
 
 
 
@@ -8799,7 +9032,6 @@
 
 
 
-      </aside>
 
 
 
@@ -8815,7 +9047,7 @@
 
 
 
-        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-4" id="card-telefones-uteis">
+        <div class="modern-card bg-white border border-[#94a3b8] p-5 sm:p-6 space-y-4" id="section-boletim-telefones">
 
 
 
@@ -10775,6 +11007,5 @@
 
 
 </html>
-
 
 

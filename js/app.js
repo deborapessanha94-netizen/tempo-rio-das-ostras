@@ -12622,3 +12622,109 @@ export function initCptecWwatch() {
 
   updateView();
 }
+
+
+// =============================================================================
+// NAVEGAÇÃO POR DROPDOWNS ESTILO INMET & SUB-ABAS DE SEÇÃO
+// =============================================================================
+
+window.closeAllNavDropdowns = function() {
+  document.querySelectorAll('.nav-dropdown-wrapper.open').forEach(el => {
+    el.classList.remove('open');
+  });
+  const mobilePanel = document.getElementById('mobile-dropdown-panel');
+  if (mobilePanel) {
+    mobilePanel.classList.add('hidden');
+    mobilePanel.removeAttribute('data-active-tab');
+  }
+};
+
+window.toggleNavDropdown = function(tabName, event) {
+  if (event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+  const wrapper = document.getElementById('nav-wrapper-' + tabName);
+  if (!wrapper) return;
+
+  const isMobile = window.innerWidth < 1024;
+  const mobilePanel = document.getElementById('mobile-dropdown-panel');
+  const mobileContent = document.getElementById('mobile-dropdown-content');
+
+  if (isMobile && mobilePanel && mobileContent) {
+    const wasOpen = !mobilePanel.classList.contains('hidden') && mobilePanel.getAttribute('data-active-tab') === tabName;
+    window.closeAllNavDropdowns();
+    if (!wasOpen) {
+      const menu = wrapper.querySelector('.nav-dropdown-menu');
+      if (menu) {
+        mobileContent.innerHTML = menu.innerHTML;
+        mobilePanel.setAttribute('data-active-tab', tabName);
+        mobilePanel.classList.remove('hidden');
+        wrapper.classList.add('open');
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+  } else {
+    const wasOpen = wrapper.classList.contains('open');
+    window.closeAllNavDropdowns();
+    if (!wasOpen) {
+      wrapper.classList.add('open');
+    }
+  }
+};
+
+window.handleNavTabClick = function(tabName, event) {
+  window.closeAllNavDropdowns();
+  if (typeof window.switchAppTab === 'function') {
+    window.switchAppTab(tabName);
+  }
+};
+
+window.navigateSubSection = function(tabName, sectionId, event) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  window.closeAllNavDropdowns();
+  if (typeof window.switchAppTab === 'function') {
+    window.switchAppTab(tabName);
+  }
+  setTimeout(() => {
+    window.scrollToSection(sectionId);
+  }, 120);
+};
+
+window.scrollToSection = function(sectionId) {
+  const el = document.getElementById(sectionId);
+  if (!el) return;
+  const stickyNav = document.getElementById('app-sticky-navigation');
+  const navHeight = stickyNav ? stickyNav.offsetHeight : 95;
+  const targetTop = el.getBoundingClientRect().top + window.pageYOffset - (navHeight + 15);
+  window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+
+  // Atualiza destaque na sub-navegação em pílulas
+  const parentView = el.closest('.app-tab-view');
+  if (parentView) {
+    const pills = parentView.querySelectorAll('.section-subnav-pill');
+    pills.forEach(p => {
+      const pAttr = p.getAttribute('onclick') || '';
+      if (pAttr.includes(sectionId)) {
+        p.classList.add('active');
+      } else {
+        p.classList.remove('active');
+      }
+    });
+  }
+};
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-dropdown-wrapper')) {
+    window.closeAllNavDropdowns();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    window.closeAllNavDropdowns();
+  }
+});
