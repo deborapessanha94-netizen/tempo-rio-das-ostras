@@ -3432,28 +3432,11 @@ function renderDashboardUI(meta, rows, weather) {
 
       }
 
-      // Detalhamento Térmico, Umidade e Ventos (Segunda parte do texto oficial agrupada)
-      let detalhamentoHtml = '';
+      // Detalhamento Térmico, Umidade e Ventos (Segunda parte do texto oficial)
+      let detalheTexto = '';
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2) {
-        const detalheLinhas = d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ');
-        if (detalheLinhas) {
-          detalhamentoHtml = `
-            <div class="p-3.5 rounded-xl ${theme.subCardBg} text-xs space-y-2 leading-relaxed">
-              <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Térmico, Umidade e Ventos</span>
-              <p class="text-black dark:text-slate-200 font-normal leading-relaxed text-justify">
-                ${detalheLinhas}
-              </p>
-            </div>
-          `;
-        }
+        detalheTexto = d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ');
       }
-
-
-
-
-
-
-
 
       return `
 
@@ -3591,16 +3574,19 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-          <!-- O TEXTO DA PREVISÃO OFICIAL (As duas partes juntas) -->
-          <div class="pt-2 border-t border-black/10 space-y-2">
-            <p class="text-xs text-black/90 dark:text-slate-100 font-medium leading-relaxed">
+          <!-- O TEXTO DA PREVISÃO OFICIAL (Texto contínuo com as informações juntas) -->
+          <div class="pt-2 border-t border-black/10 space-y-2 text-xs text-black/90 dark:text-slate-100 font-normal leading-relaxed">
+            <p class="text-justify leading-relaxed">
               ${informeResumo}
             </p>
-
-            ${detalhamentoHtml}
+            ${detalheTexto ? `
+            <p class="text-justify leading-relaxed text-black/85 dark:text-slate-200">
+              ${detalheTexto}
+            </p>
+            ` : ''}
 
             <div class="flex items-center justify-between pt-1 text-[10.5px] font-bold text-black/70 dark:text-slate-300">
-              <span id="day-card-btn-txt-${idx}" class="hover:underline flex items-center gap-1">
+              <span id="day-card-btn-txt-${idx}" class="hover:underline flex items-center gap-1 cursor-pointer">
                 Ver detalhes técnicos
               </span>
               <span class="text-[10px] text-black/60 dark:text-slate-400 uppercase tracking-wider font-semibold">Boletim Oficial</span>
@@ -3630,52 +3616,7 @@ function renderDashboardUI(meta, rows, weather) {
             </div>
           </div>
 
-
-
-
-
-
-
-            ${Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2 ? `
-
-
-
-              <div class="mt-2 p-3.5 rounded-xl ${theme.subCardBg} text-xs space-y-2 leading-relaxed">
-
-
-
-                <span class="text-[10.5px] font-extrabold uppercase tracking-wider text-[#ea580c] block">Detalhamento Térmico, Umidade e Ventos</span>
-
-
-
-                <p class="text-black font-normal leading-relaxed text-justify">
-
-
-
-                  ${d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ')}
-
-
-
-                </p>
-
-
-
-              </div>
-
-
-
-            ` : ''}
-
-
-
-          </div>
-
-
-
         </div>
-
-
-
       `;
 
 
