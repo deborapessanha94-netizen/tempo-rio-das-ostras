@@ -12910,18 +12910,14 @@ window.showAllSubSections = function(tabName) {
     }
   }
 
-  const parentView = document.getElementById(`view-tab-${tabName}`);
-  if (parentView) {
-    const pills = parentView.querySelectorAll('.section-subnav-pill');
-    pills.forEach(p => {
-      const pAttr = p.getAttribute('onclick') || '';
-      if (pAttr.includes('showAllSubSections')) {
-        p.classList.add('active');
-      } else {
-        p.classList.remove('active');
-      }
-    });
-  }
+  document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(item => {
+    const itemClick = item.getAttribute('onclick') || '';
+    if (itemClick.includes('showAllSubSections') && itemClick.includes(`'${tabName}'`)) {
+      item.classList.add('active-subitem');
+    } else {
+      item.classList.remove('active-subitem');
+    }
+  });
 
   window.closeAllNavDropdowns();
   setTimeout(() => {
@@ -12960,6 +12956,24 @@ window.scrollToSection = function(sectionId) {
 
 window.handleNavTabClick = function(tabName, event) {
   if (event) event.stopPropagation();
+  const isMobile = window.innerWidth < 1024;
+  const isCurrentlyActive = (window.state && window.state.activeTab === tabName);
+
+  if (isMobile) {
+    const mobilePanel = document.getElementById('mobile-dropdown-panel');
+    const isPanelOpenForThisTab = mobilePanel && !mobilePanel.classList.contains('hidden') && mobilePanel.getAttribute('data-active-tab') === tabName;
+
+    if (isCurrentlyActive && isPanelOpenForThisTab) {
+      window.closeAllNavDropdowns();
+      return;
+    }
+
+    const activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || window.SUB_SECTIONS_CONFIG[tabName]?.default;
+    window.switchSubSection(tabName, activeSub);
+    window.toggleNavDropdown(tabName, event);
+    return;
+  }
+
   window.closeAllNavDropdowns();
   const activeSub = (window.state.activeSubSections && window.state.activeSubSections[tabName]) || window.SUB_SECTIONS_CONFIG[tabName]?.default;
   window.switchSubSection(tabName, activeSub);

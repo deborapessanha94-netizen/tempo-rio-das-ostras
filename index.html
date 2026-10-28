@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=168">
+  <link rel="stylesheet" href="css/styles.css?v=170">
 
 
 
@@ -655,9 +655,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu left-0">
-          <div class="nav-dropdown-header">
-            <span>Previsão & Tempo • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Previsão & Tempo • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('previsao', 'section-hero-previsao', event)" class="nav-dropdown-item">
@@ -695,6 +700,13 @@
                 <span class="nav-dropdown-item-desc">Níveis e protocolos operacionais da Defesa Civil</span>
               </div>
             </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('previsao');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todas as seções de Previsão juntas</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -712,9 +724,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
-          <div class="nav-dropdown-header">
-            <span>Acumulados Chuva • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Acumulados Chuva • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('chuva', 'section-chuva-resumo', event)" class="nav-dropdown-item">
@@ -745,6 +762,13 @@
                 <span class="nav-dropdown-item-desc">Gerador de imagem oficial para Instagram Story/Post</span>
               </div>
             </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('chuva');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todas as seções de Chuva juntas</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -763,9 +787,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
-          <div class="nav-dropdown-header">
-            <span>Nível do Rio • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Nível do Rio • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('rio', 'card-telemetria-jundia', event)" class="nav-dropdown-item">
@@ -789,6 +818,13 @@
                 <span class="nav-dropdown-item-desc">Monitoramento preventivo da bacia hidrográfica vizinha</span>
               </div>
             </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('rio');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todas as seções do Rio juntas</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -806,9 +842,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu right-0 sm:left-auto lg:right-auto lg:left-0">
-          <div class="nav-dropdown-header">
-            <span>Orla & Praias • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Orla & Praias • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('orla', 'orla-panel-mar', event)" class="nav-dropdown-item">
@@ -832,6 +873,13 @@
                 <span class="nav-dropdown-item-desc">Boletim oficial do INEA para banhistas e orla</span>
               </div>
             </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('orla');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0f766e] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todas as seções da Orla juntas</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -849,9 +897,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu right-0">
-          <div class="nav-dropdown-header">
-            <span>Alertas & Sinótico • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Alertas & Sinótico • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('alertas', 'section-alertas-oficiais', event)" class="nav-dropdown-item">
@@ -875,6 +928,13 @@
                 <span class="nav-dropdown-item-desc">Análise de pressão e frentes no litoral fluminense</span>
               </div>
             </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('alertas');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#dc2626] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todos os Alertas e Sinótico juntos</span>
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -892,9 +952,14 @@
         </div>
         <!-- Menu Dropdown ("Listinha" estilo INMET) -->
         <div class="nav-dropdown-menu right-0">
-          <div class="nav-dropdown-header">
-            <span>Boletim 12 Turnos • Seções</span>
-            <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Boletim 12 Turnos • Seções</span>
+              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
           </div>
           <div class="space-y-0.5">
             <a onclick="navigateSubSection('boletim', 'section-boletim-turnos', event)" class="nav-dropdown-item">
@@ -916,6 +981,13 @@
               <div>
                 <span>Baixar Boletim em PDF</span>
                 <span class="nav-dropdown-item-desc">Download do relatório técnico oficial de Rio das Ostras</span>
+              </div>
+            </a>
+            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('boletim');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span>Ver Todas as Seções</span>
+                <span class="nav-dropdown-item-desc">Exibe todo o Boletim operacional junto</span>
               </div>
             </a>
           </div>
@@ -953,38 +1025,6 @@
 
 
   <div id="view-tab-previsao" class="app-tab-view space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('previsao', 'section-hero-previsao')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Tempo Agora">
-            <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f07a53]"></i>
-            <span>Tempo Agora</span>
-          </button>
-          <button type="button" onclick="switchSubSection('previsao', 'section-graficos-tendencia')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Gráficos de Tendência">
-            <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Gráficos de Tendência</span>
-          </button>
-          <button type="button" onclick="switchSubSection('previsao', 'section-previsao-3dias')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Previsão dos Próximos Dias">
-            <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>Previsão 3 Dias</span>
-          </button>
-          <button type="button" onclick="switchSubSection('previsao', 'section-panorama-sinotico')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Panorama Sinótico">
-            <i data-lucide="compass" class="w-3.5 h-3.5 text-[#d97706]"></i>
-            <span>Panorama Sinótico</span>
-          </button>
-          <button type="button" onclick="switchSubSection('previsao', 'section-plancon-resumo')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Plano de Contingência">
-            <i data-lucide="shield" class="w-3.5 h-3.5 text-[#16a34a]"></i>
-            <span>PLANCON</span>
-          </button>
-          <button type="button" onclick="showAllSubSections('previsao')" class="section-subnav-pill flex items-center gap-1.5 border-dashed" title="Exibir todas as seções juntas na página">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            <span>Ver Todas</span>
-          </button>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -4008,34 +4048,6 @@
 
 
   <div id="view-tab-chuva" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('chuva', 'section-chuva-resumo')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Resumo & KPIs">
-            <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Resumo & KPIs</span>
-          </button>
-          <button type="button" onclick="switchSubSection('chuva', 'section-chuva-cards')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente 10 Estações Pluviométricas">
-            <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>10 Estações Pluviométricas</span>
-          </button>
-          <button type="button" onclick="switchSubSection('chuva', 'section-chuva-tabela')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Tabela Comparativa">
-            <i data-lucide="table" class="w-3.5 h-3.5 text-[#d97706]"></i>
-            <span>Tabela Comparativa</span>
-          </button>
-          <button type="button" onclick="window.openSocialModal ? window.openSocialModal() : (window.openSocialModalChuva && window.openSocialModalChuva())" class="section-subnav-pill flex items-center gap-1.5">
-            <i data-lucide="share-2" class="w-3.5 h-3.5 text-[#059669]"></i>
-            <span>Card Instagram Diário</span>
-          </button>
-          <button type="button" onclick="showAllSubSections('chuva')" class="section-subnav-pill flex items-center gap-1.5 border-dashed" title="Exibir todas as seções de chuva juntas">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            <span>Ver Todas</span>
-          </button>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -4605,30 +4617,6 @@
 
 
   <div id="view-tab-rio" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('rio', 'card-telemetria-jundia')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Cota e Calha Atual">
-            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Cota & Calha Atual</span>
-          </button>
-          <button type="button" onclick="switchSubSection('rio', 'card-tabela-rio-jundia')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Histórico 24h & 10 Dias">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>Histórico 24h & 10 Dias</span>
-          </button>
-          <button type="button" onclick="switchSubSection('rio', 'section-rio-macae')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Rios da Região">
-            <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-[#d97706]"></i>
-            <span>Rios da Região (Macaé)</span>
-          </button>
-          <button type="button" onclick="showAllSubSections('rio')" class="section-subnav-pill flex items-center gap-1.5 border-dashed" title="Exibir todas as seções do rio juntas">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            <span>Ver Todas</span>
-          </button>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -5738,26 +5726,6 @@
 
 
   <div id="view-tab-orla" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('orla', 'orla-panel-mar')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Condições do Mar & Ondas">
-            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Mar & Praias (3 Dias)</span>
-          </button>
-          <button type="button" onclick="switchSubSection('orla', 'orla-panel-mares')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Tábuas de Maré">
-            <i data-lucide="compass" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>Tábuas de Maré</span>
-          </button>
-          <button type="button" onclick="switchSubSection('orla', 'orla-panel-balnear')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Balneabilidade das Praias">
-            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#16a34a]"></i>
-            <span>Balneabilidade (11 Praias)</span>
-          </button>
-        </div>
-      </div>
-    </div>
 
     <!-- Header da Aba Orla -->
 
@@ -6934,30 +6902,6 @@
 
 
   <div id="view-tab-alertas" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('alertas', 'section-alertas-oficiais')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Alertas Oficiais">
-            <i data-lucide="alert-octagon" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>Alertas Oficiais Vigentes</span>
-          </button>
-          <button type="button" onclick="switchSubSection('alertas', 'section-cemaden-riscos')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Riscos CEMADEN">
-            <i data-lucide="mountain" class="w-3.5 h-3.5 text-[#d97706]"></i>
-            <span>Riscos Geo-Hidrológicos (CEMADEN)</span>
-          </button>
-          <button type="button" onclick="switchSubSection('alertas', 'section-cptec-probabilistica')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Cartas Sinóticas">
-            <i data-lucide="map" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Cartas Sinóticas da Marinha</span>
-          </button>
-          <button type="button" onclick="showAllSubSections('alertas')" class="section-subnav-pill flex items-center gap-1.5 border-dashed" title="Exibir todos os alertas juntos">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            <span>Ver Todas</span>
-          </button>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -8397,30 +8341,6 @@
 
 
   <div id="view-tab-boletim" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
-    <!-- SUB-NAVEGAÇÃO POR ABINHAS DA SEÇÃO (ESTILO INMET) -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-1 pb-1">
-      <div class="p-1.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-[#cbd5e1] dark:border-slate-800 backdrop-blur-md shadow-2xs">
-        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 px-0.5 text-xs font-bold" role="tablist">
-          <span class="text-[10px] font-black uppercase text-[#64748b] dark:text-slate-400 px-2 shrink-0 hidden sm:inline">Exibir na Tela:</span>
-          <button type="button" onclick="switchSubSection('boletim', 'section-boletim-turnos')" class="section-subnav-pill active flex items-center gap-1.5" title="Exibir somente Previsão 12 Turnos">
-            <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span>Previsão 12 Turnos</span>
-          </button>
-          <button type="button" onclick="switchSubSection('boletim', 'section-boletim-telefones')" class="section-subnav-pill flex items-center gap-1.5" title="Exibir somente Telefones Úteis">
-            <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#0284c7]"></i>
-            <span>Telefones Úteis & Pronta Resposta</span>
-          </button>
-          <button type="button" onclick="showAllSubSections('boletim')" class="section-subnav-pill flex items-center gap-1.5 border-dashed" title="Exibir todas as seções do boletim juntas">
-            <i data-lucide="layers" class="w-3.5 h-3.5 text-[#64748b]"></i>
-            <span>Ver Todas</span>
-          </button>
-          <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="section-subnav-pill flex items-center gap-1.5">
-            <i data-lucide="download" class="w-3.5 h-3.5 text-[#16a34a]"></i>
-            <span>Baixar Boletim em PDF</span>
-          </a>
-        </div>
-      </div>
-    </div>
 
 
 
@@ -11202,14 +11122,14 @@
         if (turnosCol) { turnosCol.classList.remove('hidden', 'lg:col-span-12', 'w-full'); turnosCol.classList.add('lg:col-span-8'); }
         if (telCol) { telCol.classList.remove('hidden', 'lg:col-span-12', 'w-full'); telCol.classList.add('lg:col-span-4'); }
       }
-      var parentView = document.getElementById('view-tab-' + tabName);
-      if (parentView) {
-        parentView.querySelectorAll('.section-subnav-pill').forEach(function(p) {
-          var pAttr = p.getAttribute('onclick') || '';
-          if (pAttr.indexOf('showAllSubSections') !== -1) p.classList.add('active');
-          else p.classList.remove('active');
-        });
-      }
+      document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(function(item) {
+        var itemClick = item.getAttribute('onclick') || '';
+        if (itemClick.indexOf('showAllSubSections') !== -1 && itemClick.indexOf("'" + tabName + "'") !== -1) {
+          item.classList.add('active-subitem');
+        } else {
+          item.classList.remove('active-subitem');
+        }
+      });
       window.closeAllNavDropdowns();
       setTimeout(function() {
         window.dispatchEvent(new Event('resize'));
@@ -11224,8 +11144,26 @@
 
     window.handleNavTabClick = function(tabName, event) {
       if (event) event.stopPropagation();
+      var isMobile = window.innerWidth < 1024;
+      var isCurrentlyActive = (window.state && window.state.activeTab === tabName);
+
+      if (isMobile) {
+        var mobilePanel = document.getElementById('mobile-dropdown-panel');
+        var isPanelOpenForThisTab = mobilePanel && !mobilePanel.classList.contains('hidden') && mobilePanel.getAttribute('data-active-tab') === tabName;
+
+        if (isCurrentlyActive && isPanelOpenForThisTab) {
+          window.closeAllNavDropdowns();
+          return;
+        }
+
+        var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
+        window.switchSubSection(tabName, activeSub);
+        window.toggleNavDropdown(tabName, event);
+        return;
+      }
+
       window.closeAllNavDropdowns();
-      var activeSub = (window.state.activeSubSections && window.state.activeSubSections[tabName]) || window.SUB_SECTIONS_CONFIG[tabName]?.default;
+      var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
       window.switchSubSection(tabName, activeSub);
     };
 
@@ -11235,7 +11173,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=168"></script>
+  <script type="module" src="js/app.js?v=170"></script>
 
 
 
