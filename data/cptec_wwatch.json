@@ -2,8 +2,8 @@
   "fonte": "CPTEC/INPE - Modelo Numérico de Ondas WAVEWATCH III (WW3)",
   "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
   "modelo": "Wwatch",
-  "rodada": "2026-10-27 00z",
-  "atualizacao": "28/10/2026 08:36",
+  "rodada": "2026-10-28 00z",
+  "atualizacao": "28/10/2026 13:35",
   "produtos": {
     "alt_onda": "Altura Significativa e Direção das Ondas",
     "per_pico": "Período e Direção de Pico das Ondas",
@@ -23,56 +23,56 @@
   "arquivos": {
     "alt_onda_sud_000": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_000h.png",
-      "tamanho_bytes": 220710,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/27/00/Wwatch_alt_onda_sud_2026102700z_000z.png",
+      "tamanho_bytes": 219123,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/28/00/Wwatch_alt_onda_sud_2026102800z_000z.png",
       "ok": true
     },
     "alt_onda_sud_024": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_024h.png",
-      "tamanho_bytes": 220495,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/27/00/Wwatch_alt_onda_sud_2026102700z_024z.png",
+      "tamanho_bytes": 217749,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/28/00/Wwatch_alt_onda_sud_2026102800z_024z.png",
       "ok": true
     },
     "alt_onda_sud_048": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_048h.png",
-      "tamanho_bytes": 216964,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/27/00/Wwatch_alt_onda_sud_2026102700z_048z.png",
+      "tamanho_bytes": 214780,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/28/00/Wwatch_alt_onda_sud_2026102800z_048z.png",
       "ok": true
     },
     "alt_onda_sud_072": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_072h.png",
-      "tamanho_bytes": 214373,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/27/00/Wwatch_alt_onda_sud_2026102700z_072z.png",
+      "tamanho_bytes": 215444,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/28/00/Wwatch_alt_onda_sud_2026102800z_072z.png",
       "ok": true
     },
     "per_pico_sud_000": {
       "arquivo": "img/cptec/wwatch_per_pico_sud_000h.png",
-      "tamanho_bytes": 248575,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/27/00/Wwatch_per_pico_sud_2026102700z_000z.png",
+      "tamanho_bytes": 240442,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/28/00/Wwatch_per_pico_sud_2026102800z_000z.png",
       "ok": true
     },
     "per_pico_sud_024": {
       "arquivo": "img/cptec/wwatch_per_pico_sud_024h.png",
-      "tamanho_bytes": 241822,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/27/00/Wwatch_per_pico_sud_2026102700z_024z.png",
+      "tamanho_bytes": 242606,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/per_pico/2026/10/28/00/Wwatch_per_pico_sud_2026102800z_024z.png",
       "ok": true
     },
     "windsea_sud_000": {
       "arquivo": "img/cptec/wwatch_windsea_sud_000h.png",
-      "tamanho_bytes": 210017,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/27/00/Wwatch_windsea_sud_2026102700z_000z.png",
+      "tamanho_bytes": 196680,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/28/00/Wwatch_windsea_sud_2026102800z_000z.png",
       "ok": true
     },
     "windsea_sud_024": {
       "arquivo": "img/cptec/wwatch_windsea_sud_024h.png",
-      "tamanho_bytes": 198908,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/27/00/Wwatch_windsea_sud_2026102700z_024z.png",
+      "tamanho_bytes": 191802,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/windsea/2026/10/28/00/Wwatch_windsea_sud_2026102800z_024z.png",
       "ok": true
     },
     "alt_onda_bra_000": {
       "arquivo": "img/cptec/wwatch_alt_onda_bra_000h.png",
-      "tamanho_bytes": 260987,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/27/00/Wwatch_alt_onda_bra_2026102700z_000z.png",
+      "tamanho_bytes": 260700,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/10/28/00/Wwatch_alt_onda_bra_2026102800z_000z.png",
       "ok": true
     }
   },
