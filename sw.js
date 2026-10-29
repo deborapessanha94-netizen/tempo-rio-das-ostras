@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v105';
+const CACHE_NAME = 'meteo-ostras-v174';
 const STATIC_ASSETS = [
   './css/styles.css',
   './js/app.js',
@@ -77,7 +77,7 @@ self.addEventListener('fetch', event => {
   }
 
   // 2. Chamadas de dados oficiais (JSON ou APIs)
-  if (url.pathname.includes('/data/') || url.pathname.includes('/api/') || url.hostname.includes('open-meteo.com') || url.hostname.includes('rainviewer.com')) {
+  if (url.pathname.includes('/data/') || url.pathname.includes('/api/') || url.hostname.includes('open-meteo.com') || url.hostname.includes('rainviewer.com') || url.hostname.includes('weather.com')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {

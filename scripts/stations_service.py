@@ -141,6 +141,8 @@ def collect_stations_network():
             "rajada_max_24h": None,
             "umidade_atual": None,
             "pressao_atual": None,
+            "uv_atual": None,
+            "radiacao_solar": None,
             "chuva_1h": 0.0,
             "chuva_4h": 0.0,
             "chuva_12h": 0.0,
@@ -164,6 +166,8 @@ def collect_stations_network():
                 entry["rajada_atual"] = m.get("windGust")
                 entry["umidade_atual"] = obs.get("humidity")
                 entry["pressao_atual"] = m.get("pressure")
+                entry["uv_atual"] = safe_float(obs.get("uv"), 0.0) if obs.get("uv") is not None else None
+                entry["radiacao_solar"] = safe_float(obs.get("solarRadiation"), 0.0) if obs.get("solarRadiation") is not None else None
                 entry["ultima_leitura"] = obs.get("obsTimeLocal", "Hoje")
                 entry["online"] = True
                 
@@ -491,6 +495,11 @@ def collect_stations_network():
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
     max_st = pluviometric_stations[0] if pluviometric_stations else None
 
+    # UV Tempo Real de Referencia Municipal (Estacao IRIODA17 - Praia da Tartaruga)
+    irioda17_st = next((s for s in stations if s.get("codigo") == "IRIODA17"), None)
+    uv_irioda17 = irioda17_st.get("uv_atual") if irioda17_st and irioda17_st.get("uv_atual") is not None else 0.0
+    solar_irioda17 = irioda17_st.get("radiacao_solar") if irioda17_st and irioda17_st.get("radiacao_solar") is not None else 0.0
+
     dataset = {
         "atualizacao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "total_estacoes": len(all_stations),
@@ -498,13 +507,22 @@ def collect_stations_network():
         "total_hidrologicas": 1,
         "estacao_rio_jundia": inea_entry,
         "estacoes_pluviometricas": pluviometric_stations,
+        "uv_tempo_real": {
+            "estacao_referencia": "IRIODA17",
+            "nome_estacao": "Praia da Tartaruga (Weather Underground)",
+            "url_estacao": "https://www.wunderground.com/dashboard/pws/IRIODA17",
+            "uv": uv_irioda17,
+            "radiacao_solar": solar_irioda17,
+            "hora_leitura": irioda17_st.get("ultima_leitura") if irioda17_st else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        },
         "resumo": {
             "media_chuva_24h": media_24h,
             "maior_acumulado_24h": max_st.get("chuva_24h", 0.0) if max_st else 0.0,
             "maior_estacao_nome": max_st.get("nome_curto", "") if max_st else "",
             "rio_jundia_cota": inea_entry.get("nivel_rio", "1.59 m"),
             "rio_jundia_status": inea_entry.get("status_rio", "VIGILÂNCIA"),
-            "rio_jundia_pct": inea_entry.get("alerta_maximo_pct", 56.0)
+            "rio_jundia_pct": inea_entry.get("alerta_maximo_pct", 56.0),
+            "uv_atual": uv_irioda17
         },
         "portais_oficiais": {
             "cemaden_mapa": "https://mapainterativo.cemaden.gov.br/",

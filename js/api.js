@@ -31,7 +31,9 @@ export async function getRioDasOstrasWeatherData() {
     'wind_direction_10m',
     'wind_gusts_10m',
     'weather_code',
-    'cloud_cover'
+    'cloud_cover',
+    'uv_index',
+    'is_day'
   ].join(',');
 
   const hourlyParams = [
@@ -455,6 +457,43 @@ export async function getAcumuladosEstacoes() {
   } catch (e) {}
   return [];
 }
+
+/**
+ * Consulta diretamente o Índice UV e Radiação Solar em Tempo Real na estação
+ * PWS Weather Underground IRIODA17 (Praia da Tartaruga - Rio das Ostras),
+ * com fallback automático para IRIODA16 / IRIODA6 da rede municipal.
+ */
+export async function getRealtimeUvWunderground() {
+  const WU_API_KEY = 'ff90f212a6984a7390f212a698ea73cc';
+  const stations = ['IRIODA17', 'IRIODA16', 'IRIODA6'];
+  const ts = Date.now();
+
+  for (const stationId of stations) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
+      const url = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&apiKey=${WU_API_KEY}`;
+      const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+      clearTimeout(timeoutId);
+      if (!res.ok) continue;
+      const data = await res.json();
+      const obs = data?.observations?.[0];
+      if (obs && obs.uv !== undefined && obs.uv !== null) {
+        return {
+          stationId,
+          uv: Number(obs.uv),
+          solarRadiation: obs.solarRadiation !== undefined && obs.solarRadiation !== null ? Number(obs.solarRadiation) : null,
+          obsTimeLocal: obs.obsTimeLocal || null,
+          epoch: obs.epoch ? Number(obs.epoch) * 1000 : Date.now()
+        };
+      }
+    } catch (e) {
+      // Tenta próxima estação PWS da rede municipal
+    }
+  }
+  return null;
+}
+
 
 /**
  * Obtém os dados de balneabilidade das praias de Rio das Ostras (INEA)

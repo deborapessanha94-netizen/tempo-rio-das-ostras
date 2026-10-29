@@ -172,7 +172,9 @@ import {
 
 
 
-  getAcumuladosEstacoes, 
+  getAcumuladosEstacoes,
+  getRealtimeUvWunderground,
+  getLocalHourIndex, 
 
 
 
@@ -212,7 +214,7 @@ import {
 
 
 
-} from './api.js?v=63';
+} from './api.js?v=174';
 
 
 
@@ -1601,6 +1603,8 @@ async function loadAllApplicationData() {
 
 
 
+    syncLiveUvFromStation();
+
     // FASE 2: Carregamento Assíncrono em Segundo Plano dos feeds meteorológicos
 
 
@@ -2137,6 +2141,195 @@ export function getSunTimesRioDasOstras(date = new Date()) {
     sunset: `${String(ssh).padStart(2, '0')}:${String(ssm).padStart(2, '0')}`,
     duration: `${durHours}h ${String(durMin).padStart(2, '0')}m`
   };
+}
+
+/**
+ * Extrai hora e minuto atuais no fuso oficial de Rio das Ostras (America/Sao_Paulo)
+ */
+function getRioDasOstrasTimeParts() {
+  try {
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+    const parts = {};
+    fmt.formatToParts(new Date()).forEach(p => { parts[p.type] = p.value; });
+    const h = Number(parts.hour === '24' ? 0 : parts.hour);
+    const m = Number(parts.minute);
+    return { hour: h, minute: m, dec: h + m / 60, hhmm: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}` };
+  } catch (e) {
+    const now = new Date();
+    const h = now.getHours();
+    const m = now.getMinutes();
+    return { hour: h, minute: m, dec: h + m / 60, hhmm: `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}` };
+  }
+}
+
+/**
+ * Verifica se um timestamp local "YYYY-MM-DD HH:MM:SS" é recente (<= maxMinutes)
+ */
+function isReadingFresh(localTimeStr, maxMinutes = 45) {
+  if (!localTimeStr || typeof localTimeStr !== 'string') return false;
+  const m = localTimeStr.match(/^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?/);
+  if (!m) return false;
+  // Interpreta como horário de Brasília (-03:00)
+  const isoBrt = `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6] || '00'}-03:00`;
+  const ts = Date.parse(isoBrt);
+  if (isNaN(ts)) return false;
+  const ageMin = (Date.now() - ts) / 60000;
+  return ageMin >= -10 && ageMin <= maxMinutes;
+}
+
+/**
+ * Atualiza o Índice UV em Tempo Real na aba "Tempo Agora"
+ * Fonte Primária: Sensor ao vivo da Estação PWS IRIODA17 (Praia da Tartaruga - Weather Underground)
+ * Fonte Secundária: Snapshot recente (<45 min) de acumulados_estacoes.json (IRIODA17)
+ * Fonte Terciária: Open-Meteo em tempo real (current.uv_index / hourly.uv_index na hora local)
+ * Guarda Física: Entre o pôr do sol e o nascer do sol em Rio das Ostras, UV = 0 estritamente.
+ */
+export function updateRealtimeUv(weatherOpt = null) {
+  const chipUvVal = document.getElementById('hero-chip-uv-val');
+  const chipUvSub = document.getElementById('hero-chip-uv-sub');
+  if (!chipUvVal) return;
+
+  const weather = weatherOpt || state?.weatherData;
+  const tLocal = getRioDasOstrasTimeParts();
+
+  // 1. Verifica ciclo solar (Nascer / Pôr do Sol em Rio das Ostras)
+  let srDec = 5.15;
+  let ssDec = 18.0;
+  try {
+    const astroSun = typeof getSunTimesRioDasOstras === 'function' ? getSunTimesRioDasOstras() : null;
+    const srRaw = weather?.daily?.sunrise?.[0]?.split('T')?.[1] || astroSun?.sunrise;
+    const ssRaw = weather?.daily?.sunset?.[0]?.split('T')?.[1] || astroSun?.sunset;
+    if (srRaw && srRaw.includes(':')) {
+      const [sh, sm] = srRaw.split(':').map(Number);
+      if (!isNaN(sh) && !isNaN(sm)) srDec = sh + sm / 60;
+    }
+    if (ssRaw && ssRaw.includes(':')) {
+      const [eh, em] = ssRaw.split(':').map(Number);
+      if (!isNaN(eh) && !isNaN(em)) ssDec = eh + em / 60;
+    }
+  } catch (e) {}
+
+  const omIsNight = weather?.current?.is_day !== undefined ? Number(weather.current.is_day) === 0 : null;
+  const isNight = (tLocal.dec < srDec || tLocal.dec >= ssDec) || omIsNight === true;
+
+  // 2. Coleta leitura UV em tempo real por ordem de prioridade e frescor
+  let uvReal = null;
+  let uvSource = 'Estação IRIODA17 (Praia da Tartaruga)';
+
+  // Prioridade 1: Leitura ao vivo recém-consultada na API Weather Underground (IRIODA17)
+  if (state?.liveWuUv && state.liveWuUv.uv !== undefined && state.liveWuUv.uv !== null) {
+    const ageMs = Date.now() - (state.liveWuUv.epoch || 0);
+    if (ageMs <= 45 * 60 * 1000 || isReadingFresh(state.liveWuUv.obsTimeLocal, 45)) {
+      uvReal = Number(state.liveWuUv.uv);
+      uvSource = `Estação ${state.liveWuUv.stationId || 'IRIODA17'} (Weather Underground)`;
+    }
+  }
+
+  // Prioridade 2: Dataset sincronizado de estações (apenas se leitura tiver <= 45 min)
+  if (uvReal === null || isNaN(uvReal)) {
+    const uvMeta = state?.acumuladosDataset?.uv_tempo_real;
+    if (uvMeta && uvMeta.uv !== undefined && uvMeta.uv !== null && isReadingFresh(uvMeta.hora_leitura, 45)) {
+      uvReal = Number(uvMeta.uv);
+      uvSource = `Estação ${uvMeta.estacao_referencia || 'IRIODA17'} (Sincronizado)`;
+    } else {
+      const stList = Array.isArray(state?.acumuladosEstacoes) ? state.acumuladosEstacoes : [];
+      const st17 = stList.find(s => s.codigo === 'IRIODA17' || s.id === 'IRIODA17');
+      if (st17 && st17.uv_atual !== undefined && st17.uv_atual !== null && isReadingFresh(st17.ultima_leitura, 45)) {
+        uvReal = Number(st17.uv_atual);
+        uvSource = 'Estação IRIODA17 (Praia da Tartaruga)';
+      }
+    }
+  }
+
+  // Prioridade 3: Open-Meteo em tempo real (current.uv_index ou hourly.uv_index na hora exata)
+  if (uvReal === null || isNaN(uvReal)) {
+    if (weather?.current?.uv_index !== undefined && weather.current.uv_index !== null) {
+      uvReal = Number(weather.current.uv_index);
+      uvSource = 'Open-Meteo (Tempo Real)';
+    } else if (Array.isArray(weather?.hourly?.uv_index) && Array.isArray(weather?.hourly?.time)) {
+      const hIdx = typeof getLocalHourIndex === 'function' ? getLocalHourIndex(weather.hourly.time) : tLocal.hour;
+      if (weather.hourly.uv_index[hIdx] !== undefined && weather.hourly.uv_index[hIdx] !== null) {
+        uvReal = Number(weather.hourly.uv_index[hIdx]);
+        uvSource = 'Open-Meteo (Horário Atual)';
+      }
+    }
+  }
+
+  // 3. Regra física: À noite (após pôr do sol ou antes do nascer), o Índice UV é 0
+  if (isNight) {
+    uvReal = 0.0;
+  } else if (uvReal === null || isNaN(uvReal)) {
+    // Estimativa astronômica horária caso todas as redes estejam indisponíveis durante o dia
+    const solarNoon = (srDec + ssDec) / 2;
+    const halfDay = Math.max(1, (ssDec - srDec) / 2);
+    const dist = Math.abs(tLocal.dec - solarNoon);
+    const maxDaily = Number(weather?.daily?.uv_index_max?.[0] || 8);
+    uvReal = dist >= halfDay ? 0.0 : Math.max(0, maxDaily * Math.pow(Math.cos((dist / halfDay) * (Math.PI / 2)), 1.3));
+    uvSource = 'Estimativa Astronômica Horária';
+  }
+
+  uvReal = Math.max(0, uvReal);
+  const roundedUv = Math.round(uvReal);
+
+  // 4. Escala Oficial da OMS (Organização Mundial da Saúde)
+  let uvDesc = 'Baixo';
+  let uvSub = 'Risco baixo agora';
+
+  if (isNight) {
+    uvDesc = 'Baixo';
+    uvSub = 'Sem radiação (Noite)';
+  } else if (roundedUv <= 2) {
+    uvDesc = 'Baixo';
+    uvSub = roundedUv === 0 ? 'Sem risco solar agora' : 'Risco baixo • FPS básico';
+  } else if (roundedUv <= 5) {
+    uvDesc = 'Moderado';
+    uvSub = 'Use filtro FPS 30+';
+  } else if (roundedUv <= 7) {
+    uvDesc = 'Alto';
+    uvSub = 'FPS 30+ e óculos';
+  } else if (roundedUv <= 10) {
+    uvDesc = 'Muito Alto';
+    uvSub = 'Evite sol • FPS 50+';
+  } else {
+    uvDesc = 'Extremo';
+    uvSub = 'Risco extremo • Sombra';
+  }
+
+  chipUvVal.textContent = `${roundedUv} - ${uvDesc}`;
+  if (chipUvSub) {
+    chipUvSub.textContent = uvSub;
+  }
+
+  const uvWrap = chipUvVal.closest('.metric-chip');
+  if (uvWrap) {
+    const uvExact = Number.isFinite(uvReal) ? uvReal.toFixed(1) : String(roundedUv);
+    uvWrap.setAttribute(
+      'title',
+      `Índice UV Agora: ${uvExact} (${uvDesc})\nFonte: ${uvSource}\nHorário Local: ${tLocal.hhmm} • Clique para abrir estação IRIODA17`
+    );
+  }
+}
+window.updateRealtimeUv = updateRealtimeUv;
+
+/**
+ * Dispara atualização assíncrona direta da estação IRIODA17 no navegador
+ */
+async function syncLiveUvFromStation() {
+  try {
+    const wuData = await getRealtimeUvWunderground();
+    if (wuData) {
+      state.liveWuUv = wuData;
+      updateRealtimeUv();
+    }
+  } catch (e) {}
 }
 
 function renderDashboardUI(meta, rows, weather) {
@@ -2784,36 +2977,8 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-  // Atualiza Índice UV
-
-
-
-  if (chipUvVal) {
-
-
-
-    const uvVal = weather?.daily?.uv_index_max?.[0] !== undefined ? Math.round(weather.daily.uv_index_max[0]) : 7;
-
-
-
-    const uvDesc = uvVal >= 8 ? 'Muito Alto' : (uvVal >= 6 ? 'Alto' : (uvVal >= 3 ? 'Moderado' : 'Baixo'));
-
-
-
-    chipUvVal.textContent = `${uvVal} - ${uvDesc}`;
-
-
-
-  }
-
-
-
-  if (chipUvSub) {
-
-
-
-    chipUvSub.textContent = 'FPS recomendado';
-  }
+  // Atualiza Índice UV em Tempo Real (IRIODA17 + Open-Meteo Current)
+  updateRealtimeUv(weather);
 
   // Atualiza Estação do Ano Vigente (Hemisfério Sul)
   const heroEstacaoTxt = document.getElementById('hero-estacao-txt');
@@ -6657,7 +6822,7 @@ function setupPWA() {
 
 
 
-    navigator.serviceWorker.register('./sw.js?v=89').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=173').catch(() => {});
 
 
 
@@ -6699,6 +6864,7 @@ function startAutoSync() {
     if (countdownSeconds <= 0) {
       countdownSeconds = REFRESH_INTERVAL_SECONDS;
       loadAllApplicationData();
+      syncLiveUvFromStation();
       if (typeof window.refreshRioHourlyData === 'function') {
         window.refreshRioHourlyData();
       }
