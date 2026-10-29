@@ -4,7 +4,7 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-10-28 21:51:01",
+  "data_coleta": "2026-10-29 00:00:48",
   "bulletin_info": {
     "disponivel": false,
     "arquivo": null,
@@ -14,7 +14,7 @@
   },
   "previsao_rh8": {
     "hoje": {
-      "data": "28/10/2026",
+      "data": "29/10/2026",
       "faixa_chuva_mm": "1 a 10 mm",
       "temp_max": 29,
       "temp_min": 21,
