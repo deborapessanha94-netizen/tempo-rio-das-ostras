@@ -255,7 +255,7 @@ def collect_all_stations():
         "chuva_36h": 15.1,
         "chuva_48h": 23.1,
         "chuva_96h": 37.4,
-        "nivel_rio": "1.91 m",
+        "nivel_rio": "1.39 m",
         "status_rio": "VIGILÂNCIA",
         "ultima_leitura": "Hoje",
         "online": True
@@ -275,14 +275,14 @@ def collect_all_stations():
                     last_valid_j = cells
                     break
 
-        nivel_final = nivel_tile if nivel_tile else (last_valid_j[7] if last_valid_j else '1.91')
+        nivel_final = nivel_tile if nivel_tile else (last_valid_j[7] if last_valid_j else '1.39')
         hora_final = (last_valid_j[0] if last_valid_j else f"Hoje {hora_tile}") if hora_tile else (last_valid_j[0] if last_valid_j else 'Hoje')
         ch1 = safe_float(last_valid_j[2] if last_valid_j else '0.2', 0.0)
         ch4 = safe_float(last_valid_j[3] if last_valid_j else '0.4', 0.0)
         ch24 = safe_float(last_valid_j[4] if last_valid_j else '5.6', 0.0)
         ch96 = safe_float(last_valid_j[5] if last_valid_j else '37.4', 0.0)
 
-        nv_f = safe_float(nivel_final, 1.91)
+        nv_f = safe_float(nivel_final, 1.39)
         if nv_f >= 2.84: st_j = "ALERTA MÁXIMO"
         elif nv_f >= 2.27: st_j = "ALERTA"
         elif nv_f >= 1.99: st_j = "ATENÇÃO"
@@ -478,7 +478,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
 
     # Localiza dados do Jundiá coletados
     jundia_entry = next((s for s in stations if 'jundi' in s.get('nome', '').lower() or '2241036' in str(s.get('codigo', ''))), None)
-    jundia_nivel = jundia_entry.get('nivel_rio', '1.91 m') if jundia_entry else '1.91 m'
+    jundia_nivel = jundia_entry.get('nivel_rio', '1.39 m') if jundia_entry else '1.39 m'
     jundia_status = jundia_entry.get('status_rio', 'VIGILÂNCIA') if jundia_entry else 'VIGILÂNCIA'
     tem_aviso_mar = bool(marinha_info and marinha_info.get('aviso_ativo'))
 

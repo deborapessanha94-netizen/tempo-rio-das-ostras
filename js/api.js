@@ -280,8 +280,11 @@ export function parseJundiaDirectHtml(htmlText) {
       }
     }
 
-    const nivelFinal = nivelTile || lastValid?.nivel_rio || '1.91';
-    const nivelFloat = parseFloat(nivelFinal.replace(',', '.')) || 1.91;
+    const nivelFinal = (nivelTile || lastValid?.nivel_rio || '').trim();
+    const nivelFloat = parseFloat(nivelFinal.replace(',', '.'));
+    if (!nivelFinal || isNaN(nivelFloat) || nivelFloat < 0.05 || nivelFloat > 6.50) {
+      return null;
+    }
     const horaFinal = lastValid?.data_hora || (horaTile ? `Hoje ${horaTile}` : 'Hoje');
 
     let status = 'VIGILÂNCIA';
@@ -322,11 +325,43 @@ export function parseJundiaDirectHtml(htmlText) {
  * Obtém os dados telemétricos das réguas de cheias e rios de Rio das Ostras e Macaé (INEA)
  * Em tempo real oficial com multi-nível de redundância
  */
+const GITHUB_LIVE_DATA_BASE = 'https://raw.githubusercontent.com/deborapessanha94-netizen/tempo-rio-das-ostras/main/data';
+
+async function fetchLiveCloudOrLocalJson(fileName, fallbackValue = null) {
+  const ts = Date.now();
+  const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  // Em produção (ex: Vercel), busca primeiro o snapshot em tempo real sincronizado a cada 5 min no GitHub (CORS: *)
+  if (!isLocal) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const cloudUrl = `${GITHUB_LIVE_DATA_BASE}/${fileName}?t=${Math.floor(ts / 60000)}`;
+      const cloudRes = await fetch(cloudUrl, { signal: controller.signal, cache: 'no-store' });
+      clearTimeout(timeoutId);
+      if (cloudRes.ok) {
+        return await cloudRes.json();
+      }
+    } catch (e) {
+      // Fallback imediato para o arquivo estático local do domínio
+    }
+  }
+
+  try {
+    const localRes = await fetch(`./data/${fileName}?t=${ts}`, { cache: 'no-store' });
+    if (localRes.ok) {
+      return await localRes.json();
+    }
+  } catch (e) {}
+
+  return fallbackValue;
+}
+
 export async function getIneaCheias() {
   const ts = Date.now();
   const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-  // 1. Tenta API local do servidor Python (se estiver em localhost)
+  // 1. Tenta API local do servidor Python (se estiver em localhost com backend ativo)
   if (isLocal) {
     try {
       const res = await fetch(`/api/inea/cheias?t=${ts}`, { cache: 'no-store' });
@@ -337,17 +372,11 @@ export async function getIneaCheias() {
     } catch (error) {}
   }
 
-  // 2. Consulta ultrarrápida do snapshot sincronizado na nuvem (GitHub Pages) - INSTANTÂNEO (<50ms)
-  let snapshotData = null;
-  try {
-    const dataRes = await fetch(`./data/inea_cheias.json?t=${ts}`, { cache: 'no-store' });
-    if (dataRes.ok) {
-      snapshotData = await dataRes.json();
-      if (Array.isArray(snapshotData) && snapshotData.length > 0) {
-        return snapshotData;
-      }
-    }
-  } catch (e) {}
+  // 2. Consulta snapshot sincronizado na nuvem a cada 5 min (GitHub raw em produção / ./data em localhost)
+  const snapshotData = await fetchLiveCloudOrLocalJson('inea_cheias.json', null);
+  if (Array.isArray(snapshotData) && snapshotData.length > 0) {
+    return snapshotData;
+  }
 
   // 3. Fallback se não houver snapshot: consulta direta via proxy com timeout curto
   try {
@@ -426,36 +455,21 @@ export function getLocalHourIndex(times) {
  * Obtém os dados tabulados por turnos do Boletim Meteorológico Operacional Oficial
  */
 export async function getBoletimOficialData() {
-  const ts = Date.now();
-  try {
-    const res = await fetch(`./data/boletim_oficial.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return [];
+  return await fetchLiveCloudOrLocalJson('boletim_oficial.json', []);
 }
 
 /**
  * Obtém os metadados, sinopse, glossário e PLANCON do Boletim Meteorológico
  */
 export async function getBoletimMetadata() {
-  const ts = Date.now();
-  try {
-    const res = await fetch(`./data/boletim_metadata.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return null;
+  return await fetchLiveCloudOrLocalJson('boletim_metadata.json', null);
 }
 
 /**
  * Obtém a rede de monitoramento de estações com acumulados de 1h a 96h
  */
 export async function getAcumuladosEstacoes() {
-  const ts = Date.now();
-  try {
-    const res = await fetch(`./data/acumulados_estacoes.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return [];
+  return await fetchLiveCloudOrLocalJson('acumulados_estacoes.json', []);
 }
 
 /**
@@ -572,10 +586,5 @@ export async function getTabuaMares() {
  * Obtém os dados telemétricos hora a hora dos últimos 10 dias da estação Rio Jundiá (INEA 2241036)
  */
 export async function getIneaJundia10d() {
-  const ts = Date.now();
-  try {
-    const res = await fetch(`./data/inea_jundia_10d.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return null;
+  return await fetchLiveCloudOrLocalJson('inea_jundia_10d.json', null);
 }

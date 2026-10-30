@@ -117,6 +117,47 @@ def sync_inmet_alerts():
         print(f"Aviso ao sincronizar avisos INMET: {e}")
 
 def sync_inea_cheias():
+    try:
+        from scripts.jundia_telemetry import fetch_jundia_realtime
+    except ImportError:
+        from jundia_telemetry import fetch_jundia_realtime
+
+    j_live = fetch_jundia_realtime(DATA_DIR, save_10d=True)
+    stations = []
+    if j_live:
+        c1 = j_live.get('chuva_1h', 0.0)
+        c4 = j_live.get('chuva_4h', 0.0)
+        c24 = j_live.get('chuva_24h', 0.0)
+        c96 = j_live.get('chuva_96h', 0.0)
+        c6 = round(c4 + (c24 - c4) * 0.20, 1) if c24 >= c4 else c4
+        c12 = round(c4 + (c24 - c4) * 0.55, 1) if c24 >= c4 else c4
+        c36 = round(c24 + (c96 - c24) * 0.25, 1) if c96 >= c24 else c24
+        c48 = round(c24 + (c96 - c24) * 0.50, 1) if c96 >= c24 else c24
+        stations.append({
+            'municipio': 'Rio das Ostras',
+            'curso_dagua': 'rio Jundiá',
+            'nome_estacao': 'Jundiá',
+            'codigo': '2241036',
+            'ultima_leitura': j_live['ultima_leitura'],
+            'status': j_live['status_upper'],
+            'tendencia': j_live['tendencia'],
+            'chuva_1h': f"{c1:.1f}",
+            'chuva_4h': f"{c4:.1f}",
+            'chuva_6h': f"{c6:.1f}",
+            'chuva_12h': f"{c12:.1f}",
+            'chuva_24h': f"{c24:.1f}",
+            'chuva_36h': f"{c36:.1f}",
+            'chuva_48h': f"{c48:.1f}",
+            'chuva_96h': f"{c96:.1f}",
+            'chuva_30d': f"{j_live.get('chuva_30d', 0.0):.1f}",
+            'nivel_rio': j_live['nivel_dot'],
+            'cota_atencao': '1.99 m',
+            'cota_alerta': '2.27 m',
+            'cota_transborda': '2.84 m',
+            'porcentagem_calha': j_live['pct_calha'],
+            'eh_rio_das_ostras': True
+        })
+
     url = "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php"
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
@@ -126,15 +167,18 @@ def sync_inea_cheias():
                 html_doc = raw_bytes.decode('utf-8')
             except Exception:
                 html_doc = raw_bytes.decode('latin1', errors='replace')
-        
+
         rows = re.findall(r'<tr[^>]*>.*?</tr>', html_doc, re.DOTALL)
-        stations = []
         for r in rows:
             cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
             if len(cells) >= 14:
                 muni = cells[0].strip()
                 curso = cells[1].strip()
                 estacao = cells[2].strip()
+                eh_ostras = 'Ostras' in muni or 'Jundi' in curso or 'Jundi' in estacao
+                if eh_ostras and j_live:
+                    continue
+
                 leitura = cells[4].strip()
                 status = cells[5].strip()
                 chuva_1h = cells[7].strip()
@@ -143,10 +187,7 @@ def sync_inea_cheias():
                 chuva_96h = cells[10].strip()
                 chuva_30d = cells[11].strip()
                 nivel_rio = cells[12].strip()
-                
-                eh_ostras = 'Ostras' in muni or 'Jundi' in curso or 'Jundi' in estacao
 
-                # Cálculo de intervalos hidrológicos (1, 4, 6, 12, 24, 36 e 48 horas)
                 try: c1 = float(chuva_1h.replace(',', '.'))
                 except: c1 = 0.0
                 try: c4 = float(chuva_4h.replace(',', '.'))
@@ -214,35 +255,46 @@ def sync_inea_cheias():
                     'porcentagem_calha': porcentagem_calha,
                     'eh_rio_das_ostras': eh_ostras
                 })
+    except Exception as e:
+        print(f"Aviso ao sincronizar tabela regional INEA cheias: {e}")
+
+    if stations:
         with open(os.path.join(DATA_DIR, 'inea_cheias.json'), 'w', encoding='utf-8') as f:
             json.dump(stations, f, ensure_ascii=False, indent=2)
-        print("OK: inea_cheias.json atualizado")
-    except Exception as e:
-        print(f"Aviso ao sincronizar INEA cheias: {e}")
+        print("OK: inea_cheias.json atualizado com telemetria real do Rio Jundiá")
 
 def update_live_jundia_kpi(stations):
     """
-    Atualiza apenas a cota ao vivo do Rio Jundiá nos metadados,
-    preservando rigorosamente a previsão meteorológica oficial elaborada pela meteorologia.
+    Sincroniza a cota, status, tendência, ocupação de calha e margem do Rio Jundiá
+    em todos os blocos de boletim_metadata.json (KPIs, Panorama Sinótico Geral e Resumos),
+    preservando rigorosamente a previsão meteorológica oficial.
     """
     meta_path = os.path.join(DATA_DIR, 'boletim_metadata.json')
     if not os.path.exists(meta_path):
         return
     try:
-        jundia = next((s for s in stations if s.get('eh_rio_das_ostras') or 'jundi' in s.get('nome_estacao', '').lower()), None)
-        if not jundia:
+        try:
+            from scripts.jundia_telemetry import fetch_jundia_realtime, classify_jundia_level, patch_metadata_with_jundia
+        except ImportError:
+            from jundia_telemetry import fetch_jundia_realtime, classify_jundia_level, patch_metadata_with_jundia
+
+        j_info = fetch_jundia_realtime(DATA_DIR, save_10d=False)
+        if not j_info and stations:
+            jundia = next((s for s in stations if s.get('eh_rio_das_ostras') or 'jundi' in s.get('nome_estacao', '').lower()), None)
+            if jundia and jundia.get('nivel_rio'):
+                j_info = classify_jundia_level(jundia.get('nivel_rio'), 0.0)
+
+        if not j_info:
             return
+
         with open(meta_path, 'r', encoding='utf-8') as f:
             metadata = json.load(f)
-        
-        nivel_val = jundia.get('nivel_rio', '2,40')
-        if 'kpis' in metadata:
-            metadata['kpis']['jundia_nivel'] = f"{nivel_val} m"
-            metadata['kpis']['jundia_status'] = jundia.get('status', 'ALERTA MÁXIMO')
-        
+
+        patch_metadata_with_jundia(metadata, j_info)
+
         with open(meta_path, 'w', encoding='utf-8') as f:
             json.dump(metadata, f, ensure_ascii=False, indent=2)
-        print(f"OK: Cota ao vivo do Jundiá atualizada para {nivel_val} m em boletim_metadata.json")
+        print(f"OK: Cota ao vivo do Jundiá ({j_info['nivel_dot']} m - {j_info['status_title']}) sincronizada no Panorama Sinótico e KPIs")
     except Exception as e:
         print(f"Aviso ao atualizar cota ao vivo: {e}")
 

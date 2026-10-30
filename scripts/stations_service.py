@@ -288,51 +288,39 @@ def collect_stations_network():
         "chuva_36h": 0.0,
         "chuva_48h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_rio": "1.59 m",
+        "nivel_rio": "1.39 m",
         "cota_transbordo": "2.84 m",
         "cota_atencao": "1.99 m",
         "cota_alerta": "2.27 m",
-        "alerta_maximo_pct": 56.0,
+        "alerta_maximo_pct": 49.0,
         "status_rio": "VIGILÂNCIA",
+        "tendencia_rio": "Estável",
         "ultima_leitura": "Hoje",
         "online": True
     }
 
     try:
-        full_json = fetch_url_data("https://alertadecheias.com.br/stations/2241036/full", timeout=10, is_json=True)
-        if full_json and isinstance(full_json, dict):
-            nivel = safe_float(full_json.get("NIVEL_UTIMO"), 1.59)
-            pct = safe_float(full_json.get("ALERTA_MAXIMO_PCT"), 56.0)
-            cota_estacao = safe_float(full_json.get("COTA_ESTACAO"), 2.84)
-            inea_entry["nivel_rio"] = f"{nivel:.2f} m"
-            inea_entry["cota_transbordo"] = f"{cota_estacao:.2f} m"
-            inea_entry["alerta_maximo_pct"] = round(pct, 1)
+        try:
+            from scripts.jundia_telemetry import fetch_jundia_realtime
+        except ImportError:
+            from jundia_telemetry import fetch_jundia_realtime
+
+        j_live = fetch_jundia_realtime(DATA_DIR, save_10d=True)
+        if j_live:
+            inea_entry["nivel_rio"] = f"{j_live['nivel_dot']} m"
+            inea_entry["cota_transbordo"] = "2.84 m"
+            inea_entry["alerta_maximo_pct"] = float(j_live["pct_calha"])
+            inea_entry["status_rio"] = j_live["status_upper"]
+            inea_entry["tendencia_rio"] = j_live["tendencia"]
+            inea_entry["ultima_leitura"] = j_live["ultima_leitura"]
             inea_entry["chuva_1h"] = None
             inea_entry["chuva_4h"] = None
             inea_entry["chuva_24h"] = None
             inea_entry["chuva_96h"] = None
-
-
-
-            inea_entry["ultima_leitura"] = full_json.get("DATA", "Hoje")
-            if nivel >= 2.27:
-                inea_entry["status_rio"] = "ALERTA"
-            elif nivel >= 1.99:
-                inea_entry["status_rio"] = "ATENÇÃO"
-            else:
-                inea_entry["status_rio"] = "VIGILÂNCIA"
-
-        # Coleta também o histórico telemétrico de 10 dias / hora a hora
-        try:
-            ten_days_json = fetch_url_data("https://alertadecheias.com.br/stations/2241036/10d", timeout=12, is_json=True)
-            if ten_days_json and isinstance(ten_days_json, dict) and "dados" in ten_days_json:
-                with open(DATA_DIR / "inea_jundia_10d.json", "w", encoding="utf-8") as f_10d:
-                    json.dump(ten_days_json, f_10d, ensure_ascii=False, indent=2)
-                # Anexa as últimas 24 leituras diretamente no objeto para carregamento rápido
-                inea_entry["historico_recente"] = ten_days_json.get("dados", [])[-24:]
-        except Exception as e_10d:
-            print(f"   [AVISO] Erro ao sincronizar histórico 10d do Rio Jundiá: {e_10d}")
-
+            inea_entry["chuva_pluvio_24h"] = j_live.get("chuva_24h", 0.0)
+            inea_entry["chuva_pluvio_96h"] = j_live.get("chuva_96h", 0.0)
+            if j_live.get("historico_recente"):
+                inea_entry["historico_recente"] = j_live["historico_recente"]
     except Exception as e:
         print(f"   [AVISO] Erro ao consultar API alertadecheias.com.br: {e}")
 
@@ -519,9 +507,10 @@ def collect_stations_network():
             "media_chuva_24h": media_24h,
             "maior_acumulado_24h": max_st.get("chuva_24h", 0.0) if max_st else 0.0,
             "maior_estacao_nome": max_st.get("nome_curto", "") if max_st else "",
-            "rio_jundia_cota": inea_entry.get("nivel_rio", "1.59 m"),
+            "rio_jundia_cota": inea_entry.get("nivel_rio", "1.39 m"),
             "rio_jundia_status": inea_entry.get("status_rio", "VIGILÂNCIA"),
-            "rio_jundia_pct": inea_entry.get("alerta_maximo_pct", 56.0),
+            "rio_jundia_pct": inea_entry.get("alerta_maximo_pct", 49.0),
+            "rio_jundia_tendencia": inea_entry.get("tendencia_rio", "Estável"),
             "uv_atual": uv_irioda17
         },
         "portais_oficiais": {

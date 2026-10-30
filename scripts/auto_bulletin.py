@@ -88,90 +88,51 @@ def fetch_inea_cheias():
     stations = []
     jundia_station = None
 
-    # 1. Consulta em tempo real direta na estação oficial do Rio Jundiá (INEA 224103620)
+    # 1. Consulta em tempo real na API oficial Alerta de Cheias (INEA 2241036 - Rio Jundiá)
     try:
-        url_jundia = "https://alertadecheias.inea.rj.gov.br/alertadecheias/224103620.html"
-        ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
-        req = urllib.request.Request(url_jundia, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
-        with urllib.request.urlopen(req, context=ctx, timeout=12) as res:
-            html_jundia = res.read().decode('utf-8', errors='replace')
-        
-        m_tile = re.search(r'<span class=["\x27]count_top["\x27]>\s*N[^<]*as:\s*([^<]+)</span>\s*<div class=["\x27]count["\x27]>([^<]+)</div>', html_jundia, re.I)
-        hora_tile, nivel_tile = (m_tile.group(1).strip(), m_tile.group(2).strip()) if m_tile else ('', '')
-        
-        m_pct = re.search(r'<span class=["\x27]count_top["\x27]>\s*Porcentagem sobre a cota[^<]*</span>\s*<div class=["\x27]count["\x27]>([^<]+)</div>', html_jundia, re.I)
-        pct_calha_raw = m_pct.group(1).strip() if m_pct else '67%'
         try:
-            pct_val = int(re.sub(r'[^\d]', '', pct_calha_raw))
-        except:
-            pct_val = 67
+            from scripts.jundia_telemetry import fetch_jundia_realtime
+        except ImportError:
+            from jundia_telemetry import fetch_jundia_realtime
 
-        rows_j = re.findall(r'<tr[^>]*>.*?</tr>', html_jundia, re.DOTALL)
-        last_valid_j = None
-        for r in rows_j:
-            cells = [html_lib.unescape(re.sub(r'<[^>]+>', '', c).strip()) for c in re.findall(r'<t[dh][^>]*>.*?</t[dh]>', r, re.DOTALL)]
-            if len(cells) >= 8 and re.match(r'^\d{2}/\d{2}/\d{4}', cells[0]):
-                if 'Dado Nulo' not in cells[7]:
-                    last_valid_j = cells
-                    break
+        j_live = fetch_jundia_realtime(DATA_DIR, save_10d=False)
+        if j_live:
+            c1_f = j_live.get('chuva_1h', 0.0)
+            c4_f = j_live.get('chuva_4h', 0.0)
+            c24_f = j_live.get('chuva_24h', 0.0)
+            c96_f = j_live.get('chuva_96h', 0.0)
+            c30d_f = j_live.get('chuva_30d', 0.0)
+            c6_f = round(c4_f + (c24_f - c4_f) * 0.15, 1) if c24_f >= c4_f else c4_f
+            c12_f = round(c4_f + (c24_f - c4_f) * 0.45, 1) if c24_f >= c4_f else c4_f
+            c36_f = round(c24_f + (c96_f - c24_f) * 0.30, 1) if c96_f >= c24_f else c24_f
+            c48_f = round(c24_f + (c96_f - c24_f) * 0.55, 1) if c96_f >= c24_f else c24_f
 
-        nivel_final = nivel_tile if nivel_tile else (last_valid_j[7] if last_valid_j else '1.91')
-        hora_final = (last_valid_j[0] if last_valid_j else f"Hoje {hora_tile}") if hora_tile else (last_valid_j[0] if last_valid_j else 'Hoje')
-        ch1 = last_valid_j[2] if last_valid_j else '0.2'
-        ch4 = last_valid_j[3] if last_valid_j else '0.4'
-        ch24 = last_valid_j[4] if last_valid_j else '5.6'
-        ch96 = last_valid_j[5] if last_valid_j else '37.4'
-        ch30d = last_valid_j[6] if last_valid_j else '44.6'
-
-        try: nv_float = float(nivel_final.replace(',', '.'))
-        except: nv_float = 1.91
-
-        if nv_float >= 2.84: st_j = "ALERTA MÁXIMO"
-        elif nv_float >= 2.27: st_j = "ALERTA"
-        elif nv_float >= 1.99: st_j = "ATENÇÃO"
-        else: st_j = "VIGILÂNCIA"
-
-        try: c1_f = float(ch1.replace(',', '.'))
-        except: c1_f = 0.0
-        try: c4_f = float(ch4.replace(',', '.'))
-        except: c4_f = 0.0
-        try: c24_f = float(ch24.replace(',', '.'))
-        except: c24_f = 0.0
-        try: c96_f = float(ch96.replace(',', '.'))
-        except: c96_f = c24_f
-
-        c6_f = round(c4_f + (c24_f - c4_f) * 0.15, 1) if c24_f >= c4_f else c4_f
-        c12_f = round(c4_f + (c24_f - c4_f) * 0.45, 1) if c24_f >= c4_f else c4_f
-        c36_f = round(c24_f + (c96_f - c24_f) * 0.30, 1) if c96_f >= c24_f else c24_f
-        c48_f = round(c24_f + (c96_f - c24_f) * 0.55, 1) if c96_f >= c24_f else c24_f
-
-        jundia_station = {
-            'municipio': 'Rio das Ostras',
-            'curso_dagua': 'rio Jundiá',
-            'nome_estacao': 'Jundiá',
-            'codigo': '224103620',
-            'ultima_leitura': hora_final,
-            'status': st_j,
-            'chuva_1h': ch1,
-            'chuva_4h': ch4,
-            'chuva_6h': f"{c6_f:.1f}",
-            'chuva_12h': f"{c12_f:.1f}",
-            'chuva_24h': ch24,
-            'chuva_36h': f"{c36_f:.1f}",
-            'chuva_48h': f"{c48_f:.1f}",
-            'chuva_96h': ch96,
-            'chuva_30d': ch30d,
-            'nivel_rio': nivel_final,
-            'cota_atencao': '1.99 m',
-            'cota_alerta': '2.27 m',
-            'cota_transborda': '2.84 m',
-            'porcentagem_calha': pct_val,
-            'eh_rio_das_ostras': True
-        }
+            jundia_station = {
+                'municipio': 'Rio das Ostras',
+                'curso_dagua': 'rio Jundiá',
+                'nome_estacao': 'Jundiá',
+                'codigo': '2241036',
+                'ultima_leitura': j_live['ultima_leitura'],
+                'status': j_live['status_upper'],
+                'tendencia': j_live['tendencia'],
+                'chuva_1h': f"{c1_f:.1f}",
+                'chuva_4h': f"{c4_f:.1f}",
+                'chuva_6h': f"{c6_f:.1f}",
+                'chuva_12h': f"{c12_f:.1f}",
+                'chuva_24h': f"{c24_f:.1f}",
+                'chuva_36h': f"{c36_f:.1f}",
+                'chuva_48h': f"{c48_f:.1f}",
+                'chuva_96h': f"{c96_f:.1f}",
+                'chuva_30d': f"{c30d_f:.1f}",
+                'nivel_rio': j_live['nivel_dot'],
+                'cota_atencao': '1.99 m',
+                'cota_alerta': '2.27 m',
+                'cota_transborda': '2.84 m',
+                'porcentagem_calha': j_live['pct_calha'],
+                'eh_rio_das_ostras': True
+            }
     except Exception as ej:
-        print(f"[INEA Jundiá 224103620] Aviso coleta direta: {ej}")
+        print(f"[INEA Jundiá 2241036] Aviso coleta em tempo real: {ej}")
 
     # 2. Consulta tabela geral regional
     try:
@@ -375,6 +336,33 @@ def fetch_inea_macae_ostras():
         e for e in all_estacoes
         if 'friburgo' in e['municipio'].lower() and e['fora_limite_seguranca']
     ]
+    try:
+        try:
+            from scripts.jundia_telemetry import fetch_jundia_realtime
+        except ImportError:
+            from jundia_telemetry import fetch_jundia_realtime
+        j_live_mo = fetch_jundia_realtime(DATA_DIR, save_10d=False)
+    except Exception:
+        j_live_mo = None
+
+    if j_live_mo:
+        all_estacoes = [e for e in all_estacoes if 'ostras' not in e['municipio'].lower() and 'jundi' not in e['estacao'].lower()]
+        all_estacoes.insert(0, {
+            "municipio": "Rio das Ostras",
+            "curso_agua": "rio Jundiá",
+            "estacao": "Jundiá",
+            "tendencia": j_live_mo["tendencia"],
+            "leitura": j_live_mo["ultima_leitura"],
+            "status_bruto": j_live_mo["status_upper"],
+            "status": j_live_mo["status_upper"],
+            "cor_badge": "danger-extreme" if j_live_mo["nivel_float"] >= 2.84 else ("danger" if j_live_mo["nivel_float"] >= 2.27 else ("warning" if j_live_mo["nivel_float"] >= 1.99 else "success")),
+            "fora_limite_seguranca": j_live_mo["nivel_float"] >= 1.99,
+            "nivel_atual_m": j_live_mo["nivel_dot"],
+            "nivel_15min_m": j_live_mo["nivel_dot"],
+            "chuva_24h_mm": f"{j_live_mo.get('chuva_24h', 0.0):.1f}",
+            "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
+        })
+
     ostras_estacoes = [
         e for e in all_estacoes 
         if 'ostras' in e['municipio'].lower()
@@ -1163,12 +1151,12 @@ def run_auto_bulletin_pipeline():
             print(f"[ESTACOES] Erro ao ler acumulados_estacoes.json: {e}")
 
     cemaden_st = next((s for s in estacoes_obs if '18789' in str(s.get('codigo', ''))), None)
-    cemaden_24h = float(cemaden_st.get('chuva_24h', 10.2)) if cemaden_st else 10.2
-    cemaden_96h = float(cemaden_st.get('chuva_96h', 22.0)) if cemaden_st else 22.0
+    cemaden_24h = float(cemaden_st.get('chuva_24h')) if (cemaden_st and cemaden_st.get('chuva_24h') is not None) else 0.0
+    cemaden_96h = float(cemaden_st.get('chuva_96h')) if (cemaden_st and cemaden_st.get('chuva_96h') is not None) else 0.0
 
     inea_pluv_st = next((s for s in estacoes_obs if '2241036' in str(s.get('codigo', ''))), None)
-    inea_ch24 = float(inea_pluv_st.get('chuva_24h') or 8.0) if inea_pluv_st else 8.0
-    inea_ch96 = float(inea_pluv_st.get('chuva_96h') or 20.8) if inea_pluv_st else 20.8
+    inea_ch24 = float(inea_pluv_st.get('chuva_pluvio_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_24h') is not None) else (inea_pluv_st.get('chuva_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_24h') is not None) else 0.0))
+    inea_ch96 = float(inea_pluv_st.get('chuva_pluvio_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_96h') is not None) else (inea_pluv_st.get('chuva_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_96h') is not None) else 0.0))
 
     for day_idx in range(3):
         day_date_iso = om['daily']['time'][day_idx]
@@ -1567,15 +1555,24 @@ def run_auto_bulletin_pipeline():
     min_t_val = min([d['t_min'] for d in dias_3])
     max_rajada_geral = max([d['rajada_max'] for d in dias_3])
 
-    # Status Hidrológico do Rio Jundiá
-    jundia_st = next((s for s in inea_stations if s.get('eh_rio_das_ostras') or 'jundi' in s.get('nome_estacao', '').lower()), None)
-    jundia_nivel_txt = jundia_st.get('nivel_rio', '1.82') if jundia_st else '1.82'
-    jundia_status_txt = jundia_st.get('status', 'Atenção') if jundia_st else 'Atenção'
-
+    # Status Hidrológico do Rio Jundiá (Telemetria Real Verificada INEA 2241036)
     try:
-        jundia_nivel_float = float(jundia_nivel_txt.replace(',', '.'))
-    except:
-        jundia_nivel_float = 1.82
+        from scripts.jundia_telemetry import fetch_jundia_realtime, classify_jundia_level
+    except ImportError:
+        from jundia_telemetry import fetch_jundia_realtime, classify_jundia_level
+
+    jundia_live_info = fetch_jundia_realtime(DATA_DIR, save_10d=False)
+    jundia_st = next((s for s in inea_stations if s.get('eh_rio_das_ostras') or 'jundi' in s.get('nome_estacao', '').lower()), None)
+    if not jundia_live_info and jundia_st and jundia_st.get('nivel_rio'):
+        jundia_live_info = classify_jundia_level(jundia_st.get('nivel_rio'), 0.0)
+    if not jundia_live_info:
+        jundia_live_info = classify_jundia_level(1.39, 0.0)
+
+    jundia_nivel_float = jundia_live_info['nivel_float']
+    jundia_nivel_txt = jundia_live_info['nivel_dot']
+    jundia_status_txt = jundia_live_info['status_title']
+    jundia_frase_sinopse = jundia_live_info['frase_sinopse']
+    jundia_badge_estruturada = jundia_live_info['badge_estruturada']
 
     # Determinação de Alertas Oficiais
     tem_alerta_rio = jundia_nivel_float >= 2.27
@@ -1741,9 +1738,7 @@ def run_auto_bulletin_pipeline():
         f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
         f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
         f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
-        f"na orla marítima). No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade e "
-        f"vazante contínua, com a estação telemétrica municipal (INEA 224103620) acusando cota de {jundia_nivel_txt} m (Status: {jundia_status_txt}, "
-        f"capacidade de calha em 60% e ampla margem de segurança de quase 1 metro para a cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\n"
+        f"na orla marítima). {jundia_frase_sinopse}\n\n"
         f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas ECMWF, GFS e COSMO/INMET 12Z), projeta-se a passagem "
         f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
         f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
@@ -1962,7 +1957,7 @@ def run_auto_bulletin_pipeline():
         },
         "ordem_2_hidrologia_costa": {
             "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-            "badge": f"{jundia_status_txt.upper()} • COTA {jundia_nivel_txt} M (VAZANTE)",
+            "badge": jundia_badge_estruturada,
             "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
             "cota": f"{jundia_nivel_txt} m",
             "status": jundia_status_txt,

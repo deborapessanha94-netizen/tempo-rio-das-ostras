@@ -1,8 +1,8 @@
 {
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
-  "data_boletim": "29/10/2026",
-  "atualizacao": "29/10/2026 16:50",
+  "data_boletim": "30/10/2026",
+  "atualizacao": "30/10/2026 00:44",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -10,7 +10,7 @@
     "municipio_id": 20,
     "municipio_nome": "Rio das Ostras",
     "risco_hidrologico": {
-      "nivel": "BAIXO",
+      "nivel": "MODERADO",
       "status": "Atenção Hidrológica / Escoamento Pluvial",
       "badge": "warning",
       "cor_hex": "#d97706",
@@ -31,14 +31,16 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "BAIXO": 91,
+          "MODERADO": 61,
+          "BAIXO": 30,
           "SEM DADOS": 1
         }
       },
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "BAIXO": 91,
+          "MODERADO": 36,
+          "BAIXO": 55,
           "SEM DADOS": 1
         }
       }
@@ -46,83 +48,83 @@
     "vizinhos_redec1": {
       "rio-das-ostras": {
         "nome": "RIO DAS OSTRAS",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "macae": {
         "nome": "MACAÉ",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "casimiro-de-abreu": {
         "nome": "CASIMIRO DE ABREU",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "cabo-frio": {
         "nome": "CABO FRIO",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "armacao-dos-buzios": {
         "nome": "ARMAÇÃO DOS BÚZIOS",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "arraial-do-cabo": {
         "nome": "ARRAIAL DO CABO",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "sao-pedro-da-aldeia": {
         "nome": "SÃO PEDRO DA ALDEIA",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "iguaba-grande": {
         "nome": "IGUABA GRANDE",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "araruama": {
         "nome": "ARARUAMA",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "saquarema": {
         "nome": "SAQUAREMA",
-        "fill": "#28a745",
-        "nivel": "BAIXO",
-        "status": "Normalidade",
-        "badge": "success",
-        "cor_hex": "#16a34a"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "campos-dos-goytacazes": {
         "nome": "CAMPOS DOS GOYTACAZES",

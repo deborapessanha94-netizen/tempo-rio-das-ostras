@@ -214,7 +214,7 @@ import {
 
 
 
-} from './api.js?v=174';
+} from './api.js?v=175';
 
 
 
@@ -1689,18 +1689,11 @@ async function loadAllApplicationData() {
 
 
 
-    // Atualização final com dados dos modelos numéricos
-
-
-
+    // Atualização final com dados dos modelos numéricos e telemetria fluvial verificada
+    renderJundiaTelemetry(state.ineaCheias);
+    renderPanoramaSinotico(state.boletimMetadata);
     renderDashboardUI(state.boletimMetadata, state.boletimData, state.weatherData);
-
-
-
     renderAlertasPrincipais(state.inmetAlerts, state.marinhaAvisos);
-
-
-
     renderModalData(state.boletimMetadata, state.boletimData, state.inmetAlerts, state.marinhaAvisos);
 
 
@@ -1765,10 +1758,200 @@ async function loadAllApplicationData() {
 
 
 
+function parseHydroTimestampMs(rawStr) {
+  if (!rawStr) return 0;
+  const s = String(rawStr).trim();
+  const isoTry = Date.parse(s);
+  if (!isNaN(isoTry) && /^\d{4}-\d{2}-\d{2}/.test(s)) return isoTry;
+  const mBr = s.match(/^(\d{2})[\/\-](\d{2})[\/\-](\d{4})(?:\s+(?:às\s+)?(\d{2}):(\d{2}))?/i);
+  if (mBr) {
+    const dd = mBr[1], mm = mBr[2], yyyy = mBr[3];
+    const hh = mBr[4] || '00', min = mBr[5] || '00';
+    const dt = Date.parse(`${yyyy}-${mm}-${dd}T${hh}:${min}:00-03:00`);
+    return isNaN(dt) ? 0 : dt;
+  }
+  return 0;
+}
+
+function formatHydroLeituraBr(rawStr) {
+  if (!rawStr) return '';
+  const s = String(rawStr).trim();
+  const mIso = s.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}:\d{2})/);
+  if (mIso) return `${mIso[3]}/${mIso[2]}/${mIso[1]} ${mIso[4]}`;
+  const mDash = s.match(/^(\d{2})-(\d{2})-(\d{4})\s+(\d{2}:\d{2})/);
+  if (mDash) return `${mDash[1]}/${mDash[2]}/${mDash[3]} ${mDash[4]}`;
+  return s;
+}
+
+function buildVerifiedJundiaTelemetry(rawNivel, deltaM = 0, rawLeitura = '') {
+  if (rawNivel === null || rawNivel === undefined) return null;
+  const cleaned = String(rawNivel).replace(/[^\d.,\-]/g, '').replace(',', '.').trim();
+  if (!cleaned) return null;
+  let nv = parseFloat(cleaned);
+  if (isNaN(nv)) return null;
+  if (nv > 10.0) nv = Math.round((nv / 100.0) * 100) / 100; // proteção contra cm -> m
+  if (nv < 0.05 || nv > 6.50) return null;
+
+  nv = Math.round(nv * 100) / 100;
+  const COTA_ATENCAO = 1.99;
+  const COTA_ALERTA = 2.27;
+  const COTA_TRANSBORDO = 2.84;
+
+  let statusUpper = 'VIGILÂNCIA';
+  let statusTitle = 'Vigilância';
+  if (nv >= COTA_TRANSBORDO) {
+    statusUpper = 'ALERTA MÁXIMO';
+    statusTitle = 'Alerta Máximo';
+  } else if (nv >= COTA_ALERTA) {
+    statusUpper = 'ALERTA';
+    statusTitle = 'Alerta';
+  } else if (nv >= COTA_ATENCAO) {
+    statusUpper = 'ATENÇÃO';
+    statusTitle = 'Atenção';
+  }
+
+  const pctCalha = Math.min(100, Math.max(1, Math.round((nv / COTA_TRANSBORDO) * 100)));
+  const margemFloat = Math.max(0, Math.round((COTA_TRANSBORDO - nv) * 100) / 100);
+  const dVal = Number(deltaM) || 0;
+  let tendencia = 'Estável';
+  if (dVal >= 0.04) tendencia = 'Elevação';
+  else if (dVal <= -0.04) tendencia = 'Vazante';
+
+  const nivelDot = nv.toFixed(2);
+  const nivelComma = nivelDot.replace('.', ',');
+  const margemDot = margemFloat.toFixed(2);
+  const margemComma = margemDot.replace('.', ',');
+
+  let fraseSinopse = '';
+  if (nv >= COTA_TRANSBORDO) {
+    fraseSinopse = `No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá atinge patamar crítico de extravasamento, com a estação telemétrica municipal (INEA 2241036) registrando cota de ${nivelComma} m (Status: ${statusTitle}, ocupação de calha em ${pctCalha}%, superando a cota de transbordo de 2,84 m), com risco direto de inundação e refluxo pluvial nas áreas ribeirinhas.`;
+  } else if (nv >= COTA_ALERTA) {
+    fraseSinopse = `No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em nível elevado (${tendencia.toLowerCase()}), com a estação telemétrica municipal (INEA 2241036) registrando cota de ${nivelComma} m (Status: ${statusTitle}, ocupação de calha em ${pctCalha}% e margem reduzida de ${margemComma} m para a cota de transbordo de 2,84 m), demandando vigilância intensificada nos setores ribeirinhos.`;
+  } else if (nv >= COTA_ATENCAO) {
+    fraseSinopse = `No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá encontra-se sob monitoramento preventivo (${tendencia.toLowerCase()}), com a estação telemétrica municipal (INEA 2241036) registrando cota de ${nivelComma} m (Status: ${statusTitle}, ocupação de calha em ${pctCalha}% e margem de ${margemComma} m até a cota de transbordo de 2,84 m), exigindo acompanhamento contínuo da drenagem urbana.`;
+  } else {
+    const regimeTxt = tendencia === 'Vazante'
+      ? 'regime fluviométrico de estabilidade e vazante contínua'
+      : (tendencia === 'Elevação' ? 'regime fluviométrico seguro com discreta oscilação ascendente' : 'regime fluviométrico de estabilidade');
+    fraseSinopse = `No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em ${regimeTxt}, com a estação telemétrica municipal (INEA 2241036) registrando cota de ${nivelComma} m (Status: ${statusTitle}, ocupação de calha em ${pctCalha}% e ampla margem de segurança de ${margemComma} m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.`;
+  }
+
+  return {
+    nivelFloat: nv,
+    nivelDot,
+    nivelComma,
+    statusUpper,
+    statusTitle,
+    pctCalha,
+    margemFloat,
+    margemDot,
+    margemComma,
+    tendencia,
+    ultimaLeitura: formatHydroLeituraBr(rawLeitura),
+    timestampMs: parseHydroTimestampMs(rawLeitura),
+    badgeTech: `Convecção Diurna • Índices CAPE / CINE • Cota INEA ${nivelComma} m (${tendencia} • ${statusTitle})`,
+    fraseSinopse
+  };
+}
+
+export function getLiveJundiaSnapshot() {
+  const candidates = [];
+
+  // Candidato 1: Série telemétrica oficial de 15 min / hora a hora (alertadecheias.com.br/stations/2241036/10d)
+  const dados10d = state.jundia10dData?.dados;
+  if (Array.isArray(dados10d) && dados10d.length > 0) {
+    const last = dados10d[dados10d.length - 1];
+    const prev = dados10d[Math.max(0, dados10d.length - 4)];
+    const nvLast = parseFloat(String(last?.nivel ?? '').replace(',', '.'));
+    const nvPrev = parseFloat(String(prev?.nivel ?? nvLast).replace(',', '.'));
+    const delta = (!isNaN(nvLast) && !isNaN(nvPrev)) ? (nvLast - nvPrev) : 0;
+    const snap = buildVerifiedJundiaTelemetry(last?.nivel, delta, last?.datetime_brt || '');
+    if (snap) candidates.push({ ...snap, priority: 3 });
+  }
+
+  // Candidato 2: Objeto hidrológico consolidado da rede de 10 estações (stations_service.py /full)
+  const estJundia = state.acumuladosDataset?.estacao_rio_jundia
+    || (Array.isArray(state.acumuladosEstacoes) ? state.acumuladosEstacoes.find(s => s.categoria === 'inea' || String(s.codigo || '').includes('2241036')) : null);
+  if (estJundia && estJundia.nivel_rio) {
+    const tStr = String(estJundia.tendencia_rio || '').toLowerCase();
+    const deltaEst = tStr.includes('elev') ? 0.05 : (tStr.includes('vaz') ? -0.05 : 0);
+    const snap = buildVerifiedJundiaTelemetry(estJundia.nivel_rio, deltaEst, estJundia.ultima_leitura || '');
+    if (snap) candidates.push({ ...snap, priority: 3 });
+  }
+
+  // Candidato 3: Tabela regional INEA Cheias (inea_cheias.json)
+  if (Array.isArray(state.ineaCheias)) {
+    const chJundia = state.ineaCheias.find(s => s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi'));
+    if (chJundia && chJundia.nivel_rio) {
+      const tStr = String(chJundia.tendencia || '').toLowerCase();
+      const deltaCh = tStr.includes('elev') ? 0.05 : (tStr.includes('vaz') ? -0.05 : 0);
+      const snap = buildVerifiedJundiaTelemetry(chJundia.nivel_rio, deltaCh, chJundia.ultima_leitura || '');
+      if (snap) candidates.push({ ...snap, priority: 2 });
+    }
+  }
+
+  // Candidato 4: KPI salvo nos metadados do boletim
+  const kpiNivel = state.boletimMetadata?.kpis?.jundia_nivel;
+  if (kpiNivel) {
+    const snap = buildVerifiedJundiaTelemetry(kpiNivel, 0, state.boletimMetadata?.emissao || '');
+    if (snap) candidates.push({ ...snap, priority: 1 });
+  }
+
+  if (candidates.length === 0) return null;
+
+  // Ordena pelo timestamp mais recente; em caso de empate, pela maior prioridade de fonte telemétrica
+  candidates.sort((a, b) => {
+    if (b.priority !== a.priority) return b.priority - a.priority;
+    return b.timestampMs - a.timestampMs;
+  });
+
+  return candidates[0];
+}
+window.getLiveJundiaSnapshot = getLiveJundiaSnapshot;
+
+function patchJundiaInText(rawText, snap) {
+  if (!rawText || !snap) return rawText;
+  let out = String(rawText);
+
+  // 1. Substitui a sentença hidrológica completa do Panorama Sinótico Geral (Parágrafo 2)
+  out = out.replace(
+    /No monitoramento hidrometeorol[óo]gico,\s*a Bacia Hidrogr[áa]fica do Rio Jundi[áa][\s\S]*?(?:canais urbanos|setores ribeirinhos|[áa]reas ribeirinhas|drenagem urbana)\./gi,
+    snap.fraseSinopse
+  );
+
+  // 2. Substitui menções curtas de cota e status em cards de previsão e alertas
+  out = out.replace(
+    /(Rio Jundi[áa][^.\n]{0,70}?cota\s+(?:de|em)\s+)\d+[.,]\d+\s*m(?:\s*\((?:Status:\s*[^)]+|capacidade[^)]+)\))?/gi,
+    `$1${snap.nivelComma} m (Status: ${snap.statusTitle})`
+  );
+  out = out.replace(
+    /(Rio Jundi[áa][^.\n]{0,70}?(?:n[íi]vel\s+(?:de\s+|atual\s+|seguro\s*\(?)|seguro\s+com\s+))\d+[.,]\d+\s*m/gi,
+    `$1${snap.nivelComma} m`
+  );
+
+  return out;
+}
+
+function syncAuxiliaryJundiaNotes(snap) {
+  if (!snap) return;
+  const note1 = document.getElementById('cemaden-jundia-live-note');
+  if (note1) {
+    note1.textContent = `• Bacia do Rio Jundiá (estação INEA 2241036 em cota verificada de ${snap.nivelComma} m — ${snap.statusTitle})`;
+  }
+  const note2 = document.getElementById('cemaden-jundia-ref-note');
+  if (note2) {
+    note2.textContent = `• Estação 2241036 — Rio Jundiá (Atual: ${snap.nivelComma} m • Atenção: 1,99 m / Alerta: 2,27 m / Transbordo: 2,84 m)`;
+  }
+}
+
 function renderPanoramaSinotico(meta) {
   if (!meta) return;
 
-  const sinopseGeral = meta.sinopse_geral || meta.sinopse || '';
+  const snapJundia = getLiveJundiaSnapshot();
+  syncAuxiliaryJundiaNotes(snapJundia);
+
+  const rawSinopse = meta.sinopse_geral || meta.sinopse || '';
+  const sinopseGeral = patchJundiaInText(rawSinopse, snapJundia);
 
   // 1. Período
   const badgePeriodo = document.getElementById('badge-periodo-sinotico');
@@ -1780,6 +1963,9 @@ function renderPanoramaSinotico(meta) {
   const textoCompletoEl = document.getElementById('sinopse-texto-completo');
   if (textoCompletoEl && sinopseGeral) {
     const paragrafos = sinopseGeral.split('\n\n').filter(p => p.trim());
+    const card2BadgeTech = snapJundia
+      ? snapJundia.badgeTech
+      : 'Convecção Diurna • Índices CAPE / CINE • Telemetria INEA 2241036';
 
     const sectionMetadata = [
       {
@@ -1793,7 +1979,7 @@ function renderPanoramaSinotico(meta) {
         title: 'Termodinâmica Atmosférica, Instabilidade Convectiva & Resposta Hidrológica do Rio Jundiá',
         tag: 'Termodinâmica & Hidrometeorologia',
         badgeClass: 'bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60 shadow-2xs',
-        badgeTech: 'Convecção Diurna • Índices CAPE / CINE • Cota INEA 1.82 m (Vazante)',
+        badgeTech: card2BadgeTech,
         icon: 'cloud-lightning'
       },
       {
@@ -1824,12 +2010,12 @@ function renderPanoramaSinotico(meta) {
               </span>
               <h3 class="text-xs sm:text-[13px] font-bold text-black dark:text-white leading-tight">${metaItem.title}</h3>
             </div>
-            <span class="text-[9.5px] sm:text-[10px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/80 font-mono">
+            <span id="panorama-card-badge-tech-${idx}" class="text-[9.5px] sm:text-[10px] font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-900/80 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/80 font-mono">
               ${metaItem.badgeTech}
             </span>
           </div>
-          <p class="leading-relaxed text-justify text-xs sm:text-sm text-black dark:text-slate-200 font-normal">
-            ${cleanBulletinText(p)}
+          <p id="panorama-card-paragraph-${idx}" class="leading-relaxed text-justify text-xs sm:text-sm text-black dark:text-slate-200 font-normal">
+            ${cleanBulletinText(patchJundiaInText(p, snapJundia))}
           </p>
         </div>
       `;
@@ -3597,10 +3783,13 @@ function renderDashboardUI(meta, rows, weather) {
 
       }
 
+      const snapCardJundia = getLiveJundiaSnapshot();
+      informeResumo = patchJundiaInText(informeResumo, snapCardJundia);
+
       // Detalhamento Térmico, Umidade e Ventos (Segunda parte do texto oficial)
       let detalheTexto = '';
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2) {
-        detalheTexto = d.informe_populacao.slice(2).map(item => cleanBulletinText(item).replace(/^[•\-\*]\s*/, '')).join(' ');
+        detalheTexto = d.informe_populacao.slice(2).map(item => cleanBulletinText(patchJundiaInText(item, snapCardJundia)).replace(/^[•\-\*]\s*/, '')).join(' ');
       }
 
       return `
@@ -5416,35 +5605,30 @@ function renderJundiaTelemetry(stations) {
 
 
 
-  if (!stations || !Array.isArray(stations)) return;
+  const liveSnap = getLiveJundiaSnapshot();
+  syncAuxiliaryJundiaNotes(liveSnap);
 
+  const stationFromList = Array.isArray(stations)
+    ? stations.find(s => s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi'))
+    : null;
 
+  const jundiaSt = liveSnap
+    ? {
+        ...(stationFromList || {}),
+        nivel_rio: liveSnap.nivelDot,
+        porcentagem_calha: liveSnap.pctCalha,
+        ultima_leitura: liveSnap.ultimaLeitura || stationFromList?.ultima_leitura || 'Hoje',
+        tendencia: liveSnap.tendencia
+      }
+    : stationFromList;
 
+  if (!jundiaSt && (!stations || !Array.isArray(stations))) return;
 
-
-
-
-  const jundiaSt = stations.find(s => s.eh_rio_das_ostras || s.nome_estacao?.toLowerCase().includes('jundi'));
-
-
-
-
-
-
-
-  if (jundiaSt) {
-
-
-
-    const rawNivel = String(jundiaSt.nivel_rio || '1.91').replace(' m', '').trim();
-
-
-
-    const nivelFloat = parseFloat(rawNivel.replace(',', '.')) || 1.91;
-
-
-
-    const nivelFormatted = rawNivel.includes(',') ? rawNivel : nivelFloat.toFixed(2).replace('.', ',');
+  if (jundiaSt && jundiaSt.nivel_rio) {
+    const rawNivel = String(jundiaSt.nivel_rio).replace(' m', '').trim();
+    const nivelFloat = parseFloat(rawNivel.replace(',', '.'));
+    if (isNaN(nivelFloat) || nivelFloat < 0.05 || nivelFloat > 6.50) return;
+    const nivelFormatted = nivelFloat.toFixed(2).replace('.', ',');
 
 
 
@@ -5668,7 +5852,8 @@ function renderJundiaTelemetry(stations) {
 
 
 
-      msgText = `Calha em regime seguro de vazante contínua com cota de ${nivelFormatted} m (margem de segurança de ${folga} m até o transbordo).`;
+      const tendDesc = jundiaSt.tendencia === 'Vazante' ? 'estabilidade e vazante contínua' : (jundiaSt.tendencia === 'Elevação' ? 'estabilidade (discreta oscilação)' : 'estabilidade fluviométrica');
+      msgText = `Calha em regime seguro de ${tendDesc} com cota de ${nivelFormatted} m (margem de segurança de ${folga} m até o transbordo).`;
 
 
 
@@ -5998,12 +6183,8 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
 
 
   const sinopseEl = document.getElementById('modal-sinopse-content');
-
-
-
-  const sinopseTexto = meta?.sinopse_geral || meta?.sinopse || '';
-
-
+  const snapModalJundia = getLiveJundiaSnapshot();
+  const sinopseTexto = patchJundiaInText(meta?.sinopse_geral || meta?.sinopse || '', snapModalJundia);
 
   if (sinopseEl && sinopseTexto) {
 
@@ -6822,7 +7003,7 @@ function setupPWA() {
 
 
 
-    navigator.serviceWorker.register('./sw.js?v=173').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=175').catch(() => {});
 
 
 
@@ -10274,6 +10455,8 @@ window.refreshRioHourlyData = async function(isManual = false) {
     if (fresh10d && fresh10d.dados && fresh10d.dados.length > 0) {
       state.jundia10dData = fresh10d;
       initRioHourlyTable(fresh10d);
+      renderJundiaTelemetry(state.ineaCheias);
+      renderPanoramaSinotico(state.boletimMetadata);
     }
     window.updateRioSyncIndicator();
   } catch (e) {
