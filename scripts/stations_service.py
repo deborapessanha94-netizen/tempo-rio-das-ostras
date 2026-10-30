@@ -166,24 +166,21 @@ def fetch_cemaden_rain_today_details(cid, now_brt):
 
 
 def get_wu_api_key():
-    """Valida a chave da Weather Underground ou extrai chave atualizada dinamicamente"""
-    try:
-        test_url = f"https://api.weather.com/v2/pws/observations/current?stationId=IRIODA17&format=json&units=m&numericPrecision=decimal&apiKey={DEFAULT_WU_KEY}"
-        data = fetch_url_data(test_url, timeout=5, is_json=True)
-        if data and "observations" in data:
-            return DEFAULT_WU_KEY
-    except Exception:
-        pass
-
-    try:
-        html = fetch_url_data("https://www.wunderground.com/dashboard/pws/IRIODA17", timeout=8)
-        if html:
-            keys = re.findall(r'apiKey=([a-f0-9]{32})', html)
-            if keys:
-                return keys[0]
-    except Exception:
-        pass
-
+    """Retorna uma chave ativa comprovada da Weather Underground com fallback resiliente"""
+    known_keys = [
+        "ff90f212a6984a7390f212a698ea73cc",
+        "e1f10a1e78da46f5b10a1e78da96f525"
+    ]
+    test_stations = ["IRIODA16", "IRIODA15", "ICASIM5", "IRIODA17"]
+    for k in known_keys:
+        for sid in test_stations:
+            try:
+                test_url = f"https://api.weather.com/v2/pws/observations/current?stationId={sid}&format=json&units=m&numericPrecision=decimal&apiKey={k}"
+                data = fetch_url_data(test_url, timeout=5, is_json=True)
+                if data and "observations" in data and len(data["observations"]) > 0:
+                    return k
+            except Exception:
+                continue
     return DEFAULT_WU_KEY
 
 
@@ -343,6 +340,32 @@ def collect_stations_network():
             if d_data and "observations" in d_data and len(d_data["observations"]) > 0:
                 day_obs = sorted(d_data["observations"], key=lambda x: x.get("obsTimeLocal", ""))
                 today_records = [o for o in day_obs if o.get("obsTimeLocal", "").startswith(today_iso)]
+
+                # Se current falhou (ex: 204 temporário), usa a última observação ativa do dia como fallback
+                if curr_obs_dt is None and today_records:
+                    last_rec = today_records[-1]
+                    last_rec_str = last_rec.get("obsTimeLocal", "")
+                    try:
+                        last_rec_dt = datetime.strptime(last_rec_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
+                        if (now_brt - last_rec_dt).total_seconds() <= 6 * 3600:
+                            entry["online"] = True
+                            entry["ultima_leitura"] = last_rec_str
+                            m_last = last_rec.get("metric", {})
+                            t_val = m_last.get("tempAvg") if m_last.get("tempAvg") is not None else m_last.get("temp")
+                            if t_val is not None:
+                                entry["temp_atual"] = round(safe_float(t_val), 1)
+                            w_val = m_last.get("windspeedAvg") if m_last.get("windspeedAvg") is not None else m_last.get("windSpeed")
+                            if w_val is not None:
+                                entry["vento_atual"] = round(safe_float(w_val), 1)
+                            g_val = m_last.get("windgustHigh") if m_last.get("windgustHigh") is not None else m_last.get("windGust")
+                            if g_val is not None:
+                                entry["rajada_atual"] = round(safe_float(g_val), 1)
+                            p_tot = safe_float(m_last.get("precipTotal"), 0.0)
+                            entry["chuva_hoje"] = round(p_tot, 1)
+                            entry["chuva_24h"] = round(p_tot, 1)
+                            curr_obs_dt = last_rec_dt
+                    except Exception:
+                        pass
                 prev_tot_5m = 0.0
                 max_w_val = None
                 max_w_hhmm = None

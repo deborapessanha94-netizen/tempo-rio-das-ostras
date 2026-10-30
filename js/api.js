@@ -682,7 +682,14 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
       ]);
     }
 
-    const obs = currJson?.observations?.[0];
+    let obs = currJson?.observations?.[0];
+    if (!obs && Array.isArray(dayJson?.observations) && dayJson.observations.length > 0) {
+      const todayDayRecs = dayJson.observations.filter(o => String(o.obsTimeLocal || '').startsWith(todayIso));
+      if (todayDayRecs.length > 0) {
+        obs = todayDayRecs[todayDayRecs.length - 1];
+      }
+    }
+
     if (!obs) {
       if (canUseQuickCache && cached?.lastPayload) {
         resultMap[pid] = cached.lastPayload;

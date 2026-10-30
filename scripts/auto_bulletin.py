@@ -572,7 +572,7 @@ def fetch_cptec_probabilistic_maps():
         "severo_24h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png",
         "severo_48h": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_48h_temposevero.png"
     }
-    cptec_dir = Path("img/cptec")
+    cptec_dir = IMG_DIR / "cptec"
     cptec_dir.mkdir(parents=True, exist_ok=True)
     
     status_maps = {}
@@ -616,7 +616,7 @@ def fetch_cptec_wwatch():
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
         'Referer': 'https://previsaonumerica.cptec.inpe.br/'
     }
-    cptec_dir = Path("img/cptec")
+    cptec_dir = IMG_DIR / "cptec"
     cptec_dir.mkdir(parents=True, exist_ok=True)
     
     wwatch_info = {
@@ -718,7 +718,7 @@ def fetch_cemaden_riscos():
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
     }
-    cemaden_dir = Path("img/cemaden")
+    cemaden_dir = IMG_DIR / "cemaden"
     cemaden_dir.mkdir(parents=True, exist_ok=True)
     
     today_dt = datetime.now(timezone(timedelta(hours=-3)))
