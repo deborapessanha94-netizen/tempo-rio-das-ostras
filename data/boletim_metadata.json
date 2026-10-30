@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "30/10 (Sexta-feira) a 01/11 (Domingo)",
-  "emissao": "30/10/2026 às 16:30h",
+  "emissao": "30/10/2026 às 16:40h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.45 m. Alerta Amarelo de Tempestade do INMET (nº 56221 e nº 56218) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para o ciclo de 3 dias: 32.6 mm com temperatura máxima alcançando 26°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -10,7 +10,7 @@
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.4,
         "chuva_24h": 15.6,
-        "chuva_96h": 17.2,
+        "chuva_96h": 17.0,
         "leitura": "2026-10-30 13:20:00"
       },
       "inea_rio_jundia": {
@@ -787,7 +787,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-10-30T16:31:08.306796"
+    "atualizado_em": "2026-10-30T16:41:17.120960"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -795,7 +795,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-10-30 16:31:56",
+    "data_coleta": "2026-10-30 16:41:50",
     "bulletin_info": {
       "disponivel": false,
       "arquivo": null,
@@ -1276,7 +1276,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-10-30 00z",
-    "atualizacao": "30/10/2026 13:31",
+    "atualizacao": "30/10/2026 13:41",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -1362,7 +1362,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "30/10/2026",
-    "atualizacao": "30/10/2026 13:31",
+    "atualizacao": "30/10/2026 13:41",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -1540,7 +1540,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-10-30T16:31:57.132812",
+    "atualizado_em": "2026-10-30T16:41:51.849838",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "17:40",
