@@ -4,13 +4,13 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-10-30 00:44:25",
+  "data_coleta": "2026-10-30 03:57:56",
   "bulletin_info": {
-    "disponivel": true,
-    "arquivo": "BoletimHidrometeorologico_29-10-2026.pdf",
-    "data_boletim": "29/10/2026",
-    "label": "Boletim HidrometeorolÃ³gico 29/10/2026",
-    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_29-10-2026.pdf"
+    "disponivel": false,
+    "arquivo": null,
+    "data_boletim": null,
+    "label": null,
+    "url_pdf": null
   },
   "previsao_rh8": {
     "hoje": {
