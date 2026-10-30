@@ -36,7 +36,7 @@ import {
 
 
 
-} from './social-cards.js?v=177';
+} from './social-cards.js?v=178';
 
 
 
@@ -216,7 +216,7 @@ import {
 
 
 
-} from './api.js?v=177';
+} from './api.js?v=178';
 
 
 
@@ -2532,13 +2532,22 @@ function applyLiveStationsOverlay(rawData) {
   if (!rawData) return rawData;
   const overlay = state.liveStationsOverlay || {};
   const overlayKeys = Object.keys(overlay);
-  if (overlayKeys.length === 0) return rawData;
+  const liveJundiaSnap = typeof getLiveJundiaSnapshot === 'function' ? getLiveJundiaSnapshot() : null;
+  if (overlayKeys.length === 0 && !liveJundiaSnap) return rawData;
 
   const isArr = Array.isArray(rawData);
   const baseList = isArr ? rawData : (Array.isArray(rawData.estacoes) ? rawData.estacoes : []);
   if (baseList.length === 0) return rawData;
 
   const mergedList = baseList.map(st => {
+    if (st?.categoria === 'inea' && liveJundiaSnap) {
+      return {
+        ...st,
+        nivel_rio: `${liveJundiaSnap.nivelComma} m`,
+        status_rio: liveJundiaSnap.statusTitle || st.status_rio,
+        alerta_maximo_pct: liveJundiaSnap.pctCalha ?? st.alerta_maximo_pct
+      };
+    }
     const code = st?.codigo;
     if (code && overlay[code]) {
       const ov = overlay[code];
@@ -2558,7 +2567,15 @@ function applyLiveStationsOverlay(rawData) {
           chuva_96h: c96
         };
       }
-      return { ...st, ...ov };
+      return {
+        ...st,
+        ...ov,
+        inicio_chuva_hoje: ov.inicio_chuva_hoje || st.inicio_chuva_hoje || null,
+        vento_max_hoje: ov.vento_max_hoje ?? st.vento_max_hoje ?? null,
+        hora_vento_max_hoje: ov.hora_vento_max_hoje || st.hora_vento_max_hoje || null,
+        rajada_max_hoje: ov.rajada_max_hoje ?? st.rajada_max_hoje ?? null,
+        hora_rajada_max_hoje: ov.hora_rajada_max_hoje || st.hora_rajada_max_hoje || null
+      };
     }
     return st;
   });
@@ -2645,6 +2662,7 @@ async function syncLiveStationsTelemetry(force = false, quickOnly = false) {
   }
 }
 window.syncLiveStationsTelemetry = syncLiveStationsTelemetry;
+window.getLiveStationsForSocial = () => applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
 
 function renderDashboardUI(meta, rows, weather) {
 

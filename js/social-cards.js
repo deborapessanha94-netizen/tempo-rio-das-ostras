@@ -1,82 +1,104 @@
 /**
  * Gerador de Imagens para Redes Sociais (Post Feed & Stories do Instagram)
- * Baseado no modelo oficial de referência com design escuro profissional,
- * tipografia legível de alto contraste e sem menção a Defesa Civil.
+ * Sincronizado em tempo real com os valores exatos do site no momento da visualização/download.
  * Canal Oficial: @tempoemriodasostras
  */
 
 let socialState = {
   format: 'post', // 'post' (1080x1350) ou 'story' (1080x1920)
-  horizon: '24h', // label do horizonte: '24h', '23h', '12h', etc.
-  horizonHours: 24.0, // valor numérico em horas para cálculo em tempo real
+  horizon: '24h',
+  horizonHours: 24.0,
   filterMode: 'all', // 'all' (todas as 10) ou 'active' (apenas ativas)
   selectedStationCodes: new Set(),
   stationFilterText: '',
   stationsData: []
 };
 
+function round1(val, fallback = 0.0) {
+  if (val === null || val === undefined || val === '' || isNaN(Number(val))) return fallback;
+  return Math.round(Number(val) * 10) / 10;
+}
+
+function formatDec1(val) {
+  const num = round1(val, 0.0);
+  return num.toFixed(1).replace('.', ',');
+}
+
+function isSocialModalOpen() {
+  if (typeof document === 'undefined') return false;
+  const modal = document.getElementById('modal-social-chuva');
+  return Boolean(modal && !modal.classList.contains('hidden'));
+}
+
+function buildWindResult(vRaw, rRaw, vMaxRaw, rMaxRaw) {
+  const v = round1(vRaw, 0.0);
+  const r = round1(rRaw !== null && rRaw !== undefined ? rRaw : v, v);
+  const vMax = round1(vMaxRaw !== null && vMaxRaw !== undefined ? vMaxRaw : v, v);
+  const rMax = round1(rMaxRaw !== null && rMaxRaw !== undefined ? rMaxRaw : Math.max(r, v), Math.max(r, v));
+  return {
+    vento: v,
+    rajada: Math.max(r, v),
+    ventoStr: formatDec1(v),
+    rajadaStr: formatDec1(Math.max(r, v)),
+    vento_max: vMax,
+    rajada_max: rMax
+  };
+}
+
 /**
- * Retorna vento e rajada para qualquer estação, utilizando medição direta
- * ou inferência georreferenciada da rede municipal para estações puramente pluviométricas
+ * Retorna o VENTO e a RAJADA EM TEMPO REAL (com precisão decimal idêntica aos cards do site)
+ * no exato momento em que o usuário está visualizando/baixando a imagem.
  */
 export function getStationWindAndGust(st, allStations) {
   const stationsList = allStations || socialState.stationsData || [];
 
-  if (st.vento_atual !== null && st.vento_atual !== undefined && !isNaN(Number(st.vento_atual))) {
-    const v = Math.round(Number(st.vento_atual));
-    const r = (st.rajada_atual !== null && st.rajada_atual !== undefined && !isNaN(Number(st.rajada_atual)))
-      ? Math.round(Number(st.rajada_atual))
-      : v;
+  // 1. Estação PWS online com medição direta em tempo real no site
+  if (st && st.online !== false && st.vento_atual !== null && st.vento_atual !== undefined && !isNaN(Number(st.vento_atual))) {
     const rawRMax = (st.rajada_max_hoje !== null && st.rajada_max_hoje !== undefined) ? st.rajada_max_hoje : st.rajada_max_24h;
     const rawVMax = (st.vento_max_hoje !== null && st.vento_max_hoje !== undefined) ? st.vento_max_hoje : st.vento_max_24h;
-    const rMax = (rawRMax !== null && rawRMax !== undefined && !isNaN(Number(rawRMax)))
-      ? Math.round(Number(rawRMax))
-      : Math.max(r, v);
-    const vMax = (rawVMax !== null && rawVMax !== undefined && !isNaN(Number(rawVMax)))
-      ? Math.round(Number(rawVMax))
-      : v;
-    return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
+    return buildWindResult(st.vento_atual, st.rajada_atual, rawVMax, rawRMax);
   }
 
-  // Se for Rio Jundiá (Cantagalo), usa o vento da estação Cantagalo (IRIODA16)
-  if (st.categoria === 'inea') {
-    const canta = stationsList.find(s => s.codigo === 'IRIODA16');
-    if (canta && canta.vento_atual !== null && canta.vento_atual !== undefined) {
-      const v = Math.round(Number(canta.vento_atual));
-      const r = Math.round(Number(canta.rajada_atual || canta.vento_atual));
-      const rMax = Math.round(Number(canta.rajada_max_24h || r));
-      const vMax = Math.round(Number(canta.vento_max_24h || v));
-      return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
+  // 2. Rio Jundiá (Cantagalo): espelha o vento em tempo real da estação de Cantagalo (IRIODA16)
+  if (st && st.categoria === 'inea') {
+    const canta = stationsList.find(s => s.codigo === 'IRIODA16' && s.online !== false && s.vento_atual !== null && s.vento_atual !== undefined);
+    if (canta) {
+      return buildWindResult(canta.vento_atual, canta.rajada_atual, canta.vento_max_hoje ?? canta.vento_max_24h, canta.rajada_max_hoje ?? canta.rajada_max_24h);
     }
   }
 
-  // Se for PCD Palmital (Encostas), usa Rocha Leão (IRIODA15) mais próximo
-  if (st.codigo && String(st.codigo).includes('187')) {
-    const rocha = stationsList.find(s => s.codigo === 'IRIODA15');
-    if (rocha && rocha.vento_atual !== null && rocha.vento_atual !== undefined) {
-      const v = Math.round(Number(rocha.vento_atual));
-      const r = Math.round(Number(rocha.rajada_atual || rocha.vento_atual));
-      const rMax = Math.round(Number(rocha.rajada_max_24h || r));
-      const vMax = Math.round(Number(rocha.vento_max_24h || v));
-      return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
+  // 3. PCDs CEMADEN Palmital (sem anemômetro físico): espelha o vento em tempo real da estação vizinha Rocha Leão (IRIODA15)
+  if (st && (st.categoria === 'cemaden' || (st.codigo && String(st.codigo).includes('187')))) {
+    const rocha = stationsList.find(s => s.codigo === 'IRIODA15' && s.online !== false && s.vento_atual !== null && s.vento_atual !== undefined);
+    if (rocha) {
+      return buildWindResult(rocha.vento_atual, rocha.rajada_atual, rocha.vento_max_hoje ?? rocha.vento_max_24h, rocha.rajada_max_hoje ?? rocha.rajada_max_24h);
     }
   }
 
-  // Média regional das estações PWS ativas com anemômetro
-  const withWind = stationsList.filter(s => s.vento_atual !== null && s.vento_atual !== undefined && !isNaN(Number(s.vento_atual)));
+  // 4. Estação costeira/urbana temporariamente em calibração (ex: IRIODA5 - Jd. Mariléa): usa vizinha ativa mais próxima (Costazul IRIODA6 ou Tartaruga IRIODA17)
+  const coastalNeighbor = stationsList.find(s => (s.codigo === 'IRIODA6' || s.codigo === 'IRIODA17') && s.online !== false && s.vento_atual !== null && s.vento_atual !== undefined);
+  if (coastalNeighbor) {
+    return buildWindResult(
+      coastalNeighbor.vento_atual,
+      coastalNeighbor.rajada_atual,
+      coastalNeighbor.vento_max_hoje ?? coastalNeighbor.vento_max_24h,
+      coastalNeighbor.rajada_max_hoje ?? coastalNeighbor.rajada_max_24h
+    );
+  }
+
+  // 5. Fallback: média em tempo real das estações PWS ativas do site
+  const withWind = stationsList.filter(s => s.online !== false && s.vento_atual !== null && s.vento_atual !== undefined && !isNaN(Number(s.vento_atual)));
   if (withWind.length > 0) {
-    const avgV = Math.round(withWind.reduce((acc, s) => acc + Number(s.vento_atual), 0) / withWind.length);
-    const avgR = Math.round(withWind.reduce((acc, s) => acc + Number(s.rajada_atual || s.vento_atual), 0) / withWind.length);
-    const avgRMax = Math.round(withWind.reduce((acc, s) => acc + Number(s.rajada_max_24h || s.rajada_atual || s.vento_atual), 0) / withWind.length);
-    const avgVMax = Math.round(withWind.reduce((acc, s) => acc + Number(s.vento_max_24h || s.vento_atual), 0) / withWind.length);
-    return { vento: avgV, rajada: avgR, vento_max: avgVMax, rajada_max: avgRMax };
+    const avgV = withWind.reduce((acc, s) => acc + Number(s.vento_atual), 0) / withWind.length;
+    const avgR = withWind.reduce((acc, s) => acc + Number(s.rajada_atual ?? s.vento_atual), 0) / withWind.length;
+    return buildWindResult(avgV, avgR, avgV, avgR);
   }
 
-  return { vento: 5, rajada: 12, vento_max: 20, rajada_max: 30 };
+  return buildWindResult(0.0, 0.0, 0.0, 0.0);
 }
 
 /**
- * Inicializa os dados das estações
+ * Atualiza os dados das estações no estado social (e re-renderiza ao vivo se o modal estiver aberto)
  */
 export function setSocialStationsData(data) {
   if (!data) return;
@@ -86,11 +108,65 @@ export function setSocialStationsData(data) {
     socialState.stationsData = data.estacoes;
   }
 
-  // Se o conjunto de selecionadas estiver vazio, seleciona todas por padrão
   if (socialState.selectedStationCodes.size === 0 && socialState.stationsData.length > 0) {
     socialState.stationsData.forEach(s => {
       if (s.codigo) socialState.selectedStationCodes.add(s.codigo);
     });
+  }
+
+  if (isSocialModalOpen()) {
+    renderSocialStationChips();
+    renderSocialCanvas();
+  }
+}
+
+/**
+ * Consulta imediatamente o estado em tempo real já atualizado do site (e dispara pulso rápido nas estações)
+ * para garantir que tanto a pré-visualização quanto o PNG baixado reflitam o momento exato do download.
+ */
+async function syncFromLiveSiteNow({ full = false } = {}) {
+  // 1. Puxa imediatamente o estado ao vivo já carregado na tela do site
+  if (typeof window !== 'undefined' && typeof window.getLiveStationsForSocial === 'function') {
+    const liveData = window.getLiveStationsForSocial();
+    if (liveData) {
+      if (Array.isArray(liveData) && liveData.length > 0) {
+        socialState.stationsData = liveData;
+      } else if (Array.isArray(liveData.estacoes) && liveData.estacoes.length > 0) {
+        socialState.stationsData = liveData.estacoes;
+      }
+    }
+  }
+
+  // 2. Dispara consulta em tempo real às estações (rápida ~180ms para download ou completa para botão Atualizar)
+  if (typeof window !== 'undefined' && typeof window.syncLiveStationsTelemetry === 'function') {
+    try {
+      await window.syncLiveStationsTelemetry(true, !full);
+      if (typeof window.getLiveStationsForSocial === 'function') {
+        const refreshed = window.getLiveStationsForSocial();
+        if (refreshed) {
+          if (Array.isArray(refreshed) && refreshed.length > 0) {
+            socialState.stationsData = refreshed;
+          } else if (Array.isArray(refreshed.estacoes) && refreshed.estacoes.length > 0) {
+            socialState.stationsData = refreshed.estacoes;
+          }
+        }
+      }
+      return;
+    } catch (e) {
+      console.warn('Aviso ao sincronizar telemetria ao vivo para card social:', e);
+    }
+  }
+
+  // 3. Fallback apenas se a lista ainda estiver vazia
+  if (!socialState.stationsData || socialState.stationsData.length === 0) {
+    try {
+      const res = await fetch(`./data/acumulados_estacoes.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) socialState.stationsData = data;
+        else if (Array.isArray(data?.estacoes)) socialState.stationsData = data.estacoes;
+      }
+    } catch (e) {}
   }
 }
 
@@ -103,7 +179,6 @@ function parseUserQuery(query) {
     return { isHorizon: false, hours: 24.0, horizonLabel: '24H', stationFilter: '' };
   }
 
-  // 1. Dias (ex: '2 dias', '2d', '3 dias', '1 dia')
   const dayMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:dias?|d\b)/i);
   if (dayMatch) {
     const dVal = parseFloat(dayMatch[1].replace(',', '.'));
@@ -113,7 +188,6 @@ function parseUserQuery(query) {
     return { isHorizon: true, hours: hVal, horizonLabel: label, stationFilter: residual };
   }
 
-  // 2. Intervalo de horas (ex: 'das 10h às 18h', '10-18', '10 as 18')
   const rangeMatch = clean.match(/(?:das\s*)?(\d{1,2})h?\s*(?:as|às|a|-)\s*(\d{1,2})h?/i);
   if (rangeMatch) {
     const h1 = parseFloat(rangeMatch[1]);
@@ -123,7 +197,6 @@ function parseUserQuery(query) {
     return { isHorizon: true, hours: diff, horizonLabel: `${diff}H`, stationFilter: residual };
   }
 
-  // 3. Horas diretas (ex: '23', '23h', '23 horas', '1.5h', '8 hrs')
   const hourMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:h(?:oras?|rs?)?\b)?/i);
   if (hourMatch && hourMatch[1]) {
     const hVal = parseFloat(hourMatch[1].replace(',', '.'));
@@ -132,7 +205,6 @@ function parseUserQuery(query) {
     return { isHorizon: true, hours: Math.max(0.1, hVal), horizonLabel: label, stationFilter: residual };
   }
 
-  // 4. Pesquisa por nome da estação
   return { isHorizon: false, hours: socialState.horizonHours || 24.0, horizonLabel: (socialState.horizon || '24h').toUpperCase(), stationFilter: clean };
 }
 
@@ -180,7 +252,7 @@ export function calculateStationRain(station, hours) {
 }
 
 /**
- * Abre o modal de exportação de chuva
+ * Abre o modal de exportação de chuva já consultando os dados ao vivo do site
  */
 export async function openSocialModalChuva(initialHorizon = '24h') {
   const modal = document.getElementById('modal-social-chuva');
@@ -191,18 +263,25 @@ export async function openSocialModalChuva(initialHorizon = '24h') {
   socialState.horizonHours = parsed.hours;
   socialState.stationFilterText = '';
 
-  if (!socialState.stationsData || socialState.stationsData.length === 0) {
-    await refreshSocialStationsData();
+  // Puxa imediatamente o snapshot ao vivo atual da página antes mesmo de abrir
+  if (typeof window !== 'undefined' && typeof window.getLiveStationsForSocial === 'function') {
+    const curLive = window.getLiveStationsForSocial();
+    if (curLive) {
+      if (Array.isArray(curLive) && curLive.length > 0) socialState.stationsData = curLive;
+      else if (Array.isArray(curLive.estacoes) && curLive.estacoes.length > 0) socialState.stationsData = curLive.estacoes;
+    }
   }
 
-  // Garante que todas as estações estão carregadas e selecionadas por padrão
+  if (!socialState.stationsData || socialState.stationsData.length === 0) {
+    await syncFromLiveSiteNow({ full: false });
+  }
+
   if (socialState.selectedStationCodes.size === 0 && socialState.stationsData.length > 0) {
     socialState.stationsData.forEach(s => {
       if (s.codigo) socialState.selectedStationCodes.add(s.codigo);
     });
   }
 
-  // Sincroniza controles da UI
   const searchInput = document.getElementById('social-horizon-search');
   if (searchInput) searchInput.value = socialState.horizon;
 
@@ -215,7 +294,6 @@ export async function openSocialModalChuva(initialHorizon = '24h') {
   modal.classList.remove('hidden');
   modal.classList.add('flex');
 
-  // Renderiza o card imediatamente
   renderSocialCanvas();
 
   const previewContainer = document.getElementById('social-preview-container');
@@ -224,11 +302,16 @@ export async function openSocialModalChuva(initialHorizon = '24h') {
   }
 
   if (window.lucide) window.lucide.createIcons();
+
+  // Confirma leitura fresquíssima em background (~180ms) e atualiza o preview
+  syncFromLiveSiteNow({ full: false }).then(() => {
+    if (isSocialModalOpen()) {
+      renderSocialStationChips();
+      renderSocialCanvas();
+    }
+  }).catch(() => {});
 }
 
-/**
- * Fecha o modal
- */
 export function closeSocialModalChuva() {
   const modal = document.getElementById('modal-social-chuva');
   if (modal) {
@@ -237,9 +320,6 @@ export function closeSocialModalChuva() {
   }
 }
 
-/**
- * Alterna entre formato Post e Story
- */
 export function setSocialFormat(format) {
   socialState.format = format;
   updateFormatButtons(format);
@@ -250,9 +330,6 @@ export function setSocialFormat(format) {
   }
 }
 
-/**
- * Define o horizonte de tempo via atalho (ex: '1h', '24h')
- */
 export function setSocialHorizon(horizon) {
   const parsed = parseUserQuery(horizon);
   socialState.horizon = parsed.horizonLabel.toLowerCase();
@@ -267,9 +344,6 @@ export function setSocialHorizon(horizon) {
   renderSocialCanvas();
 }
 
-/**
- * Manipula a busca por texto do horizonte ou estação
- */
 export function handleSocialSearch(query) {
   const parsed = parseUserQuery(query);
 
@@ -286,9 +360,6 @@ export function handleSocialSearch(query) {
   renderSocialCanvas();
 }
 
-/**
- * Define o modo de filtro das estações ('all' para todas as 10 ou 'active' para apenas online)
- */
 export function setSocialStationsFilter(mode) {
   socialState.filterMode = mode;
   socialState.selectedStationCodes.clear();
@@ -310,9 +381,6 @@ export function setSocialStationsFilter(mode) {
   renderSocialCanvas();
 }
 
-/**
- * Alterna individualmente a seleção de uma estação
- */
 export function toggleStationSelection(code) {
   if (socialState.selectedStationCodes.has(code)) {
     socialState.selectedStationCodes.delete(code);
@@ -320,7 +388,6 @@ export function toggleStationSelection(code) {
     socialState.selectedStationCodes.add(code);
   }
 
-  // Se todas estão selecionadas ou só as ativas, ajusta filterMode
   const total = socialState.stationsData.length;
   const activeCount = socialState.stationsData.filter(s => s.online !== false).length;
   if (socialState.selectedStationCodes.size === total) {
@@ -340,27 +407,14 @@ export function toggleStationSelection(code) {
 }
 
 /**
- * Atualiza medições em tempo real buscando o JSON mais recente
+ * Botão "Atualizar" do modal: consulta diretamente a telemetria em tempo real do site (sem sobrescrever com JSON estático antigo)
  */
 export async function refreshSocialStationsData() {
-  const ts = Date.now();
-  try {
-    const res = await fetch(`./data/acumulados_estacoes.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      setSocialStationsData(data);
-    }
-  } catch (e) {
-    console.warn("Falha ao recarregar estações em tempo real:", e);
-  }
-
+  await syncFromLiveSiteNow({ full: true });
   renderSocialStationChips();
   renderSocialCanvas();
 }
 
-/**
- * Renderiza os chips de alternância rápida de cada estação no modal
- */
 export function renderSocialStationChips() {
   const container = document.getElementById('social-station-chips');
   const countEl = document.getElementById('social-selected-count');
@@ -450,15 +504,13 @@ function updateActivePill(activeHz) {
   }
 }
 
-/**
- * Compatibilidade legada para o checkbox de ativas
- */
 export function toggleOnlyActive(isChecked) {
   setSocialStationsFilter(isChecked ? 'active' : 'all');
 }
 
 /**
- * Renderiza o canvas de alta resolução com TODAS as estações e VENTO/RAJADAS
+ * Renderiza o canvas de alta resolução com TODAS as estações selecionadas
+ * e os valores REAIS de VENTO e RAJADAS do exato momento (sincronizados com os cards do site).
  */
 export function renderSocialCanvas() {
   const canvas = document.getElementById('social-export-canvas') || document.createElement('canvas');
@@ -496,14 +548,12 @@ export function renderSocialCanvas() {
   // 2. Filtra e Ordena as Estações Selecionadas
   let stations = [...socialState.stationsData];
 
-  // Aplica filtro de seleção individual ou modo ativo
   if (socialState.selectedStationCodes && socialState.selectedStationCodes.size > 0) {
     stations = stations.filter(s => socialState.selectedStationCodes.has(s.codigo));
   } else if (socialState.filterMode === 'active') {
     stations = stations.filter(s => s.online !== false);
   }
 
-  // Filtro de busca textual se houver
   if (socialState.stationFilterText) {
     const q = socialState.stationFilterText.toLowerCase();
     stations = stations.filter(s =>
@@ -513,20 +563,16 @@ export function renderSocialCanvas() {
     );
   }
 
-  // Separa estações pluviométricas de chuva e hidrológica do Rio Jundiá
   const rainStations = stations.filter(s => s.categoria !== 'inea');
   const jundiaSt = stations.find(s => s.categoria === 'inea');
 
-  // Calcula o valor de chuva NA HORA para o horizonte ativo em horas
   const currentHours = socialState.horizonHours || 24.0;
   rainStations.forEach(st => {
     st._activeRainVal = calculateStationRain(st, currentHours);
   });
 
-  // Ordena da maior para a menor chuva
   rainStations.sort((a, b) => b._activeRainVal - a._activeRainVal);
 
-  // CONSTRÓI O ARRAY COMPLETO SEM TRUNCAR (Exibe TODAS as estações selecionadas!)
   let displayStations = [];
   if (jundiaSt && (!socialState.stationFilterText || socialState.stationFilterText.includes('jundi') || socialState.stationFilterText.includes('inea'))) {
     displayStations = [...rainStations, jundiaSt];
@@ -539,18 +585,15 @@ export function renderSocialCanvas() {
   const leftPad = 70;
   const rightPad = width - 70;
 
-  // Barra de acento ciano à esquerda do título
   ctx.fillStyle = '#00d2ff';
   ctx.beginPath();
   ctx.roundRect(leftPad, topPad, 10, isStory ? 90 : 75, 5);
   ctx.fill();
 
-  // "ACUMULADOS DE"
   ctx.fillStyle = '#ffffff';
   ctx.font = isStory ? 'bold 38px sans-serif' : 'bold 32px sans-serif';
   ctx.fillText('ACUMULADOS DE', leftPad + 24, topPad + (isStory ? 34 : 28));
 
-  // "CHUVA" em Ciano Elétrico Grande
   const titleGrad = ctx.createLinearGradient(leftPad + 24, topPad + 40, leftPad + 280, topPad + 95);
   titleGrad.addColorStop(0, '#5eead4');
   titleGrad.addColorStop(1, '#00c2ff');
@@ -558,7 +601,6 @@ export function renderSocialCanvas() {
   ctx.font = isStory ? '900 70px sans-serif' : '900 58px sans-serif';
   ctx.fillText('CHUVA', leftPad + 24, topPad + (isStory ? 92 : 76));
 
-  // Subtítulo e Carimbo de Data/Hora à Direita
   const now = new Date();
   const dataFormatada = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
   const horaFormatada = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -576,7 +618,6 @@ export function renderSocialCanvas() {
   ctx.fillStyle = '#38bdf8';
   ctx.fillText(metaRight, rightPad - metaW, subY);
 
-  // Linha horizontal abaixo do cabeçalho
   ctx.strokeStyle = 'rgba(0, 194, 255, 0.25)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
@@ -584,23 +625,23 @@ export function renderSocialCanvas() {
   ctx.lineTo(rightPad, subY + 18);
   ctx.stroke();
 
-  // 4. Lista das Estações (Dimensionamento Dinâmico para comportar TODAS)
+  // 4. Lista das Estações
   const listStartY = subY + 32;
   const footerY = height - (isStory ? 85 : 60);
   const availableListH = footerY - listStartY - 20;
   const numStations = Math.max(displayStations.length, 1);
 
-  // Calcula a altura exata de cada linha para caberem TODAS as 10 estações
   const rowHeight = isStory
     ? Math.min(145, Math.floor(availableListH / numStations))
     : Math.min(108, Math.floor(availableListH / numStations));
+
+  const midX = Math.round(width * 0.435);
 
   displayStations.forEach((st, idx) => {
     const rowY = listStartY + idx * rowHeight;
     const rainVal = st._activeRainVal !== undefined ? st._activeRainVal : calculateStationRain(st, currentHours);
     const rainStr = `${rainVal.toFixed(1).replace('.', ',')} mm`;
 
-    // Nome Amigável / Limpo da Estação
     let displayName = st.nome_curto || st.nome;
     displayName = displayName
       .replace(/defesa civil municipal\s*(\(tartaruga\))?/gi, 'Praia da Tartaruga')
@@ -608,7 +649,6 @@ export function renderSocialCanvas() {
       .replace(/\s*-\s*[A-Z0-9]+$/i, '')
       .trim();
 
-    // Rede e Código
     let codeStr = st.codigo || '';
     if (st.categoria === 'cemaden') {
       codeStr = `PCD ${st.codigo.replace(/[^0-9]/g, '')}`;
@@ -618,10 +658,15 @@ export function renderSocialCanvas() {
 
     // A. Coluna Esquerda: Nome e Badge
     ctx.fillStyle = '#ffffff';
-    ctx.font = isStory ? 'bold 28px sans-serif' : 'bold 23px sans-serif';
+    let nameFontPx = isStory ? 26 : 22;
+    ctx.font = `bold ${nameFontPx}px sans-serif`;
+    const maxNameW = midX - leftPad - 28;
+    while (nameFontPx > 17 && ctx.measureText(displayName).width > maxNameW) {
+      nameFontPx -= 1;
+      ctx.font = `bold ${nameFontPx}px sans-serif`;
+    }
     ctx.fillText(displayName, leftPad, rowY + (isStory ? 40 : 30));
 
-    // Badge Retangular Arredondado com o Código
     const badgeTxt = codeStr;
     ctx.font = isStory ? 'bold 16px monospace' : 'bold 14px monospace';
     const badgeW = ctx.measureText(badgeTxt).width + 20;
@@ -640,16 +685,15 @@ export function renderSocialCanvas() {
     ctx.fillText(badgeTxt, leftPad + 10, badgeY + (isStory ? 18 : 15));
 
     // B. Coluna Central: Indicador Visual e Volume
-    const midX = width * 0.47;
     const isJundia = st.categoria === 'inea';
+    let midColEndX = midX + 180;
 
     if (isJundia) {
-      // Para o Rio Jundiá: NÍVEL DO RIO com cápsula visual
-      const riverLevel = st.nivel_rio ? st.nivel_rio.replace('.', ',') : '1,59 m';
+      const riverLevel = st.nivel_rio ? String(st.nivel_rio).replace('.', ',') : '1,40 m';
 
-      const capW = isStory ? 80 : 70;
-      const capH = isStory ? 30 : 26;
-      const capX = midX - 30;
+      const capW = isStory ? 74 : 64;
+      const capH = isStory ? 28 : 24;
+      const capX = midX - 18;
       const capY = rowY + (isStory ? 38 : 28);
 
       const capGrad = ctx.createLinearGradient(capX, capY, capX + capW, capY);
@@ -657,31 +701,41 @@ export function renderSocialCanvas() {
       capGrad.addColorStop(1, '#00d2ff');
       ctx.fillStyle = capGrad;
       ctx.beginPath();
-      ctx.roundRect(capX, capY, capW, capH, 13);
+      ctx.roundRect(capX, capY, capW, capH, 12);
       ctx.fill();
 
-      // Nível do Rio em metros (ex: 1,59 m)
       ctx.fillStyle = '#ffffff';
-      ctx.font = isStory ? '900 40px monospace' : '900 33px monospace';
-      ctx.fillText(riverLevel, capX + capW + 16, rowY + (isStory ? 64 : 52));
+      ctx.font = isStory ? '900 38px monospace' : '900 32px monospace';
+      const rTxtX = capX + capW + 14;
+      ctx.fillText(riverLevel, rTxtX, rowY + (isStory ? 63 : 51));
+      midColEndX = rTxtX + ctx.measureText(riverLevel).width;
     } else {
-      // Para Estações Pluviométricas: Círculo Ciano + Volume mm
       ctx.fillStyle = '#00d2ff';
       ctx.beginPath();
-      ctx.arc(midX, rowY + (isStory ? 50 : 40), isStory ? 15 : 12, 0, Math.PI * 2);
+      ctx.arc(midX, rowY + (isStory ? 50 : 40), isStory ? 14 : 11.5, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = '#ffffff';
-      ctx.font = isStory ? '900 42px monospace' : '900 35px monospace';
-      ctx.fillText(rainStr, midX + (isStory ? 28 : 22), rowY + (isStory ? 64 : 52));
+      ctx.font = isStory ? '900 39px monospace' : '900 34px monospace';
+      const rainTxtX = midX + (isStory ? 25 : 21);
+      ctx.fillText(rainStr, rainTxtX, rowY + (isStory ? 63 : 51));
+      midColEndX = rainTxtX + ctx.measureText(rainStr).width;
     }
 
-    // C. Coluna Direita: VENTO E RAJADA (Nunca exibe "ativa"!)
+    // C. Coluna Direita: VENTO E RAJADAS EM TEMPO REAL (idêntico aos valores atualizados do site)
     const windInfo = getStationWindAndGust(st, socialState.stationsData);
-    const pillTxt = `agora: ${windInfo.vento} • raj máx: ${windInfo.rajada_max} km/h`;
+    const pillTxt = `vento: ${windInfo.ventoStr} • rajadas: ${windInfo.rajadaStr} km/h`;
 
-    ctx.font = isStory ? 'bold 19px monospace' : 'bold 16px monospace';
-    const pillW = ctx.measureText(pillTxt).width + 30;
+    let pillFontPx = isStory ? 17.5 : 15.5;
+    ctx.font = `bold ${pillFontPx}px monospace`;
+    let pillW = ctx.measureText(pillTxt).width + 26;
+    const maxPillW = Math.max(220, rightPad - (midColEndX + 18));
+    while (pillFontPx > 12.5 && pillW > maxPillW) {
+      pillFontPx -= 0.5;
+      ctx.font = `bold ${pillFontPx}px monospace`;
+      pillW = ctx.measureText(pillTxt).width + 24;
+    }
+
     const pillH = isStory ? 42 : 36;
     const pillX = rightPad - pillW;
     const pillY = rowY + (isStory ? 32 : 24);
@@ -695,9 +749,8 @@ export function renderSocialCanvas() {
     ctx.stroke();
 
     ctx.fillStyle = '#7dd3fc';
-    ctx.fillText(pillTxt, pillX + 15, pillY + (isStory ? 27 : 24));
+    ctx.fillText(pillTxt, pillX + 12, pillY + (isStory ? 27 : 23.5));
 
-    // Linha divisória suave abaixo da linha
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.lineWidth = 1;
     ctx.beginPath();
@@ -707,7 +760,6 @@ export function renderSocialCanvas() {
   });
 
   // 5. Rodapé Oficial
-  // Barra de acento ciano horizontal
   ctx.fillStyle = '#00d2ff';
   ctx.beginPath();
   ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 140, 2, 1);
@@ -721,7 +773,6 @@ export function renderSocialCanvas() {
   ctx.font = isStory ? '400 19px sans-serif' : '400 16px sans-serif';
   ctx.fillText('Fontes: Estações de cada bairro • Rio das Ostras - RJ', leftPad, footerY + (isStory ? 26 : 22));
 
-  // Atualiza a imagem de pré-visualização no DOM
   const previewImg = document.getElementById('social-preview-image');
   if (previewImg) {
     previewImg.src = canvas.toDataURL('image/png');
@@ -729,9 +780,12 @@ export function renderSocialCanvas() {
 }
 
 /**
- * Faz download da imagem gerada no canvas
+ * Faz download da imagem sincronizando antes com os valores reais do site naquele exato momento
  */
-export function downloadSocialCard() {
+export async function downloadSocialCard() {
+  await syncFromLiveSiteNow({ full: false });
+  renderSocialCanvas();
+
   const canvas = document.getElementById('social-export-canvas');
   if (!canvas) return;
 
@@ -748,18 +802,33 @@ export function downloadSocialCard() {
 }
 
 /**
- * Baixa diretamente o card no formato especificado ('post' ou 'story')
+ * Baixa diretamente o card no formato especificado ('post' ou 'story'),
+ * consultando primeiro os ventos e rajadas em tempo real atualizados no site.
  */
 export async function downloadSocialFormat(format) {
   if (format && (format === 'post' || format === 'story')) {
-    setSocialFormat(format);
+    socialState.format = format;
+    updateFormatButtons(format);
   }
-  // Pequeno intervalo para renderização do canvas
-  await new Promise(resolve => setTimeout(resolve, 80));
-  downloadSocialCard();
+  await syncFromLiveSiteNow({ full: false });
+  renderSocialCanvas();
+  await new Promise(resolve => setTimeout(resolve, 40));
+
+  const canvas = document.getElementById('social-export-canvas');
+  if (!canvas) return;
+
+  const fmtName = socialState.format === 'story' ? 'story' : 'post';
+  const horizonName = socialState.horizon;
+  const fileName = `acumulados_chuva_${horizonName}_${fmtName}_riodasostras.png`;
+
+  const link = document.createElement('a');
+  link.download = fileName;
+  link.href = canvas.toDataURL('image/png');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
-// Expõe funções globalmente para interações do HTML
 if (typeof window !== 'undefined') {
   window.openSocialModalChuva = openSocialModalChuva;
   window.openSocialModal = openSocialModalChuva;

@@ -673,12 +673,12 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
     let histJson = null;
 
     if (canUseQuickCache) {
-      currJson = await fetchJsonWithTimeout(`${base}/current?${q}`, 3500);
+      currJson = await fetchJsonWithTimeout(`${base}/current?${q}`, 6000);
     } else {
       [currJson, dayJson, histJson] = await Promise.all([
-        fetchJsonWithTimeout(`${base}/current?${q}`, 4500),
-        fetchJsonWithTimeout(`${base}/all/1day?${q}`, 5000),
-        fetchJsonWithTimeout(`${base}/hourly/7day?${q}`, 5500)
+        fetchJsonWithTimeout(`${base}/current?${q}`, 7500),
+        fetchJsonWithTimeout(`${base}/all/1day?${q}`, 10000),
+        fetchJsonWithTimeout(`${base}/hourly/7day?${q}`, 10000)
       ]);
     }
 
@@ -980,7 +980,7 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
 
     _wuLiveWindowCache[pid] = {
       todayIso,
-      fullFetchMs: canUseQuickCache ? prevMem.fullFetchMs : nowMs,
+      fullFetchMs: canUseQuickCache ? prevMem.fullFetchMs : (Array.isArray(dayJson?.observations) && dayJson.observations.length > 0 ? nowMs : 0),
       baseChuvaHoje: canUseQuickCache ? prevMem.baseChuvaHoje : chuvaHoje,
       last5mMs,
       wAvg5m,
