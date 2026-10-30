@@ -6,7 +6,7 @@
     "mapas": {
       "chuva_24h": {
         "ok": true,
-        "tamanho_bytes": 341879,
+        "tamanho_bytes": 344899,
         "arquivo": "img/cptec/mapa_prev_prob_24h_chuvaintensa.png",
         "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_chuvaintensa.png"
       },
@@ -18,7 +18,7 @@
       },
       "severo_24h": {
         "ok": true,
-        "tamanho_bytes": 337293,
+        "tamanho_bytes": 333539,
         "arquivo": "img/cptec/mapa_prev_prob_24h_temposevero.png",
         "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png"
       },
@@ -43,69 +43,69 @@
     "cidade": "Rio das Ostras",
     "uf": "RJ",
     "probabilidade_chuva": 95,
-    "precipitacao_acumulada": "17",
+    "precipitacao_acumulada": "23",
     "indice_uv": 12,
     "temperatura_max": "27",
     "temperatura_min": "21",
     "vento": "6",
-    "umidade": 80,
-    "temperatura_prev": "26",
-    "sensacao_termica": "24",
-    "hora_atual": "2026-10-30T12:00:00.000Z"
+    "umidade": 81,
+    "temperatura_prev": "27",
+    "sensacao_termica": "25",
+    "hora_atual": "2026-10-30T13:00:00.000Z"
   },
   "proximos_dias": [
     {
       "data_atual": "31",
       "semana_dia": "Sáb",
       "probabilidade_chuva": 5,
-      "temperatura_max": "26",
+      "temperatura_max": "27",
       "temperatura_min": "20",
-      "umidade": 71,
+      "umidade": 76,
       "indice_uv": 13
     },
     {
       "data_atual": "01",
       "semana_dia": "Dom",
-      "probabilidade_chuva": 60,
+      "probabilidade_chuva": 30,
       "temperatura_max": "26",
-      "temperatura_min": "20",
-      "umidade": 86,
+      "temperatura_min": "21",
+      "umidade": 82,
       "indice_uv": 13
     },
     {
       "data_atual": "02",
       "semana_dia": "Seg",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "29",
-      "temperatura_min": "20",
-      "umidade": 83,
+      "probabilidade_chuva": 20,
+      "temperatura_max": "28",
+      "temperatura_min": "21",
+      "umidade": 84,
       "indice_uv": 13
     },
     {
       "data_atual": "03",
       "semana_dia": "Ter",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "32",
-      "temperatura_min": "23",
-      "umidade": 67,
+      "probabilidade_chuva": 10,
+      "temperatura_max": "29",
+      "temperatura_min": "22",
+      "umidade": 75,
       "indice_uv": 13
     },
     {
       "data_atual": "04",
       "semana_dia": "Qua",
-      "probabilidade_chuva": 40,
-      "temperatura_max": "30",
+      "probabilidade_chuva": 20,
+      "temperatura_max": "31",
       "temperatura_min": "22",
-      "umidade": 53,
+      "umidade": 67,
       "indice_uv": 13
     },
     {
       "data_atual": "05",
       "semana_dia": "Qui",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "34",
+      "probabilidade_chuva": 10,
+      "temperatura_max": "32",
       "temperatura_min": "23",
-      "umidade": 53,
+      "umidade": 64,
       "indice_uv": 13
     }
   ],
