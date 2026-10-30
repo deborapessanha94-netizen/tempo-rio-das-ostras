@@ -1,10 +1,10 @@
 {
   "ibge": "3304524",
   "municipio": "Rio das Ostras - RJ",
-  "data": "2026-10-29",
-  "rodada": "12",
+  "data": "2026-10-30",
+  "rodada": "00",
   "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
   "imagem_disponivel": true,
   "imagem_path": "img/meteograma_inmet.png",
-  "atualizado_em": "2026-10-29T23:55:58.605572"
+  "atualizado_em": "2026-10-30T03:01:05.434254"
 }
