@@ -639,15 +639,16 @@ async function fetchJsonWithTimeout(url, timeoutMs = 4500) {
   }
 }
 
+const _wuLiveWindowCache = {};
+
 /**
  * Consulta diretamente no navegador (CORS: *) todas as 6 estações Weather Underground
- * de Rio das Ostras e entorno com precisão decimal em tempo real, calculando:
- * - Temperatura, Vento e Rajada naquele exato momento (observations/current)
- * - Horário exato em que a chuva iniciou no dia atual (observations/all/1day)
- * - Maior Vento e Maior Rajada do dia + respectivos horários (observations/all/1day)
- * - Acumulados reais de 1h, 4h, 6h, 12h, 24h, 36h, 48h, 96h sem defasagem de cron
+ * de Rio das Ostras e entorno com precisão decimal em tempo real:
+ * - Modo rápido (quickOnly=true a cada 20s): atualiza observations/current (~180ms) acompanhando o pulso de 16-20s das Ecowitt.
+ * - Modo completo (quickOnly=false no load e a cada 2 min): sincroniza current + all/1day (5 min) + hourly/7day.
+ * - Reconciliação anti-lacuna de 16s: evita zerar vento/rajada quando um único pacote instantâneo cai entre duas lufadas dentro de uma janela ativa de 5 min.
  */
-export async function fetchLiveWuStationsTelemetry() {
+export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
   const WU_API_KEY = 'ff90f212a6984a7390f212a698ea73cc';
   const stationIds = ['IRIODA17', 'IRIODA16', 'IRIODA15', 'ICASIM5', 'IRIODA6', 'IRIODA5'];
   const todayIso = getTodayIsoBrt();
@@ -658,14 +659,35 @@ export async function fetchLiveWuStationsTelemetry() {
     const base = 'https://api.weather.com/v2/pws/observations';
     const q = `stationId=${pid}&format=json&units=m&numericPrecision=decimal&apiKey=${WU_API_KEY}`;
 
-    const [currJson, dayJson, histJson] = await Promise.all([
-      fetchJsonWithTimeout(`${base}/current?${q}`, 4500),
-      fetchJsonWithTimeout(`${base}/all/1day?${q}`, 5000),
-      fetchJsonWithTimeout(`${base}/hourly/7day?${q}`, 5500)
-    ]);
+    const cached = _wuLiveWindowCache[pid];
+    const canUseQuickCache = Boolean(
+      quickOnly &&
+      cached &&
+      cached.todayIso === todayIso &&
+      cached.fullFetchMs &&
+      (nowMs - cached.fullFetchMs) < 110000
+    );
+
+    let currJson = null;
+    let dayJson = null;
+    let histJson = null;
+
+    if (canUseQuickCache) {
+      currJson = await fetchJsonWithTimeout(`${base}/current?${q}`, 3500);
+    } else {
+      [currJson, dayJson, histJson] = await Promise.all([
+        fetchJsonWithTimeout(`${base}/current?${q}`, 4500),
+        fetchJsonWithTimeout(`${base}/all/1day?${q}`, 5000),
+        fetchJsonWithTimeout(`${base}/hourly/7day?${q}`, 5500)
+      ]);
+    }
 
     const obs = currJson?.observations?.[0];
     if (!obs) {
+      if (canUseQuickCache && cached?.lastPayload) {
+        resultMap[pid] = cached.lastPayload;
+        return;
+      }
       resultMap[pid] = {
         online: false,
         temp_atual: null,
@@ -704,8 +726,8 @@ export async function fetchLiveWuStationsTelemetry() {
 
     const m = obs.metric || {};
     const tempAtual = round1(m.temp, null);
-    const ventoAtual = round1(m.windSpeed, 0.0);
-    const rajadaAtual = round1(m.windGust !== undefined && m.windGust !== null ? m.windGust : m.windSpeed, ventoAtual);
+    const rawWind = round1(m.windSpeed, 0.0) || 0.0;
+    const rawGust = round1(m.windGust !== undefined && m.windGust !== null ? m.windGust : m.windSpeed, rawWind) || 0.0;
     const ventoDirGraus = (obs.winddir !== undefined && obs.winddir !== null && !isNaN(Number(obs.winddir)))
       ? Math.round(Number(obs.winddir))
       : null;
@@ -714,72 +736,28 @@ export async function fetchLiveWuStationsTelemetry() {
     let chuvaHoje = obsLocal.startsWith(todayIso) ? (round1(m.precipTotal, 0.0) || 0.0) : 0.0;
     const chuvaTaxaAtual = round1(m.precipRate, 0.0) || 0.0;
 
-    let inicioChuvaHoje = null;
-    let ventoMaxHoje = null;
-    let horaVentoMaxHoje = null;
-    let rajadaMaxHoje = null;
-    let horaRajadaMaxHoje = null;
-    const today5mBuckets = [];
-
-    if (Array.isArray(dayJson?.observations) && dayJson.observations.length > 0) {
-      const sortedDay = dayJson.observations
-        .slice()
-        .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
-      const todayRecs = sortedDay.filter(o => String(o.obsTimeLocal || '').startsWith(todayIso));
-      let prevTot5m = 0.0;
-
-      for (const rec of todayRecs) {
-        const tStr = String(rec.obsTimeLocal || '');
-        const mr = rec.metric || {};
-        const tot = Number(mr.precipTotal || 0);
-        const rate = Number(mr.precipRate || 0);
-
-        if (!inicioChuvaHoje && (tot > 0 || rate > 0)) {
-          inicioChuvaHoje = tStr.slice(11, 16);
-        }
-
-        const tMs = parseBrtLocalMs(tStr);
-        if (!isNaN(tMs)) {
-          const inc = Math.max(0, tot - prevTot5m);
-          today5mBuckets.push({ ms: tMs, val: inc });
-          prevTot5m = Math.max(prevTot5m, tot);
-        }
-
-        const wHi = round1(mr.windspeedHigh, null);
-        if (wHi !== null && (ventoMaxHoje === null || wHi > ventoMaxHoje)) {
-          ventoMaxHoje = wHi;
-          horaVentoMaxHoje = tStr.slice(11, 16);
-        }
-
-        const gHi = round1(mr.windgustHigh, null);
-        if (gHi !== null && (rajadaMaxHoje === null || gHi > rajadaMaxHoje)) {
-          rajadaMaxHoje = gHi;
-          horaRajadaMaxHoje = tStr.slice(11, 16);
-        }
-      }
-
-      if (!isNaN(obsMs) && chuvaHoje > prevTot5m) {
-        today5mBuckets.push({ ms: obsMs, val: chuvaHoje - prevTot5m });
-        if (!inicioChuvaHoje && chuvaHoje > 0) {
-          inicioChuvaHoje = obsLocal.slice(11, 16);
-        }
-      }
-      if (prevTot5m > chuvaHoje) {
-        chuvaHoje = round1(prevTot5m, chuvaHoje);
-      }
-    } else if (chuvaHoje > 0 && obsLocal.length >= 16) {
-      inicioChuvaHoje = obsLocal.slice(11, 16);
+    const prevMem = _wuLiveWindowCache[pid] || {};
+    let lastNonZeroWind = prevMem.lastNonZeroWind || 0.0;
+    let lastNonZeroGust = prevMem.lastNonZeroGust || 0.0;
+    let lastNonZeroMs = prevMem.lastNonZeroMs || 0;
+    if (rawWind > 0) {
+      lastNonZeroWind = rawWind;
+      lastNonZeroGust = Math.max(rawGust, rawWind);
+      lastNonZeroMs = nowMs;
+    } else if (rawGust > 0) {
+      lastNonZeroGust = rawGust;
+      lastNonZeroMs = nowMs;
     }
 
-    const currHhmm = obsLocal.length >= 16 ? obsLocal.slice(11, 16) : null;
-    if (ventoAtual !== null && (ventoMaxHoje === null || ventoAtual > ventoMaxHoje)) {
-      ventoMaxHoje = ventoAtual;
-      horaVentoMaxHoje = currHhmm;
-    }
-    if (rajadaAtual !== null && (rajadaMaxHoje === null || rajadaAtual > rajadaMaxHoje)) {
-      rajadaMaxHoje = rajadaAtual;
-      horaRajadaMaxHoje = currHhmm;
-    }
+    let inicioChuvaHoje = canUseQuickCache ? prevMem.inicioChuvaHoje : null;
+    let ventoMaxHoje = canUseQuickCache ? prevMem.ventoMaxHoje : null;
+    let horaVentoMaxHoje = canUseQuickCache ? prevMem.horaVentoMaxHoje : null;
+    let rajadaMaxHoje = canUseQuickCache ? prevMem.rajadaMaxHoje : null;
+    let horaRajadaMaxHoje = canUseQuickCache ? prevMem.horaRajadaMaxHoje : null;
+    let last5mMs = canUseQuickCache ? prevMem.last5mMs : NaN;
+    let wAvg5m = canUseQuickCache ? (prevMem.wAvg5m || 0.0) : 0.0;
+    let wHi5m = canUseQuickCache ? (prevMem.wHi5m || 0.0) : 0.0;
+    let gHi5m = canUseQuickCache ? (prevMem.gHi5m || 0.0) : 0.0;
 
     let chuva1h = chuvaTaxaAtual;
     let chuva4h = chuvaHoje;
@@ -792,69 +770,184 @@ export async function fetchLiveWuStationsTelemetry() {
     let ventoMax24h = ventoMaxHoje;
     let rajadaMax24h = rajadaMaxHoje;
 
-    if (Array.isArray(histJson?.observations) && histJson.observations.length > 0) {
-      const sortedHist = histJson.observations
-        .slice()
-        .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
-      const priorBuckets = [];
-      const todayHourlyBuckets = [];
-      let prevDay = null;
-      let prevVal = 0.0;
+    if (canUseQuickCache) {
+      const deltaRain = Math.max(0, chuvaHoje - (prevMem.baseChuvaHoje || 0));
+      if (!inicioChuvaHoje && chuvaHoje > 0 && obsLocal.length >= 16) {
+        inicioChuvaHoje = obsLocal.slice(11, 16);
+      }
+      chuva1h = round1((prevMem.chuva1h || 0) + deltaRain, 0.0);
+      chuva4h = Math.max(round1((prevMem.chuva4h || 0) + deltaRain, 0.0), chuva1h);
+      chuva6h = Math.max(round1((prevMem.chuva6h || 0) + deltaRain, 0.0), chuva4h);
+      chuva12h = Math.max(round1((prevMem.chuva12h || 0) + deltaRain, 0.0), chuva6h);
+      chuva24h = Math.max(round1((prevMem.chuva24h || 0) + deltaRain, 0.0), chuvaHoje);
+      chuva36h = Math.max(round1((prevMem.chuva36h || 0) + deltaRain, 0.0), chuva24h);
+      chuva48h = Math.max(round1((prevMem.chuva48h || 0) + deltaRain, 0.0), chuva36h);
+      chuva96h = Math.max(round1((prevMem.chuva96h || 0) + deltaRain, 0.0), chuva48h);
+      ventoMax24h = prevMem.ventoMax24h ?? ventoMaxHoje;
+      rajadaMax24h = prevMem.rajadaMax24h ?? rajadaMaxHoje;
+    } else {
+      const today5mBuckets = [];
+      if (Array.isArray(dayJson?.observations) && dayJson.observations.length > 0) {
+        const sortedDay = dayJson.observations
+          .slice()
+          .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
+        const todayRecs = sortedDay.filter(o => String(o.obsTimeLocal || '').startsWith(todayIso));
+        let prevTot5m = 0.0;
 
-      for (const h of sortedHist) {
-        const tStr = String(h.obsTimeLocal || '');
-        const tMs = parseBrtLocalMs(tStr);
-        if (isNaN(tMs)) continue;
-        const dayStr = tStr.slice(0, 10);
-        const tot = Number(h.metric?.precipTotal || 0);
-        let inc = 0;
-        if (prevDay !== dayStr) {
-          inc = Math.max(0, tot);
-          prevVal = Math.max(0, tot);
-          prevDay = dayStr;
-        } else {
-          inc = Math.max(0, tot - prevVal);
-          prevVal = Math.max(prevVal, tot);
+        for (const rec of todayRecs) {
+          const tStr = String(rec.obsTimeLocal || '');
+          const mr = rec.metric || {};
+          const tot = Number(mr.precipTotal || 0);
+          const rate = Number(mr.precipRate || 0);
+
+          if (!inicioChuvaHoje && (tot > 0 || rate > 0)) {
+            inicioChuvaHoje = tStr.slice(11, 16);
+          }
+
+          const tMs = parseBrtLocalMs(tStr);
+          if (!isNaN(tMs)) {
+            const inc = Math.max(0, tot - prevTot5m);
+            today5mBuckets.push({ ms: tMs, val: inc });
+            prevTot5m = Math.max(prevTot5m, tot);
+          }
+
+          const wHi = round1(mr.windspeedHigh, null);
+          if (wHi !== null && (ventoMaxHoje === null || wHi > ventoMaxHoje)) {
+            ventoMaxHoje = wHi;
+            horaVentoMaxHoje = tStr.slice(11, 16);
+          }
+
+          const gHi = round1(mr.windgustHigh, null);
+          if (gHi !== null && (rajadaMaxHoje === null || gHi > rajadaMaxHoje)) {
+            rajadaMaxHoje = gHi;
+            horaRajadaMaxHoje = tStr.slice(11, 16);
+          }
         }
-        if (dayStr < todayIso) {
-          priorBuckets.push({ ms: tMs, val: inc });
-        } else if (dayStr === todayIso) {
-          todayHourlyBuckets.push({ ms: tMs, val: inc });
+
+        if (todayRecs.length > 0) {
+          const lastRec = todayRecs[todayRecs.length - 1];
+          last5mMs = parseBrtLocalMs(lastRec.obsTimeLocal || '');
+          wAvg5m = round1(lastRec.metric?.windspeedAvg, 0.0) || 0.0;
+          wHi5m = round1(lastRec.metric?.windspeedHigh, 0.0) || 0.0;
+          gHi5m = round1(lastRec.metric?.windgustHigh, 0.0) || 0.0;
         }
+
+        if (!isNaN(obsMs) && chuvaHoje > prevTot5m) {
+          today5mBuckets.push({ ms: obsMs, val: chuvaHoje - prevTot5m });
+          if (!inicioChuvaHoje && chuvaHoje > 0) {
+            inicioChuvaHoje = obsLocal.slice(11, 16);
+          }
+        }
+        if (prevTot5m > chuvaHoje) {
+          chuvaHoje = round1(prevTot5m, chuvaHoje);
+        }
+      } else if (chuvaHoje > 0 && obsLocal.length >= 16) {
+        inicioChuvaHoje = obsLocal.slice(11, 16);
       }
 
-      const combined = priorBuckets.concat(today5mBuckets.length > 0 ? today5mBuckets : todayHourlyBuckets);
-      const refMs = !isNaN(obsMs) ? obsMs : nowMs;
-      const sumHours = (hrs) => {
-        const cutoff = refMs - hrs * 3600 * 1000;
-        const s = combined.reduce((acc, b) => (b.ms > cutoff ? acc + b.val : acc), 0);
-        return round1(s, 0.0) || 0.0;
-      };
+      ventoMax24h = ventoMaxHoje;
+      rajadaMax24h = rajadaMaxHoje;
 
-      if (combined.length > 0) {
-        chuva1h = sumHours(1);
-        chuva4h = Math.max(sumHours(4), chuva1h);
-        chuva6h = Math.max(sumHours(6), chuva4h);
-        chuva12h = Math.max(sumHours(12), chuva6h);
-        chuva24h = Math.max(sumHours(24), chuvaHoje);
-        chuva36h = Math.max(sumHours(36), chuva24h);
-        chuva48h = Math.max(sumHours(48), chuva36h);
-        chuva96h = Math.max(sumHours(96), chuva48h);
-      }
+      if (Array.isArray(histJson?.observations) && histJson.observations.length > 0) {
+        const sortedHist = histJson.observations
+          .slice()
+          .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
+        const priorBuckets = [];
+        const todayHourlyBuckets = [];
+        let prevDay = null;
+        let prevVal = 0.0;
 
-      const cutoff24 = refMs - 24 * 3600 * 1000;
-      for (const h of sortedHist) {
-        const tMs = parseBrtLocalMs(h.obsTimeLocal);
-        if (!isNaN(tMs) && tMs >= cutoff24) {
-          const wHi = round1(h.metric?.windspeedHigh, null);
-          const gHi = round1(h.metric?.windgustHigh, null);
-          if (wHi !== null && (ventoMax24h === null || wHi > ventoMax24h)) ventoMax24h = wHi;
-          if (gHi !== null && (rajadaMax24h === null || gHi > rajadaMax24h)) rajadaMax24h = gHi;
+        for (const h of sortedHist) {
+          const tStr = String(h.obsTimeLocal || '');
+          const tMs = parseBrtLocalMs(tStr);
+          if (isNaN(tMs)) continue;
+          const dayStr = tStr.slice(0, 10);
+          const tot = Number(h.metric?.precipTotal || 0);
+          let inc = 0;
+          if (prevDay !== dayStr) {
+            inc = Math.max(0, tot);
+            prevVal = Math.max(0, tot);
+            prevDay = dayStr;
+          } else {
+            inc = Math.max(0, tot - prevVal);
+            prevVal = Math.max(prevVal, tot);
+          }
+          if (dayStr < todayIso) {
+            priorBuckets.push({ ms: tMs, val: inc });
+          } else if (dayStr === todayIso) {
+            todayHourlyBuckets.push({ ms: tMs, val: inc });
+          }
+        }
+
+        const combined = priorBuckets.concat(today5mBuckets.length > 0 ? today5mBuckets : todayHourlyBuckets);
+        const refMs = !isNaN(obsMs) ? obsMs : nowMs;
+        const sumHours = (hrs) => {
+          const cutoff = refMs - hrs * 3600 * 1000;
+          const s = combined.reduce((acc, b) => (b.ms > cutoff ? acc + b.val : acc), 0);
+          return round1(s, 0.0) || 0.0;
+        };
+
+        if (combined.length > 0) {
+          chuva1h = sumHours(1);
+          chuva4h = Math.max(sumHours(4), chuva1h);
+          chuva6h = Math.max(sumHours(6), chuva4h);
+          chuva12h = Math.max(sumHours(12), chuva6h);
+          chuva24h = Math.max(sumHours(24), chuvaHoje);
+          chuva36h = Math.max(sumHours(36), chuva24h);
+          chuva48h = Math.max(sumHours(48), chuva36h);
+          chuva96h = Math.max(sumHours(96), chuva48h);
+        }
+
+        const cutoff24 = refMs - 24 * 3600 * 1000;
+        for (const h of sortedHist) {
+          const tMs = parseBrtLocalMs(h.obsTimeLocal);
+          if (!isNaN(tMs) && tMs >= cutoff24) {
+            const wHi = round1(h.metric?.windspeedHigh, null);
+            const gHi = round1(h.metric?.windgustHigh, null);
+            if (wHi !== null && (ventoMax24h === null || wHi > ventoMax24h)) ventoMax24h = wHi;
+            if (gHi !== null && (rajadaMax24h === null || gHi > rajadaMax24h)) rajadaMax24h = gHi;
+          }
         }
       }
     }
 
-    resultMap[pid] = {
+    // Reconciliação anti-lacuna de 16s: usa primeiro o pulso instantâneo; se ele vier 0.0
+    // numa pausa curta entre rajadas, consulta o último pulso não-zero (<90s) ou a janela ativa de 5 min (<12 min)
+    const isFresh5m = !isNaN(last5mMs) && !isNaN(obsMs)
+      ? (Math.abs(obsMs - last5mMs) <= 12 * 60 * 1000)
+      : (!isNaN(last5mMs) && (nowMs - last5mMs) <= 15 * 60 * 1000);
+    const hasRecent90s = lastNonZeroMs > 0 && (nowMs - lastNonZeroMs) <= 90 * 1000;
+
+    let ventoAtual = rawWind;
+    if (ventoAtual <= 0) {
+      if (hasRecent90s && lastNonZeroWind > 0) {
+        ventoAtual = lastNonZeroWind;
+      } else if (isFresh5m && wAvg5m > 0) {
+        ventoAtual = wAvg5m;
+      } else if (isFresh5m && wHi5m > 0) {
+        ventoAtual = wHi5m;
+      } else {
+        ventoAtual = 0.0;
+      }
+    }
+
+    const active5mGust = isFresh5m ? gHi5m : 0.0;
+    const recent90sGust = hasRecent90s ? lastNonZeroGust : 0.0;
+    const rajadaAtual = round1(Math.max(rawGust, active5mGust, recent90sGust, ventoAtual), ventoAtual);
+
+    const currHhmm = obsLocal.length >= 16 ? obsLocal.slice(11, 16) : null;
+    if (ventoAtual !== null && (ventoMaxHoje === null || ventoAtual > ventoMaxHoje)) {
+      ventoMaxHoje = ventoAtual;
+      horaVentoMaxHoje = currHhmm;
+    }
+    if (rajadaAtual !== null && (rajadaMaxHoje === null || rajadaAtual > rajadaMaxHoje)) {
+      rajadaMaxHoje = rajadaAtual;
+      horaRajadaMaxHoje = currHhmm;
+    }
+    if (ventoMaxHoje !== null && (ventoMax24h === null || ventoMaxHoje > ventoMax24h)) ventoMax24h = ventoMaxHoje;
+    if (rajadaMaxHoje !== null && (rajadaMax24h === null || rajadaMaxHoje > rajadaMax24h)) rajadaMax24h = rajadaMaxHoje;
+
+    const payload = {
       online: true,
       ultima_leitura: obsLocal,
       temp_atual: tempAtual,
@@ -884,6 +977,37 @@ export async function fetchLiveWuStationsTelemetry() {
       chuva_48h: round1(chuva48h, 0.0),
       chuva_96h: round1(chuva96h, 0.0)
     };
+
+    _wuLiveWindowCache[pid] = {
+      todayIso,
+      fullFetchMs: canUseQuickCache ? prevMem.fullFetchMs : nowMs,
+      baseChuvaHoje: canUseQuickCache ? prevMem.baseChuvaHoje : chuvaHoje,
+      last5mMs,
+      wAvg5m,
+      wHi5m,
+      gHi5m,
+      lastNonZeroWind,
+      lastNonZeroGust,
+      lastNonZeroMs,
+      inicioChuvaHoje,
+      ventoMaxHoje,
+      horaVentoMaxHoje,
+      rajadaMaxHoje,
+      horaRajadaMaxHoje,
+      ventoMax24h,
+      rajadaMax24h,
+      chuva1h: payload.chuva_1h,
+      chuva4h: payload.chuva_4h,
+      chuva6h: payload.chuva_6h,
+      chuva12h: payload.chuva_12h,
+      chuva24h: payload.chuva_24h,
+      chuva36h: payload.chuva_36h,
+      chuva48h: payload.chuva_48h,
+      chuva96h: payload.chuva_96h,
+      lastPayload: payload
+    };
+
+    resultMap[pid] = payload;
   }));
 
   return resultMap;

@@ -389,6 +389,33 @@ def collect_stations_network():
                 if prev_tot_5m > entry["chuva_hoje"]:
                     entry["chuva_hoje"] = round(prev_tot_5m, 1)
 
+                # Reconciliação anti-lacuna de 16s (Ecowitt / EasyWeatherPro):
+                # Se o pacote instantâneo current veio 0.0 entre duas lufadas, mas o ciclo ativo
+                # de 5 minutos da própria estação registrou vento/rajada, preserva a leitura real do ciclo atual.
+                if entry["online"] and today_records:
+                    last_5m = today_records[-1]
+                    last_5m_str = last_5m.get("obsTimeLocal", "")
+                    m_last = last_5m.get("metric", {})
+                    is_fresh_5m = True
+                    if curr_obs_dt is not None and last_5m_str:
+                        try:
+                            dt_last_5m = datetime.strptime(last_5m_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
+                            if abs((curr_obs_dt - dt_last_5m).total_seconds()) > 12 * 60:
+                                is_fresh_5m = False
+                        except Exception:
+                            pass
+                    if is_fresh_5m:
+                        w_avg_5m = round(safe_float(m_last.get("windspeedAvg"), 0.0), 1)
+                        w_hi_5m = round(safe_float(m_last.get("windspeedHigh"), 0.0), 1)
+                        g_hi_5m = round(safe_float(m_last.get("windgustHigh"), 0.0), 1)
+                        if entry["vento_atual"] is None or entry["vento_atual"] <= 0.0:
+                            if w_avg_5m > 0.0:
+                                entry["vento_atual"] = w_avg_5m
+                            elif w_hi_5m > 0.0:
+                                entry["vento_atual"] = w_hi_5m
+                        curr_g = entry["rajada_atual"] if entry["rajada_atual"] is not None else 0.0
+                        entry["rajada_atual"] = round(max(curr_g, g_hi_5m, entry["vento_atual"] or 0.0), 1)
+
                 if max_w_val is not None:
                     entry["vento_max_hoje"] = max_w_val
                     entry["hora_vento_max_hoje"] = max_w_hhmm

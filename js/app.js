@@ -36,7 +36,7 @@ import {
 
 
 
-} from './social-cards.js?v=176';
+} from './social-cards.js?v=177';
 
 
 
@@ -216,7 +216,7 @@ import {
 
 
 
-} from './api.js?v=176';
+} from './api.js?v=177';
 
 
 
@@ -2590,15 +2590,15 @@ function applyLiveStationsOverlay(rawData) {
  * Weather Underground (temperatura, vento, rajada, maior vento, maior rajada, início da chuva hoje)
  * e das PCDs do CEMADEN, atualizando os cards imediatamente sem depender de fila do GitHub Actions.
  */
-async function syncLiveStationsTelemetry(force = false) {
+async function syncLiveStationsTelemetry(force = false, quickOnly = false) {
   const now = Date.now();
   if (state.isSyncingLiveStations) return;
-  if (!force && state.lastLiveStationsSyncMs && (now - state.lastLiveStationsSyncMs) < 45000) return;
+  if (!force && state.lastLiveStationsSyncMs && (now - state.lastLiveStationsSyncMs) < 15000) return;
   state.isSyncingLiveStations = true;
 
   try {
-    // 1. Weather Underground em tempo real (~300ms)
-    const wuLive = await fetchLiveWuStationsTelemetry();
+    // 1. Weather Underground em tempo real (~180ms no ciclo de 20s / ~350ms no ciclo completo)
+    const wuLive = await fetchLiveWuStationsTelemetry({ quickOnly });
     if (wuLive && Object.keys(wuLive).length > 0) {
       state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...wuLive };
       state.lastLiveStationsSyncMs = Date.now();
@@ -2624,18 +2624,20 @@ async function syncLiveStationsTelemetry(force = false) {
       }
     }
 
-    // 2. CEMADEN horário em tempo real (independente, não bloqueia WU)
-    fetchLiveCemadenStationsTelemetry().then(cemLive => {
-      if (cemLive && Object.keys(cemLive).length > 0) {
-        state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...cemLive };
-        if (state.acumuladosDataset || state.stationsRawData) {
-          const updatedCem = applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
-          state.acumuladosDataset = updatedCem;
-          state.acumuladosEstacoes = updatedCem.estacoes ? updatedCem.estacoes : updatedCem;
-          renderAcumuladosChuva(updatedCem);
+    // 2. CEMADEN horário em tempo real (apenas no ciclo completo, não bloqueia WU)
+    if (!quickOnly) {
+      fetchLiveCemadenStationsTelemetry().then(cemLive => {
+        if (cemLive && Object.keys(cemLive).length > 0) {
+          state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...cemLive };
+          if (state.acumuladosDataset || state.stationsRawData) {
+            const updatedCem = applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
+            state.acumuladosDataset = updatedCem;
+            state.acumuladosEstacoes = updatedCem.estacoes ? updatedCem.estacoes : updatedCem;
+            renderAcumuladosChuva(updatedCem);
+          }
         }
-      }
-    }).catch(() => {});
+      }).catch(() => {});
+    }
   } catch (err) {
     console.warn('[Live Stations] Aviso ao consultar telemetria direta:', err);
   } finally {
@@ -7165,10 +7167,25 @@ window.resetSyncCountdown = function() {
 };
 
 function startAutoSync() {
-  // Atualização direta das estações (Weather Underground / CEMADEN) a cada 2 minutos em tempo real
+  // Pulso rápido de 20 em 20 segundos acompanhando a transmissão de 16-20s das estações PWS
   setInterval(() => {
-    syncLiveStationsTelemetry(true);
+    if (typeof document === 'undefined' || document.visibilityState !== 'hidden') {
+      syncLiveStationsTelemetry(true, true);
+    }
+  }, 20 * 1000);
+
+  // Sincronização completa (janela de 5 min + 7 dias + CEMADEN) a cada 2 minutos
+  setInterval(() => {
+    syncLiveStationsTelemetry(true, false);
   }, 120 * 1000);
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncLiveStationsTelemetry(true, true);
+      }
+    });
+  }
 
   // Timer de contagem regressiva e sincronização contínua de 5 em 5 minutos (300 segundos)
   setInterval(() => {
