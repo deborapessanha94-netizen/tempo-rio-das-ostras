@@ -486,7 +486,7 @@ export async function getRealtimeUvWunderground() {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4500);
-      const url = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&apiKey=${WU_API_KEY}`;
+      const url = `https://api.weather.com/v2/pws/observations/current?stationId=${stationId}&format=json&units=m&numericPrecision=decimal&apiKey=${WU_API_KEY}`;
       const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
       clearTimeout(timeoutId);
       if (!res.ok) continue;
@@ -587,4 +587,384 @@ export async function getTabuaMares() {
  */
 export async function getIneaJundia10d() {
   return await fetchLiveCloudOrLocalJson('inea_jundia_10d.json', null);
+}
+
+function getTodayIsoBrt() {
+  try {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    }).formatToParts(new Date());
+    const y = parts.find(p => p.type === 'year')?.value;
+    const m = parts.find(p => p.type === 'month')?.value;
+    const d = parts.find(p => p.type === 'day')?.value;
+    if (y && m && d) return `${y}-${m}-${d}`;
+  } catch (e) {}
+  const brtNow = new Date(Date.now() - 3 * 3600 * 1000);
+  return brtNow.toISOString().slice(0, 10);
+}
+
+function parseBrtLocalMs(localStr) {
+  if (!localStr || typeof localStr !== 'string') return NaN;
+  const clean = localStr.trim().replace(' ', 'T');
+  const withSec = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(clean) ? `${clean}:00` : clean;
+  return Date.parse(`${withSec}-03:00`);
+}
+
+function degToCardinalPt(deg) {
+  if (deg === null || deg === undefined || isNaN(Number(deg))) return null;
+  const d = ((Number(deg) % 360) + 360) % 360;
+  const dirs = ['N', 'NNE', 'NE', 'ENE', 'L', 'ESE', 'SE', 'SSE', 'S', 'SSO', 'SO', 'OSO', 'O', 'ONO', 'NO', 'NNO'];
+  return dirs[Math.round(d / 22.5) % 16];
+}
+
+function round1(val, fallback = null) {
+  if (val === null || val === undefined || val === '' || isNaN(Number(val))) return fallback;
+  return Math.round(Number(val) * 10) / 10;
+}
+
+async function fetchJsonWithTimeout(url, timeoutMs = 4500) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+    clearTimeout(timeoutId);
+    if (!res.ok || res.status === 204) return null;
+    return await res.json();
+  } catch (e) {
+    clearTimeout(timeoutId);
+    return null;
+  }
+}
+
+/**
+ * Consulta diretamente no navegador (CORS: *) todas as 6 estações Weather Underground
+ * de Rio das Ostras e entorno com precisão decimal em tempo real, calculando:
+ * - Temperatura, Vento e Rajada naquele exato momento (observations/current)
+ * - Horário exato em que a chuva iniciou no dia atual (observations/all/1day)
+ * - Maior Vento e Maior Rajada do dia + respectivos horários (observations/all/1day)
+ * - Acumulados reais de 1h, 4h, 6h, 12h, 24h, 36h, 48h, 96h sem defasagem de cron
+ */
+export async function fetchLiveWuStationsTelemetry() {
+  const WU_API_KEY = 'ff90f212a6984a7390f212a698ea73cc';
+  const stationIds = ['IRIODA17', 'IRIODA16', 'IRIODA15', 'ICASIM5', 'IRIODA6', 'IRIODA5'];
+  const todayIso = getTodayIsoBrt();
+  const nowMs = Date.now();
+  const resultMap = {};
+
+  await Promise.allSettled(stationIds.map(async (pid) => {
+    const base = 'https://api.weather.com/v2/pws/observations';
+    const q = `stationId=${pid}&format=json&units=m&numericPrecision=decimal&apiKey=${WU_API_KEY}`;
+
+    const [currJson, dayJson, histJson] = await Promise.all([
+      fetchJsonWithTimeout(`${base}/current?${q}`, 4500),
+      fetchJsonWithTimeout(`${base}/all/1day?${q}`, 5000),
+      fetchJsonWithTimeout(`${base}/hourly/7day?${q}`, 5500)
+    ]);
+
+    const obs = currJson?.observations?.[0];
+    if (!obs) {
+      resultMap[pid] = {
+        online: false,
+        temp_atual: null,
+        vento_atual: null,
+        rajada_atual: null,
+        vento_dir_graus: null,
+        vento_dir_cardinal: null,
+        vento_max_hoje: null,
+        hora_vento_max_hoje: null,
+        rajada_max_hoje: null,
+        hora_rajada_max_hoje: null,
+        inicio_chuva_hoje: null,
+        chuva_hoje: 0.0,
+        ultima_leitura: 'Sem transmissão recente'
+      };
+      return;
+    }
+
+    const obsLocal = obs.obsTimeLocal || '';
+    const obsMs = parseBrtLocalMs(obsLocal);
+    const isRecent = isNaN(obsMs) ? true : ((nowMs - obsMs) <= 6 * 3600 * 1000);
+    if (!isRecent) {
+      resultMap[pid] = {
+        online: false,
+        temp_atual: null,
+        vento_atual: null,
+        rajada_atual: null,
+        vento_max_hoje: null,
+        rajada_max_hoje: null,
+        inicio_chuva_hoje: null,
+        chuva_hoje: 0.0,
+        ultima_leitura: obsLocal || 'Sem transmissão recente'
+      };
+      return;
+    }
+
+    const m = obs.metric || {};
+    const tempAtual = round1(m.temp, null);
+    const ventoAtual = round1(m.windSpeed, 0.0);
+    const rajadaAtual = round1(m.windGust !== undefined && m.windGust !== null ? m.windGust : m.windSpeed, ventoAtual);
+    const ventoDirGraus = (obs.winddir !== undefined && obs.winddir !== null && !isNaN(Number(obs.winddir)))
+      ? Math.round(Number(obs.winddir))
+      : null;
+    const ventoDirCardinal = degToCardinalPt(ventoDirGraus);
+
+    let chuvaHoje = obsLocal.startsWith(todayIso) ? (round1(m.precipTotal, 0.0) || 0.0) : 0.0;
+    const chuvaTaxaAtual = round1(m.precipRate, 0.0) || 0.0;
+
+    let inicioChuvaHoje = null;
+    let ventoMaxHoje = null;
+    let horaVentoMaxHoje = null;
+    let rajadaMaxHoje = null;
+    let horaRajadaMaxHoje = null;
+    const today5mBuckets = [];
+
+    if (Array.isArray(dayJson?.observations) && dayJson.observations.length > 0) {
+      const sortedDay = dayJson.observations
+        .slice()
+        .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
+      const todayRecs = sortedDay.filter(o => String(o.obsTimeLocal || '').startsWith(todayIso));
+      let prevTot5m = 0.0;
+
+      for (const rec of todayRecs) {
+        const tStr = String(rec.obsTimeLocal || '');
+        const mr = rec.metric || {};
+        const tot = Number(mr.precipTotal || 0);
+        const rate = Number(mr.precipRate || 0);
+
+        if (!inicioChuvaHoje && (tot > 0 || rate > 0)) {
+          inicioChuvaHoje = tStr.slice(11, 16);
+        }
+
+        const tMs = parseBrtLocalMs(tStr);
+        if (!isNaN(tMs)) {
+          const inc = Math.max(0, tot - prevTot5m);
+          today5mBuckets.push({ ms: tMs, val: inc });
+          prevTot5m = Math.max(prevTot5m, tot);
+        }
+
+        const wHi = round1(mr.windspeedHigh, null);
+        if (wHi !== null && (ventoMaxHoje === null || wHi > ventoMaxHoje)) {
+          ventoMaxHoje = wHi;
+          horaVentoMaxHoje = tStr.slice(11, 16);
+        }
+
+        const gHi = round1(mr.windgustHigh, null);
+        if (gHi !== null && (rajadaMaxHoje === null || gHi > rajadaMaxHoje)) {
+          rajadaMaxHoje = gHi;
+          horaRajadaMaxHoje = tStr.slice(11, 16);
+        }
+      }
+
+      if (!isNaN(obsMs) && chuvaHoje > prevTot5m) {
+        today5mBuckets.push({ ms: obsMs, val: chuvaHoje - prevTot5m });
+        if (!inicioChuvaHoje && chuvaHoje > 0) {
+          inicioChuvaHoje = obsLocal.slice(11, 16);
+        }
+      }
+      if (prevTot5m > chuvaHoje) {
+        chuvaHoje = round1(prevTot5m, chuvaHoje);
+      }
+    } else if (chuvaHoje > 0 && obsLocal.length >= 16) {
+      inicioChuvaHoje = obsLocal.slice(11, 16);
+    }
+
+    const currHhmm = obsLocal.length >= 16 ? obsLocal.slice(11, 16) : null;
+    if (ventoAtual !== null && (ventoMaxHoje === null || ventoAtual > ventoMaxHoje)) {
+      ventoMaxHoje = ventoAtual;
+      horaVentoMaxHoje = currHhmm;
+    }
+    if (rajadaAtual !== null && (rajadaMaxHoje === null || rajadaAtual > rajadaMaxHoje)) {
+      rajadaMaxHoje = rajadaAtual;
+      horaRajadaMaxHoje = currHhmm;
+    }
+
+    let chuva1h = chuvaTaxaAtual;
+    let chuva4h = chuvaHoje;
+    let chuva6h = chuvaHoje;
+    let chuva12h = chuvaHoje;
+    let chuva24h = chuvaHoje;
+    let chuva36h = chuvaHoje;
+    let chuva48h = chuvaHoje;
+    let chuva96h = chuvaHoje;
+    let ventoMax24h = ventoMaxHoje;
+    let rajadaMax24h = rajadaMaxHoje;
+
+    if (Array.isArray(histJson?.observations) && histJson.observations.length > 0) {
+      const sortedHist = histJson.observations
+        .slice()
+        .sort((a, b) => String(a.obsTimeLocal || '').localeCompare(String(b.obsTimeLocal || '')));
+      const priorBuckets = [];
+      const todayHourlyBuckets = [];
+      let prevDay = null;
+      let prevVal = 0.0;
+
+      for (const h of sortedHist) {
+        const tStr = String(h.obsTimeLocal || '');
+        const tMs = parseBrtLocalMs(tStr);
+        if (isNaN(tMs)) continue;
+        const dayStr = tStr.slice(0, 10);
+        const tot = Number(h.metric?.precipTotal || 0);
+        let inc = 0;
+        if (prevDay !== dayStr) {
+          inc = Math.max(0, tot);
+          prevVal = Math.max(0, tot);
+          prevDay = dayStr;
+        } else {
+          inc = Math.max(0, tot - prevVal);
+          prevVal = Math.max(prevVal, tot);
+        }
+        if (dayStr < todayIso) {
+          priorBuckets.push({ ms: tMs, val: inc });
+        } else if (dayStr === todayIso) {
+          todayHourlyBuckets.push({ ms: tMs, val: inc });
+        }
+      }
+
+      const combined = priorBuckets.concat(today5mBuckets.length > 0 ? today5mBuckets : todayHourlyBuckets);
+      const refMs = !isNaN(obsMs) ? obsMs : nowMs;
+      const sumHours = (hrs) => {
+        const cutoff = refMs - hrs * 3600 * 1000;
+        const s = combined.reduce((acc, b) => (b.ms > cutoff ? acc + b.val : acc), 0);
+        return round1(s, 0.0) || 0.0;
+      };
+
+      if (combined.length > 0) {
+        chuva1h = sumHours(1);
+        chuva4h = Math.max(sumHours(4), chuva1h);
+        chuva6h = Math.max(sumHours(6), chuva4h);
+        chuva12h = Math.max(sumHours(12), chuva6h);
+        chuva24h = Math.max(sumHours(24), chuvaHoje);
+        chuva36h = Math.max(sumHours(36), chuva24h);
+        chuva48h = Math.max(sumHours(48), chuva36h);
+        chuva96h = Math.max(sumHours(96), chuva48h);
+      }
+
+      const cutoff24 = refMs - 24 * 3600 * 1000;
+      for (const h of sortedHist) {
+        const tMs = parseBrtLocalMs(h.obsTimeLocal);
+        if (!isNaN(tMs) && tMs >= cutoff24) {
+          const wHi = round1(h.metric?.windspeedHigh, null);
+          const gHi = round1(h.metric?.windgustHigh, null);
+          if (wHi !== null && (ventoMax24h === null || wHi > ventoMax24h)) ventoMax24h = wHi;
+          if (gHi !== null && (rajadaMax24h === null || gHi > rajadaMax24h)) rajadaMax24h = gHi;
+        }
+      }
+    }
+
+    resultMap[pid] = {
+      online: true,
+      ultima_leitura: obsLocal,
+      temp_atual: tempAtual,
+      vento_atual: ventoAtual,
+      rajada_atual: rajadaAtual,
+      vento_dir_graus: ventoDirGraus,
+      vento_dir_cardinal: ventoDirCardinal,
+      umidade_atual: obs.humidity ?? null,
+      pressao_atual: m.pressure ?? null,
+      uv_atual: obs.uv !== undefined && obs.uv !== null ? round1(obs.uv, 0.0) : null,
+      radiacao_solar: obs.solarRadiation !== undefined && obs.solarRadiation !== null ? round1(obs.solarRadiation, 0.0) : null,
+      chuva_hoje: round1(chuvaHoje, 0.0),
+      chuva_taxa_atual: chuvaTaxaAtual,
+      inicio_chuva_hoje: inicioChuvaHoje,
+      vento_max_hoje: ventoMaxHoje,
+      hora_vento_max_hoje: horaVentoMaxHoje,
+      rajada_max_hoje: rajadaMaxHoje,
+      hora_rajada_max_hoje: horaRajadaMaxHoje,
+      vento_max_24h: ventoMax24h,
+      rajada_max_24h: rajadaMax24h,
+      chuva_1h: round1(chuva1h, 0.0),
+      chuva_4h: round1(chuva4h, 0.0),
+      chuva_6h: round1(chuva6h, 0.0),
+      chuva_12h: round1(chuva12h, 0.0),
+      chuva_24h: round1(chuva24h, 0.0),
+      chuva_36h: round1(chuva36h, 0.0),
+      chuva_48h: round1(chuva48h, 0.0),
+      chuva_96h: round1(chuva96h, 0.0)
+    };
+  }));
+
+  return resultMap;
+}
+
+/**
+ * Consulta diretamente no navegador (CORS: *) a série horária das 3 PCDs do CEMADEN
+ * em Rio das Ostras / Palmital (18788, 18790, 18789), convertendo UTC -> Horário de Brasília (UTC-3).
+ */
+export async function fetchLiveCemadenStationsTelemetry() {
+  const pcdIds = ['18788', '18790', '18789'];
+  const todayIso = getTodayIsoBrt();
+  const resultMap = {};
+
+  await Promise.allSettled(pcdIds.map(async (cid) => {
+    const url = `https://mapservices.cemaden.gov.br/MapaInterativoWS/resources/horario/${cid}/47`;
+    const ws = await fetchJsonWithTimeout(url, 4000);
+    if (!ws || !Array.isArray(ws.datas) || !Array.isArray(ws.horarios) || !Array.isArray(ws.acumulados)) {
+      return;
+    }
+
+    const pts = [];
+    ws.datas.forEach((dStr, dIdx) => {
+      const row = ws.acumulados[dIdx];
+      if (!Array.isArray(row)) return;
+      const mDate = String(dStr || '').trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (!mDate) return;
+      const dd = Number(mDate[1]);
+      const mm = Number(mDate[2]);
+      const yyyy = Number(mDate[3]);
+
+      ws.horarios.forEach((hStr, hIdx) => {
+        const val = row[hIdx];
+        if (val === null || val === undefined || isNaN(Number(val))) return;
+        const hrUtc = parseInt(String(hStr).replace(/[^\d]/g, ''), 10);
+        if (isNaN(hrUtc)) return;
+        const utcMs = Date.UTC(yyyy, mm - 1, dd, hrUtc, 0, 0);
+        const brtShifted = new Date(utcMs - 3 * 3600 * 1000);
+        const brtIsoDate = brtShifted.toISOString().slice(0, 10);
+        const brtHhmm = `${String(brtShifted.getUTCHours()).padStart(2, '0')}:00`;
+        const brtFull = `${brtIsoDate} ${brtHhmm}:00`;
+        pts.push({ utcMs, brtIsoDate, brtHhmm, brtFull, val: Math.max(0, Number(val)) });
+      });
+    });
+
+    if (pts.length === 0) return;
+    pts.sort((a, b) => a.utcMs - b.utcMs);
+
+    const lastPt = pts[pts.length - 1];
+    const refMs = lastPt.utcMs;
+    const sumHrs = (hrs) => {
+      const cutoff = refMs - hrs * 3600 * 1000;
+      return round1(pts.reduce((acc, p) => (p.utcMs > cutoff ? acc + p.val : acc), 0), 0.0) || 0.0;
+    };
+
+    const todayPts = pts.filter(p => p.brtIsoDate === todayIso);
+    const chuvaHoje = round1(todayPts.reduce((acc, p) => acc + p.val, 0), 0.0) || 0.0;
+    const firstPos = todayPts.find(p => p.val > 0);
+
+    const c1 = sumHrs(1);
+    const c4 = Math.max(sumHrs(4), c1);
+    const c6 = Math.max(sumHrs(6), c4);
+    const c12 = Math.max(sumHrs(12), c6);
+    const c24 = Math.max(sumHrs(24), chuvaHoje);
+    const c36 = Math.max(sumHrs(36), c24);
+    const c48 = Math.max(sumHrs(48), c36);
+
+    resultMap[`PCD ${cid}`] = {
+      online: (Date.now() - lastPt.utcMs) <= 12 * 3600 * 1000,
+      ultima_leitura: lastPt.brtFull,
+      chuva_hoje: chuvaHoje,
+      inicio_chuva_hoje: firstPos ? firstPos.brtHhmm : null,
+      chuva_1h: c1,
+      chuva_4h: c4,
+      chuva_6h: c6,
+      chuva_12h: c12,
+      chuva_24h: c24,
+      chuva_36h: c36,
+      chuva_48h: c48
+    };
+  }));
+
+  return resultMap;
 }

@@ -27,11 +27,13 @@ export function getStationWindAndGust(st, allStations) {
     const r = (st.rajada_atual !== null && st.rajada_atual !== undefined && !isNaN(Number(st.rajada_atual)))
       ? Math.round(Number(st.rajada_atual))
       : v;
-    const rMax = (st.rajada_max_24h !== null && st.rajada_max_24h !== undefined && !isNaN(Number(st.rajada_max_24h)))
-      ? Math.round(Number(st.rajada_max_24h))
+    const rawRMax = (st.rajada_max_hoje !== null && st.rajada_max_hoje !== undefined) ? st.rajada_max_hoje : st.rajada_max_24h;
+    const rawVMax = (st.vento_max_hoje !== null && st.vento_max_hoje !== undefined) ? st.vento_max_hoje : st.vento_max_24h;
+    const rMax = (rawRMax !== null && rawRMax !== undefined && !isNaN(Number(rawRMax)))
+      ? Math.round(Number(rawRMax))
       : Math.max(r, v);
-    const vMax = (st.vento_max_24h !== null && st.vento_max_24h !== undefined && !isNaN(Number(st.vento_max_24h)))
-      ? Math.round(Number(st.vento_max_24h))
+    const vMax = (rawVMax !== null && rawVMax !== undefined && !isNaN(Number(rawVMax)))
+      ? Math.round(Number(rawVMax))
       : v;
     return { vento: v, rajada: r, vento_max: vMax, rajada_max: rMax };
   }

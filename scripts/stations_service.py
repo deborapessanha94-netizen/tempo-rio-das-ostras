@@ -1,8 +1,8 @@
 """
 Módulo de Coleta e Monitoramento da Rede Pluviométrica e Hidrológica de Rio das Ostras
-- Weather Underground (6 PWS)
+- Weather Underground (6 PWS) — Telemetria decimal em tempo real + início da chuva hoje + picos diários
 - INEA Alerta de Cheias (Estação 2241036 / Rio Jundiá)
-- CEMADEN Nacional (3 PCDs Palmital)
+- CEMADEN Nacional (3 PCDs Palmital) — Conversão UTC -> BRT + início da chuva hoje
 """
 
 import urllib.request
@@ -15,6 +15,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
+BRT = timezone(timedelta(hours=-3))
+
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 }
@@ -25,16 +27,22 @@ SSL_CTX.verify_mode = ssl.CERT_NONE
 
 DEFAULT_WU_KEY = "ff90f212a6984a7390f212a698ea73cc"
 
+
 def fetch_url_data(url, timeout=12, is_json=False):
     req = urllib.request.Request(url, headers=HEADERS)
     with urllib.request.urlopen(req, context=SSL_CTX, timeout=timeout) as res:
+        if res.status == 204:
+            return None
         content = res.read()
+        if not content:
+            return None
         if is_json:
             return json.loads(content.decode('utf-8'))
         try:
             return content.decode('utf-8')
         except UnicodeDecodeError:
             return content.decode('latin1', errors='replace')
+
 
 def safe_float(val, default=0.0):
     if val is None:
@@ -47,10 +55,120 @@ def safe_float(val, default=0.0):
     except (ValueError, TypeError):
         return default
 
+
+def deg_to_cardinal_pt(deg):
+    if deg is None:
+        return None
+    try:
+        d = float(deg) % 360.0
+    except (ValueError, TypeError):
+        return None
+    dirs = [
+        "N", "NNE", "NE", "ENE",
+        "L", "ESE", "SE", "SSE",
+        "S", "SSO", "SO", "OSO",
+        "O", "ONO", "NO", "NNO"
+    ]
+    idx = int(round(d / 22.5)) % 16
+    return dirs[idx]
+
+
+def convert_cemaden_utc_to_brt(raw_str):
+    """Converte '30/10/26 12:10' (UTC do CEMADEN getJson2) para datetime BRT e string 'YYYY-MM-DD HH:MM:SS'."""
+    if not raw_str or not isinstance(raw_str, str):
+        return None, "Sem leitura recente"
+    s = raw_str.strip()
+    for fmt in ("%d/%m/%y %H:%M", "%d/%m/%Y %H:%M", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M"):
+        try:
+            dt_utc = datetime.strptime(s, fmt).replace(tzinfo=timezone.utc)
+            dt_brt = dt_utc.astimezone(BRT)
+            return dt_brt, dt_brt.strftime("%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            continue
+    return None, s
+
+
+def fetch_cemaden_rain_today_details(cid, now_brt):
+    """
+    Extrai o acumulado de chuva hoje (desde 00:00 BRT) e o horário exato (HH:MM BRT)
+    em que a chuva iniciou hoje nas PCDs do CEMADEN.
+    """
+    today_date = now_brt.date()
+    inicio_hhmm = None
+    chuva_hoje = None
+
+    # 1. Série horária oficial MapaInterativoWS (24h UTC -> converte para BRT)
+    try:
+        ws_url = f"https://mapservices.cemaden.gov.br/MapaInterativoWS/resources/horario/{cid}/23"
+        ws_data = fetch_url_data(ws_url, timeout=6, is_json=True)
+        if ws_data and "datas" in ws_data and "horarios" in ws_data and "acumulados" in ws_data:
+            datas = ws_data["datas"]
+            horarios = ws_data["horarios"]
+            acumulados = ws_data["acumulados"]
+            pts = []
+            for d_idx, d_str in enumerate(datas):
+                if d_idx >= len(acumulados):
+                    continue
+                row = acumulados[d_idx]
+                for h_idx, h_str in enumerate(horarios):
+                    if h_idx >= len(row):
+                        continue
+                    val = row[h_idx]
+                    if val is None:
+                        continue
+                    try:
+                        hr_num = int(str(h_str).lower().replace("h", "").strip())
+                        dt_utc = datetime.strptime(d_str.strip(), "%d/%m/%Y").replace(
+                            hour=hr_num, minute=0, second=0, tzinfo=timezone.utc
+                        )
+                        dt_brt = dt_utc.astimezone(BRT)
+                        pts.append((dt_brt, float(val)))
+                    except Exception:
+                        continue
+            pts.sort(key=lambda x: x[0])
+            today_pts = [(t, v) for t, v in pts if t.date() == today_date]
+            if today_pts:
+                chuva_hoje = round(sum(max(0.0, v) for _, v in today_pts), 1)
+                first_pos = next((t for t, v in today_pts if v > 0.0), None)
+                if first_pos is not None:
+                    inicio_hhmm = first_pos.strftime("%H:%M")
+    except Exception:
+        pass
+
+    # 2. Refinamento de minuto (10 em 10 min) via grafico_pcds.php se a chuva iniciou nas últimas 4h
+    try:
+        gp_url = f"https://resources.cemaden.gov.br/graficos/interativo/grafico_pcds.php?idpcd={cid}&uf=RJ"
+        html = fetch_url_data(gp_url, timeout=6, is_json=False)
+        if html:
+            m_times = re.search(r"Grafico\([^[]*\[([^\]]+)\]\s*,\s*'[^']*'\s*,\s*\[([^\]]+)\]", html)
+            if m_times:
+                raw_ts = re.findall(r"'([^']+)'", m_times.group(1))
+                raw_vs = [safe_float(x, 0.0) for x in m_times.group(2).split(",")]
+                ten_pts = []
+                for t_lbl, v_num in zip(raw_ts, raw_vs):
+                    # Ex: '2026-10-30  08h20 UTC'
+                    mt = re.match(r"(\d{4}-\d{2}-\d{2})\s+(\d{2})h(\d{2})", t_lbl.strip())
+                    if mt:
+                        dt_u = datetime.strptime(
+                            f"{mt.group(1)} {mt.group(2)}:{mt.group(3)}", "%Y-%m-%d %H:%M"
+                        ).replace(tzinfo=timezone.utc)
+                        ten_pts.append((dt_u.astimezone(BRT), v_num))
+                ten_today = [(t, v) for t, v in ten_pts if t.date() == today_date and v > 0.0]
+                if ten_today:
+                    first_10m = ten_today[0][0]
+                    # Se não tínhamos início horário, ou se o início horário bate com a mesma hora/janela das 4h
+                    if inicio_hhmm is None or first_10m.strftime("%H:00") == inicio_hhmm:
+                        inicio_hhmm = first_10m.strftime("%H:%M")
+    except Exception:
+        pass
+
+    return inicio_hhmm, chuva_hoje
+
+
 def get_wu_api_key():
     """Valida a chave da Weather Underground ou extrai chave atualizada dinamicamente"""
     try:
-        test_url = f"https://api.weather.com/v2/pws/observations/current?stationId=IRIODA17&format=json&units=m&apiKey={DEFAULT_WU_KEY}"
+        test_url = f"https://api.weather.com/v2/pws/observations/current?stationId=IRIODA17&format=json&units=m&numericPrecision=decimal&apiKey={DEFAULT_WU_KEY}"
         data = fetch_url_data(test_url, timeout=5, is_json=True)
         if data and "observations" in data:
             return DEFAULT_WU_KEY
@@ -59,17 +177,21 @@ def get_wu_api_key():
 
     try:
         html = fetch_url_data("https://www.wunderground.com/dashboard/pws/IRIODA17", timeout=8)
-        keys = re.findall(r'apiKey=([a-f0-9]{32})', html)
-        if keys:
-            return keys[0]
+        if html:
+            keys = re.findall(r'apiKey=([a-f0-9]{32})', html)
+            if keys:
+                return keys[0]
     except Exception:
         pass
 
     return DEFAULT_WU_KEY
 
+
 def collect_stations_network():
-    print(">> [Rede Pluviométrica] Coletando todas as 10 estações...")
+    print(">> [Rede Pluviométrica] Coletando todas as 10 estações em tempo real (precisão decimal)...")
     wu_key = get_wu_api_key()
+    now_brt = datetime.now(BRT)
+    today_iso = now_brt.strftime("%Y-%m-%d")
     stations = []
 
     # 1. Weather Underground PWS (6 Estações)
@@ -137,14 +259,24 @@ def collect_stations_network():
             "temp_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
+            "vento_dir_graus": None,
+            "vento_dir_cardinal": None,
+            "vento_max_hoje": None,
+            "hora_vento_max_hoje": None,
+            "rajada_max_hoje": None,
+            "hora_rajada_max_hoje": None,
             "vento_max_24h": None,
             "rajada_max_24h": None,
             "umidade_atual": None,
             "pressao_atual": None,
             "uv_atual": None,
             "radiacao_solar": None,
+            "chuva_hoje": 0.0,
+            "chuva_taxa_atual": 0.0,
+            "inicio_chuva_hoje": None,
             "chuva_1h": 0.0,
             "chuva_4h": 0.0,
+            "chuva_6h": 0.0,
             "chuva_12h": 0.0,
             "chuva_24h": 0.0,
             "chuva_36h": 0.0,
@@ -154,115 +286,220 @@ def collect_stations_network():
             "online": False
         }
 
-        # Coleta observação atual
+        curr_obs_dt = None
+        curr_precip_today = 0.0
+
+        # A) Coleta observação atual com precisão decimal exata
         try:
-            curr_url = f"https://api.weather.com/v2/pws/observations/current?stationId={pid}&format=json&units=m&apiKey={wu_key}"
+            curr_url = f"https://api.weather.com/v2/pws/observations/current?stationId={pid}&format=json&units=m&numericPrecision=decimal&apiKey={wu_key}"
             c_data = fetch_url_data(curr_url, timeout=8, is_json=True)
             if c_data and "observations" in c_data and len(c_data["observations"]) > 0:
                 obs = c_data["observations"][0]
                 m = obs.get("metric", {})
-                entry["temp_atual"] = m.get("temp")
-                entry["vento_atual"] = m.get("windSpeed")
-                entry["rajada_atual"] = m.get("windGust")
-                entry["umidade_atual"] = obs.get("humidity")
-                entry["pressao_atual"] = m.get("pressure")
-                entry["uv_atual"] = safe_float(obs.get("uv"), 0.0) if obs.get("uv") is not None else None
-                entry["radiacao_solar"] = safe_float(obs.get("solarRadiation"), 0.0) if obs.get("solarRadiation") is not None else None
-                entry["ultima_leitura"] = obs.get("obsTimeLocal", "Hoje")
-                entry["online"] = True
-                
-                precip_total = safe_float(m.get("precipTotal"), 0.0)
-                entry["chuva_24h"] = precip_total
-                entry["chuva_1h"] = safe_float(m.get("precipRate"), 0.0)
-                entry["chuva_96h"] = round(precip_total * 1.5, 1) if precip_total > 0 else 0.0
+                obs_local_str = obs.get("obsTimeLocal", "")
+                if obs_local_str:
+                    entry["ultima_leitura"] = obs_local_str
+                    try:
+                        curr_obs_dt = datetime.strptime(obs_local_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
+                    except Exception:
+                        curr_obs_dt = None
+
+                # Verifica se a leitura é recente (últimas 6 horas)
+                is_recent = True
+                if curr_obs_dt is not None:
+                    age_sec = (now_brt - curr_obs_dt).total_seconds()
+                    if age_sec > 6 * 3600:
+                        is_recent = False
+
+                if is_recent:
+                    entry["online"] = True
+                    if m.get("temp") is not None:
+                        entry["temp_atual"] = round(safe_float(m.get("temp")), 1)
+                    if m.get("windSpeed") is not None:
+                        entry["vento_atual"] = round(safe_float(m.get("windSpeed")), 1)
+                    if m.get("windGust") is not None:
+                        entry["rajada_atual"] = round(safe_float(m.get("windGust")), 1)
+                    if obs.get("winddir") is not None:
+                        entry["vento_dir_graus"] = int(round(safe_float(obs.get("winddir"))))
+                        entry["vento_dir_cardinal"] = deg_to_cardinal_pt(entry["vento_dir_graus"])
+                    entry["umidade_atual"] = obs.get("humidity")
+                    entry["pressao_atual"] = m.get("pressure")
+                    entry["uv_atual"] = round(safe_float(obs.get("uv"), 0.0), 1) if obs.get("uv") is not None else None
+                    entry["radiacao_solar"] = round(safe_float(obs.get("solarRadiation"), 0.0), 1) if obs.get("solarRadiation") is not None else None
+
+                    if obs_local_str.startswith(today_iso):
+                        curr_precip_today = round(safe_float(m.get("precipTotal"), 0.0), 1)
+                        entry["chuva_hoje"] = curr_precip_today
+                        entry["chuva_24h"] = curr_precip_today
+                    entry["chuva_taxa_atual"] = round(safe_float(m.get("precipRate"), 0.0), 1)
         except Exception:
             pass
 
-        # Coleta histórico horário de 7 dias
+        # B) Coleta curva de 5 em 5 minutos do dia atual (all/1day) para início exato da chuva e picos diários
+        today_5m_buckets = []
         try:
-            hist_url = f"https://api.weather.com/v2/pws/observations/hourly/7day?stationId={pid}&format=json&units=m&apiKey={wu_key}"
+            day_url = f"https://api.weather.com/v2/pws/observations/all/1day?stationId={pid}&format=json&units=m&numericPrecision=decimal&apiKey={wu_key}"
+            d_data = fetch_url_data(day_url, timeout=9, is_json=True)
+            if d_data and "observations" in d_data and len(d_data["observations"]) > 0:
+                day_obs = sorted(d_data["observations"], key=lambda x: x.get("obsTimeLocal", ""))
+                today_records = [o for o in day_obs if o.get("obsTimeLocal", "").startswith(today_iso)]
+                prev_tot_5m = 0.0
+                max_w_val = None
+                max_w_hhmm = None
+                max_g_val = None
+                max_g_hhmm = None
+
+                for o in today_records:
+                    t_str = o.get("obsTimeLocal", "")
+                    m_o = o.get("metric", {})
+                    tot_o = safe_float(m_o.get("precipTotal"), 0.0)
+                    rate_o = safe_float(m_o.get("precipRate"), 0.0)
+
+                    # Horário em que a chuva iniciou hoje (primeiro registro > 0 desde 00:00)
+                    if entry["inicio_chuva_hoje"] is None and (tot_o > 0.0 or rate_o > 0.0):
+                        entry["inicio_chuva_hoje"] = t_str[11:16]
+
+                    # Incremento de 5 minutos para acumulados exatos
+                    try:
+                        dt_o = datetime.strptime(t_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
+                        inc_5m = max(0.0, tot_o - prev_tot_5m)
+                        today_5m_buckets.append((dt_o, inc_5m))
+                        prev_tot_5m = max(prev_tot_5m, tot_o)
+                    except Exception:
+                        pass
+
+                    # Pico de vento sustentado do dia
+                    w_hi = safe_float(m_o.get("windspeedHigh"), None)
+                    if w_hi is not None and (max_w_val is None or w_hi > max_w_val):
+                        max_w_val = round(w_hi, 1)
+                        max_w_hhmm = t_str[11:16]
+
+                    # Pico de rajada do dia
+                    g_hi = safe_float(m_o.get("windgustHigh"), None)
+                    if g_hi is not None and (max_g_val is None or g_hi > max_g_val):
+                        max_g_val = round(g_hi, 1)
+                        max_g_hhmm = t_str[11:16]
+
+                # Se a observação em tempo real já acumulou mais chuva após o último bloco de 5 min
+                if curr_obs_dt is not None and curr_precip_today > prev_tot_5m:
+                    today_5m_buckets.append((curr_obs_dt, curr_precip_today - prev_tot_5m))
+                    if entry["inicio_chuva_hoje"] is None and curr_precip_today > 0.0:
+                        entry["inicio_chuva_hoje"] = curr_obs_dt.strftime("%H:%M")
+
+                if prev_tot_5m > entry["chuva_hoje"]:
+                    entry["chuva_hoje"] = round(prev_tot_5m, 1)
+
+                if max_w_val is not None:
+                    entry["vento_max_hoje"] = max_w_val
+                    entry["hora_vento_max_hoje"] = max_w_hhmm
+                if max_g_val is not None:
+                    entry["rajada_max_hoje"] = max_g_val
+                    entry["hora_rajada_max_hoje"] = max_g_hhmm
+        except Exception:
+            pass
+
+        # Garante consistência com leitura instantânea caso um pico esteja ocorrendo neste exato segundo
+        curr_hhmm = curr_obs_dt.strftime("%H:%M") if curr_obs_dt else None
+        if entry["vento_atual"] is not None:
+            if entry["vento_max_hoje"] is None or entry["vento_atual"] > entry["vento_max_hoje"]:
+                entry["vento_max_hoje"] = entry["vento_atual"]
+                entry["hora_vento_max_hoje"] = curr_hhmm
+        if entry["rajada_atual"] is not None:
+            if entry["rajada_max_hoje"] is None or entry["rajada_atual"] > entry["rajada_max_hoje"]:
+                entry["rajada_max_hoje"] = entry["rajada_atual"]
+                entry["hora_rajada_max_hoje"] = curr_hhmm
+
+        # C) Coleta histórico horário de 7 dias (combinando dias anteriores + malha de 5 min de hoje)
+        try:
+            hist_url = f"https://api.weather.com/v2/pws/observations/hourly/7day?stationId={pid}&format=json&units=m&numericPrecision=decimal&apiKey={wu_key}"
             h_data = fetch_url_data(hist_url, timeout=10, is_json=True)
             if h_data and "observations" in h_data and len(h_data["observations"]) > 0:
                 hourly = h_data["observations"]
-                entry["online"] = True
                 sorted_obs = sorted(hourly, key=lambda x: x.get("obsTimeLocal", ""))
-                buckets = []
+                prior_buckets = []
+                today_hourly_buckets = []
                 prev_day = None
                 prev_val = 0.0
                 for o in sorted_obs:
                     t_str = o.get("obsTimeLocal", "")
-                    if not t_str: continue
+                    if not t_str:
+                        continue
                     try:
-                        dt = datetime.strptime(t_str, "%Y-%m-%d %H:%M:%S")
+                        dt = datetime.strptime(t_str, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
                     except Exception:
                         continue
                     day_str = dt.strftime("%Y-%m-%d")
                     tot = safe_float(o.get("metric", {}).get("precipTotal"), 0.0)
                     if prev_day != day_str:
-                        inc = tot
+                        inc = max(0.0, tot)
+                        prev_val = max(0.0, tot)
+                        prev_day = day_str
                     else:
                         inc = max(0.0, tot - prev_val)
-                    buckets.append((dt, inc))
-                    prev_day = day_str
-                    prev_val = tot
+                        prev_val = max(prev_val, tot)
+                    if day_str < today_iso:
+                        prior_buckets.append((dt, inc))
+                    elif day_str == today_iso:
+                        today_hourly_buckets.append((dt, inc))
 
-                if buckets:
-                    now = buckets[-1][0]
+                combined_buckets = prior_buckets + (today_5m_buckets if today_5m_buckets else today_hourly_buckets)
+                ref_now = curr_obs_dt if curr_obs_dt is not None else now_brt
+
+                if combined_buckets:
                     def acc_hours(hrs):
-                        cutoff = now - timedelta(hours=hrs)
-                        return round(sum(val for t, val in buckets if t > cutoff), 1)
+                        cutoff = ref_now - timedelta(hours=hrs)
+                        return round(sum(val for t, val in combined_buckets if t > cutoff), 1)
 
                     h1 = acc_hours(1)
                     h4 = acc_hours(4)
+                    h6 = acc_hours(6)
                     h12 = acc_hours(12)
-                    h24 = acc_hours(24)
-                    h36 = acc_hours(36)
-                    h48 = acc_hours(48)
-                    h96 = acc_hours(96)
+                    h24 = max(acc_hours(24), entry["chuva_hoje"])
+                    h36 = max(acc_hours(36), h24)
+                    h48 = max(acc_hours(48), h36)
+                    h96 = max(acc_hours(96), h48)
 
-                    if h24 > 0:
-                        entry["chuva_1h"] = h1
-                        entry["chuva_4h"] = h4
-                        entry["chuva_12h"] = h12
-                        entry["chuva_24h"] = h24
-                        entry["chuva_36h"] = h36
-                        entry["chuva_48h"] = h48
-                        entry["chuva_96h"] = h96
-                # Calcula extremos de vento e rajada registrados nas últimas 24h
+                    entry["chuva_1h"] = h1
+                    entry["chuva_4h"] = max(h4, h1)
+                    entry["chuva_6h"] = max(h6, entry["chuva_4h"])
+                    entry["chuva_12h"] = max(h12, entry["chuva_6h"])
+                    entry["chuva_24h"] = round(h24, 1)
+                    entry["chuva_36h"] = round(h36, 1)
+                    entry["chuva_48h"] = round(h48, 1)
+                    entry["chuva_96h"] = round(h96, 1)
+
+                # Extremos de 24h (mantém compatibilidade com exportações e tabela)
                 try:
-                    last_dt = datetime.strptime(sorted_obs[-1].get("obsTimeLocal", ""), "%Y-%m-%d %H:%M:%S")
-                    cutoff_24h = last_dt - timedelta(hours=24)
-                    obs_24h = [o for o in sorted_obs if o.get("obsTimeLocal") and datetime.strptime(o.get("obsTimeLocal"), "%Y-%m-%d %H:%M:%S") >= cutoff_24h]
+                    cutoff_24h = ref_now - timedelta(hours=24)
+                    obs_24h = []
+                    for o in sorted_obs:
+                        ts_o = o.get("obsTimeLocal", "")
+                        if ts_o:
+                            dt_o = datetime.strptime(ts_o, "%Y-%m-%d %H:%M:%S").replace(tzinfo=BRT)
+                            if dt_o >= cutoff_24h:
+                                obs_24h.append(o)
                     if obs_24h:
                         v_vals = [safe_float(o.get("metric", {}).get("windspeedHigh"), None) for o in obs_24h if o.get("metric", {}).get("windspeedHigh") is not None]
                         g_vals = [safe_float(o.get("metric", {}).get("windgustHigh"), None) for o in obs_24h if o.get("metric", {}).get("windgustHigh") is not None]
                         if v_vals:
-                            entry["vento_max_24h"] = round(max(v_vals))
+                            entry["vento_max_24h"] = round(max(v_vals), 1)
                         if g_vals:
-                            entry["rajada_max_24h"] = round(max(g_vals))
+                            entry["rajada_max_24h"] = round(max(g_vals), 1)
                 except Exception:
                     pass
-
-                if entry.get("rajada_atual") is not None:
-                    curr_g = safe_float(entry.get("rajada_atual"), 0.0)
-                    if entry.get("rajada_max_24h") is None or curr_g > entry["rajada_max_24h"]:
-                        entry["rajada_max_24h"] = round(curr_g)
-                if entry.get("vento_atual") is not None:
-                    curr_v = safe_float(entry.get("vento_atual"), 0.0)
-                    if entry.get("vento_max_24h") is None or curr_v > entry["vento_max_24h"]:
-                        entry["vento_max_24h"] = round(curr_v)
-
         except Exception:
             pass
 
-        if entry.get("vento_atual") is not None and entry.get("vento_max_24h") is None:
-            entry["vento_max_24h"] = round(safe_float(entry["vento_atual"], 0.0))
-        if entry.get("rajada_atual") is not None and entry.get("rajada_max_24h") is None:
-            entry["rajada_max_24h"] = round(safe_float(entry["rajada_atual"], 0.0))
+        if entry["vento_max_hoje"] is not None:
+            if entry["vento_max_24h"] is None or entry["vento_max_hoje"] > entry["vento_max_24h"]:
+                entry["vento_max_24h"] = entry["vento_max_hoje"]
+        if entry["rajada_max_hoje"] is not None:
+            if entry["rajada_max_24h"] is None or entry["rajada_max_hoje"] > entry["rajada_max_24h"]:
+                entry["rajada_max_24h"] = entry["rajada_max_hoje"]
+
         stations.append(entry)
 
     # 2. Estação Hidrológica e Cota do Rio (INEA)
-    # INEA Rio Jundiá (Cantagalo / Rio das Ostras) - 2241036
     inea_entry = {
         "codigo": "INEA 2241036",
         "nome": "INEA Rio Jundiá (Cantagalo / Rio das Ostras) - 2241036",
@@ -277,6 +514,8 @@ def collect_stations_network():
         "temp_atual": None,
         "vento_atual": None,
         "rajada_atual": None,
+        "vento_max_hoje": None,
+        "rajada_max_hoje": None,
         "vento_max_24h": None,
         "rajada_max_24h": None,
         "umidade_atual": None,
@@ -326,7 +565,7 @@ def collect_stations_network():
 
     stations.append(inea_entry)
 
-    # 3. PCDs Pluviométricas Oficiais (CEMADEN)
+    # 3. PCDs Pluviométricas Oficiais (CEMADEN) — sem inventar vento/temperatura
     cemaden_targets = [
         {
             "id": "18788",
@@ -372,9 +611,13 @@ def collect_stations_network():
             "temp_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
+            "vento_max_hoje": None,
+            "rajada_max_hoje": None,
             "vento_max_24h": None,
             "rajada_max_24h": None,
             "umidade_atual": None,
+            "chuva_hoje": 0.0,
+            "inicio_chuva_hoje": None,
             "chuva_1h": 0.0,
             "chuva_4h": 0.0,
             "chuva_6h": 0.0,
@@ -383,8 +626,8 @@ def collect_stations_network():
             "chuva_36h": 0.0,
             "chuva_48h": 0.0,
             "chuva_96h": 0.0,
-            "ultima_leitura": "Hoje",
-            "online": True
+            "ultima_leitura": "Sem leitura recente",
+            "online": False
         }
 
         matched = next((s for s in c_json if str(s.get("idestacao")) == cid), None) if c_json else None
@@ -396,16 +639,32 @@ def collect_stations_network():
             acc24 = safe_float(matched.get("acc24hr"), 0.0)
             acc48 = safe_float(matched.get("acc48hr"), 0.0)
             acc96 = safe_float(matched.get("acc96hr"), 0.0)
-            c_entry["chuva_1h"] = acc1
-            c_entry["chuva_4h"] = acc3
-            c_entry["chuva_6h"] = acc6 if acc6 > 0 else round(acc3 + (acc12 - acc3) * 0.33, 1)
-            c_entry["chuva_12h"] = acc12
-            c_entry["chuva_24h"] = acc24
-            c_entry["chuva_36h"] = round((acc24 + acc48) / 2, 1)
-            c_entry["chuva_48h"] = acc48
-            c_entry["chuva_96h"] = acc96
-            c_entry["ultima_leitura"] = matched.get("datahoraUltimovalor", "Hoje")
-            c_entry["online"] = True
+            c_entry["chuva_1h"] = round(acc1, 1)
+            c_entry["chuva_4h"] = round(acc3, 1)
+            c_entry["chuva_6h"] = round(acc6 if acc6 > 0 else (acc3 + (acc12 - acc3) * 0.33), 1)
+            c_entry["chuva_12h"] = round(acc12, 1)
+            c_entry["chuva_24h"] = round(acc24, 1)
+            c_entry["chuva_36h"] = round(max(acc24, (acc24 + acc48) / 2.0), 1)
+            c_entry["chuva_48h"] = round(max(acc24, acc48), 1)
+            c_entry["chuva_96h"] = round(max(c_entry["chuva_48h"], acc96), 1)
+
+            dt_cem_brt, fmt_cem_brt = convert_cemaden_utc_to_brt(matched.get("datahoraUltimovalor", ""))
+            c_entry["ultima_leitura"] = fmt_cem_brt
+            if dt_cem_brt is not None:
+                c_entry["online"] = (now_brt - dt_cem_brt).total_seconds() <= 12 * 3600
+            else:
+                c_entry["online"] = str(matched.get("acc24hr", "-")).strip() != "-"
+
+        inicio_cem, chuva_hoje_cem = fetch_cemaden_rain_today_details(cid, now_brt)
+        if inicio_cem is not None:
+            c_entry["inicio_chuva_hoje"] = inicio_cem
+        if chuva_hoje_cem is not None:
+            c_entry["chuva_hoje"] = chuva_hoje_cem
+            if chuva_hoje_cem > c_entry["chuva_24h"]:
+                c_entry["chuva_24h"] = chuva_hoje_cem
+                c_entry["chuva_36h"] = max(c_entry["chuva_36h"], chuva_hoje_cem)
+                c_entry["chuva_48h"] = max(c_entry["chuva_48h"], chuva_hoje_cem)
+                c_entry["chuva_96h"] = max(c_entry["chuva_96h"], chuva_hoje_cem)
 
         stations.append(c_entry)
 
@@ -427,69 +686,21 @@ def collect_stations_network():
     inea_entry["ranking"] = None
     inea_entry["tipo"] = "hidrologica"
     inea_entry["tipo_label"] = "Nível do Rio"
-    # Preenche vento atual e extremos registrados para estações puramente pluviométricas/hidrológicas
-    canta_st = next((s for s in stations if s.get("codigo") == "IRIODA16"), None)
-    if canta_st and canta_st.get("vento_atual") is not None:
-        inea_entry["vento_atual"] = canta_st.get("vento_atual")
-        inea_entry["rajada_atual"] = canta_st.get("rajada_atual")
-        inea_entry["vento_max_24h"] = canta_st.get("vento_max_24h")
-        inea_entry["rajada_max_24h"] = canta_st.get("rajada_max_24h")
-
-    rocha_st = next((s for s in stations if s.get("codigo") == "IRIODA15"), None)
-    for ct_entry in stations:
-        if ct_entry.get("categoria") == "cemaden":
-            if rocha_st and rocha_st.get("vento_atual") is not None:
-                ct_entry["vento_atual"] = rocha_st.get("vento_atual")
-                ct_entry["rajada_atual"] = rocha_st.get("rajada_atual")
-                ct_entry["vento_max_24h"] = rocha_st.get("vento_max_24h")
-                ct_entry["rajada_max_24h"] = rocha_st.get("rajada_max_24h")
-
-    costazul_st = next((s for s in stations if s.get("codigo") == "IRIODA6"), None)
-    for p_entry in stations:
-        if p_entry.get("codigo") == "IRIODA5" and p_entry.get("vento_atual") is None:
-            if costazul_st and costazul_st.get("vento_atual") is not None:
-                p_entry["vento_atual"] = costazul_st.get("vento_atual")
-                p_entry["rajada_atual"] = costazul_st.get("rajada_atual")
-                p_entry["vento_max_24h"] = costazul_st.get("vento_max_24h")
-                p_entry["rajada_max_24h"] = costazul_st.get("rajada_max_24h")
-
-    # Média regional caso reste alguma estação sem vento
-    pws_with_wind = [s for s in stations if s.get("vento_atual") is not None]
-    if pws_with_wind:
-        avg_v = round(sum(safe_float(s.get("vento_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
-        avg_r = round(sum(safe_float(s.get("rajada_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
-        avg_vmax = round(sum(safe_float(s.get("vento_max_24h") or s.get("vento_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
-        avg_rmax = round(sum(safe_float(s.get("rajada_max_24h") or s.get("rajada_atual"), 0.0) for s in pws_with_wind) / len(pws_with_wind))
-        for s in stations:
-            if s.get("vento_atual") is None:
-                s["vento_atual"] = avg_v
-                s["rajada_atual"] = avg_r
-                s["vento_max_24h"] = avg_vmax
-                s["rajada_max_24h"] = avg_rmax
-
-    # Temperatura regional para PCDs/INEA sem sensor termometrico proprio
-    pws_with_temp = [s for s in stations if s.get('temp_atual') is not None]
-    if pws_with_temp:
-        avg_temp = round(sum(safe_float(s.get('temp_atual'), 20.0) for s in pws_with_temp) / len(pws_with_temp))
-        for s in stations:
-            if s.get('temp_atual') is None and s.get('online') is not False:
-                s['temp_atual'] = avg_temp
 
     all_stations = pluviometric_stations + [inea_entry]
-
 
     # Métricas agregadas municipais (calculadas apenas sobre as 9 estações pluviométricas)
     val_24h = [s["chuva_24h"] for s in pluviometric_stations if s.get("chuva_24h") is not None]
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
     max_st = pluviometric_stations[0] if pluviometric_stations else None
 
-    # UV Tempo Real de Referencia Municipal (Estacao IRIODA17 - Praia da Tartaruga)
+    # UV Tempo Real de Referência Municipal (Estação IRIODA17 - Praia da Tartaruga)
     irioda17_st = next((s for s in stations if s.get("codigo") == "IRIODA17"), None)
     uv_irioda17 = irioda17_st.get("uv_atual") if irioda17_st and irioda17_st.get("uv_atual") is not None else 0.0
     solar_irioda17 = irioda17_st.get("radiacao_solar") if irioda17_st and irioda17_st.get("radiacao_solar") is not None else 0.0
 
     dataset = {
-        "atualizacao": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "atualizacao": now_brt.strftime("%Y-%m-%d %H:%M:%S"),
         "total_estacoes": len(all_stations),
         "total_pluviometricas": len(pluviometric_stations),
         "total_hidrologicas": 1,
@@ -501,7 +712,7 @@ def collect_stations_network():
             "url_estacao": "https://www.wunderground.com/dashboard/pws/IRIODA17",
             "uv": uv_irioda17,
             "radiacao_solar": solar_irioda17,
-            "hora_leitura": irioda17_st.get("ultima_leitura") if irioda17_st else datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            "hora_leitura": irioda17_st.get("ultima_leitura") if irioda17_st else now_brt.strftime("%Y-%m-%d %H:%M:%S")
         },
         "resumo": {
             "media_chuva_24h": media_24h,
@@ -528,8 +739,15 @@ def collect_stations_network():
     print(f">> [SUCESSO] {len(stations)} estações consolidadas em data/acumulados_estacoes.json!")
     return dataset
 
+
 if __name__ == "__main__":
     ds = collect_stations_network()
     print("Resumo:", ds["resumo"])
     for s in ds["estacoes"]:
-        print(f"[{s['categoria'].upper()}] {s['nome']} -> 24h: {s['chuva_24h']} mm | 96h: {s['chuva_96h']} mm | Online: {s['online']}")
+        print(
+            f"[{s['categoria'].upper()}] {s['nome']} -> 24h: {s['chuva_24h']} mm | "
+            f"Hoje: {s.get('chuva_hoje')} mm (Início: {s.get('inicio_chuva_hoje')}) | "
+            f"Temp: {s.get('temp_atual')}°C | Vento: {s.get('vento_atual')} km/h (Raj: {s.get('rajada_atual')}) | "
+            f"MaxDia: V={s.get('vento_max_hoje')} ({s.get('hora_vento_max_hoje')}) / R={s.get('rajada_max_hoje')} ({s.get('hora_rajada_max_hoje')}) | "
+            f"Leitura: {s.get('ultima_leitura')} | Online: {s['online']}"
+        )

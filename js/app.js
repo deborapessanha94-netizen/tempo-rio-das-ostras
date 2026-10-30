@@ -36,7 +36,7 @@ import {
 
 
 
-} from './social-cards.js';
+} from './social-cards.js?v=176';
 
 
 
@@ -174,6 +174,8 @@ import {
 
   getAcumuladosEstacoes,
   getRealtimeUvWunderground,
+  fetchLiveWuStationsTelemetry,
+  fetchLiveCemadenStationsTelemetry,
   getLocalHourIndex, 
 
 
@@ -214,7 +216,7 @@ import {
 
 
 
-} from './api.js?v=175';
+} from './api.js?v=176';
 
 
 
@@ -277,6 +279,9 @@ const state = {
 
 
   acumuladosEstacoes: [],
+  liveStationsOverlay: {},
+  lastLiveStationsSyncMs: 0,
+  isSyncingLiveStations: false,
 
 
 
@@ -1604,6 +1609,7 @@ async function loadAllApplicationData() {
 
 
     syncLiveUvFromStation();
+    syncLiveStationsTelemetry(true);
 
     // FASE 2: Carregamento Assíncrono em Segundo Plano dos feeds meteorológicos
 
@@ -2517,6 +2523,126 @@ async function syncLiveUvFromStation() {
     }
   } catch (e) {}
 }
+
+/**
+ * Mescla a telemetria em tempo real consultada diretamente no navegador (Weather Underground + CEMADEN)
+ * sobre o dataset de estações, impedindo qualquer regressão para snapshots antigos do GitHub Actions.
+ */
+function applyLiveStationsOverlay(rawData) {
+  if (!rawData) return rawData;
+  const overlay = state.liveStationsOverlay || {};
+  const overlayKeys = Object.keys(overlay);
+  if (overlayKeys.length === 0) return rawData;
+
+  const isArr = Array.isArray(rawData);
+  const baseList = isArr ? rawData : (Array.isArray(rawData.estacoes) ? rawData.estacoes : []);
+  if (baseList.length === 0) return rawData;
+
+  const mergedList = baseList.map(st => {
+    const code = st?.codigo;
+    if (code && overlay[code]) {
+      const ov = overlay[code];
+      if (st.categoria === 'cemaden') {
+        const c24 = Math.max(Number(st.chuva_24h || 0), Number(ov.chuva_24h || 0));
+        const c36 = Math.max(c24, Number(st.chuva_36h || 0), Number(ov.chuva_36h || 0));
+        const c48 = Math.max(c36, Number(st.chuva_48h || 0), Number(ov.chuva_48h || 0));
+        const c96 = Math.max(c48, Number(st.chuva_96h || 0), Number(ov.chuva_96h || 0));
+        return {
+          ...st,
+          ...ov,
+          inicio_chuva_hoje: ov.inicio_chuva_hoje || st.inicio_chuva_hoje || null,
+          chuva_hoje: Math.max(Number(st.chuva_hoje || 0), Number(ov.chuva_hoje || 0)),
+          chuva_24h: c24,
+          chuva_36h: c36,
+          chuva_48h: c48,
+          chuva_96h: c96
+        };
+      }
+      return { ...st, ...ov };
+    }
+    return st;
+  });
+
+  if (isArr) return mergedList;
+
+  const pluviais = mergedList
+    .filter(s => s.categoria !== 'inea')
+    .sort((a, b) => Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0));
+  const vals24 = pluviais.map(s => Number(s.chuva_24h || 0));
+  const media24 = vals24.length > 0 ? Math.round((vals24.reduce((a, b) => a + b, 0) / vals24.length) * 10) / 10 : 0.0;
+  const topSt = pluviais[0] || null;
+
+  return {
+    ...rawData,
+    estacoes: mergedList,
+    estacoes_pluviometricas: pluviais,
+    resumo: {
+      ...(rawData.resumo || {}),
+      media_chuva_24h: media24,
+      maior_acumulado_24h: topSt ? Number(topSt.chuva_24h || 0) : 0.0,
+      maior_estacao_nome: topSt ? (topSt.nome_curto || topSt.nome || '') : ''
+    }
+  };
+}
+
+/**
+ * Sincroniza diretamente do navegador os dados REAIS em horário REAL das estações
+ * Weather Underground (temperatura, vento, rajada, maior vento, maior rajada, início da chuva hoje)
+ * e das PCDs do CEMADEN, atualizando os cards imediatamente sem depender de fila do GitHub Actions.
+ */
+async function syncLiveStationsTelemetry(force = false) {
+  const now = Date.now();
+  if (state.isSyncingLiveStations) return;
+  if (!force && state.lastLiveStationsSyncMs && (now - state.lastLiveStationsSyncMs) < 45000) return;
+  state.isSyncingLiveStations = true;
+
+  try {
+    // 1. Weather Underground em tempo real (~300ms)
+    const wuLive = await fetchLiveWuStationsTelemetry();
+    if (wuLive && Object.keys(wuLive).length > 0) {
+      state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...wuLive };
+      state.lastLiveStationsSyncMs = Date.now();
+
+      // Aproveita leitura UV ao vivo da IRIODA17 se disponível
+      const ref17 = wuLive['IRIODA17'];
+      if (ref17 && ref17.online && ref17.uv_atual !== null && ref17.uv_atual !== undefined) {
+        state.liveWuUv = {
+          stationId: 'IRIODA17',
+          uv: Number(ref17.uv_atual),
+          solarRadiation: ref17.radiacao_solar,
+          obsTimeLocal: ref17.ultima_leitura,
+          epoch: Date.now()
+        };
+        updateRealtimeUv();
+      }
+
+      if (state.acumuladosDataset || state.stationsRawData) {
+        const updated = applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
+        state.acumuladosDataset = updated;
+        state.acumuladosEstacoes = updated.estacoes ? updated.estacoes : updated;
+        renderAcumuladosChuva(updated);
+      }
+    }
+
+    // 2. CEMADEN horário em tempo real (independente, não bloqueia WU)
+    fetchLiveCemadenStationsTelemetry().then(cemLive => {
+      if (cemLive && Object.keys(cemLive).length > 0) {
+        state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...cemLive };
+        if (state.acumuladosDataset || state.stationsRawData) {
+          const updatedCem = applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
+          state.acumuladosDataset = updatedCem;
+          state.acumuladosEstacoes = updatedCem.estacoes ? updatedCem.estacoes : updatedCem;
+          renderAcumuladosChuva(updatedCem);
+        }
+      }
+    }).catch(() => {});
+  } catch (err) {
+    console.warn('[Live Stations] Aviso ao consultar telemetria direta:', err);
+  } finally {
+    state.isSyncingLiveStations = false;
+  }
+}
+window.syncLiveStationsTelemetry = syncLiveStationsTelemetry;
 
 function renderDashboardUI(meta, rows, weather) {
 
@@ -7039,6 +7165,11 @@ window.resetSyncCountdown = function() {
 };
 
 function startAutoSync() {
+  // Atualização direta das estações (Weather Underground / CEMADEN) a cada 2 minutos em tempo real
+  setInterval(() => {
+    syncLiveStationsTelemetry(true);
+  }, 120 * 1000);
+
   // Timer de contagem regressiva e sincronização contínua de 5 em 5 minutos (300 segundos)
   setInterval(() => {
     countdownSeconds--;
@@ -7046,6 +7177,7 @@ function startAutoSync() {
       countdownSeconds = REFRESH_INTERVAL_SECONDS;
       loadAllApplicationData();
       syncLiveUvFromStation();
+      syncLiveStationsTelemetry(true);
       if (typeof window.refreshRioHourlyData === 'function') {
         window.refreshRioHourlyData();
       }
@@ -8818,6 +8950,7 @@ window.switchAppTab = function(tabName) {
 
 
       renderAcumuladosChuva(state.acumuladosDataset || state.acumuladosEstacoes);
+      syncLiveStationsTelemetry(false);
 
 
 
@@ -9206,14 +9339,38 @@ window.handleCustomStationHorizon = function(val) {
 
 
 
-function renderAcumuladosChuva(data) {
+function formatStationMetric1(val, suffix = '') {
+  if (val === null || val === undefined || val === '' || isNaN(Number(val))) return '—';
+  return `${Number(val).toFixed(1).replace('.', ',')}${suffix}`;
+}
 
+function formatStationLeituraBr(rawStr) {
+  if (!rawStr) return 'Sem leitura recente';
+  const s = String(rawStr).trim();
+  // YYYY-MM-DD HH:MM:SS ou YYYY-MM-DD HH:MM
+  const mIso = s.match(/^(\d{4})-(\d{2})-(\d{2})[T\s]+(\d{2}:\d{2}(?::\d{2})?)/);
+  if (mIso) {
+    return `${mIso[3]}/${mIso[2]}/${mIso[1]} às ${mIso[4]}`;
+  }
+  // DD/MM/YYYY HH:MM
+  const mBr = s.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}:\d{2}(?::\d{2})?)/);
+  if (mBr) {
+    return `${mBr[1]}/${mBr[2]}/${mBr[3]} às ${mBr[4]}`;
+  }
+  return s;
+}
 
+function extractStationClockShort(rawStr) {
+  if (!rawStr) return '';
+  const s = String(rawStr).trim();
+  const m = s.match(/(\d{2}:\d{2}(?::\d{2})?)/);
+  return m ? m[1] : '';
+}
 
-  if (!data) return;
+function renderAcumuladosChuva(rawInput) {
+  if (!rawInput) return;
 
-
-
+  const data = applyLiveStationsOverlay(rawInput);
   state.stationsRawData = data;
 
 
@@ -9299,6 +9456,16 @@ function renderAcumuladosChuva(data) {
     if (kpiMaiorLocalEl) kpiMaiorLocalEl.textContent = maiorSt.nome_curto || maiorSt.nome;
     const kpiMaiorLabelEl = document.getElementById('chuva-kpi-maior-label');
     if (kpiMaiorLabelEl) kpiMaiorLabelEl.textContent = `Maior Acumulado (${activeHorizonLabel})`;
+  }
+
+  const liveJundiaSnap = getLiveJundiaSnapshot();
+  if (kpiRioEl && (liveJundiaSnap || jundiaSt)) {
+    kpiRioEl.textContent = liveJundiaSnap ? `${liveJundiaSnap.nivelComma} m` : String(jundiaSt.nivel_rio || '1,39 m').replace('.', ',');
+    if (kpiRioSubEl) {
+      const stTxt = liveJundiaSnap ? liveJundiaSnap.statusTitle : (jundiaSt.status_rio || 'Vigilância');
+      const pctTxt = liveJundiaSnap ? liveJundiaSnap.pctCalha : Math.round(Number(jundiaSt.alerta_maximo_pct || 49));
+      kpiRioSubEl.textContent = `Status: ${stTxt} • Calha em ${pctTxt}%`;
+    }
   }
 
   // 2. Renderiza Grade de Cards das 10 Estações
@@ -9509,61 +9676,91 @@ function renderAcumuladosChuva(data) {
 
 
 
-      } else if ((st.temp_atual !== null && st.temp_atual !== undefined) || (st.vento_atual !== null && st.vento_atual !== undefined)) {
-        const tempVal = (st.temp_atual !== null && st.temp_atual !== undefined) ? `${st.temp_atual}°C` : '—';
-        const ventoAgora = (st.vento_atual !== null && st.vento_atual !== undefined) ? `${st.vento_atual} km/h` : '0 km/h';
-        const rajadaAgora = (st.rajada_atual !== null && st.rajada_atual !== undefined) ? `${st.rajada_atual} km/h` : ventoAgora;
-        const rajadaMax = (st.rajada_max_24h !== null && st.rajada_max_24h !== undefined) ? `${st.rajada_max_24h} km/h` : rajadaAgora;
-        const ventoMax = (st.vento_max_24h !== null && st.vento_max_24h !== undefined) ? `${st.vento_max_24h} km/h` : ventoAgora;
+      } else if (isOnline && ((st.temp_atual !== null && st.temp_atual !== undefined) || (st.vento_atual !== null && st.vento_atual !== undefined))) {
+        const tempVal = formatStationMetric1(st.temp_atual, '°C');
+        const ventoAgora = formatStationMetric1(st.vento_atual ?? 0, ' km/h');
+        const rajadaAgora = formatStationMetric1(st.rajada_atual ?? st.vento_atual ?? 0, ' km/h');
+        const rawVentoMax = (st.vento_max_hoje !== null && st.vento_max_hoje !== undefined) ? st.vento_max_hoje : (st.vento_max_24h ?? st.vento_atual ?? 0);
+        const rawRajadaMax = (st.rajada_max_hoje !== null && st.rajada_max_hoje !== undefined) ? st.rajada_max_hoje : (st.rajada_max_24h ?? st.rajada_atual ?? st.vento_atual ?? 0);
+        const ventoMaxDia = formatStationMetric1(rawVentoMax, ' km/h');
+        const rajadaMaxDia = formatStationMetric1(rawRajadaMax, ' km/h');
+        const horaVentoMax = st.hora_vento_max_hoje || '';
+        const horaRajadaMax = st.hora_rajada_max_hoje || '';
+        const horaCurta = extractStationClockShort(st.ultima_leitura);
+        const dirCard = st.vento_dir_cardinal || '';
 
         sensorInfo = `
-          <div class="p-2 sm:p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[9.5px] sm:text-[10.5px] text-black font-semibold space-y-1.5 shadow-sm">
-            <div class="flex items-center justify-between gap-1 flex-wrap">
-              <span class="flex items-center gap-1 text-black whitespace-nowrap" title="Temperatura Atual">
-                <i data-lucide="thermometer" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-                Temp: <strong>${tempVal}</strong>
-              </span>
-              <span class="flex items-center gap-1 text-[#0284c7] whitespace-nowrap" title="Vento no Momento (Sustentado)">
-                <i data-lucide="wind" class="w-3.5 h-3.5 shrink-0"></i>
-                Vento agora: <strong>${ventoAgora}</strong>
-              </span>
+          <div class="space-y-2">
+            <!-- Parte 1: Condições em Tempo Real (Temperatura, Vento, Rajadas naquele momento) -->
+            <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-black shadow-2xs space-y-1.5">
+              <div class="flex items-center justify-between gap-1 border-b border-[#e2e8f0] pb-1">
+                <span class="flex items-center gap-1 text-[9.5px] font-black uppercase tracking-wider text-emerald-800">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
+                  Tempo Real Agora
+                </span>
+                <span class="text-[9.5px] font-mono font-bold text-slate-700">${horaCurta ? `Leitura às ${horaCurta}` : 'Ao vivo'}</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1 text-center pt-0.5">
+                <div class="px-0.5">
+                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
+                    <i data-lucide="thermometer" class="w-3 h-3 text-[#ea580c] shrink-0"></i> Temperatura
+                  </span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-black block mt-0.5">${tempVal}</strong>
+                </div>
+                <div class="border-x border-[#cbd5e1]/80 px-0.5">
+                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
+                    <i data-lucide="wind" class="w-3 h-3 text-[#0284c7] shrink-0"></i> Vento
+                  </span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-[#0284c7] block mt-0.5">${ventoAgora}</strong>
+                  ${dirCard ? `<span class="text-[8.5px] font-bold text-slate-500 block leading-none mt-0.5">Dir. ${dirCard}</span>` : ''}
+                </div>
+                <div class="px-0.5">
+                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
+                    <i data-lucide="activity" class="w-3 h-3 text-cyan-700 shrink-0"></i> Rajadas
+                  </span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-cyan-800 block mt-0.5">${rajadaAgora}</strong>
+                </div>
+              </div>
             </div>
-            <div class="flex items-center justify-between pt-1 border-t border-[#cbd5e1]/70 text-[9px] sm:text-[9.5px] flex-wrap gap-1">
-              <span class="flex items-center gap-1 text-black/80 whitespace-nowrap" title="Rajada registrada no momento">
-                <i data-lucide="activity" class="w-3 h-3 text-cyan-600 shrink-0"></i>
-                Rajada agora: <strong>${rajadaAgora}</strong>
-              </span>
-              <span class="flex items-center gap-1 text-[#b91c1c] font-bold whitespace-nowrap" title="Maior rajada registrada nas últimas 24h">
-                <i data-lucide="zap" class="w-3 h-3 text-[#b91c1c] shrink-0"></i>
-                Maior rajada: <strong>${rajadaMax}</strong>
-              </span>
+
+            <!-- Parte 2: Maior Vento e Maior Rajada do Dia -->
+            <div class="p-2 rounded-xl bg-gradient-to-br from-[#fff7ed] to-[#fef2f2]/85 border border-[#fdba74]/75 text-black shadow-2xs space-y-1.5">
+              <div class="flex items-center justify-between gap-1">
+                <span class="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-[#9a3412]">
+                  <i data-lucide="zap" class="w-3 h-3 text-[#ea580c] shrink-0"></i>
+                  Extremos de Vento Hoje
+                </span>
+                <span class="text-[8.5px] font-bold text-[#9a3412]/80">Picos do dia</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1.5 text-center">
+                <div class="bg-white/95 rounded-lg py-1 px-1.5 border border-[#fed7aa]">
+                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-700 block">Maior Vento</span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-[#0369a1] block">${ventoMaxDia}</strong>
+                  ${horaVentoMax ? `<span class="text-[8.5px] font-semibold text-slate-600 block leading-tight">às ${horaVentoMax}</span>` : ''}
+                </div>
+                <div class="bg-white/95 rounded-lg py-1 px-1.5 border border-[#fecaca]">
+                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-700 block">Maior Rajada</span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-[#b91c1c] block">${rajadaMaxDia}</strong>
+                  ${horaRajadaMax ? `<span class="text-[8.5px] font-semibold text-slate-600 block leading-tight">às ${horaRajadaMax}</span>` : ''}
+                </div>
+              </div>
             </div>
+          </div>
+        `;
+      } else if (!isOnline) {
+        sensorInfo = `
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-slate-600 font-semibold flex items-center gap-2">
+            <i data-lucide="wifi-off" class="w-4 h-4 text-slate-400 shrink-0"></i>
+            <span>Estação temporariamente sem transmissão em tempo real no painel da rede.</span>
           </div>
         `;
       } else {
-
-
-
         sensorInfo = `
-
-
-
-          <div class="p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-black font-medium">
-
-
-
-            <span>PCD Pluviométrica de Alta Precisão • Rede Oficial CEMADEN</span>
-
-
-
+          <div class="p-2.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-slate-700 font-semibold flex items-center gap-2">
+            <i data-lucide="cloud-rain" class="w-4 h-4 text-[#ea580c] shrink-0"></i>
+            <span>PCD Pluviométrica Oficial CEMADEN • Medição exclusiva de chuva (sem sensor local de vento/temperatura).</span>
           </div>
-
-
-
         `;
-
-
-
       }
 
 
@@ -9949,39 +10146,56 @@ function renderAcumuladosChuva(data) {
                   </div>`;
               }
 
+              const chHojeNum = (st.chuva_hoje !== null && st.chuva_hoje !== undefined) ? Number(st.chuva_hoje) : 0.0;
+              const chHojeStr = chHojeNum.toFixed(1).replace('.', ',');
+              let rainStartBanner = '';
+              if (!isOnline) {
+                rainStartBanner = `
+                  <div class="flex items-center justify-between gap-1.5 flex-wrap px-2.5 py-1.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-slate-600">
+                    <span class="flex items-center gap-1.5 font-semibold">
+                      <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+                      <span>Início da chuva hoje: <strong class="text-slate-700">Sem leitura ativa</strong></span>
+                    </span>
+                  </div>`;
+              } else if (st.inicio_chuva_hoje || chHojeNum > 0) {
+                const horaIni = st.inicio_chuva_hoje ? `às ${st.inicio_chuva_hoje}` : 'Registrada hoje';
+                rainStartBanner = `
+                  <div class="flex items-center justify-between gap-1.5 flex-wrap px-2.5 py-1.5 rounded-xl bg-gradient-to-br from-[#eff6ff] to-[#e0f2fe] border border-[#38bdf8]/60 text-[10.5px] text-[#1e3a8a] shadow-2xs">
+                    <span class="flex items-center gap-1.5 font-bold">
+                      <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+                      <span>Chuva iniciou hoje: <strong class="font-mono font-black text-[#0369a1] text-[11px]">${horaIni}</strong></span>
+                    </span>
+                    <span class="font-mono font-extrabold text-[10px] bg-white px-2 py-0.5 rounded-md border border-[#bfdbfe] text-[#0369a1]">Hoje: ${chHojeStr} mm</span>
+                  </div>`;
+              } else {
+                rainStartBanner = `
+                  <div class="flex items-center justify-between gap-1.5 flex-wrap px-2.5 py-1.5 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-[10.5px] text-slate-700">
+                    <span class="flex items-center gap-1.5 font-semibold">
+                      <i data-lucide="sun" class="w-3.5 h-3.5 text-amber-500 shrink-0"></i>
+                      <span>Chuva hoje: <strong class="font-bold text-slate-900">Sem registro desde 00h</strong></span>
+                    </span>
+                    <span class="font-mono font-bold text-[10px] text-slate-600">0,0 mm</span>
+                  </div>`;
+              }
+
               return `
-                <div class="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#cbd5e1] text-center">
-                  ${col1Html}
-                  ${col2Html}
-                  ${col3Html}
+                <div class="space-y-1.5">
+                  <div class="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-gradient-to-br from-[#f8fafc] to-[#f1f5f9] border border-[#cbd5e1] text-center">
+                    ${col1Html}
+                    ${col2Html}
+                    ${col3Html}
+                  </div>
+                  ${rainStartBanner}
                 </div>`;
             })()}
 
             <!-- Sensores Adicionais -->
-
-
-
             ${sensorInfo}
-
-
-
           </div>
 
-
-
-
-
-
-
           <!-- Rodapé do Card com Link -->
-
-
-
-          <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between text-xs">
-
-
-
-            <span class="text-[10px] text-black font-medium truncate">${st.ultima_leitura || 'Hoje'}</span>
+          <div class="pt-2 border-t border-[#cbd5e1] flex items-center justify-between gap-2 flex-wrap text-xs">
+            <span class="text-[10px] text-black font-semibold">${formatStationLeituraBr(st.ultima_leitura)}</span>
 
 
 
@@ -10279,7 +10493,8 @@ function renderAcumuladosChuva(data) {
 
 
             <span class="text-[10.5px] text-black/75 block">${st.bairro || 'Rio das Ostras'} • ${st.codigo}</span>
-            ${(st.vento_atual !== null && st.vento_atual !== undefined) ? `<span class="text-[9.5px] font-bold text-[#0284c7] block mt-0.5">💨 No momento: ${st.vento_atual} km/h (rajada ${(st.rajada_atual !== null && st.rajada_atual !== undefined) ? st.rajada_atual : st.vento_atual} km/h) • <span class="text-[#b91c1c]">⚡ Maior registro 24h: ${(st.rajada_max_24h !== null && st.rajada_max_24h !== undefined) ? st.rajada_max_24h : ((st.rajada_atual !== null && st.rajada_atual !== undefined) ? st.rajada_atual : st.vento_atual)} km/h</span></span>` : ''}
+            ${st.inicio_chuva_hoje ? `<span class="text-[9.5px] font-bold text-[#0369a1] block mt-0.5">🌧️ Chuva iniciou hoje às ${st.inicio_chuva_hoje} (${formatStationMetric1(st.chuva_hoje ?? 0, ' mm')} hoje)</span>` : ''}
+            ${(isOnline && st.vento_atual !== null && st.vento_atual !== undefined) ? `<span class="text-[9.5px] font-bold text-[#0284c7] block mt-0.5">🌡️ ${formatStationMetric1(st.temp_atual, '°C')} • 💨 Agora: ${formatStationMetric1(st.vento_atual, ' km/h')} (rajada ${formatStationMetric1(st.rajada_atual ?? st.vento_atual, ' km/h')}) • <span class="text-[#b91c1c]">⚡ Picos hoje: vento ${formatStationMetric1(st.vento_max_hoje ?? st.vento_max_24h ?? st.vento_atual, ' km/h')} / rajada ${formatStationMetric1(st.rajada_max_hoje ?? st.rajada_max_24h ?? st.rajada_atual ?? st.vento_atual, ' km/h')}</span></span>` : ''}
 
 
 
