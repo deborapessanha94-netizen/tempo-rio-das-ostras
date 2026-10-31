@@ -13,23 +13,23 @@
     {
       "key": "d0",
       "rotulo": "Hoje",
-      "data_iso": "2026-10-30",
-      "data_br": "30/10",
-      "dia_semana": "Sexta"
-    },
-    {
-      "key": "d1",
-      "rotulo": "Amanhã",
       "data_iso": "2026-10-31",
       "data_br": "31/10",
       "dia_semana": "Sábado"
     },
     {
-      "key": "d2",
-      "rotulo": "Depois de amanhã",
+      "key": "d1",
+      "rotulo": "Amanhã",
       "data_iso": "2026-11-01",
       "data_br": "01/11",
       "dia_semana": "Domingo"
+    },
+    {
+      "key": "d2",
+      "rotulo": "Depois de amanhã",
+      "data_iso": "2026-11-02",
+      "data_br": "02/11",
+      "dia_semana": "Segunda"
     }
   ],
   "praias_condicoes": [
@@ -390,31 +390,37 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-10-30",
+    "data": "2026-10-31",
     "proxima_mare": {
-      "tipo": "BAIXA-MAR",
-      "hora": "00:08",
-      "altura": 0.45,
-      "rotulo": "Baixa-mar (0,5 m)"
+      "tipo": "PREAMAR",
+      "hora": "06:40",
+      "altura": 1.06,
+      "rotulo": "Preia-mar (1,1 m)"
     },
     "mares_do_dia": [
       {
-        "tipo": "PREAMAR",
-        "hora": "05:28",
-        "altura": 1.16,
-        "rotulo": "Preia-mar (1,2 m)"
-      },
-      {
         "tipo": "BAIXA-MAR",
-        "hora": "12:08",
-        "altura": 0.53,
+        "hora": "00:08",
+        "altura": 0.45,
         "rotulo": "Baixa-mar (0,5 m)"
       },
       {
         "tipo": "PREAMAR",
-        "hora": "17:40",
-        "altura": 1.07,
+        "hora": "06:40",
+        "altura": 1.06,
         "rotulo": "Preia-mar (1,1 m)"
+      },
+      {
+        "tipo": "BAIXA-MAR",
+        "hora": "13:25",
+        "altura": 0.57,
+        "rotulo": "Baixa-mar (0,6 m)"
+      },
+      {
+        "tipo": "PREAMAR",
+        "hora": "19:05",
+        "altura": 1.02,
+        "rotulo": "Preia-mar (1,0 m)"
       }
     ]
   }

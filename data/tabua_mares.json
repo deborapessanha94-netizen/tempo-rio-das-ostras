@@ -7,39 +7,14 @@
   "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
   "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
   "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "atualizado_em": "2026-10-30T23:39:13.897304",
+  "atualizado_em": "2026-10-31T00:44:52.496059",
   "proxima_mare": {
-    "tipo": "BAIXA-MAR",
-    "hora": "00:08",
-    "altura": 0.45,
-    "rotulo": "Baixa-mar (0,5 m)"
+    "tipo": "PREAMAR",
+    "hora": "06:40",
+    "altura": 1.06,
+    "rotulo": "Preia-mar (1,1 m)"
   },
   "dias": [
-    {
-      "data_iso": "2026-10-30",
-      "data_br": "30/10/2026",
-      "dia_semana": "Sexta",
-      "eventos": [
-        {
-          "tipo": "PREAMAR",
-          "hora": "05:28",
-          "altura": 1.16,
-          "rotulo": "Preia-mar (1,2 m)"
-        },
-        {
-          "tipo": "BAIXA-MAR",
-          "hora": "12:08",
-          "altura": 0.53,
-          "rotulo": "Baixa-mar (0,5 m)"
-        },
-        {
-          "tipo": "PREAMAR",
-          "hora": "17:40",
-          "altura": 1.07,
-          "rotulo": "Preia-mar (1,1 m)"
-        }
-      ]
-    },
     {
       "data_iso": "2026-10-31",
       "data_br": "31/10/2026",
@@ -99,6 +74,12 @@
       "data_iso": "2026-11-05",
       "data_br": "05/11/2026",
       "dia_semana": "Quinta",
+      "eventos": []
+    },
+    {
+      "data_iso": "2026-11-06",
+      "data_br": "06/11/2026",
+      "dia_semana": "Sexta",
       "eventos": []
     }
   ]
