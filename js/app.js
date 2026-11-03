@@ -2607,6 +2607,27 @@ function applyLiveStationsOverlay(rawData) {
  * Weather Underground (temperatura, vento, rajada, maior vento, maior rajada, início da chuva hoje)
  * e das PCDs do CEMADEN, atualizando os cards imediatamente sem depender de fila do GitHub Actions.
  */
+export function getLiveHeroStationTelemetry() {
+  const overlay = state.liveStationsOverlay || {};
+  const prioCodes = ['IRIODA17', 'IRIODA16', 'IRIODA6', 'IRIODA15', 'ICASIM5'];
+  for (const c of prioCodes) {
+    if (overlay[c] && overlay[c].online && overlay[c].temp_atual !== null && overlay[c].temp_atual !== undefined) {
+      return overlay[c];
+    }
+  }
+  const dataset = state.acumuladosDataset || {};
+  const estacoes = dataset.estacoes || state.acumuladosEstacoes || [];
+  if (Array.isArray(estacoes)) {
+    for (const c of prioCodes) {
+      const s = estacoes.find(x => x.codigo === c);
+      if (s && s.online && s.temp_atual !== null && s.temp_atual !== undefined) {
+        return s;
+      }
+    }
+  }
+  return null;
+}
+
 async function syncLiveStationsTelemetry(force = false, quickOnly = false) {
   const now = Date.now();
   if (state.isSyncingLiveStations) return;
@@ -2621,31 +2642,32 @@ async function syncLiveStationsTelemetry(force = false, quickOnly = false) {
       state.lastLiveStationsSyncMs = Date.now();
 
       // Aproveita telemetria em tempo real (UV, Temp e Sensação Térmica) das estações de referência
-      const ref17 = wuLive['IRIODA17'] || wuLive['IRIODA16'];
-      if (ref17 && ref17.online) {
-        if (ref17.uv_atual !== null && ref17.uv_atual !== undefined) {
+      const liveHero = getLiveHeroStationTelemetry() || wuLive['IRIODA17'] || wuLive['IRIODA16'];
+      if (liveHero && liveHero.online) {
+        if (liveHero.uv_atual !== null && liveHero.uv_atual !== undefined) {
           state.liveWuUv = {
-            stationId: ref17.codigo || 'IRIODA17',
-            uv: Number(ref17.uv_atual),
-            solarRadiation: ref17.radiacao_solar,
-            obsTimeLocal: ref17.ultima_leitura,
+            stationId: liveHero.codigo || 'IRIODA17',
+            uv: Number(liveHero.uv_atual),
+            solarRadiation: liveHero.radiacao_solar,
+            obsTimeLocal: liveHero.ultima_leitura,
             epoch: Date.now()
           };
           updateRealtimeUv();
         }
-        if (ref17.temp_atual !== null && ref17.temp_atual !== undefined) {
+        if (liveHero.temp_atual !== null && liveHero.temp_atual !== undefined) {
           const sideTemp = document.getElementById('sidebar-temp');
-          if (sideTemp) sideTemp.textContent = `${Math.round(ref17.temp_atual)}°`;
+          if (sideTemp) sideTemp.textContent = `${Math.round(liveHero.temp_atual)}°`;
         }
-        if (ref17.sensacao_atual !== null && ref17.sensacao_atual !== undefined) {
+        const sensVal = (liveHero.sensacao_atual !== null && liveHero.sensacao_atual !== undefined) ? liveHero.sensacao_atual : liveHero.temp_atual;
+        if (sensVal !== null && sensVal !== undefined) {
           const heroSens = document.getElementById('hero-sensacao');
           if (heroSens) {
-            heroSens.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação: ${Math.round(ref17.sensacao_atual)}°C</span>`;
+            heroSens.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação em Tempo Real: ${Math.round(sensVal)}°C</span>`;
+            heroSens.title = `Sensação térmica em tempo real na estação ${liveHero.nome_curto || liveHero.nome || liveHero.codigo}`;
             if (window.lucide) window.lucide.createIcons();
           }
         }
       }
-
       if (state.acumuladosDataset || state.stationsRawData) {
         const updated = applyLiveStationsOverlay(state.acumuladosDataset || state.stationsRawData);
         state.acumuladosDataset = updated;
@@ -2970,15 +2992,12 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-  // Atualiza Temperatura
-
-
-
+  // Atualiza Temperatura no Hero Card (prioriza estação em tempo real de Rio das Ostras)
   if (sideTemp) {
-
-
-
-    if (tempCur !== undefined) {
+    const liveSt = getLiveHeroStationTelemetry();
+    if (liveSt && liveSt.temp_atual !== null && liveSt.temp_atual !== undefined) {
+      sideTemp.textContent = `${Math.round(liveSt.temp_atual)}°`;
+    } else if (tempCur !== undefined) {
 
 
 
@@ -3018,19 +3037,31 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-  // Atualiza Sensação Térmica
-
-
-
+  // Atualiza Sensação Térmica em Tempo Real (prioriza sensor da estação municipal)
   if (heroSensacao) {
-    const sVal = (appTempCur !== undefined) ? Math.round(appTempCur) : ((tempCur !== undefined) ? Math.round(tempCur) : 31);
-    heroSensacao.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação: ${sVal}°C</span>`;
+    const liveHeroSt = getLiveHeroStationTelemetry();
+    let sVal = null;
+    let sTitle = 'Sensação térmica em tempo real';
+    if (liveHeroSt && liveHeroSt.sensacao_atual !== null && liveHeroSt.sensacao_atual !== undefined) {
+      sVal = Math.round(liveHeroSt.sensacao_atual);
+      sTitle = `Sensação térmica em tempo real na estação ${liveHeroSt.nome_curto || liveHeroSt.codigo}`;
+    } else if (liveHeroSt && liveHeroSt.temp_atual !== null && liveHeroSt.temp_atual !== undefined) {
+      sVal = Math.round(liveHeroSt.temp_atual);
+      sTitle = `Sensação térmica em tempo real na estação ${liveHeroSt.nome_curto || liveHeroSt.codigo}`;
+    } else if (appTempCur !== undefined) {
+      sVal = Math.round(appTempCur);
+    } else if (tempCur !== undefined) {
+      sVal = Math.round(tempCur);
+    } else {
+      sVal = 33;
+    }
+    heroSensacao.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação em Tempo Real: ${sVal}°C</span>`;
+    heroSensacao.title = sTitle;
     if (window.lucide) window.lucide.createIcons();
   }
 
 
 
-  }
 
 
 
@@ -3604,7 +3635,7 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-        const diaSemData = d.dia.split(/[•—]/)[0].trim();
+        const diaSemData = d.dia.split(/[•—–]/)[0].trim();
 
 
 
@@ -3985,21 +4016,14 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
-
-
-
-              <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
-              <span class="text-[10px] sm:text-[11px] font-bold text-[#c2410c] bg-[#fff7ed] border border-[#ea580c]/30 px-2 py-0.5 rounded-md whitespace-nowrap flex items-center gap-1 shadow-2xs" title="Sensação Térmica Máxima Prevista">
-                <i data-lucide="flame" class="w-3 h-3 text-[#ea580c]"></i>Sensação ${sensacaoMax}°C
+            <div class="flex flex-col items-end gap-1 shrink-0 pl-1 self-start pt-0.5">
+              <div class="flex items-center gap-1.5">
+                <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
+                <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 ${theme.chevronColor} transition"></i>
+              </div>
+              <span class="text-[9.5px] sm:text-[10.5px] font-bold text-[#c2410c] bg-[#fff7ed] border border-[#ea580c]/30 px-1.5 py-0.5 rounded-md whitespace-nowrap flex items-center gap-1 shadow-2xs" title="Sensação Térmica: Menor ${sensacaoMin}°C e Maior ${sensacaoMax}°C">
+                <i data-lucide="flame" class="w-3 h-3 text-[#ea580c]"></i>Sensação ${sensacaoMin}° a ${sensacaoMax}°C
               </span>
-
-
-
-              <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 ${theme.chevronColor} transition"></i>
-
-
-
             </div>
 
 
@@ -4019,7 +4043,7 @@ function renderDashboardUI(meta, rows, weather) {
           <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#fff7ed] border border-[#ea580c]/30 shadow-2xs text-[11px] font-bold text-[#9a3412]" title="Sensação Térmica Máxima Prevista">
               <i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-              <span>Sensação: até ${sensacaoMax}°C</span>
+              <span>Sensação: Menor ${sensacaoMin}°C • Maior ${sensacaoMax}°C</span>
             </span>
 
 
@@ -4104,7 +4128,7 @@ function renderDashboardUI(meta, rows, weather) {
             <div class="grid grid-cols-2 gap-2 text-xs">
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Sensação Térmica</span>
-                <span class="font-extrabold text-xs block text-[#c2410c] dark:text-orange-300 leading-tight mt-0.5">Pico de até ${sensacaoMax}°C</span>
+                <span class="font-extrabold text-xs block text-[#c2410c] dark:text-orange-300 leading-tight mt-0.5">Menor: ${sensacaoMin}°C | Maior: ${sensacaoMax}°C</span>
                 <span class="text-[10px] text-black/75 dark:text-slate-300 font-medium block leading-snug mt-1">Mínima de ${sensacaoMin}°C a Máxima de ${sensacaoMax}°C</span>
               </div>
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
