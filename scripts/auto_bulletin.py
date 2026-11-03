@@ -1690,7 +1690,10 @@ def run_auto_bulletin_pipeline():
                 t2 = f"Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
             elev_tipo = "rápida"
 
-        t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
+        sens_vals_day = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos] if day_turnos else []
+        s_max_day = max(sens_vals_day) if sens_vals_day else int(round(t_max))
+        sens_txt = f", com sensação térmica alcançando até {s_max_day:.0f}°C no pico do calor" if s_max_day >= t_max else ""
+        t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação{sens_txt}. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
         t4 = f"A umidade relativa do ar oscila entre {u_min:.0f}% nas horas mais quentes da tarde e {u_max:.0f}% na madrugada ({ar_classificacao})."
         t5 = vento_txt
 
@@ -1795,16 +1798,24 @@ def run_auto_bulletin_pipeline():
 
         sub_desc = day_turnos[2]['tempo_desc'] if len(day_turnos) > 2 else res_txt
 
+        sens_vals = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos]
+        sens_min = min(sens_vals) if sens_vals else int(round(d['t_min']))
+        sens_max = max(sens_vals) if sens_vals else int(round(d['t_max']))
+
         dias_resumo.append({
-            "dia": f"{d['dia_semana'].upper()} — {d['date_br']}",
+            "dia": f"{d['dia_semana'].upper()} – {d['date_br']}",
             "subtitulo": sub_desc,
             "badge": badge,
             "badge_tipo": badge_tipo,
             "descricao": desc_card,
+            "sensacao_min": sens_min,
+            "sensacao_max": sens_max,
+            "sensacao_faixa": f"{sens_min}° a {sens_max}°C",
             "informe_populacao": informe_pop,
             "pilares": {
                 "ceu": { "label": "CÉU", "val": wmo_desc, "icon": icon_n },
                 "temp": { "label": "TEMPERATURA", "val": f"{d['t_min']:.0f}° a {d['t_max']:.0f}°C", "icon": "thermometer" },
+                "sensacao": { "label": "SENSAÇÃO TÉRMICA", "val": f"Pico de até {sens_max}°C (Mín {sens_min}°C)", "icon": "flame" },
                 "umid": { "label": "UMIDADE", "val": f"{min([r['umid_min'] for r in day_turnos])}% a {max([r['umid_max'] for r in day_turnos])}%", "icon": "droplets" },
                 "vento": { "label": "VENTO & RAJADAS", "val": f"Rajadas {dia_rajada:.0f} km/h", "icon": "wind" },
                 "chuva": { "label": "CHUVA", "val": ch_card_val, "icon": "cloud-rain" if dia_chuva > 5 or d.get('tem_alerta_inmet') else "cloud-drizzle" },

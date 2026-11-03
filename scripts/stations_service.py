@@ -254,6 +254,7 @@ def collect_stations_network():
             "categoria": "pws",
             "url": p["url"],
             "temp_atual": None,
+            "sensacao_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
             "vento_dir_graus": None,
@@ -312,6 +313,20 @@ def collect_stations_network():
                     entry["online"] = True
                     if m.get("temp") is not None:
                         entry["temp_atual"] = round(safe_float(m.get("temp")), 1)
+                    heat_idx = safe_float(m.get("heatIndex")) if m.get("heatIndex") is not None else None
+                    wind_chill = safe_float(m.get("windChill")) if m.get("windChill") is not None else None
+                    t_val_now = entry.get("temp_atual")
+                    sens_calc = None
+                    if heat_idx is not None and (t_val_now is None or t_val_now >= 20.0):
+                        sens_calc = heat_idx
+                    elif wind_chill is not None and (t_val_now is None or t_val_now <= 15.0):
+                        sens_calc = wind_chill
+                    elif heat_idx is not None:
+                        sens_calc = heat_idx
+                    elif t_val_now is not None:
+                        sens_calc = t_val_now
+                    if sens_calc is not None:
+                        entry["sensacao_atual"] = round(sens_calc, 1)
                     if m.get("windSpeed") is not None:
                         entry["vento_atual"] = round(safe_float(m.get("windSpeed")), 1)
                     if m.get("windGust") is not None:
@@ -354,6 +369,11 @@ def collect_stations_network():
                             t_val = m_last.get("tempAvg") if m_last.get("tempAvg") is not None else m_last.get("temp")
                             if t_val is not None:
                                 entry["temp_atual"] = round(safe_float(t_val), 1)
+                            h_last = m_last.get("heatindexAvg") if m_last.get("heatindexAvg") is not None else (m_last.get("heatIndex") or m_last.get("windChill"))
+                            if h_last is not None:
+                                entry["sensacao_atual"] = round(safe_float(h_last), 1)
+                            elif entry.get("temp_atual") is not None:
+                                entry["sensacao_atual"] = entry["temp_atual"]
                             w_val = m_last.get("windspeedAvg") if m_last.get("windspeedAvg") is not None else m_last.get("windSpeed")
                             if w_val is not None:
                                 entry["vento_atual"] = round(safe_float(w_val), 1)
@@ -562,6 +582,7 @@ def collect_stations_network():
         "url": "https://alertadecheias.com.br/#/stations-info?station=2241036",
         "url_portal": "https://alertadecheias.com.br",
         "temp_atual": None,
+        "sensacao_atual": None,
         "vento_atual": None,
         "rajada_atual": None,
         "vento_max_hoje": None,
@@ -659,6 +680,7 @@ def collect_stations_network():
             "url": ct["url"],
             "url_portal": "https://mapainterativo.cemaden.gov.br/",
             "temp_atual": None,
+            "sensacao_atual": None,
             "vento_atual": None,
             "rajada_atual": None,
             "vento_max_hoje": None,
@@ -797,7 +819,7 @@ if __name__ == "__main__":
         print(
             f"[{s['categoria'].upper()}] {s['nome']} -> 24h: {s['chuva_24h']} mm | "
             f"Hoje: {s.get('chuva_hoje')} mm (Início: {s.get('inicio_chuva_hoje')}) | "
-            f"Temp: {s.get('temp_atual')}°C | Vento: {s.get('vento_atual')} km/h (Raj: {s.get('rajada_atual')}) | "
+            f"Temp: {s.get('temp_atual')}°C (Sens: {s.get('sensacao_atual')}°C) | Vento: {s.get('vento_atual')} km/h (Raj: {s.get('rajada_atual')}) | "
             f"MaxDia: V={s.get('vento_max_hoje')} ({s.get('hora_vento_max_hoje')}) / R={s.get('rajada_max_hoje')} ({s.get('hora_rajada_max_hoje')}) | "
             f"Leitura: {s.get('ultima_leitura')} | Online: {s['online']}"
         )

@@ -2620,17 +2620,30 @@ async function syncLiveStationsTelemetry(force = false, quickOnly = false) {
       state.liveStationsOverlay = { ...(state.liveStationsOverlay || {}), ...wuLive };
       state.lastLiveStationsSyncMs = Date.now();
 
-      // Aproveita leitura UV ao vivo da IRIODA17 se disponível
-      const ref17 = wuLive['IRIODA17'];
-      if (ref17 && ref17.online && ref17.uv_atual !== null && ref17.uv_atual !== undefined) {
-        state.liveWuUv = {
-          stationId: 'IRIODA17',
-          uv: Number(ref17.uv_atual),
-          solarRadiation: ref17.radiacao_solar,
-          obsTimeLocal: ref17.ultima_leitura,
-          epoch: Date.now()
-        };
-        updateRealtimeUv();
+      // Aproveita telemetria em tempo real (UV, Temp e Sensação Térmica) das estações de referência
+      const ref17 = wuLive['IRIODA17'] || wuLive['IRIODA16'];
+      if (ref17 && ref17.online) {
+        if (ref17.uv_atual !== null && ref17.uv_atual !== undefined) {
+          state.liveWuUv = {
+            stationId: ref17.codigo || 'IRIODA17',
+            uv: Number(ref17.uv_atual),
+            solarRadiation: ref17.radiacao_solar,
+            obsTimeLocal: ref17.ultima_leitura,
+            epoch: Date.now()
+          };
+          updateRealtimeUv();
+        }
+        if (ref17.temp_atual !== null && ref17.temp_atual !== undefined) {
+          const sideTemp = document.getElementById('sidebar-temp');
+          if (sideTemp) sideTemp.textContent = `${Math.round(ref17.temp_atual)}°`;
+        }
+        if (ref17.sensacao_atual !== null && ref17.sensacao_atual !== undefined) {
+          const heroSens = document.getElementById('hero-sensacao');
+          if (heroSens) {
+            heroSens.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação: ${Math.round(ref17.sensacao_atual)}°C</span>`;
+            if (window.lucide) window.lucide.createIcons();
+          }
+        }
       }
 
       if (state.acumuladosDataset || state.stationsRawData) {
@@ -3010,26 +3023,10 @@ function renderDashboardUI(meta, rows, weather) {
 
 
   if (heroSensacao) {
-
-
-
-    if (appTempCur !== undefined) {
-
-
-
-      heroSensacao.textContent = `Sensação: ${Math.round(appTempCur)}°C`;
-
-
-
-    } else if (tempCur !== undefined) {
-
-
-
-      heroSensacao.textContent = `Sensação: ${Math.round(tempCur)}°C`;
-
-
-
-    }
+    const sVal = (appTempCur !== undefined) ? Math.round(appTempCur) : ((tempCur !== undefined) ? Math.round(tempCur) : 31);
+    heroSensacao.innerHTML = `<i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação: ${sVal}°C</span>`;
+    if (window.lucide) window.lucide.createIcons();
+  }
 
 
 
@@ -3728,6 +3725,8 @@ function renderDashboardUI(meta, rows, weather) {
 
 
       const tempVal = d.pilares?.temp?.val ? d.pilares.temp.val.replace(' a ', ' / ') : '24° / 19°C';
+      const sensacaoMax = d.sensacao_max || (d.pilares?.sensacao?.val ? parseInt((d.pilares.sensacao.val.match(/\d+/) || [26])[0]) : (d.t_max ? Math.round(d.t_max) : 26));
+      const sensacaoMin = d.sensacao_min || (d.t_min ? Math.round(d.t_min) : 20);
 
 
 
@@ -3991,6 +3990,9 @@ function renderDashboardUI(meta, rows, weather) {
 
 
               <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
+              <span class="text-[10px] sm:text-[11px] font-bold text-[#c2410c] bg-[#fff7ed] border border-[#ea580c]/30 px-2 py-0.5 rounded-md whitespace-nowrap flex items-center gap-1 shadow-2xs" title="Sensação Térmica Máxima Prevista">
+                <i data-lucide="flame" class="w-3 h-3 text-[#ea580c]"></i>Sensação ${sensacaoMax}°C
+              </span>
 
 
 
@@ -4015,6 +4017,10 @@ function renderDashboardUI(meta, rows, weather) {
 
 
           <div class="flex items-center gap-1.5 pt-0.5 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#fff7ed] border border-[#ea580c]/30 shadow-2xs text-[11px] font-bold text-[#9a3412]" title="Sensação Térmica Máxima Prevista">
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+              <span>Sensação: até ${sensacaoMax}°C</span>
+            </span>
 
 
 
@@ -4096,6 +4102,11 @@ function renderDashboardUI(meta, rows, weather) {
           <!-- Quadrinhos dos Pilares Oficiais Expandidos Abaixo do Texto -->
           <div id="day-card-collapse-${idx}" class="pilares-collapse hidden pt-3 border-t border-current/15 space-y-2.5">
             <div class="grid grid-cols-2 gap-2 text-xs">
+              <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
+                <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Sensação Térmica</span>
+                <span class="font-extrabold text-xs block text-[#c2410c] dark:text-orange-300 leading-tight mt-0.5">Pico de até ${sensacaoMax}°C</span>
+                <span class="text-[10px] text-black/75 dark:text-slate-300 font-medium block leading-snug mt-1">Mínima de ${sensacaoMin}°C a Máxima de ${sensacaoMax}°C</span>
+              </div>
               <div class="p-2.5 rounded-xl ${theme.subCardBg} space-y-0.5">
                 <span class="${theme.subCardLabel} font-bold block uppercase text-[10px] tracking-wider">Céu</span>
                 <span class="font-bold text-xs block text-black dark:text-white leading-tight mt-0.5">${cleanBulletinText(d.pilares?.ceu?.val || '—')}</span>
@@ -5563,6 +5574,7 @@ function renderSelectedTurnoDayBars() {
 
 
 
+            ${r.sensacao_termica ? `<span class="font-mono text-[10px] font-bold text-[#c2410c] bg-[#fff7ed] px-2 py-0.5 rounded border border-[#ea580c]/30 shadow-2xs flex items-center gap-0.5" title="Sensação Térmica no Turno"><i data-lucide="flame" class="w-3 h-3 text-[#ea580c]"></i>Sensação ${r.sensacao_termica}°C</span>` : ''}
             <span class="font-mono font-bold text-black bg-[#f8fafc] px-2.5 py-0.5 rounded-md border border-[#cbd5e1]">${val.toFixed(1)} mm</span>
 
 
@@ -6453,6 +6465,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
 
 
                   <th class="p-2.5">Temp</th>
+                  <th class="p-2.5 text-[#c2410c]">Sensação</th>
 
 
 
@@ -6501,6 +6514,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
 
 
                     <td class="p-2.5 font-mono font-bold text-zinc-900">${r.temp_min}° / ${r.temp_max}°C</td>
+                    <td class="p-2.5 font-mono font-black text-[#c2410c] whitespace-nowrap">${r.sensacao_termica ? `${r.sensacao_termica}°C` : `${r.temp_max}°C`}</td>
 
 
 
@@ -9713,6 +9727,9 @@ function renderAcumuladosChuva(rawInput) {
 
       } else if (isOnline && ((st.temp_atual !== null && st.temp_atual !== undefined) || (st.vento_atual !== null && st.vento_atual !== undefined))) {
         const tempVal = formatStationMetric1(st.temp_atual, '°C');
+        const sensacaoVal = (st.sensacao_atual !== null && st.sensacao_atual !== undefined)
+          ? formatStationMetric1(st.sensacao_atual, '°C')
+          : tempVal;
         const ventoAgora = formatStationMetric1(st.vento_atual ?? 0, ' km/h');
         const rajadaAgora = formatStationMetric1(st.rajada_atual ?? st.vento_atual ?? 0, ' km/h');
         const rawVentoMax = (st.vento_max_hoje !== null && st.vento_max_hoje !== undefined) ? st.vento_max_hoje : (st.vento_max_24h ?? st.vento_atual ?? 0);
@@ -9735,23 +9752,29 @@ function renderAcumuladosChuva(rawInput) {
                 </span>
                 <span class="text-[9.5px] font-mono font-bold text-slate-700">${horaCurta ? `Leitura às ${horaCurta}` : 'Ao vivo'}</span>
               </div>
-              <div class="grid grid-cols-3 gap-1 text-center pt-0.5">
+              <div class="grid grid-cols-4 gap-1 text-center pt-0.5">
                 <div class="px-0.5">
-                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
-                    <i data-lucide="thermometer" class="w-3 h-3 text-[#ea580c] shrink-0"></i> Temperatura
+                  <span class="text-[8px] sm:text-[8.5px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5" title="Temperatura Atual Medida">
+                    <i data-lucide="thermometer" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#ea580c] shrink-0"></i> Temp.
                   </span>
                   <strong class="text-xs sm:text-[13px] font-mono font-black text-black block mt-0.5">${tempVal}</strong>
                 </div>
-                <div class="border-x border-[#cbd5e1]/80 px-0.5">
+                <div class="border-l border-[#cbd5e1]/80 px-0.5">
+                  <span class="text-[8px] sm:text-[8.5px] font-extrabold uppercase text-[#c2410c] flex items-center justify-center gap-0.5" title="Sensação Térmica (Heat Index / Wind Chill)">
+                    <i data-lucide="flame" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#ea580c] shrink-0"></i> Sensação
+                  </span>
+                  <strong class="text-xs sm:text-[13px] font-mono font-black text-[#c2410c] block mt-0.5">${sensacaoVal}</strong>
+                </div>
+                <div class="border-l border-[#cbd5e1]/80 px-0.5">
                   <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
                     <i data-lucide="wind" class="w-3 h-3 text-[#0284c7] shrink-0"></i> Vento
                   </span>
                   <strong class="text-xs sm:text-[13px] font-mono font-black text-[#0284c7] block mt-0.5">${ventoAgora}</strong>
                   ${dirCard ? `<span class="text-[8.5px] font-bold text-slate-500 block leading-none mt-0.5">Dir. ${dirCard}</span>` : ''}
                 </div>
-                <div class="px-0.5">
-                  <span class="text-[8.5px] sm:text-[9px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
-                    <i data-lucide="activity" class="w-3 h-3 text-cyan-700 shrink-0"></i> Rajadas
+                <div class="border-l border-[#cbd5e1]/80 px-0.5">
+                  <span class="text-[8px] sm:text-[8.5px] font-extrabold uppercase text-slate-600 flex items-center justify-center gap-0.5">
+                    <i data-lucide="zap" class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#d97706] shrink-0"></i> Rajadas
                   </span>
                   <strong class="text-xs sm:text-[13px] font-mono font-black text-cyan-800 block mt-0.5">${rajadaAgora}</strong>
                 </div>

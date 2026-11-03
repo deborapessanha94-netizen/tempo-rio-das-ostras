@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=179">
+  <link rel="stylesheet" href="css/styles.css?v=180">
 
 
 
@@ -1183,7 +1183,7 @@
 
 
 
-                  <span id="hero-sensacao" class="badge-title-orange px-2 py-0.5 rounded-full font-bold text-[11px] text-black shadow-xs inline-block">Sensação: 31°C</span>
+                  <span id="hero-sensacao" class="inline-flex items-center gap-1 badge-title-orange px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block"><i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação: 31°C</span></span>
 
 
 
@@ -11137,6 +11137,18 @@
       }, 60);
     };
 
+    document.addEventListener('DOMContentLoaded', function() {
+      var h = (window.location.hash || '').replace('#', '');
+      if (h && window.SUB_SECTIONS_CONFIG) {
+        for (var t in window.SUB_SECTIONS_CONFIG) {
+          if (window.SUB_SECTIONS_CONFIG[t].sections.indexOf(h) !== -1) {
+            window.switchSubSection(t, h);
+            break;
+          }
+        }
+      }
+    });
+
     window.navigateSubSection = function(tabName, sectionId, event) {
       if (event) { event.preventDefault(); event.stopPropagation(); }
       window.switchSubSection(tabName, sectionId);
@@ -11173,7 +11185,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=179"></script>
+  <script type="module" src="js/app.js?v=180"></script>
 
 
 

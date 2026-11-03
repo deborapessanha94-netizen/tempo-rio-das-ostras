@@ -698,6 +698,7 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
       resultMap[pid] = {
         online: false,
         temp_atual: null,
+        sensacao_atual: null,
         vento_atual: null,
         rajada_atual: null,
         vento_dir_graus: null,
@@ -720,6 +721,7 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
       resultMap[pid] = {
         online: false,
         temp_atual: null,
+        sensacao_atual: null,
         vento_atual: null,
         rajada_atual: null,
         vento_max_hoje: null,
@@ -733,6 +735,18 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
 
     const m = obs.metric || {};
     const tempAtual = round1(m.temp, null);
+    const heatIdx = round1(m.heatIndex, null);
+    const windChill = round1(m.windChill, null);
+    let sensacaoAtual = null;
+    if (heatIdx !== null && (tempAtual === null || tempAtual >= 20.0)) {
+      sensacaoAtual = heatIdx;
+    } else if (windChill !== null && (tempAtual === null || tempAtual <= 15.0)) {
+      sensacaoAtual = windChill;
+    } else if (heatIdx !== null) {
+      sensacaoAtual = heatIdx;
+    } else if (tempAtual !== null) {
+      sensacaoAtual = tempAtual;
+    }
     const rawWind = round1(m.windSpeed, 0.0) || 0.0;
     const rawGust = round1(m.windGust !== undefined && m.windGust !== null ? m.windGust : m.windSpeed, rawWind) || 0.0;
     const ventoDirGraus = (obs.winddir !== undefined && obs.winddir !== null && !isNaN(Number(obs.winddir)))
@@ -958,6 +972,7 @@ export async function fetchLiveWuStationsTelemetry({ quickOnly = false } = {}) {
       online: true,
       ultima_leitura: obsLocal,
       temp_atual: tempAtual,
+      sensacao_atual: sensacaoAtual,
       vento_atual: ventoAtual,
       rajada_atual: rajadaAtual,
       vento_dir_graus: ventoDirGraus,
