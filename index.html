@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=183">
+  <link rel="stylesheet" href="css/styles.css?v=184">
 
 
 
@@ -683,7 +683,7 @@
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
               <div>
                 <span>Previsão dos Próximos Dias</span>
-                <span class="nav-dropdown-item-desc">Cards operacionais de 3 dias com mar e detalhes</span>
+                <span class="nav-dropdown-item-desc">Cards operacionais de 4 dias (Hoje + 3 dias à frente) com mar e detalhes</span>
               </div>
             </a>
             <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item">
@@ -933,12 +933,12 @@
         </div>
       </div>
 
-      <!-- Aba 6: Boletim 12 Turnos com Dropdown INMET -->
+      <!-- Aba 6: Boletim 16 Turnos com Dropdown INMET -->
       <div id="nav-wrapper-boletim" class="nav-dropdown-wrapper shrink-0 lg:w-full">
         <div class="flex items-center w-full">
           <button id="nav-tab-boletim" onclick="handleNavTabClick('boletim', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
             <i data-lucide="file-text" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Boletim 12 Turnos</span>
+            <span class="leading-none whitespace-nowrap">Boletim 16 Turnos</span>
             <span onclick="toggleNavDropdown('boletim', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções do Boletim">
               <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
             </span>
@@ -948,7 +948,7 @@
         <div class="nav-dropdown-menu right-0">
           <div class="nav-dropdown-header flex items-center justify-between">
             <div class="flex items-center gap-1.5">
-              <span>Boletim 12 Turnos • Seções</span>
+              <span>Boletim 16 Turnos • Seções</span>
               <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
             </div>
             <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
@@ -959,8 +959,8 @@
             <a onclick="navigateSubSection('boletim', 'section-boletim-turnos', event)" class="nav-dropdown-item">
               <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
               <div>
-                <span>Previsão Operacional 12 Turnos</span>
-                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para os 3 dias</span>
+                <span>Previsão Operacional 16 Turnos</span>
+                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para os 4 dias (Hoje + 3 dias à frente)</span>
               </div>
             </a>
             <a onclick="navigateSubSection('boletim', 'section-boletim-telefones', event)" class="nav-dropdown-item">
@@ -1852,7 +1852,7 @@
 
 
 
-    <!-- Previsão Estendida 3 Dias -->
+    <!-- Previsão Estendida 4 Dias (Hoje + 3 Dias à Frente) -->
 
 
 
@@ -1919,11 +1919,11 @@
 
 
 
-      <!-- Lista / Grid dos 3 Dias (Inspirados na Estética da Imagem: Sage, Earth & Toffee) -->
+      <!-- Lista / Grid dos 4 Dias (Inspirados na Estética da Imagem: Sage, Earth & Toffee) -->
 
 
 
-      <div id="sidebar-3days-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div id="sidebar-3days-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
 
 
@@ -5853,7 +5853,7 @@
 
 
 
-                <span class="text-xs font-normal text-black">Mar (3 Dias), Tábuas de Maré e Balneabilidade INEA</span>
+                <span class="text-xs font-normal text-black">Mar (4 Dias), Tábuas de Maré e Balneabilidade INEA</span>
 
 
 
@@ -8192,7 +8192,7 @@
 
 
 
-  <!-- VIEW 6: BOLETIM OPERACIONAL (PLANCON 12 TURNOS, EMERGÊNCIAS & DOWNLOADS) -->
+  <!-- VIEW 6: BOLETIM OPERACIONAL (PLANCON 16 TURNOS, EMERGÊNCIAS & DOWNLOADS) -->
 
 
 
@@ -8253,7 +8253,7 @@
 
 
 
-              PLANCON Municipal • 12 Turnos
+              PLANCON Municipal • 16 Turnos
 
 
 
@@ -8405,7 +8405,7 @@
 
 
 
-          <!-- Seletor e Somatório dos 3 Dias (Hoje + 2 Dias à Frente) -->
+          <!-- Seletor e Somatório dos 4 Dias (Hoje + 3 Dias à Frente) -->
 
 
 
@@ -8425,7 +8425,7 @@
 
 
 
-                <span>Somatório para 3 Dias (Hoje + 2 Dias à Frente):</span>
+                <span>Somatório para 4 Dias (Hoje + 3 Dias à Frente):</span>
 
 
 
@@ -8457,7 +8457,7 @@
 
 
 
-            <div class="grid grid-cols-3 gap-2" id="chuva-turnos-day-selector">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="chuva-turnos-day-selector">
 
 
 
@@ -8541,6 +8541,14 @@
 
 
 
+              </button>
+
+              <button type="button" onclick="selectTurnoDay(3)" id="btn-turno-day-3" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+3 (3 Dias à Frente)</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-3-name">--</span>
+                  <span id="lbl-turno-day-3-val" class="font-mono text-black">-- mm</span>
+                </div>
               </button>
 
 
@@ -8829,7 +8837,7 @@
 
 
 
-              Ver Tabela Completa dos 12 Turnos →
+              Ver Tabela Completa dos 16 Turnos →
 
 
 
@@ -9728,7 +9736,7 @@
 
 
 
-            <span id="modal-boletim-periodo" class="text-xs text-[#64748b] font-normal">12 Turnos • @tempoemriodasostras</span>
+            <span id="modal-boletim-periodo" class="text-xs text-[#64748b] font-normal">16 Turnos • @tempoemriodasostras</span>
 
 
 
@@ -9792,7 +9800,7 @@
 
 
 
-              <span>Panorama Sinótico Geral dos 3 Dias</span>
+              <span>Panorama Sinótico Geral dos 4 Dias (Hoje + 3 Dias à Frente)</span>
 
 
 
@@ -9828,7 +9836,7 @@
 
 
 
-        <!-- Tabela Completa dos 12 Turnos Operacionais -->
+        <!-- Tabela Completa dos 16 Turnos Operacionais -->
 
 
 
@@ -9848,7 +9856,7 @@
 
 
 
-              <span>Quadro Técnico dos 12 Turnos Operacionais</span>
+              <span>Quadro Técnico dos 16 Turnos Operacionais</span>
 
 
 
@@ -11045,7 +11053,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=183"></script>
+  <script type="module" src="js/app.js?v=184"></script>
 
 
 

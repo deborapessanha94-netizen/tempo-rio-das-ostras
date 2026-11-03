@@ -1158,7 +1158,7 @@ def run_auto_bulletin_pipeline():
     inea_ch24 = float(inea_pluv_st.get('chuva_pluvio_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_24h') is not None) else (inea_pluv_st.get('chuva_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_24h') is not None) else 0.0))
     inea_ch96 = float(inea_pluv_st.get('chuva_pluvio_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_96h') is not None) else (inea_pluv_st.get('chuva_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_96h') is not None) else 0.0))
 
-    for day_idx in range(3):
+    for day_idx in range(4):
         day_date_iso = om['daily']['time'][day_idx]
         dt = datetime.strptime(day_date_iso, '%Y-%m-%d')
         dia_semana_nome = DIAS_SEMANA_PT[dt.weekday()]
@@ -1503,7 +1503,7 @@ def run_auto_bulletin_pipeline():
             })
 
     # Recalcula os totais diários mantendo 100% de coerência matemática com os turnos e sintetizando alertas
-    for d_idx in range(3):
+    for d_idx in range(4):
         d_turnos = [r for r in records_12_turnos if r['data_iso'] == dias_3[d_idx]['date_iso']]
         if d_turnos:
             dias_3[d_idx]['chuva_tot'] = round(sum(r['chuva_media'] for r in d_turnos), 1)
@@ -1543,11 +1543,11 @@ def run_auto_bulletin_pipeline():
     boletim_json_path = DATA_DIR / "boletim_oficial.json"
     with open(boletim_json_path, 'w', encoding='utf-8') as f:
         json.dump(records_12_turnos, f, ensure_ascii=False, indent=2)
-    print(f"   [JSON] Salvo 12 turnos operacionais em: {boletim_json_path.name}")
+    print(f"   [JSON] Salvo {len(records_12_turnos)} turnos operacionais em: {boletim_json_path.name}")
 
 
     # 3. Constrói Metadados, Panorama Sinótico e Cards da População
-    periodo_str = f"{dias_3[0]['date_short']} ({dias_3[0]['dia_semana']}) a {dias_3[2]['date_short']} ({dias_3[2]['dia_semana']})"
+    periodo_str = f"{dias_3[0]['date_short']} ({dias_3[0]['dia_semana']}) a {dias_3[3]['date_short']} ({dias_3[3]['dia_semana']})"
 
     # Análise de chuva total e pico térmico
     chuva_total_3d = sum([d['chuva_tot'] for d in dias_3])
@@ -1618,7 +1618,7 @@ def run_auto_bulletin_pipeline():
     if tem_aviso_marinha:
         alerta_partes.append(f"Avisos da Marinha do Brasil para a Área Delta: {m_data.get('tipo', 'Vento Forte')} (nº {m_data.get('numero')}) válidos a partir de {m_data.get('inicio_formatado', '24/10 às 21h')} até {m_data.get('fim_formatado', '26/10 às 00h')}")
 
-    alerta_partes.append(f"Acumulado total de chuva previsto para o ciclo de 3 dias: {chuva_total_3d:.1f} mm com temperatura máxima alcançando {pico_calor:.0f}°C")
+    alerta_partes.append(f"Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): {chuva_total_3d:.1f} mm com temperatura máxima alcançando {pico_calor:.0f}°C")
 
     informe_alerta = ". ".join(alerta_partes) + "."
 
@@ -1704,10 +1704,12 @@ def run_auto_bulletin_pipeline():
     d0 = dias_3[0]
     d1 = dias_3[1]
     d2 = dias_3[2]
+    d3 = dias_3[3] if len(dias_3) > 3 else dias_3[2]
 
     d0_alerts = get_day_alerts(d0['date_iso'])
     d1_alerts = get_day_alerts(d1['date_iso'])
     d2_alerts = get_day_alerts(d2['date_iso'])
+    d3_alerts = get_day_alerts(d3['date_iso'])
 
     def format_alert_text(alerts):
         if not alerts: return "sem avisos meteorológicos vigentes"
@@ -1716,14 +1718,17 @@ def run_auto_bulletin_pipeline():
     d0_aviso_str = format_alert_text(d0_alerts)
     d1_aviso_str = format_alert_text(d1_alerts)
     d2_aviso_str = format_alert_text(d2_alerts)
+    d3_aviso_str = format_alert_text(d3_alerts)
 
     prep0 = prep_dia(d0['dia_semana'])
     prep1 = prep_dia(d1['dia_semana'])
     prep2 = prep_dia(d2['dia_semana'])
+    prep3 = prep_dia(d3['dia_semana'])
 
     d0_faixa = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
     d1_faixa = d1.get('chuva_faixa_txt') or f"{d1['chuva_tot']:.1f} mm"
     d2_faixa = d2.get('chuva_faixa_txt') or f"{d2['chuva_tot']:.1f} mm"
+    d3_faixa = d3.get('chuva_faixa_txt') or f"{d3['chuva_tot']:.1f} mm"
 
     sinopse_geral = (
         f"A configuração sinótica sobre o município de Rio das Ostras e o setor costeiro da Bacia de Campos para o período de {periodo_str} "
@@ -1748,7 +1753,7 @@ def run_auto_bulletin_pipeline():
         f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
         f"(rajadas regulares), com precipitação residual em declínio ({d1_faixa}, {d1_aviso_str}). "
         f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), consolida-se estabilização troposférica com redução expressiva da cobertura de nuvens, "
-        f"predomínio de sol e volumes pluviométricos residuais ({d2_faixa}, {d2_aviso_str}). No domínio oceanográfico costeiro (Área Delta - Farol de São Tomé a Cabo Frio, "
+        f"predomínio de sol e volumes pluviométricos residuais ({d2_faixa}, {d2_aviso_str}), estendendo-se para {prep3} {d3['dia_semana'].lower()} ({d3['date_short']}) com manutenção de gradiente térmico estável e chuva residual estimada em {d3_faixa} ({d3_aviso_str}). No domínio oceanográfico costeiro (Área Delta - Farol de São Tomé a Cabo Frio, "
         f"sob monitoramento do CHM/Marinha do Brasil), o estado do mar é caracterizado por ondas de 1,2 a 1,6 m formadas por vagas de vento sobrepostas a ondas de gravidade "
         f"oceânicas superficiais (swell de E/SE), mantendo hidrodinâmica costeira favorável sem represamento de maré na desembocadura dos canais pluviais. "
         f"A infraestrutura de telemetria meteorológica e hidrológica opera com processamento autônomo e contínuo 24h na nuvem, assegurando vigilância ininterrupta dos dados sinóticos municipais."
@@ -1849,6 +1854,7 @@ def run_auto_bulletin_pipeline():
     c0 = dias_3[0]['chuva_tot']
     c1 = dias_3[1]['chuva_tot']
     c2 = dias_3[2]['chuva_tot']
+    c3 = dias_3[3]['chuva_tot'] if len(dias_3) > 3 else dias_3[2]['chuva_tot']
 
     impactos_bairros = [
         {
@@ -1905,6 +1911,7 @@ def run_auto_bulletin_pipeline():
     d0_nome = dias_resumo[0]['dia'].split('—')[0].strip() if dias_resumo else "D+0"
     d1_nome = dias_resumo[1]['dia'].split('—')[0].strip() if len(dias_resumo) > 1 else "D+1"
     d2_nome = dias_resumo[2]['dia'].split('—')[0].strip() if len(dias_resumo) > 2 else "D+2"
+    d3_nome = dias_resumo[3]['dia'].split('—')[0].strip() if len(dias_resumo) > 3 else "D+3"
 
     def extrair_resumo_curto(dr):
         t_val = dr.get('pilares', {}).get('temp', {}).get('val', '')
@@ -1918,7 +1925,7 @@ def run_auto_bulletin_pipeline():
             cond = "Nublado/Estável"
         return f"{cond} ({t_max_num})"
 
-    evol_3d_str = f"{d0_nome}: {extrair_resumo_curto(dias_resumo[0])} ➔ {d1_nome}: {extrair_resumo_curto(dias_resumo[1])} ➔ {d2_nome}: {extrair_resumo_curto(dias_resumo[2])}"
+    evol_3d_str = f"{d0_nome}: {extrair_resumo_curto(dias_resumo[0])} ➔ {d1_nome}: {extrair_resumo_curto(dias_resumo[1])} ➔ {d2_nome}: {extrair_resumo_curto(dias_resumo[2])} ➔ {d3_nome}: {extrair_resumo_curto(dias_resumo[3])}" if len(dias_resumo) > 3 else f"{d0_nome}: {extrair_resumo_curto(dias_resumo[0])} ➔ {d1_nome}: {extrair_resumo_curto(dias_resumo[1])} ➔ {d2_nome}: {extrair_resumo_curto(dias_resumo[2])}"
 
     sinopse_estruturada = {
         "periodo": periodo_str,
@@ -1955,6 +1962,17 @@ def run_auto_bulletin_pipeline():
                 "descricao": dias_resumo[2]['descricao'],
                 "informe_populacao": dias_resumo[2].get('informe_populacao', []),
                 "pilares": dias_resumo[2]['pilares']
+            },
+            {
+                "dia_offset": "D+3",
+                "dia_ordem": 4,
+                "dia_rotulo": dias_resumo[3]['dia'] if len(dias_resumo) > 3 else dias_resumo[2]['dia'],
+                "subtitulo": dias_resumo[3]['subtitulo'] if len(dias_resumo) > 3 else dias_resumo[2]['subtitulo'],
+                "badge": dias_resumo[3]['badge'] if len(dias_resumo) > 3 else dias_resumo[2]['badge'],
+                "badge_tipo": dias_resumo[3]['badge_tipo'] if len(dias_resumo) > 3 else dias_resumo[2]['badge_tipo'],
+                "descricao": dias_resumo[3]['descricao'] if len(dias_resumo) > 3 else dias_resumo[2]['descricao'],
+                "informe_populacao": dias_resumo[3].get('informe_populacao', []) if len(dias_resumo) > 3 else [],
+                "pilares": dias_resumo[3]['pilares'] if len(dias_resumo) > 3 else dias_resumo[2]['pilares']
             }
         ],
         "ordem_1_atmosfera": {
@@ -1962,7 +1980,7 @@ def run_auto_bulletin_pipeline():
             "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
             "texto": sinopse_geral.split('\n\n')[0] if '\n\n' in sinopse_geral else sinopse_geral,
             "pilares": [
-                {"label": "Modelos Numéricos (3 Dias)", "val": f"INMET e Open-Meteo ({chuva_total_3d:.1f} mm em 72h)"},
+                {"label": "Modelos Numéricos (4 Dias)", "val": f"INMET e Open-Meteo ({chuva_total_3d:.1f} mm em 96h)"},
                 {"label": "Gradiente Térmico Oficial", "val": f"Mínima de {min_t_val:.0f}°C até Máxima de {pico_calor:.0f}°C"},
                 {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
             ]
@@ -2054,7 +2072,9 @@ def run_auto_bulletin_pipeline():
             } for d in dias_3
         ],
         "acumulado_3dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
-        "acumulado_3dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2) = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "acumulado_3dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2)" + (f" + {dias_3[3]['chuva_tot']:.1f} mm (D+3)" if len(dias_3) > 3 else "") + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "acumulado_4dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2)" + (f" + {dias_3[3]['chuva_tot']:.1f} mm (D+3)" if len(dias_3) > 3 else "") + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "acumulado_4dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
         "dias_somados": [d['chuva_tot'] for d in dias_3],
         "conclusao_sem_pontas_soltas": (
             "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade "
@@ -2139,6 +2159,7 @@ def run_auto_bulletin_pipeline():
             "jundia_nivel": f"{jundia_nivel_txt} m",
             "jundia_status": jundia_status_txt,
             "chuva_3d": f"{chuva_total_3d:.1f} mm",
+            "chuva_4d": f"{chuva_total_3d:.1f} mm",
             "aviso_marinha": "NORMAL" if not tem_aviso_marinha else "FORÇA 7",
             "pico_calor": f"{pico_calor:.0f}°C",
             "plancon_status": "ATENÇÃO" if len(today_alerts) > 0 else "OBSERVAÇÃO"

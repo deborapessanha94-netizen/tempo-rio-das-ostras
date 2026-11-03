@@ -3595,6 +3595,17 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
+      },
+      {
+        cardClass: 'card-sage shadow-sm',
+        medallionClass: 'icon-medallion bg-white text-black border-1.5 border-[#5a8a64] shadow-xs',
+        badgeText: 'text-black font-semibold',
+        titleText: 'text-black font-extrabold',
+        tempText: 'text-black font-extrabold bg-white/90 px-2.5 py-1 rounded-xl border border-[#5a8a64]/40 shadow-2xs',
+        iconColor: 'text-black',
+        chevronColor: 'text-black',
+        subCardBg: 'bg-white/95 border border-[#5a8a64]/30 text-black shadow-2xs',
+        subCardLabel: 'text-[#2d5a37] font-bold text-[9.5px]'
       }
 
 
@@ -3611,7 +3622,7 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
-      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã'];
+      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã', 'D+3 (3 Dias à Frente)'];
 
 
 
@@ -5214,152 +5225,56 @@ function renderChuvaTurnosBars(rows) {
 
 
 
-  // Separação rigorosa dos 3 dias (4 turnos para cada dia = 12 turnos)
+  // Separação rigorosa dos 4 dias (4 turnos para cada dia = 16 turnos)
 
 
 
   const d0_turnos = rows.slice(0, 4);
-
-
-
   const d1_turnos = rows.slice(4, 8);
-
-
-
   const d2_turnos = rows.slice(8, 12);
-
-
-
-
-
-
+  const d3_turnos = rows.slice(12, 16);
 
   const tot0 = d0_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
-
-
-
   const tot1 = d1_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
-
-
-
   const tot2 = d2_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
-
-
-
-  const totalGeral = tot0 + tot1 + tot2;
-
-
-
-
-
-
+  const tot3 = d3_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const totalGeral = tot0 + tot1 + tot2 + tot3;
 
   // Atualiza badges no cabeçalho do card
-
-
-
   if (badgeHoje) {
-
-
-
     badgeHoje.textContent = `Hoje: ${tot0.toFixed(1)} mm`;
-
-
-
   }
-
-
-
   if (badgeTotal) {
-
-
-
-    badgeTotal.textContent = `Total 3D: ${totalGeral.toFixed(1)} mm`;
-
-
-
+    badgeTotal.textContent = d3_turnos.length > 0 ? `Total 4D: ${totalGeral.toFixed(1)} mm` : `Total 3D: ${totalGeral.toFixed(1)} mm`;
   }
-
-
-
-
-
-
 
   // Atualiza a fórmula visível
-
-
-
   if (formulaEl) {
-
-
-
-    formulaEl.textContent = `${tot0.toFixed(1)} + ${tot1.toFixed(1)} + ${tot2.toFixed(1)} = ${totalGeral.toFixed(1)} mm`;
-
-
-
+    if (d3_turnos.length > 0) {
+      formulaEl.textContent = `${tot0.toFixed(1)} + ${tot1.toFixed(1)} + ${tot2.toFixed(1)} + ${tot3.toFixed(1)} = ${totalGeral.toFixed(1)} mm`;
+    } else {
+      formulaEl.textContent = `${tot0.toFixed(1)} + ${tot1.toFixed(1)} + ${tot2.toFixed(1)} = ${totalGeral.toFixed(1)} mm`;
+    }
   }
 
-
-
-
-
-
-
-  // Atualiza os botões seletores dos 3 dias
-
-
-
+  // Atualiza os botões seletores dos 4 dias
   const l0Name = document.getElementById('lbl-turno-day-0-name');
-
-
-
   const l0Val = document.getElementById('lbl-turno-day-0-val');
-
-
-
   const l1Name = document.getElementById('lbl-turno-day-1-name');
-
-
-
   const l1Val = document.getElementById('lbl-turno-day-1-val');
-
-
-
   const l2Name = document.getElementById('lbl-turno-day-2-name');
-
-
-
   const l2Val = document.getElementById('lbl-turno-day-2-val');
-
-
-
-
-
-
+  const l3Name = document.getElementById('lbl-turno-day-3-name');
+  const l3Val = document.getElementById('lbl-turno-day-3-val');
 
   if (l0Name) l0Name.textContent = d0_turnos[0]?.dia_semana || 'Hoje';
-
-
-
   if (l0Val) l0Val.textContent = `${tot0.toFixed(1)} mm`;
-
-
-
   if (l1Name) l1Name.textContent = d1_turnos[0]?.dia_semana || 'Amanhã';
-
-
-
   if (l1Val) l1Val.textContent = `${tot1.toFixed(1)} mm`;
-
-
-
   if (l2Name) l2Name.textContent = d2_turnos[0]?.dia_semana || 'D+2';
-
-
-
   if (l2Val) l2Val.textContent = `${tot2.toFixed(1)} mm`;
-
+  if (l3Name) l3Name.textContent = d3_turnos[0]?.dia_semana || 'D+3';
+  if (l3Val) l3Val.textContent = `${tot3.toFixed(1)} mm`;
 
 
 
@@ -5418,7 +5333,7 @@ function renderChuvaTurnosBars(rows) {
 
 
 
-      mfMedia.textContent = `${tot0.toFixed(1)} mm hoje (${totalGeral.toFixed(1)} mm nos 3 dias: Hoje ${tot0.toFixed(1)} + Amanhã ${tot1.toFixed(1)} + D+2 ${tot2.toFixed(1)})`;
+      mfMedia.textContent = (typeof d3_turnos !== 'undefined' && d3_turnos.length > 0) ? `${tot0.toFixed(1)} mm hoje (${totalGeral.toFixed(1)} mm nos 4 dias: Hoje ${tot0.toFixed(1)} + Amanhã ${tot1.toFixed(1)} + D+2 ${tot2.toFixed(1)} + D+3 ${tot3.toFixed(1)})` : `${tot0.toFixed(1)} mm hoje (${totalGeral.toFixed(1)} mm nos 3 dias: Hoje ${tot0.toFixed(1)} + Amanhã ${tot1.toFixed(1)} + D+2 ${tot2.toFixed(1)})`;
 
 
 
@@ -5647,7 +5562,7 @@ function renderSelectedTurnoDayBars() {
 
 
 
-  [0, 1, 2].forEach(idx => {
+  [0, 1, 2, 3].forEach(idx => {
 
 
 
@@ -6388,7 +6303,7 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
 
 
 
-  // Modal Boletim: Tabela 12 Turnos
+  // Modal Boletim: Tabela 16 Turnos
 
 
 

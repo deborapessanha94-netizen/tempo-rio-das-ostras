@@ -249,6 +249,13 @@ html:not(.dark) .font-mono, .mono-val {
   box-shadow: 0 4px 16px rgba(120, 100, 80, 0.08) !important;
 }
 
+/* Variação Card Sage Verde Suave */
+.card-sage {
+  background: linear-gradient(150deg, #edf5f0 0%, #deede2 100%) !important;
+  border: 1.5px solid #5a8a64 !important;
+  box-shadow: 0 4px 16px rgba(90, 138, 100, 0.08) !important;
+}
+
 /* Variação Card Central de Emergência Claro */
 .card-navy-banner {
   background: #ffffff !important;
@@ -781,6 +788,12 @@ html.dark .card-stoneware {
   background: linear-gradient(150deg, #231f1c 0%, #171412 100%) !important;
   border-color: #786450 !important;
   box-shadow: 0 4px 16px rgba(120, 100, 80, 0.15) !important;
+}
+
+html.dark .card-sage {
+  background: linear-gradient(150deg, #17241b 0%, #101c13 100%) !important;
+  border-color: #2d5a37 !important;
+  box-shadow: 0 4px 16px rgba(45, 90, 55, 0.2) !important;
 }
 
 html.dark .card-navy-banner {

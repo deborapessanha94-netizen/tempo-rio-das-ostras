@@ -466,6 +466,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
     d0 = now_brt.date()
     d1 = d0 + timedelta(days=1)
     d2 = d0 + timedelta(days=2)
+    d3 = d0 + timedelta(days=3)
 
     dias_nomes = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
     dias_abrev = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']
@@ -482,7 +483,7 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
     jundia_status = jundia_entry.get('status_rio', 'VIGILÂNCIA') if jundia_entry else 'VIGILÂNCIA'
     tem_aviso_mar = bool(marinha_info and marinha_info.get('aviso_ativo'))
 
-    for d_idx, d_curr in enumerate([d0, d1, d2]):
+    for d_idx, d_curr in enumerate([d0, d1, d2, d3]):
         d_key = d_curr.strftime('%d/%m/%Y')
         d_iso = d_curr.strftime('%Y-%m-%d')
         dia_semana = dias_nomes[d_curr.weekday()]
