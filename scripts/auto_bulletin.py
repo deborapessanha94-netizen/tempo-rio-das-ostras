@@ -53,6 +53,37 @@ WMO_MAP = {
     96: ("Tempestade com Granizo", "cloud-lightning", "Tempestade severa com trovoadas")
 }
 
+def calc_sensacao_termica(temp_c, ur_pct, wind_kmh=0.0):
+    """
+    Calcula a Sensação Térmica segundo normas da OMM / NOAA:
+    1. Heat Index de Rothfusz (Steadman) para temp >= 20°C
+    2. Wind Chill para temp <= 15°C e vento > 4.8 km/h
+    3. Temperatura real nos demais casos
+    """
+    if temp_c is None:
+        return None
+    import math
+    if temp_c <= 15.0 and wind_kmh and wind_kmh > 4.8:
+        v_pow = wind_kmh ** 0.16
+        return round(13.12 + 0.6215 * temp_c - 11.37 * v_pow + 0.3965 * temp_c * v_pow, 1)
+    if temp_c >= 20.0 and ur_pct is not None:
+        T = (temp_c * 9.0 / 5.0) + 32.0
+        R = float(ur_pct)
+        hi_simple = 0.5 * (T + 61.0 + ((T - 68.0) * 1.2) + (R * 0.094))
+        if hi_simple < 80.0:
+            hi_f = hi_simple
+        else:
+            hi_f = (-42.379 + 2.04901523 * T + 10.14333127 * R
+                    - 0.22475541 * T * R - 0.00683783 * (T ** 2)
+                    - 0.05481717 * (R ** 2) + 0.00122874 * (T ** 2) * R
+                    + 0.00085282 * T * (R ** 2) - 0.00000199 * (T ** 2) * (R ** 2))
+            if R < 13.0 and 80.0 <= T <= 112.0:
+                hi_f -= ((13.0 - R) / 4.0) * math.sqrt((17.0 - abs(T - 95.0)) / 17.0)
+            elif R > 85.0 and 80.0 <= T <= 87.0:
+                hi_f += ((R - 85.0) / 10.0) * ((87.0 - T) / 5.0)
+        return round((hi_f - 32.0) * 5.0 / 9.0, 1)
+    return round(temp_c, 1)
+
 def deg_to_compass(d):
     val = int((d / 22.5) + 0.5)
     arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WSW', 'NW', 'NNW']
@@ -1447,7 +1478,7 @@ def run_auto_bulletin_pipeline():
             pw_val = round(math.exp(0.0614 * td_approx + 1.12), 1)
 
             # Sensação térmica (Multimodel CPTEC)
-            sensacao_val = round(sum(multi_heat) / len(multi_heat)) if multi_heat else round((t_min + t_max) / 2)
+            sensacao_val = round(sum(multi_heat) / len(multi_heat)) if multi_heat else round(calc_sensacao_termica(t_mid, ur_mid, vento_vel_media))
 
             # Índice UV (CPTEC)
             uv_val = uv_cptec if (turno_nome in ['Manhã', 'Tarde'] and uv_cptec is not None) else 0
