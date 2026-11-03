@@ -397,8 +397,16 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
   let config = null;
 
   if (metric === 'temperature') {
+    const isDark = typeof document !== 'undefined' && document.documentElement && document.documentElement.classList.contains('dark');
     const tMax = bulletinRows.map(r => r.temp_max);
     const tMin = bulletinRows.map(r => r.temp_min);
+    const tSens = bulletinRows.map(r => (r.sensacao_termica !== undefined && r.sensacao_termica !== null) ? r.sensacao_termica : Math.round((r.temp_max + r.temp_min) / 2));
+
+    const allVals = [...tMax, ...tMin, ...tSens].filter(v => typeof v === 'number' && !isNaN(v));
+    const minVal = allVals.length > 0 ? Math.min(...allVals) : 16;
+    const maxVal = allVals.length > 0 ? Math.max(...allVals) : 32;
+    const yMin = Math.max(0, Math.floor(minVal / 2) * 2 - 2);
+    const yMax = Math.ceil(maxVal / 2) * 2 + 2;
 
     config = {
       type: 'line',
@@ -408,42 +416,62 @@ export function renderBulletinChart(canvas, metric, bulletinRows) {
           {
             label: 'Máxima (°C)',
             data: tMax,
-            borderColor: c.primary,
-            backgroundColor: c.gradStart,
+            borderColor: isDark ? '#f87171' : '#dc2626',
+            backgroundColor: isDark ? 'rgba(248, 113, 113, 0.12)' : 'rgba(220, 38, 38, 0.08)',
             borderWidth: 2.5,
             tension: 0.3,
-            fill: '+1',
-            pointBackgroundColor: c.primary,
-            pointRadius: 4
+            fill: 1,
+            pointBackgroundColor: isDark ? '#f87171' : '#dc2626',
+            pointRadius: 4.5
           },
           {
             label: 'Mínima (°C)',
             data: tMin,
-            borderColor: c.secondary,
+            borderColor: isDark ? '#38bdf8' : '#0284c7',
             backgroundColor: 'transparent',
             borderWidth: 2,
             borderDash: [4, 4],
             tension: 0.3,
             fill: false,
-            pointBackgroundColor: c.secondary,
+            pointBackgroundColor: isDark ? '#38bdf8' : '#0284c7',
             pointRadius: 4
+          },
+          {
+            label: 'Sensação Térmica (°C)',
+            data: tSens,
+            borderColor: isDark ? '#fb923c' : '#ea580c',
+            backgroundColor: 'transparent',
+            borderWidth: 2.5,
+            tension: 0.35,
+            fill: false,
+            pointBackgroundColor: isDark ? '#fb923c' : '#ea580c',
+            pointBorderColor: '#ffffff',
+            pointBorderWidth: 1.5,
+            pointRadius: 4.5,
+            pointHoverRadius: 6.5
           }
         ]
       },
       options: {
-        ...getCommonOptions('Temperatura (°C)'),
+        ...getCommonOptions('Temperatura & Sensação (°C)'),
         scales: {
           x: getXAxisConfig(),
           y: {
-            min: 16,
-            max: 32,
-            ticks: { stepSize: 2, color: c.text, font: { weight: '600' } },
+            min: yMin,
+            max: yMax,
+            ticks: {
+              stepSize: 2,
+              color: c.text,
+              font: { weight: '600' },
+              callback: (val) => val + '°C'
+            },
             grid: { color: c.grid },
-            title: { display: true, text: 'Temperatura (°C)', color: c.text }
+            title: { display: true, text: 'Temperatura & Sensação (°C)', color: c.text }
           }
         }
       }
     };
+
   } else if (metric === 'humidity') {
     const uMax = bulletinRows.map(r => r.umid_max);
     const uMin = bulletinRows.map(r => r.umid_min);
