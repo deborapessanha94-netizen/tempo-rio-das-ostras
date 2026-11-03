@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "03/11 (Terça-feira) a 05/11 (Quinta-feira)",
-  "emissao": "03/11/2026 às 13:40h",
+  "emissao": "03/11/2026 às 16:58h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.34 m. Alerta Amarelo de Tempestade do INMET (nº 56260 e nº 56262) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 795/2026) válidos a partir de 05/11 às 09:00h até 06/11 às 03:00h. Acumulado total de chuva previsto para o ciclo de 3 dias: 20.5 mm com temperatura máxima alcançando 36°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -826,7 +826,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-03T13:40:38.135450"
+    "atualizado_em": "2026-11-03T16:58:57.914410"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -834,13 +834,13 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-03 13:40:58",
+    "data_coleta": "2026-11-03 16:59:41",
     "bulletin_info": {
-      "disponivel": true,
-      "arquivo": "BoletimHidrometeorologico_03-11-2026.pdf",
-      "data_boletim": "03/11/2026",
-      "label": "Boletim HidrometeorolÃ³gico 03/11/2026",
-      "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_03-11-2026.pdf"
+      "disponivel": false,
+      "arquivo": null,
+      "data_boletim": null,
+      "label": null,
+      "url_pdf": null
     },
     "previsao_rh8": {
       "hoje": {
@@ -865,268 +865,7 @@
     "contato_sala_situacao": "(21) 2334-9307",
     "url_oficial": "http://alertadecheias.inea.rj.gov.br"
   },
-  "inea_macae_ostras": {
-    "fonte": "INEA - Sistema de Alerta de Cheias",
-    "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-    "atualizacao": "03/11/2026 13:40",
-    "bacia": "Rios Macaé e das Ostras",
-    "alerta_macae": {
-      "tem_elevacao_fora_limite": true,
-      "maior_nivel": "ALERTA MÁXIMO",
-      "qtd_estacoes_elevadas": 5,
-      "estacoes_afetadas": [
-        {
-          "municipio": "Macaé",
-          "curso_agua": "rio São Pedro",
-          "estacao": "Glicério",
-          "tendencia": "Estavel",
-          "leitura": "03/11/2026 13:30",
-          "status_bruto": "ATENÇÃO",
-          "status": "ATENÇÃO",
-          "cor_badge": "warning",
-          "fora_limite_seguranca": true,
-          "nivel_atual_m": "-",
-          "nivel_15min_m": "-",
-          "chuva_24h_mm": "0",
-          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/22134203020.html"
-        },
-        {
-          "municipio": "Macaé",
-          "curso_agua": "rio São Pedro",
-          "estacao": "São Pedro",
-          "tendencia": "Descendo",
-          "leitura": "03/11/2026 13:30",
-          "status_bruto": "ATENÇÃO",
-          "status": "ATENÇÃO",
-          "cor_badge": "warning",
-          "fora_limite_seguranca": true,
-          "nivel_atual_m": "0.62",
-          "nivel_15min_m": "0.64",
-          "chuva_24h_mm": "0.2",
-          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
-        },
-        {
-          "municipio": "Macaé",
-          "curso_agua": "rio Sana",
-          "estacao": "Barra do Sana",
-          "tendencia": "Estavel",
-          "leitura": "03/11/2026 12:00",
-          "status_bruto": "ATENÇÃO",
-          "status": "ATENÇÃO",
-          "cor_badge": "warning",
-          "fora_limite_seguranca": true,
-          "nivel_atual_m": "1.26",
-          "nivel_15min_m": "1.26",
-          "chuva_24h_mm": "0.2",
-          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70848020.html"
-        },
-        {
-          "municipio": "Macaé",
-          "curso_agua": "Lagoa Imboassica",
-          "estacao": "Lagoa de Imboassica",
-          "tendencia": "Estavel",
-          "leitura": "03/11/2026 12:15",
-          "status_bruto": "ALERTA MÁXIMO",
-          "status": "ALERTA MÁXIMO",
-          "cor_badge": "danger-extreme",
-          "fora_limite_seguranca": true,
-          "nivel_atual_m": "1.54",
-          "nivel_15min_m": "1.54",
-          "chuva_24h_mm": "0.8",
-          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71131820.html"
-        },
-        {
-          "municipio": "Macaé",
-          "curso_agua": "rio Macaé",
-          "estacao": "Ponte do Baião",
-          "tendencia": "Estavel",
-          "leitura": "03/11/2026 12:00",
-          "status_bruto": "ATENÇÃO",
-          "status": "ATENÇÃO",
-          "cor_badge": "warning",
-          "fora_limite_seguranca": true,
-          "nivel_atual_m": "1.61",
-          "nivel_15min_m": "1.61",
-          "chuva_24h_mm": "0.2",
-          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71501220.html"
-        }
-      ],
-      "resumo_texto": "5 estação(ões) em Macaé fora da cota de segurança (ALERTA MÁXIMO): Glicério (ATENÇÃO), São Pedro (ATENÇÃO: 0.62 m), Barra do Sana (ATENÇÃO: 1.26 m), Lagoa de Imboassica (ALERTA MÁXIMO: 1.54 m), Ponte do Baião (ATENÇÃO: 1.61 m)"
-    },
-    "alerta_friburgo_cabeceiras": {
-      "tem_elevacao": false,
-      "estacoes_afetadas": []
-    },
-    "estacoes_rio_das_ostras": [
-      {
-        "municipio": "Rio das Ostras",
-        "curso_agua": "rio Jundiá",
-        "estacao": "Jundiá",
-        "tendencia": "Estável",
-        "leitura": "03/11/2026 10:30",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "1.34",
-        "nivel_15min_m": "1.34",
-        "chuva_24h_mm": "0.0",
-        "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
-      }
-    ],
-    "todas_estacoes": [
-      {
-        "municipio": "Rio das Ostras",
-        "curso_agua": "rio Jundiá",
-        "estacao": "Jundiá",
-        "tendencia": "Estável",
-        "leitura": "03/11/2026 10:30",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "1.34",
-        "nivel_15min_m": "1.34",
-        "chuva_24h_mm": "0.0",
-        "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
-      },
-      {
-        "municipio": "Macaé",
-        "curso_agua": "rio São Pedro",
-        "estacao": "Glicério",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 13:30",
-        "status_bruto": "ATENÇÃO",
-        "status": "ATENÇÃO",
-        "cor_badge": "warning",
-        "fora_limite_seguranca": true,
-        "nivel_atual_m": "-",
-        "nivel_15min_m": "-",
-        "chuva_24h_mm": "0",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/22134203020.html"
-      },
-      {
-        "municipio": "Macaé",
-        "curso_agua": "rio São Pedro",
-        "estacao": "São Pedro",
-        "tendencia": "Descendo",
-        "leitura": "03/11/2026 13:30",
-        "status_bruto": "ATENÇÃO",
-        "status": "ATENÇÃO",
-        "cor_badge": "warning",
-        "fora_limite_seguranca": true,
-        "nivel_atual_m": "0.62",
-        "nivel_15min_m": "0.64",
-        "chuva_24h_mm": "0.2",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
-      },
-      {
-        "municipio": "Nova Friburgo",
-        "curso_agua": "rio Macaé",
-        "estacao": "Macaé de Cima",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:15",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "0.39",
-        "nivel_15min_m": "0.39",
-        "chuva_24h_mm": "1.2",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70677220.html"
-      },
-      {
-        "municipio": "Nova Friburgo",
-        "curso_agua": "rio Bonito",
-        "estacao": "Piller",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:15",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "0.57",
-        "nivel_15min_m": "0.57",
-        "chuva_24h_mm": "0",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70740420.html"
-      },
-      {
-        "municipio": "Macaé",
-        "curso_agua": "rio Sana",
-        "estacao": "Barra do Sana",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:00",
-        "status_bruto": "ATENÇÃO",
-        "status": "ATENÇÃO",
-        "cor_badge": "warning",
-        "fora_limite_seguranca": true,
-        "nivel_atual_m": "1.26",
-        "nivel_15min_m": "1.26",
-        "chuva_24h_mm": "0.2",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70848020.html"
-      },
-      {
-        "municipio": "Macaé",
-        "curso_agua": "Lagoa Imboassica",
-        "estacao": "Lagoa de Imboassica",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:15",
-        "status_bruto": "ALERTA MÁXIMO",
-        "status": "ALERTA MÁXIMO",
-        "cor_badge": "danger-extreme",
-        "fora_limite_seguranca": true,
-        "nivel_atual_m": "1.54",
-        "nivel_15min_m": "1.54",
-        "chuva_24h_mm": "0.8",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71131820.html"
-      },
-      {
-        "municipio": "Nova Friburgo",
-        "curso_agua": "rio Macaé",
-        "estacao": "São Romão",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:00",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "0.75",
-        "nivel_15min_m": "0.75",
-        "chuva_24h_mm": "0.2",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71268220.html"
-      },
-      {
-        "municipio": "Nova Friburgo",
-        "curso_agua": "rio Macaé",
-        "estacao": "Galdinópolis",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:00",
-        "status_bruto": "VIGILÂNCIA",
-        "status": "VIGILÂNCIA",
-        "cor_badge": "success",
-        "fora_limite_seguranca": false,
-        "nivel_atual_m": "0.58",
-        "nivel_15min_m": "0.58",
-        "chuva_24h_mm": "0.6",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE7135F420.html"
-      },
-      {
-        "municipio": "Macaé",
-        "curso_agua": "rio Macaé",
-        "estacao": "Ponte do Baião",
-        "tendencia": "Estavel",
-        "leitura": "03/11/2026 12:00",
-        "status_bruto": "ATENÇÃO",
-        "status": "ATENÇÃO",
-        "cor_badge": "warning",
-        "fora_limite_seguranca": true,
-        "nivel_atual_m": "1.61",
-        "nivel_15min_m": "1.61",
-        "chuva_24h_mm": "0.2",
-        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71501220.html"
-      }
-    ]
-  },
+  "inea_macae_ostras": null,
   "orla_condicoes": {
     "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 795/2026)",
     "badge": "VENTO FORTE",
@@ -1552,7 +1291,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-03 00z",
-    "atualizacao": "03/11/2026 13:40",
+    "atualizacao": "03/11/2026 13:59",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -1638,7 +1377,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "03/11/2026",
-    "atualizacao": "03/11/2026 13:40",
+    "atualizacao": "03/11/2026 13:59",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -1816,7 +1555,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-03T13:41:00.613065",
+    "atualizado_em": "2026-11-03T16:59:42.845536",
     "proxima_mare": null,
     "dias": [
       {
