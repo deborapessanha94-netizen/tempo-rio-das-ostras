@@ -40,8 +40,8 @@
     "tendencia_rio": "Estável",
     "ultima_leitura": "03/11/2026 12:30",
     "online": true,
-    "chuva_pluvio_24h": 0.0,
-    "chuva_pluvio_96h": 0.0,
+    "chuva_pluvio_24h": 5.4,
+    "chuva_pluvio_96h": 5.4,
     "historico_recente": [
       {
         "chuva": 0.0,
@@ -1092,8 +1092,8 @@
       "tendencia_rio": "Estável",
       "ultima_leitura": "03/11/2026 12:30",
       "online": true,
-      "chuva_pluvio_24h": 0.0,
-      "chuva_pluvio_96h": 0.0,
+      "chuva_pluvio_24h": 5.4,
+      "chuva_pluvio_96h": 5.4,
       "historico_recente": [
         {
           "chuva": 0.0,
