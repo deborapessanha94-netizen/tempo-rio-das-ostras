@@ -13403,8 +13403,7 @@ window.SUB_SECTIONS_CONFIG = {
     default: 'section-alertas-oficiais',
     sections: [
       'section-alertas-oficiais',
-      'section-cemaden-riscos',
-      'section-cptec-probabilistica'
+      'section-cemaden-riscos'
     ]
   },
   boletim: {
