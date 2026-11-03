@@ -7,15 +7,9 @@
   "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
   "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
   "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "atualizado_em": "2026-11-02T22:34:51.888061",
+  "atualizado_em": "2026-11-03T03:44:56.979134",
   "proxima_mare": null,
   "dias": [
-    {
-      "data_iso": "2026-11-02",
-      "data_br": "02/11/2026",
-      "dia_semana": "Segunda",
-      "eventos": []
-    },
     {
       "data_iso": "2026-11-03",
       "data_br": "03/11/2026",
@@ -50,6 +44,12 @@
       "data_iso": "2026-11-08",
       "data_br": "08/11/2026",
       "dia_semana": "Domingo",
+      "eventos": []
+    },
+    {
+      "data_iso": "2026-11-09",
+      "data_br": "09/11/2026",
+      "dia_semana": "Segunda",
       "eventos": []
     }
   ]
