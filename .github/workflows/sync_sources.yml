@@ -48,6 +48,7 @@ jobs:
           python scripts/stations_service.py || true
           python scripts/sync_data.py || true
           python scripts/collector.py || true
+          python scripts/auto_bulletin.py || true
 
       - name: Salvar Dados e Boletins Atualizados no Repositório
         run: |
