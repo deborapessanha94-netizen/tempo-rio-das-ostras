@@ -1,27 +1,5 @@
 [
   {
-    "id": 56260,
-    "descricao": "Tempestade",
-    "severidade": "Perigo Potencial",
-    "cor_nome": "Amarelo",
-    "cor_badge": "Alerta Amarelo • Perigo Potencial",
-    "cor_hex": "#EAB308",
-    "eh_direto_ostras": true,
-    "inicio": "2026-11-03 09:25",
-    "fim": "2026-11-03 23:59",
-    "inicio_formatado": "03/11/2026 às 09:25",
-    "fim_formatado": "03/11/2026 às 23:59",
-    "riscos": [
-      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
-    ],
-    "instrucoes": [
-      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
-      "Evite usar aparelhos eletrônicos ligados à tomada. ",
-      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
-    ],
-    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Rio Grande do Sul,Acre,São Paulo,Espírito Santo,Pará,Mato Grosso do Sul,Tocantins,Mato Grosso,Roraima,Rondônia,Amazonas,Rio de Janeiro,Distrito Federal,Bahia"
-  },
-  {
     "id": 56262,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
