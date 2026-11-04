@@ -3,7 +3,7 @@
   "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
   "modelo": "Wwatch",
   "rodada": "2026-11-04 00z",
-  "atualizacao": "04/11/2026 14:58",
+  "atualizacao": "04/11/2026 15:46",
   "produtos": {
     "alt_onda": "Altura Significativa e Direção das Ondas",
     "per_pico": "Período e Direção de Pico das Ondas",
@@ -23,8 +23,9 @@
   "arquivos": {
     "alt_onda_sud_000": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_000h.png",
-      "ok": true,
-      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/11/04/00/Wwatch_alt_onda_sud_2026110400z_000z.png"
+      "tamanho_bytes": 212221,
+      "url_oficial": "https://s1.cptec.inpe.br/grafico/Modelos/Wwatch/pn/alt_onda/2026/11/04/00/Wwatch_alt_onda_sud_2026110400z_000z.png",
+      "ok": true
     },
     "alt_onda_sud_024": {
       "arquivo": "img/cptec/wwatch_alt_onda_sud_024h.png",
