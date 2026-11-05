@@ -1,9 +1,21 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-05 15:39:11",
+  "coleta_iso": "2026-11-05 17:59:04",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para sexta-feira (6) e Sábado (7)",
+      "data": "05/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-6-e-sábado-7",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa de evento internacional sobre sustentabilidade espacial em Brasília",
+      "data": "05/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-evento-internacional-sobre-sustentabilidade-espacial-em-brasília",
+      "relevancia_sudeste": true
+    },
     {
       "titulo": "Previsão para quinta-feira (5) e sexta-feira (6)",
       "data": "04/11/2026",
@@ -50,18 +62,6 @@
       "titulo": "Previsão para sexta-feira (30), sábado (31), domingo (1) e segunda-feira (2)",
       "data": "29/10/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-30-sábado-31-domingo-1-e-segunda-feira-2",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para quinta-feira (29) e sexta-feira (30)",
-      "data": "28/10/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-29-e-sexta-feira-30",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Novembro: como será o clima no Brasil?",
-      "data": "28/10/2026",
-      "url": "https://portal.inmet.gov.br/noticias/novembro-como-será-o-clima-no-brasil-5",
       "relevancia_sudeste": false
     }
   ]
