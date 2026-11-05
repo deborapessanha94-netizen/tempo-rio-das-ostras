@@ -36,7 +36,7 @@ import {
 
 
 
-} from './social-cards.js?v=187';
+} from './social-cards.js?v=188';
 
 
 
@@ -3617,433 +3617,149 @@ function renderDashboardUI(meta, rows, weather) {
 
 
     list3d.innerHTML = meta.dias_resumo.map((d, idx) => {
-
-
-
-      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã', 'D+3 (3 Dias à Frente)'];
-
-
-
+      // Rótulos limpos e sem aperto horizontal
+      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã', 'D+3'];
       const rotuloCurto = rotulos[idx] || `Dia ${idx + 1}`;
 
-
-
-      
-
-
-
-      // Formata o nome do dia em Title Case: "TERÇA-FEIRA" -> "Terça-Feira"
-
-
-
+      // Formata o nome do dia em Title Case: "QUINTA-FEIRA" -> "Quinta-Feira"
       let nomeDiaFormatado = '';
-
-
-
       if (d.dia) {
-
-
-
         const diaSemData = d.dia.split(/[•—–]/)[0].trim();
-
-
-
         nomeDiaFormatado = diaSemData
-
-
-
           .toLowerCase()
-
-
-
           .split('-')
-
-
-
           .map(p => p.charAt(0).toUpperCase() + p.slice(1))
-
-
-
           .join('-');
-
-
-
       }
 
-
-
-
-
-
-
-      // Extrai a data oficial: "20/10/2026"
-
-
-
+      // Extrai a data oficial: "05/11/2026"
       let dataStr = '';
-
-
-
       if (d.dia) {
-
-
-
         const m = d.dia.match(/(\d{2}\/\d{2}(?:\/\d{4})?)/);
-
-
-
         if (m) {
-
-
-
           dataStr = m[1];
-
-
-
           if (!dataStr.includes('/20')) {
-
-
-
             dataStr = `${dataStr}/${new Date().getFullYear()}`;
-
-
-
           }
-
-
-
         }
-
-
-
       }
-
-
-
       if (!dataStr) {
-
-
-
         const now = new Date();
-
-
-
         const target = new Date(now.getTime() + idx * 86400000);
-
-
-
         const dd = String(target.getDate()).padStart(2, '0');
-
-
-
         const mm = String(target.getMonth() + 1).padStart(2, '0');
-
-
-
         dataStr = `${dd}/${mm}/${target.getFullYear()}`;
-
-
-
       }
-
-
-
-
-
-
-
-      // Título exatamente no padrão: "Hoje (Terça-Feira) - 20/10/2026"
-
-
-
-      const tituloCard = `${rotuloCurto} (${nomeDiaFormatado}) - ${dataStr}`;
-
-
-
-
-
-
 
       const tempVal = d.pilares?.temp?.val ? d.pilares.temp.val.replace(' a ', ' / ') : '24° / 19°C';
       const sensacaoMax = d.sensacao_max || (d.pilares?.sensacao?.val ? parseInt((d.pilares.sensacao.val.match(/\d+/) || [26])[0]) : (d.t_max ? Math.round(d.t_max) : 26));
       const sensacaoMin = d.sensacao_min || (d.t_min ? Math.round(d.t_min) : 20);
 
-
-
       let condTxt = 'Estável';
-
-
-
       if (d.subtitulo) {
-
-
-
         condTxt = d.subtitulo.split(/\s*(?:[-—•]|\s{2,})\s*M[áa]xima/i)[0].trim();
-
-
-
         condTxt = condTxt.replace(/\(Alerta Amarelo\s*[-—]\s*Perigo Potencial\)/i, '(Alerta Amarelo)');
-
-
-
         if (condTxt.includes('(') && !condTxt.includes(')')) {
-
-
-
           condTxt += ')';
-
-
-
         }
-
-
-
       }
 
+      // Separa a condição principal do alerta/sistema meteorológico para exibição limpa e espaçada
+      let condicaoPrincipal = condTxt;
+      let alertaTexto = '';
+      const matchPar = condTxt.match(/^([^(]+)(?:\(([^)]+)\))?/);
+      if (matchPar) {
+        condicaoPrincipal = matchPar[1].trim();
+        if (matchPar[2]) alertaTexto = matchPar[2].trim();
+      }
 
+      let alertaBadgeHtml = '';
+      if (alertaTexto) {
+        const isAlerta = /alerta/i.test(alertaTexto);
+        const badgeCls = isAlerta
+          ? 'text-[#9a3412] bg-[#ffedd5] border border-[#ea580c]/30 font-bold'
+          : 'text-black/80 bg-black/5 border border-black/10 font-medium';
+        alertaBadgeHtml = `<span class="inline-block mt-1 text-[10px] sm:text-[10.5px] px-1.5 py-0.5 rounded ${badgeCls} leading-tight">${alertaTexto}</span>`;
+      }
 
       const iconName = d.pilares?.ceu?.icon || 'cloud-sun';
-
-
-
       const chuvaVal = d.pilares?.chuva?.val || '0 mm';
-
-
-
       const ventoVal = d.pilares?.vento?.val || '24 km/h';
-
-
-
-      const theme = cardThemes[idx % 3];
-
-
-
-
-
-
+      const theme = cardThemes[idx % cardThemes.length];
 
       // Previsão do Mar detalhada e precisa para os 3 dias
-
-
-
       const marInfoList = [
-
-
-
         { ondas: '1,2 a 1,6 m', estado: 'Calmo a Moderado', chip: '1,2 a 1,6 m (Mod.)', detalhe: 'Swell E/SE • Enseadas 0,3-0,7 m | Oceânica 1,2-1,6 m' },
-
-
-
         { ondas: '1,0 a 1,4 m', estado: 'Moderado', chip: '1,0 a 1,4 m (Mod.)', detalhe: 'Swell E • Enseadas 0,3-0,6 m | Oceânica 1,0-1,4 m' },
-
-
-
         { ondas: '0,8 a 1,2 m', estado: 'Calmo', chip: '0,8 a 1,2 m (Calmo)', detalhe: 'Swell E/NE • Enseadas 0,2-0,5 m | Oceânica 0,8-1,2 m' }
-
-
-
       ];
-
-
-
       const marInfo = marInfoList[idx] || { ondas: '1,0 m', estado: 'Normal', chip: '1,0 m', detalhe: 'Condições regulares de mar' };
 
-
-
-
-
-
-
       const marFrases = [
-
-
-
         'Na orla de Rio das Ostras, o mar varia de calmo a moderado com ondas de 1,2 a 1,6 m na faixa oceânica e águas abrigadas nas enseadas (0,3 a 0,7 m).',
-
-
-
         'Na orla de Rio das Ostras, o mar se mantém moderado com ondas de 1,0 a 1,4 m e ventos costeiros regulares.',
-
-
-
         'Na orla de Rio das Ostras, o mar se apresenta calmo com ondas de 0,8 a 1,2 m.'
-
-
-
       ];
-
-
-
       const marFrase = marFrases[idx] || `Na orla, o mar se apresenta ${marInfo.estado.toLowerCase()} com ondas de ${marInfo.ondas}.`;
 
-
-
-
-
-
-
-      // Extrai o textinho da previsão oficial para exibir de cara no card, sintetizando convecção, chuva multi-fonte, hidrologia e mar SEM TÓPICOS
-
-
-
       let informeResumo = '';
-
-
-
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0) {
-
-
-
         let base = cleanBulletinText(d.informe_populacao[0]);
-
-
-
         if (!base.endsWith('.')) base += '.';
-
-
-
         let detalheChuva = (d.informe_populacao.length > 1) ? cleanBulletinText(d.informe_populacao[1]) : '';
-
-
-
         if (detalheChuva && !detalheChuva.endsWith('.')) detalheChuva += '.';
-
-
-
-        
-
-
-
         let textoCompleto = detalheChuva ? `${base} ${detalheChuva}` : base;
-
-
-
         if (!textoCompleto.toLowerCase().includes('mar ')) {
-
-
-
           informeResumo = `${textoCompleto} ${marFrase}`;
-
-
-
         } else {
-
-
-
           informeResumo = textoCompleto;
-
-
-
         }
-
-
-
       } else {
-
-
-
         const fallbacks = [
-
-
-
           `Nesta quinta-feira, calor e umidade favorecem convecção diurna com pancadas de chuva e trovoadas à tarde (volume contínuo de 8.3 mm com pico de até 50 mm/dia sob Alerta Amarelo nº 56141). O Rio Jundiá permanece seguro com 1.7 m. ${marFrases[0]}`,
-
-
-
           `Nesta sexta-feira, instabilidades mantêm chuva com trovoadas (média de 10.5 mm e até 50 mm/dia sob Alerta Amarelo nº 56143). O Rio Jundiá segue estável. ${marFrases[1]}`,
-
-
-
           `Neste sábado, calor com pancadas de chuva à tarde (média de 3.6 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo nº 56153). A bacia opera livre. ${marFrases[2]}`
-
-
-
         ];
-
-
-
         informeResumo = fallbacks[idx] || `Previsão operacional regular. ${marFrase}`;
-
-
-
       }
 
       const snapCardJundia = getLiveJundiaSnapshot();
       informeResumo = patchJundiaInText(informeResumo, snapCardJundia);
 
-      // Detalhamento Térmico, Umidade e Ventos (Segunda parte do texto oficial)
       let detalheTexto = '';
       if (Array.isArray(d.informe_populacao) && d.informe_populacao.length > 2) {
         detalheTexto = d.informe_populacao.slice(2).map(item => cleanBulletinText(patchJundiaInText(item, snapCardJundia)).replace(/^[•\-\*]\s*/, '')).join(' ');
       }
 
       return `
+        <div class="p-4 rounded-2xl ${theme.cardClass} space-y-3 cursor-pointer transition hover:scale-[1.01]" onclick="window.toggleDayCard(${idx})">
 
-
-
-        <div class="p-4 rounded-2xl ${theme.cardClass} space-y-2.5 cursor-pointer transition hover:scale-[1.01]" onclick="window.toggleDayCard(${idx})">
-
-
-
-          <div class="flex items-center justify-between text-sm gap-2">
-
-
-
-            <div class="flex items-center gap-2.5 min-w-0 flex-1">
-
-
-
-              <div class="${theme.medallionClass} w-9 h-9 shrink-0">
-
-
-
-                <i data-lucide="${iconName}" class="w-4 h-4 ${theme.iconColor}"></i>
-
-
-
+          <!-- Linha 1: Cabeçalho com Dia, Data e Temperatura Máx/Mín -->
+          <div class="flex items-center justify-between gap-2 border-b border-black/10 pb-2">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-black text-sm text-black tracking-tight">${rotuloCurto}</span>
+                <span class="text-xs font-bold text-black/75">(${nomeDiaFormatado})</span>
               </div>
-
-
-
-              <div class="min-w-0 flex-1">
-
-
-
-                <span class="font-black ${theme.titleText} text-xs sm:text-[13px] block leading-tight text-black">${tituloCard}</span>
-
-
-
-                <span class="text-[11px] sm:text-xs font-semibold ${theme.badgeText} block mt-0.5">${condTxt}</span>
-
-
-
-              </div>
-
-
-
+              <span class="text-[11px] font-semibold text-black/60 block mt-0.5">${dataStr}</span>
             </div>
 
-
-
-            <div class="flex flex-col items-end gap-1 shrink-0 pl-1 self-start pt-0.5">
-              <div class="flex items-center gap-1.5">
-                <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
-                <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 ${theme.chevronColor} transition"></i>
-              </div>
-              <span class="text-[9.5px] sm:text-[10.5px] font-bold text-[#c2410c] bg-[#fff7ed] border border-[#ea580c]/30 px-1.5 py-0.5 rounded-md whitespace-nowrap flex items-center gap-1 shadow-2xs" title="Sensação Térmica: Menor ${sensacaoMin}°C e Maior ${sensacaoMax}°C">
-                <i data-lucide="flame" class="w-3 h-3 text-[#ea580c]"></i>Sensação ${sensacaoMin}° a ${sensacaoMax}°C
-              </span>
+            <div class="flex items-center gap-1.5 shrink-0 pl-1 self-start pt-0.5">
+              <span class="font-black font-mono ${theme.tempText} text-xs whitespace-nowrap">${tempVal}</span>
+              <i data-lucide="chevron-down" id="day-card-chevron-${idx}" class="w-4 h-4 ${theme.chevronColor} transition"></i>
             </div>
-
-
-
           </div>
 
-
-
-
-
-
+          <!-- Linha 2: Ícone do Céu e Condição Meteorológica em Largura Completa (Sem quebras de 1 palavra) -->
+          <div class="flex items-start gap-2.5 pt-0.5">
+            <div class="${theme.medallionClass} w-9 h-9 shrink-0 flex items-center justify-center mt-0.5">
+              <i data-lucide="${iconName}" class="w-4 h-4 ${theme.iconColor}"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="text-xs sm:text-[13px] font-bold text-black leading-snug block">${condicaoPrincipal}</span>
+              ${alertaBadgeHtml}
+            </div>
+          </div>
 
           <!-- Previsão Essencial com Mar em Destaque (Chuva, Mar na Orla e Vento) Sempre Visíveis -->
 
