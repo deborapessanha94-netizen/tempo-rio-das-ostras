@@ -18,7 +18,7 @@
       },
       "severo_24h": {
         "ok": true,
-        "tamanho_bytes": 332499,
+        "tamanho_bytes": 330415,
         "arquivo": "img/cptec/mapa_prev_prob_24h_temposevero.png",
         "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png"
       },
