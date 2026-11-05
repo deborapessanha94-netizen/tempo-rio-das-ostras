@@ -2551,28 +2551,62 @@ function applyLiveStationsOverlay(rawData) {
     const code = st?.codigo;
     if (code && overlay[code]) {
       const ov = overlay[code];
-      const c24 = Math.max(Number(st.chuva_24h || 0), Number(ov.chuva_24h || 0), Number(ov.chuva_hoje || 0));
-      const c36 = Math.max(c24, Number(st.chuva_36h || 0), Number(ov.chuva_36h || 0));
-      const c48 = Math.max(c36, Number(st.chuva_48h || 0), Number(ov.chuva_48h || 0));
-      const c96 = Math.max(c48, Number(st.chuva_96h || 0), Number(ov.chuva_96h || 0));
+      const isOnline = ov.online !== false;
+      if (!isOnline) {
+        return {
+          ...st,
+          ...ov,
+          online: false,
+          temp_atual: null,
+          sensacao_atual: null,
+          vento_atual: null,
+          rajada_atual: null,
+          vento_max_hoje: null,
+          hora_vento_max_hoje: null,
+          rajada_max_hoje: null,
+          hora_rajada_max_hoje: null,
+          chuva_hoje: 0.0,
+          chuva_1h: 0.0,
+          chuva_4h: 0.0,
+          chuva_6h: 0.0,
+          chuva_12h: 0.0,
+          chuva_24h: 0.0,
+          chuva_36h: 0.0,
+          chuva_48h: 0.0,
+          chuva_96h: 0.0,
+          ultima_leitura: ov.ultima_leitura || 'Offline / Sem dados recentes'
+        };
+      }
+
+      const cHoje = Number(ov.chuva_hoje ?? 0.0);
+      const c24 = Number(ov.chuva_24h ?? cHoje);
+      const c36 = Number(ov.chuva_36h ?? c24);
+      const c48 = Number(ov.chuva_48h ?? c36);
+      const c96 = Number(ov.chuva_96h ?? c48);
 
       return {
         ...st,
         ...ov,
-        inicio_chuva_hoje: ov.inicio_chuva_hoje || st.inicio_chuva_hoje || null,
-        chuva_hoje: Math.max(Number(st.chuva_hoje || 0), Number(ov.chuva_hoje || 0)),
-        chuva_1h: (ov.chuva_1h !== undefined && ov.chuva_1h !== null && Number(ov.chuva_1h) > 0) ? Number(ov.chuva_1h) : Number(st.chuva_1h || 0),
-        chuva_4h: (ov.chuva_4h !== undefined && ov.chuva_4h !== null && Number(ov.chuva_4h) > 0) ? Number(ov.chuva_4h) : Number(st.chuva_4h || 0),
-        chuva_6h: (ov.chuva_6h !== undefined && ov.chuva_6h !== null && Number(ov.chuva_6h) > 0) ? Number(ov.chuva_6h) : Number(st.chuva_6h || 0),
-        chuva_12h: (ov.chuva_12h !== undefined && ov.chuva_12h !== null && Number(ov.chuva_12h) > 0) ? Number(ov.chuva_12h) : Number(st.chuva_12h || 0),
+        online: true,
+        inicio_chuva_hoje: ov.inicio_chuva_hoje || null,
+        chuva_hoje: cHoje,
+        chuva_1h: Number(ov.chuva_1h ?? 0.0),
+        chuva_4h: Number(ov.chuva_4h ?? cHoje),
+        chuva_6h: Number(ov.chuva_6h ?? cHoje),
+        chuva_12h: Number(ov.chuva_12h ?? cHoje),
         chuva_24h: c24,
         chuva_36h: c36,
         chuva_48h: c48,
         chuva_96h: c96,
-        vento_max_hoje: ov.vento_max_hoje ?? st.vento_max_hoje ?? null,
-        hora_vento_max_hoje: ov.hora_vento_max_hoje || st.hora_vento_max_hoje || null,
-        rajada_max_hoje: ov.rajada_max_hoje ?? st.rajada_max_hoje ?? null,
-        hora_rajada_max_hoje: ov.hora_rajada_max_hoje || st.hora_rajada_max_hoje || null
+        temp_atual: ov.temp_atual ?? null,
+        sensacao_atual: ov.sensacao_atual ?? null,
+        vento_atual: ov.vento_atual ?? null,
+        rajada_atual: ov.rajada_atual ?? null,
+        vento_max_hoje: ov.vento_max_hoje ?? null,
+        hora_vento_max_hoje: ov.hora_vento_max_hoje || null,
+        rajada_max_hoje: ov.rajada_max_hoje ?? null,
+        hora_rajada_max_hoje: ov.hora_rajada_max_hoje || null,
+        ultima_leitura: ov.ultima_leitura || st.ultima_leitura
       };
     }
     return st;
@@ -2582,10 +2616,19 @@ function applyLiveStationsOverlay(rawData) {
 
   const pluviais = mergedList
     .filter(s => s.categoria !== 'inea')
-    .sort((a, b) => Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0));
+    .sort((a, b) => {
+      const vA = Number(a.chuva_24h || 0);
+      const vB = Number(b.chuva_24h || 0);
+      if (vB !== vA) return vB - vA;
+      const onA = a.online !== false ? 1 : 0;
+      const onB = b.online !== false ? 1 : 0;
+      if (onB !== onA) return onB - onA;
+      return (a.nome_curto || a.nome || '').localeCompare(b.nome_curto || b.nome || '');
+    });
   const vals24 = pluviais.map(s => Number(s.chuva_24h || 0));
   const media24 = vals24.length > 0 ? Math.round((vals24.reduce((a, b) => a + b, 0) / vals24.length) * 10) / 10 : 0.0;
-  const topSt = pluviais[0] || null;
+  const maxVal = vals24.length > 0 ? Math.max(...vals24) : 0.0;
+  const topSt = maxVal > 0.0 ? pluviais.find(s => Number(s.chuva_24h || 0) === maxVal) : null;
 
   return {
     ...rawData,
@@ -2594,8 +2637,8 @@ function applyLiveStationsOverlay(rawData) {
     resumo: {
       ...(rawData.resumo || {}),
       media_chuva_24h: media24,
-      maior_acumulado_24h: topSt ? Number(topSt.chuva_24h || 0) : 0.0,
-      maior_estacao_nome: topSt ? (topSt.nome_curto || topSt.nome || '') : ''
+      maior_acumulado_24h: maxVal,
+      maior_estacao_nome: topSt ? (topSt.nome_curto || topSt.nome || '') : 'Sem registro de chuva'
     }
   };
 }
@@ -9124,7 +9167,10 @@ function renderAcumuladosChuva(rawInput) {
     const valA = window.getStationRainForMetric(a, activeMetric);
     const valB = window.getStationRainForMetric(b, activeMetric);
     if (valB !== valA) return valB - valA;
-    return Number(b.chuva_24h || 0) - Number(a.chuva_24h || 0);
+    const onA = a.online !== false ? 1 : 0;
+    const onB = b.online !== false ? 1 : 0;
+    if (onB !== onA) return onB - onA;
+    return (a.nome_curto || a.nome || '').localeCompare(b.nome_curto || b.nome || '');
   });
 
   // Lista consolidada para renderização: 9 estações pluviométricas ordenadas + Rio Jundiá
@@ -9151,11 +9197,17 @@ function renderAcumuladosChuva(rawInput) {
     if (kpiMediaLabelEl) kpiMediaLabelEl.textContent = `Média Municipal (${activeHorizonLabel})`;
   }
 
+  const maxRainInNetwork = estacoesPluviais.reduce((max, s) => Math.max(max, window.getStationRainForMetric(s, activeMetric)), 0.0);
   if (kpiMaiorEl && estacoesPluviais.length > 0) {
-    const maiorSt = estacoesPluviais[0];
-    const valMaior = window.getStationRainForMetric(maiorSt, activeMetric);
-    kpiMaiorEl.textContent = `${valMaior.toFixed(1).replace('.', ',')} mm`;
-    if (kpiMaiorLocalEl) kpiMaiorLocalEl.textContent = maiorSt.nome_curto || maiorSt.nome;
+    if (maxRainInNetwork > 0) {
+      const maiorSt = estacoesPluviais[0];
+      const valMaior = window.getStationRainForMetric(maiorSt, activeMetric);
+      kpiMaiorEl.textContent = `${valMaior.toFixed(1).replace('.', ',')} mm`;
+      if (kpiMaiorLocalEl) kpiMaiorLocalEl.textContent = maiorSt.nome_curto || maiorSt.nome;
+    } else {
+      kpiMaiorEl.textContent = '0,0 mm';
+      if (kpiMaiorLocalEl) kpiMaiorLocalEl.textContent = 'Sem chuva registrada no período';
+    }
     const kpiMaiorLabelEl = document.getElementById('chuva-kpi-maior-label');
     if (kpiMaiorLabelEl) kpiMaiorLabelEl.textContent = `Maior Acumulado (${activeHorizonLabel})`;
   }
@@ -9203,41 +9255,16 @@ function renderAcumuladosChuva(rawInput) {
 
 
       let rankBadge = '';
-
-
-
-      if (rankNum === 1) {
-
-
-
+      if (isOnline && maxRainInNetwork > 0 && rankNum === 1) {
         rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-[#ea580c] text-white shadow-2xs">#1 MAIOR VOLUME</span>';
-
-
-
-      } else if (rankNum === 2) {
-
-
-
+      } else if (isOnline && maxRainInNetwork > 0 && rankNum === 2) {
         rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-black bg-[#ffebe4] border border-[#f07a53] text-black shadow-2xs">#2</span>';
-
-
-
-      } else if (rankNum === 3) {
-
-
-
+      } else if (isOnline && maxRainInNetwork > 0 && rankNum === 3) {
         rankBadge = '<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-[#fef3c7] border border-[#d97706]/40 text-black">#3</span>';
-
-
-
-      } else {
-
-
-
+      } else if (isOnline) {
         rankBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-[#f1f5f9] text-[#475569] border border-[#cbd5e1]">#${rankNum}</span>`;
-
-
-
+      } else {
+        rankBadge = `<span class="px-2 py-0.5 rounded-full text-[9.5px] font-bold bg-[#f8fafc] text-slate-400 border border-slate-200">#${rankNum}</span>`;
       }
 
 
@@ -9310,7 +9337,7 @@ function renderAcumuladosChuva(rawInput) {
 
 
 
-        : '<span class="text-[10px] font-bold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-300">Em Calibração</span>';
+        : '<span class="flex items-center gap-1 text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-300 shadow-2xs"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Offline</span>';
 
 
 
@@ -10039,7 +10066,7 @@ function renderAcumuladosChuva(rawInput) {
 
 
 
-        : '<span class="text-[10px] font-bold text-zinc-700 bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-300">Calibração</span>';
+        : '<span class="text-[10px] font-bold text-rose-800 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-300">Offline</span>';
 
 
 

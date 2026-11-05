@@ -165,11 +165,13 @@ export function getStationRainForSocial(station, horizon, hours) {
   const hRound = Math.round(h);
   const isDaily = horizon === 'hoje' || horizon === 'diario' || horizon === 'diário';
 
+  if (station.online === false) return 0.0;
+
   // 1. Se estiver consultando horizonte diário ou 24h
   if (isDaily || hRound === 24) {
     const vHoje = Number(station.chuva_hoje !== undefined && station.chuva_hoje !== null ? station.chuva_hoje : 0.0);
     const v24h = Number(station.chuva_24h !== undefined && station.chuva_24h !== null ? station.chuva_24h : 0.0);
-    return Math.max(vHoje, v24h);
+    return isDaily ? vHoje : v24h;
   }
 
   // 2. Horizontes canônicos do site
@@ -772,16 +774,27 @@ export function renderSocialCanvas() {
       // Estações Pluviométricas: Volume em mm em destaque
       const rainValNum = rainVal || 0;
       const isZero = rainValNum <= 0.05;
+      const isOnline = st.online !== false;
 
-      // Cor de destaque: ciano elétrico para chuva > 0, azul claro suave para 0,0 mm
-      ctx.fillStyle = isZero ? '#94a3b8' : '#00d2ff';
-      ctx.font = isStory ? '900 46px monospace' : '900 36px monospace';
-      ctx.fillText(rainStr, rightPad, rowY + (isStory ? 44 : 32));
+      if (!isOnline) {
+        ctx.fillStyle = '#f43f5e';
+        ctx.font = isStory ? '900 32px monospace' : '900 24px monospace';
+        ctx.fillText('OFFLINE', rightPad, rowY + (isStory ? 44 : 32));
 
-      // Subtítulo descritivo alinhado à direita
-      ctx.fillStyle = isZero ? '#64748b' : '#38bdf8';
-      ctx.font = isStory ? '600 15px sans-serif' : '600 13px sans-serif';
-      ctx.fillText(`Acumulado ${horizonLabel}`, rightPad, rowY + (isStory ? 68 : 52));
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = isStory ? '600 15px sans-serif' : '600 13px sans-serif';
+        ctx.fillText('Sem sinal recente', rightPad, rowY + (isStory ? 68 : 52));
+      } else {
+        // Cor de destaque: ciano elétrico para chuva > 0, azul claro suave para 0,0 mm
+        ctx.fillStyle = isZero ? '#94a3b8' : '#00d2ff';
+        ctx.font = isStory ? '900 46px monospace' : '900 36px monospace';
+        ctx.fillText(rainStr, rightPad, rowY + (isStory ? 44 : 32));
+
+        // Subtítulo descritivo alinhado à direita
+        ctx.fillStyle = isZero ? '#64748b' : '#38bdf8';
+        ctx.font = isStory ? '600 15px sans-serif' : '600 13px sans-serif';
+        ctx.fillText(`Acumulado ${horizonLabel}`, rightPad, rowY + (isStory ? 68 : 52));
+      }
     }
 
     ctx.textAlign = 'left';

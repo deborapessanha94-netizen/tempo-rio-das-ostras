@@ -280,7 +280,7 @@ def collect_stations_network():
             "chuva_36h": 0.0,
             "chuva_48h": 0.0,
             "chuva_96h": 0.0,
-            "ultima_leitura": "Sem dados recentes",
+            "ultima_leitura": "Offline / Sem dados recentes",
             "online": False
         }
 
@@ -740,11 +740,12 @@ def collect_stations_network():
 
         stations.append(c_entry)
 
-    # Separa as 9 estações pluviométricas e ordena da maior para a menor pelo volume (mm)
+    # Separa as 9 estações pluviométricas e ordena: maior chuva primeiro; se empatadas, online primeiro
     pluviometric_stations = [s for s in stations if s.get("categoria") != "inea"]
     pluviometric_stations.sort(
         key=lambda s: (
             safe_float(s.get("chuva_24h", 0.0)),
+            1 if s.get("online") else 0,
             safe_float(s.get("chuva_96h", 0.0)),
             safe_float(s.get("chuva_1h", 0.0))
         ),
@@ -764,7 +765,13 @@ def collect_stations_network():
     # Métricas agregadas municipais (calculadas apenas sobre as 9 estações pluviométricas)
     val_24h = [s["chuva_24h"] for s in pluviometric_stations if s.get("chuva_24h") is not None]
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
-    max_st = pluviometric_stations[0] if pluviometric_stations else None
+    max_val_24h = max(val_24h, default=0.0)
+    if max_val_24h > 0.0:
+        max_st = next((s for s in pluviometric_stations if s.get("chuva_24h") == max_val_24h), pluviometric_stations[0])
+        maior_nome = max_st.get("nome_curto", "")
+    else:
+        max_st = None
+        maior_nome = "Sem registro de chuva" 
 
     # UV Tempo Real de Referência Municipal (Estação IRIODA17 - Praia da Tartaruga)
     irioda17_st = next((s for s in stations if s.get("codigo") == "IRIODA17"), None)
@@ -789,7 +796,7 @@ def collect_stations_network():
         "resumo": {
             "media_chuva_24h": media_24h,
             "maior_acumulado_24h": max_st.get("chuva_24h", 0.0) if max_st else 0.0,
-            "maior_estacao_nome": max_st.get("nome_curto", "") if max_st else "",
+            "maior_estacao_nome": maior_nome,
             "rio_jundia_cota": inea_entry.get("nivel_rio", "1.39 m"),
             "rio_jundia_status": inea_entry.get("status_rio", "VIGILÂNCIA"),
             "rio_jundia_pct": inea_entry.get("alerta_maximo_pct", 49.0),
