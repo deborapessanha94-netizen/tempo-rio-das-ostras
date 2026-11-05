@@ -441,16 +441,16 @@ export function renderSocialStationChips() {
 
     if (isSelected) {
       return `
-        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#0284c7]/20 text-[#38bdf8] border border-[#0284c7] flex items-center gap-1 cursor-pointer transition shadow-2xs hover:brightness-125">
-          <span class="w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-emerald-400' : 'bg-amber-400'}"></span>
+        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#e0f2fe] text-black border-2 border-[#0284c7] flex items-center gap-1 cursor-pointer transition shadow-2xs hover:brightness-95">
+          <span class="w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-emerald-600' : 'bg-amber-600'}"></span>
           <span>${shortName}</span>
-          <span class="text-[10px] opacity-75">✓</span>
+          <span class="text-[10px] font-black text-[#0284c7]">✓</span>
         </button>
       `;
     } else {
       return `
-        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-400 border border-slate-700 line-through flex items-center gap-1 cursor-pointer transition opacity-70 hover:opacity-100">
-          <span class="w-1.5 h-1.5 rounded-full bg-slate-600"></span>
+        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-[#64748b] border border-[#cbd5e1] line-through flex items-center gap-1 cursor-pointer transition opacity-70 hover:opacity-100">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
           <span>${shortName}</span>
         </button>
       `;
@@ -462,8 +462,8 @@ function updateStationsFilterButtons() {
   const btnAll = document.getElementById('social-btn-filter-all');
   const btnActive = document.getElementById('social-btn-filter-active');
 
-  const activeCls = 'px-3 py-1.5 rounded-xl text-xs font-black bg-gradient-to-r from-[#ea580c] to-[#f97316] text-white shadow-md border border-orange-400/50 cursor-pointer flex items-center gap-1';
-  const inactiveCls = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 border border-slate-700 cursor-pointer flex items-center gap-1';
+  const activeCls = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
+  const inactiveCls = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
 
   if (btnAll && btnActive) {
     if (socialState.filterMode === 'all') {
@@ -484,8 +484,8 @@ function updateFormatButtons(activeFmt) {
   const btnStory = document.getElementById('social-btn-fmt-story');
   const dlMainBtn = document.getElementById('social-download-main-btn');
 
-  const activeCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-[#0284c7] to-[#00c2ff] text-white shadow-md border border-cyan-400/40 cursor-pointer flex items-center justify-center gap-1.5 transition';
-  const inactiveCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 border border-slate-700 cursor-pointer flex items-center justify-center gap-1.5 transition';
+  const activeCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
+  const inactiveCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
 
   if (btnPost && btnStory) {
     if (activeFmt === 'post') {
@@ -500,12 +500,12 @@ function updateFormatButtons(activeFmt) {
   if (dlMainBtn) {
     if (activeFmt === 'story') {
       dlMainBtn.innerHTML = `
-        <i data-lucide="download" class="w-4 h-4 text-white"></i>
+        <i data-lucide="download" class="w-4 h-4 text-black"></i>
         <span>Baixar Stories (1080x1920)</span>
       `;
     } else {
       dlMainBtn.innerHTML = `
-        <i data-lucide="download" class="w-4 h-4 text-white"></i>
+        <i data-lucide="download" class="w-4 h-4 text-black"></i>
         <span>Baixar Post Feed (1080x1350)</span>
       `;
     }
@@ -519,13 +519,16 @@ function updateHorizonButtons(activeHz) {
   const horizons = ['12h', '24h', '36h', '48h', '96h'];
   const activeNormalized = String(activeHz || '').toLowerCase().replace(/[^0-9h]/g, '');
 
+  const activeCls = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer transition';
+  const inactiveCls = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition';
+
   horizons.forEach(hz => {
     const btn = document.getElementById(`social-hz-btn-${hz}`);
     if (btn) {
       if (hz === activeNormalized) {
-        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white border border-[#38bdf8] shadow-sm cursor-pointer transition';
+        btn.className = activeCls;
       } else {
-        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition';
+        btn.className = inactiveCls;
       }
     }
   });
@@ -533,9 +536,9 @@ function updateHorizonButtons(activeHz) {
   const btnHoje = document.getElementById('social-hz-btn-hoje');
   if (btnHoje) {
     if (activeHz === 'hoje' || activeHz === 'diario') {
-      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white border border-[#38bdf8] shadow-sm cursor-pointer transition';
+      btnHoje.className = activeCls;
     } else {
-      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition';
+      btnHoje.className = inactiveCls;
     }
   }
 }

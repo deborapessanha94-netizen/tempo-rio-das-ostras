@@ -186,7 +186,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=186">
+  <link rel="stylesheet" href="css/styles.css?v=187">
 
 
 
@@ -10550,25 +10550,140 @@
 
   <!-- MODAL: EXPORTAR IMAGEM PARA INSTAGRAM (POST 4:5 & STORIES 9:16) -->
   <!-- ========================================================================= -->
-  <div id="modal-social-chuva" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 modal-backdrop bg-black/80 backdrop-blur-md">
-    <div class="modern-card max-w-4xl w-full max-h-[96vh] sm:max-h-[92vh] flex flex-col shadow-2xl overflow-hidden bg-[#071326] text-white border border-[#0284c7]/40" style="border-top: 4px solid #f07a53 !important;">
+  <div id="modal-social-chuva" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 modal-backdrop bg-black/60 backdrop-blur-sm">
+    <div class="modern-card max-w-4xl w-full max-h-[96vh] sm:max-h-[92vh] flex flex-col shadow-2xl overflow-hidden bg-white text-black border border-[#cbd5e1]" style="border-top: 4px solid #f07a53 !important;">
       
-      <!-- Cabeçalho do Modal (Compacto e Responsivo) -->
-      <div class="px-4 py-3 bg-[#0a1931] text-white flex items-center justify-between border-b border-slate-700/80 gap-2 shrink-0">
+      <!-- Cabeçalho do Modal (Compacto e Responsivo na Paleta Oficial) -->
+      <div class="px-4 py-3 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1] gap-2 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs shrink-0">
             <i data-lucide="instagram" class="w-4 h-4 text-black"></i>
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
-              <h3 class="text-sm sm:text-base font-black text-white leading-tight truncate">Exportar Card Oficial de Chuva</h3>
-              <span class="text-[10px] font-mono font-bold uppercase bg-[#0284c7]/20 text-[#38bdf8] border border-[#0284c7]/50 px-2 py-0.5 rounded-full shrink-0">
+              <h3 class="text-sm sm:text-base font-black text-black leading-tight truncate">Exportar Card Oficial de Chuva</h3>
+              <span class="text-[10px] font-mono font-black uppercase bg-[#ffebe4] text-[#ea580c] border border-[#f07a53] px-2 py-0.5 rounded-full shrink-0">
                 @tempoemriodasostras
               </span>
             </div>
-            <span class="text-[11px] text-slate-300 font-medium hidden sm:inline">Acumulados da rede municipal em tempo real para Post e Stories</span>
+            <span class="text-[11px] text-black font-semibold hidden sm:inline">Acumulados da rede municipal em tempo real para Post e Stories</span>
           </div>
         </div>
+
+        <button type="button" onclick="closeSocialModalChuva()" class="p-2 rounded-xl text-black hover:bg-[#e2e8f0] cursor-pointer transition shrink-0" title="Fechar modal">
+          <i data-lucide="x" class="w-5 h-5 text-black"></i>
+        </button>
+      </div>
+
+      <!-- Barra de Controles e Filtros Rápidos (Otimizada para Celular & Paleta Oficial) -->
+      <div class="p-3 sm:p-4 bg-[#f8fafc] border-b border-[#cbd5e1] space-y-2.5 text-xs shrink-0">
+        
+        <!-- Linha 1: Seletor Segmentado de Formato & Ações Rápidas -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <!-- Formato (Segmented Touch Targets) -->
+          <div class="flex items-center gap-1.5 p-1 bg-[#eaeff2] rounded-2xl border border-[#cbd5e1] w-full sm:w-auto shadow-xs" role="tablist">
+            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="square" class="w-3.5 h-3.5 text-black"></i>
+              <span>Post Feed (4:5)</span>
+            </button>
+            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
+              <span>Stories (9:16)</span>
+            </button>
+          </div>
+
+          <!-- Filtro Rápido de Estações (Todas vs Ativas + Atualizar) -->
+          <div class="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+            <div class="flex items-center gap-1.5">
+              <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-white"></i>
+                <span>Todas (10)</span>
+              </button>
+              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>Apenas Ativas</span>
+              </button>
+            </div>
+            <button type="button" onclick="refreshSocialStationsData()" class="p-2 rounded-xl bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer transition flex items-center justify-center shadow-xs" title="Atualizar dados em tempo real">
+              <i id="social-refresh-icon" data-lucide="refresh-cw" class="w-3.5 h-3.5 text-black"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Linha 2: Pílulas de Horizonte de Tempo em 1 Toque -->
+        <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <span class="text-[11px] font-black text-black shrink-0">Horizonte:</span>
+            <button id="social-hz-btn-hoje" onclick="setSocialHorizon('hoje')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
+              Hoje
+            </button>
+            <button id="social-hz-btn-12h" onclick="setSocialHorizon('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
+              12h
+            </button>
+            <button id="social-hz-btn-24h" onclick="setSocialHorizon('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer transition">
+              24h
+            </button>
+            <button id="social-hz-btn-36h" onclick="setSocialHorizon('36h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
+              36h
+            </button>
+            <button id="social-hz-btn-48h" onclick="setSocialHorizon('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
+              48h
+            </button>
+            <button id="social-hz-btn-96h" onclick="setSocialHorizon('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
+              96h
+            </button>
+          </div>
+
+          <!-- Drawer Recolhível de Seleção de Estações -->
+          <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg bg-[#ffebe4]/60 hover:bg-[#ffebe4] border border-[#f07a53]/30 transition shrink-0">
+            <span id="social-selected-count">10 de 10 selecionadas</span>
+            <i id="social-chips-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#ea580c] transition-transform duration-200"></i>
+          </button>
+        </div>
+
+        <!-- Drawer Recolhível: Chips das Estações (Não empurra a tela no celular) -->
+        <div id="social-chips-drawer" class="hidden pt-2 border-t border-[#cbd5e1] max-h-32 overflow-y-auto">
+          <div id="social-station-chips" class="flex items-center gap-1.5 flex-wrap">
+            <!-- Chips gerados dinamicamente via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Corpo do Modal: Área de Pré-visualização Centralizada e Fluida -->
+      <div id="social-preview-container" class="flex-1 overflow-y-auto p-2 sm:p-4 bg-[#f4f6f8] flex flex-col items-center justify-center min-h-[220px] max-h-[50vh] sm:max-h-[56vh] border-y border-[#cbd5e1]">
+        <div class="relative max-w-full max-h-full my-auto flex items-center justify-center p-1.5 sm:p-2 bg-white rounded-2xl shadow-md border border-[#cbd5e1]">
+          <img 
+            id="social-preview-image" 
+            src="" 
+            alt="Pré-visualização do Card Oficial para Instagram" 
+            class="max-h-[44vh] sm:max-h-[50vh] w-auto max-w-full rounded-xl shadow-md border border-[#cbd5e1] object-contain transition duration-150"
+          />
+        </div>
+        <p class="text-[11px] font-black text-black mt-2 flex items-center gap-1.5 shrink-0">
+          <i data-lucide="eye" class="w-3.5 h-3.5 text-[#f07a53]"></i>
+          <span>Resolução oficial 1080px • Sem vento • Sincronizado com as 10 estações</span>
+        </p>
+      </div>
+
+      <!-- Rodapé de Ações do Modal (Botão Grande e Acessível para Polegar no Mobile) -->
+      <div class="px-4 py-3 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between gap-3 text-xs flex-wrap shrink-0">
+        <span class="text-black font-bold hidden sm:inline">
+          Canal Oficial: <strong class="text-black font-black">@tempoemriodasostras</strong>
+        </span>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <button type="button" onclick="closeSocialModalChuva()" class="btn-action-outline px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm cursor-pointer transition">
+            Fechar
+          </button>
+          <button type="button" id="social-download-main-btn" onclick="downloadSocialCurrentFormat()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs hover:bg-[#ffd9cb] active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition">
+            <i data-lucide="download" class="w-4 h-4 text-black"></i>
+            <span>Baixar Post Feed (1080x1350)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
         <button type="button" onclick="closeSocialModalChuva()" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 cursor-pointer transition shrink-0" title="Fechar modal">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -10927,7 +11042,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=186"></script>
+  <script type="module" src="js/app.js?v=187"></script>
 
 
 
