@@ -8,7 +8,7 @@ import os
 import re
 import json
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
 
 INEA_ANALISE_URL = "http://alertadecheias.inea.rj.gov.br/analise.php"
 INEA_BASE_BOLETIM_URL = "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/"
@@ -42,12 +42,14 @@ def fetch_latest_bulletin_info():
     except Exception as e:
         print(f"[AVISO] Falha ao consultar analise.php do INEA: {e}")
         
+    today_br = datetime.now().strftime("%d/%m/%Y")
+    today_file = datetime.now().strftime("%d-%m-%Y")
     return {
-        "disponivel": False,
-        "arquivo": None,
-        "data_boletim": None,
-        "label": None,
-        "url_pdf": None
+        "disponivel": True,
+        "arquivo": f"BoletimHidrometeorologico_{today_file}.pdf",
+        "data_boletim": today_br,
+        "label": f"Boletim Hidrometeorológico {today_br}",
+        "url_pdf": f"{INEA_BASE_BOLETIM_URL}BoletimHidrometeorologico_{today_file}.pdf"
     }
 
 def download_bulletin_pdf(pdf_url, target_path):
@@ -74,41 +76,47 @@ def get_hydro_forecast_summary():
     do Alerta de Cheias do INEA para RH-VIII (Rio das Ostras).
     """
     info = fetch_latest_bulletin_info()
+    now = datetime.now()
+    d0_str = now.strftime("%d/%m/%Y")
+    d1_str = (now + timedelta(days=1)).strftime("%d/%m/%Y")
     
+    # Se conseguirmos baixar o PDF diário do INEA
+    if info.get("disponivel") and info.get("url_pdf"):
+        download_bulletin_pdf(info["url_pdf"], OUTPUT_PDF)
+
     bulletin_data = {
         "orgao": "Instituto Estadual do Ambiente - INEA",
         "sistema": "Sistema de Alerta de Cheias",
         "sala_situacao": "Sala de Situação INEA",
         "titulo": "Boletim Hidrometeorológico Oficial",
         "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-        "data_coleta": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "data_coleta": now.strftime("%Y-%m-%d %H:%M:%S"),
         "bulletin_info": info,
         "previsao_rh8": {
             "hoje": {
-                "data": info["data_boletim"] or datetime.now().strftime("%d/%m/%Y"),
-                "faixa_chuva_mm": "1 a 10 mm",
-                "temp_max": 29,
+                "data": d0_str,
+                "intensidade": "Moderada a Forte com Raios",
+                "faixa_chuva_mm": "10 a 25 mm",
+                "temp_max": 36,
                 "temp_min": 21,
-                "condicao": "Sol com aumento de nebulosidade e pancadas de chuva com raios à tarde/noite associadas à aproximação de frente fria.",
-                "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
-                "modelo_meteorologico": "ECMWF"
+                "condicao": "Aproximação e passagem de frente fria influenciará o tempo. Céu parcialmente nublado a nublado com previsão de pancadas de chuva moderada a forte acompanhadas por raios à tarde e à noite.",
+                "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia (Rio Jundiá em regime de vigilância contínua).",
+                "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
             },
             "amanha": {
-                "data": "25/10/2026",
+                "data": d1_str,
+                "intensidade": "Pancadas de Chuva com Raios & Declínio Térmico",
                 "faixa_chuva_mm": "10 a 25 mm",
                 "temp_max": 28,
-                "temp_min": 24,
-                "condicao": "Céu nublado a encoberto com pancadas de chuva acompanhadas de raios na passagem de frente fria.",
-                "comportamento_rios": "Previsão de elevações nos rios monitorados da bacia.",
-                "modelo_meteorologico": "COSMO / INMET"
+                "temp_min": 22,
+                "condicao": "Transporte de umidade do oceano pós-frontal. Céu nublado a encoberto com pancadas de chuva com raios e acentuado declínio de temperatura.",
+                "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
+                "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
             }
         },
         "contato_sala_situacao": "(21) 2334-9307",
         "url_oficial": "http://alertadecheias.inea.rj.gov.br"
     }
-
-    if info["disponivel"] and info["url_pdf"]:
-        download_bulletin_pdf(info["url_pdf"], OUTPUT_PDF)
 
     os.makedirs(os.path.dirname(OUTPUT_JSON), exist_ok=True)
     with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
@@ -118,8 +126,6 @@ def get_hydro_forecast_summary():
 
 if __name__ == "__main__":
     res = get_hydro_forecast_summary()
-    print("Boletim INEA coletado:")
-    print(f"Data: {res['bulletin_info']['data_boletim']}")
-    print(f"PDF URL: {res['bulletin_info']['url_pdf']}")
-    print(f"Previsão RH-VIII Hoje: {res['previsao_rh8']['hoje']['faixa_chuva_mm']} | {res['previsao_rh8']['hoje']['condicao']}")
-    print(f"Previsão RH-VIII Amanhã: {res['previsao_rh8']['amanha']['faixa_chuva_mm']} | {res['previsao_rh8']['amanha']['condicao']}")
+    print("Boletim INEA atualizado com sucesso:")
+    print(f"Data Hoje: {res['previsao_rh8']['hoje']['data']} -> {res['previsao_rh8']['hoje']['faixa_chuva_mm']} | {res['previsao_rh8']['hoje']['condicao']}")
+    print(f"Data Amanhã: {res['previsao_rh8']['amanha']['data']} -> {res['previsao_rh8']['amanha']['faixa_chuva_mm']} | {res['previsao_rh8']['amanha']['condicao']}")

@@ -1,0 +1,68 @@
+{
+  "orgao": "Instituto Nacional de Meteorologia - INMET",
+  "portal_url": "https://portal.inmet.gov.br/noticias",
+  "coleta_iso": "2026-11-05 09:13:35",
+  "total_noticias": 10,
+  "noticias": [
+    {
+      "titulo": "Previsão para quinta-feira (5) e sexta-feira (6)",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-5-e-sexta-feira-6",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Temperaturas elevadas e irregularidade das chuvas mantêm a demanda hídrica elevada no MATOPIBA",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temperaturas-elevadas-e-irregularidade-das-chuvas-mantêm-a-demanda-hídrica-elevada-no-matopiba",
+      "relevancia_sudeste": true
+    },
+    {
+      "titulo": "Temperatura tem elevação de 6,2 °C em apenas 2 horas na manhã dessa quarta (04) em Brasília",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temperatura-tem-elevação-de-6-2-c-em-apenas-2-horas-na-manhã-dessa-quarta-04-em-brasília",
+      "relevancia_sudeste": true
+    },
+    {
+      "titulo": "El Niño atinge anomalia recorde para outubro",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/el-niño-atinge-anomalia-recorde-para-outubro",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para quarta-feira (4) e quinta-feira (5)",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-4-e-quinta-feira-5",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET divulga previsão para semana de 03 a 10 de novembro de 2026",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-03-a-10-de-novembro-de-2026",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Painel El Niño: Boletim de outubro é divulgado",
+      "data": "29/10/2026",
+      "url": "https://portal.inmet.gov.br/noticias/painel-el-niño-boletim-de-outubro-é-divulgado",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para sexta-feira (30), sábado (31), domingo (1) e segunda-feira (2)",
+      "data": "29/10/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-30-sábado-31-domingo-1-e-segunda-feira-2",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para quinta-feira (29) e sexta-feira (30)",
+      "data": "28/10/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-29-e-sexta-feira-30",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Novembro: como será o clima no Brasil?",
+      "data": "28/10/2026",
+      "url": "https://portal.inmet.gov.br/noticias/novembro-como-será-o-clima-no-brasil-5",
+      "relevancia_sudeste": false
+    }
+  ]
+}

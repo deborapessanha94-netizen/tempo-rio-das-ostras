@@ -4,32 +4,34 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-11-04 00:35:22",
+  "data_coleta": "2026-11-05 09:13:52",
   "bulletin_info": {
-    "disponivel": false,
-    "arquivo": null,
-    "data_boletim": null,
-    "label": null,
-    "url_pdf": null
+    "disponivel": true,
+    "arquivo": "BoletimHidrometeorologico_05-11-2026.pdf",
+    "data_boletim": "05/11/2026",
+    "label": "Boletim HidrometeorolÃ³gico 05/11/2026",
+    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_05-11-2026.pdf"
   },
   "previsao_rh8": {
     "hoje": {
-      "data": "04/11/2026",
-      "faixa_chuva_mm": "1 a 10 mm",
-      "temp_max": 29,
+      "data": "05/11/2026",
+      "intensidade": "Moderada a Forte com Raios",
+      "faixa_chuva_mm": "10 a 25 mm",
+      "temp_max": 36,
       "temp_min": 21,
-      "condicao": "Sol com aumento de nebulosidade e pancadas de chuva com raios à tarde/noite associadas à aproximação de frente fria.",
-      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
-      "modelo_meteorologico": "ECMWF"
+      "condicao": "Aproximação e passagem de frente fria influenciará o tempo. Céu parcialmente nublado a nublado com previsão de pancadas de chuva moderada a forte acompanhadas por raios à tarde e à noite.",
+      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia (Rio Jundiá em regime de vigilância contínua).",
+      "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
     },
     "amanha": {
-      "data": "25/10/2026",
+      "data": "06/11/2026",
+      "intensidade": "Pancadas de Chuva com Raios & Declínio Térmico",
       "faixa_chuva_mm": "10 a 25 mm",
       "temp_max": 28,
-      "temp_min": 24,
-      "condicao": "Céu nublado a encoberto com pancadas de chuva acompanhadas de raios na passagem de frente fria.",
-      "comportamento_rios": "Previsão de elevações nos rios monitorados da bacia.",
-      "modelo_meteorologico": "COSMO / INMET"
+      "temp_min": 22,
+      "condicao": "Transporte de umidade do oceano pós-frontal. Céu nublado a encoberto com pancadas de chuva com raios e acentuado declínio de temperatura.",
+      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
+      "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
     }
   },
   "contato_sala_situacao": "(21) 2334-9307",

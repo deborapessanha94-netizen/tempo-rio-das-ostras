@@ -1170,6 +1170,25 @@ def run_auto_bulletin_pipeline():
     cptec_proximos = cptec_data.get('proximos_dias', [])
     cptec_multi_list = cptec_data.get('meteograma_multimodel', {}).get('data', [])
 
+    # Carrega dados do Alerta de Cheias do INEA e Notícias Oficiais do INMET
+    inea_boletim_path = DATA_DIR / "inea_alerta_cheias_boletim.json"
+    inea_boletim_data = {}
+    if inea_boletim_path.exists():
+        try:
+            with open(inea_boletim_path, 'r', encoding='utf-8') as f:
+                inea_boletim_data = json.load(f)
+        except Exception:
+            pass
+
+    inmet_noticias_path = DATA_DIR / "inmet_noticias.json"
+    inmet_noticias_data = {}
+    if inmet_noticias_path.exists():
+        try:
+            with open(inmet_noticias_path, 'r', encoding='utf-8') as f:
+                inmet_noticias_data = json.load(f)
+        except Exception:
+            pass
+
     # Carrega dados observados das estações (CEMADEN PCD 18789, INEA Rio Jundiá, PWS)
     estacoes_obs = []
     estacoes_path = DATA_DIR / "acumulados_estacoes.json"
@@ -1448,21 +1467,43 @@ def run_auto_bulletin_pipeline():
                     chuva_prob_max = min(chuva_prob_max, 25)
                     chuva_sum = min(chuva_sum, 0.5)
 
-            # Integração dos Alertas INMET vigentes nos cálculos do turno
+            # Integração dos Alertas INMET vigentes & Boletim Oficial Alerta de Cheias INEA nos cálculos do turno
+            inea_rh8 = inea_boletim_data.get('previsao_rh8', {})
+            inea_hoje = inea_rh8.get('hoje', {})
+            inea_amanha = inea_rh8.get('amanha', {})
+            inea_prev_dia = inea_hoje if day_idx == 0 else (inea_amanha if day_idx == 1 else {})
+            inea_faixa = inea_prev_dia.get('faixa_chuva_mm', '')
+            inea_tem_chuva_mod = ('10 a 25' in inea_faixa or 'moderada' in inea_prev_dia.get('condicao', '').lower() or 'pancadas' in inea_prev_dia.get('condicao', '').lower())
+
             if tem_alerta_inmet_dia and alerta_dia:
                 sev_alerta = alerta_dia.get('cor_nome', 'Amarelo')
+                alerta_num = alerta_dia.get('id', '')
                 if turno_nome == 'Tarde':
-                    chuva_prob_max = max(chuva_prob_max, 75 if sev_alerta == 'Amarelo' else 90)
-                    rajada_max = max(rajada_max, 45 if sev_alerta == 'Amarelo' else 55)
-                    chuva_sum = max(chuva_sum, 2.5)
-                    if 'trovoada' not in tempo_desc.lower() and 'tempestade' not in tempo_desc.lower():
-                        tempo_desc = f"{tempo_desc} ({alerta_dia.get('cor_badge', 'Alerta de Tempestade')})"
+                    chuva_prob_max = max(chuva_prob_max, 85 if sev_alerta == 'Amarelo' else 95)
+                    rajada_max = max(rajada_max, 50 if sev_alerta == 'Amarelo' else 60)
+                    chuva_sum = max(chuva_sum, 8.5 if inea_tem_chuva_mod else 6.0)
+                    tempo_desc = f"Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº {alerta_num} & Alerta de Cheias INEA)"
                     icon_name = "cloud-lightning"
                 elif turno_nome == 'Noite':
-                    chuva_prob_max = max(chuva_prob_max, 60)
-                    chuva_sum = max(chuva_sum, 0.5)
+                    chuva_prob_max = max(chuva_prob_max, 75 if sev_alerta == 'Amarelo' else 85)
+                    rajada_max = max(rajada_max, 45)
+                    chuva_sum = max(chuva_sum, 6.0 if inea_tem_chuva_mod else 4.0)
+                    tempo_desc = "Chuva Moderada com Trovoadas e Rajadas"
+                    icon_name = "cloud-lightning"
                 elif turno_nome == 'Manhã':
-                    chuva_prob_max = max(chuva_prob_max, 40)
+                    chuva_prob_max = max(chuva_prob_max, 50)
+            elif day_idx == 1 and inea_tem_chuva_mod:
+                # Sexta-feira: passagem pós-frontal e transporte de umidade com declínio térmico
+                if turno_nome in ['Manhã', 'Tarde']:
+                    chuva_prob_max = max(chuva_prob_max, 75)
+                    chuva_sum = max(chuva_sum, 4.0)
+                    tempo_desc = "Céu nublado com pancadas de chuva e raios (Transporte de Umidade / Frente Fria)"
+                    icon_name = "cloud-rain"
+                elif turno_nome in ['Madrugada', 'Noite']:
+                    chuva_prob_max = max(chuva_prob_max, 65)
+                    chuva_sum = max(chuva_sum, 2.5)
+                    tempo_desc = "Chuva intermitente pós-frontal"
+                    icon_name = "cloud-rain" 
 
             # Se Marinha tiver aviso ativo
             if tem_aviso_marinha and day_idx == 0:
@@ -1761,34 +1802,68 @@ def run_auto_bulletin_pipeline():
     d2_faixa = d2.get('chuva_faixa_txt') or f"{d2['chuva_tot']:.1f} mm"
     d3_faixa = d3.get('chuva_faixa_txt') or f"{d3['chuva_tot']:.1f} mm"
 
-    sinopse_geral = (
-        f"A configuração sinótica sobre o município de Rio das Ostras e o setor costeiro da Bacia de Campos para o período de {periodo_str} "
-        f"é modulada pelo posicionamento da borda ocidental do Anticiclone Subtropical do Atlântico Sul (ASAS, isóbara central de ~1020-1022 hPa), "
-        f"mantendo gradiente bárico favorável ao escoamento contínuo de ventos de quadrante Nordeste a Leste na camada limite planetária (1000 a 850 hPa). "
-        f"Esse padrão de circulação zonal impõe advecção horizontal contínua de ar quente e úmido de origem marítima tropical em direção ao continente. "
-        f"Em médios níveis da troposfera (500 hPa), a propagação de perturbações ondulatórias baroclínicas (cavados de onda curta) gera advecção de "
-        f"vorticidade ciclônica relativa positiva, potencializando a convergência de massa em superfície acoplada à difluência térmica em altos níveis "
-        f"(250 hPa) associada ao ramo polar/subtropical do jato. O perfil térmico na superfície apresenta oscilação barométrica estável, com temperaturas "
-        f"oscilando entre mínima de {d0['t_min']:.0f}°C ao amanhecer (sob resfriamento radiativo noturno) e máxima diurna de {d0['t_max']:.0f}°C "
-        f"{prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), com precipitação diária prevista em {d0_faixa} ({d0_aviso_str}).\n\n"
-        f"O forte aquecimento diabático por radiação solar em superfície durante o ciclo diurno estabelece taxas de lapso superadiabáticas junto ao solo, "
-        f"promovendo forçamento termodinâmico ascensional e desestabilização vertical da troposfera. A conjugação entre elevado teor de água precipitável "
-        f"na coluna troposférica (PW de 38 a 42 mm aferida nos modelos numéricos), umidade relativa em superfície e expressiva disponibilidade de "
-        f"Energia Potencial Convectiva Disponível (índices CAPE moderados a altos, com erosão progressiva da inibição convectiva - CINE a partir da tarde) "
-        f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
-        f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
-        f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
-        f"na orla marítima). {jundia_frase_sinopse}\n\n"
-        f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas ECMWF, GFS e COSMO/INMET 12Z), projeta-se a passagem "
-        f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
-        f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
-        f"(rajadas regulares), com precipitação residual em declínio ({d1_faixa}, {d1_aviso_str}). "
-        f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), consolida-se estabilização troposférica com redução expressiva da cobertura de nuvens, "
-        f"predomínio de sol e volumes pluviométricos residuais ({d2_faixa}, {d2_aviso_str}), estendendo-se para {prep3} {d3['dia_semana'].lower()} ({d3['date_short']}) com manutenção de gradiente térmico estável e chuva residual estimada em {d3_faixa} ({d3_aviso_str}). No domínio oceanográfico costeiro (Área Delta - Farol de São Tomé a Cabo Frio, "
-        f"sob monitoramento do CHM/Marinha do Brasil), o estado do mar é caracterizado por ondas de 1,2 a 1,6 m formadas por vagas de vento sobrepostas a ondas de gravidade "
-        f"oceânicas superficiais (swell de E/SE), mantendo hidrodinâmica costeira favorável sem represamento de maré na desembocadura dos canais pluviais. "
-        f"A infraestrutura de telemetria meteorológica e hidrológica opera com processamento autônomo e contínuo 24h na nuvem, assegurando vigilância ininterrupta dos dados sinóticos municipais."
-    )
+    # Verificação dinâmica de Frente Fria e Ciclone Extratropical
+    tem_frente_fria = ('frente fria' in inea_prev_dia.get('condicao', '').lower() or
+                       any('frente fria' in n.get('titulo', '').lower() or 'ciclone' in n.get('titulo', '').lower() for n in inmet_noticias_data.get('noticias', [])) or
+                       d0.get('tem_alerta_inmet') or d1.get('tem_alerta_inmet'))
+
+    if tem_frente_fria:
+        p1 = (
+            f"A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de {periodo_str} "
+            f"é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, "
+            f"que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência "
+            f"de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas "
+            f"diurnas a até {d0['t_max']:.0f}°C {prep0} {d0['dia_semana'].lower()} ({d0['date_short']}). Em médios (500 hPa) e altos níveis (250 hPa), "
+            f"a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, "
+            f"promovendo convecção profunda com precipitação diária prevista em {d0_faixa} ({d0_aviso_str})."
+        )
+        p2 = (
+            f"O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível "
+            f"(índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical "
+            f"(Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e "
+            f"rajadas de vento descendentes convectivas (downbursts de até {max_rajada_geral:.0f} km/h na orla marítima). O Boletim Hidrometeorológico "
+            f"Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais "
+            f"de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. {jundia_frase_sinopse}"
+        )
+        p3 = (
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), "
+            f"na sexta-feira ({d1['date_short']}) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), "
+            f"determinando acentuado declínio de temperatura ({d1['t_min']:.0f}°C a {d1['t_max']:.0f}°C) e manutenção de chuva com raios ({d1_faixa}, {d1_aviso_str}). "
+            f"No sábado ({d2['date_short']}) e domingo ({d3['date_short']}), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo "
+            f"instável sob vigência de novos alertas meteorológicos do INMET ({d2_faixa} e {d3_faixa}). No domínio oceanográfico costeiro (Área Delta - "
+            f"CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de {mar_ondas} e aviso de vento forte, exigindo cautela na navegação e orla. "
+            f"A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem."
+        )
+        sinopse_geral = f"{p1}\n\n{p2}\n\n{p3}"
+    else:
+        sinopse_geral = (
+            f"A configuração sinótica sobre o município de Rio das Ostras e o setor costeiro da Bacia de Campos para o período de {periodo_str} "
+            f"é modulada pelo posicionamento da borda ocidental do Anticiclone Subtropical do Atlântico Sul (ASAS, isóbara central de ~1020-1022 hPa), "
+            f"mantendo gradiente bárico favorável ao escoamento contínuo de ventos de quadrante Nordeste a Leste na camada limite planetária (1000 a 850 hPa). "
+            f"Esse padrão de circulação zonal impõe advecção horizontal contínua de ar quente e úmido de origem marítima tropical em direção ao continente. "
+            f"Em médios níveis da troposfera (500 hPa), a propagação de perturbações ondulatórias baroclínicas (cavados de onda curta) gera advecção de "
+            f"vorticidade ciclônica relativa positiva, potencializando a convergência de massa em superfície acoplada à difluência térmica em altos níveis "
+            f"(250 hPa) associada ao ramo polar/subtropical do jato. O perfil térmico na superfície apresenta oscilação barométrica estável, com temperaturas "
+            f"oscilando entre mínima de {d0['t_min']:.0f}°C ao amanhecer (sob resfriamento radiativo noturno) e máxima diurna de {d0['t_max']:.0f}°C "
+            f"{prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), com precipitação diária prevista em {d0_faixa} ({d0_aviso_str}).\n\n"
+            f"O forte aquecimento diabático por radiação solar em superfície durante o ciclo diurno estabelece taxas de lapso superadiabáticas junto ao solo, "
+            f"promovendo forçamento termodinâmico ascensional e desestabilização vertical da troposfera. A conjugação entre elevado teor de água precipitável "
+            f"na coluna troposférica (PW de 38 a 42 mm aferida nos modelos numéricos), umidade relativa em superfície e expressiva disponibilidade de "
+            f"Energia Potencial Convectiva Disponível (índices CAPE moderados a altos, com erosão progressiva da inibição convectiva - CINE a partir da tarde) "
+            f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
+            f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
+            f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
+            f"na orla marítima). {jundia_frase_sinopse}\n\n"
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas ECMWF, GFS e COSMO/INMET 12Z), projeta-se a passagem "
+            f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
+            f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
+            f"(rajadas regulares), com precipitação residual em declínio ({d1_faixa}, {d1_aviso_str}). "
+            f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), consolida-se estabilização troposférica com redução expressiva da cobertura de nuvens, "
+            f"predomínio de sol e volumes pluviométricos residuais ({d2_faixa}, {d2_aviso_str}), estendendo-se para {prep3} {d3['dia_semana'].lower()} ({d3['date_short']}) com manutenção de gradiente térmico estável e chuva residual estimada em {d3_faixa} ({d3_aviso_str}). No domínio oceanográfico costeiro (Área Delta - Farol de São Tomé a Cabo Frio, "
+            f"sob monitoramento do CHM/Marinha do Brasil), o estado do mar é caracterizado por ondas de 1,2 a 1,6 m formadas por vagas de vento sobrepostas a ondas de gravidade "
+            f"oceânicas superficiais (swell de E/SE), mantendo hidrodinâmica costeira favorável sem represamento de maré na desembocadura dos canais pluviais. "
+            f"A infraestrutura de telemetria meteorológica e hidrológica opera com processamento autônomo e contínuo 24h na nuvem, assegurando vigilância ininterrupta dos dados sinóticos municipais."
+        )
 
     # Cards dos 3 Dias
     dias_resumo = []

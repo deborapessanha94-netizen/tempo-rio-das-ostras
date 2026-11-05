@@ -1018,6 +1018,17 @@ def run_daily_collection():
     except Exception as e:
         print(f"   [AVISO] Falha ao coletar Boletim Hidrometeorológico INEA: {e}")
 
+    # Coleta Notícias e Destaques do Portal INMET
+    try:
+        try:
+            from scripts.inmet_noticias_service import fetch_inmet_noticias
+        except ImportError:
+            from inmet_noticias_service import fetch_inmet_noticias
+        print(">> [6/7] Coletando Notícias e Destaques do Portal INMET...")
+        fetch_inmet_noticias()
+    except Exception as e:
+        print(f"   [AVISO] Falha ao coletar Notícias INMET: {e}")
+
     # Gera a previsão e o boletim oficial para os 3 dias a partir de hoje
     try:
         try:

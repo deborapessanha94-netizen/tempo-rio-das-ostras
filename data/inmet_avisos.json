@@ -1,16 +1,16 @@
 [
   {
-    "id": 56260,
+    "id": 56290,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_nome": "Amarelo",
     "cor_badge": "Alerta Amarelo • Perigo Potencial",
     "cor_hex": "#EAB308",
     "eh_direto_ostras": true,
-    "inicio": "2026-11-03 09:25",
-    "fim": "2026-11-03 23:59",
-    "inicio_formatado": "03/11/2026 às 09:25",
-    "fim_formatado": "03/11/2026 às 23:59",
+    "inicio": "2026-11-05 08:58",
+    "fim": "2026-11-05 23:59",
+    "inicio_formatado": "05/11/2026 às 08:58",
+    "fim_formatado": "05/11/2026 às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -19,20 +19,40 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Rio Grande do Sul,Acre,São Paulo,Espírito Santo,Pará,Mato Grosso do Sul,Tocantins,Mato Grosso,Roraima,Rondônia,Amazonas,Rio de Janeiro,Distrito Federal,Bahia"
+    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,São Paulo,Espírito Santo,Mato Grosso do Sul,Mato Grosso,Rio de Janeiro,Distrito Federal"
   },
   {
-    "id": 56262,
+    "id": 56291,
+    "descricao": "Ventos Costeiros",
+    "severidade": "Perigo Potencial",
+    "cor_nome": "Amarelo",
+    "cor_badge": "Alerta Amarelo • Perigo Potencial",
+    "cor_hex": "#EAB308",
+    "eh_direto_ostras": true,
+    "inicio": "2026-11-05 10:00",
+    "fim": "2026-11-05 23:59",
+    "inicio_formatado": "05/11/2026 às 10:00",
+    "fim_formatado": "05/11/2026 às 23:59",
+    "riscos": [
+      "Intensificação dos ventos nas regiões litorâneas, movimentando dunas de areia sobre construções na orla."
+    ],
+    "instrucoes": [
+      "Contate a Defesa Civil (telefone: 199)."
+    ],
+    "estados": "Rio de Janeiro,São Paulo"
+  },
+  {
+    "id": 56278,
     "descricao": "Tempestade",
     "severidade": "Perigo Potencial",
     "cor_nome": "Amarelo",
     "cor_badge": "Alerta Amarelo • Perigo Potencial",
     "cor_hex": "#EAB308",
     "eh_direto_ostras": true,
-    "inicio": "2026-11-04 00:00",
-    "fim": "2026-11-04 23:59",
-    "inicio_formatado": "04/11/2026 às 00:00",
-    "fim_formatado": "04/11/2026 às 23:59",
+    "inicio": "2026-11-07 00:01",
+    "fim": "2026-11-07 23:59",
+    "inicio_formatado": "07/11/2026 às 00:01",
+    "fim_formatado": "07/11/2026 às 23:59",
     "riscos": [
       "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
     ],
@@ -41,6 +61,48 @@
       "Evite usar aparelhos eletrônicos ligados à tomada. ",
       "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
     ],
-    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Pará,Tocantins,Maranhão,Rio Grande do Sul,São Paulo,Espírito Santo,Mato Grosso,Mato Grosso do Sul,Roraima,Rondônia,Amazonas,Rio de Janeiro,Acre,Bahia"
+    "estados": "Goiás,Minas Gerais,Paraná,Santa Catarina,Mato Grosso,São Paulo,Mato Grosso do Sul,Rio Grande do Sul,Rio de Janeiro,Distrito Federal,Bahia"
+  },
+  {
+    "id": 56282,
+    "descricao": "Tempestade",
+    "severidade": "Perigo Potencial",
+    "cor_nome": "Amarelo",
+    "cor_badge": "Alerta Amarelo • Perigo Potencial",
+    "cor_hex": "#EAB308",
+    "eh_direto_ostras": true,
+    "inicio": "2026-11-08 00:01",
+    "fim": "2026-11-08 23:59",
+    "inicio_formatado": "08/11/2026 às 00:01",
+    "fim_formatado": "08/11/2026 às 23:59",
+    "riscos": [
+      "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos."
+    ],
+    "instrucoes": [
+      "Em caso de rajadas de vento: (não se abrigue debaixo de árvores, pois há leve risco de queda e descargas elétricas e não estacione veículos próximos a torres de transmissão e placas de propaganda). ",
+      "Evite usar aparelhos eletrônicos ligados à tomada. ",
+      "Obtenha mais informações junto à Defesa Civil (telefone 199) e ao Corpo de Bombeiros (telefone 193)."
+    ],
+    "estados": "Goiás,Minas Gerais,Espírito Santo,Mato Grosso,Mato Grosso do Sul,São Paulo,Rio de Janeiro,Distrito Federal,Bahia"
+  },
+  {
+    "id": 56281,
+    "descricao": "Declínio de Temperatura",
+    "severidade": "Perigo Potencial",
+    "cor_nome": "Amarelo",
+    "cor_badge": "Alerta Amarelo • Perigo Potencial",
+    "cor_hex": "#EAB308",
+    "eh_direto_ostras": false,
+    "inicio": "2026-11-08 00:00",
+    "fim": "2026-11-08 23:59",
+    "inicio_formatado": "08/11/2026 às 00:00",
+    "fim_formatado": "08/11/2026 às 23:59",
+    "riscos": [
+      "Leve risco à saúde. Declínio entre 3ºC e 5ºC."
+    ],
+    "instrucoes": [
+      "Contate a Defesa Civil (telefone: 199)."
+    ],
+    "estados": "Paraná,Santa Catarina,Rio Grande do Sul,São Paulo,Mato Grosso do Sul,Minas Gerais,Rio de Janeiro"
   }
 ]
