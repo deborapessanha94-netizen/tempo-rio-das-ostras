@@ -2,7 +2,7 @@
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
   "data_boletim": "05/11/2026",
-  "atualizacao": "05/11/2026 16:32",
+  "atualizacao": "05/11/2026 18:19",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -31,18 +31,16 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "MUITO ALTO": 5,
-          "ALTO": 65,
-          "MODERADO": 21,
+          "MUITO ALTO": 9,
+          "ALTO": 82,
           "SEM DADOS": 1
         }
       },
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "MODERADO": 62,
-          "ALTO": 14,
-          "BAIXO": 15,
+          "MODERADO": 69,
+          "ALTO": 22,
           "SEM DADOS": 1
         }
       }
@@ -130,11 +128,11 @@
       },
       "campos-dos-goytacazes": {
         "nome": "CAMPOS DOS GOYTACAZES",
-        "fill": "#ffe510",
-        "nivel": "MODERADO",
-        "status": "Atenção",
-        "badge": "warning",
-        "cor_hex": "#d97706"
+        "fill": "#fd7e14",
+        "nivel": "ALTO",
+        "status": "Alerta",
+        "badge": "danger",
+        "cor_hex": "#ea580c"
       }
     }
   },
