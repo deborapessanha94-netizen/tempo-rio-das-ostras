@@ -2551,26 +2551,24 @@ function applyLiveStationsOverlay(rawData) {
     const code = st?.codigo;
     if (code && overlay[code]) {
       const ov = overlay[code];
-      if (st.categoria === 'cemaden') {
-        const c24 = Math.max(Number(st.chuva_24h || 0), Number(ov.chuva_24h || 0));
-        const c36 = Math.max(c24, Number(st.chuva_36h || 0), Number(ov.chuva_36h || 0));
-        const c48 = Math.max(c36, Number(st.chuva_48h || 0), Number(ov.chuva_48h || 0));
-        const c96 = Math.max(c48, Number(st.chuva_96h || 0), Number(ov.chuva_96h || 0));
-        return {
-          ...st,
-          ...ov,
-          inicio_chuva_hoje: ov.inicio_chuva_hoje || st.inicio_chuva_hoje || null,
-          chuva_hoje: Math.max(Number(st.chuva_hoje || 0), Number(ov.chuva_hoje || 0)),
-          chuva_24h: c24,
-          chuva_36h: c36,
-          chuva_48h: c48,
-          chuva_96h: c96
-        };
-      }
+      const c24 = Math.max(Number(st.chuva_24h || 0), Number(ov.chuva_24h || 0), Number(ov.chuva_hoje || 0));
+      const c36 = Math.max(c24, Number(st.chuva_36h || 0), Number(ov.chuva_36h || 0));
+      const c48 = Math.max(c36, Number(st.chuva_48h || 0), Number(ov.chuva_48h || 0));
+      const c96 = Math.max(c48, Number(st.chuva_96h || 0), Number(ov.chuva_96h || 0));
+
       return {
         ...st,
         ...ov,
         inicio_chuva_hoje: ov.inicio_chuva_hoje || st.inicio_chuva_hoje || null,
+        chuva_hoje: Math.max(Number(st.chuva_hoje || 0), Number(ov.chuva_hoje || 0)),
+        chuva_1h: (ov.chuva_1h !== undefined && ov.chuva_1h !== null && Number(ov.chuva_1h) > 0) ? Number(ov.chuva_1h) : Number(st.chuva_1h || 0),
+        chuva_4h: (ov.chuva_4h !== undefined && ov.chuva_4h !== null && Number(ov.chuva_4h) > 0) ? Number(ov.chuva_4h) : Number(st.chuva_4h || 0),
+        chuva_6h: (ov.chuva_6h !== undefined && ov.chuva_6h !== null && Number(ov.chuva_6h) > 0) ? Number(ov.chuva_6h) : Number(st.chuva_6h || 0),
+        chuva_12h: (ov.chuva_12h !== undefined && ov.chuva_12h !== null && Number(ov.chuva_12h) > 0) ? Number(ov.chuva_12h) : Number(st.chuva_12h || 0),
+        chuva_24h: c24,
+        chuva_36h: c36,
+        chuva_48h: c48,
+        chuva_96h: c96,
         vento_max_hoje: ov.vento_max_hoje ?? st.vento_max_hoje ?? null,
         hora_vento_max_hoje: ov.hora_vento_max_hoje || st.hora_vento_max_hoje || null,
         rajada_max_hoje: ov.rajada_max_hoje ?? st.rajada_max_hoje ?? null,
