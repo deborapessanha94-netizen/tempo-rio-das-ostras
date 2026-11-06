@@ -1,9 +1,21 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-06 18:52:49",
+  "coleta_iso": "2026-11-06 21:35:52",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para sábado (7), domingo (8) e segunda-feira (9)",
+      "data": "06/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-7-domingo-8-e-segunda-feira-9",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa da celebração dos 56 anos do INPE em Cachoeira Paulista (SP)",
+      "data": "06/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-da-celebração-dos-56-anos-do-inpe-em-cachoeira-paulista-sp",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para sexta-feira (6) e Sábado (7)",
       "data": "05/11/2026",
@@ -50,18 +62,6 @@
       "titulo": "INMET divulga previsão para semana de 03 a 10 de novembro de 2026",
       "data": "03/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-03-a-10-de-novembro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Painel El Niño: Boletim de outubro é divulgado",
-      "data": "29/10/2026",
-      "url": "https://portal.inmet.gov.br/noticias/painel-el-niño-boletim-de-outubro-é-divulgado",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sexta-feira (30), sábado (31), domingo (1) e segunda-feira (2)",
-      "data": "29/10/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-30-sábado-31-domingo-1-e-segunda-feira-2",
       "relevancia_sudeste": false
     }
   ]
