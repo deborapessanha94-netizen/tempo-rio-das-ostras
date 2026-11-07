@@ -1,9 +1,9 @@
 {
-  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 798/2026)",
+  "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 802/2026)",
   "badge": "VENTO FORTE",
   "badge_tipo": "warning",
   "aviso_ativo": true,
-  "aviso_numero": "798/2026",
+  "aviso_numero": "802/2026",
   "aviso_tipo": "VENTO FORTE",
   "mar_ondas": "2,0 a 2,5 m (Agitado)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",

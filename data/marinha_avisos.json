@@ -1,10 +1,10 @@
 {
   "aviso_ativo": true,
-  "numero": "798/2026",
+  "numero": "802/2026",
   "tipo": "VENTO FORTE",
   "area": "Área DELTA (Macaé a Cabo Frio e Bacia Oceânica)",
-  "forca": "FORÇA 7 BEAUFORT",
-  "rajadas": "50 a 61 km/h (Força 7)",
+  "forca": "NW/SW FORÇA 7 COM RAJADAS FORÇA 8",
+  "rajadas": "62 a 74 km/h (Força 7/8)",
   "inicio_utc": "2026-11-08T09:00:00+00:00",
   "fim_utc": "2026-11-09T09:00:00+00:00",
   "inicio": "08/11 às 06:00h",
@@ -12,16 +12,16 @@
   "inicio_formatado": "08/11 às 06:00h",
   "fim_formatado": "09/11 às 06:00h",
   "emissao": null,
-  "validade": "Avisos nº 798/2026 válidos a partir de 08/11 às 06:00h até 09/11 às 06:00h",
+  "validade": "Avisos nº 802/2026 válidos a partir de 08/11 às 06:00h até 09/11 às 06:00h",
   "mar_ondas": "2,0 a 2,5 m (Agitado)",
   "restricao": "Atenção a pescadores, navegantes e banhistas na Área Delta: vento Força 7 com rajadas Força 8 de até 74 km/h (Força 7/8) e ondas de 2,0 a 2,5 m (Agitado), válidos a partir de 08/11 às 06:00h até 09/11 às 06:00h.",
   "avisos_ativos": [
     {
-      "numero": "798/2026",
+      "numero": "802/2026",
       "tipo": "VENTO FORTE",
       "area": "Área DELTA",
-      "forca": "FORÇA 7 BEAUFORT",
-      "rajadas": "50 a 61 km/h (Força 7)",
+      "forca": "NW/SW FORÇA 7 COM RAJADAS FORÇA 8",
+      "rajadas": "62 a 74 km/h (Força 7/8)",
       "mar_ondas": "2,0 a 2,5 m (Agitado)",
       "ondas": "2,0 a 2,5 m (Agitado)",
       "inicio_utc": "2026-11-08T09:00:00Z",
@@ -29,9 +29,9 @@
       "inicio_br": "08/11 às 06:00h",
       "fim_br": "09/11 às 06:00h",
       "periodo": "De 08/11 às 06:00h até 09/11 às 06:00h",
-      "validade": "Aviso nº 798/2026 válido até 09/11 às 06:00h",
+      "validade": "Aviso nº 802/2026 válido até 09/11 às 06:00h",
       "restricao": "Atenção a pescadores, navegantes e banhistas na orla costeira.",
-      "texto": "AVISO NR 798/2026 AVISO DE VENTO FORTE/MUITO FORTE EMITIDO ÀS 1300Z - SEX - 06/NOV/2026 ÁREA COSTEIRA ENTRE ARRAIAL DO CABO/RJ E MARATAÍZES/ES ATÉ 320MN DA COSTA A PARTIR DE 080900Z. VENTO NE/NW RONDANDO PARA SW/SE, FORÇA 7/8. VÁLIDO ATÉ 090900Z."
+      "texto": "AVISO NR 802/2026 AVISO DE VENTO FORTE/MUITO FORTE EMITIDO ÀS 071400 UTC NOV 2026 ÁREA COSTEIRA ENTRE ARRAIAL DO CABO/RJ E SÃO MATEUS/ES ATÉ 320MN DA COSTA A PARTIR DE 080900Z. VENTO SW/S FORÇA 7 COM RAJADAS FORÇA 8. VÁLIDO ATÉ 090900Z. ESTE AVISO SUBSTITUI O AVISO NR 798/2026."
     }
   ],
   "cartas_sinoticas": [
