@@ -1,20 +1,68 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-08 23:08:12",
-  "total_noticias": 2,
+  "coleta_iso": "2026-11-08 23:38:00",
+  "total_noticias": 10,
   "noticias": [
     {
-      "titulo": "Previsão aponta avanço de frente fria e temporais com queda de temperatura no Sudeste",
-      "data": "08/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias",
+      "titulo": "Previsão para sábado (7), domingo (8) e segunda-feira (9)",
+      "data": "06/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-7-domingo-8-e-segunda-feira-9",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa da celebração dos 56 anos do INPE em Cachoeira Paulista (SP)",
+      "data": "06/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-da-celebração-dos-56-anos-do-inpe-em-cachoeira-paulista-sp",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para sexta-feira (6) e Sábado (7)",
+      "data": "05/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-6-e-sábado-7",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa de evento internacional sobre sustentabilidade espacial em Brasília",
+      "data": "05/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-evento-internacional-sobre-sustentabilidade-espacial-em-brasília",
       "relevancia_sudeste": true
     },
     {
-      "titulo": "Informativo Meteorológico Semanal: Ciclone e frente fria organizam canal de umidade",
-      "data": "08/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias",
+      "titulo": "Previsão para quinta-feira (5) e sexta-feira (6)",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-5-e-sexta-feira-6",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Temperaturas elevadas e irregularidade das chuvas mantêm a demanda hídrica elevada no MATOPIBA",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temperaturas-elevadas-e-irregularidade-das-chuvas-mantêm-a-demanda-hídrica-elevada-no-matopiba",
       "relevancia_sudeste": true
+    },
+    {
+      "titulo": "Temperatura tem elevação de 6,2 °C em apenas 2 horas na manhã dessa quarta (04) em Brasília",
+      "data": "04/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temperatura-tem-elevação-de-6-2-c-em-apenas-2-horas-na-manhã-dessa-quarta-04-em-brasília",
+      "relevancia_sudeste": true
+    },
+    {
+      "titulo": "El Niño atinge anomalia recorde para outubro",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/el-niño-atinge-anomalia-recorde-para-outubro",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para quarta-feira (4) e quinta-feira (5)",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-4-e-quinta-feira-5",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET divulga previsão para semana de 03 a 10 de novembro de 2026",
+      "data": "03/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-03-a-10-de-novembro-de-2026",
+      "relevancia_sudeste": false
     }
   ]
 }
