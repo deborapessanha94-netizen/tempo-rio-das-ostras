@@ -142,22 +142,12 @@
 
 
 
-        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-
-
-
+        // Padrão do site é SEMPRE a Paleta Nórdica Clara Oficial (#f4f1ea)
+        // Só ativa o tema escuro se o usuário tiver explicitamente escolhido 'dark'
+        if (savedTheme === 'dark') {
           document.documentElement.classList.add('dark');
-
-
-
         } else {
-
-
-
           document.documentElement.classList.remove('dark');
-
-
-
         }
 
 
@@ -186,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=189">
+  <link rel="stylesheet" href="css/styles.css?v=190">
 
 
 
@@ -10610,32 +10600,47 @@
           </div>
         </div>
 
-        <!-- Linha 2: Pílulas de Horizonte de Tempo em 1 Toque -->
-        <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-[11px] font-black text-black shrink-0">Horizonte:</span>
-            <button id="social-hz-btn-hoje" onclick="setSocialHorizon('hoje')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
-              Hoje
+        <!-- Linha 2: Digitação Direta do Horizonte de Horas (Sem opções fixas - Cálculo na hora sob demanda) -->
+        <div class="flex items-center justify-between gap-2.5 flex-wrap pt-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <label for="social-custom-hours-input" class="text-xs font-black text-black shrink-0 flex items-center gap-1.5">
+              <i data-lucide="clock" class="w-4 h-4 text-[#ea580c]"></i>
+              <span>Digite o horizonte:</span>
+            </label>
+            <div class="flex items-center gap-1.5 bg-white border-2 border-[#cbd5e1] focus-within:border-[#f07a53] px-3 py-1.5 rounded-xl shadow-xs transition">
+              <input 
+                type="number" 
+                id="social-custom-hours-input" 
+                min="1" 
+                max="96" 
+                step="1"
+                value="24"
+                placeholder="24" 
+                class="w-14 sm:w-16 bg-transparent text-sm font-black font-mono text-black outline-none text-center" 
+                oninput="handleSocialHoursInput(this.value)"
+                onchange="handleSocialHoursInput(this.value)"
+                title="Digite qualquer quantidade de horas (ex: 3, 6, 15, 24, 48...)"
+              />
+              <span class="text-xs font-black text-black/80">horas</span>
+            </div>
+            <button type="button" id="social-btn-toggle-hoje" onclick="toggleSocialHoje()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5" title="Calcular acumulado desde 00:00 de hoje">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+              <span>Hoje (desde 00h)</span>
             </button>
-            <button id="social-hz-btn-12h" onclick="setSocialHorizon('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
-              12h
+          </div>
+
+          <!-- Seletor de Tema do Card do Instagram (Oficial Nórdica Clara vs Noturna) -->
+          <div class="flex items-center gap-1 bg-[#eaeff2] p-1 rounded-xl border border-[#cbd5e1] shadow-2xs">
+            <button type="button" id="social-theme-btn-nordic" onclick="setSocialCardTheme('nordic')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Paleta Nórdica Clara Oficial do Site">
+              <span>🎨 Nórdica Clara</span>
             </button>
-            <button id="social-hz-btn-24h" onclick="setSocialHorizon('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer transition">
-              24h
-            </button>
-            <button id="social-hz-btn-36h" onclick="setSocialHorizon('36h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
-              36h
-            </button>
-            <button id="social-hz-btn-48h" onclick="setSocialHorizon('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
-              48h
-            </button>
-            <button id="social-hz-btn-96h" onclick="setSocialHorizon('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer transition">
-              96h
+            <button type="button" id="social-theme-btn-dark" onclick="setSocialCardTheme('dark')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Paleta Noturna Oceânica">
+              <span>🌙 Noturna</span>
             </button>
           </div>
 
           <!-- Drawer Recolhível de Seleção de Estações -->
-          <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1 px-2.5 rounded-lg bg-[#ffebe4]/60 hover:bg-[#ffebe4] border border-[#f07a53]/30 transition shrink-0">
+          <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1.5 px-3 rounded-xl bg-[#ffebe4]/70 hover:bg-[#ffebe4] border border-[#f07a53]/40 transition shrink-0 shadow-2xs">
             <span id="social-selected-count">10 de 10 selecionadas</span>
             <i id="social-chips-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#ea580c] transition-transform duration-200"></i>
           </button>
@@ -10677,121 +10682,6 @@
           </button>
           <button type="button" id="social-download-main-btn" onclick="downloadSocialCurrentFormat()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs hover:bg-[#ffd9cb] active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition">
             <i data-lucide="download" class="w-4 h-4 text-black"></i>
-            <span>Baixar Post Feed (1080x1350)</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-        <button type="button" onclick="closeSocialModalChuva()" class="p-2 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 cursor-pointer transition shrink-0" title="Fechar modal">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Barra de Controles e Filtros Rápidos (Otimizada para Celular) -->
-      <div class="p-3 sm:p-4 bg-[#0a1931]/70 border-b border-slate-800 space-y-2.5 text-xs shrink-0">
-        
-        <!-- Linha 1: Seletor Segmentado de Formato & Ações Rápidas -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <!-- Formato (Segmented Touch Targets) -->
-          <div class="flex items-center gap-1.5 p-1 bg-[#020b18]/80 rounded-2xl border border-slate-700/60 w-full sm:w-auto" role="tablist">
-            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-gradient-to-r from-[#0284c7] to-[#00c2ff] text-white shadow-md border border-cyan-400/40 cursor-pointer flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="square" class="w-3.5 h-3.5"></i>
-              <span>Post Feed (4:5)</span>
-            </button>
-            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
-              <span>Stories (9:16)</span>
-            </button>
-          </div>
-
-          <!-- Filtro Rápido de Estações (Todas vs Ativas + Atualizar) -->
-          <div class="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
-            <div class="flex items-center gap-1.5">
-              <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-gradient-to-r from-[#ea580c] to-[#f97316] text-white shadow-md border border-orange-400/50 cursor-pointer flex items-center gap-1">
-                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                <span>Todas (10)</span>
-              </button>
-              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer flex items-center gap-1">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span>Apenas Ativas</span>
-              </button>
-            </div>
-            <button type="button" onclick="refreshSocialStationsData()" class="p-2 rounded-xl bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700 cursor-pointer transition flex items-center justify-center" title="Atualizar dados em tempo real">
-              <i id="social-refresh-icon" data-lucide="refresh-cw" class="w-3.5 h-3.5 text-cyan-400"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Linha 2: Pílulas de Horizonte de Tempo em 1 Toque (Sem necessidade de digitação móvel) -->
-        <div class="flex items-center justify-between gap-2 flex-wrap pt-1">
-          <div class="flex items-center gap-1.5 flex-wrap">
-            <span class="text-[11px] font-bold text-slate-400 shrink-0">Horizonte:</span>
-            <button id="social-hz-btn-hoje" onclick="setSocialHorizon('hoje')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition">
-              Hoje
-            </button>
-            <button id="social-hz-btn-12h" onclick="setSocialHorizon('12h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition">
-              12h
-            </button>
-            <button id="social-hz-btn-24h" onclick="setSocialHorizon('24h')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#0284c7] text-white border border-[#38bdf8] shadow-sm cursor-pointer transition">
-              24h
-            </button>
-            <button id="social-hz-btn-36h" onclick="setSocialHorizon('36h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition">
-              36h
-            </button>
-            <button id="social-hz-btn-48h" onclick="setSocialHorizon('48h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition">
-              48h
-            </button>
-            <button id="social-hz-btn-96h" onclick="setSocialHorizon('96h')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 hover:bg-slate-700 border border-slate-700 cursor-pointer transition">
-              96h
-            </button>
-          </div>
-
-          <!-- Drawer Recolhível de Seleção de Estações -->
-          <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 cursor-pointer py-1 px-2 rounded-lg hover:bg-white/5 transition shrink-0">
-            <span id="social-selected-count">10 de 10 selecionadas</span>
-            <i id="social-chips-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200"></i>
-          </button>
-        </div>
-
-        <!-- Drawer Recolhível: Chips das Estações (Não empurra a tela no celular) -->
-        <div id="social-chips-drawer" class="hidden pt-2 border-t border-slate-800 max-h-32 overflow-y-auto">
-          <div id="social-station-chips" class="flex items-center gap-1.5 flex-wrap">
-            <!-- Chips gerados dinamicamente via JS -->
-          </div>
-        </div>
-      </div>
-
-      <!-- Corpo do Modal: Área de Pré-visualização Centralizada e Fluida -->
-      <div id="social-preview-container" class="flex-1 overflow-y-auto p-2 sm:p-4 bg-[#020b18] flex flex-col items-center justify-center min-h-[220px] max-h-[50vh] sm:max-h-[56vh] border-y border-slate-800/90">
-        <div class="relative max-w-full max-h-full my-auto flex items-center justify-center">
-          <img 
-            id="social-preview-image" 
-            src="" 
-            alt="Pré-visualização do Card Oficial para Instagram" 
-            class="max-h-[46vh] sm:max-h-[52vh] w-auto max-w-full rounded-xl shadow-2xl border border-slate-800 object-contain transition duration-150"
-          />
-        </div>
-        <p class="text-[10px] sm:text-[11px] font-medium text-slate-400 mt-2 flex items-center gap-1.5 shrink-0">
-          <i data-lucide="eye" class="w-3.5 h-3.5 text-cyan-400"></i>
-          <span>Resolução oficial 1080px • Sem vento • Sincronizado com as 10 estações</span>
-        </p>
-      </div>
-
-      <!-- Rodapé de Ações do Modal (Botão Grande e Acessível para Polegar no Mobile) -->
-      <div class="px-4 py-3 bg-[#0a1931] border-t border-slate-800 flex items-center justify-between gap-3 text-xs flex-wrap shrink-0">
-        <span class="text-slate-400 font-medium hidden sm:inline">
-          Canal Oficial: <strong class="text-white font-extrabold">@tempoemriodasostras</strong>
-        </span>
-
-        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-          <button type="button" onclick="closeSocialModalChuva()" class="px-4 py-2.5 rounded-xl font-bold text-slate-300 hover:bg-slate-800 border border-slate-700 cursor-pointer transition">
-            Fechar
-          </button>
-          <button type="button" id="social-download-main-btn" onclick="downloadSocialCurrentFormat()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-gradient-to-r from-[#ea580c] to-[#f97316] text-white shadow-lg hover:brightness-110 active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition">
-            <i data-lucide="download" class="w-4 h-4 text-white"></i>
             <span>Baixar Post Feed (1080x1350)</span>
           </button>
         </div>
@@ -11042,7 +10932,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=189"></script>
+  <script type="module" src="js/app.js?v=190"></script>
 
 
 

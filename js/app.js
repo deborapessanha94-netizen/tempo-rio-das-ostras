@@ -12463,51 +12463,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  if (window.matchMedia) {
-
-
-
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-
-
-
-      if (!localStorage.getItem('theme')) {
-
-
-
-        if (e.matches) {
-
-
-
-          document.documentElement.classList.add('dark');
-
-
-
-        } else {
-
-
-
-          document.documentElement.classList.remove('dark');
-
-
-
-        }
-
-
-
-        window.updateThemeIcon(e.matches);
-
-
-
-      }
-
-
-
-    });
-
-
-
-  }
+  // Não altera o tema automaticamente pelo SO: o padrão oficial é sempre a Paleta Nórdica Clara
+  // Usuário escolhe explicitamente quando desejar no botão de tema da barra superior.
 
 
 
