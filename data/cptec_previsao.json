@@ -51,27 +51,9 @@
     "umidade": 70,
     "temperatura_prev": "30",
     "sensacao_termica": "27",
-    "hora_atual": "2026-11-07T23:00:00.000Z"
+    "hora_atual": "2026-11-08T01:00:00.000Z"
   },
   "proximos_dias": [
-    {
-      "data_atual": "08",
-      "semana_dia": "Dom",
-      "probabilidade_chuva": 95,
-      "temperatura_max": "27",
-      "temperatura_min": "20",
-      "umidade": 79,
-      "indice_uv": 13
-    },
-    {
-      "data_atual": "09",
-      "semana_dia": "Seg",
-      "probabilidade_chuva": 70,
-      "temperatura_max": "23",
-      "temperatura_min": "19",
-      "umidade": 68,
-      "indice_uv": 13
-    },
     {
       "data_atual": "10",
       "semana_dia": "Ter",
@@ -107,6 +89,24 @@
       "temperatura_min": "20",
       "umidade": 74,
       "indice_uv": 13
+    },
+    {
+      "data_atual": "14",
+      "semana_dia": "Sáb",
+      "probabilidade_chuva": null,
+      "temperatura_max": null,
+      "temperatura_min": null,
+      "umidade": null,
+      "indice_uv": null
+    },
+    {
+      "data_atual": "15",
+      "semana_dia": "Dom",
+      "probabilidade_chuva": null,
+      "temperatura_max": null,
+      "temperatura_min": null,
+      "umidade": null,
+      "indice_uv": null
     }
   ],
   "meteograma_multimodel": {

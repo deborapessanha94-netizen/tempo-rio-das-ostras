@@ -13,23 +13,23 @@
     {
       "key": "d0",
       "rotulo": "Hoje",
-      "data_iso": "2026-11-07",
-      "data_br": "07/11",
-      "dia_semana": "Sábado"
-    },
-    {
-      "key": "d1",
-      "rotulo": "Amanhã",
       "data_iso": "2026-11-08",
       "data_br": "08/11",
       "dia_semana": "Domingo"
     },
     {
-      "key": "d2",
-      "rotulo": "Depois de amanhã",
+      "key": "d1",
+      "rotulo": "Amanhã",
       "data_iso": "2026-11-09",
       "data_br": "09/11",
       "dia_semana": "Segunda"
+    },
+    {
+      "key": "d2",
+      "rotulo": "Depois de amanhã",
+      "data_iso": "2026-11-10",
+      "data_br": "10/11",
+      "dia_semana": "Terça"
     }
   ],
   "praias_condicoes": [
@@ -390,7 +390,7 @@
   ],
   "tabua_resumo": {
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-    "data": "2026-11-07",
+    "data": "2026-11-08",
     "proxima_mare": null,
     "mares_do_dia": []
   }
