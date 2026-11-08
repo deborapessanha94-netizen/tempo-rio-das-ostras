@@ -2,7 +2,7 @@
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
   "data_boletim": "08/11/2026",
-  "atualizacao": "08/11/2026 05:03",
+  "atualizacao": "08/11/2026 12:04",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -10,7 +10,7 @@
     "municipio_id": 20,
     "municipio_nome": "Rio das Ostras",
     "risco_hidrologico": {
-      "nivel": "ALTO",
+      "nivel": "MODERADO",
       "status": "Atenção Hidrológica / Escoamento Pluvial",
       "badge": "warning",
       "cor_hex": "#d97706",
@@ -31,110 +31,108 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "MODERADO": 15,
-          "ALTO": 75,
-          "SEM DADOS": 1,
-          "MUITO ALTO": 1
+          "MODERADO": 81,
+          "ALTO": 10,
+          "SEM DADOS": 1
         }
       },
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "MODERADO": 59,
-          "ALTO": 31,
-          "SEM DADOS": 1,
-          "MUITO ALTO": 1
+          "MODERADO": 85,
+          "ALTO": 6,
+          "SEM DADOS": 1
         }
       }
     },
     "vizinhos_redec1": {
       "rio-das-ostras": {
         "nome": "RIO DAS OSTRAS",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "macae": {
         "nome": "MACAÉ",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "casimiro-de-abreu": {
         "nome": "CASIMIRO DE ABREU",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "cabo-frio": {
         "nome": "CABO FRIO",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "armacao-dos-buzios": {
         "nome": "ARMAÇÃO DOS BÚZIOS",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "arraial-do-cabo": {
         "nome": "ARRAIAL DO CABO",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "sao-pedro-da-aldeia": {
         "nome": "SÃO PEDRO DA ALDEIA",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "iguaba-grande": {
         "nome": "IGUABA GRANDE",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "araruama": {
         "nome": "ARARUAMA",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "saquarema": {
         "nome": "SAQUAREMA",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       },
       "campos-dos-goytacazes": {
         "nome": "CAMPOS DOS GOYTACAZES",
-        "fill": "#fd7e14",
-        "nivel": "ALTO",
-        "status": "Alerta",
-        "badge": "danger",
-        "cor_hex": "#ea580c"
+        "fill": "#ffe510",
+        "nivel": "MODERADO",
+        "status": "Atenção",
+        "badge": "warning",
+        "cor_hex": "#d97706"
       }
     }
   },
