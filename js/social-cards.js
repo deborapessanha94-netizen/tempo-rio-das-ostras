@@ -3,21 +3,32 @@
  * Sincronizado em tempo real com os valores exatos do site no momento da visualização/download.
  * Canal Oficial: @tempoemriodasostras
  *
- * v190:
- * - Paleta Nórdica Clara Oficial do site como padrão visual dos cards (com opção de modo noturno)
- * - Digitação direta de qualquer quantidade de horas com cálculo dinâmico na hora (sem opções fixas)
+ * v191:
+ * - Imagens SEPARADAS para CHUVA e para VENTOS & RAJADAS (Duas imagens oficiais distintas)
+ * - Card de Vento com ranking dos maiores ventos e maiores rajadas, direção, pódio resumo e horários
+ * - Paleta Nórdica Clara Oficial (#f4f1ea) como padrão visual em todos os dispositivos
+ * - Digitação direta de qualquer quantidade de horas para chuva e métricas rápidas para vento
  * - Download 100% compatível com celulares (Web Share API nativa, Blob URL e helper touch-and-hold)
  */
 
 export const socialState = {
   format: 'post', // 'post' (1080x1350) ou 'story' (1080x1920)
   cardTheme: 'nordic', // 'nordic' (Paleta Nórdica Clara Oficial) ou 'dark' (Noturna Oceânica)
+  activeTab: 'chuva', // 'chuva' (Acumulados) ou 'vento' (Maiores Ventos e Rajadas)
+
+  // Estados de Chuva:
   horizon: '24h',
   horizonHours: 24.0,
   isHoje: false,
   filterMode: 'all', // 'all' (todas as 10) ou 'active' (apenas ativas)
   selectedStationCodes: new Set(),
   stationFilterText: '',
+
+  // Estados de Vento & Rajadas:
+  windMetric: 'hoje', // 'hoje' (máximas do dia), '24h', 'agora'
+  windFilter: 'anemometer', // 'anemometer' (com sensor de vento) ou 'all' (todas as 10)
+
+  // Dados consolidados:
   stationsData: [],
   chipsDrawerOpen: false
 };
@@ -39,10 +50,9 @@ function isSocialModalOpen() {
 }
 
 /**
- * Retorna o vento e rajada da estação (mantido para compatibilidade e tabela comparativa do site)
+ * Retorna o vento e rajada da estação (para uso geral e tabela comparativa do site)
  */
 export function getStationWindAndGust(st, allStations) {
-  const stationsList = allStations || socialState.stationsData || [];
   const v = round1(st?.vento_atual, 0.0);
   const r = round1(st?.rajada_atual ?? v, v);
   return {
@@ -63,13 +73,6 @@ export function setSocialStationsData(data) {
   } else if (data.estacoes && Array.isArray(data.estacoes)) {
     socialState.stationsData = data.estacoes;
   }
-
-  if (socialState.selectedStationCodes.size === 0 && socialState.stationsData.length > 0) {
-    socialState.stationsData.forEach(s => {
-      if (s.codigo) socialState.selectedStationCodes.add(s.codigo);
-    });
-  }
-
   if (isSocialModalOpen()) {
     renderSocialStationChips();
     renderSocialCanvas();
@@ -77,410 +80,474 @@ export function setSocialStationsData(data) {
 }
 
 /**
- * Consulta o estado em tempo real das estações
+ * Sincroniza dados em tempo real a partir da memória ativa do site ou do JSON local
  */
-async function syncFromLiveSiteNow({ full = false } = {}) {
-  if (typeof window !== 'undefined' && typeof window.getLiveStationsForSocial === 'function') {
-    const liveData = window.getLiveStationsForSocial();
-    if (liveData) {
+export async function syncFromLiveSiteNow(full = false) {
+  try {
+    if (typeof window !== 'undefined' && typeof window.getLiveStationsForSocial === 'function') {
+      const liveData = window.getLiveStationsForSocial();
       if (Array.isArray(liveData) && liveData.length > 0) {
         socialState.stationsData = liveData;
-      } else if (Array.isArray(liveData.estacoes) && liveData.estacoes.length > 0) {
-        socialState.stationsData = liveData.estacoes;
+        return;
       }
     }
-  }
 
-  if (typeof window !== 'undefined' && typeof window.syncLiveStationsTelemetry === 'function') {
-    try {
+    if (typeof window !== 'undefined' && typeof window.syncLiveStationsTelemetry === 'function') {
       await window.syncLiveStationsTelemetry(true, !full);
       if (typeof window.getLiveStationsForSocial === 'function') {
         const refreshed = window.getLiveStationsForSocial();
-        if (refreshed) {
-          if (Array.isArray(refreshed) && refreshed.length > 0) {
-            socialState.stationsData = refreshed;
-          } else if (Array.isArray(refreshed.estacoes) && refreshed.estacoes.length > 0) {
-            socialState.stationsData = refreshed.estacoes;
-          }
+        if (Array.isArray(refreshed) && refreshed.length > 0) {
+          socialState.stationsData = refreshed;
+          return;
         }
       }
+    }
+
+    if (typeof window !== 'undefined' && window.state && Array.isArray(window.state.stationsData) && window.state.stationsData.length > 0) {
+      socialState.stationsData = window.state.stationsData;
       return;
-    } catch (e) {
-      console.warn('Aviso ao sincronizar telemetria para card social:', e);
     }
-  }
 
-  if (!socialState.stationsData || socialState.stationsData.length === 0) {
-    try {
-      const res = await fetch(`./data/acumulados_estacoes.json?t=${Date.now()}`, { cache: 'no-store' });
-      if (res.ok) {
-        const data = await res.json();
-        if (Array.isArray(data)) socialState.stationsData = data;
-        else if (Array.isArray(data?.estacoes)) socialState.stationsData = data.estacoes;
+    if (typeof window !== 'undefined' && window.state?.acumuladosDataset?.estacoes) {
+      socialState.stationsData = window.state.acumuladosDataset.estacoes;
+      return;
+    }
+
+    const res = await fetch(`./data/acumulados_estacoes.json?t=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) {
+      const json = await res.json();
+      if (Array.isArray(json?.estacoes)) {
+        socialState.stationsData = json.estacoes;
       }
-    } catch (e) {}
+    }
+  } catch (err) {
+    console.warn('[SocialCards] Falha ao sincronizar dados em tempo real:', err);
   }
 }
 
 /**
- * Parser inteligente de horizonte de tempo
+ * Extrai horizonte em horas a partir de texto digitado pelo usuário
  */
-function parseUserQuery(query) {
-  const clean = String(query || '').trim().toLowerCase();
-  if (!clean || clean === '24h' || clean === '24') {
-    return { isHorizon: true, hours: 24.0, horizonLabel: '24H', stationFilter: '' };
-  }
-  if (clean === 'hoje' || clean === 'diario' || clean === 'diário') {
-    return { isHorizon: true, hours: 24.0, horizonLabel: 'HOJE', stationFilter: '' };
-  }
+export function parseUserQuery(query) {
+  if (!query) return null;
+  const clean = String(query).toLowerCase().trim();
 
-  const dayMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:dias?|d)/i);
-  if (dayMatch) {
-    const dVal = parseFloat(dayMatch[1].replace(',', '.'));
-    const hVal = Math.round(dVal * 24 * 10) / 10;
-    const residual = clean.replace(dayMatch[0], '').trim();
-    const label = Number.isInteger(hVal) ? `${hVal}H` : `${hVal.toFixed(1)}H`;
-    return { isHorizon: true, hours: hVal, horizonLabel: label, stationFilter: residual };
+  if (/^(hoje|today|00h|desde\s*00h)/i.test(clean)) {
+    return { isHoje: true, hours: 24.0, label: 'Hoje (desde 00h)' };
   }
 
-  const hourMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:h(?:oras?|rs?)?)?/i);
-  if (hourMatch && hourMatch[1]) {
-    const hVal = parseFloat(hourMatch[1].replace(',', '.'));
-    const residual = clean.replace(hourMatch[0], '').trim();
-    const label = Number.isInteger(hVal) ? `${hVal}H` : `${hVal.toFixed(1)}H`;
-    return { isHorizon: true, hours: Math.max(0.1, hVal), horizonLabel: label, stationFilter: residual };
-  }
-
-  return { isHorizon: false, hours: socialState.horizonHours || 24.0, horizonLabel: (socialState.horizon || '24h').toUpperCase(), stationFilter: clean };
-}
-
-/**
- * Retorna o volume exato de chuva de uma estação para qualquer horizonte em horas,
- * calculando na hora sob demanda.
- */
-export function getStationRainForSocial(station, horizon, hours) {
-  if (!station) return 0.0;
-  if (station.online === false) return 0.0;
-  if (station.categoria === 'inea') return null;
-
-  const h = hours || socialState.horizonHours || 24.0;
-  const hRound = Math.round(h);
-  const isDaily = socialState.isHoje || horizon === 'hoje' || horizon === 'diario' || horizon === 'diário';
-
-  // 1. Se estiver consultando acumulado diário (desde 00h de hoje)
-  if (isDaily) {
-    return Number(station.chuva_hoje !== undefined && station.chuva_hoje !== null ? station.chuva_hoje : 0.0);
-  }
-
-  // 2. Horizontes canônicos do site
-  if (hRound === 1 && station.chuva_1h != null) return Number(station.chuva_1h);
-  if (hRound === 4 && station.chuva_4h != null) return Number(station.chuva_4h);
-  if (hRound === 6 && station.chuva_6h != null) return Number(station.chuva_6h);
-  if (hRound === 12 && station.chuva_12h != null) return Number(station.chuva_12h);
-  if (hRound === 24 && station.chuva_24h != null) return Number(station.chuva_24h);
-  if (hRound === 36 && station.chuva_36h != null) return Number(station.chuva_36h);
-  if (hRound === 48 && station.chuva_48h != null) return Number(station.chuva_48h);
-  if (hRound === 96 && station.chuva_96h != null) return Number(station.chuva_96h);
-
-  // 3. Consulta ao getter oficial do site se disponível
-  if (typeof window !== 'undefined' && typeof window.getStationRainForMetric === 'function') {
-    const fromSite = window.getStationRainForMetric(station, `${hRound}h`);
-    if (fromSite !== undefined && fromSite !== null && !isNaN(Number(fromSite)) && Number(fromSite) > 0) {
-      return Number(fromSite);
+  const hourMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:horas?|h\b)/i);
+  if (hourMatch) {
+    const val = parseFloat(hourMatch[1].replace(',', '.'));
+    if (!isNaN(val) && val > 0) {
+      return { isHoje: false, hours: val, label: `${val} horas` };
     }
   }
 
-  // 4. Interpolação matemática contínua para qualquer número de horas digitado
-  return calculateStationRain(station, h);
+  const dayMatch = clean.match(/(\d+(?:[.,]\d+)?)\s*(?:dias?|d\b)/i);
+  if (dayMatch) {
+    const val = parseFloat(dayMatch[1].replace(',', '.'));
+    if (!isNaN(val) && val > 0) {
+      const h = val * 24.0;
+      return { isHoje: false, hours: h, label: `${h} horas` };
+    }
+  }
+
+  const numOnly = clean.match(/^(\d+(?:[.,]\d+)?)$/);
+  if (numOnly) {
+    const val = parseFloat(numOnly[1].replace(',', '.'));
+    if (!isNaN(val) && val > 0) {
+      return { isHoje: false, hours: val, label: `${val} horas` };
+    }
+  }
+
+  return null;
 }
 
 /**
- * Calcula a curva de chuva interpolada para qualquer quantidade de horas digitada pelo usuário
+ * Obtém ou interpola a precipitação de uma estação para qualquer número de horas digitado
+ */
+export function getStationRainForSocial(station, horizon, customHours) {
+  if (!station) return 0.0;
+
+  // 1. Acumulado diário (desde 00h de hoje)
+  if (socialState.isHoje || horizon === 'hoje') {
+    if (station.chuva_hoje !== undefined && station.chuva_hoje !== null) {
+      return round1(station.chuva_hoje, 0.0);
+    }
+  }
+
+  const hrs = customHours !== undefined && customHours !== null
+    ? Number(customHours)
+    : (socialState.horizonHours || 24.0);
+
+  return calculateStationRain(station, hrs);
+}
+
+/**
+ * Cálculo dinâmico para qualquer quantidade de horas digitada
  */
 export function calculateStationRain(station, hours) {
-  if (!station || hours <= 0) return 0.0;
-  if (station.online === false) return 0.0;
-  if (station.categoria === 'inea') return 0.0;
+  if (!station) return 0.0;
+  const h = Math.max(0.1, Number(hours) || 24.0);
 
-  const c1 = Number(station.chuva_1h !== undefined && station.chuva_1h !== null ? station.chuva_1h : 0.0);
-  const c4 = Number(station.chuva_4h !== undefined && station.chuva_4h !== null ? station.chuva_4h : c1);
-  const c6 = Number(station.chuva_6h !== undefined && station.chuva_6h !== null ? station.chuva_6h : (c4 + (Number(station.chuva_12h || c4) - c4) * 0.33));
-  const c12 = Number(station.chuva_12h !== undefined && station.chuva_12h !== null ? station.chuva_12h : c6);
-  const cHoje = Number(station.chuva_hoje !== undefined && station.chuva_hoje !== null ? station.chuva_hoje : 0.0);
-  const c24 = Math.max(cHoje, Number(station.chuva_24h !== undefined && station.chuva_24h !== null ? station.chuva_24h : c12));
-  const c36 = Number(station.chuva_36h !== undefined && station.chuva_36h !== null ? station.chuva_36h : ((c24 + Number(station.chuva_48h || c24)) / 2));
-  const c48 = Number(station.chuva_48h !== undefined && station.chuva_48h !== null ? station.chuva_48h : c36);
-  const c96 = Number(station.chuva_96h !== undefined && station.chuva_96h !== null ? station.chuva_96h : c48);
-
-  const points = [
-    { h: 0.0, v: 0.0 },
-    { h: 1.0, v: c1 },
-    { h: 4.0, v: c4 },
-    { h: 6.0, v: c6 },
-    { h: 12.0, v: c12 },
-    { h: 24.0, v: c24 },
-    { h: 36.0, v: c36 },
-    { h: 48.0, v: c48 },
-    { h: 96.0, v: c96 }
-  ];
-
-  if (hours >= 96.0) return points[points.length - 1].v;
-
-  for (let i = 0; i < points.length - 1; i++) {
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    if (hours >= p1.h && hours <= p2.h) {
-      const span = p2.h - p1.h;
-      if (span === 0) return p1.v;
-      const t = (hours - p1.h) / span;
-      return round1(p1.v + t * (p2.v - p1.v), 0.0);
+  const hRound = Math.round(h);
+  if (typeof window !== 'undefined' && typeof window.getStationRainForMetric === 'function') {
+    const fromSite = window.getStationRainForMetric(station, `${hRound}h`);
+    if (fromSite !== null && fromSite !== undefined && !isNaN(Number(fromSite)) && Number(fromSite) >= 0) {
+      return round1(fromSite, 0.0);
     }
   }
 
-  return round1(points[points.length - 1].v, 0.0);
+  const keyExact = `chuva_${hRound}h`;
+  if (station[keyExact] !== undefined && station[keyExact] !== null && !isNaN(Number(station[keyExact]))) {
+    return round1(station[keyExact], 0.0);
+  }
+
+  const knownHorizons = [
+    { h: 1, val: Number(station.chuva_1h ?? 0) },
+    { h: 4, val: Number(station.chuva_4h ?? station.chuva_1h ?? 0) },
+    { h: 6, val: Number(station.chuva_6h ?? station.chuva_4h ?? 0) },
+    { h: 12, val: Number(station.chuva_12h ?? station.chuva_6h ?? 0) },
+    { h: 24, val: Number(station.chuva_24h ?? station.chuva_hoje ?? 0) },
+    { h: 36, val: Number(station.chuva_36h ?? station.chuva_24h ?? 0) },
+    { h: 48, val: Number(station.chuva_48h ?? station.chuva_36h ?? 0) },
+    { h: 96, val: Number(station.chuva_96h ?? station.chuva_48h ?? 0) }
+  ];
+
+  if (h <= knownHorizons[0].h) {
+    const ratio = h / knownHorizons[0].h;
+    return round1(knownHorizons[0].val * ratio, 0.0);
+  }
+
+  for (let i = 0; i < knownHorizons.length - 1; i++) {
+    const lower = knownHorizons[i];
+    const upper = knownHorizons[i + 1];
+    if (h >= lower.h && h <= upper.h) {
+      const frac = (h - lower.h) / (upper.h - lower.h);
+      const interpolated = lower.val + (upper.val - lower.val) * frac;
+      return round1(interpolated, lower.val);
+    }
+  }
+
+  const last = knownHorizons[knownHorizons.length - 1];
+  return round1(last.val, 0.0);
 }
 
 /**
- * Abre o modal de exportação na Paleta Nórdica Clara Oficial
+ * Alterna entre a Aba de Chuva e a Aba de Ventos & Rajadas (Duas imagens separadas)
  */
-export async function openSocialModalChuva(initialHorizon) {
+export function setSocialTab(tab) {
+  if (tab !== 'chuva' && tab !== 'vento') return;
+  socialState.activeTab = tab;
+
+  // Atualiza botões da aba no topo do modal
+  const btnChuva = document.getElementById('social-tab-btn-chuva');
+  const btnVento = document.getElementById('social-tab-btn-vento');
+  
+  if (btnChuva && btnVento) {
+    if (tab === 'chuva') {
+      btnChuva.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-2 transition';
+      btnVento.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-2 transition';
+    } else {
+      btnVento.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#e0f2fe] border-2 border-[#0284c7] text-black shadow-xs cursor-pointer flex items-center justify-center gap-2 transition';
+      btnChuva.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-2 transition';
+    }
+  }
+
+  // Alterna contêineres de controles
+  const cChuva = document.getElementById('social-controls-chuva');
+  const cVento = document.getElementById('social-controls-vento');
+  if (cChuva && cVento) {
+    if (tab === 'chuva') {
+      cChuva.classList.remove('hidden');
+      cVento.classList.add('hidden');
+    } else {
+      cChuva.classList.add('hidden');
+      cVento.classList.remove('hidden');
+    }
+  }
+
+  // Atualiza título e subtítulo do modal
+  const titleEl = document.getElementById('social-modal-title');
+  const subEl = document.getElementById('social-modal-subtitle');
+  if (titleEl) {
+    titleEl.innerText = tab === 'chuva' ? 'Exportar Card Oficial de Chuva' : 'Exportar Card Oficial de Ventos & Rajadas';
+  }
+  if (subEl) {
+    subEl.innerText = tab === 'chuva'
+      ? 'Acumulados da rede municipal em tempo real para Post e Stories'
+      : 'Maiores ventos e rajadas registradas pela rede municipal em tempo real';
+  }
+
+  // Atualiza texto do botão de download principal
+  updateDownloadButtonLabel();
+
+  // Re-renderiza o canvas com o card correspondente
+  renderSocialCanvas();
+}
+
+/**
+ * Atualiza o rótulo do botão de download principal com base na aba e no formato ativo
+ */
+function updateDownloadButtonLabel() {
+  const btn = document.getElementById('social-download-main-btn');
+  if (!btn) return;
+  const isStory = socialState.format === 'story';
+  const fmtText = isStory ? 'Stories (1080x1920)' : 'Post Feed (1080x1350)';
+  
+  if (socialState.activeTab === 'vento') {
+    btn.innerHTML = `<i data-lucide="download" class="w-4 h-4 text-black"></i><span>Baixar Card de Ventos & Rajadas (${fmtText})</span>`;
+    btn.className = 'flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-[#e0f2fe] border-2 border-[#0284c7] text-black shadow-xs hover:bg-[#bae6fd] active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition';
+  } else {
+    btn.innerHTML = `<i data-lucide="download" class="w-4 h-4 text-black"></i><span>Baixar Card de Chuva (${fmtText})</span>`;
+    btn.className = 'flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs hover:bg-[#ffd9cb] active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition';
+  }
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
+}
+
+/**
+ * Define a métrica de vento ('hoje', '24h', 'agora')
+ */
+export function setSocialWindMetric(metric) {
+  if (!['hoje', '24h', 'agora'].includes(metric)) return;
+  socialState.windMetric = metric;
+
+  const btnHoje = document.getElementById('social-wind-btn-hoje');
+  const btn24h = document.getElementById('social-wind-btn-24h');
+  const btnAgora = document.getElementById('social-wind-btn-agora');
+
+  [
+    { el: btnHoje, id: 'hoje' },
+    { el: btn24h, id: '24h' },
+    { el: btnAgora, id: 'agora' }
+  ].forEach(b => {
+    if (!b.el) return;
+    if (b.id === metric) {
+      b.el.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#e0f2fe] border-2 border-[#0284c7] text-black shadow-xs cursor-pointer flex items-center gap-1.5 transition';
+    } else {
+      b.el.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
+    }
+  });
+
+  renderSocialCanvas();
+}
+
+/**
+ * Define o filtro de estações de vento ('anemometer' ou 'all')
+ */
+export function setSocialWindFilter(filter) {
+  if (!['anemometer', 'all'].includes(filter)) return;
+  socialState.windFilter = filter;
+
+  const btnAnem = document.getElementById('social-wind-filter-anemometer');
+  const btnAll = document.getElementById('social-wind-filter-all');
+
+  if (btnAnem && btnAll) {
+    if (filter === 'anemometer') {
+      btnAnem.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white shadow-xs border border-[#0369a1] cursor-pointer flex items-center gap-1';
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
+    } else {
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white shadow-xs border border-[#0369a1] cursor-pointer flex items-center gap-1';
+      btnAnem.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
+    }
+  }
+
+  renderSocialCanvas();
+}
+
+/**
+ * Abre o Modal Social focado em Chuva
+ */
+export async function openSocialModalChuva(initialHorizon = '24h') {
+  await openSocialModalWithTab('chuva', initialHorizon);
+}
+
+/**
+ * Abre o Modal Social focado em Ventos & Rajadas
+ */
+export async function openSocialModalVento() {
+  await openSocialModalWithTab('vento', 'hoje');
+}
+
+/**
+ * Abre o Modal Social configurando a aba inicial
+ */
+export async function openSocialModalWithTab(tab, initialHorizon = '24h') {
   const modal = document.getElementById('modal-social-chuva');
   if (!modal) return;
 
-  // Adota métrica atualmente ativa no site ou valor padrão
-  const siteMetric = (typeof window !== 'undefined' && window.state?.stationsSortMetric)
-    ? window.state.stationsSortMetric
-    : '24h';
-  const effectiveHorizon = initialHorizon || siteMetric || '24h';
-
-  if (String(effectiveHorizon).toLowerCase() === 'hoje') {
-    socialState.isHoje = true;
-    socialState.horizon = 'hoje';
-    socialState.horizonHours = 24.0;
-  } else {
-    const parsed = parseUserQuery(effectiveHorizon);
-    socialState.isHoje = false;
-    socialState.horizon = parsed.horizonLabel.toLowerCase();
-    socialState.horizonHours = parsed.hours || 24.0;
-  }
-
-  socialState.stationFilterText = '';
-
-  // Sincroniza input de digitação direta
-  const hoursInput = document.getElementById('social-custom-hours-input');
-  if (hoursInput) {
-    hoursInput.value = socialState.isHoje ? '' : Math.round(socialState.horizonHours);
-  }
-
-  const btnHoje = document.getElementById('social-btn-toggle-hoje');
-  if (btnHoje) {
-    btnHoje.className = socialState.isHoje
-      ? 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer transition flex items-center gap-1.5'
-      : 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
-  }
-
-  // Puxa snapshot em tempo real das 10 estações
-  if (typeof window !== 'undefined' && typeof window.getLiveStationsForSocial === 'function') {
-    const curLive = window.getLiveStationsForSocial();
-    if (curLive) {
-      if (Array.isArray(curLive) && curLive.length > 0) socialState.stationsData = curLive;
-      else if (Array.isArray(curLive.estacoes) && curLive.estacoes.length > 0) socialState.stationsData = curLive.estacoes;
-    }
-  }
-
-  if (!socialState.stationsData || socialState.stationsData.length === 0) {
-    if (typeof window !== 'undefined' && window.state?.acumuladosDataset?.estacoes) {
-      socialState.stationsData = window.state.acumuladosDataset.estacoes;
-    }
-  }
-
-  if (!socialState.stationsData || socialState.stationsData.length === 0) {
-    await syncFromLiveSiteNow({ full: false });
-  }
-
-  if (socialState.selectedStationCodes.size === 0 && socialState.stationsData.length > 0) {
-    socialState.stationsData.forEach(s => {
-      if (s.codigo) socialState.selectedStationCodes.add(s.codigo);
-    });
-  }
-
-  updateFormatButtons(socialState.format);
-  updateCardThemeButtons(socialState.cardTheme);
-  updateStationsFilterButtons();
-  renderSocialStationChips();
+  await syncFromLiveSiteNow();
 
   modal.classList.remove('hidden');
   modal.classList.add('flex');
+  document.body.style.overflow = 'hidden';
+
+  setSocialTab(tab || 'chuva');
+
+  if (tab === 'chuva') {
+    if (initialHorizon === 'hoje') {
+      toggleSocialHoje(true);
+    } else {
+      const q = parseUserQuery(initialHorizon);
+      if (q) {
+        socialState.isHoje = q.isHoje;
+        socialState.horizonHours = q.hours;
+        socialState.horizon = `${Math.round(q.hours)}h`;
+        const inp = document.getElementById('social-custom-hours-input');
+        if (inp) inp.value = Math.round(q.hours);
+      }
+    }
+  }
+
+  updateFormatButtons(socialState.format || 'post');
+  updateCardThemeButtons(socialState.cardTheme || 'nordic');
+  updateStationsFilterButtons(socialState.filterMode || 'all');
+  renderSocialStationChips();
 
   renderSocialCanvas();
 
-  syncFromLiveSiteNow({ full: false }).then(() => {
-    if (isSocialModalOpen()) {
-      renderSocialStationChips();
-      renderSocialCanvas();
-    }
-  }).catch(() => {});
+  if (window.lucide && typeof window.lucide.createIcons === 'function') {
+    window.lucide.createIcons();
+  }
 }
 
+/**
+ * Fecha o Modal Social
+ */
 export function closeSocialModalChuva() {
   const modal = document.getElementById('modal-social-chuva');
-  if (modal) {
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-  }
+  if (!modal) return;
+  modal.classList.add('hidden');
+  modal.classList.remove('flex');
+  document.body.style.overflow = '';
 }
 
-export function setSocialFormat(format) {
-  if (format !== 'post' && format !== 'story') return;
-  socialState.format = format;
-  updateFormatButtons(format);
+/**
+ * Define o formato do card: 'post' (1080x1350) ou 'story' (1080x1920)
+ */
+export function setSocialFormat(fmt) {
+  if (fmt !== 'post' && fmt !== 'story') return;
+  socialState.format = fmt;
+  updateFormatButtons(fmt);
+  updateDownloadButtonLabel();
   renderSocialCanvas();
 }
 
 /**
- * Manipula a digitação direta do horizonte de horas pelo usuário com recálculo instantâneo
+ * Digitação direta de horas com recálculo em tempo real
  */
 export function handleSocialHoursInput(val) {
-  const raw = String(val || '').trim().replace(',', '.');
-  const num = parseFloat(raw);
-  if (isNaN(num) || num <= 0) return;
+  const parsed = parseUserQuery(val);
+  if (!parsed) return;
 
-  const clamped = Math.min(96, Math.max(0.5, num));
-  socialState.isHoje = false;
-  socialState.horizonHours = clamped;
-  socialState.horizon = Number.isInteger(clamped) ? `${clamped}h` : `${clamped.toFixed(1)}h`;
+  socialState.isHoje = parsed.isHoje;
+  socialState.horizonHours = parsed.hours;
+  socialState.horizon = `${Math.round(parsed.hours)}h`;
 
   const btnHoje = document.getElementById('social-btn-toggle-hoje');
   if (btnHoje) {
-    btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
+    if (parsed.isHoje) {
+      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1.5 transition';
+    } else {
+      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
+    }
   }
 
   renderSocialCanvas();
 }
 
 /**
- * Alterna para o cálculo de chuva acumulada hoje (desde 00h)
+ * Alterna modo "Hoje (desde 00h)"
  */
-export function toggleSocialHoje() {
-  socialState.isHoje = true;
-  socialState.horizon = 'hoje';
-  socialState.horizonHours = 24.0;
-
-  const hoursInput = document.getElementById('social-custom-hours-input');
-  if (hoursInput) hoursInput.value = '';
+export function toggleSocialHoje(forceTrue = false) {
+  if (forceTrue) {
+    socialState.isHoje = true;
+  } else {
+    socialState.isHoje = !socialState.isHoje;
+  }
 
   const btnHoje = document.getElementById('social-btn-toggle-hoje');
-  if (btnHoje) {
-    btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer transition flex items-center gap-1.5';
+  const inp = document.getElementById('social-custom-hours-input');
+
+  if (socialState.isHoje) {
+    if (btnHoje) {
+      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1.5 transition';
+    }
+    if (inp) inp.value = '';
+    socialState.horizon = 'hoje';
+  } else {
+    if (btnHoje) {
+      btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
+    }
+    if (inp) inp.value = '24';
+    socialState.horizonHours = 24.0;
+    socialState.horizon = '24h';
   }
 
   renderSocialCanvas();
 }
 
 /**
- * Alterna a paleta do card entre a Oficial Nórdica Clara (padrão) e Noturna
+ * Alterna tema do card gerado (Nórdica Clara Oficial vs Noturna)
  */
 export function setSocialCardTheme(theme) {
-  socialState.cardTheme = theme === 'dark' ? 'dark' : 'nordic';
-  updateCardThemeButtons(socialState.cardTheme);
+  if (theme !== 'nordic' && theme !== 'dark') return;
+  socialState.cardTheme = theme;
+  updateCardThemeButtons(theme);
   renderSocialCanvas();
 }
 
-function updateCardThemeButtons(theme) {
+export function updateCardThemeButtons(theme) {
   const btnNordic = document.getElementById('social-theme-btn-nordic');
   const btnDark = document.getElementById('social-theme-btn-dark');
 
-  const activeCls = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
-  const inactiveCls = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
-
   if (btnNordic && btnDark) {
-    if (theme === 'dark') {
-      btnDark.className = activeCls;
-      btnNordic.className = inactiveCls;
+    if (theme === 'nordic') {
+      btnNordic.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
+      btnDark.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     } else {
-      btnNordic.className = activeCls;
-      btnDark.className = inactiveCls;
+      btnDark.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#0284c7] border-2 border-[#38bdf8] text-white shadow-xs cursor-pointer flex items-center gap-1 transition';
+      btnNordic.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     }
   }
 }
 
-export function setSocialHorizon(horizon) {
-  const clean = String(horizon || '').toLowerCase();
-  if (clean === 'hoje') {
-    toggleSocialHoje();
+export function setSocialHorizon(hz) {
+  if (!hz) return;
+  if (hz === 'hoje') {
+    toggleSocialHoje(true);
     return;
   }
-  const parsed = parseUserQuery(clean);
-  socialState.isHoje = false;
-  socialState.horizon = parsed.horizonLabel.toLowerCase();
-  socialState.horizonHours = parsed.hours;
-
-  const hoursInput = document.getElementById('social-custom-hours-input');
-  if (hoursInput) hoursInput.value = Math.round(parsed.hours);
-
-  const btnHoje = document.getElementById('social-btn-toggle-hoje');
-  if (btnHoje) {
-    btnHoje.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5';
+  const q = parseUserQuery(hz);
+  if (q) {
+    const inp = document.getElementById('social-custom-hours-input');
+    if (inp) inp.value = Math.round(q.hours);
+    handleSocialHoursInput(q.hours);
   }
-
-  renderSocialCanvas();
 }
 
-export function handleSocialSearch(query) {
-  const parsed = parseUserQuery(query);
-  socialState.horizon = parsed.horizonLabel.toLowerCase();
-  socialState.horizonHours = parsed.hours;
-  socialState.stationFilterText = parsed.stationFilter || '';
+export function handleSocialSearch(val) {
+  socialState.stationFilterText = String(val || '').toLowerCase().trim();
   renderSocialCanvas();
 }
 
 export function setSocialStationsFilter(mode) {
+  if (mode !== 'all' && mode !== 'active') return;
   socialState.filterMode = mode;
-  updateStationsFilterButtons();
-
-  if (mode === 'all') {
-    socialState.stationsData.forEach(s => {
-      if (s.codigo) socialState.selectedStationCodes.add(s.codigo);
-    });
-  } else if (mode === 'active') {
-    socialState.selectedStationCodes.clear();
-    socialState.stationsData.forEach(s => {
-      if (s.codigo && s.online !== false) {
-        socialState.selectedStationCodes.add(s.codigo);
-      }
-    });
-  }
-
-  renderSocialStationChips();
+  updateStationsFilterButtons(mode);
   renderSocialCanvas();
 }
 
 export function toggleStationSelection(code) {
+  if (!code) return;
   if (socialState.selectedStationCodes.has(code)) {
-    if (socialState.selectedStationCodes.size > 1) {
-      socialState.selectedStationCodes.delete(code);
-    }
+    socialState.selectedStationCodes.delete(code);
   } else {
     socialState.selectedStationCodes.add(code);
   }
-
-  const total = socialState.stationsData.length;
-  const activeCount = socialState.stationsData.filter(s => s.online !== false).length;
-  const allSelected = socialState.stationsData.every(s => socialState.selectedStationCodes.has(s.codigo));
-  const allActiveSelected = socialState.stationsData.every(s => {
-    if (s.online === false) return true;
-    return socialState.selectedStationCodes.has(s.codigo);
-  }) && socialState.selectedStationCodes.size === activeCount;
-
-  if (allSelected) {
-    socialState.filterMode = 'all';
-  } else if (allActiveSelected) {
-    socialState.filterMode = 'active';
-  } else {
-    socialState.filterMode = 'custom';
-  }
-
-  updateStationsFilterButtons();
   renderSocialStationChips();
   renderSocialCanvas();
 }
@@ -489,185 +556,171 @@ export function toggleSocialChipsDrawer() {
   const drawer = document.getElementById('social-chips-drawer');
   const chevron = document.getElementById('social-chips-chevron');
   if (!drawer) return;
-
   socialState.chipsDrawerOpen = !socialState.chipsDrawerOpen;
   if (socialState.chipsDrawerOpen) {
     drawer.classList.remove('hidden');
-    if (chevron) chevron.style.transform = 'rotate(180deg)';
+    if (chevron) chevron.classList.add('rotate-180');
   } else {
     drawer.classList.add('hidden');
-    if (chevron) chevron.style.transform = 'rotate(0deg)';
+    if (chevron) chevron.classList.remove('rotate-180');
   }
 }
 
 export async function refreshSocialStationsData() {
   const icon = document.getElementById('social-refresh-icon');
   if (icon) icon.classList.add('animate-spin');
-
   try {
-    await syncFromLiveSiteNow({ full: true });
-    renderSocialStationChips();
-    renderSocialCanvas();
+    await syncFromLiveSiteNow(true);
   } finally {
     if (icon) icon.classList.remove('animate-spin');
+    renderSocialStationChips();
+    renderSocialCanvas();
   }
 }
 
-function renderSocialStationChips() {
+export function renderSocialStationChips() {
   const container = document.getElementById('social-station-chips');
   const countEl = document.getElementById('social-selected-count');
   if (!container) return;
 
-  const total = socialState.stationsData.length;
-  const selectedCount = socialState.selectedStationCodes.size;
-  if (countEl) {
-    countEl.textContent = `${selectedCount} de ${total} selecionadas`;
+  const stations = socialState.stationsData || [];
+  if (stations.length === 0) return;
+
+  if (socialState.selectedStationCodes.size === 0) {
+    stations.forEach(s => socialState.selectedStationCodes.add(s.codigo));
   }
 
-  container.innerHTML = socialState.stationsData.map(st => {
-    const isSelected = socialState.selectedStationCodes.has(st.codigo);
-    const shortName = st.nome_curto || (st.nome ? st.nome.replace(/\s*-\s*[A-Z0-9]+$/i, '').trim() : st.codigo);
-    const isOnline = st.online !== false;
+  const selectedCount = socialState.selectedStationCodes.size;
+  if (countEl) {
+    countEl.innerText = `${selectedCount} de ${stations.length} selecionadas`;
+  }
 
-    if (isSelected) {
-      return `
-        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] flex items-center gap-1 cursor-pointer transition shadow-2xs hover:brightness-95">
-          <span class="w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-emerald-600' : 'bg-rose-600'}"></span>
-          <span>${shortName}</span>
-          <span class="text-[10px] font-black text-[#ea580c]">✓</span>
-        </button>
-      `;
-    } else {
-      return `
-        <button type="button" onclick="toggleStationSelection('${st.codigo}')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-[#f1f5f9] text-[#64748b] border border-[#cbd5e1] line-through flex items-center gap-1 cursor-pointer transition opacity-70 hover:opacity-100">
-          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-          <span>${shortName}</span>
-        </button>
-      `;
-    }
+  container.innerHTML = stations.map(st => {
+    const isSelected = socialState.selectedStationCodes.has(st.codigo);
+    const bgClass = isSelected
+      ? 'bg-[#ffebe4] border-[#f07a53] text-black font-black'
+      : 'bg-white border-[#cbd5e1] text-black/60 font-medium';
+    return `
+      <button 
+        type="button"
+        onclick="toggleStationSelection('${st.codigo}')"
+        class="px-2.5 py-1 rounded-lg text-[11px] border cursor-pointer transition flex items-center gap-1 ${bgClass}"
+      >
+        <span>${st.nome_curto || st.nome}</span>
+        ${isSelected ? '<span class="text-[#ea580c] font-black">✓</span>' : ''}
+      </button>
+    `;
   }).join('');
 }
 
-function updateStationsFilterButtons() {
+export function updateStationsFilterButtons(mode) {
   const btnAll = document.getElementById('social-btn-filter-all');
   const btnActive = document.getElementById('social-btn-filter-active');
-
-  const activeCls = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
-  const inactiveCls = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
-
   if (btnAll && btnActive) {
-    if (socialState.filterMode === 'all') {
-      btnAll.className = activeCls;
-      btnActive.className = inactiveCls;
-    } else if (socialState.filterMode === 'active') {
-      btnActive.className = activeCls;
-      btnAll.className = inactiveCls;
+    if (mode === 'all') {
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
+      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
     } else {
-      btnAll.className = inactiveCls;
-      btnActive.className = inactiveCls;
+      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
     }
   }
 }
 
-function updateFormatButtons(activeFmt) {
+export function updateFormatButtons(fmt) {
   const btnPost = document.getElementById('social-btn-fmt-post');
   const btnStory = document.getElementById('social-btn-fmt-story');
-  const dlMainBtn = document.getElementById('social-download-main-btn');
-
-  const activeCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
-  const inactiveCls = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
-
   if (btnPost && btnStory) {
-    if (activeFmt === 'post') {
-      btnPost.className = activeCls;
-      btnStory.className = inactiveCls;
-      if (dlMainBtn) {
-        dlMainBtn.querySelector('span').textContent = 'Baixar Post Feed (1080x1350)';
-      }
+    if (fmt === 'post') {
+      btnPost.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnStory.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
     } else {
-      btnStory.className = activeCls;
-      btnPost.className = inactiveCls;
-      if (dlMainBtn) {
-        dlMainBtn.querySelector('span').textContent = 'Baixar Stories (1080x1920)';
-      }
+      btnStory.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnPost.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
     }
   }
 }
 
-export function toggleOnlyActive(isChecked) {
-  setSocialStationsFilter(isChecked ? 'active' : 'all');
+export function toggleOnlyActive() {
+  const newMode = socialState.filterMode === 'active' ? 'all' : 'active';
+  setSocialStationsFilter(newMode);
 }
 
 /**
- * Renderiza o canvas de alta resolução oficial para o Instagram.
- * Paleta Padrão: Nórdica Clara Oficial do Site (#f4f1ea, branco cerâmico, terracota #ea580c, tipografia preta legível).
+ * Função principal de renderização do Canvas: direciona para Chuva ou Vento
  */
 export function renderSocialCanvas() {
-  const canvas = document.getElementById('social-export-canvas') || document.createElement('canvas');
-  canvas.id = 'social-export-canvas';
+  const canvas = document.getElementById('social-export-canvas');
+  if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   const isStory = socialState.format === 'story';
   const isDark = socialState.cardTheme === 'dark';
+
   const width = 1080;
   const height = isStory ? 1920 : 1350;
 
-  canvas.width = width;
-  canvas.height = height;
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
 
-  // 1. Fundo do Card
+  ctx.clearRect(0, 0, width, height);
+
+  if (socialState.activeTab === 'vento') {
+    renderSocialCanvasVento(canvas, ctx, width, height, isStory, isDark);
+  } else {
+    renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isDark);
+  }
+}
+
+/**
+ * RENDERIZADOR 1: CARD OFICIAL DE CHUVA
+ */
+export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isDark) {
+  // Fundo
   if (isDark) {
     const bgGrad = ctx.createLinearGradient(0, 0, width, height);
     bgGrad.addColorStop(0, '#020b18');
-    bgGrad.addColorStop(0.45, '#041328');
-    bgGrad.addColorStop(1, '#071e3b');
+    bgGrad.addColorStop(0.4, '#06172e');
+    bgGrad.addColorStop(1, '#020813');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
-
-    ctx.save();
-    ctx.strokeStyle = 'rgba(0, 194, 255, 0.05)';
-    ctx.lineWidth = 2;
-    const numWaves = isStory ? 7 : 5;
-    for (let i = 0; i < numWaves; i++) {
-      ctx.beginPath();
-      const yOffset = 240 + i * (isStory ? 230 : 210);
-      ctx.moveTo(0, yOffset);
-      ctx.bezierCurveTo(width * 0.3, yOffset - 60, width * 0.7, yOffset + 60, width, yOffset);
-      ctx.stroke();
-    }
-    ctx.restore();
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   } else {
-    // Paleta Nórdica Clara Oficial do Site (#f4f1ea cerâmica com acentos quentes terracota)
     const bgGrad = ctx.createLinearGradient(0, 0, width, height);
-    bgGrad.addColorStop(0, '#faf8f5');
-    bgGrad.addColorStop(0.4, '#f4f1ea');
-    bgGrad.addColorStop(1, '#ebe6dd');
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(0.3, '#f4f1ea');
+    bgGrad.addColorStop(1, '#eae5dc');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, width, height);
-
-    // Borda perimetral sutil cerâmica
-    ctx.strokeStyle = '#dfd8ce';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.roundRect(16, 16, width - 32, height - 32, 24);
-    ctx.stroke();
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   }
 
-  // 2. Filtra e Ordena as Estações Selecionadas
-  let stations = [...socialState.stationsData];
+  // Coleta dados das estações
+  let stations = (socialState.stationsData && socialState.stationsData.length > 0)
+    ? [...socialState.stationsData]
+    : (window.state?.acumuladosDataset?.estacoes ? [...window.state.acumuladosDataset.estacoes] : []);
 
-  if (socialState.selectedStationCodes && socialState.selectedStationCodes.size > 0) {
+  if (socialState.selectedStationCodes.size > 0) {
     stations = stations.filter(s => socialState.selectedStationCodes.has(s.codigo));
-  } else if (socialState.filterMode === 'active') {
+  }
+
+  if (socialState.filterMode === 'active') {
     stations = stations.filter(s => s.online !== false);
   }
 
   if (socialState.stationFilterText) {
-    const q = socialState.stationFilterText.toLowerCase();
-    stations = stations.filter(s =>
-      (s.nome && s.nome.toLowerCase().includes(q)) ||
-      (s.bairro && s.bairro.toLowerCase().includes(q)) ||
-      (s.codigo && s.codigo.toLowerCase().includes(q))
+    const query = socialState.stationFilterText;
+    stations = stations.filter(s => 
+      (s.nome && s.nome.toLowerCase().includes(query)) ||
+      (s.bairro && s.bairro.toLowerCase().includes(query)) ||
+      (s.codigo && s.codigo.toLowerCase().includes(query))
     );
   }
 
@@ -681,7 +734,7 @@ export function renderSocialCanvas() {
     st._activeRainVal = getStationRainForSocial(st, currentHz, currentHours);
   });
 
-  // Ordena rigorosamente da maior precipitação para a menor; se empatar, online primeiro
+  // Ordena da maior para a menor precipitação
   rainStations.sort((a, b) => {
     const vA = a._activeRainVal || 0;
     const vB = b._activeRainVal || 0;
@@ -699,12 +752,11 @@ export function renderSocialCanvas() {
     displayStations = [...rainStations];
   }
 
-  // 3. Cabeçalho Oficial do Card
+  // Cabeçalho
   const topPad = isStory ? 110 : 60;
   const leftPad = 65;
   const rightPad = width - 65;
 
-  // Barra de acento à esquerda do título
   ctx.fillStyle = '#ea580c';
   ctx.beginPath();
   ctx.roundRect(leftPad, topPad, 10, isStory ? 92 : 78, 5);
@@ -725,7 +777,6 @@ export function renderSocialCanvas() {
   ctx.font = isStory ? '900 68px sans-serif' : '900 56px sans-serif';
   ctx.fillText('CHUVA', leftPad + 24, topPad + (isStory ? 94 : 78));
 
-  // Metadados do topo à direita
   const now = new Date();
   const dataFormatada = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
   const horaFormatada = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -739,7 +790,6 @@ export function renderSocialCanvas() {
   const subText = socialState.filterMode === 'active' ? 'Estações Ativas da Rede Municipal' : 'Rede Municipal & Entorno • Telemetria Oficial';
   ctx.fillText(subText, leftPad, subY);
 
-  // Pílula com Data, Hora e Horizonte
   ctx.textAlign = 'right';
   ctx.font = 'bold 22px monospace';
   if (isDark) {
@@ -755,7 +805,6 @@ export function renderSocialCanvas() {
   }
   ctx.textAlign = 'left';
 
-  // Linha divisória do cabeçalho
   ctx.strokeStyle = isDark ? 'rgba(0, 194, 255, 0.3)' : '#cbd5e1';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
@@ -763,166 +812,97 @@ export function renderSocialCanvas() {
   ctx.lineTo(rightPad, subY + 18);
   ctx.stroke();
 
-  // 4. Lista das Estações da Rede
-  const listStartY = subY + 30;
-  const footerY = height - (isStory ? 85 : 60);
-  const availableListH = footerY - listStartY - 16;
-  const numStations = Math.max(displayStations.length, 1);
+  // Linhas das estações
+  const startY = subY + 36;
+  const footerY = height - (isStory ? 65 : 48);
+  const availableHeight = footerY - startY - (isStory ? 60 : 40);
+  const count = displayStations.length || 1;
 
-  const rowHeight = isStory
-    ? Math.min(148, Math.floor(availableListH / numStations))
-    : Math.min(108, Math.floor(availableListH / numStations));
-
-  const cardH = rowHeight - (isStory ? 14 : 10);
-  const cardW = rightPad - leftPad;
+  const rowGap = isStory ? Math.min(22, Math.floor(availableHeight / count * 0.18)) : Math.min(14, Math.floor(availableHeight / count * 0.18));
+  const rowHeight = Math.min(isStory ? 120 : 88, Math.floor((availableHeight - (count - 1) * rowGap) / count));
 
   displayStations.forEach((st, idx) => {
-    const rowY = listStartY + idx * rowHeight;
+    const rowY = startY + idx * (rowHeight + rowGap);
     const isJundia = st.categoria === 'inea';
-    const isOnline = st.online !== false;
-    const rainVal = st._activeRainVal !== undefined ? st._activeRainVal : getStationRainForSocial(st, currentHz, currentHours);
-    const rainStr = `${(rainVal || 0).toFixed(1).replace('.', ',')} mm`;
+    const isOffline = st.online === false;
 
-    let displayName = st.nome_curto || st.nome || '';
-    displayName = displayName
-      .replace(/defesa civil municipal\s*(\(tartaruga\))?/gi, 'Praia da Tartaruga')
-      .replace(/defesa civil/gi, '')
-      .replace(/\s*-\s*[A-Z0-9]+$/i, '')
-      .trim();
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(leftPad, rowY, width - 130, rowHeight, 14);
+    ctx.fill();
 
-    let codeStr = st.codigo || '';
-    if (st.categoria === 'cemaden') {
-      codeStr = `PCD ${st.codigo.replace(/[^0-9]/g, '')}`;
-    } else if (st.categoria === 'inea') {
-      codeStr = 'INEA 2241036';
-    }
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
 
-    const bairroStr = st.bairro ? st.bairro.split('/')[0].trim() : '';
-
-    // Container de Card Branco Cerâmico na Paleta Nórdica Clara
-    if (!isDark) {
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.roundRect(leftPad, rowY, cardW, cardH, 14);
-      ctx.fill();
-
-      ctx.strokeStyle = '#e2e8f0';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-    }
-
-    // =========================================================================
-    // COLUNA ESQUERDA: Nome da Estação, Badge do Código e Bairro
-    // =========================================================================
-    ctx.textAlign = 'left';
     ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-    let nameFontPx = isStory ? 28 : 23;
-    ctx.font = `800 ${nameFontPx}px sans-serif`;
+    ctx.font = isStory ? 'bold 30px sans-serif' : 'bold 24px sans-serif';
+    const nameY = rowY + (isStory ? 42 : 32);
+    ctx.fillText(st.nome_curto || st.nome, leftPad + 18, nameY);
 
-    const maxNameW = width * 0.58;
-    while (nameFontPx > 18 && ctx.measureText(displayName).width > maxNameW) {
-      nameFontPx -= 1;
-      ctx.font = `800 ${nameFontPx}px sans-serif`;
-    }
-    ctx.fillText(displayName, leftPad + 18, rowY + (isStory ? 40 : 30));
+    const badgeY = rowY + (isStory ? 74 : 54);
+    const badgeText = st.codigo || '';
+    ctx.font = 'bold 13px monospace';
+    const badgeWidth = ctx.measureText(badgeText).width + 12;
 
-    // Badge do Código da Estação
-    ctx.font = isStory ? 'bold 15px monospace' : 'bold 13px monospace';
-    const badgeW = ctx.measureText(codeStr).width + 16;
-    const badgeH = isStory ? 26 : 22;
-    const badgeY = rowY + (isStory ? 54 : 40);
+    ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe';
+    ctx.beginPath();
+    ctx.roundRect(leftPad + 18, badgeY - 14, badgeWidth, 20, 6);
+    ctx.fill();
+    ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-    if (isDark) {
-      ctx.fillStyle = 'rgba(2, 132, 199, 0.22)';
-      ctx.strokeStyle = '#0284c7';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.roundRect(leftPad + 18, badgeY, badgeW, badgeH, 6);
-      ctx.fill();
-      ctx.stroke();
+    ctx.fillStyle = isDark ? '#38bdf8' : '#0369a1';
+    ctx.fillText(badgeText, leftPad + 24, badgeY);
 
-      ctx.fillStyle = '#38bdf8';
-      ctx.fillText(codeStr, leftPad + 26, badgeY + (isStory ? 18 : 15));
-    } else {
-      ctx.fillStyle = '#f1f5f9';
-      ctx.strokeStyle = '#cbd5e1';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.roundRect(leftPad + 18, badgeY, badgeW, badgeH, 6);
-      ctx.fill();
-      ctx.stroke();
+    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+    ctx.font = '600 15px sans-serif';
+    ctx.fillText(st.bairro ? `  ${st.bairro}` : '', leftPad + 18 + badgeWidth + 4, badgeY);
 
-      ctx.fillStyle = '#0369a1';
-      ctx.fillText(codeStr, leftPad + 26, badgeY + (isStory ? 18 : 15));
-    }
-
-    // Nome do bairro ao lado do badge
-    if (bairroStr) {
-      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-      ctx.font = isStory ? '600 16px sans-serif' : '600 14px sans-serif';
-      ctx.fillText(bairroStr, leftPad + 18 + badgeW + 12, badgeY + (isStory ? 18 : 15));
-    }
-
-    // =========================================================================
-    // COLUNA DIREITA: Volume de Chuva / Nível do Rio Jundiá
-    // =========================================================================
     ctx.textAlign = 'right';
+    if (isOffline) {
+      ctx.fillStyle = '#ef4444';
+      ctx.font = '900 24px sans-serif';
+      ctx.fillText('OFFLINE', rightPad - 18, rowY + (isStory ? 42 : 32));
 
-    if (isJundia) {
-      // Estação Fluviométrica do Rio Jundiá
-      const riverLevel = st.nivel_rio ? String(st.nivel_rio).replace('.', ',') : '1,40 m';
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('Sem sinal recente', rightPad - 18, rowY + (isStory ? 70 : 52));
+    } else if (isJundia) {
+      const riverLevel = (st.rio_nivel !== undefined && st.rio_nivel !== null)
+        ? Number(st.rio_nivel).toFixed(2).replace('.', ',')
+        : '1,40';
 
       ctx.fillStyle = '#0284c7';
-      ctx.font = isStory ? '900 42px monospace' : '900 34px monospace';
-      ctx.fillText(riverLevel, rightPad - 18, rowY + (isStory ? 44 : 32));
+      ctx.font = '900 36px sans-serif';
+      ctx.fillText(riverLevel, rightPad - 64, rowY + (isStory ? 44 : 34));
 
-      // Subtítulo do status da calha
-      const statusTxt = st.status_rio ? `NÍVEL DO RIO • ${st.status_rio}` : 'NÍVEL FLUVIAL • VIGILÂNCIA';
-      ctx.fillStyle = isDark ? '#38bdf8' : '#166534';
-      ctx.font = isStory ? 'bold 16px sans-serif' : 'bold 13px sans-serif';
-      ctx.fillText(statusTxt, rightPad - 18, rowY + (isStory ? 70 : 54));
-    } else if (!isOnline) {
-      // Estação Offline
-      ctx.fillStyle = '#e11d48';
-      ctx.font = isStory ? '900 32px monospace' : '900 24px monospace';
-      ctx.fillText('OFFLINE', rightPad - 18, rowY + (isStory ? 44 : 32));
+      ctx.font = 'bold 26px sans-serif';
+      ctx.fillText('m', rightPad - 18, rowY + (isStory ? 44 : 34));
 
-      ctx.fillStyle = isDark ? '#94a3b8' : '#94a3b8';
-      ctx.font = isStory ? 'bold 15px sans-serif' : 'bold 13px sans-serif';
-      ctx.fillText('Sem sinal recente', rightPad - 18, rowY + (isStory ? 68 : 52));
+      ctx.fillStyle = '#0369a1';
+      ctx.font = 'bold 15px sans-serif';
+      ctx.fillText('NÍVEL DO RIO • Vigilância', rightPad - 18, rowY + (isStory ? 72 : 54));
     } else {
-      // Estações Pluviométricas Ativas
-      const rainValNum = rainVal || 0;
-      const isZero = rainValNum <= 0.05;
+      const rainVal = st._activeRainVal || 0;
+      const rainStr = formatDec1(rainVal);
 
-      if (isDark) {
-        ctx.fillStyle = isZero ? '#94a3b8' : '#00d2ff';
-      } else {
-        ctx.fillStyle = isZero ? '#64748b' : '#ea580c';
-      }
-      ctx.font = isStory ? '900 46px monospace' : '900 36px monospace';
-      ctx.fillText(rainStr, rightPad - 18, rowY + (isStory ? 44 : 32));
+      ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
+      ctx.font = '900 42px sans-serif';
+      ctx.fillText(rainStr, rightPad - 72, rowY + (isStory ? 44 : 34));
 
-      // Subtítulo descritivo alinhado à direita
-      ctx.fillStyle = isDark ? '#64748b' : '#475569';
-      ctx.font = isStory ? '700 15px sans-serif' : '700 13px sans-serif';
+      ctx.font = 'bold 26px sans-serif';
+      ctx.fillText('mm', rightPad - 18, rowY + (isStory ? 44 : 34));
+
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = 'bold 14px sans-serif';
       ctx.fillText(`Acumulado ${horizonLabel}`, rightPad - 18, rowY + (isStory ? 68 : 52));
     }
-
     ctx.textAlign = 'left';
-
-    // Linha divisória para tema escuro
-    if (isDark) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(leftPad, rowY + rowHeight - 6);
-      ctx.lineTo(rightPad, rowY + rowHeight - 6);
-      ctx.stroke();
-    }
   });
 
-  // 5. Rodapé Oficial
+  // Rodapé Oficial
   ctx.fillStyle = '#ea580c';
   ctx.beginPath();
   ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 130, 3, 1.5);
@@ -936,7 +916,428 @@ export function renderSocialCanvas() {
   ctx.font = isStory ? '500 19px sans-serif' : '500 16px sans-serif';
   ctx.fillText('Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ', leftPad, footerY + (isStory ? 26 : 22));
 
-  // Atualiza imagem de pré-visualização no modal
+  const previewImg = document.getElementById('social-preview-image');
+  if (previewImg) {
+    previewImg.src = canvas.toDataURL('image/png');
+  }
+}
+
+/**
+ * RENDERIZADOR 2: CARD OFICIAL DE VENTOS & RAJADAS (SEPARADO DA CHUVA)
+ */
+export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isDark) {
+  // Coleta dados
+  const stations = (socialState.stationsData && socialState.stationsData.length > 0)
+    ? socialState.stationsData
+    : (window.state?.acumuladosDataset?.estacoes || []);
+
+  const metric = socialState.windMetric || 'hoje'; // 'hoje' | '24h' | 'agora'
+
+  const parsed = stations.map(st => {
+    let gust = 0.0;
+    let sust = 0.0;
+    let time = '';
+
+    if (metric === 'hoje') {
+      sust = round1(st.vento_max_hoje ?? st.vento_atual, 0.0);
+      gust = round1(st.rajada_max_hoje ?? st.vento_max_hoje ?? st.rajada_atual, sust);
+      time = st.hora_rajada_max_hoje || st.hora_vento_max_hoje || '';
+    } else if (metric === '24h') {
+      sust = round1(st.vento_max_24h ?? st.vento_max_hoje ?? st.vento_atual, 0.0);
+      gust = round1(st.rajada_max_24h ?? st.rajada_max_hoje ?? st.rajada_atual, sust);
+      time = '24h';
+    } else { // 'agora'
+      sust = round1(st.vento_atual, 0.0);
+      gust = round1(st.rajada_atual ?? st.vento_atual, sust);
+      time = 'Agora';
+    }
+
+    const hasAnemometer = Boolean(
+      st.categoria === 'meteorologica' ||
+      st.tipo === 'meteorologica' ||
+      (st.codigo && (st.codigo.startsWith('IR') || st.codigo.startsWith('IC')))
+    );
+
+    const isPluviometerOnly = Boolean(
+      st.categoria === 'cemaden' ||
+      st.categoria === 'pluviometrica' ||
+      (st.codigo && st.codigo.startsWith('PCD'))
+    );
+
+    const isRiverOnly = Boolean(
+      st.categoria === 'inea' ||
+      st.categoria === 'hidrologica' ||
+      (st.codigo && st.codigo.includes('2241036'))
+    );
+
+    const isOnline = st.online !== false;
+
+    return {
+      raw: st,
+      codigo: st.codigo || '',
+      nome: st.nome_curto || st.nome || '',
+      bairro: st.bairro || '',
+      online: isOnline,
+      hasAnemometer,
+      isPluviometerOnly,
+      isRiverOnly,
+      gust: Math.max(gust, sust),
+      sust,
+      time,
+      dir: st.vento_dir_cardinal || '',
+      deg: st.vento_dir_graus !== null && st.vento_dir_graus !== undefined ? Math.round(st.vento_dir_graus) : null
+    };
+  });
+
+  // Filtragem
+  let displayStations = [];
+  if (socialState.windFilter === 'anemometer') {
+    displayStations = parsed.filter(s => s.hasAnemometer);
+  } else {
+    displayStations = parsed;
+  }
+
+  // Ordenação: ativas com anemômetro ordenadas pela MAIOR RAJADA; depois offline; depois pluviômetros/rio
+  displayStations.sort((a, b) => {
+    const aActive = (a.online && a.hasAnemometer) ? 1 : 0;
+    const bActive = (b.online && b.hasAnemometer) ? 1 : 0;
+    if (bActive !== aActive) return bActive - aActive;
+
+    if (aActive && bActive) {
+      if (b.gust !== a.gust) return b.gust - a.gust;
+      return b.sust - a.sust;
+    }
+
+    const aAnem = a.hasAnemometer ? 1 : 0;
+    const bAnem = b.hasAnemometer ? 1 : 0;
+    if (bAnem !== aAnem) return bAnem - aAnem;
+
+    return a.nome.localeCompare(b.nome);
+  });
+
+  // Top Highlights para o Pódio Resumo
+  const activeWithWind = parsed.filter(s => s.online && s.hasAnemometer && s.gust > 0);
+  activeWithWind.sort((a, b) => b.gust - a.gust);
+
+  const topGustStation = activeWithWind[0] || null;
+  const topSustStation = activeWithWind.slice().sort((a, b) => b.sust - a.sust)[0] || null;
+
+  // Background
+  if (isDark) {
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, '#020b18');
+    bgGrad.addColorStop(0.4, '#06172e');
+    bgGrad.addColorStop(1, '#020813');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
+  } else {
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(0.3, '#f4f1ea');
+    bgGrad.addColorStop(1, '#eae5dc');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
+  }
+
+  const topPad = isStory ? 95 : 50;
+  const leftPad = 65;
+  const rightPad = width - 65;
+  const contentWidth = rightPad - leftPad;
+
+  // Barra de acento
+  ctx.fillStyle = '#0284c7';
+  ctx.beginPath();
+  ctx.roundRect(leftPad, topPad, 10, isStory ? 90 : 76, 5);
+  ctx.fill();
+
+  // Cabeçalho
+  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+  ctx.font = isStory ? 'bold 34px sans-serif' : 'bold 28px sans-serif';
+  ctx.fillText('MAIORES VENTOS E', leftPad + 24, topPad + (isStory ? 32 : 26));
+
+  if (isDark) {
+    const titleGrad = ctx.createLinearGradient(leftPad + 24, topPad + 40, leftPad + 360, topPad + 95);
+    titleGrad.addColorStop(0, '#38bdf8');
+    titleGrad.addColorStop(1, '#00c2ff');
+    ctx.fillStyle = titleGrad;
+  } else {
+    ctx.fillStyle = '#0284c7';
+  }
+  ctx.font = isStory ? '900 66px sans-serif' : '900 54px sans-serif';
+  ctx.fillText('RAJADAS DO DIA', leftPad + 24, topPad + (isStory ? 92 : 76));
+
+  const now = new Date();
+  const dataFormatada = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+  const horaFormatada = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  const metricLabel = metric === 'hoje'
+    ? 'MÁXIMAS DE HOJE'
+    : (metric === '24h' ? 'ÚLTIMAS 24H' : 'TEMPO REAL');
+
+  const subY = topPad + (isStory ? 142 : 118);
+  ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
+  ctx.font = '700 22px sans-serif';
+  ctx.fillText('Rede Municipal & Entorno • Telemetria Oficial', leftPad, subY);
+
+  ctx.textAlign = 'right';
+  ctx.font = 'bold 21px monospace';
+  if (isDark) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillText(`${dataFormatada} • ${horaFormatada} • ${metricLabel}`, rightPad, subY);
+  } else {
+    const horizonSuffix = ` • ${metricLabel}`;
+    const suffixWidth = ctx.measureText(horizonSuffix).width;
+    ctx.fillStyle = '#0284c7';
+    ctx.fillText(horizonSuffix, rightPad, subY);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillText(`${dataFormatada} • ${horaFormatada}`, rightPad - suffixWidth, subY);
+  }
+  ctx.textAlign = 'left';
+
+  ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.3)' : '#cbd5e1';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(leftPad, subY + 16);
+  ctx.lineTo(rightPad, subY + 16);
+  ctx.stroke();
+
+  // POD RESUMO (3 colunas de destaque)
+  const podY = subY + 28;
+  const podH = isStory ? 116 : 98;
+  const podGap = 16;
+  const podW = (contentWidth - 2 * podGap) / 3;
+
+  const pods = [
+    {
+      title: '🌪️ MAIOR RAJADA DO DIA',
+      val: topGustStation ? `${formatDec1(topGustStation.gust)}` : '--',
+      unit: 'km/h',
+      color: '#ea580c',
+      sub: topGustStation ? `${topGustStation.nome}${topGustStation.time ? ' (' + topGustStation.time + ')' : ''}` : 'Sem registro'
+    },
+    {
+      title: '💨 MAIOR VENTO SUSTENTADO',
+      val: topSustStation ? `${formatDec1(topSustStation.sust)}` : '--',
+      unit: 'km/h',
+      color: '#0284c7',
+      sub: topSustStation ? `${topSustStation.nome}${topSustStation.time ? ' (' + topSustStation.time + ')' : ''}` : 'Sem registro'
+    },
+    {
+      title: '🧭 DIREÇÃO NO PICO',
+      val: topGustStation && topGustStation.dir ? topGustStation.dir : '--',
+      unit: topGustStation && topGustStation.deg !== null ? `(${topGustStation.deg}°)` : '',
+      color: isDark ? '#38bdf8' : '#0f172a',
+      sub: topGustStation ? `${topGustStation.bairro || 'Litoral Sul'}` : 'Ventos costeiros'
+    }
+  ];
+
+  pods.forEach((p, i) => {
+    const px = leftPad + i * (podW + podGap);
+
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.85)' : '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(px, podY, podW, podH, 14);
+    ctx.fill();
+
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.roundRect(px, podY, podW, 4, [14, 14, 0, 0]);
+    ctx.fill();
+
+    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(p.title, px + 14, podY + 22);
+
+    ctx.fillStyle = p.color;
+    ctx.font = '900 36px sans-serif';
+    ctx.fillText(p.val, px + 14, podY + 58);
+
+    const valW = ctx.measureText(p.val).width;
+    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.fillText(` ${p.unit}`, px + 14 + valW, podY + 58);
+
+    ctx.fillStyle = isDark ? '#cbd5e1' : '#334155';
+    ctx.font = '600 13px sans-serif';
+    ctx.fillText(p.sub, px + 14, podY + 84);
+  });
+
+  // CARDS DAS ESTAÇÕES
+  const footerH = isStory ? 75 : 60;
+  const startCardsY = podY + podH + (isStory ? 22 : 16);
+  const availableH = height - startCardsY - footerH;
+  const count = displayStations.length || 1;
+
+  const cardGap = isStory ? Math.min(18, Math.floor(availableH / count * 0.15)) : Math.min(12, Math.floor(availableH / count * 0.15));
+  const cardH = Math.min(isStory ? 140 : 105, Math.floor((availableH - (count - 1) * cardGap) / count));
+
+  displayStations.forEach((st, idx) => {
+    const cardY = startCardsY + idx * (cardH + cardGap);
+
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(leftPad, cardY, contentWidth, cardH, 14);
+    ctx.fill();
+
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    const rankX = leftPad + 14;
+    const rankY = cardY + (cardH - 34) / 2;
+    const isTop3 = idx < 3 && st.online && st.hasAnemometer;
+
+    if (isTop3) {
+      const colors = [
+        { bg: '#fef3c7', border: '#f59e0b', text: '#b45309', label: '1º' },
+        { bg: '#f1f5f9', border: '#94a3b8', text: '#334155', label: '2º' },
+        { bg: '#ffedd5', border: '#ea580c', text: '#c2410c', label: '3º' }
+      ][idx];
+      ctx.fillStyle = colors.bg;
+      ctx.beginPath();
+      ctx.roundRect(rankX, rankY, 44, 34, 10);
+      ctx.fill();
+      ctx.strokeStyle = colors.border;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      ctx.fillStyle = colors.text;
+      ctx.font = '900 17px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(colors.label, rankX + 22, rankY + 24);
+      ctx.textAlign = 'left';
+    } else {
+      ctx.fillStyle = isDark ? '#1e293b' : '#f8fafc';
+      ctx.beginPath();
+      ctx.roundRect(rankX, rankY, 44, 34, 10);
+      ctx.fill();
+      ctx.strokeStyle = isDark ? '#334155' : '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = 'bold 15px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`#${idx + 1}`, rankX + 22, rankY + 23);
+      ctx.textAlign = 'left';
+    }
+
+    const textStartX = rankX + 44 + 14;
+    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+    ctx.font = isStory ? 'bold 30px sans-serif' : 'bold 25px sans-serif';
+    ctx.fillText(st.nome, textStartX, cardY + (cardH * 0.44));
+
+    const sublineY = cardY + (cardH * 0.76);
+    ctx.font = 'bold 13px monospace';
+    const codeText = st.codigo;
+    const codeW = ctx.measureText(codeText).width + 12;
+
+    ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe';
+    ctx.beginPath();
+    ctx.roundRect(textStartX, sublineY - 14, codeW, 20, 6);
+    ctx.fill();
+    ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = isDark ? '#38bdf8' : '#0369a1';
+    ctx.fillText(codeText, textStartX + 6, sublineY);
+
+    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+    ctx.font = '600 15px sans-serif';
+    const locText = st.bairro ? `  ${st.bairro}` : '';
+    const dirText = (st.online && st.hasAnemometer && st.dir) ? ` • Vento: ${st.dir} (${st.deg ?? 0}°)` : '';
+    ctx.fillText(`${locText}${dirText}`, textStartX + codeW + 4, sublineY);
+
+    const rightColX = rightPad - 16;
+
+    if (!st.online) {
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#ef4444';
+      ctx.font = '900 24px sans-serif';
+      ctx.fillText('OFFLINE', rightColX, cardY + (cardH * 0.46));
+
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 14px sans-serif';
+      ctx.fillText('Sem sinal recente', rightColX, cardY + (cardH * 0.74));
+      ctx.textAlign = 'left';
+    } else if (!st.hasAnemometer) {
+      ctx.textAlign = 'right';
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText(st.isRiverOnly ? 'NÍVEL DO RIO' : 'SEM ANEMÔMETRO', rightColX, cardY + (cardH * 0.46));
+
+      ctx.font = '500 14px sans-serif';
+      ctx.fillText(st.isRiverOnly ? 'Estação Fluviométrica' : 'Apenas Pluviômetro', rightColX, cardY + (cardH * 0.74));
+      ctx.textAlign = 'left';
+    } else {
+      ctx.textAlign = 'right';
+
+      // 1) RAJADA MÁXIMA
+      const gustStr = formatDec1(st.gust);
+      ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
+      ctx.font = '900 38px sans-serif';
+      ctx.fillText(gustStr, rightColX - 52, cardY + (cardH * 0.48));
+
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('km/h', rightColX, cardY + (cardH * 0.48));
+
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = 'bold 13px sans-serif';
+      const gustLabel = st.time ? `Rajada máx às ${st.time}` : 'Rajada máxima';
+      ctx.fillText(gustLabel, rightColX, cardY + (cardH * 0.78));
+
+      // 2) VENTO SUSTENTADO
+      const sustX = rightColX - 220;
+      const sustStr = formatDec1(st.sust);
+      ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+      ctx.font = '900 32px sans-serif';
+      ctx.fillText(sustStr, sustX - 48, cardY + (cardH * 0.48));
+
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText('km/h', sustX, cardY + (cardH * 0.48));
+
+      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+      ctx.font = 'bold 13px sans-serif';
+      ctx.fillText('Vento sustentado', sustX, cardY + (cardH * 0.78));
+
+      ctx.textAlign = 'left';
+    }
+  });
+
+  // RODAPÉ OFICIAL
+  const footerY = height - (isStory ? 65 : 48);
+  ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.4)' : '#0284c7';
+  ctx.beginPath();
+  ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), contentWidth, 3, 1.5);
+  ctx.fill();
+
+  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+  ctx.font = isStory ? 'bold 26px sans-serif' : 'bold 22px sans-serif';
+  ctx.fillText('@tempoemriodasostras', leftPad, footerY);
+
+  ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+  ctx.font = isStory ? '500 19px sans-serif' : '500 16px sans-serif';
+  ctx.fillText('Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ', leftPad, footerY + (isStory ? 26 : 22));
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = isDark ? '#38bdf8' : '#0284c7';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.fillText('TELEMETRIA OFICIAL • ANEMÔMETROS CALIBRADOS', rightPad, footerY);
+  ctx.textAlign = 'left';
+
   const previewImg = document.getElementById('social-preview-image');
   if (previewImg) {
     previewImg.src = canvas.toDataURL('image/png');
@@ -966,8 +1367,20 @@ export async function downloadSocialFormat(format) {
   if (!canvas) return;
 
   const fmtName = socialState.format === 'story' ? 'stories' : 'post';
-  const horizonName = socialState.isHoje ? 'hoje' : (socialState.horizon || '24h');
-  const fileName = `acumulados_chuva_${horizonName}_${fmtName}_riodasostras.png`;
+  let fileName = '';
+  let shareTitle = '';
+  let shareText = '';
+
+  if (socialState.activeTab === 'vento') {
+    fileName = `maiores_ventos_rajadas_${socialState.windMetric}_${fmtName}_riodasostras.png`;
+    shareTitle = 'Maiores Ventos e Rajadas - Rio das Ostras';
+    shareText = `Maiores ventos e rajadas registrados pela rede municipal de Rio das Ostras (${socialState.windMetric.toUpperCase()}).`;
+  } else {
+    const horizonName = socialState.isHoje ? 'hoje' : (socialState.horizon || '24h');
+    fileName = `acumulados_chuva_${horizonName}_${fmtName}_riodasostras.png`;
+    shareTitle = 'Acumulados de Chuva - Rio das Ostras';
+    shareText = `Acumulados de Chuva da rede municipal de Rio das Ostras (${horizonName.toUpperCase()}).`;
+  }
 
   const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (window.innerWidth < 1024 && navigator.maxTouchPoints > 0);
 
@@ -980,8 +1393,8 @@ export async function downloadSocialFormat(format) {
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
-            title: 'Acumulados de Chuva - Rio das Ostras',
-            text: `Acumulados de Chuva da rede municipal de Rio das Ostras (${horizonName.toUpperCase()}).`
+            title: shareTitle,
+            text: shareText
           });
           return;
         }
@@ -999,66 +1412,45 @@ export async function downloadSocialFormat(format) {
     const link = document.createElement('a');
     link.download = fileName;
     link.href = blobUrl;
-    link.rel = 'noopener';
-    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
-
-    setTimeout(() => {
-      document.body.removeChild(link);
-      URL.revokeObjectURL(blobUrl);
-    }, 3000);
-
-    // 3. Em celulares onde o download automático de blob pode ser restrito pelo navegador,
-    // exibe o helper flutuante para toque e retenção ("Salvar Imagem")
-    if (isMobile) {
-      showMobileSaveHelper(canvas.toDataURL('image/png'), fileName);
-    }
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
   }, 'image/png');
+
+  // 3. Fallback adicional para iOS Safari: exibe helper com toque contínuo para salvar
+  if (isMobile && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    showMobileSaveHelper(canvas.toDataURL('image/png'), fileName);
+  }
 }
 
-/**
- * Helper flutuante para celulares garantindo que o usuário consiga salvar em qualquer navegador móvel
- */
 function showMobileSaveHelper(dataUrl, fileName) {
-  let helper = document.getElementById('mobile-save-helper-modal');
-  if (!helper) {
-    helper = document.createElement('div');
-    helper.id = 'mobile-save-helper-modal';
-    helper.className = 'fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/75 backdrop-blur-sm animate-fade-in';
-    document.body.appendChild(helper);
-  }
-
-  helper.innerHTML = `
-    <div class="max-w-md w-full bg-white rounded-2xl p-4 shadow-2xl border-2 border-[#f07a53] space-y-3 text-black">
-      <div class="flex items-center justify-between pb-2 border-b border-[#cbd5e1]">
-        <div class="flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <h4 class="text-sm font-black text-black">Salvar Imagem no Celular</h4>
+  let overlay = document.getElementById('social-mobile-save-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'social-mobile-save-overlay';
+    overlay.className = 'fixed inset-0 z-60 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-4';
+    overlay.innerHTML = `
+      <div class="bg-white rounded-2xl max-w-sm w-full p-4 text-center shadow-2xl border border-[#cbd5e1] space-y-3">
+        <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-2">
+          <span class="text-xs font-black text-black">Salvar Imagem no Celular</span>
+          <button type="button" onclick="this.closest('#social-mobile-save-overlay').remove()" class="p-1 text-black font-bold text-sm">✕</button>
         </div>
-        <button type="button" onclick="document.getElementById('mobile-save-helper-modal').remove()" class="p-1 rounded-lg text-black hover:bg-[#e2e8f0]">
-          ✕
+        <p class="text-xs text-black/80 font-medium">
+          <strong>Toque e segure</strong> o dedo sobre a imagem abaixo e selecione <strong>"Salvar Imagem"</strong> para guardar no seu Fotos/Galeria.
+        </p>
+        <div class="max-h-[50vh] overflow-hidden rounded-xl border border-[#cbd5e1] flex items-center justify-center bg-[#f4f1ea]">
+          <img id="social-mobile-helper-img" src="" class="max-h-[48vh] w-auto object-contain" />
+        </div>
+        <button type="button" onclick="this.closest('#social-mobile-save-overlay').remove()" class="w-full py-2 bg-[#f07a53] text-white rounded-xl font-black text-xs">
+          Entendi, fechar
         </button>
       </div>
-
-      <p class="text-xs font-semibold text-black/80 leading-snug">
-        💡 <strong>Dica para Celular:</strong> Se o download não iniciou automaticamente, <strong>toque e segure o dedo sobre a imagem abaixo</strong> e selecione <strong>"Salvar Imagem"</strong> ou <strong>"Fazer download da imagem"</strong>.
-      </p>
-
-      <div class="p-2 bg-[#f8fafc] rounded-xl border border-[#cbd5e1] flex justify-center max-h-[46vh] overflow-hidden">
-        <img src="${dataUrl}" alt="${fileName}" class="max-h-[42vh] w-auto rounded-lg shadow-sm object-contain" />
-      </div>
-
-      <div class="flex items-center gap-2 pt-1">
-        <a href="${dataUrl}" download="${fileName}" class="flex-1 py-2 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black text-center shadow-xs">
-          Baixar Arquivo
-        </a>
-        <button type="button" onclick="document.getElementById('mobile-save-helper-modal').remove()" class="px-4 py-2 rounded-xl text-xs font-bold bg-[#f1f5f9] text-black border border-[#cbd5e1]">
-          Fechar
-        </button>
-      </div>
-    </div>
-  `;
+    `;
+    document.body.appendChild(overlay);
+  }
+  const img = document.getElementById('social-mobile-helper-img');
+  if (img) img.src = dataUrl;
 }
 
 export async function downloadSocialCard() {
@@ -1069,8 +1461,16 @@ export async function downloadSocialCard() {
 if (typeof window !== 'undefined') {
   window.socialState = socialState;
   window.openSocialModalChuva = openSocialModalChuva;
-  window.openSocialModal = openSocialModalChuva;
+  window.openSocialModalVento = openSocialModalVento;
+  window.openSocialModalWithTab = openSocialModalWithTab;
+  window.openSocialModal = function(param) {
+    if (param === 'vento') openSocialModalVento();
+    else openSocialModalChuva(param || '24h');
+  };
   window.closeSocialModalChuva = closeSocialModalChuva;
+  window.setSocialTab = setSocialTab;
+  window.setSocialWindMetric = setSocialWindMetric;
+  window.setSocialWindFilter = setSocialWindFilter;
   window.setSocialFormat = setSocialFormat;
   window.setSocialHorizon = setSocialHorizon;
   window.handleSocialHoursInput = handleSocialHoursInput;
@@ -1086,5 +1486,8 @@ if (typeof window !== 'undefined') {
   window.downloadSocialFormat = downloadSocialFormat;
   window.downloadSocialCard = downloadSocialCard;
   window.getStationRainForSocial = getStationRainForSocial;
+  window.getStationWindAndGust = getStationWindAndGust;
   window.renderSocialCanvas = renderSocialCanvas;
+  window.renderSocialCanvasChuva = renderSocialCanvasChuva;
+  window.renderSocialCanvasVento = renderSocialCanvasVento;
 }
