@@ -1017,12 +1017,12 @@ def run_auto_bulletin_pipeline():
         "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,precipitation,"
         "surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code"
         "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,weather_code"
-        "&timezone=America%2FSao_Paulo"
+        "&forecast_days=8&timezone=America%2FSao_Paulo"
     )
 
     url_marine = (
         f"https://marine-api.open-meteo.com/v1/marine?latitude={LAT}&longitude={LON}"
-        "&hourly=wave_height,wave_direction,wave_period&timezone=America%2FSao_Paulo"
+        "&hourly=wave_height,wave_direction,wave_period&forecast_days=8&timezone=America%2FSao_Paulo"
     )
 
     try:
@@ -1208,7 +1208,7 @@ def run_auto_bulletin_pipeline():
     inea_ch24 = float(inea_pluv_st.get('chuva_pluvio_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_24h') is not None) else (inea_pluv_st.get('chuva_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_24h') is not None) else 0.0))
     inea_ch96 = float(inea_pluv_st.get('chuva_pluvio_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_96h') is not None) else (inea_pluv_st.get('chuva_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_96h') is not None) else 0.0))
 
-    for day_idx in range(4):
+    for day_idx in range(8):
         day_date_iso = om['daily']['time'][day_idx]
         dt = datetime.strptime(day_date_iso, '%Y-%m-%d')
         dia_semana_nome = DIAS_SEMANA_PT[dt.weekday()]
@@ -1619,7 +1619,7 @@ def run_auto_bulletin_pipeline():
 
 
     # 3. Constrói Metadados, Panorama Sinótico e Cards da População
-    periodo_str = f"{dias_3[0]['date_short']} ({dias_3[0]['dia_semana']}) a {dias_3[3]['date_short']} ({dias_3[3]['dia_semana']})"
+    periodo_str = f"{dias_3[0]['date_short']} ({dias_3[0]['dia_semana']}) a {dias_3[-1]['date_short']} ({dias_3[-1]['dia_semana']})"
 
     # Análise de chuva total e pico térmico
     chuva_total_3d = sum([d['chuva_tot'] for d in dias_3])
@@ -2177,10 +2177,12 @@ def run_auto_bulletin_pipeline():
                 "taxa_horaria_pico": d.get('taxa_horaria_pico', '< 5 mm/h')
             } for d in dias_3
         ],
-        "acumulado_3dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
-        "acumulado_3dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2)" + (f" + {dias_3[3]['chuva_tot']:.1f} mm (D+3)" if len(dias_3) > 3 else "") + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
-        "acumulado_4dias_formula": f"{dias_3[0]['chuva_tot']:.1f} mm (Hoje) + {dias_3[1]['chuva_tot']:.1f} mm (D+1) + {dias_3[2]['chuva_tot']:.1f} mm (D+2)" + (f" + {dias_3[3]['chuva_tot']:.1f} mm (D+3)" if len(dias_3) > 3 else "") + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
-        "acumulado_4dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
+        "acumulado_3dias_media": round(sum(d['chuva_tot'] for d in dias_3[:3]), 1),
+        "acumulado_4dias_media": round(sum(d['chuva_tot'] for d in dias_3[:4]), 1),
+        "acumulado_semana_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
+        "acumulado_semana_formula": " + ".join([f"{d['chuva_tot']:.1f} mm ({d['dia_semana'][:3]})" for d in dias_3]) + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "acumulado_8dias_formula": " + ".join([f"{d['chuva_tot']:.1f} mm ({d['dia_semana'][:3]})" for d in dias_3]) + f" = {sum(d['chuva_tot'] for d in dias_3):.1f} mm",
+        "acumulado_8dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
         "dias_somados": [d['chuva_tot'] for d in dias_3],
         "conclusao_sem_pontas_soltas": (
             "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade "

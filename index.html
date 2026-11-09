@@ -673,7 +673,7 @@
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
               <div>
                 <span>Previsão dos Próximos Dias</span>
-                <span class="nav-dropdown-item-desc">Cards operacionais de 4 dias (Hoje + 3 dias à frente) com mar e detalhes</span>
+                <span class="nav-dropdown-item-desc">Previsão operacional para 1 semana à frente (Hoje + 7 dias) com mar e detalhes</span>
               </div>
             </a>
             <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item cursor-pointer">
@@ -973,7 +973,7 @@
               <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
               <div>
                 <span>Previsão Operacional 16 Turnos</span>
-                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para os 4 dias (Hoje + 3 dias à frente)</span>
+                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para 1 semana à frente (Hoje + 7 dias)</span>
               </div>
             </a>
             <a onclick="navigateSubSection('boletim', 'section-boletim-telefones', event)" class="nav-dropdown-item">
@@ -1868,7 +1868,7 @@
 
 
 
-            <h3 class="text-base sm:text-lg font-bold text-black tracking-tight">Previsão dos Próximos Dias</h3>
+            <h3 class="text-base sm:text-lg font-bold text-black tracking-tight">Previsão dos Próximos Dias (1 Semana à Frente)</h3>
 
 
 
@@ -5840,7 +5840,7 @@
 
 
 
-                <span class="text-xs font-normal text-black">Mar (4 Dias), Tábuas de Maré e Balneabilidade INEA</span>
+                <span class="text-xs font-normal text-black">Mar (1 Semana / 8 Dias), Tábuas de Maré e Balneabilidade INEA</span>
 
 
 
@@ -8412,7 +8412,7 @@
 
 
 
-                <span>Somatório para 4 Dias (Hoje + 3 Dias à Frente):</span>
+                <span>Somatório para 1 Semana (Hoje + 7 Dias à Frente):</span>
 
 
 
@@ -8444,106 +8444,64 @@
 
 
 
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="chuva-turnos-day-selector">
-
-
-
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2" id="chuva-turnos-day-selector">
               <button type="button" onclick="selectTurnoDay(0)" id="btn-turno-day-0" class="p-2 rounded-xl text-left border-2 border-[#0284c7] bg-[#f0f9ff] text-black transition shadow-2xs cursor-pointer">
-
-
-
                 <div class="text-[10px] uppercase font-bold text-black/70">Hoje (D0)</div>
-
-
-
                 <div class="text-xs font-black text-black flex items-center justify-between">
-
-
-
-                  <span id="lbl-turno-day-0-name">Domingo</span>
-
-
-
-                  <span id="lbl-turno-day-0-val" class="font-mono text-[#0369a1]">9,2 mm</span>
-
-
-
+                  <span id="lbl-turno-day-0-name">Hoje</span>
+                  <span id="lbl-turno-day-0-val" class="font-mono text-[#0369a1]">-- mm</span>
                 </div>
-
-
-
               </button>
-
-
-
               <button type="button" onclick="selectTurnoDay(1)" id="btn-turno-day-1" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
-
-
-
                 <div class="text-[10px] uppercase font-bold text-black/70">Amanhã (D1)</div>
-
-
-
                 <div class="text-xs font-black text-black flex items-center justify-between">
-
-
-
-                  <span id="lbl-turno-day-1-name">Segunda</span>
-
-
-
-                  <span id="lbl-turno-day-1-val" class="font-mono text-black">7,1 mm</span>
-
-
-
+                  <span id="lbl-turno-day-1-name">Amanhã</span>
+                  <span id="lbl-turno-day-1-val" class="font-mono text-black">-- mm</span>
                 </div>
-
-
-
               </button>
-
-
-
               <button type="button" onclick="selectTurnoDay(2)" id="btn-turno-day-2" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
-
-
-
-                <div class="text-[10px] uppercase font-bold text-black/70">D+2 (2 Dias à Frente)</div>
-
-
-
+                <div class="text-[10px] uppercase font-bold text-black/70">D+2</div>
                 <div class="text-xs font-black text-black flex items-center justify-between">
-
-
-
-                  <span id="lbl-turno-day-2-name">Terça</span>
-
-
-
-                  <span id="lbl-turno-day-2-val" class="font-mono text-black">1,1 mm</span>
-
-
-
+                  <span id="lbl-turno-day-2-name">D+2</span>
+                  <span id="lbl-turno-day-2-val" class="font-mono text-black">-- mm</span>
                 </div>
-
-
-
               </button>
-
               <button type="button" onclick="selectTurnoDay(3)" id="btn-turno-day-3" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
-                <div class="text-[10px] uppercase font-bold text-black/70">D+3 (3 Dias à Frente)</div>
+                <div class="text-[10px] uppercase font-bold text-black/70">D+3</div>
                 <div class="text-xs font-black text-black flex items-center justify-between">
-                  <span id="lbl-turno-day-3-name">--</span>
+                  <span id="lbl-turno-day-3-name">D+3</span>
                   <span id="lbl-turno-day-3-val" class="font-mono text-black">-- mm</span>
                 </div>
               </button>
-
-
-
+              <button type="button" onclick="selectTurnoDay(4)" id="btn-turno-day-4" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+4</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-4-name">D+4</span>
+                  <span id="lbl-turno-day-4-val" class="font-mono text-black">-- mm</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectTurnoDay(5)" id="btn-turno-day-5" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+5</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-5-name">D+5</span>
+                  <span id="lbl-turno-day-5-val" class="font-mono text-black">-- mm</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectTurnoDay(6)" id="btn-turno-day-6" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+6</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-6-name">D+6</span>
+                  <span id="lbl-turno-day-6-val" class="font-mono text-black">-- mm</span>
+                </div>
+              </button>
+              <button type="button" onclick="selectTurnoDay(7)" id="btn-turno-day-7" class="p-2 rounded-xl text-left border border-[#cbd5e1] bg-white text-black hover:bg-[#f8fafc] transition shadow-2xs cursor-pointer">
+                <div class="text-[10px] uppercase font-bold text-black/70">D+7</div>
+                <div class="text-xs font-black text-black flex items-center justify-between">
+                  <span id="lbl-turno-day-7-name">D+7</span>
+                  <span id="lbl-turno-day-7-val" class="font-mono text-black">-- mm</span>
+                </div>
+              </button>
             </div>
-
-
-
           </div>
 
 
@@ -9787,7 +9745,7 @@
 
 
 
-              <span>Panorama Sinótico Geral dos 4 Dias (Hoje + 3 Dias à Frente)</span>
+              <span>Panorama Sinótico Geral para 1 Semana (Hoje + 7 Dias à Frente)</span>
 
 
 
@@ -11051,7 +11009,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=198"></script>
+  <script type="module" src="js/app.js?v=199"></script>
 
 
 

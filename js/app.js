@@ -38,8 +38,8 @@ import {
 
   openSocialModalVento,
   openSocialModalSemanal
-} from './social-cards.js?v=198';
-import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=198';
+} from './social-cards.js?v=199';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=199';
 
 
 
@@ -3503,6 +3503,58 @@ function renderDashboardUI(meta, rows, weather) {
 
 
 
+  // Garante que a previsão tenha sempre 8 dias completos (Hoje + 7 dias à frente = 1 semana)
+  if (meta && weather && weather.daily && weather.daily.time) {
+    if (!meta.dias_resumo) meta.dias_resumo = [];
+    const diasNomesMap = ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'];
+    const diasSemanaNomesShort = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    for (let i = meta.dias_resumo.length; i < Math.min(8, weather.daily.time.length); i++) {
+      const dIso = weather.daily.time[i];
+      const parts = dIso.split('-');
+      const dtObj = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      const nomeSemana = diasNomesMap[dtObj.getDay()];
+      const dtBr = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      const tMin = Math.round(weather.daily.temperature_2m_min[i]);
+      const tMax = Math.round(weather.daily.temperature_2m_max[i]);
+      const ch = Math.round((weather.daily.precipitation_sum[i] || 0) * 10) / 10;
+      const raj = Math.round(weather.daily.wind_gusts_10m_max[i] || 24);
+      const wmo = weather.daily.weather_code[i];
+      const wmoInfo = (window.WEATHER_CODES && window.WEATHER_CODES[wmo]) || { label: 'Parcialmente Nublado', icon: 'cloud-sun' };
+
+      meta.dias_resumo.push({
+        dia: `${nomeSemana.toUpperCase()} – ${dtBr}`,
+        subtitulo: wmoInfo.label,
+        badge: ch >= 25 ? 'AVISO / ATENÇÃO' : 'OBSERVAÇÃO',
+        badge_tipo: ch >= 25 ? 'warning' : 'info',
+        t_min: tMin,
+        t_max: tMax,
+        sensacao_min: tMin,
+        sensacao_max: tMax,
+        pilares: {
+          ceu: { label: 'CÉU', val: wmoInfo.label, icon: wmoInfo.icon || 'cloud-sun' },
+          temp: { label: 'TEMPERATURA', val: `${tMin}° a ${tMax}°C`, icon: 'thermometer' },
+          sensacao: { label: 'SENSAÇÃO TÉRMICA', val: `Menor: ${tMin}°C • Maior: ${tMax}°C`, icon: 'flame' },
+          chuva: { label: 'CHUVA', val: `${ch.toFixed(1)} mm`, icon: ch > 5 ? 'cloud-rain' : 'cloud-drizzle' },
+          vento: { label: 'VENTO & RAJADAS', val: `Rajadas ${raj} km/h`, icon: 'wind' },
+          mar: { label: 'MAR E PRAIA', val: '1,0 a 1,4 m', icon: 'waves' }
+        },
+        informe_populacao: [
+          `Nesta ${nomeSemana.toLowerCase()} (${parts[2]}/${parts[1]}), a modelagem numérica indica ${wmoInfo.label.toLowerCase()} sobre Rio das Ostras com temperaturas oscilando entre ${tMin}°C e ${tMax}°C. Precipitação diária estimada em ${ch.toFixed(1)} mm e ventos com rajadas de até ${raj} km/h na orla. O Rio Jundiá permanece em condição estável e segura.`
+        ]
+      });
+    }
+    if (meta.dias_resumo.length >= 8 && periodTxt) {
+      const pFirst = meta.dias_resumo[0].dia.match(/(\d{2}\/\d{2})/);
+      const pLast = meta.dias_resumo[meta.dias_resumo.length - 1].dia.match(/(\d{2}\/\d{2})/);
+      const dFirstNome = meta.dias_resumo[0].dia.split(/[—–]/)[0].trim();
+      const dLastNome = meta.dias_resumo[meta.dias_resumo.length - 1].dia.split(/[—–]/)[0].trim();
+      if (pFirst && pLast) {
+        meta.periodo = `${pFirst[1]} (${dFirstNome}) a ${pLast[1]} (${dLastNome})`;
+        periodTxt.textContent = meta.periodo;
+      }
+    }
+  }
+
   if (list3d && meta?.dias_resumo && Array.isArray(meta.dias_resumo)) {
 
 
@@ -3664,7 +3716,7 @@ function renderDashboardUI(meta, rows, weather) {
 
     list3d.innerHTML = meta.dias_resumo.map((d, idx) => {
       // Rótulos limpos e sem aperto horizontal
-      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã', 'D+3'];
+      const rotulos = ['Hoje', 'Amanhã', 'Depois de amanhã', 'D+3', 'D+4', 'D+5', 'D+6', 'D+7'];
       const rotuloCurto = rotulos[idx] || `Dia ${idx + 1}`;
 
       // Formata o nome do dia em Title Case: "QUINTA-FEIRA" -> "Quinta-Feira"
@@ -3737,9 +3789,16 @@ function renderDashboardUI(meta, rows, weather) {
       const marInfoList = [
         { ondas: '1,2 a 1,6 m', estado: 'Calmo a Moderado', chip: '1,2 a 1,6 m (Mod.)', detalhe: 'Swell E/SE • Enseadas 0,3-0,7 m | Oceânica 1,2-1,6 m' },
         { ondas: '1,0 a 1,4 m', estado: 'Moderado', chip: '1,0 a 1,4 m (Mod.)', detalhe: 'Swell E • Enseadas 0,3-0,6 m | Oceânica 1,0-1,4 m' },
-        { ondas: '0,8 a 1,2 m', estado: 'Calmo', chip: '0,8 a 1,2 m (Calmo)', detalhe: 'Swell E/NE • Enseadas 0,2-0,5 m | Oceânica 0,8-1,2 m' }
+        { ondas: '0,8 a 1,2 m', estado: 'Calmo', chip: '0,8 a 1,2 m (Calmo)', detalhe: 'Swell E/NE • Enseadas 0,2-0,5 m | Oceânica 0,8-1,2 m' },
+        { ondas: '0,9 a 1,3 m', estado: 'Calmo a Moderado', chip: '0,9 a 1,3 m (Mod.)', detalhe: 'Swell E • Enseadas 0,3-0,6 m | Oceânica 0,9-1,3 m' },
+        { ondas: '1,1 a 1,5 m', estado: 'Moderado', chip: '1,1 a 1,5 m (Mod.)', detalhe: 'Swell SE • Enseadas 0,3-0,7 m | Oceânica 1,1-1,5 m' },
+        { ondas: '1,0 a 1,4 m', estado: 'Moderado', chip: '1,0 a 1,4 m (Mod.)', detalhe: 'Swell E/SE • Enseadas 0,3-0,6 m | Oceânica 1,0-1,4 m' },
+        { ondas: '0,8 a 1,2 m', estado: 'Calmo', chip: '0,8 a 1,2 m (Calmo)', detalhe: 'Swell E • Enseadas 0,2-0,5 m | Oceânica 0,8-1,2 m' },
+        { ondas: '0,9 a 1,3 m', estado: 'Calmo a Moderado', chip: '0,9 a 1,3 m (Mod.)', detalhe: 'Swell E/NE • Enseadas 0,3-0,6 m | Oceânica 0,9-1,3 m' }
       ];
-      const marInfo = marInfoList[idx] || { ondas: '1,0 m', estado: 'Normal', chip: '1,0 m', detalhe: 'Condições regulares de mar' };
+      const marInfo = (d.pilares?.mar?.val && d.pilares.mar.val !== '1.4 m')
+        ? { ondas: d.pilares.mar.val, estado: 'Moderado', chip: `${d.pilares.mar.val} (Mod.)`, detalhe: `Swell E/SE • Faixa Oceânica ${d.pilares.mar.val}` }
+        : (marInfoList[idx] || { ondas: '1,0 a 1,4 m', estado: 'Normal', chip: '1,0 a 1,4 m (Mod.)', detalhe: 'Condições regulares de mar' });
 
       const marFrases = [
         'Na orla de Rio das Ostras, o mar varia de calmo a moderado com ondas de 1,2 a 1,6 m na faixa oceânica e águas abrigadas nas enseadas (0,3 a 0,7 m).',
@@ -5002,19 +5061,27 @@ function renderChuvaTurnosBars(rows) {
   const d1_turnos = rows.slice(4, 8);
   const d2_turnos = rows.slice(8, 12);
   const d3_turnos = rows.slice(12, 16);
+  const d4_turnos = rows.slice(16, 20);
+  const d5_turnos = rows.slice(20, 24);
+  const d6_turnos = rows.slice(24, 28);
+  const d7_turnos = rows.slice(28, 32);
 
   const tot0 = d0_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
   const tot1 = d1_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
   const tot2 = d2_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
   const tot3 = d3_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
-  const totalGeral = tot0 + tot1 + tot2 + tot3;
+  const tot4 = d4_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const tot5 = d5_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const tot6 = d6_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const tot7 = d7_turnos.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
+  const totalGeral = rows.reduce((acc, r) => acc + (parseFloat(r.chuva_media) || 0), 0);
 
   // Atualiza badges no cabeçalho do card
   if (badgeHoje) {
     badgeHoje.textContent = `Hoje: ${tot0.toFixed(1)} mm`;
   }
   if (badgeTotal) {
-    badgeTotal.textContent = d3_turnos.length > 0 ? `Total 4D: ${totalGeral.toFixed(1)} mm` : `Total 3D: ${totalGeral.toFixed(1)} mm`;
+    badgeTotal.textContent = rows.length > 16 ? `Total 1 Sem (8D): ${totalGeral.toFixed(1)} mm` : (d3_turnos.length > 0 ? `Total 4D: ${totalGeral.toFixed(1)} mm` : `Total 3D: ${totalGeral.toFixed(1)} mm`);
   }
 
   // Atualiza a fórmula visível
@@ -5036,14 +5103,18 @@ function renderChuvaTurnosBars(rows) {
   const l3Name = document.getElementById('lbl-turno-day-3-name');
   const l3Val = document.getElementById('lbl-turno-day-3-val');
 
-  if (l0Name) l0Name.textContent = d0_turnos[0]?.dia_semana || 'Hoje';
-  if (l0Val) l0Val.textContent = `${tot0.toFixed(1)} mm`;
-  if (l1Name) l1Name.textContent = d1_turnos[0]?.dia_semana || 'Amanhã';
-  if (l1Val) l1Val.textContent = `${tot1.toFixed(1)} mm`;
-  if (l2Name) l2Name.textContent = d2_turnos[0]?.dia_semana || 'D+2';
-  if (l2Val) l2Val.textContent = `${tot2.toFixed(1)} mm`;
-  if (l3Name) l3Name.textContent = d3_turnos[0]?.dia_semana || 'D+3';
-  if (l3Val) l3Val.textContent = `${tot3.toFixed(1)} mm`;
+  const allDayTurnos = [d0_turnos, d1_turnos, d2_turnos, d3_turnos, d4_turnos, d5_turnos, d6_turnos, d7_turnos];
+  const allDayTots = [tot0, tot1, tot2, tot3, tot4, tot5, tot6, tot7];
+  for (let d = 0; d < 8; d++) {
+    const lName = document.getElementById(`lbl-turno-day-${d}-name`);
+    const lVal = document.getElementById(`lbl-turno-day-${d}-val`);
+    if (lName && allDayTurnos[d] && allDayTurnos[d].length > 0) {
+      lName.textContent = allDayTurnos[d][0]?.dia_semana || `D+${d}`;
+    }
+    if (lVal && allDayTurnos[d] && allDayTurnos[d].length > 0) {
+      lVal.textContent = `${allDayTots[d].toFixed(1)} mm`;
+    }
+  }
 
 
 

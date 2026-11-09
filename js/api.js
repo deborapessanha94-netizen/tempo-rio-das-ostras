@@ -71,7 +71,7 @@ export async function getRioDasOstrasWeatherData() {
     'uv_index_max'
   ].join(',');
 
-  const url = `${BASE_FORECAST_URL}?latitude=${RIO_DAS_OSTRAS_COORDS.lat}&longitude=${RIO_DAS_OSTRAS_COORDS.lon}&current=${currentParams}&hourly=${hourlyParams}&daily=${dailyParams}&forecast_days=7&timezone=America%2FSao_Paulo&_t=${Date.now()}`;
+  const url = `${BASE_FORECAST_URL}?latitude=${RIO_DAS_OSTRAS_COORDS.lat}&longitude=${RIO_DAS_OSTRAS_COORDS.lon}&current=${currentParams}&hourly=${hourlyParams}&daily=${dailyParams}&forecast_days=8&timezone=America%2FSao_Paulo&_t=${Date.now()}`;
 
   const response = await fetch(url);
   if (!response.ok) {
