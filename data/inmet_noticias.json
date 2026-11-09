@@ -1,9 +1,27 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-09 10:24:38",
+  "coleta_iso": "2026-11-09 19:33:34",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para terça-feira (10) e quarta-feira (11)",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-10-e-quarta-feira-11",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET divulga previsão para semana de 9 a 16 de novembro de 2026",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-9-a-16-de-novembro-de-2026",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Nota sobre os Destaques Meteorológicos de outubro de 2026",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/nota-sobre-os-destaques-meteorológicos-de-outubro-de-2026",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para sábado (7), domingo (8) e segunda-feira (9)",
       "data": "06/11/2026",
@@ -45,24 +63,6 @@
       "data": "04/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/temperatura-tem-elevação-de-6-2-c-em-apenas-2-horas-na-manhã-dessa-quarta-04-em-brasília",
       "relevancia_sudeste": true
-    },
-    {
-      "titulo": "El Niño atinge anomalia recorde para outubro",
-      "data": "03/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/el-niño-atinge-anomalia-recorde-para-outubro",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para quarta-feira (4) e quinta-feira (5)",
-      "data": "03/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-4-e-quinta-feira-5",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET divulga previsão para semana de 03 a 10 de novembro de 2026",
-      "data": "03/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-03-a-10-de-novembro-de-2026",
-      "relevancia_sudeste": false
     }
   ]
 }
