@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=191">
+  <link rel="stylesheet" href="css/styles.css?v=192">
 
 
 
@@ -10584,30 +10584,42 @@
 
       <!-- Barra de Controles e Filtros Rápidos (Otimizada para Celular & Paleta Oficial) -->
       <div class="p-3 sm:p-4 bg-[#f8fafc] border-b border-[#cbd5e1] space-y-2.5 text-xs shrink-0">
-        
-        <!-- Linha 1: Seletor Segmentado de Formato & Ações Rápidas -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-          <!-- Formato (Segmented Touch Targets) -->
-          <div class="flex items-center gap-1.5 p-1 bg-[#eaeff2] rounded-2xl border border-[#cbd5e1] w-full sm:w-auto shadow-xs" role="tablist">
-            <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="square" class="w-3.5 h-3.5 text-black"></i>
-              <span>Post Feed (4:5)</span>
-            </button>
-            <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition">
-              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
-              <span>Stories (9:16)</span>
-            </button>
+
+        <!-- Linha 1: Controles Globais (Formato, Tema do Card e Filtro de Ativas - Comum para Chuva e Vento) -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Formato (Segmented Touch Targets) -->
+            <div class="flex items-center gap-1.5 p-1 bg-[#eaeff2] rounded-2xl border border-[#cbd5e1] shadow-xs" role="tablist">
+              <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="square" class="w-3.5 h-3.5 text-black"></i>
+                <span>Post Feed (4:5)</span>
+              </button>
+              <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
+                <span>Stories (9:16)</span>
+              </button>
+            </div>
+
+            <!-- Seletor de Tema do Card (Nórdica Clara vs Escura Noturna) - Disponível para Chuva e Vento -->
+            <div class="flex items-center gap-1 bg-[#eaeff2] p-1 rounded-2xl border border-[#cbd5e1] shadow-xs">
+              <button type="button" id="social-theme-btn-nordic" onclick="setSocialCardTheme('nordic')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Paleta Nórdica Clara Oficial">
+                <span>🎨 Clara</span>
+              </button>
+              <button type="button" id="social-theme-btn-dark" onclick="setSocialCardTheme('dark')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Paleta Escura Noturna Oficial (Mesma de Chuva)">
+                <span>🌙 Escura</span>
+              </button>
+            </div>
           </div>
 
-          <!-- Filtro Rápido de Estações (Todas vs Ativas + Atualizar) -->
-          <div class="flex items-center justify-between sm:justify-end gap-1.5 w-full sm:w-auto">
+          <!-- Filtro de Estações (Todas vs Apenas Ativas + Atualizar) -->
+          <div class="flex items-center justify-between sm:justify-end gap-1.5 w-full lg:w-auto">
             <div class="flex items-center gap-1.5">
-              <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1">
-                <i data-lucide="layers" class="w-3.5 h-3.5 text-white"></i>
-                <span>Todas (10)</span>
+              <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Exibe todas as estações">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-black"></i>
+                <span id="social-filter-all-label">Todas</span>
               </button>
-              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-600"></i>
+              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#059669] text-white shadow-xs border border-[#047857] cursor-pointer flex items-center gap-1 transition" title="Exibe exclusivamente estações ativas com dados em tempo real">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-white"></i>
                 <span>Apenas Ativas</span>
               </button>
             </div>
@@ -10617,7 +10629,7 @@
           </div>
         </div>
 
-        <!-- Bloco de Controles da Chuva -->
+        <!-- Linha 2: Controles Específicos da Chuva -->
         <div id="social-controls-chuva" class="space-y-2.5">
           <div class="flex items-center justify-between gap-2.5 flex-wrap pt-1">
             <div class="flex items-center gap-2 flex-wrap">
@@ -10647,16 +10659,6 @@
               </button>
             </div>
 
-            <!-- Seletor de Tema do Card do Instagram (Oficial Nórdica Clara vs Noturna) -->
-            <div class="flex items-center gap-1 bg-[#eaeff2] p-1 rounded-xl border border-[#cbd5e1] shadow-2xs">
-              <button type="button" id="social-theme-btn-nordic" onclick="setSocialCardTheme('nordic')" class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Paleta Nórdica Clara Oficial do Site">
-                <span>🎨 Nórdica Clara</span>
-              </button>
-              <button type="button" id="social-theme-btn-dark" onclick="setSocialCardTheme('dark')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Paleta Noturna Oceânica">
-                <span>🌙 Noturna</span>
-              </button>
-            </div>
-
             <!-- Drawer Recolhível de Seleção de Estações -->
             <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1.5 px-3 rounded-xl bg-[#ffebe4]/70 hover:bg-[#ffebe4] border border-[#f07a53]/40 transition shrink-0 shadow-2xs">
               <span id="social-selected-count">10 de 10 selecionadas</span>
@@ -10665,7 +10667,7 @@
           </div>
         </div>
 
-        <!-- Bloco de Controles do Vento & Rajadas -->
+        <!-- Linha 2: Controles Específicos do Vento & Rajadas -->
         <div id="social-controls-vento" class="space-y-2.5 hidden">
           <div class="flex items-center justify-between gap-2.5 flex-wrap pt-1">
             <div class="flex items-center gap-2 flex-wrap">
@@ -10701,29 +10703,6 @@
               >
                 <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Tempo Real (Agora)</span>
-              </button>
-            </div>
-
-            <!-- Filtro de estações com anemômetro -->
-            <div class="flex items-center gap-1.5">
-              <button 
-                type="button" 
-                id="social-wind-filter-anemometer" 
-                onclick="setSocialWindFilter('anemometer')" 
-                class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white shadow-xs border border-[#0369a1] cursor-pointer flex items-center gap-1"
-                title="Exibe estações com anemômetro calibrado"
-              >
-                <i data-lucide="check" class="w-3.5 h-3.5 text-white"></i>
-                <span>Com Anemômetro</span>
-              </button>
-              <button 
-                type="button" 
-                id="social-wind-filter-all" 
-                onclick="setSocialWindFilter('all')" 
-                class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer flex items-center gap-1"
-                title="Exibe todas as 10 estações da rede"
-              >
-                <span>Todas as 10</span>
               </button>
             </div>
           </div>
@@ -11027,7 +11006,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=191"></script>
+  <script type="module" src="js/app.js?v=192"></script>
 
 
 

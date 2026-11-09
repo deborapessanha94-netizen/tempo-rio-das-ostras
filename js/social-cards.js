@@ -3,30 +3,30 @@
  * Sincronizado em tempo real com os valores exatos do site no momento da visualização/download.
  * Canal Oficial: @tempoemriodasostras
  *
- * v191:
- * - Imagens SEPARADAS para CHUVA e para VENTOS & RAJADAS (Duas imagens oficiais distintas)
- * - Card de Vento com ranking dos maiores ventos e maiores rajadas, direção, pódio resumo e horários
- * - Paleta Nórdica Clara Oficial (#f4f1ea) como padrão visual em todos os dispositivos
- * - Digitação direta de qualquer quantidade de horas para chuva e métricas rápidas para vento
- * - Download 100% compatível com celulares (Web Share API nativa, Blob URL e helper touch-and-hold)
+ * v192:
+ * - Filtro de estações ativas estrito: remove 100% das estações offline quando "Apenas Ativas" está selecionado
+ * - Card de Vento na Paleta Escura Noturna Oficial idêntica à de Chuva (#020b18, ciano luminoso #38bdf8, gradiente #5eead4 -> #00c2ff)
+ * - Seletor de Tema do Card (Clara vs Escura) comum e acessível em ambas as abas (Chuva e Vento)
+ * - Dois cards oficiais totalmente separados para Chuva e Ventos & Rajadas
  */
 
 export const socialState = {
   format: 'post', // 'post' (1080x1350) ou 'story' (1080x1920)
-  cardTheme: 'nordic', // 'nordic' (Paleta Nórdica Clara Oficial) ou 'dark' (Noturna Oceânica)
+  cardTheme: 'nordic', // 'nordic' (Paleta Nórdica Clara Oficial) ou 'dark' (Noturna Oceânica Oficial)
   activeTab: 'chuva', // 'chuva' (Acumulados) ou 'vento' (Maiores Ventos e Rajadas)
+
+  // Filtro padrão: APENAS ATIVAS (não exibe estações offline)
+  filterMode: 'active', // 'active' (apenas estações ativas online) ou 'all' (todas as 10)
 
   // Estados de Chuva:
   horizon: '24h',
   horizonHours: 24.0,
   isHoje: false,
-  filterMode: 'all', // 'all' (todas as 10) ou 'active' (apenas ativas)
   selectedStationCodes: new Set(),
   stationFilterText: '',
 
   // Estados de Vento & Rajadas:
   windMetric: 'hoje', // 'hoje' (máximas do dia), '24h', 'agora'
-  windFilter: 'anemometer', // 'anemometer' (com sensor de vento) ou 'all' (todas as 10)
 
   // Dados consolidados:
   stationsData: [],
@@ -170,7 +170,6 @@ export function parseUserQuery(query) {
 export function getStationRainForSocial(station, horizon, customHours) {
   if (!station) return 0.0;
 
-  // 1. Acumulado diário (desde 00h de hoje)
   if (socialState.isHoje || horizon === 'hoje') {
     if (station.chuva_hoje !== undefined && station.chuva_hoje !== null) {
       return round1(station.chuva_hoje, 0.0);
@@ -255,7 +254,7 @@ export function setSocialTab(tab) {
     }
   }
 
-  // Alterna contêineres de controles
+  // Alterna contêineres de controles específicos da Linha 2
   const cChuva = document.getElementById('social-controls-chuva');
   const cVento = document.getElementById('social-controls-vento');
   if (cChuva && cVento) {
@@ -336,29 +335,6 @@ export function setSocialWindMetric(metric) {
 }
 
 /**
- * Define o filtro de estações de vento ('anemometer' ou 'all')
- */
-export function setSocialWindFilter(filter) {
-  if (!['anemometer', 'all'].includes(filter)) return;
-  socialState.windFilter = filter;
-
-  const btnAnem = document.getElementById('social-wind-filter-anemometer');
-  const btnAll = document.getElementById('social-wind-filter-all');
-
-  if (btnAnem && btnAll) {
-    if (filter === 'anemometer') {
-      btnAnem.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white shadow-xs border border-[#0369a1] cursor-pointer flex items-center gap-1';
-      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
-    } else {
-      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] text-white shadow-xs border border-[#0369a1] cursor-pointer flex items-center gap-1';
-      btnAnem.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
-    }
-  }
-
-  renderSocialCanvas();
-}
-
-/**
  * Abre o Modal Social focado em Chuva
  */
 export async function openSocialModalChuva(initialHorizon = '24h') {
@@ -404,7 +380,7 @@ export async function openSocialModalWithTab(tab, initialHorizon = '24h') {
 
   updateFormatButtons(socialState.format || 'post');
   updateCardThemeButtons(socialState.cardTheme || 'nordic');
-  updateStationsFilterButtons(socialState.filterMode || 'all');
+  updateStationsFilterButtons(socialState.filterMode || 'active');
   renderSocialStationChips();
 
   renderSocialCanvas();
@@ -491,7 +467,7 @@ export function toggleSocialHoje(forceTrue = false) {
 }
 
 /**
- * Alterna tema do card gerado (Nórdica Clara Oficial vs Noturna)
+ * Alterna tema do card gerado (Nórdica Clara Oficial vs Escura Noturna Oficial)
  */
 export function setSocialCardTheme(theme) {
   if (theme !== 'nordic' && theme !== 'dark') return;
@@ -506,11 +482,11 @@ export function updateCardThemeButtons(theme) {
 
   if (btnNordic && btnDark) {
     if (theme === 'nordic') {
-      btnNordic.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
-      btnDark.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
+      btnNordic.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
+      btnDark.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     } else {
-      btnDark.className = 'px-2.5 py-1 rounded-lg text-xs font-black bg-[#0284c7] border-2 border-[#38bdf8] text-white shadow-xs cursor-pointer flex items-center gap-1 transition';
-      btnNordic.className = 'px-2.5 py-1 rounded-lg text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
+      btnDark.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#0284c7] border-2 border-[#38bdf8] text-white shadow-xs cursor-pointer flex items-center gap-1 transition';
+      btnNordic.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     }
   }
 }
@@ -534,10 +510,14 @@ export function handleSocialSearch(val) {
   renderSocialCanvas();
 }
 
+/**
+ * Define o filtro de estações: 'all' (todas) ou 'active' (exclusivamente ativas online)
+ */
 export function setSocialStationsFilter(mode) {
   if (mode !== 'all' && mode !== 'active') return;
   socialState.filterMode = mode;
   updateStationsFilterButtons(mode);
+  renderSocialStationChips();
   renderSocialCanvas();
 }
 
@@ -583,7 +563,11 @@ export function renderSocialStationChips() {
   const countEl = document.getElementById('social-selected-count');
   if (!container) return;
 
-  const stations = socialState.stationsData || [];
+  const rawStations = socialState.stationsData || [];
+  const stations = socialState.filterMode === 'active'
+    ? rawStations.filter(s => s.online !== false)
+    : rawStations;
+
   if (stations.length === 0) return;
 
   if (socialState.selectedStationCodes.size === 0) {
@@ -617,12 +601,12 @@ export function updateStationsFilterButtons(mode) {
   const btnAll = document.getElementById('social-btn-filter-all');
   const btnActive = document.getElementById('social-btn-filter-active');
   if (btnAll && btnActive) {
-    if (mode === 'all') {
-      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
-      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
+    if (mode === 'active') {
+      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#059669] text-white shadow-xs border border-[#047857] cursor-pointer flex items-center gap-1 transition';
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     } else {
-      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1';
-      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1';
+      btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#f07a53] text-white shadow-xs border border-[#ea580c] cursor-pointer flex items-center gap-1 transition';
+      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     }
   }
 }
@@ -632,11 +616,11 @@ export function updateFormatButtons(fmt) {
   const btnStory = document.getElementById('social-btn-fmt-story');
   if (btnPost && btnStory) {
     if (fmt === 'post') {
-      btnPost.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
-      btnStory.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnPost.className = 'px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnStory.className = 'px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
     } else {
-      btnStory.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
-      btnPost.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnStory.className = 'px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition';
+      btnPost.className = 'px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition';
     }
   }
 }
@@ -707,12 +691,13 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
     ? [...socialState.stationsData]
     : (window.state?.acumuladosDataset?.estacoes ? [...window.state.acumuladosDataset.estacoes] : []);
 
-  if (socialState.selectedStationCodes.size > 0) {
-    stations = stations.filter(s => socialState.selectedStationCodes.has(s.codigo));
-  }
-
+  // FILTRO ESTRITO DE APENAS ATIVAS
   if (socialState.filterMode === 'active') {
     stations = stations.filter(s => s.online !== false);
+  }
+
+  if (socialState.selectedStationCodes.size > 0) {
+    stations = stations.filter(s => socialState.selectedStationCodes.has(s.codigo));
   }
 
   if (socialState.stationFilterText) {
@@ -786,12 +771,12 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
 
   const subY = topPad + (isStory ? 148 : 122);
   ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-  ctx.font = '700 23px sans-serif';
+  ctx.font = '700 20px sans-serif';
   const subText = socialState.filterMode === 'active' ? 'Estações Ativas da Rede Municipal' : 'Rede Municipal & Entorno • Telemetria Oficial';
   ctx.fillText(subText, leftPad, subY);
 
   ctx.textAlign = 'right';
-  ctx.font = 'bold 22px monospace';
+  ctx.font = 'bold 20px monospace';
   if (isDark) {
     ctx.fillStyle = '#38bdf8';
     ctx.fillText(`${dataFormatada} • ${horaFormatada} • ${horizonLabel}`, rightPad, subY);
@@ -815,7 +800,7 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
   // Linhas das estações
   const startY = subY + 36;
   const footerY = height - (isStory ? 65 : 48);
-  const availableHeight = footerY - startY - (isStory ? 60 : 40);
+  const availableHeight = (footerY - 45) - startY;
   const count = displayStations.length || 1;
 
   const rowGap = isStory ? Math.min(22, Math.floor(availableHeight / count * 0.18)) : Math.min(14, Math.floor(availableHeight / count * 0.18));
@@ -826,12 +811,12 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
     const isJundia = st.categoria === 'inea';
     const isOffline = st.online === false;
 
-    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff';
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff';
     ctx.beginPath();
     ctx.roundRect(leftPad, rowY, width - 130, rowHeight, 14);
     ctx.fill();
 
-    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : '#cbd5e1';
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
@@ -903,7 +888,7 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
   });
 
   // Rodapé Oficial
-  ctx.fillStyle = '#ea580c';
+  ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
   ctx.beginPath();
   ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 130, 3, 1.5);
   ctx.fill();
@@ -924,6 +909,7 @@ export function renderSocialCanvasChuva(canvas, ctx, width, height, isStory, isD
 
 /**
  * RENDERIZADOR 2: CARD OFICIAL DE VENTOS & RAJADAS (SEPARADO DA CHUVA)
+ * Suporte completo à Paleta Escura Noturna Oficial idêntica à de Chuva
  */
 export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isDark) {
   // Coleta dados
@@ -989,11 +975,13 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     };
   });
 
-  // Filtragem
+  // FILTRAGEM ESTRITA DE ESTAÇÕES
   let displayStations = [];
-  if (socialState.windFilter === 'anemometer') {
-    displayStations = parsed.filter(s => s.hasAnemometer);
+  if (socialState.filterMode === 'active') {
+    // APENAS AS ATIVAS COM ANEMÔMETRO (sem nenhuma estação offline)
+    displayStations = parsed.filter(s => s.online !== false && s.hasAnemometer);
   } else {
+    // Todas as estações da rede
     displayStations = parsed;
   }
 
@@ -1015,7 +1003,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     return a.nome.localeCompare(b.nome);
   });
 
-  // Top Highlights para o Pódio Resumo
+  // Top Highlights para o Pódio Resumo (apenas dados reais ativos)
   const activeWithWind = parsed.filter(s => s.online && s.hasAnemometer && s.gust > 0);
   activeWithWind.sort((a, b) => b.gust - a.gust);
 
@@ -1053,7 +1041,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
   const contentWidth = rightPad - leftPad;
 
   // Barra de acento
-  ctx.fillStyle = '#0284c7';
+  ctx.fillStyle = isDark ? '#00c2ff' : '#0284c7';
   ctx.beginPath();
   ctx.roundRect(leftPad, topPad, 10, isStory ? 90 : 76, 5);
   ctx.fill();
@@ -1065,7 +1053,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
 
   if (isDark) {
     const titleGrad = ctx.createLinearGradient(leftPad + 24, topPad + 40, leftPad + 360, topPad + 95);
-    titleGrad.addColorStop(0, '#38bdf8');
+    titleGrad.addColorStop(0, '#5eead4');
     titleGrad.addColorStop(1, '#00c2ff');
     ctx.fillStyle = titleGrad;
   } else {
@@ -1084,11 +1072,11 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
 
   const subY = topPad + (isStory ? 142 : 118);
   ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-  ctx.font = '700 22px sans-serif';
+  ctx.font = '700 20px sans-serif';
   ctx.fillText('Rede Municipal & Entorno • Telemetria Oficial', leftPad, subY);
 
   ctx.textAlign = 'right';
-  ctx.font = 'bold 21px monospace';
+  ctx.font = 'bold 20px monospace';
   if (isDark) {
     ctx.fillStyle = '#38bdf8';
     ctx.fillText(`${dataFormatada} • ${horaFormatada} • ${metricLabel}`, rightPad, subY);
@@ -1109,7 +1097,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
   ctx.lineTo(rightPad, subY + 16);
   ctx.stroke();
 
-  // POD RESUMO (3 colunas de destaque)
+  // POD RESUMO (3 colunas de destaque no topo)
   const podY = subY + 28;
   const podH = isStory ? 116 : 98;
   const podGap = 16;
@@ -1120,21 +1108,21 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
       title: '🌪️ MAIOR RAJADA DO DIA',
       val: topGustStation ? `${formatDec1(topGustStation.gust)}` : '--',
       unit: 'km/h',
-      color: '#ea580c',
+      color: isDark ? '#38bdf8' : '#ea580c',
       sub: topGustStation ? `${topGustStation.nome}${topGustStation.time ? ' (' + topGustStation.time + ')' : ''}` : 'Sem registro'
     },
     {
       title: '💨 MAIOR VENTO SUSTENTADO',
       val: topSustStation ? `${formatDec1(topSustStation.sust)}` : '--',
       unit: 'km/h',
-      color: '#0284c7',
+      color: isDark ? '#5eead4' : '#0284c7',
       sub: topSustStation ? `${topSustStation.nome}${topSustStation.time ? ' (' + topSustStation.time + ')' : ''}` : 'Sem registro'
     },
     {
       title: '🧭 DIREÇÃO NO PICO',
       val: topGustStation && topGustStation.dir ? topGustStation.dir : '--',
       unit: topGustStation && topGustStation.deg !== null ? `(${topGustStation.deg}°)` : '',
-      color: isDark ? '#38bdf8' : '#0f172a',
+      color: isDark ? '#ffffff' : '#0f172a',
       sub: topGustStation ? `${topGustStation.bairro || 'Litoral Sul'}` : 'Ventos costeiros'
     }
   ];
@@ -1147,19 +1135,22 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     ctx.roundRect(px, podY, podW, podH, 14);
     ctx.fill();
 
-    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.35)' : '#cbd5e1';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
+    // Mini barra superior do pod
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.roundRect(px, podY, podW, 4, [14, 14, 0, 0]);
     ctx.fill();
 
-    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    // Label do pod
+    ctx.fillStyle = isDark ? '#cbd5e1' : '#64748b';
     ctx.font = 'bold 13px sans-serif';
     ctx.fillText(p.title, px + 14, podY + 22);
 
+    // Valor e unidade
     ctx.fillStyle = p.color;
     ctx.font = '900 36px sans-serif';
     ctx.fillText(p.val, px + 14, podY + 58);
@@ -1169,29 +1160,29 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     ctx.font = 'bold 18px sans-serif';
     ctx.fillText(` ${p.unit}`, px + 14 + valW, podY + 58);
 
-    ctx.fillStyle = isDark ? '#cbd5e1' : '#334155';
+    ctx.fillStyle = isDark ? '#94a3b8' : '#334155';
     ctx.font = '600 13px sans-serif';
     ctx.fillText(p.sub, px + 14, podY + 84);
   });
 
   // CARDS DAS ESTAÇÕES
-  const footerH = isStory ? 75 : 60;
-  const startCardsY = podY + podH + (isStory ? 22 : 16);
-  const availableH = height - startCardsY - footerH;
+  const footerY = height - (isStory ? 65 : 48);
+  const startCardsY = podY + podH + (isStory ? 20 : 14);
+  const availableH = (footerY - 45) - startCardsY;
   const count = displayStations.length || 1;
 
-  const cardGap = isStory ? Math.min(18, Math.floor(availableH / count * 0.15)) : Math.min(12, Math.floor(availableH / count * 0.15));
-  const cardH = Math.min(isStory ? 140 : 105, Math.floor((availableH - (count - 1) * cardGap) / count));
+  const cardGap = isStory ? Math.min(20, Math.floor(availableH / count * 0.18)) : Math.min(14, Math.floor(availableH / count * 0.18));
+  const cardH = Math.min(isStory ? 140 : 108, Math.floor((availableH - (count - 1) * cardGap) / count));
 
   displayStations.forEach((st, idx) => {
     const cardY = startCardsY + idx * (cardH + cardGap);
 
-    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.75)' : '#ffffff';
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.85)' : '#ffffff';
     ctx.beginPath();
     ctx.roundRect(leftPad, cardY, contentWidth, cardH, 14);
     ctx.fill();
 
-    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : '#cbd5e1';
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
@@ -1200,11 +1191,16 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     const isTop3 = idx < 3 && st.online && st.hasAnemometer;
 
     if (isTop3) {
-      const colors = [
+      const colors = isDark ? [
+        { bg: 'rgba(245, 158, 11, 0.25)', border: '#f59e0b', text: '#fbbf24', label: '1º' },
+        { bg: 'rgba(148, 163, 184, 0.25)', border: '#94a3b8', text: '#e2e8f0', label: '2º' },
+        { bg: 'rgba(234, 88, 12, 0.25)', border: '#ea580c', text: '#f97316', label: '3º' }
+      ][idx] : [
         { bg: '#fef3c7', border: '#f59e0b', text: '#b45309', label: '1º' },
         { bg: '#f1f5f9', border: '#94a3b8', text: '#334155', label: '2º' },
         { bg: '#ffedd5', border: '#ea580c', text: '#c2410c', label: '3º' }
       ][idx];
+
       ctx.fillStyle = colors.bg;
       ctx.beginPath();
       ctx.roundRect(rankX, rankY, 44, 34, 10);
@@ -1219,7 +1215,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
       ctx.fillText(colors.label, rankX + 22, rankY + 24);
       ctx.textAlign = 'left';
     } else {
-      ctx.fillStyle = isDark ? '#1e293b' : '#f8fafc';
+      ctx.fillStyle = isDark ? 'rgba(30, 41, 59, 0.6)' : '#f8fafc';
       ctx.beginPath();
       ctx.roundRect(rankX, rankY, 44, 34, 10);
       ctx.fill();
@@ -1285,13 +1281,14 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
     } else {
       ctx.textAlign = 'right';
 
-      // 1) RAJADA MÁXIMA
+      // 1) RAJADA MÁXIMA (Em ciano luminoso #38bdf8 no modo escuro, terracota #ea580c no modo claro)
       const gustStr = formatDec1(st.gust);
       ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
       ctx.font = '900 38px sans-serif';
       ctx.fillText(gustStr, rightColX - 52, cardY + (cardH * 0.48));
 
       ctx.font = 'bold 18px sans-serif';
+      ctx.fillStyle = isDark ? '#00c2ff' : '#ea580c';
       ctx.fillText('km/h', rightColX, cardY + (cardH * 0.48));
 
       ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
@@ -1299,7 +1296,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
       const gustLabel = st.time ? `Rajada máx às ${st.time}` : 'Rajada máxima';
       ctx.fillText(gustLabel, rightColX, cardY + (cardH * 0.78));
 
-      // 2) VENTO SUSTENTADO
+      // 2) VENTO SUSTENTADO (Em branco nítido no escuro, slate escuro no claro)
       const sustX = rightColX - 220;
       const sustStr = formatDec1(st.sust);
       ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
@@ -1307,6 +1304,7 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
       ctx.fillText(sustStr, sustX - 48, cardY + (cardH * 0.48));
 
       ctx.font = 'bold 16px sans-serif';
+      ctx.fillStyle = isDark ? '#cbd5e1' : '#64748b';
       ctx.fillText('km/h', sustX, cardY + (cardH * 0.48));
 
       ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
@@ -1318,7 +1316,6 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
   });
 
   // RODAPÉ OFICIAL
-  const footerY = height - (isStory ? 65 : 48);
   ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.4)' : '#0284c7';
   ctx.beginPath();
   ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), contentWidth, 3, 1.5);
@@ -1384,7 +1381,7 @@ export async function downloadSocialFormat(format) {
 
   const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || (window.innerWidth < 1024 && navigator.maxTouchPoints > 0);
 
-  // 1. Tenta compartilhamento nativo móvel via Web Share API (salva direto na galeria/fotos do celular)
+  // 1. Tenta compartilhamento nativo móvel via Web Share API
   if (isMobile && navigator.share && navigator.canShare) {
     try {
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
@@ -1400,12 +1397,12 @@ export async function downloadSocialFormat(format) {
         }
       }
     } catch (err) {
-      if (err.name === 'AbortError') return; // Usuário cancelou
+      if (err.name === 'AbortError') return;
       console.warn('[Social Share] Fallback para download via Blob:', err);
     }
   }
 
-  // 2. Download direto via Blob URL (suportado por Android, PC e navegadores modernos)
+  // 2. Download direto via Blob URL
   canvas.toBlob(blob => {
     if (!blob) return;
     const blobUrl = URL.createObjectURL(blob);
@@ -1418,7 +1415,7 @@ export async function downloadSocialFormat(format) {
     setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
   }, 'image/png');
 
-  // 3. Fallback adicional para iOS Safari: exibe helper com toque contínuo para salvar
+  // 3. Fallback adicional para iOS Safari: exibe helper com toque contínuo
   if (isMobile && /iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     showMobileSaveHelper(canvas.toDataURL('image/png'), fileName);
   }
@@ -1457,7 +1454,7 @@ export async function downloadSocialCard() {
   await downloadSocialCurrentFormat();
 }
 
-// Exportações globais para interação com o HTML
+// Exportações globais para o HTML
 if (typeof window !== 'undefined') {
   window.socialState = socialState;
   window.openSocialModalChuva = openSocialModalChuva;
@@ -1470,7 +1467,6 @@ if (typeof window !== 'undefined') {
   window.closeSocialModalChuva = closeSocialModalChuva;
   window.setSocialTab = setSocialTab;
   window.setSocialWindMetric = setSocialWindMetric;
-  window.setSocialWindFilter = setSocialWindFilter;
   window.setSocialFormat = setSocialFormat;
   window.setSocialHorizon = setSocialHorizon;
   window.handleSocialHoursInput = handleSocialHoursInput;
