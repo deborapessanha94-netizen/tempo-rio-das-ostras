@@ -655,18 +655,11 @@
             </button>
           </div>
           <div class="space-y-0.5">
-            <a onclick="navigateSubSection('previsao', 'section-hero-previsao', event)" class="nav-dropdown-item">
+            <a onclick="navigateSubSection('previsao', 'section-hero-previsao', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
               <div>
-                <span>Tempo Agora</span>
+                <span class="font-bold text-slate-800 dark:text-slate-100">Tempo Agora</span>
                 <span class="nav-dropdown-item-desc">Condições em tempo real, temperatura e sensação</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.openSocialModalTempoAgora && window.openSocialModalTempoAgora()" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span class="font-bold text-[#ea580c]">Baixar Card Tempo Agora</span>
-                <span class="nav-dropdown-item-desc">Imagem oficial completa para Post ou Stories</span>
               </div>
             </a>
             <a onclick="navigateSubSection('previsao', 'section-panorama-semanal', event)" class="nav-dropdown-item cursor-pointer">
@@ -679,34 +672,67 @@
                 <span class="nav-dropdown-item-desc">Resumo da semana: vento, rajadas, chuva, sistemas atuantes e riscos de extremos</span>
               </div>
             </a>
-            <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item">
+            <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
               <div>
                 <span>Gráficos de Tendência</span>
                 <span class="nav-dropdown-item-desc">Evolução horária de 72h (Temp, Chuva, Vento)</span>
               </div>
             </a>
-            <a onclick="navigateSubSection('previsao', 'section-previsao-3dias', event)" class="nav-dropdown-item">
+            <a onclick="navigateSubSection('previsao', 'section-previsao-3dias', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
               <div>
                 <span>Previsão dos Próximos Dias</span>
                 <span class="nav-dropdown-item-desc">Cards operacionais de 4 dias (Hoje + 3 dias à frente) com mar e detalhes</span>
               </div>
             </a>
-            <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item">
+            <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="compass" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
               <div>
                 <span>Panorama Sinótico Geral</span>
                 <span class="nav-dropdown-item-desc">Diagnóstico sinótico e termodinâmico de mesoescala</span>
               </div>
             </a>
-            <a onclick="navigateSubSection('previsao', 'section-plancon-resumo', event)" class="nav-dropdown-item">
+            <a onclick="navigateSubSection('previsao', 'section-plancon-resumo', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="shield" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
               <div>
                 <span>Plano de Contingência (PLANCON)</span>
                 <span class="nav-dropdown-item-desc">Níveis e protocolos operacionais da Defesa Civil</span>
               </div>
             </a>
+
+            <!-- Ações de Baixar Imagens Oficiais para Redes Sociais -->
+            <div class="border-t border-slate-200 dark:border-slate-800 my-1.5 pt-2 px-1">
+              <div class="text-[10px] font-black uppercase tracking-wider text-[#ea580c] dark:text-[#ea580c] mb-1.5 px-2 flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                  <span>Baixar Cards Oficiais (Redes Sociais)</span>
+                </span>
+                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-[#ffebe4] dark:bg-orange-950/60 text-[#c2410c] dark:text-orange-300">Feed & Story</span>
+              </div>
+              <div class="space-y-1">
+                <a onclick="window.closeAllNavDropdowns(); window.openSocialModalWithTab ? window.openSocialModalWithTab('tempo') : window.openSocialModalTempoAgora();" class="nav-dropdown-item cursor-pointer bg-[#fff7ed] hover:bg-[#ffedd5] dark:bg-slate-800/90 dark:hover:bg-slate-700/90 border border-[#fed7aa] dark:border-slate-700 rounded-xl">
+                  <i data-lucide="sun-medium" class="w-4 h-4 text-[#ea580c] shrink-0"></i>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-1">
+                      <span class="font-bold text-xs text-[#9a3412] dark:text-[#fb923c]">Baixar Card Tempo Agora</span>
+                      <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200 uppercase">Post / Story</span>
+                    </div>
+                    <span class="nav-dropdown-item-desc">Imagem oficial completa com temperatura, chuva e 8 sensores</span>
+                  </div>
+                </a>
+                <a onclick="window.closeAllNavDropdowns(); window.openSocialModalWithTab ? window.openSocialModalWithTab('semanal') : window.openSocialModalSemanal();" class="nav-dropdown-item cursor-pointer bg-sky-50 hover:bg-sky-100 dark:bg-slate-800/90 dark:hover:bg-slate-700/90 border border-sky-200 dark:border-slate-700 rounded-xl">
+                  <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7] shrink-0"></i>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-1">
+                      <span class="font-bold text-xs text-[#0369a1] dark:text-sky-300">Baixar Card Panorama Semanal</span>
+                      <span class="text-[9px] font-black px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-800 dark:text-sky-200 uppercase">7 Dias</span>
+                    </div>
+                    <span class="nav-dropdown-item-desc">Resumo da semana: vento, rajadas, chuva e sistemas atuantes</span>
+                  </div>
+                </a>
+              </div>
+            </div>
             <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('previsao');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
               <i data-lucide="layers" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
               <div>
@@ -1119,47 +1145,10 @@
                 <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
                   24H
                 </span>
-                <button 
-                  type="button" 
-                  id="btn-hero-export-social" 
-                  onclick="openSocialModalTempoAgora()" 
-                  class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black transition cursor-pointer bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs active:scale-95" 
-                  title="Baixar imagem oficial completa do Tempo Agora para postar nas redes sociais"
-                >
-                  <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                  <span class="hidden sm:inline">Baixar Imagem / Postar</span>
-                  <span class="sm:hidden">Baixar Imagem</span>
-                </button>
               </div>
 
 
 
-          </div>
-
-          <!-- Botão de Alto Destaque: Baixar Imagem Oficial do Tempo Agora -->
-          <div class="mb-3 space-y-2">
-            <button 
-              type="button" 
-              id="btn-hero-export-social-main" 
-              onclick="openSocialModalTempoAgora()" 
-              class="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-[#ffebe4] via-[#fff7ed] to-[#ffebe4] hover:brightness-95 text-[#c2410c] dark:text-[#ea580c] border-2 border-[#f07a53] shadow-xs transition cursor-pointer active:scale-98" 
-              title="Clique para abrir e baixar a imagem oficial completa do Tempo Agora para postar"
-            >
-              <i data-lucide="camera" class="w-4 h-4 text-[#ea580c]"></i>
-              <span class="tracking-wide">📸 BAIXAR IMAGEM DO TEMPO AGORA (PARA POSTAR)</span>
-            </button>
-
-            <!-- Botão de Acesso Direto ao Panorama Semanal (7 Dias) -->
-            <button 
-              type="button" 
-              id="btn-hero-panorama-semanal" 
-              onclick="navigateSubSection('previsao', 'section-panorama-semanal', event)" 
-              class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl font-bold text-xs bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 text-[#0284c7] dark:text-sky-300 border border-sky-400/40 shadow-xs transition cursor-pointer" 
-              title="Ver o Panorama Meteorológico Completo de 7 Dias para esta semana"
-            >
-              <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7]"></i>
-              <span class="tracking-tight">🗓️ VER PANORAMA SEMANAL (7 DIAS • VENTO, RAJADAS, CHUVA & SISTEMAS)</span>
-            </button>
           </div>
 
 
@@ -1643,15 +1632,6 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span id="hero-sync-label">Atualização a cada 5 min (Tempo Real)</span>
               </span>
-              <button 
-                type="button" 
-                onclick="openSocialModalTempoAgora()" 
-                class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border border-[#f07a53] transition cursor-pointer shadow-2xs" 
-                title="Exportar imagem do Tempo Agora"
-              >
-                <i data-lucide="share-2" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                <span>Postar Tempo Agora</span>
-              </button>
             </div>
           </div>
 
@@ -1920,6 +1900,18 @@
 
 
 
+        </div>
+        <div class="flex items-center gap-2">
+          <button 
+            type="button" 
+            onclick="window.openSocialModalWithTab ? window.openSocialModalWithTab('tempo') : window.openSocialModalTempoAgora()" 
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border border-[#f07a53] shadow-xs transition cursor-pointer" 
+            title="Baixar imagem oficial para postar nas redes sociais"
+          >
+            <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span class="hidden sm:inline">Baixar Card</span>
+            <span class="sm:hidden">Baixar</span>
+          </button>
         </div>
 
 
@@ -11043,6 +11035,22 @@
       window.switchSubSection(tabName, activeSub);
     };
 
+    window.openSocialModalSemanal = function() {
+      if (typeof window.openSocialModalWithTab === 'function') window.openSocialModalWithTab('semanal');
+      else if (typeof window.openSocialModalChuva === 'function') {
+        window.openSocialModalChuva();
+        if (typeof window.setSocialTab === 'function') window.setSocialTab('semanal');
+      }
+    };
+    window.openSocialModalWithTab = window.openSocialModalWithTab || function(tab) {
+      if (tab === 'semanal' && typeof window.openSocialModalSemanal === 'function') return window.openSocialModalSemanal();
+      if (tab === 'tempo' && typeof window.openSocialModalTempoAgora === 'function') return window.openSocialModalTempoAgora();
+      if (tab === 'vento' && typeof window.openSocialModalVento === 'function') return window.openSocialModalVento();
+      if (typeof window.openSocialModalChuva === 'function') {
+        window.openSocialModalChuva();
+        if (typeof window.setSocialTab === 'function') window.setSocialTab(tab || 'tempo');
+      }
+    };
     window.openSocialModalTempoAgora = function() {
       if (typeof window.openSocialModalWithTab === 'function') window.openSocialModalWithTab('tempo');
       else if (typeof window.openSocialModalChuva === 'function') {
@@ -11070,7 +11078,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=196"></script>
+  <script type="module" src="js/app.js?v=197"></script>
 
 
 
