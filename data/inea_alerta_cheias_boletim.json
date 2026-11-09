@@ -4,17 +4,17 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-11-08 23:40:33",
+  "data_coleta": "2026-11-09 02:44:36",
   "bulletin_info": {
     "disponivel": true,
-    "arquivo": "BoletimHidrometeorologico_08-11-2026.pdf",
-    "data_boletim": "08/11/2026",
-    "label": "Boletim Hidrometeorológico 08/11/2026",
-    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_08-11-2026.pdf"
+    "arquivo": "BoletimHidrometeorologico_09-11-2026.pdf",
+    "data_boletim": "09/11/2026",
+    "label": "Boletim Hidrometeorológico 09/11/2026",
+    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_09-11-2026.pdf"
   },
   "previsao_rh8": {
     "hoje": {
-      "data": "08/11/2026",
+      "data": "09/11/2026",
       "intensidade": "Moderada a Forte com Raios",
       "faixa_chuva_mm": "10 a 25 mm",
       "temp_max": 36,
@@ -24,7 +24,7 @@
       "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
     },
     "amanha": {
-      "data": "09/11/2026",
+      "data": "10/11/2026",
       "intensidade": "Pancadas de Chuva com Raios & Declínio Térmico",
       "faixa_chuva_mm": "10 a 25 mm",
       "temp_max": 28,
