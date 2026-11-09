@@ -669,6 +669,16 @@
                 <span class="nav-dropdown-item-desc">Imagem oficial completa para Post ou Stories</span>
               </div>
             </a>
+            <a onclick="navigateSubSection('previsao', 'section-panorama-semanal', event)" class="nav-dropdown-item cursor-pointer">
+              <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="font-bold text-slate-800 dark:text-slate-100">Panorama Semanal (7 Dias)</span>
+                  <span class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">Segunda a Domingo</span>
+                </div>
+                <span class="nav-dropdown-item-desc">Resumo da semana: vento, rajadas, chuva, sistemas atuantes e riscos de extremos</span>
+              </div>
+            </a>
             <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item">
               <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
               <div>
@@ -1127,7 +1137,7 @@
           </div>
 
           <!-- Botão de Alto Destaque: Baixar Imagem Oficial do Tempo Agora -->
-          <div class="mb-3">
+          <div class="mb-3 space-y-2">
             <button 
               type="button" 
               id="btn-hero-export-social-main" 
@@ -1137,6 +1147,18 @@
             >
               <i data-lucide="camera" class="w-4 h-4 text-[#ea580c]"></i>
               <span class="tracking-wide">📸 BAIXAR IMAGEM DO TEMPO AGORA (PARA POSTAR)</span>
+            </button>
+
+            <!-- Botão de Acesso Direto ao Panorama Semanal (7 Dias) -->
+            <button 
+              type="button" 
+              id="btn-hero-panorama-semanal" 
+              onclick="navigateSubSection('previsao', 'section-panorama-semanal', event)" 
+              class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl font-bold text-xs bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50 text-[#0284c7] dark:text-sky-300 border border-sky-400/40 shadow-xs transition cursor-pointer" 
+              title="Ver o Panorama Meteorológico Completo de 7 Dias para esta semana"
+            >
+              <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7]"></i>
+              <span class="tracking-tight">🗓️ VER PANORAMA SEMANAL (7 DIAS • VENTO, RAJADAS, CHUVA & SISTEMAS)</span>
             </button>
           </div>
 
@@ -2745,6 +2767,13 @@
 
 
 
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- SEÇÃO DE PANORAMA SEMANAL (7 DIAS - SEGUNDA A DOMINGO)                    -->
+  <!-- ========================================================================= -->
+  <section id="section-panorama-semanal" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 w-full hidden">
+    <!-- Gerado dinamicamente via js/weekly-overview.js -->
   </section>
 
   <!-- ========================================================================= -->
@@ -10550,7 +10579,7 @@
       <div class="px-4 py-3 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1] gap-2 shrink-0">
         <div class="flex items-center gap-2.5 min-w-0">
           <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs shrink-0">
-            <i data-lucide="instagram" class="w-4 h-4 text-black"></i>
+            <i data-lucide="camera" class="w-4 h-4 text-black"></i>
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
@@ -10596,6 +10625,15 @@
         >
           <i data-lucide="wind" class="w-4 h-4 text-[#0284c7]"></i>
           <span>💨 Ventos & Rajadas</span>
+        </button>
+        <button 
+          type="button" 
+          id="social-tab-btn-semanal" 
+          onclick="setSocialTab('semanal')" 
+          class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+        >
+          <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7]"></i>
+          <span>🗓️ Panorama Semanal</span>
         </button>
       </div>
 
@@ -10790,7 +10828,7 @@
     window.SUB_SECTIONS_CONFIG = {
       previsao: {
         default: 'section-hero-previsao',
-        sections: ['section-hero-previsao', 'section-graficos-tendencia', 'section-previsao-3dias', 'section-panorama-sinotico', 'section-plancon-resumo']
+        sections: ['section-hero-previsao', 'section-graficos-tendencia', 'section-previsao-3dias', 'section-panorama-semanal', 'section-panorama-sinotico', 'section-plancon-resumo']
       },
       chuva: {
         default: 'section-chuva-resumo',
@@ -11032,7 +11070,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=195"></script>
+  <script type="module" src="js/app.js?v=196"></script>
 
 
 

@@ -32,11 +32,14 @@ import {
 
   downloadSocialCard,
 
-  calculateStationRain
+  calculateStationRain,
 
+  openSocialModalTempoAgora,
 
-
-} from './social-cards.js?v=195';
+  openSocialModalVento,
+  openSocialModalSemanal
+} from './social-cards.js?v=196';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=196';
 
 
 
@@ -3942,6 +3945,15 @@ function renderDashboardUI(meta, rows, weather) {
 
   renderChuvaTurnosBars(rows);
   if (window.lucide) window.lucide.createIcons();
+
+  // 5. Panorama Meteorológico Semanal (7 Dias)
+  try {
+    if (typeof renderPanoramaSemanal === 'function') {
+      renderPanoramaSemanal(weather, meta);
+    }
+  } catch (errWeekly) {
+    console.warn('[Weekly Overview] Erro ao renderizar panorama semanal:', errWeekly);
+  }
 }
 
 
@@ -6373,8 +6385,24 @@ function updateBulletinChart() {
 }
 window.updateBulletinChart = updateBulletinChart;
 window.state = state;
-window.openSocialModal = openSocialModalChuva;
+window.openSocialModal = function(param) {
+  if (param === 'tempo' || param === 'tempo_agora') {
+    if (typeof openSocialModalTempoAgora === 'function') openSocialModalTempoAgora();
+    else if (window.openSocialModalTempoAgora) window.openSocialModalTempoAgora();
+  } else if (param === 'vento') {
+    if (typeof openSocialModalVento === 'function') openSocialModalVento();
+    else if (window.openSocialModalVento) window.openSocialModalVento();
+  } else if (param === 'semanal') {
+    if (typeof openSocialModalSemanal === 'function') openSocialModalSemanal();
+    else if (window.openSocialModalSemanal) window.openSocialModalSemanal();
+  } else {
+    if (typeof openSocialModalChuva === 'function') openSocialModalChuva(param || '24h');
+    else if (window.openSocialModalChuva) window.openSocialModalChuva(param || '24h');
+  }
+};
 window.openSocialModalChuva = openSocialModalChuva;
+window.openSocialModalVento = openSocialModalVento;
+window.openSocialModalSemanal = openSocialModalSemanal;
 
 
 
@@ -12984,6 +13012,7 @@ window.SUB_SECTIONS_CONFIG = {
       'section-hero-previsao',
       'section-graficos-tendencia',
       'section-previsao-3dias',
+      'section-panorama-semanal',
       'section-panorama-sinotico',
       'section-plancon-resumo'
     ]
@@ -13258,3 +13287,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.switchSubSection(initialTab, initialSub);
   }, 50);
 });
+
+window.openSocialModalSemanal = openSocialModalSemanal;
+window.renderPanoramaSemanal = renderPanoramaSemanal;
