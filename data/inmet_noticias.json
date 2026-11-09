@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-09 19:33:34",
+  "coleta_iso": "2026-11-09 20:40:04",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "BOLETIM AGROCLIMATOLÓGICO MENSAL - NOVEMBRO/2026",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/boletim-agroclimatológico-mensal-novembro-2026",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para terça-feira (10) e quarta-feira (11)",
       "data": "09/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "Temperaturas elevadas e irregularidade das chuvas mantêm a demanda hídrica elevada no MATOPIBA",
       "data": "04/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/temperaturas-elevadas-e-irregularidade-das-chuvas-mantêm-a-demanda-hídrica-elevada-no-matopiba",
-      "relevancia_sudeste": true
-    },
-    {
-      "titulo": "Temperatura tem elevação de 6,2 °C em apenas 2 horas na manhã dessa quarta (04) em Brasília",
-      "data": "04/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/temperatura-tem-elevação-de-6-2-c-em-apenas-2-horas-na-manhã-dessa-quarta-04-em-brasília",
       "relevancia_sudeste": true
     }
   ]
