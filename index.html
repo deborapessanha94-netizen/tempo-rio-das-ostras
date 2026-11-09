@@ -662,16 +662,6 @@
                 <span class="nav-dropdown-item-desc">Condições em tempo real, temperatura e sensação</span>
               </div>
             </a>
-            <a onclick="navigateSubSection('previsao', 'section-panorama-semanal', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="calendar-days" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-bold text-slate-800 dark:text-slate-100">Panorama Semanal (7 Dias)</span>
-                  <span class="text-[9px] font-black uppercase px-1.5 py-0.2 rounded bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">Segunda a Domingo</span>
-                </div>
-                <span class="nav-dropdown-item-desc">Resumo da semana: vento, rajadas, chuva, sistemas atuantes e riscos de extremos</span>
-              </div>
-            </a>
             <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item cursor-pointer">
               <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
               <div>
@@ -706,7 +696,7 @@
               <div class="text-[10px] font-black uppercase tracking-wider text-[#ea580c] dark:text-[#ea580c] mb-1.5 px-2 flex items-center justify-between">
                 <span class="flex items-center gap-1.5">
                   <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                  <span>Baixar Cards Oficiais (Redes Sociais)</span>
+                  <span>Baixar Card Oficial (Redes Sociais)</span>
                 </span>
                 <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-[#ffebe4] dark:bg-orange-950/60 text-[#c2410c] dark:text-orange-300">Feed & Story</span>
               </div>
@@ -719,16 +709,6 @@
                       <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200 uppercase">Post / Story</span>
                     </div>
                     <span class="nav-dropdown-item-desc">Imagem oficial completa com temperatura, chuva e 8 sensores</span>
-                  </div>
-                </a>
-                <a onclick="window.closeAllNavDropdowns(); window.openSocialModalWithTab ? window.openSocialModalWithTab('semanal') : window.openSocialModalSemanal();" class="nav-dropdown-item cursor-pointer bg-sky-50 hover:bg-sky-100 dark:bg-slate-800/90 dark:hover:bg-slate-700/90 border border-sky-200 dark:border-slate-700 rounded-xl">
-                  <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7] shrink-0"></i>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between gap-1">
-                      <span class="font-bold text-xs text-[#0369a1] dark:text-sky-300">Baixar Card Panorama Semanal</span>
-                      <span class="text-[9px] font-black px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-800 dark:text-sky-200 uppercase">7 Dias</span>
-                    </div>
-                    <span class="nav-dropdown-item-desc">Resumo da semana: vento, rajadas, chuva e sistemas atuantes</span>
                   </div>
                 </a>
               </div>
@@ -2759,13 +2739,6 @@
 
 
 
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- SEÇÃO DE PANORAMA SEMANAL (7 DIAS - SEGUNDA A DOMINGO)                    -->
-  <!-- ========================================================================= -->
-  <section id="section-panorama-semanal" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 w-full hidden">
-    <!-- Gerado dinamicamente via js/weekly-overview.js -->
   </section>
 
   <!-- ========================================================================= -->
@@ -10820,7 +10793,7 @@
     window.SUB_SECTIONS_CONFIG = {
       previsao: {
         default: 'section-hero-previsao',
-        sections: ['section-hero-previsao', 'section-graficos-tendencia', 'section-previsao-3dias', 'section-panorama-semanal', 'section-panorama-sinotico', 'section-plancon-resumo']
+        sections: ['section-hero-previsao', 'section-graficos-tendencia', 'section-previsao-3dias', 'section-panorama-sinotico', 'section-plancon-resumo']
       },
       chuva: {
         default: 'section-chuva-resumo',
@@ -11078,7 +11051,7 @@
       }
     };
   </script>
-  <script type="module" src="js/app.js?v=197"></script>
+  <script type="module" src="js/app.js?v=198"></script>
 
 
 
