@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "09/11 (Segunda-feira) a 16/11 (Segunda-feira)",
-  "emissao": "09/11/2026 às 21:25h",
+  "emissao": "09/11/2026 às 21:58h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.55 m. Sem avisos meteorológicos severos vigentes para hoje. Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 37.0 mm com temperatura máxima alcançando 29°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -9,7 +9,7 @@
       "cemaden_pcd_18789": {
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.0,
-        "chuva_24h": 2.8,
+        "chuva_24h": 2.6,
         "chuva_96h": 30.6,
         "leitura": "2026-11-09 18:10:00"
       },
@@ -170,7 +170,7 @@
         "descricao": "Previsão de garoa persistente sobre Rio das Ostras. Temperaturas variando entre mínima de 18°C e máxima de 22°C. Volume pluviométrico diário estimado em 4.7 mm com rajadas de vento de até 23 km/h na faixa litorânea.",
         "informe_populacao": [
           "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (4.7 mm no dia). Pluviômetro CEMADEN registra 2.8 mm e o Rio Jundiá (INEA) cota de 1.55 m (Status: Vigilância), em regime seguro de vazante contínua.",
+          "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (4.7 mm no dia). Pluviômetro CEMADEN registra 2.6 mm e o Rio Jundiá (INEA) cota de 1.55 m (Status: Vigilância), em regime seguro de vazante contínua.",
           "Temperaturas variam entre mínima de 18°C ao amanhecer e máxima de 22°C à tarde em gradual elevação, com sensação térmica variando entre a menor de 20°C e a maior de 22°C no pico do calor. Na região rural, oscilam entre 16°C e 20°C.",
           "A umidade relativa do ar oscila entre 60% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos de SW-S rondando para SW-W moderados com rajadas de até 23 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -525,7 +525,7 @@
       "sensacao_faixa": "20° a 22°C",
       "informe_populacao": [
         "Nesta segunda-feira, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde.",
-        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (4.7 mm no dia). Pluviômetro CEMADEN registra 2.8 mm e o Rio Jundiá (INEA) cota de 1.55 m (Status: Vigilância), em regime seguro de vazante contínua.",
+        "Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada (4.7 mm no dia). Pluviômetro CEMADEN registra 2.6 mm e o Rio Jundiá (INEA) cota de 1.55 m (Status: Vigilância), em regime seguro de vazante contínua.",
         "Temperaturas variam entre mínima de 18°C ao amanhecer e máxima de 22°C à tarde em gradual elevação, com sensação térmica variando entre a menor de 20°C e a maior de 22°C no pico do calor. Na região rural, oscilam entre 16°C e 20°C.",
         "A umidade relativa do ar oscila entre 60% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos de SW-S rondando para SW-W moderados com rajadas de até 23 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -1297,7 +1297,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-09T21:26:13.866582"
+    "atualizado_em": "2026-11-09T21:58:54.428898"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -1305,7 +1305,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-09 21:26:45",
+    "data_coleta": "2026-11-09 21:59:34",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_09-11-2026.pdf",
@@ -1764,7 +1764,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-09 00z",
-    "atualizacao": "09/11/2026 18:26",
+    "atualizacao": "09/11/2026 18:59",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -1850,7 +1850,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "09/11/2026",
-    "atualizacao": "09/11/2026 18:26",
+    "atualizacao": "09/11/2026 18:59",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -2027,7 +2027,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-09T21:27:06.808421",
+    "atualizado_em": "2026-11-09T21:59:55.656675",
     "proxima_mare": null,
     "dias": [
       {
