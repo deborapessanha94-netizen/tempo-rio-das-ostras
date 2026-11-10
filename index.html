@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=207">
+  <link rel="stylesheet" href="css/styles.css?v=208">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=207" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=208" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -4293,7 +4293,7 @@
             <i data-lucide="gauge" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
           </div>
           <span id="chuva-kpi-maior" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">14.2 mm</span>
-          <span id="chuva-kpi-maior-local" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block truncate">Barra de São João / Praiamar</span>
+          <span id="chuva-kpi-maior-local" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block leading-snug break-words">Barra de São João / Praiamar</span>
         </div>
 
         <!-- KPI 3: Cota do Rio Jundiá -->
@@ -4303,7 +4303,7 @@
             <i data-lucide="waves" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
           </div>
           <span id="chuva-kpi-rio" class="text-xl sm:text-2xl font-black font-mono text-black block tracking-tight leading-tight">1.59 m</span>
-          <span id="chuva-kpi-rio-sub" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block truncate">Status: Vigilância • Calha em 56%</span>
+          <span id="chuva-kpi-rio-sub" class="text-[9.5px] sm:text-[10px] font-bold text-black/90 block leading-snug break-words">Status: Vigilância • Calha em 56%</span>
         </div>
 
         <!-- KPI 4: Rede Monitorada -->
@@ -4780,7 +4780,7 @@
               1. Filtrar por Mês Registrado
             </label>
             <select id="hist-filter-month" onchange="onHistoricoFilterChange('month')" class="w-full px-3 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 border border-[#94a3b8] text-black dark:text-white">
-              <option value="all">Todos os Meses (Outubro/2026 até Hoje)</option>
+              <option value="all">Todos os Meses (Out/2026 – Hoje)</option>
             </select>
           </div>
 
@@ -4821,8 +4821,8 @@
               </button>
             </div>
             <select id="hist-filter-sort" onchange="onHistoricoFilterChange('sort')" class="w-full px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 border border-[#cbd5e1] text-slate-800 dark:text-white">
-              <option value="asc">Ordem Cronológica (01/10/2026 → Hoje)</option>
-              <option value="desc">Mais Recentes Primeiro (Hoje → 01/10/2026)</option>
+              <option value="asc">Ordem Cronológica (01/10 → Hoje)</option>
+              <option value="desc">Mais Recentes (Hoje → 01/10)</option>
             </select>
           </div>
         </div>
@@ -4833,19 +4833,19 @@
 
       <!-- Tabela Principal em Formato de Planilha com Cabeçalho Fixo e Rodapé de Totais -->
       <div class="overflow-x-auto max-h-[680px] overflow-y-auto rounded-2xl border-2 border-[#94a3b8] dark:border-slate-700 bg-white dark:bg-slate-900 shadow-xs">
-        <table id="historico-planilha-table" class="w-full text-left text-xs border-collapse">
-          <thead class="sticky top-0 z-20 bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white font-black uppercase text-[10.5px] border-b-2 border-[#64748b] shadow-xs">
+        <table id="historico-planilha-table" class="w-full table-fixed min-w-[980px] text-left text-xs border-collapse">
+          <thead class="sticky top-0 z-20 bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white font-black uppercase text-[10px] border-b-2 border-[#64748b] shadow-xs leading-tight">
             <tr>
-              <th class="p-2.5 text-center w-14 bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">DIA</th>
-              <th class="p-2.5 text-center w-28 bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">MÊS</th>
-              <th class="p-2.5 text-center w-16 bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">ANO</th>
-              <th class="p-2.5 text-center w-28 bg-[#cbd5e1] dark:bg-slate-700 text-black dark:text-white">HORÁRIO</th>
-              <th class="p-2.5 text-center w-44 bg-[#e0f2fe] dark:bg-sky-950 text-sky-950 dark:text-sky-200">CHUVA EM MM POR HORA<br><span class="text-[9px] font-bold text-sky-800 dark:text-sky-300">(Média Rede, Máx &amp; Totais)</span></th>
-              <th class="p-2.5 w-64 bg-[#dcfce7] dark:bg-emerald-950 text-emerald-950 dark:text-emerald-200">VENTO: VELOCIDADE, DIREÇÃO E RAJADAS POR HORA<br><span class="text-[9px] font-bold text-emerald-800 dark:text-emerald-300">(km/h, Cardeal/Graus e Pico)</span></th>
-              <th class="p-2.5 min-w-[210px] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">SISTEMA ATUANTE REGISTRADO NAQUELE DIA</th>
-              <th class="p-2.5 min-w-[220px] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">SISTEMA ATUANTE REGISTRADO DAQUELE MÊS</th>
-              <th class="p-2.5 min-w-[260px] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">CARACTERÍSTICAS METEOROLÓGICAS REGISTRADAS DAQUELE DIA</th>
-              <th class="p-2.5 min-w-[260px] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">CARACTERÍSTICAS METEOROLÓGICAS REGISTRADAS DAQUELE MÊS</th>
+              <th class="p-2 text-center w-[4%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">DIA</th>
+              <th class="p-2 text-center w-[7%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">MÊS</th>
+              <th class="p-2 text-center w-[4.5%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">ANO</th>
+              <th class="p-2 text-center w-[7%] bg-[#cbd5e1] dark:bg-slate-700 text-black dark:text-white">HORÁRIO</th>
+              <th class="p-2 text-center w-[11.5%] bg-[#e0f2fe] dark:bg-sky-950 text-sky-950 dark:text-sky-200">CHUVA EM MM/H<br><span class="text-[8.5px] font-bold text-sky-800 dark:text-sky-300">(Média, Máx &amp; Totais)</span></th>
+              <th class="p-2 w-[15%] bg-[#dcfce7] dark:bg-emerald-950 text-emerald-950 dark:text-emerald-200">VENTO: VEL., DIREÇÃO E RAJADAS<br><span class="text-[8.5px] font-bold text-emerald-800 dark:text-emerald-300">(km/h, Cardeal e Pico)</span></th>
+              <th class="p-2 w-[11.5%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">SISTEMA ATUANTE NO DIA</th>
+              <th class="p-2 w-[12.5%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">SISTEMA ATUANTE NO MÊS</th>
+              <th class="p-2 w-[13.5%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">CARACTERÍSTICAS DO DIA</th>
+              <th class="p-2 w-[13.5%] bg-[#e2e8f0] dark:bg-slate-800 text-black dark:text-white">CARACTERÍSTICAS DO MÊS</th>
             </tr>
           </thead>
           <tbody id="historico-planilha-tbody" class="divide-y divide-slate-200 dark:divide-slate-800 text-black dark:text-slate-100">
@@ -8921,7 +8921,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=207" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=208" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -10737,8 +10737,8 @@
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=207"></script>
-  <script type="module" src="js/app.js?v=207"></script>
+  <script src="js/historico_planilha.js?v=208"></script>
+  <script type="module" src="js/app.js?v=208"></script>
 
 
 

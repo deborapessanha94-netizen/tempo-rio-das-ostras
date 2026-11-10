@@ -128,7 +128,7 @@
     var daySel = document.getElementById('hist-filter-day-select');
     if (monthSel && data.resumo_mensal) {
       var currM = monthSel.value || 'all';
-      var mHtml = '<option value="all">Todos os Meses Registrados (Outubro/2026 até Hoje)</option>';
+      var mHtml = '<option value="all">Todos os Meses (Out/2026 – Hoje)</option>';
       data.resumo_mensal.forEach(function (m) {
         mHtml += '<option value="' + m.ano_mes + '">' + String(m.mes_num).padStart(2, '0') + ' - ' + escapeHtml(m.rotulo_mes) + ' (Total: ' + fmtNum(m.chuva_total_media_mm, 1) + ' mm)</option>';
       });
@@ -485,43 +485,47 @@
 
     var html = months.map(function (m) {
       var stMap = m.estacoes_totais_mes || {};
+      var rajadaDetalhe = String(m.vento_rajada_max_detalhe || '').replace(/(\d+)\.(\d+)/g, '$1,$2');
+      var diaChuvoso = String(m.dia_mais_chuvoso || '').replace(/(\d+)\.(\d+)/g, '$1,$2');
+      var sistemaMes = String(m.sistema_atuante_mes || '').replace(/(\d+)\.(\d+)/g, '$1,$2');
+      var caracMes = String(m.caracteristicas_mes || '').replace(/(\d+)\.(\d+)/g, '$1,$2');
       return (
         '<div class="p-4 rounded-2xl bg-[#f8fafc] dark:bg-slate-800/90 border border-[#cbd5e1] dark:border-slate-700 space-y-3 shadow-2xs">' +
-          '<div class="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-2.5">' +
-            '<div class="flex items-center gap-2">' +
+          '<div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-2.5">' +
+            '<div class="flex items-center gap-2 flex-wrap">' +
               '<span class="px-2.5 py-1 rounded-lg text-xs font-black bg-[#ffebe4] text-[#9a3412] border border-[#f07a53]">' +
                 String(m.mes_num).padStart(2, '0') + '/' + m.ano +
               '</span>' +
               '<h4 class="text-sm font-black text-black dark:text-white">' + escapeHtml(m.rotulo_mes) + '</h4>' +
             '</div>' +
-            '<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300">' +
+            '<span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-900 border border-sky-300 whitespace-nowrap">' +
               m.dias_com_chuva + ' dias c/ chuva' +
             '</span>' +
           '</div>' +
 
-          '<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">' +
-            '<div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">' +
-              '<div class="text-[10px] font-bold text-slate-500 uppercase">Chuva Média Rede</div>' +
-              '<div class="text-base font-black text-sky-700 dark:text-sky-400">' + fmtNum(m.chuva_total_media_mm, 1) + ' mm</div>' +
-              '<div class="text-[10px] text-slate-600 dark:text-slate-400 truncate">Máx: ' + fmtNum(m.chuva_maior_estacao_mm, 1) + ' mm (' + escapeHtml(m.chuva_maior_estacao_nome) + ')</div>' +
+          '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">' +
+            '<div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between gap-0.5">' +
+              '<div class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wide">Chuva Média Rede</div>' +
+              '<div class="text-base sm:text-lg font-black text-sky-700 dark:text-sky-400 leading-tight whitespace-nowrap">' + fmtNum(m.chuva_total_media_mm, 1) + ' mm</div>' +
+              '<div class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 leading-snug break-words">Máx: <strong>' + fmtNum(m.chuva_maior_estacao_mm, 1) + ' mm</strong> (' + escapeHtml(m.chuva_maior_estacao_nome) + ')</div>' +
             '</div>' +
-            '<div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">' +
-              '<div class="text-[10px] font-bold text-slate-500 uppercase">Vento Velocidade</div>' +
-              '<div class="text-base font-black text-emerald-700 dark:text-emerald-400">Máx ' + fmtNum(m.vento_vel_max_kmh, 1) + ' km/h</div>' +
-              '<div class="text-[10px] text-slate-600 dark:text-slate-400">Média: ' + fmtNum(m.vento_vel_media_kmh, 1) + ' km/h • Dir: ' + escapeHtml(m.vento_dir_predominante) + '</div>' +
+            '<div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between gap-0.5">' +
+              '<div class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wide">Vento Velocidade</div>' +
+              '<div class="text-base sm:text-lg font-black text-emerald-700 dark:text-emerald-400 leading-tight whitespace-nowrap">Máx ' + fmtNum(m.vento_vel_max_kmh, 1) + ' km/h</div>' +
+              '<div class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 leading-snug break-words">Média: <strong>' + fmtNum(m.vento_vel_media_kmh, 1) + ' km/h</strong> • Dir: <strong>' + escapeHtml(m.vento_dir_predominante) + '</strong></div>' +
             '</div>' +
-            '<div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">' +
-              '<div class="text-[10px] font-bold text-slate-500 uppercase">Maior Rajada Mês</div>' +
-              '<div class="text-base font-black text-amber-700 dark:text-amber-400">' + fmtNum(m.vento_rajada_max_kmh, 1) + ' km/h</div>' +
-              '<div class="text-[10px] text-slate-600 dark:text-slate-400 truncate" title="' + escapeHtml(m.vento_rajada_max_detalhe) + '">' + escapeHtml(m.vento_rajada_max_detalhe) + '</div>' +
+            '<div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between gap-0.5">' +
+              '<div class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wide">Maior Rajada Mês</div>' +
+              '<div class="text-base sm:text-lg font-black text-amber-700 dark:text-amber-400 leading-tight whitespace-nowrap">' + fmtNum(m.vento_rajada_max_kmh, 1) + ' km/h</div>' +
+              '<div class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 leading-snug break-words">' + escapeHtml(rajadaDetalhe) + '</div>' +
             '</div>' +
-            '<div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">' +
-              '<div class="text-[10px] font-bold text-slate-500 uppercase">Dia Mais Chuvoso</div>' +
-              '<div class="text-xs font-black text-slate-900 dark:text-white leading-tight mt-0.5">' + escapeHtml(m.dia_mais_chuvoso) + '</div>' +
+            '<div class="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex flex-col justify-between gap-0.5">' +
+              '<div class="text-[10px] font-extrabold text-slate-500 uppercase tracking-wide">Dia Mais Chuvoso</div>' +
+              '<div class="text-xs sm:text-[13px] font-black text-slate-900 dark:text-white leading-snug break-words mt-0.5">' + escapeHtml(diaChuvoso) + '</div>' +
             '</div>' +
           '</div>' +
 
-          '<div class="flex flex-wrap items-center gap-1.5 text-[11px] bg-white dark:bg-slate-900 p-2 rounded-xl border border-slate-200 dark:border-slate-700">' +
+          '<div class="flex flex-wrap items-center gap-1.5 text-[11px] bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">' +
             '<span class="font-black text-slate-700 dark:text-slate-300 uppercase text-[10px]">Totais por Estação:</span>' +
             '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Praia da Tartaruga: ' + fmtNum(stMap.IRIODA17 || 0, 1) + ' mm</span>' +
             '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Cantagalo: ' + fmtNum(stMap.IRIODA16 || 0, 1) + ' mm</span>' +
@@ -533,11 +537,11 @@
           '<div class="space-y-1.5 text-xs">' +
             '<div class="p-2.5 rounded-xl bg-amber-50/70 dark:bg-slate-900/90 border border-amber-200 dark:border-slate-700">' +
               '<span class="font-black text-amber-900 dark:text-amber-300 uppercase text-[10.5px] block mb-0.5">Sistema Atuante Registrado Daquele Mês:</span>' +
-              '<p class="text-slate-800 dark:text-slate-200 font-medium leading-snug">' + escapeHtml(m.sistema_atuante_mes) + '</p>' +
+              '<p class="text-slate-800 dark:text-slate-200 font-medium leading-snug break-words">' + escapeHtml(sistemaMes) + '</p>' +
             '</div>' +
             '<div class="p-2.5 rounded-xl bg-emerald-50/60 dark:bg-slate-900/90 border border-emerald-200 dark:border-slate-700">' +
               '<span class="font-black text-emerald-900 dark:text-emerald-300 uppercase text-[10.5px] block mb-0.5">Características Meteorológicas Registradas Daquele Mês:</span>' +
-              '<p class="text-slate-800 dark:text-slate-200 font-medium leading-snug">' + escapeHtml(m.caracteristicas_mes) + '</p>' +
+              '<p class="text-slate-800 dark:text-slate-200 font-medium leading-snug break-words">' + escapeHtml(caracMes) + '</p>' +
             '</div>' +
           '</div>' +
         '</div>'
@@ -594,7 +598,7 @@
           '<button onclick="clearHistoricoFilters()" class="text-xs font-bold text-[#9a3412] hover:underline cursor-pointer self-start sm:self-auto">Mostrar Todos os Dias ×</button>' +
         '</div>' +
 
-        '<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">' +
+        '<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">' +
           '<div class="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-orange-200">' +
             '<div class="text-[10px] font-bold text-slate-500 uppercase">Chuva Total no Dia</div>' +
             '<div class="text-lg font-black text-sky-700">' + fmtNum(dayObj.chuva_total_media_mm, 1) + ' mm <span class="text-xs font-bold text-slate-500">(Média)</span></div>' +
@@ -741,14 +745,14 @@
           rowsHtml.push(
             '<tr class="' + trBg + ' border-b border-slate-200 dark:border-slate-800 transition align-middle">' +
               '<td class="py-1.5 px-2 text-center font-mono font-bold text-slate-900 dark:text-slate-100">' + String(r.dia).padStart(2, '0') + '</td>' +
-              '<td class="py-1.5 px-2 text-center font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">' + String(r.mes_num).padStart(2, '0') + ' (' + escapeHtml(r.mes_nome) + ')</td>' +
+              '<td class="py-1.5 px-1.5 text-center font-bold text-slate-800 dark:text-slate-200 break-words leading-tight">' + String(r.mes_num).padStart(2, '0') + ' (' + escapeHtml(r.mes_nome) + ')</td>' +
               '<td class="py-1.5 px-2 text-center font-mono font-bold text-slate-700 dark:text-slate-300">' + r.ano + '</td>' +
-              '<td class="py-1.5 px-2.5 text-center font-mono font-black text-slate-900 dark:text-white bg-slate-100/80 dark:bg-slate-800/60 whitespace-nowrap">' + r.horario + '</td>' +
-              '<td class="py-1.5 px-2.5 text-center whitespace-nowrap ' + (isRainyHr ? 'font-black text-sky-700 dark:text-sky-300' : 'text-slate-700 dark:text-slate-400') + '">' +
+              '<td class="py-1.5 px-1.5 text-center font-mono font-black text-slate-900 dark:text-white bg-slate-100/80 dark:bg-slate-800/60 break-words leading-tight">' + r.horario + '</td>' +
+              '<td class="py-1.5 px-2 text-center break-words leading-tight ' + (isRainyHr ? 'font-black text-sky-700 dark:text-sky-300' : 'text-slate-700 dark:text-slate-400') + '">' +
                 '<div class="text-xs font-black">' + fmtNum(r.chuva_mm_hora, 2) + ' mm</div>' +
                 (isRainyHr ? '<div class="text-[10px] font-bold text-sky-800 dark:text-sky-400">Máx: ' + fmtNum(r.chuva_max_estacao_mm, 2) + ' mm (' + escapeHtml(r.chuva_max_estacao_nome) + ')</div>' : '') +
               '</td>' +
-              '<td class="py-1.5 px-2.5 whitespace-nowrap">' +
+              '<td class="py-1.5 px-2 break-words leading-tight">' +
                 '<div class="font-bold text-slate-900 dark:text-slate-100 text-[11.5px]">' +
                   'Vel: <span class="text-emerald-700 dark:text-emerald-400 font-black">' + fmtNum(r.vento_velocidade_kmh, 1) + ' km/h</span> ' +
                   '<span class="text-[10px] text-slate-500">(Méd: ' + fmtNum(r.vento_velocidade_media_kmh, 1) + ')</span>' +
@@ -758,10 +762,10 @@
                   'Rajada: <span class="text-amber-700 dark:text-amber-400 font-black">' + fmtNum(r.vento_rajada_kmh, 1) + ' km/h</span>' +
                 '</div>' +
               '</td>' +
-              '<td class="py-1.5 px-2.5 min-w-[210px] max-w-[250px]"><div class="max-h-12 overflow-y-auto text-[11px] font-semibold text-slate-800 dark:text-slate-200 leading-tight">' + escapeHtml(r.sistema_atuante_dia) + '</div></td>' +
-              '<td class="py-1.5 px-2.5 min-w-[220px] max-w-[260px]"><div class="max-h-12 overflow-y-auto text-[10.5px] text-slate-700 dark:text-slate-300 leading-tight">' + escapeHtml(r.sistema_atuante_mes) + '</div></td>' +
-              '<td class="py-1.5 px-2.5 min-w-[260px] max-w-[310px]"><div class="max-h-12 overflow-y-auto text-[10.5px] text-slate-800 dark:text-slate-200 leading-tight">' + escapeHtml(r.caracteristicas_dia) + '</div></td>' +
-              '<td class="py-1.5 px-2.5 min-w-[260px] max-w-[310px]"><div class="max-h-12 overflow-y-auto text-[10.5px] text-slate-700 dark:text-slate-300 leading-tight">' + escapeHtml(r.caracteristicas_mes) + '</div></td>' +
+              '<td class="py-1.5 px-2 break-words"><div class="text-[10px] font-semibold text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(r.sistema_atuante_dia) + '</div></td>' +
+              '<td class="py-1.5 px-2 break-words"><div class="text-[10px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(r.sistema_atuante_mes) + '</div></td>' +
+              '<td class="py-1.5 px-2 break-words"><div class="text-[10px] text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(r.caracteristicas_dia) + '</div></td>' +
+              '<td class="py-1.5 px-2 break-words"><div class="text-[10px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(r.caracteristicas_mes) + '</div></td>' +
             '</tr>'
           );
         });
@@ -771,21 +775,21 @@
           rowsHtml.push(
             '<tr class="bg-[#fff7ed] dark:bg-amber-950/50 border-y-2 border-[#f07a53] font-bold text-black dark:text-amber-100 align-middle">' +
               '<td class="py-2 px-2 text-center font-mono font-black">' + String(dSum.dia).padStart(2, '0') + '</td>' +
-              '<td class="py-2 px-2 text-center font-black whitespace-nowrap">' + String(dSum.mes_num).padStart(2, '0') + ' (' + escapeHtml(dSum.mes_nome) + ')</td>' +
+              '<td class="py-2 px-1.5 text-center font-black break-words leading-tight">' + String(dSum.mes_num).padStart(2, '0') + ' (' + escapeHtml(dSum.mes_nome) + ')</td>' +
               '<td class="py-2 px-2 text-center font-mono font-black">' + dSum.ano + '</td>' +
-              '<td class="py-2 px-2.5 text-center font-black text-[#9a3412] dark:text-amber-300 bg-[#ffedd5] dark:bg-amber-900/40 whitespace-nowrap">TOTAL DO DIA (' + dSum.data_br + ')</td>' +
-              '<td class="py-2 px-2.5 text-center whitespace-nowrap">' +
+              '<td class="py-2 px-1.5 text-center font-black text-[#9a3412] dark:text-amber-300 bg-[#ffedd5] dark:bg-amber-900/40 break-words leading-tight text-[10.5px]">TOTAL DO DIA (' + dSum.data_br + ')</td>' +
+              '<td class="py-2 px-2 text-center break-words leading-tight">' +
                 '<div class="text-xs font-black text-sky-800 dark:text-sky-300">Total: ' + fmtNum(dSum.chuva_total_media_mm, 1) + ' mm</div>' +
                 '<div class="text-[10.5px] font-bold text-[#9a3412] dark:text-amber-300">Máx Estação: ' + fmtNum(dSum.chuva_maior_estacao_mm, 1) + ' mm (' + escapeHtml(dSum.chuva_maior_estacao_nome) + ')</div>' +
               '</td>' +
-              '<td class="py-2 px-2.5 whitespace-nowrap">' +
+              '<td class="py-2 px-2 break-words leading-tight">' +
                 '<div class="text-xs font-black">Vel. Máx: ' + fmtNum(dSum.vento_vel_max_kmh, 1) + ' km/h (Méd: ' + fmtNum(dSum.vento_vel_media_kmh, 1) + ')</div>' +
                 '<div class="text-[10.5px] font-black text-[#9a3412] dark:text-amber-300">Dir. Pred.: ' + escapeHtml(dSum.vento_dir_predominante) + ' • Raj. Máx: ' + fmtNum(dSum.vento_rajada_max_kmh, 1) + ' km/h (' + dSum.vento_rajada_max_horario + ')</div>' +
               '</td>' +
-              '<td class="py-2 px-2.5 min-w-[210px] max-w-[250px]"><div class="max-h-14 overflow-y-auto text-[11px] font-bold leading-tight">' + escapeHtml(dSum.sistema_atuante_dia) + '</div></td>' +
-              '<td class="py-2 px-2.5 min-w-[220px] max-w-[260px]"><div class="max-h-14 overflow-y-auto text-[10.5px] font-medium leading-tight">' + escapeHtml(dSum.sistema_atuante_mes) + '</div></td>' +
-              '<td class="py-2 px-2.5 min-w-[260px] max-w-[310px]"><div class="max-h-14 overflow-y-auto text-[10.5px] font-bold leading-tight">' + escapeHtml(dSum.caracteristicas_dia) + '</div></td>' +
-              '<td class="py-2 px-2.5 min-w-[260px] max-w-[310px]"><div class="max-h-14 overflow-y-auto text-[10.5px] font-medium leading-tight">' + escapeHtml(dSum.caracteristicas_mes) + '</div></td>' +
+              '<td class="py-2 px-2 break-words"><div class="text-[10px] font-bold leading-snug">' + escapeHtml(dSum.sistema_atuante_dia) + '</div></td>' +
+              '<td class="py-2 px-2 break-words"><div class="text-[10px] font-medium leading-snug">' + escapeHtml(dSum.sistema_atuante_mes) + '</div></td>' +
+              '<td class="py-2 px-2 break-words"><div class="text-[10px] font-bold leading-snug">' + escapeHtml(dSum.caracteristicas_dia) + '</div></td>' +
+              '<td class="py-2 px-2 break-words"><div class="text-[10px] font-medium leading-snug">' + escapeHtml(dSum.caracteristicas_mes) + '</div></td>' +
             '</tr>'
           );
         }
@@ -819,18 +823,18 @@
             '<td class="p-2.5 text-center font-bold whitespace-nowrap">' + String(dSum.mes_num).padStart(2, '0') + ' (' + escapeHtml(dSum.mes_nome) + ')</td>' +
             '<td class="p-2.5 text-center font-mono font-bold">' + dSum.ano + '</td>' +
             '<td class="p-2.5 text-center font-black text-slate-800 dark:text-slate-200 whitespace-nowrap">CONSOLIDADO (' + dSum.horas_registradas + 'h)</td>' +
-            '<td class="p-2.5 text-center whitespace-nowrap">' +
+            '<td class="p-2 text-center break-words leading-tight">' +
               '<div class="text-sm font-black text-sky-700 dark:text-sky-300">' + fmtNum(dSum.chuva_total_media_mm, 1) + ' mm <span class="text-[10px] font-semibold">(Média)</span></div>' +
               '<div class="text-[10.5px] font-bold text-slate-700 dark:text-slate-300">Máx: ' + fmtNum(dSum.chuva_maior_estacao_mm, 1) + ' mm (' + escapeHtml(dSum.chuva_maior_estacao_nome) + ')</div>' +
             '</td>' +
-            '<td class="p-2.5 whitespace-nowrap">' +
+            '<td class="p-2 break-words leading-tight">' +
               '<div class="font-bold text-slate-900 dark:text-slate-100">Máx: <span class="text-emerald-700 font-black">' + fmtNum(dSum.vento_vel_max_kmh, 1) + ' km/h</span> (Méd: ' + fmtNum(dSum.vento_vel_media_kmh, 1) + ')</div>' +
               '<div class="text-[11px] font-bold text-slate-700 dark:text-slate-300">Dir: ' + escapeHtml(dSum.vento_dir_predominante) + ' • Raj. Máx: <span class="text-amber-700 font-black">' + fmtNum(dSum.vento_rajada_max_kmh, 1) + ' km/h</span> (' + dSum.vento_rajada_max_horario + ')</div>' +
             '</td>' +
-            '<td class="p-2.5 min-w-[220px] text-[11px] font-semibold text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(dSum.sistema_atuante_dia) + '</td>' +
-            '<td class="p-2.5 min-w-[220px] text-[11px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(dSum.sistema_atuante_mes) + '</td>' +
-            '<td class="p-2.5 min-w-[260px] text-[11px] text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(dSum.caracteristicas_dia) + '</td>' +
-            '<td class="p-2.5 min-w-[260px] text-[11px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(dSum.caracteristicas_mes) + '</td>' +
+            '<td class="p-2.5 break-words text-[11px] font-semibold text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(dSum.sistema_atuante_dia) + '</td>' +
+            '<td class="p-2.5 break-words text-[11px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(dSum.sistema_atuante_mes) + '</td>' +
+            '<td class="p-2.5 break-words text-[11px] text-slate-800 dark:text-slate-200 leading-snug">' + escapeHtml(dSum.caracteristicas_dia) + '</td>' +
+            '<td class="p-2.5 break-words text-[11px] text-slate-700 dark:text-slate-300 leading-snug">' + escapeHtml(dSum.caracteristicas_mes) + '</td>' +
           '</tr>'
         );
 
@@ -879,11 +883,11 @@
           '<td colspan="4" class="p-3 text-left uppercase tracking-wider">' +
             'TOTAL GERAL DOS ITENS EXIBIDOS (' + filtered.days.length + ' dias / ' + filtered.hours.length + 'h)' +
           '</td>' +
-          '<td class="p-3 text-center whitespace-nowrap">' +
+          '<td class="p-2.5 text-center break-words leading-tight">' +
             '<div class="text-sm font-black text-sky-900 dark:text-sky-300">Soma Rede: ' + fmtNum(totalRainSum, 1) + ' mm</div>' +
             '<div class="text-[10.5px] text-emerald-900 dark:text-emerald-300">Pico Registrado: ' + fmtNum(maxRainPeak, 1) + ' mm</div>' +
           '</td>' +
-          '<td class="p-3 whitespace-nowrap">' +
+          '<td class="p-2.5 break-words leading-tight">' +
             '<div>Vel. Máx: ' + fmtNum(maxWindSpeed, 1) + ' km/h (Média: ' + fmtNum(avgW, 1) + ' km/h)</div>' +
             '<div class="text-[10.5px] text-amber-900 dark:text-amber-300">Maior Rajada: ' + fmtNum(maxGustSpeed, 1) + ' km/h ' + (maxGustInfo ? '(' + escapeHtml(maxGustInfo) + ')' : '') + '</div>' +
           '</td>' +
@@ -899,14 +903,14 @@
     return (
       '<tr class="bg-sky-100/90 dark:bg-sky-950/70 border-y-2 border-sky-500 font-black text-black dark:text-sky-100">' +
         '<td class="p-2.5 text-center font-mono">MÊS</td>' +
-        '<td class="p-2.5 text-center whitespace-nowrap">' + String(mSum.mes_num).padStart(2, '0') + ' (' + escapeHtml(mSum.mes_nome) + ')</td>' +
+        '<td class="p-2 text-center break-words leading-tight">' + String(mSum.mes_num).padStart(2, '0') + ' (' + escapeHtml(mSum.mes_nome) + ')</td>' +
         '<td class="p-2.5 text-center font-mono">' + mSum.ano + '</td>' +
         '<td class="p-2.5 text-center text-sky-900 dark:text-sky-300 whitespace-nowrap">TOTAL DO MÊS (' + mSum.dias_registrados + ' dias)</td>' +
-        '<td class="p-2.5 text-center whitespace-nowrap">' +
+        '<td class="p-2 text-center break-words leading-tight">' +
           '<div class="text-sm font-black text-sky-900 dark:text-sky-200">Total Mês: ' + fmtNum(mSum.chuva_total_media_mm, 1) + ' mm</div>' +
           '<div class="text-[10.5px] text-sky-800 dark:text-sky-300">Máx Estação: ' + fmtNum(mSum.chuva_maior_estacao_mm, 1) + ' mm (' + escapeHtml(mSum.chuva_maior_estacao_nome) + ')</div>' +
         '</td>' +
-        '<td class="p-2.5 whitespace-nowrap">' +
+        '<td class="p-2 break-words leading-tight">' +
           '<div>Vel. Máx Mês: ' + fmtNum(mSum.vento_vel_max_kmh, 1) + ' km/h (Méd: ' + fmtNum(mSum.vento_vel_media_kmh, 1) + ')</div>' +
           '<div class="text-[10.5px] text-sky-900 dark:text-sky-300">Dir. Pred.: ' + escapeHtml(mSum.vento_dir_predominante) + ' • Raj. Máx: ' + fmtNum(mSum.vento_rajada_max_kmh, 1) + ' km/h</div>' +
         '</td>' +

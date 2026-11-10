@@ -6764,6 +6764,10 @@ function initBulletinChartZoomControls() {
   }
 }
 window.updateBulletinChart = updateBulletinChart;
+if (window.state) {
+  if (window.state.activeTab) state.activeTab = window.state.activeTab;
+  if (window.state.activeSubSections) state.activeSubSections = window.state.activeSubSections;
+}
 window.state = state;
 window.openSocialModal = function(param) {
   if (param === 'tempo' || param === 'tempo_agora') {
