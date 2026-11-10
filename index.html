@@ -10823,7 +10823,7 @@
           class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
         >
           <i data-lucide="sun-medium" class="w-4 h-4 text-[#ea580c]"></i>
-          <span>☀️ Tempo Agora</span>
+          <span>Tempo Agora</span>
         </button>
         <button 
           type="button" 
@@ -10832,7 +10832,7 @@
           class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
         >
           <i data-lucide="cloud-rain" class="w-4 h-4 text-[#ea580c]"></i>
-          <span>🌧️ Chuva</span>
+          <span>Chuva</span>
         </button>
         <button 
           type="button" 
@@ -10841,7 +10841,7 @@
           class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
         >
           <i data-lucide="wind" class="w-4 h-4 text-[#0284c7]"></i>
-          <span>💨 Ventos & Rajadas</span>
+          <span>Ventos & Rajadas</span>
         </button>
         <button 
           type="button" 
@@ -10850,7 +10850,7 @@
           class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
         >
           <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7]"></i>
-          <span>🗓️ Panorama Semanal</span>
+          <span>Panorama Semanal</span>
         </button>
       </div>
 
@@ -10875,10 +10875,10 @@
             <!-- Seletor de Tema do Card (Nórdica Clara vs Escura Noturna) - Disponível para Chuva e Vento -->
             <div class="flex items-center gap-1 bg-[#eaeff2] p-1 rounded-2xl border border-[#cbd5e1] shadow-xs">
               <button type="button" id="social-theme-btn-nordic" onclick="setSocialCardTheme('nordic')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Paleta Nórdica Clara Oficial">
-                <span>🎨 Clara</span>
+                <span>Clara</span>
               </button>
               <button type="button" id="social-theme-btn-dark" onclick="setSocialCardTheme('dark')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Paleta Escura Noturna Oficial (Mesma de Chuva)">
-                <span>🌙 Escura</span>
+                <span>Escura</span>
               </button>
             </div>
           </div>
@@ -10890,8 +10890,8 @@
                 <i data-lucide="layers" class="w-3.5 h-3.5 text-black"></i>
                 <span id="social-filter-all-label">Todas</span>
               </button>
-              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#059669] text-white shadow-xs border border-[#047857] cursor-pointer flex items-center gap-1 transition" title="Exibe exclusivamente estações ativas com dados em tempo real">
-                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-white"></i>
+              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Exibe exclusivamente estações ativas com dados em tempo real">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#ea580c]"></i>
                 <span>Apenas Ativas</span>
               </button>
             </div>
@@ -11260,51 +11260,9 @@
       window.switchSubSection(tabName, activeSub);
     };
 
-    window.openSocialModalSemanal = function() {
-      if (typeof window.openSocialModalWithTab === 'function') window.openSocialModalWithTab('semanal');
-      else if (typeof window.openSocialModalChuva === 'function') {
-        window.openSocialModalChuva();
-        if (typeof window.setSocialTab === 'function') window.setSocialTab('semanal');
-      }
-    };
-    window.openSocialModalWithTab = window.openSocialModalWithTab || function(tab) {
-      if (tab === 'semanal' && typeof window.openSocialModalSemanal === 'function') return window.openSocialModalSemanal();
-      if (tab === 'tempo' && typeof window.openSocialModalTempoAgora === 'function') return window.openSocialModalTempoAgora();
-      if (tab === 'vento' && typeof window.openSocialModalVento === 'function') return window.openSocialModalVento();
-      if (typeof window.openSocialModalChuva === 'function') {
-        window.openSocialModalChuva();
-        if (typeof window.setSocialTab === 'function') window.setSocialTab(tab || 'tempo');
-      }
-    };
-    window.openSocialModalTempoAgora = function() {
-      if (typeof window.openSocialModalWithTab === 'function') window.openSocialModalWithTab('tempo');
-      else if (typeof window.openSocialModalChuva === 'function') {
-        window.openSocialModalChuva();
-        if (typeof window.setSocialTab === 'function') window.setSocialTab('tempo');
-      }
-    };
-    window.openSocialModal = function(modeOrHz) {
-      if (modeOrHz === 'tempo' || modeOrHz === 'tempo_agora') {
-        window.openSocialModalTempoAgora();
-      } else if (modeOrHz === 'vento') {
-        if (typeof window.openSocialModalVento === 'function') window.openSocialModalVento();
-        else if (typeof window.openSocialModalChuva === 'function') {
-          window.openSocialModalChuva();
-          if (typeof window.setSocialTab === 'function') window.setSocialTab('vento');
-        }
-      } else {
-        if (typeof window.openSocialModalChuva === 'function') window.openSocialModalChuva(modeOrHz || '24h');
-      }
-    };
-    window.openSocialModalVento = function() {
-      if (typeof window.openSocialModalChuva === 'function') {
-        window.openSocialModalChuva();
-        if (typeof window.setSocialTab === 'function') window.setSocialTab('vento');
-      }
-    };
-  </script>
+    </script>
   <script src="js/historico_planilha.js?v=202"></script>
-  <script type="module" src="js/app.js?v=202"></script>
+  <script type="module" src="js/app.js?v=204"></script>
 
 
 

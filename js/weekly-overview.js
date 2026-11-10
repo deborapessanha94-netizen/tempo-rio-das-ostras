@@ -64,8 +64,8 @@ function classifyWindGust(gustKmH) {
     return {
       severity: 'danger',
       label: 'Rajada Severa',
-      badgeBg: 'bg-rose-500/15 border-rose-500/40 text-rose-700 dark:text-rose-400',
-      textClass: 'text-rose-600 dark:text-rose-400',
+      badgeBg: 'bg-[#ffebe4] border border-[#f07a53] text-[#ea580c] dark:bg-orange-950/50 dark:border-orange-500/40 dark:text-orange-300',
+      textClass: 'text-[#ea580c] dark:text-orange-400',
       icon: 'alert-triangle'
     };
   }
@@ -73,7 +73,7 @@ function classifyWindGust(gustKmH) {
     return {
       severity: 'warning',
       label: 'Rajada Forte',
-      badgeBg: 'bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-amber-400',
+      badgeBg: 'bg-[#ffebe4] border border-[#f07a53]/60 text-[#c2410c] dark:bg-orange-950/40 dark:border-orange-500/40 dark:text-orange-300',
       textClass: 'text-amber-600 dark:text-amber-400',
       icon: 'wind'
     };
@@ -82,7 +82,7 @@ function classifyWindGust(gustKmH) {
     return {
       severity: 'moderate',
       label: 'Rajada Fresca',
-      badgeBg: 'bg-sky-500/15 border-sky-500/40 text-sky-700 dark:text-sky-300',
+      badgeBg: 'bg-[#e0f2fe] border border-[#0284c7]/40 text-[#0369a1] dark:bg-sky-950/40 dark:border-sky-500/40 dark:text-sky-300',
       textClass: 'text-sky-600 dark:text-sky-400',
       icon: 'wind'
     };
@@ -90,8 +90,8 @@ function classifyWindGust(gustKmH) {
   return {
     severity: 'low',
     label: 'Vento Brando',
-    badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-700 dark:text-emerald-400',
-    textClass: 'text-emerald-600 dark:text-emerald-400',
+    badgeBg: 'bg-slate-100 border border-slate-300 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300',
+    textClass: 'text-slate-700 dark:text-slate-300',
     icon: 'wind'
   };
 }
@@ -108,7 +108,7 @@ function classifyRain(mm, prob, wmoCode) {
       type: 'thunderstorm',
       label: 'Pancadas com Trovoada',
       desc: `Chuva moderada a forte com convecção severa (${val.toFixed(1)} mm, ${p}%)`,
-      badgeBg: 'bg-purple-500/15 border-purple-500/40 text-purple-700 dark:text-purple-300',
+      badgeBg: 'bg-[#ffebe4] border border-[#f07a53] text-[#ea580c] dark:bg-orange-950/50 dark:border-orange-500/40 dark:text-orange-300',
       icon: 'zap'
     };
   }
@@ -117,7 +117,7 @@ function classifyRain(mm, prob, wmoCode) {
       type: 'heavy',
       label: 'Chuva Forte',
       desc: `Pancadas volumosas ao longo do dia (${val.toFixed(1)} mm, ${p}%)`,
-      badgeBg: 'bg-blue-600/15 border-blue-600/40 text-blue-700 dark:text-blue-300',
+      badgeBg: 'bg-[#e0f2fe] border border-[#0284c7] text-[#0369a1] dark:bg-sky-950/50 dark:border-sky-500/40 dark:text-sky-300',
       icon: 'cloud-rain-wind'
     };
   }
@@ -126,7 +126,7 @@ function classifyRain(mm, prob, wmoCode) {
       type: 'moderate',
       label: 'Chuva Moderada',
       desc: `Chuva fraca a moderada intermitente (${val.toFixed(1)} mm, ${p}%)`,
-      badgeBg: 'bg-sky-500/15 border-sky-500/30 text-sky-700 dark:text-sky-300',
+      badgeBg: 'bg-[#e0f2fe] border border-[#0284c7]/40 text-[#0369a1] dark:bg-sky-950/40 dark:border-sky-500/40 dark:text-sky-300',
       icon: 'cloud-rain'
     };
   }
@@ -143,7 +143,7 @@ function classifyRain(mm, prob, wmoCode) {
     type: 'none',
     label: 'Sem Chuva Significativa',
     desc: `Tempo estável e seco (0.0 mm, ${p}%)`,
-    badgeBg: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-700 dark:text-emerald-400',
+    badgeBg: 'bg-slate-100 border border-slate-300 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300',
     icon: 'sun'
   };
 }
@@ -372,14 +372,13 @@ export function resolveWeeklyForecast7Days(weatherData, boletimMetadata) {
 function getRiskBadgeClasses(level) {
   switch (level) {
     case 'alert':
-      return 'bg-rose-500/15 border-rose-500/40 text-rose-700 dark:text-rose-400 font-extrabold';
     case 'warning':
-      return 'bg-amber-500/15 border-amber-500/40 text-amber-700 dark:text-amber-400 font-bold';
+      return 'bg-[#ffebe4] border border-[#f07a53] text-[#ea580c] dark:bg-orange-950/50 dark:border-orange-500/40 dark:text-orange-300 font-extrabold';
     case 'attention':
-      return 'bg-sky-500/15 border-sky-500/35 text-sky-700 dark:text-sky-300 font-bold';
+      return 'bg-[#e0f2fe] border border-[#0284c7]/40 text-[#0369a1] dark:bg-sky-950/40 dark:border-sky-500/40 dark:text-sky-300 font-bold';
     case 'low':
     default:
-      return 'bg-emerald-500/15 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 font-medium';
+      return 'bg-slate-100 border border-slate-300 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 font-semibold';
   }
 }
 
@@ -435,15 +434,7 @@ export function renderPanoramaSemanal(weatherData, boletimMetadata) {
 
         <!-- Ações do Cabeçalho: Baixar Card e Retornar ao Tempo Agora -->
         <div class="flex items-center gap-2 flex-wrap shrink-0">
-          <button 
-            type="button" 
-            onclick="window.openSocialModalSemanal && window.openSocialModalSemanal()"
-            class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ea580c] hover:bg-[#c2410c] text-white shadow-sm hover:shadow transition flex items-center gap-1.5 cursor-pointer"
-            title="Exportar imagem do resumo semanal para Post ou Stories"
-          >
-            <i data-lucide="camera" class="w-4 h-4 text-white"></i>
-            <span>Baixar Card Semanal (Post/Story)</span>
-          </button>
+          
           
           <button 
             type="button" 
@@ -751,35 +742,7 @@ export function renderPanoramaSemanal(weatherData, boletimMetadata) {
         </div>
       </div>
 
-      <!-- =================================================================== -->
-      <!-- BANNER DE COMPARTILHAMENTO NAS REDES SOCIAIS                        -->
-      <!-- =================================================================== -->
-      <div class="p-4 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
-            <i data-lucide="camera" class="w-5 h-5 text-white"></i>
-          </div>
-          <div>
-            <h4 class="font-black text-sm sm:text-base leading-tight">
-              Exportar Panorama Semanal para Redes Sociais
-            </h4>
-            <p class="text-xs text-white/90">
-              Gere a arte oficial em alta definição formatada para Feed (4:5) ou Stories (9:16) no padrão visual @tempoemriodasostras.
-            </p>
-          </div>
-        </div>
-
-        <button 
-          type="button" 
-          onclick="window.openSocialModalSemanal && window.openSocialModalSemanal()"
-          class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-white text-orange-600 hover:bg-orange-50 shadow-sm transition flex items-center gap-1.5 shrink-0 cursor-pointer"
-        >
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Gerar Arte Semanal</span>
-        </button>
       </div>
-
-    </div>
   `;
 
   container.innerHTML = html;

@@ -14,7 +14,7 @@
 
 export const socialState = {
   format: 'post', // 'post' (1080x1350) ou 'story' (1080x1920)
-  cardTheme: 'dark', // 'dark' (Escura Noturna Oficial) ou 'nordic' (Clara Nórdica)
+  cardTheme: 'nordic', // 'nordic' (Paleta Clara Oficial da Página) ou 'dark' (Escura Noturna Oficial)
   activeTab: 'tempo', // 'tempo' (Tempo Agora), 'chuva' ou 'vento'
 
   // Filtro padrão de estações para Chuva e Vento: APENAS ATIVAS
@@ -456,7 +456,7 @@ export function setSocialStationsFilter(mode) {
       btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
       btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     } else {
-      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#059669] text-white shadow-xs border border-[#047857] cursor-pointer flex items-center gap-1 transition';
+      btnActive.className = 'px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition';
       btnAll.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition';
     }
   }
@@ -600,366 +600,267 @@ export function renderSocialCanvas() {
 }
 
 /**
- * RENDERIZADOR 1: CARD COMPLETO DO TEMPO AGORA (Post Feed & Stories)
+ * RENDERIZADOR 1: CARD OFICIAL DO TEMPO AGORA (Padrão Idêntico ao Card de Chuva)
  */
 export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory, isDark) {
-  // 1. Fundo Geral (Idêntico ao padrão dos cards)
+  // Fundo e Moldura Externa (100% idênticos ao Card de Chuva)
   if (isDark) {
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
     bgGrad.addColorStop(0, '#020b18');
-    bgGrad.addColorStop(0.5, '#041226');
-    bgGrad.addColorStop(1, '#06172e');
+    bgGrad.addColorStop(0.4, '#06172e');
+    bgGrad.addColorStop(1, '#020813');
     ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   } else {
-    ctx.fillStyle = '#f4f1ea';
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(0.3, '#f4f1ea');
+    bgGrad.addColorStop(1, '#eae5dc');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   }
-  ctx.fillRect(0, 0, width, height);
 
-  // Extrai valores exatos em tempo real do DOM (com fallbacks seguros)
+  // Extrai valores exatos em tempo real do DOM (sem emojis coloridos)
   const getTxt = (id, fallback = '') => {
     if (typeof document === 'undefined') return fallback;
     const el = document.getElementById(id);
-    return el ? el.textContent.trim().replace(/\s+/g, ' ') : fallback;
+    const raw = el ? el.textContent.trim().replace(/\s+/g, ' ') : fallback;
+    return raw.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim() || fallback;
   };
 
-  const data = {
-    title: 'Rio das Ostras, RJ – Tempo agora',
-    estacaoAno: getTxt('hero-estacao-txt', 'Estação: Primavera'),
-    subtitle: 'Região dos Lagos • Costa do Sol • Estação Telemétrica Sede',
-    alertPill: getTxt('hero-alert-pill', 'Alerta Oficial Vigente Hoje'),
-    temp: getTxt('sidebar-temp', '20°'),
-    sensacao: getTxt('hero-sensacao', 'Sensação em Tempo Real: 20°C'),
-    skyCond: getTxt('hero-sky-condition', 'Céu no Momento'),
-    condTitle: getTxt('hero-condition', 'Muitas nuvens com pancadas de chuva isoladas'),
-    condSub: getTxt('hero-subcondition', 'Chuva prevista: 15.9 mm • Rajadas 50 km/h na orla marítima'),
-    date: getTxt('hero-date', 'Segunda-feira, 09 de Novembro de 2026'),
-    syncLabel: getTxt('hero-sync-label', 'Atualização a cada 5 min (Tempo Real)'),
-    chips: [
-      { label: 'CHUVA PREVISTA', val: getTxt('hero-chip-chuva-val', '15.9 mm (Até 50 mm)'), sub: getTxt('hero-chip-chuva-sub', 'Pico: 20 a 30 mm/h (Alerta)'), icon: '🌧️', isCoral: true },
-      { label: 'VENTO / RAJADAS', val: getTxt('sidebar-wind', '50 km/h'), sub: getTxt('hero-chip-vento-sub', 'Rajadas na orla marítima'), icon: '💨', isCoral: false },
-      { label: 'UMIDADE DO AR', val: getTxt('sidebar-hum', '60% a 90%'), sub: getTxt('hero-chip-umid-sub', 'Ar Muito Úmido'), icon: '💧', isCoral: true },
-      { label: 'MAR NA ORLA', val: getTxt('sidebar-sea', '1.0 a 1.0 m'), sub: getTxt('hero-chip-mar-sub', 'Atenção • Moderado'), icon: '🌊', isCoral: false },
-      { label: 'PRESSÃO ATM.', val: getTxt('hero-chip-press-val', '1018 hPa'), sub: getTxt('hero-chip-press-sub', 'Estável'), icon: '⏲️', isCoral: false },
-      { label: 'ÍNDICE UV', val: getTxt('hero-chip-uv-val', '8 - Muito Alto'), sub: getTxt('hero-chip-uv-sub', 'Evite sol • FPS 50+'), icon: '☀️', isCoral: true },
-      { label: 'NASCER & PÔR DO SOL', val: getTxt('hero-chip-sol-val', '🌅 04:57 • 🌇 18:06'), sub: getTxt('hero-chip-sol-sub', '13h 08m de Sol'), icon: '🌄', isCoral: true },
-      { label: 'FASE DA LUA', val: getTxt('hero-chip-lua-val', '🌑 Lua Nova'), sub: getTxt('hero-chip-lua-sub', 'Ilum. 0% • Noite'), icon: '🌙', isCoral: false }
-    ]
-  };
+  const tempRaw = getTxt('sidebar-temp', '20°').replace(/°C?/g, '').trim();
+  const sensRaw = getTxt('hero-sensacao', 'Sensação em Tempo Real: 20°C').replace(/^Sensação[^:]*:\s*/i, '').trim();
+  const condTitle = getTxt('hero-condition', 'Muitas nuvens com pancadas de chuva isoladas');
+  const chuvaVal = getTxt('hero-chip-chuva-val', '15,9 mm');
+  const chuvaSub = getTxt('hero-chip-chuva-sub', 'Pico: 20 a 30 mm/h');
+  const ventoVal = getTxt('sidebar-wind', '50 km/h');
+  const ventoSub = getTxt('hero-chip-vento-sub', 'Rajadas na orla marítima');
+  const umidVal = getTxt('sidebar-hum', '60% a 90%');
+  const umidSub = getTxt('hero-chip-umid-sub', 'Ar Muito Úmido');
+  const marVal = getTxt('sidebar-sea', '1,0 m');
+  const marSub = getTxt('hero-chip-mar-sub', 'Atenção • Moderado');
+  const pressVal = getTxt('hero-chip-press-val', '1018 hPa');
+  const pressSub = getTxt('hero-chip-press-sub', 'Estável ao nível do mar');
+  const uvVal = getTxt('hero-chip-uv-val', '8 - Muito Alto');
+  const uvSub = getTxt('hero-chip-uv-sub', 'Proteção solar recomendada');
+  const solVal = getTxt('hero-chip-sol-val', '04:57 • 18:06');
+  const solSub = getTxt('hero-chip-sol-sub', '13h 08m de luz solar');
+  const luaVal = getTxt('hero-chip-lua-val', 'Lua Nova');
 
-  // Margens e Geometria do Hero Card Central
-  const margin = 55;
-  const cardX = margin;
-  const cardY = isStory ? 80 : 45;
-  const cardW = width - margin * 2; // 970px
-  const cardH = isStory ? 1700 : 1220;
+  const rows = [
+    {
+      name: 'Temperatura & Condição Atual',
+      code: 'AGORA',
+      desc: condTitle.length > 44 ? condTitle.slice(0, 43) + '…' : condTitle,
+      valMain: `${tempRaw}`,
+      valUnit: '°C',
+      subRight: `Sensação térmica: ${sensRaw}`
+    },
+    {
+      name: 'Chuva Prevista (24h)',
+      code: 'CHUVA',
+      desc: chuvaSub,
+      valMain: chuvaVal.replace(/\s*\(.*\)/, '').replace('mm', '').trim().replace('.', ','),
+      valUnit: 'mm',
+      subRight: chuvaVal.includes('(') ? chuvaVal.slice(chuvaVal.indexOf('(')).replace(/[()]/g, '') : 'Acumulado previsto hoje'
+    },
+    {
+      name: 'Vento & Rajadas na Orla',
+      code: 'VENTO',
+      desc: ventoSub,
+      valMain: ventoVal.replace('km/h', '').trim(),
+      valUnit: 'km/h',
+      subRight: 'Velocidade / Rajada máxima'
+    },
+    {
+      name: 'Umidade Relativa do Ar',
+      code: 'UMID',
+      desc: umidSub,
+      valMain: umidVal.replace(/\s*a\s*/i, '–'),
+      valUnit: '',
+      subRight: 'Faixa higrométrica do dia'
+    },
+    {
+      name: 'Condição do Mar na Orla',
+      code: 'ORLA',
+      desc: marSub,
+      valMain: marVal.replace('m', '').replace(/\s*a\s*/i, '–').trim().replace(/\./g, ','),
+      valUnit: 'm',
+      subRight: 'Altura significativa de onda'
+    },
+    {
+      name: 'Pressão Atmosférica (PNM)',
+      code: 'PNM',
+      desc: pressSub,
+      valMain: pressVal.replace('hPa', '').trim(),
+      valUnit: 'hPa',
+      subRight: 'Referência normal: 1013 hPa'
+    },
+    {
+      name: 'Radiação & Índice UV',
+      code: 'IUV',
+      desc: uvSub,
+      valMain: `IUV ${uvVal.split('-')[0].trim()}`,
+      valUnit: '',
+      subRight: uvVal.includes('-') ? uvVal.split('-')[1].trim() : 'Incidência solar'
+    },
+    {
+      name: 'Ciclo Solar & Fase da Lua',
+      code: 'ASTRO',
+      desc: `Nascer / Pôr do Sol: ${solVal}`,
+      valMain: luaVal,
+      valUnit: '',
+      subRight: solSub
+    }
+  ];
 
-  // Cartão Principal
-  ctx.fillStyle = isDark ? 'rgba(10, 20, 38, 0.96)' : '#ffffff';
-  ctx.beginPath();
-  ctx.roundRect(cardX, cardY, cardW, cardH, 24);
-  ctx.fill();
+  const leftPad = 65;
+  const rightPad = width - 65;
+  const topPad = isStory ? 95 : 70;
 
-  ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.35)' : '#cbd5e1';
-  ctx.lineWidth = 2.5;
-  ctx.stroke();
-
-  // Barra superior de destaque (Orange pill accent)
+  // Barra de Destaque Vertical (Idêntica à Chuva)
   ctx.fillStyle = '#ea580c';
   ctx.beginPath();
-  ctx.roundRect(cardX + 28, cardY, cardW - 56, 5, 2.5);
+  ctx.roundRect(leftPad, topPad + 4, 9, isStory ? 82 : 72, 4.5);
   ctx.fill();
 
-  // 2. TOPO DO CARD: Ícone Pin + Título + Estação + Alerta + 24H
-  const headerY = cardY + (isStory ? 45 : 36);
-
-  // Pin Medallion
-  ctx.fillStyle = '#ea580c';
-  ctx.beginPath();
-  ctx.roundRect(cardX + 28, headerY, 44, 44, 12);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '22px sans-serif';
-  ctx.fillText('📍', cardX + 38, headerY + 31);
-
-  // Título Principal
-  const titleX = cardX + 84;
+  // Título Superior (Idêntico à Chuva)
   ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? 'bold 28px sans-serif' : 'bold 24px sans-serif';
-  ctx.fillText(data.title, titleX, headerY + 24);
+  ctx.font = isStory ? '900 36px sans-serif' : '900 28px sans-serif';
+  ctx.fillText('CONDIÇÕES DO', leftPad + 24, topPad + (isStory ? 34 : 26));
 
-  // Linha 2 do Cabeçalho: Subtítulo + Badge Estação
-  ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
-  ctx.font = '500 14px sans-serif';
-  const subTxt = data.subtitle;
-  ctx.fillText(subTxt, titleX, headerY + 48);
+  if (isDark) {
+    const titleGrad = ctx.createLinearGradient(leftPad + 24, 0, leftPad + 420, 0);
+    titleGrad.addColorStop(0, '#5eead4');
+    titleGrad.addColorStop(1, '#00c2ff');
+    ctx.fillStyle = titleGrad;
+  } else {
+    ctx.fillStyle = '#ea580c';
+  }
+  ctx.font = isStory ? '900 68px sans-serif' : '900 56px sans-serif';
+  ctx.fillText('TEMPO AGORA', leftPad + 24, topPad + (isStory ? 94 : 78));
 
-  const subTxtWidth = ctx.measureText(subTxt).width;
-  const estacaoX = titleX + subTxtWidth + 14;
-  ctx.font = 'bold 12px sans-serif';
-  const estacaoWidth = ctx.measureText(data.estacaoAno).width + 18;
+  const now = new Date();
+  const dataFormatada = `${String(now.getDate()).padStart(2, '0')}/${String(now.getMonth() + 1).padStart(2, '0')}/${now.getFullYear()}`;
+  const horaFormatada = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const horizonLabel = 'TEMPO REAL';
 
-  ctx.fillStyle = isDark ? 'rgba(16, 185, 129, 0.2)' : '#dcfce7';
-  ctx.beginPath();
-  ctx.roundRect(estacaoX, headerY + 34, estacaoWidth, 20, 10);
-  ctx.fill();
-  ctx.strokeStyle = isDark ? '#10b981' : '#86efac';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.fillStyle = isDark ? '#34d399' : '#15803d';
-  ctx.fillText(data.estacaoAno, estacaoX + 9, headerY + 48);
+  const subY = topPad + (isStory ? 148 : 122);
+  ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
+  ctx.font = '700 20px sans-serif';
+  ctx.fillText('Monitoramento Oficial • Sede & Orla Marítima', leftPad, subY);
 
-  // Lado Direito do Topo: Alerta Oficial + 24H
-  const rightX = cardX + cardW - 28;
   ctx.textAlign = 'right';
-
-  // Badge 24H
-  ctx.font = 'bold 12px sans-serif';
-  const badge24Width = 44;
-  ctx.fillStyle = isDark ? '#1e293b' : '#f1f5f9';
-  ctx.beginPath();
-  ctx.roundRect(rightX - badge24Width, headerY + 8, badge24Width, 28, 8);
-  ctx.fill();
-  ctx.strokeStyle = isDark ? '#475569' : '#cbd5e1';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.fillStyle = isDark ? '#e2e8f0' : '#0f172a';
-  ctx.fillText('24H', rightX - 12, headerY + 27);
-
-  // Badge Alerta Oficial Vigente
-  const alertText = data.alertPill.toUpperCase();
-  ctx.font = '900 12px sans-serif';
-  const alertWidth = ctx.measureText(alertText).width + 24;
-  const alertX = rightX - badge24Width - 10 - alertWidth;
-
-  ctx.fillStyle = '#ea580c';
-  ctx.beginPath();
-  ctx.roundRect(alertX, headerY + 8, alertWidth, 28, 14);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText(alertText, rightX - badge24Width - 22, headerY + 27);
+  ctx.font = 'bold 20px monospace';
+  if (isDark) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillText(`${dataFormatada} • ${horaFormatada} • ${horizonLabel}`, rightPad, subY);
+  } else {
+    const horizonSuffix = ` • ${horizonLabel}`;
+    const suffixWidth = ctx.measureText(horizonSuffix).width;
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText(horizonSuffix, rightPad, subY);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillText(`${dataFormatada} • ${horaFormatada}`, rightPad - suffixWidth, subY);
+  }
   ctx.textAlign = 'left';
 
-  // Linha divisória horizontal
-  const div1Y = headerY + 68;
-  ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(203, 213, 225, 0.8)';
+  ctx.strokeStyle = isDark ? 'rgba(0, 194, 255, 0.3)' : '#cbd5e1';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(cardX + 28, div1Y);
-  ctx.lineTo(cardX + cardW - 28, div1Y);
+  ctx.moveTo(leftPad, subY + 18);
+  ctx.lineTo(rightPad, subY + 18);
   ctx.stroke();
 
-  // 3. CENTRO DO CARD: Temperatura + Sensação + Céu no Momento + Mapa & Ícone
-  const centerTopY = div1Y + (isStory ? 32 : 24);
+  // Linhas Horizontais (Exatamente igual ao layout de Chuva e Vento)
+  const startY = subY + 36;
+  const footerY = height - (isStory ? 65 : 48);
+  const availableHeight = (footerY - 45) - startY;
+  const count = rows.length;
 
-  // Temperatura Gigante
-  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? '900 84px sans-serif' : '900 70px sans-serif';
-  ctx.fillText(data.temp, cardX + 28, centerTopY + (isStory ? 72 : 62));
+  const rowGap = isStory ? Math.min(22, Math.floor(availableHeight / count * 0.18)) : Math.min(14, Math.floor(availableHeight / count * 0.18));
+  const rowHeight = Math.min(isStory ? 130 : 94, Math.floor((availableHeight - (count - 1) * rowGap) / count));
 
-  const tempWidth = ctx.measureText(data.temp).width;
-  ctx.font = 'bold 30px sans-serif';
-  ctx.fillText('C', cardX + 32 + tempWidth, centerTopY + (isStory ? 42 : 34));
+  rows.forEach((item, idx) => {
+    const rowY = startY + idx * (rowHeight + rowGap);
 
-  // Sensação em Tempo Real (Pill)
-  const sensX = cardX + 64 + tempWidth;
-  ctx.font = 'bold 14px sans-serif';
-  const sensClean = data.sensacao.replace(/^Sensação em Tempo Real:\s*/i, '');
-  const sensText = `🔥 Sensação em Tempo Real: ${sensClean}`;
-  const sensWidth = ctx.measureText(sensText).width + 24;
-  ctx.fillStyle = '#ea580c';
-  ctx.beginPath();
-  ctx.roundRect(sensX, centerTopY + (isStory ? 20 : 14), sensWidth, 30, 15);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText(sensText, sensX + 12, centerTopY + (isStory ? 41 : 34));
-
-  // Pill "CÉU NO MOMENTO"
-  const skyY = centerTopY + (isStory ? 116 : 98);
-  ctx.font = 'bold 11px sans-serif';
-  ctx.fillStyle = isDark ? 'rgba(234, 88, 12, 0.2)' : '#ffedd5';
-  ctx.beginPath();
-  ctx.roundRect(cardX + 28, skyY - 14, 128, 22, 6);
-  ctx.fill();
-  ctx.strokeStyle = isDark ? '#ea580c' : '#fdba74';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.fillStyle = isDark ? '#ea580c' : '#c2410c';
-  ctx.fillText('👁️ CÉU NO MOMENTO', cardX + 34, skyY + 2);
-
-  // Subtítulo do Céu
-  ctx.fillStyle = isDark ? '#94a3b8' : '#334155';
-  ctx.font = '600 16px sans-serif';
-  ctx.fillText(data.skyCond, cardX + 166, skyY + 2);
-
-  // Título da Condição (Grande e Destacado)
-  const condY = skyY + (isStory ? 42 : 32);
-  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? 'bold 30px sans-serif' : 'bold 23px sans-serif';
-  ctx.fillText(data.condTitle, cardX + 28, condY);
-
-  // Subcondição (Chuva prevista e rajadas na orla)
-  const subcondY = condY + (isStory ? 32 : 26);
-  ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-  ctx.font = '500 16px sans-serif';
-  ctx.fillText(data.condSub, cardX + 28, subcondY);
-
-  // LADO DIREITO DO CENTRO: Mini-Mapa do RJ
-  const visualRightX = cardX + cardW - 28;
-  const mapW = isStory ? 220 : 185;
-  const mapH = isStory ? 154 : 130;
-  const mapX = visualRightX - mapW;
-  const mapY = centerTopY + 2;
-
-  // Box do Mapa
-  ctx.fillStyle = isDark ? '#0b1322' : '#f8fafc';
-  ctx.beginPath();
-  ctx.roundRect(mapX, mapY, mapW, mapH, 14);
-  ctx.fill();
-  ctx.strokeStyle = isDark ? '#1e293b' : '#cbd5e1';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-
-  // Imagem real do Mapa do RJ
-  const mapImg = (isDark ? preloadedMapDark : preloadedMapLight) ||
-                 document.querySelector(isDark ? 'img[src*="mapa_rj_dark"]' : 'img[src*="mapa_rj_light"]') ||
-                 document.querySelector('img[src*="mapa_rj"]');
-  if (mapImg && mapImg.complete && mapImg.naturalWidth > 0) {
-    ctx.drawImage(mapImg, mapX + 6, mapY + 6, mapW - 12, mapH - 12);
-  }
-
-  // Ponto de Rio das Ostras no Mapa
-  const pinX = mapX + mapW * 0.788;
-  const pinY = mapY + mapH * 0.60;
-  ctx.fillStyle = '#ea580c';
-  ctx.beginPath();
-  ctx.arc(pinX, pinY, 5, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  // Tag "Rio das Ostras" sobre o mapa
-  ctx.fillStyle = '#ea580c';
-  ctx.beginPath();
-  ctx.roundRect(mapX + mapW - 88, mapY + mapH - 24, 82, 19, 4);
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 9.5px sans-serif';
-  ctx.fillText('📍 Rio das Ostras', mapX + mapW - 84, mapY + mapH - 10);
-
-  // Linha divisória horizontal antes da grade de métricas
-  const div2Y = Math.max(subcondY + (isStory ? 30 : 20), mapY + mapH + (isStory ? 24 : 16));
-  ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(203, 213, 225, 0.8)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(cardX + 28, div2Y);
-  ctx.lineTo(cardX + cardW - 28, div2Y);
-  ctx.stroke();
-
-  // 4. GRADE DE 8 MÉTRICAS ESSENCIAIS (2 Colunas x 4 Linhas)
-  const gridStartY = div2Y + (isStory ? 28 : 18);
-  const colGap = 18;
-  const colW = (cardW - 56 - colGap) / 2; // ~448px cada
-  const rowGap = isStory ? 20 : 10;
-  const metricH = isStory ? 130 : 84;
-
-  data.chips.forEach((chip, i) => {
-    const col = i % 2;
-    const row = Math.floor(i / 2);
-    const chipX = cardX + 28 + col * (colW + colGap);
-    const chipY = gridStartY + row * (metricH + rowGap);
-
-    // Fundo da Célula de Métrica
-    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.85)' : '#ffffff';
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff';
     ctx.beginPath();
-    ctx.roundRect(chipX, chipY, colW, metricH, 14);
+    ctx.roundRect(leftPad, rowY, width - 130, rowHeight, 14);
     ctx.fill();
 
     ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Medalhão Circular do Ícone
-    const iconSize = isStory ? 52 : 42;
-    const iconX = chipX + 14;
-    const iconY = chipY + (metricH - iconSize) / 2;
+    // Título da Linha à esquerda
+    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+    ctx.font = isStory ? 'bold 30px sans-serif' : 'bold 24px sans-serif';
+    const nameY = rowY + (isStory ? 42 : 32);
+    ctx.fillText(item.name, leftPad + 18, nameY);
 
-    ctx.fillStyle = chip.isCoral 
-      ? (isDark ? 'rgba(234, 88, 12, 0.2)' : '#ffedd5')
-      : (isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe');
+    // Badge Padrão Azul-Oceano + Subtítulo
+    const badgeY = rowY + (isStory ? 74 : 54);
+    const badgeText = item.code;
+    ctx.font = 'bold 13px monospace';
+    const badgeWidth = ctx.measureText(badgeText).width + 12;
+
+    ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe';
     ctx.beginPath();
-    ctx.arc(iconX + iconSize/2, iconY + iconSize/2, iconSize/2, 0, Math.PI * 2);
+    ctx.roundRect(leftPad + 18, badgeY - 14, badgeWidth, 20, 6);
     ctx.fill();
-
-    ctx.strokeStyle = chip.isCoral ? '#ea580c' : (isDark ? '#38bdf8' : '#0284c7');
+    ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    ctx.font = isStory ? '24px sans-serif' : '19px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(chip.icon, iconX + iconSize/2, iconY + iconSize/2 + (isStory ? 8 : 6));
-    ctx.textAlign = 'left';
+    ctx.fillStyle = isDark ? '#38bdf8' : '#0369a1';
+    ctx.fillText(badgeText, leftPad + 24, badgeY);
 
-    // Textos da Métrica
-    const textX = iconX + iconSize + 14;
-    const topTextY = chipY + (isStory ? 32 : 22);
+    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+    ctx.font = '600 15px sans-serif';
+    ctx.fillText(`  ${item.desc}`, leftPad + 18 + badgeWidth + 4, badgeY);
 
-    // Rótulo
+    // Valor Principal à direita (Idêntico ao padrão de Chuva)
+    ctx.textAlign = 'right';
+    ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
+
+    if (item.valUnit) {
+      ctx.font = 'bold 24px sans-serif';
+      const unitW = ctx.measureText(item.valUnit).width;
+      ctx.fillText(item.valUnit, rightPad - 18, rowY + (isStory ? 44 : 34));
+
+      ctx.font = '900 40px sans-serif';
+      ctx.fillText(item.valMain, rightPad - 24 - unitW, rowY + (isStory ? 44 : 34));
+    } else {
+      ctx.font = '900 34px sans-serif';
+      ctx.fillText(item.valMain, rightPad - 18, rowY + (isStory ? 44 : 34));
+    }
+
     ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-    ctx.font = 'bold 11px sans-serif';
-    ctx.fillText(chip.label, textX, topTextY);
-
-    // Valor com escala dinâmica de fonte para evitar qualquer estouro
-    ctx.fillStyle = isDark ? (chip.isCoral ? '#38bdf8' : '#ffffff') : '#0f172a';
-    const valLen = chip.val.length;
-    const valFontSize = isStory 
-      ? (valLen > 24 ? 17 : (valLen > 18 ? 19 : 22)) 
-      : (valLen > 24 ? 14 : (valLen > 18 ? 15 : 17));
-    ctx.font = `900 ${valFontSize}px sans-serif`;
-    ctx.fillText(chip.val, textX, topTextY + (isStory ? 32 : 23));
-
-    // Subtexto
-    ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-    ctx.font = isStory ? '500 13px sans-serif' : '500 12px sans-serif';
-    ctx.fillText(chip.sub, textX, topTextY + (isStory ? 58 : 42));
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(item.subRight, rightPad - 18, rowY + (isStory ? 70 : 52));
+    ctx.textAlign = 'left';
   });
 
-  // 5. RODAPÉ DO HERO CARD: Data Oficial + Frequência de Atualização
-  const heroFooterY = cardY + cardH - (isStory ? 40 : 28);
-  ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.2)' : 'rgba(203, 213, 225, 0.8)';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(cardX + 28, heroFooterY - 18);
-  ctx.lineTo(cardX + cardW - 28, heroFooterY - 18);
-  ctx.stroke();
-
-  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? 'bold 16px sans-serif' : 'bold 14px sans-serif';
-  ctx.fillText(data.date, cardX + 28, heroFooterY + 4);
-
-  // Badge de Sincronização em Tempo Real
-  ctx.textAlign = 'right';
-  ctx.fillStyle = isDark ? '#38bdf8' : '#059669';
-  ctx.font = isStory ? 'bold 14px sans-serif' : 'bold 12px sans-serif';
-  ctx.fillText(`🟢 ${data.syncLabel}`, cardX + cardW - 28, heroFooterY + 4);
-  ctx.textAlign = 'left';
-
-  // 6. RODAPÉ EXTERNO DO POST: Marca Oficial @tempoemriodasostras
-  const extFooterY = height - (isStory ? 50 : 30);
+  // Rodapé Oficial (Idêntico ao de Chuva)
   ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
   ctx.beginPath();
-  ctx.roundRect(margin, extFooterY - 26, width - margin * 2, 2.5, 1.25);
+  ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 130, 3, 1.5);
   ctx.fill();
 
   ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? 'bold 24px sans-serif' : 'bold 20px sans-serif';
-  ctx.fillText('@tempoemriodasostras', margin, extFooterY);
+  ctx.font = isStory ? 'bold 26px sans-serif' : 'bold 22px sans-serif';
+  ctx.fillText('@tempoemriodasostras', leftPad, footerY);
 
-  ctx.textAlign = 'right';
   ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-  ctx.font = isStory ? '500 16px sans-serif' : '500 14px sans-serif';
-  ctx.fillText('Canal Oficial • Telemetria Oficial dos Bairros • Rio das Ostras - RJ', width - margin, extFooterY);
-  ctx.textAlign = 'left';
+  ctx.font = isStory ? '500 19px sans-serif' : '500 16px sans-serif';
+  ctx.fillText('Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ', leftPad, footerY + (isStory ? 26 : 22));
 
   const previewImg = document.getElementById('social-preview-image');
   if (previewImg) {
@@ -1457,22 +1358,32 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
 }
 
 /**
- * RENDERIZADOR 4: CARD DO PANORAMA SEMANAL (7 DIAS)
- * Formatos: Post Feed (1080x1350, 4:5) e Stories (1080x1920, 9:16)
- * Contém: Vento, Rajadas, Chuva, Sistemas Atuantes e Eventos Extremos
+ * RENDERIZADOR 4: CARD OFICIAL DO PANORAMA SEMANAL (7 DIAS)
+ * Segue estritamente o mesmo padrão visual e paleta do Card de Chuva e Vento.
  */
 export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, isDark) {
-  // 1. Fundo
+  // 1. Fundo e Moldura Externa (100% idênticos ao Card de Chuva)
   if (isDark) {
-    const bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
     bgGrad.addColorStop(0, '#020b18');
-    bgGrad.addColorStop(0.5, '#041226');
-    bgGrad.addColorStop(1, '#06172e');
+    bgGrad.addColorStop(0.4, '#06172e');
+    bgGrad.addColorStop(1, '#020813');
     ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   } else {
-    ctx.fillStyle = '#f4f1ea';
+    const bgGrad = ctx.createLinearGradient(0, 0, width, height);
+    bgGrad.addColorStop(0, '#f8fafc');
+    bgGrad.addColorStop(0.3, '#f4f1ea');
+    bgGrad.addColorStop(1, '#eae5dc');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(12, 12, width - 24, height - 24);
   }
-  ctx.fillRect(0, 0, width, height);
 
   // 2. Obtém dados semanais
   let weekly = null;
@@ -1483,393 +1394,154 @@ export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, i
     }
   }
 
-  // Fallback caso dados não estejam carregados
   if (!weekly || !weekly.days || weekly.days.length === 0) {
     ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-    ctx.font = 'bold 28px Inter, sans-serif';
+    ctx.font = 'bold 28px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('Dados do Panorama Semanal em processamento...', width / 2, height / 2);
+    ctx.textAlign = 'left';
     const pImg = document.getElementById('social-preview-image');
     if (pImg) pImg.src = canvas.toDataURL('image/png');
     return;
   }
 
-  const { periodLabel, totalRainMm, maxGustDay, days } = weekly;
+  const { periodLabel, totalRainMm, days } = weekly;
 
-  // 3. Moldura Central
-  const margin = 45;
-  const cardX = margin;
-  const cardY = isStory ? 70 : 35;
-  const cardW = width - margin * 2;
-  const cardH = height - cardY - (isStory ? 70 : 35);
+  const leftPad = 65;
+  const rightPad = width - 65;
+  const topPad = isStory ? 95 : 70;
 
-  ctx.save();
-  ctx.beginPath();
-  ctx.roundRect(cardX, cardY, cardW, cardH, 24);
-  ctx.fillStyle = isDark ? '#081325' : '#ffffff';
-  ctx.fill();
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = isDark ? '#1e293b' : '#cbd5e1';
-  ctx.stroke();
-
-  // Barra de acento superior laranja
-  ctx.beginPath();
-  ctx.roundRect(cardX + 28, cardY, cardW - 56, 5, 2.5);
+  // Barra de Destaque Vertical (Idêntica à Chuva)
   ctx.fillStyle = '#ea580c';
-  ctx.fill();
-
-  // 4. Cabeçalho do Card
-  const headerY = cardY + 28;
-  
-  // Medallion Ícone
   ctx.beginPath();
-  ctx.roundRect(cardX + 28, headerY, 46, 46, 12);
-  const medGrad = ctx.createLinearGradient(cardX + 28, headerY, cardX + 74, headerY + 46);
-  medGrad.addColorStop(0, '#f97316');
-  medGrad.addColorStop(1, '#ea580c');
-  ctx.fillStyle = medGrad;
+  ctx.roundRect(leftPad, topPad + 4, 9, isStory ? 82 : 72, 4.5);
   ctx.fill();
 
-  ctx.font = '24px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#ffffff';
-  ctx.fillText('🗓️', cardX + 51, headerY + 24);
-
-  // Título e Subtítulo
-  const textX = cardX + 86;
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  ctx.font = '900 23px Inter, sans-serif';
+  // Título Superior (Idêntico à Chuva)
   ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.fillText('Rio das Ostras – Panorama Semanal (7 Dias)', textX, headerY + 2);
+  ctx.font = isStory ? '900 36px sans-serif' : '900 28px sans-serif';
+  ctx.fillText('PANORAMA SEMANAL', leftPad + 24, topPad + (isStory ? 34 : 26));
 
-  ctx.font = '700 13px Inter, sans-serif';
-  ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-  ctx.fillText(`Validade: ${periodLabel} • Atualizado toda Segunda-feira`, textX, headerY + 28);
+  if (isDark) {
+    const titleGrad = ctx.createLinearGradient(leftPad + 24, 0, leftPad + 360, 0);
+    titleGrad.addColorStop(0, '#5eead4');
+    titleGrad.addColorStop(1, '#00c2ff');
+    ctx.fillStyle = titleGrad;
+  } else {
+    ctx.fillStyle = '#ea580c';
+  }
+  ctx.font = isStory ? '900 68px sans-serif' : '900 56px sans-serif';
+  ctx.fillText('7 DIAS', leftPad + 24, topPad + (isStory ? 94 : 78));
 
-  // Badge da direita: @tempoemriodasostras
-  const badgeRightX = cardX + cardW - 28;
-  const tagW = 165;
+  const subY = topPad + (isStory ? 148 : 122);
+  ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
+  ctx.font = '700 20px sans-serif';
+  ctx.fillText('Previsão de Chuva, Ventos e Sistemas Atuantes', leftPad, subY);
+
+  const totalRainStr = formatDec1(totalRainMm);
+  ctx.textAlign = 'right';
+  ctx.font = 'bold 20px monospace';
+  if (isDark) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.fillText(`${periodLabel} • TOTAL: ${totalRainStr} MM`, rightPad, subY);
+  } else {
+    const horizonSuffix = ` • TOTAL: ${totalRainStr} MM`;
+    const suffixWidth = ctx.measureText(horizonSuffix).width;
+    ctx.fillStyle = '#ea580c';
+    ctx.fillText(horizonSuffix, rightPad, subY);
+    ctx.fillStyle = '#0f172a';
+    ctx.fillText(`${periodLabel}`, rightPad - suffixWidth, subY);
+  }
+  ctx.textAlign = 'left';
+
+  ctx.strokeStyle = isDark ? 'rgba(0, 194, 255, 0.3)' : '#cbd5e1';
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.roundRect(badgeRightX - tagW, headerY + 6, tagW, 28, 8);
-  ctx.fillStyle = isDark ? '#1e293b' : '#ffebe4';
-  ctx.fill();
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = isDark ? '#334155' : '#f07a53';
+  ctx.moveTo(leftPad, subY + 18);
+  ctx.lineTo(rightPad, subY + 18);
   ctx.stroke();
 
-  ctx.font = '800 11px JetBrains Mono, monospace';
-  ctx.fillStyle = isDark ? '#f8fafc' : '#ea580c';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('@tempoemriodasostras', badgeRightX - tagW / 2, headerY + 20);
+  // As 7 Linhas Diárias (100% no padrão das linhas de Chuva e Vento)
+  const startY = subY + 36;
+  const footerY = height - (isStory ? 65 : 48);
+  const availableHeight = (footerY - 45) - startY;
+  const displayDays = days.slice(0, 7);
+  const count = displayDays.length || 1;
 
-  // 5. Faixa Executiva dos 4 Destaques (Chuva Total, Pico Rajada, Sistemas, Riscos)
-  const stripY = headerY + 58;
-  const stripH = isStory ? 82 : 68;
-  const colW = (cardW - 56 - 24) / 4;
+  const rowGap = isStory ? Math.min(24, Math.floor(availableHeight / count * 0.18)) : Math.min(15, Math.floor(availableHeight / count * 0.18));
+  const rowHeight = Math.min(isStory ? 135 : 102, Math.floor((availableHeight - (count - 1) * rowGap) / count));
 
-  const kpis = [
-    { label: 'CHUVA TOTAL', val: `${totalRainMm} mm`, sub: 'Acumulado 7 dias', color: '#0284c7' },
-    { label: 'MAIOR RAJADA', val: `${maxGustDay.windGust} km/h`, sub: `${maxGustDay.dayOfWeekShort} (${maxGustDay.windDirCardinal})`, color: '#ea580c' },
-    { label: 'SISTEMAS PRINCIPAIS', val: 'ASAS / F. Fria', sub: 'Pré-Frontal Qui', color: '#8b5cf6' },
-    { label: 'EVENTOS EXTREMOS', val: 'Qui / Sex', sub: 'Rajadas & Chuva', color: '#e11d48' }
-  ];
+  displayDays.forEach((d, idx) => {
+    const rowY = startY + idx * (rowHeight + rowGap);
 
-  for (let k = 0; k < 4; k++) {
-    const kX = cardX + 28 + k * (colW + 8);
+    ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.8)' : '#ffffff';
     ctx.beginPath();
-    ctx.roundRect(kX, stripY, colW, stripH, 12);
-    ctx.fillStyle = isDark ? '#0d1829' : '#f8fafc';
+    ctx.roundRect(leftPad, rowY, width - 130, rowHeight, 14);
     ctx.fill();
+
+    ctx.strokeStyle = isDark ? 'rgba(56, 189, 248, 0.25)' : '#cbd5e1';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Linha 1 Esquerda: Dia da Semana + Data + Temperatura Máx/Mín
+    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+    ctx.font = isStory ? 'bold 28px sans-serif' : 'bold 23px sans-serif';
+    const nameY = rowY + (isStory ? 42 : 34);
+    const todaySuffix = d.isToday ? ' (HOJE)' : '';
+    ctx.fillText(`${d.dayOfWeek}${todaySuffix}  •  ${d.tempMax}° / ${d.tempMin}°C`, leftPad + 18, nameY);
+
+    // Linha 2 Esquerda: Badge Azul-Oceano com Data + Sistema Atuante & Condição
+    const badgeY = rowY + (isStory ? 78 : 60);
+    const badgeText = `${d.dayOfWeekShort.toUpperCase()} ${d.dateFormatted}`;
+    ctx.font = 'bold 13px monospace';
+    const badgeWidth = ctx.measureText(badgeText).width + 12;
+
+    ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe';
+    ctx.beginPath();
+    ctx.roundRect(leftPad + 18, badgeY - 14, badgeWidth, 20, 6);
+    ctx.fill();
+    ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
     ctx.lineWidth = 1;
-    ctx.strokeStyle = isDark ? '#1e293b' : '#cbd5e1';
     ctx.stroke();
 
-    ctx.textAlign = 'left';
-    ctx.font = '800 10px Inter, sans-serif';
+    ctx.fillStyle = isDark ? '#38bdf8' : '#0369a1';
+    ctx.fillText(badgeText, leftPad + 24, badgeY);
+
+    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
+    ctx.font = '600 15px sans-serif';
+    const sysClean = (d.sistemaAtuante || '').length > 56 ? d.sistemaAtuante.slice(0, 55) + '…' : d.sistemaAtuante;
+    ctx.fillText(`  ${sysClean}`, leftPad + 18 + badgeWidth + 4, badgeY);
+
+    // Lado Direito: Acumulado de Chuva em destaque + Vento e Rajada abaixo (Idêntico à Chuva)
+    ctx.textAlign = 'right';
+    const rainStr = formatDec1(d.rainMm);
+
+    ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
+    ctx.font = '900 40px sans-serif';
+    ctx.fillText(rainStr, rightPad - 72, rowY + (isStory ? 44 : 36));
+
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText('mm', rightPad - 18, rowY + (isStory ? 44 : 36));
+
     ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-    ctx.fillText(kpis[k].label, kX + 12, stripY + 10);
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(`Rajada ${d.windGust} km/h (${d.windDirCardinal}) • Vento ${d.windSpeed} km/h`, rightPad - 18, rowY + (isStory ? 76 : 58));
+    ctx.textAlign = 'left';
+  });
 
-    ctx.font = '900 17px JetBrains Mono, monospace';
-    ctx.fillStyle = kpis[k].color;
-    ctx.fillText(kpis[k].val, kX + 12, stripY + 27);
+  // Rodapé Oficial (Idêntico ao de Chuva)
+  ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
+  ctx.beginPath();
+  ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 130, 3, 1.5);
+  ctx.fill();
 
-    ctx.font = '600 10.5px Inter, sans-serif';
-    ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-    ctx.fillText(kpis[k].sub, kX + 12, stripY + 48);
-  }
+  ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+  ctx.font = isStory ? 'bold 26px sans-serif' : 'bold 22px sans-serif';
+  ctx.fillText('@tempoemriodasostras', leftPad, footerY);
 
-  // 6. As 7 Linhas Diárias (Segunda a Domingo)
-  const rowsStartY = stripY + stripH + (isStory ? 20 : 14);
-  const totalRowsHeight = cardH - (rowsStartY - cardY) - (isStory ? 55 : 40);
-  const rowH = totalRowsHeight / 7;
-  const rowSpacing = isStory ? 10 : 5;
-  const effectiveRowH = rowH - rowSpacing;
-
-  for (let i = 0; i < Math.min(days.length, 7); i++) {
-    const d = days[i];
-    const rY = rowsStartY + i * rowH;
-    const rX = cardX + 28;
-    const rW = cardW - 56;
-
-    // Fundo da Linha
-    ctx.beginPath();
-    ctx.roundRect(rX, rY, rW, effectiveRowH, 14);
-    if (d.isToday) {
-      ctx.fillStyle = isDark ? '#142038' : '#fff7ed';
-      ctx.strokeStyle = '#ea580c';
-      ctx.lineWidth = 2;
-    } else {
-      ctx.fillStyle = isDark ? '#0b1626' : (i % 2 === 0 ? '#f8fafc' : '#ffffff');
-      ctx.strokeStyle = isDark ? '#1e293b' : '#e2e8f0';
-      ctx.lineWidth = 1.2;
-    }
-    ctx.fill();
-    ctx.stroke();
-
-    if (isStory) {
-      // -------------------------------------------------------------
-      // LAYOUT STORIES (9:16) - 3 LINHAS ESTRUTURADAS E ESPAÇOSAS
-      // -------------------------------------------------------------
-      
-      // LINHA 1 (Y + 16): Dia, Data, Hoje, Temperatura e Condição
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      const line1Y = rY + 28;
-      
-      ctx.font = '900 20px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-      ctx.fillText(`${d.dayOfWeek.toUpperCase()} • ${d.dateFormatted}`, rX + 20, line1Y);
-
-      if (d.isToday) {
-        const dayTextWidth = ctx.measureText(`${d.dayOfWeek.toUpperCase()} • ${d.dateFormatted}`).width;
-        ctx.beginPath();
-        ctx.roundRect(rX + 20 + dayTextWidth + 12, line1Y - 11, 46, 22, 6);
-        ctx.fillStyle = '#ea580c';
-        ctx.fill();
-        ctx.font = '900 11px Inter, sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.fillText('HOJE', rX + 20 + dayTextWidth + 35, line1Y);
-      }
-
-      // Temperatura e Condição no canto superior direito (Empilhados sem sobreposição)
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'middle';
-      ctx.font = '900 23px JetBrains Mono, monospace';
-      ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-      ctx.fillText(`${d.tempMax}° / ${d.tempMin}°C`, rX + rW - 20, line1Y - 8);
-
-      ctx.font = '700 13px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-      const cStoryLabel = d.weatherLabel.length > 22 ? d.weatherLabel.substring(0, 21) + '…' : d.weatherLabel;
-      ctx.fillText(cStoryLabel, rX + rW - 20, line1Y + 16);
-
-      // LINHA 2 (Y + 70): Os 4 Pilares - Vento/Rajadas & Chuva
-      const line2Y = rY + 74;
-      ctx.textAlign = 'left';
-      
-      // Vento e Rajada
-      ctx.font = '800 14px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
-      ctx.fillText(`💨 Vento: ${d.windSpeed} km/h (${d.windDirCardinal})`, rX + 20, line2Y);
-
-      // Badge de Rajada
-      const gustW = 120;
-      ctx.beginPath();
-      ctx.roundRect(rX + 215, line2Y - 13, gustW, 26, 7);
-      if (d.windGust >= 50) {
-        ctx.fillStyle = isDark ? '#451a03' : '#ffedd5';
-        ctx.strokeStyle = '#ea580c';
-      } else if (d.windGust >= 35) {
-        ctx.fillStyle = isDark ? '#0c2642' : '#e0f2fe';
-        ctx.strokeStyle = '#0284c7';
-      } else {
-        ctx.fillStyle = isDark ? '#052e16' : '#ecfdf5';
-        ctx.strokeStyle = '#10b981';
-      }
-      ctx.lineWidth = 1.2;
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.textAlign = 'center';
-      ctx.font = '900 12px JetBrains Mono, monospace';
-      ctx.fillStyle = d.windGust >= 50 ? '#ea580c' : (d.windGust >= 35 ? '#0284c7' : '#10b981');
-      ctx.fillText(`Rajada ${d.windGust} km/h`, rX + 215 + gustW / 2, line2Y);
-
-      // Chuva
-      ctx.textAlign = 'left';
-      ctx.font = '800 14px Inter, sans-serif';
-      ctx.fillStyle = d.rainMm >= 5 ? '#2563eb' : (isDark ? '#38bdf8' : '#0284c7');
-      ctx.fillText(`🌧️ Chuva: ${d.rainMm.toFixed(1)} mm (${d.rainProb}% prob)`, rX + 365, line2Y);
-
-      // LINHA 3 (Y + 118): Sistema Atuante & Evento Extremo
-      const line3Y = rY + 118;
-      ctx.font = '800 13px Inter, sans-serif';
-      ctx.fillStyle = '#ea580c';
-      const sisStory = d.sistemaAtuante.length > 34 ? d.sistemaAtuante.substring(0, 33) + '…' : d.sistemaAtuante;
-      ctx.fillText(`🌐 ${sisStory}`, rX + 20, line3Y);
-
-      // Badge de Risco na Linha 3 à direita
-      const rBadgeW = 270;
-      const rBadgeX = rX + rW - rBadgeW - 20;
-      ctx.beginPath();
-      ctx.roundRect(rBadgeX, line3Y - 13, rBadgeW, 26, 7);
-      let rFill = '#059669';
-      if (d.riskLevel === 'alert') {
-        ctx.fillStyle = isDark ? '#4c0519' : '#ffe4e6';
-        ctx.strokeStyle = '#e11d48';
-        rFill = '#e11d48';
-      } else if (d.riskLevel === 'warning') {
-        ctx.fillStyle = isDark ? '#451a03' : '#ffedd5';
-        ctx.strokeStyle = '#ea580c';
-        rFill = '#c2410c';
-      } else if (d.riskLevel === 'attention') {
-        ctx.fillStyle = isDark ? '#082f49' : '#e0f2fe';
-        ctx.strokeStyle = '#0284c7';
-        rFill = '#0284c7';
-      } else {
-        ctx.fillStyle = isDark ? '#022c22' : '#f0fdf4';
-        ctx.strokeStyle = '#10b981';
-        rFill = '#059669';
-      }
-      ctx.lineWidth = 1.2;
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.textAlign = 'center';
-      ctx.font = '900 11px Inter, sans-serif';
-      ctx.fillStyle = rFill;
-      const bText = d.riskBadge.length > 30 ? d.riskBadge.substring(0, 29) + '…' : d.riskBadge;
-      ctx.fillText(`⚠️ ${bText}`, rBadgeX + rBadgeW / 2, line3Y);
-
-    } else {
-      // -------------------------------------------------------------
-      // LAYOUT POST FEED (4:5) - 2 LINHAS EQUILIBRADAS E LEGÍVEIS
-      // -------------------------------------------------------------
-      
-      // LINHA 1 (Y + 24): Dia, Data, Temperatura e Céu
-      const line1Y = rY + 24;
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      
-      ctx.font = '900 15px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-      ctx.fillText(`${d.dayOfWeekShort.toUpperCase()} • ${d.dateFormatted}`, rX + 16, line1Y);
-
-      if (d.isToday) {
-        ctx.beginPath();
-        ctx.roundRect(rX + 124, line1Y - 9, 38, 18, 4);
-        ctx.fillStyle = '#ea580c';
-        ctx.fill();
-        ctx.font = '900 9px Inter, sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.fillText('HOJE', rX + 143, line1Y);
-      }
-
-      // Temperatura e Céu
-      ctx.textAlign = 'left';
-      ctx.font = '900 16px JetBrains Mono, monospace';
-      ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-      ctx.fillText(`${d.tempMax}° / ${d.tempMin}°C`, rX + 175, line1Y);
-
-      ctx.font = '700 11.5px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-      const cLabel = d.weatherLabel.length > 18 ? d.weatherLabel.substring(0, 17) + '…' : d.weatherLabel;
-      ctx.fillText(cLabel, rX + 285, line1Y);
-
-      // Vento & Rajada na Linha 1 à direita
-      ctx.font = '800 12.5px Inter, sans-serif';
-      ctx.fillStyle = isDark ? '#e2e8f0' : '#1e293b';
-      ctx.fillText(`💨 ${d.windSpeed} km/h • ${d.windDirCardinal}`, rX + 445, line1Y);
-
-      // Badge de Rajada
-      const gBadgeW = 105;
-      ctx.beginPath();
-      ctx.roundRect(rX + 575, line1Y - 11, gBadgeW, 22, 5);
-      if (d.windGust >= 50) {
-        ctx.fillStyle = isDark ? '#451a03' : '#ffedd5';
-        ctx.strokeStyle = '#ea580c';
-      } else if (d.windGust >= 35) {
-        ctx.fillStyle = isDark ? '#0c2642' : '#e0f2fe';
-        ctx.strokeStyle = '#0284c7';
-      } else {
-        ctx.fillStyle = isDark ? '#052e16' : '#ecfdf5';
-        ctx.strokeStyle = '#10b981';
-      }
-      ctx.lineWidth = 1;
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.textAlign = 'center';
-      ctx.font = '900 11px JetBrains Mono, monospace';
-      ctx.fillStyle = d.windGust >= 50 ? '#ea580c' : (d.windGust >= 35 ? '#0284c7' : '#10b981');
-      ctx.fillText(`Rajada ${d.windGust}k`, rX + 575 + gBadgeW / 2, line1Y);
-
-      // Chuva na Linha 1 à extrema direita
-      ctx.textAlign = 'right';
-      ctx.font = '900 13px JetBrains Mono, monospace';
-      ctx.fillStyle = d.rainMm >= 5 ? '#2563eb' : (isDark ? '#38bdf8' : '#0284c7');
-      ctx.fillText(`🌧️ ${d.rainMm.toFixed(1)} mm (${d.rainProb}%)`, rX + rW - 16, line1Y);
-
-      // LINHA 2 (Y + 58): Sistema Atuante & Evento Extremo
-      const line2Y = rY + 58;
-      ctx.textAlign = 'left';
-      ctx.font = '800 11.5px Inter, sans-serif';
-      ctx.fillStyle = '#ea580c';
-      const sisPost = d.sistemaAtuante.length > 38 ? d.sistemaAtuante.substring(0, 37) + '…' : d.sistemaAtuante;
-      ctx.fillText(`🌐 ${sisPost}`, rX + 16, line2Y);
-
-      // Badge de Risco na Linha 2 à direita
-      const rBadgeW = 230;
-      const rBadgeX = rX + rW - rBadgeW - 16;
-      ctx.beginPath();
-      ctx.roundRect(rBadgeX, line2Y - 11, rBadgeW, 22, 5);
-      let rFill = '#059669';
-      if (d.riskLevel === 'alert') {
-        ctx.fillStyle = isDark ? '#4c0519' : '#ffe4e6';
-        ctx.strokeStyle = '#e11d48';
-        rFill = '#e11d48';
-      } else if (d.riskLevel === 'warning') {
-        ctx.fillStyle = isDark ? '#451a03' : '#ffedd5';
-        ctx.strokeStyle = '#ea580c';
-        rFill = '#c2410c';
-      } else if (d.riskLevel === 'attention') {
-        ctx.fillStyle = isDark ? '#082f49' : '#e0f2fe';
-        ctx.strokeStyle = '#0284c7';
-        rFill = '#0284c7';
-      } else {
-        ctx.fillStyle = isDark ? '#022c22' : '#f0fdf4';
-        ctx.strokeStyle = '#10b981';
-        rFill = '#059669';
-      }
-      ctx.lineWidth = 1;
-      ctx.fill();
-      ctx.stroke();
-
-      ctx.textAlign = 'center';
-      ctx.font = '900 10px Inter, sans-serif';
-      ctx.fillStyle = rFill;
-      const bText = d.riskBadge.length > 28 ? d.riskBadge.substring(0, 27) + '…' : d.riskBadge;
-      ctx.fillText(`⚠️ ${bText}`, rBadgeX + rBadgeW / 2, line2Y);
-    }
-  }
-
-  // 7. Rodapé do Card
-  const footerY = cardY + cardH - (isStory ? 35 : 22);
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'middle';
-  ctx.font = '700 10.5px Inter, sans-serif';
-  ctx.fillStyle = isDark ? '#64748b' : '#94a3b8';
-  ctx.fillText('Defesa Civil de Rio das Ostras • Modelagem Numérica ECMWF/GFS/ICON via Open-Meteo', cardX + 28, footerY);
-
-  ctx.textAlign = 'right';
-  ctx.font = '700 10.5px JetBrains Mono, monospace';
-  ctx.fillText('Previsão Operacional 7 Dias', cardX + cardW - 28, footerY);
-  ctx.restore();
+  ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+  ctx.font = isStory ? '500 19px sans-serif' : '500 16px sans-serif';
+  ctx.fillText('Fontes: Modelagem ECMWF/GFS & Rede Municipal • Rio das Ostras - RJ', leftPad, footerY + (isStory ? 26 : 22));
 
   const previewImg = document.getElementById('social-preview-image');
   if (previewImg) {

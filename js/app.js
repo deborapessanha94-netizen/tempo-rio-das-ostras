@@ -38,8 +38,8 @@ import {
 
   openSocialModalVento,
   openSocialModalSemanal
-} from './social-cards.js?v=199';
-import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=199';
+} from './social-cards.js?v=204';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=204';
 
 
 
