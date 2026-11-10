@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=205">
+  <link rel="stylesheet" href="css/styles.css?v=206">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=205" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=206" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -4896,111 +4896,7 @@
 
 
 
-    <!-- Header Temático Hidrológico -->
-
-
-
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
-
-
-
-          <i data-lucide="waves" class="w-5 h-5 text-black"></i>
-
-
-
-        </div>
-
-
-
-        <div>
-
-
-
-          <div class="flex items-center gap-2">
-
-
-
-            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
-
-
-
-              Telemetria & Cota do Rio Jundiá
-
-
-
-            </h2>
-
-
-
-            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7]/40 uppercase tracking-wide">
-
-
-
-              Estação INEA 2241036
-
-
-
-            </span>
-
-
-
-          </div>
-
-
-
-          <p class="text-xs font-semibold text-black mt-0.5">
-
-
-
-            Monitoramento hidrológico fluvial oficial da bacia do Rio Jundiá em Rio das Ostras
-
-
-
-          </p>
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-      <div class="flex items-center gap-2">
-
-
-
-        <a href="https://alertadecheias.com.br/#/stations-info?station=2241036" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold text-black bg-[#ffebe4] border border-[#f07a53] hover:bg-[#fed7cc] transition shadow-xs cursor-pointer">
-
-
-
-          <i data-lucide="external-link" class="w-4 h-4 text-black"></i>
-
-
-
-          <span>Portal Alerta de Cheias INEA</span>
-
-
-
-        </a>
-
-
-
-      </div>
-
-
-
-    </div>
+    <!-- Sub-abas do Rio controladas exclusivamente pelo menu superior -->
 
 
 
@@ -6002,87 +5898,7 @@
 
   <div id="view-tab-orla" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
 
-    <!-- Header da Aba Orla -->
-
-
-
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
-
-
-
-          <i data-lucide="anchor" class="w-5 h-5 text-black"></i>
-
-
-
-        </div>
-
-
-
-        <div>
-
-
-
-          <div class="flex items-center gap-2">
-
-
-
-            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
-
-
-
-              Condições da Orla, Marés & Balneabilidade
-
-
-
-            </h2>
-
-
-
-            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#ccfbf1] text-[#0f766e] border border-[#0d9488]/40 uppercase tracking-wide">
-
-
-
-              11 Praias Monitoradas
-
-
-
-            </span>
-
-
-
-          </div>
-
-
-
-          <p class="text-xs font-semibold text-black mt-0.5">
-
-
-
-            Previsão marítima CHM/Marinha do Brasil, tábua de marés astronômica e balneabilidade oficial INEA
-
-
-
-          </p>
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-    </div>
+    <!-- Sub-abas da Orla controladas exclusivamente pelo menu superior -->
 
 
 
@@ -6130,11 +5946,8 @@
 
 
 
-                <h3 class="text-base font-black text-black tracking-tight leading-tight">Condições da Orla & Praias</h3>
-
-
-
-                <span class="text-xs font-normal text-black">Mar (1 Semana / 8 Dias), Tábuas de Maré e Balneabilidade INEA</span>
+                <h3 id="orla-card-header-title" class="text-base font-black text-black tracking-tight leading-tight">Condições do Mar & Ondas na Orla</h3>
+                <span id="orla-card-header-subtitle" class="text-xs font-normal text-black">Previsão marítima (1 Semana / 8 Dias), ondulação, swell e enseadas</span>
 
 
 
@@ -6166,28 +5979,7 @@
 
 
 
-          <!-- SELETOR DE NICHOS (3 ABAS SEGMENTADAS NÓRDICAS) -->
-
-
-
-                    <div class="grid grid-cols-3 gap-1 sm:gap-1.5 bg-[#f5efe8]/80 p-1 sm:p-1.5 rounded-2xl border border-[#b8a99a]/50 text-center" role="tablist">
-
-            <button id="orla-tab-btn-mar" onclick="switchOrlaTab('mar')" class="orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs" role="tab" aria-selected="true">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-              <span>Mar & Praias</span>
-            </button>
-
-            <button id="orla-tab-btn-mares" onclick="switchOrlaTab('mares')" class="orla-tab-btn flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="compass" class="w-3.5 h-3.5 text-black"></i>
-              <span>Tábuas de Maré</span>
-            </button>
-
-            <button id="orla-tab-btn-balnear" onclick="switchOrlaTab('balnear')" class="orla-tab-btn flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer" role="tab" aria-selected="false">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-black"></i>
-              <span>Balneabilidade</span>
-            </button>
-
-          </div>
+          <!-- Abas internas removidas (v206): navegação exclusiva pelo topo -->
 
 
 
@@ -7032,7 +6824,7 @@
 
 
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div id="orla-seguranca-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
 
 
@@ -7181,87 +6973,7 @@
 
 
 
-    <!-- Header da Aba Alertas -->
-
-
-
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
-
-
-
-          <i data-lucide="shield-alert" class="w-5 h-5 text-black"></i>
-
-
-
-        </div>
-
-
-
-        <div>
-
-
-
-          <div class="flex items-center gap-2">
-
-
-
-            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
-
-
-
-              Alertas Meteorológicos Oficiais & Defesa Civil
-
-
-
-            </h2>
-
-
-
-            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#fee2e2] text-[#991b1b] border border-[#dc2626]/40 uppercase tracking-wide">
-
-
-
-              Fontes Oficiais INMET & Marinha
-
-
-
-            </span>
-
-
-
-          </div>
-
-
-
-          <p class="text-xs font-semibold text-black mt-0.5">
-
-
-
-            Avisos meteorológicos vigentes, áreas sob atenção e análise técnica da Região dos Lagos
-
-
-
-          </p>
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-    </div>
+    <!-- Sub-abas de Alertas controladas exclusivamente pelo menu superior -->
 
 
 
@@ -7273,19 +6985,7 @@
 
 
 
-      <!-- Navegação Rápida entre os Módulos da Aba Alertas -->
-    <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-      <a href="#section-alertas-oficiais" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition text-black bg-[#ffebe4] border border-[#f07a53] shadow-2xs whitespace-nowrap flex items-center gap-1.5 shrink-0 hover:bg-[#ffd9cc]">
-        <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-black"></i>
-        <span>Alertas Oficiais (INMET & Marinha)</span>
-      </a>
-      <a href="#section-cemaden-riscos" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition text-black bg-[#fef3c7] border border-[#d97706] hover:bg-[#fde68a] shadow-2xs whitespace-nowrap flex items-center gap-1.5 shrink-0">
-        <i data-lucide="mountain-snow" class="w-3.5 h-3.5 text-black"></i>
-        <span>Riscos Geo-Hidrológicos (CEMADEN & RJ)</span>
-        <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-500 text-white font-black">ALERTA RJ</span>
-      </a>
-
-    </div>
+      
 
 <section id="section-alertas-oficiais" class="w-full">
 
@@ -8486,87 +8186,7 @@
 
 
 
-    <!-- Header da Aba Boletim -->
-
-
-
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#cbd5e1] shadow-xs">
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <div class="medallion-title-orange w-10 h-10 rounded-2xl flex items-center justify-center text-black shadow-xs shrink-0">
-
-
-
-          <i data-lucide="file-text" class="w-5 h-5 text-black"></i>
-
-
-
-        </div>
-
-
-
-        <div>
-
-
-
-          <div class="flex items-center gap-2">
-
-
-
-            <h2 class="text-lg sm:text-xl font-black text-black tracking-tight font-heading">
-
-
-
-              Boletim Operacional & Suporte de Emergência
-
-
-
-            </h2>
-
-
-
-            <span class="text-[11px] px-2.5 py-0.5 rounded-full font-black bg-[#f1f5f9] text-[#334155] border border-[#cbd5e1] uppercase tracking-wide">
-
-
-
-              PLANCON Municipal • 16 Turnos
-
-
-
-            </span>
-
-
-
-          </div>
-
-
-
-          <p class="text-xs font-semibold text-black mt-0.5">
-
-
-
-            Precipitação por turnos operacionais de 2 horas, telefones úteis de pronta resposta e downloads oficiais
-
-
-
-          </p>
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-    </div>
+    <!-- Sub-abas do Boletim controladas exclusivamente pelo menu superior -->
 
 
 
@@ -9475,7 +9095,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=205" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=206" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -11123,9 +10743,15 @@
       if (!config) return;
       var targetId = sectionId || (window.state.activeSubSections && window.state.activeSubSections[tabName]) || config.default;
       window.state.activeSubSections[tabName] = targetId;
+      window.state.activeTab = tabName;
 
       if (typeof window.switchAppTab === 'function') {
         window.switchAppTab(tabName);
+      } else {
+        document.querySelectorAll('.app-tab-view').forEach(function(v) {
+          if (v.id === 'view-tab-' + tabName) v.classList.remove('hidden');
+          else v.classList.add('hidden');
+        });
       }
 
       config.sections.forEach(function(sId) {
@@ -11156,6 +10782,13 @@
         if (targetId === 'orla-panel-mar' && typeof window.switchOrlaTab === 'function') window.switchOrlaTab('mar');
         else if (targetId === 'orla-panel-mares' && typeof window.switchOrlaTab === 'function') window.switchOrlaTab('mares');
         else if (targetId === 'orla-panel-balnear' && typeof window.switchOrlaTab === 'function') window.switchOrlaTab('balnear');
+      }
+      if (tabName === 'rio') {
+        var notifMacae = document.getElementById('notificacao-rios-macae');
+        if (notifMacae) {
+          if (targetId === 'card-tabela-rio-jundia') notifMacae.classList.add('hidden');
+          else notifMacae.classList.remove('hidden');
+        }
       }
 
       var parentView = document.getElementById('view-tab-' + tabName);
@@ -11203,6 +10836,18 @@
         if (turnosCol) { turnosCol.classList.remove('hidden', 'lg:col-span-12', 'w-full'); turnosCol.classList.add('lg:col-span-8'); }
         if (telCol) { telCol.classList.remove('hidden', 'lg:col-span-12', 'w-full'); telCol.classList.add('lg:col-span-4'); }
       }
+      if (tabName === 'orla') {
+        var segGrid = document.getElementById('orla-seguranca-grid');
+        if (segGrid) segGrid.classList.remove('hidden');
+        var hTitle = document.getElementById('orla-card-header-title');
+        var hSub = document.getElementById('orla-card-header-subtitle');
+        if (hTitle) hTitle.textContent = 'Condições da Orla, Marés & Balneabilidade';
+        if (hSub) hSub.textContent = 'Mar (1 Semana / 8 Dias), Tábuas de Maré e Balneabilidade INEA';
+      }
+      if (tabName === 'rio') {
+        var notifMacae = document.getElementById('notificacao-rios-macae');
+        if (notifMacae) notifMacae.classList.remove('hidden');
+      }
       document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(function(item) {
         var itemClick = item.getAttribute('onclick') || '';
         if (itemClick.indexOf('showAllSubSections') !== -1 && itemClick.indexOf("'" + tabName + "'") !== -1) {
@@ -11238,7 +10883,8 @@
     window.handleNavTabClick = function(tabName, event) {
       if (event) event.stopPropagation();
       var isMobile = window.innerWidth < 1024;
-      var isCurrentlyActive = (window.state && window.state.activeTab === tabName);
+      var viewEl = document.getElementById('view-tab-' + tabName);
+      var isCurrentlyActive = (window.state && window.state.activeTab === tabName) || (viewEl && !viewEl.classList.contains('hidden'));
 
       if (isMobile) {
         var mobilePanel = document.getElementById('mobile-dropdown-panel');
@@ -11255,14 +10901,18 @@
         return;
       }
 
+      if (isCurrentlyActive) {
+        window.toggleNavDropdown(tabName, event);
+        return;
+      }
       window.closeAllNavDropdowns();
       var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
       window.switchSubSection(tabName, activeSub);
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=205"></script>
-  <script type="module" src="js/app.js?v=205"></script>
+  <script src="js/historico_planilha.js?v=206"></script>
+  <script type="module" src="js/app.js?v=206"></script>
 
 
 

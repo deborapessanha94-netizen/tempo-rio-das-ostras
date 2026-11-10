@@ -7357,134 +7357,42 @@ function startAutoSync() {
 
 
 window.switchOrlaTab = function(tabName) {
-
-
-
-  state.activeOrlaTab = tabName;
-
-
-
   if (tabName === 'wwatch') tabName = 'mar';
+  state.activeOrlaTab = tabName;
+  if (window.state && window.state.activeSubSections) {
+    window.state.activeSubSections.orla = `orla-panel-${tabName}`;
+  }
   const tabs = ['mar', 'mares', 'balnear'];
-
-
-
   tabs.forEach(t => {
-
-
-
-    const btn = document.getElementById(`orla-tab-btn-${t}`);
-
-
-
     const panel = document.getElementById(`orla-panel-${t}`);
-
-
-
-    if (btn) {
-
-
-
-      if (t === tabName) {
-
-
-
-        btn.classList.add('active');
-
-
-
-        btn.setAttribute('aria-selected', 'true');
-
-
-
-        if (t === 'mar') {
-
-
-
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs';
-
-
-
-        } else if (t === 'mares') {
-
-
-
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#eaf0f6] border-2 border-[#6d8ba6] text-black shadow-xs';
-
-
-
-        } else {
-
-
-
-          btn.className = 'orla-tab-btn active flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-black tracking-tight transition cursor-pointer bg-[#f5efe8] border-2 border-[#b8a99a] text-black shadow-xs';
-
-
-
-        }
-
-
-
-      } else {
-
-
-
-        btn.classList.remove('active');
-
-
-
-        btn.setAttribute('aria-selected', 'false');
-
-
-
-        btn.className = 'orla-tab-btn flex items-center justify-center gap-1 sm:gap-1.5 py-1.5 sm:py-2 px-0.5 sm:px-1 rounded-full text-[11px] sm:text-xs font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer';
-
-
-
-      }
-
-
-
-    }
-
-
-
     if (panel) {
-
-
-
       if (t === tabName) {
-
-
-
         panel.classList.remove('hidden');
-
-
-
       } else {
-
-
-
         panel.classList.add('hidden');
-
-
-
       }
-
-
-
     }
-
-
-
   });
 
+  const hTitle = document.getElementById('orla-card-header-title');
+  const hSub = document.getElementById('orla-card-header-subtitle');
+  const segGrid = document.getElementById('orla-seguranca-grid');
 
+  if (tabName === 'mar') {
+    if (hTitle) hTitle.textContent = 'Condições do Mar & Ondas na Orla';
+    if (hSub) hSub.textContent = 'Previsão marítima (1 Semana / 8 Dias), ondulação, swell e enseadas';
+    if (segGrid) segGrid.classList.remove('hidden');
+  } else if (tabName === 'mares') {
+    if (hTitle) hTitle.textContent = 'Tábua de Marés Astronômica Oficial';
+    if (hSub) hSub.textContent = 'Horários e alturas de preamar e baixa-mar (CHM / Marinha do Brasil)';
+    if (segGrid) segGrid.classList.add('hidden');
+  } else if (tabName === 'balnear') {
+    if (hTitle) hTitle.textContent = 'Balneabilidade Oficial das Praias (INEA)';
+    if (hSub) hSub.textContent = 'Qualidade da água para banho nas 11 praias monitoradas de Rio das Ostras';
+    if (segGrid) segGrid.classList.add('hidden');
+  }
 
   if (window.lucide) window.lucide.createIcons();
-
-
-
 };
 
 window.switchCemadenTab = function(tabName) {
@@ -13457,6 +13365,7 @@ window.switchSubSection = function(tabName, sectionId) {
 
   const targetId = sectionId || window.state.activeSubSections[tabName] || config.default;
   window.state.activeSubSections[tabName] = targetId;
+  window.state.activeTab = tabName;
 
   // 1. Ativa a aba principal caso ainda não esteja visível
   if (typeof window.switchAppTab === 'function') {
@@ -13494,7 +13403,7 @@ window.switchSubSection = function(tabName, sectionId) {
     }
   });
 
-  // 3. Caso especial para Aba Orla (abas integradas de mar, marés e balneabilidade)
+  // 3. Caso especial para Aba Orla (abas de mar, marés e balneabilidade)
   if (tabName === 'orla') {
     if (targetId === 'orla-panel-mar' && typeof window.switchOrlaTab === 'function') {
       window.switchOrlaTab('mar');
@@ -13502,6 +13411,13 @@ window.switchSubSection = function(tabName, sectionId) {
       window.switchOrlaTab('mares');
     } else if (targetId === 'orla-panel-balnear' && typeof window.switchOrlaTab === 'function') {
       window.switchOrlaTab('balnear');
+    }
+  }
+  if (tabName === 'rio') {
+    const notifMacae = document.getElementById('notificacao-rios-macae');
+    if (notifMacae) {
+      if (targetId === 'card-tabela-rio-jundia') notifMacae.classList.add('hidden');
+      else notifMacae.classList.remove('hidden');
     }
   }
 
@@ -13577,6 +13493,18 @@ window.showAllSubSections = function(tabName) {
       telCol.classList.add('lg:col-span-4');
     }
   }
+  if (tabName === 'orla') {
+    const segGrid = document.getElementById('orla-seguranca-grid');
+    if (segGrid) segGrid.classList.remove('hidden');
+    const hTitle = document.getElementById('orla-card-header-title');
+    const hSub = document.getElementById('orla-card-header-subtitle');
+    if (hTitle) hTitle.textContent = 'Condições da Orla, Marés & Balneabilidade';
+    if (hSub) hSub.textContent = 'Mar (1 Semana / 8 Dias), Tábuas de Maré e Balneabilidade INEA';
+  }
+  if (tabName === 'rio') {
+    const notifMacae = document.getElementById('notificacao-rios-macae');
+    if (notifMacae) notifMacae.classList.remove('hidden');
+  }
 
   document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(item => {
     const itemClick = item.getAttribute('onclick') || '';
@@ -13625,7 +13553,8 @@ window.scrollToSection = function(sectionId) {
 window.handleNavTabClick = function(tabName, event) {
   if (event) event.stopPropagation();
   const isMobile = window.innerWidth < 1024;
-  const isCurrentlyActive = (window.state && window.state.activeTab === tabName);
+  const viewEl = document.getElementById('view-tab-' + tabName);
+  const isCurrentlyActive = (window.state && window.state.activeTab === tabName) || (viewEl && !viewEl.classList.contains('hidden'));
 
   if (isMobile) {
     const mobilePanel = document.getElementById('mobile-dropdown-panel');
@@ -13642,6 +13571,10 @@ window.handleNavTabClick = function(tabName, event) {
     return;
   }
 
+  if (isCurrentlyActive) {
+    window.toggleNavDropdown(tabName, event);
+    return;
+  }
   window.closeAllNavDropdowns();
   const activeSub = (window.state.activeSubSections && window.state.activeSubSections[tabName]) || window.SUB_SECTIONS_CONFIG[tabName]?.default;
   window.switchSubSection(tabName, activeSub);
