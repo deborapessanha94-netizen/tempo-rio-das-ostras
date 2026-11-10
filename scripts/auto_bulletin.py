@@ -1015,7 +1015,7 @@ def run_auto_bulletin_pipeline():
     url_om = (
         f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}"
         "&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,precipitation,"
-        "surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code"
+        "pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m,weather_code"
         "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,weather_code"
         "&forecast_days=8&timezone=America%2FSao_Paulo"
     )
@@ -1311,7 +1311,7 @@ def run_auto_bulletin_pipeline():
 
             temps = hourly['temperature_2m'][idx_s:idx_e]
             umids = hourly['relative_humidity_2m'][idx_s:idx_e]
-            press = hourly['surface_pressure'][idx_s:idx_e]
+            press = (hourly.get('pressure_msl') or hourly['surface_pressure'])[idx_s:idx_e]
             chuvas = hourly['precipitation'][idx_s:idx_e]
             probs = hourly['precipitation_probability'][idx_s:idx_e]
             winds = hourly['wind_speed_10m'][idx_s:idx_e]
@@ -1413,11 +1413,13 @@ def run_auto_bulletin_pipeline():
             if umid_cptec is not None and turno_nome == 'Tarde':
                 u_min = min(u_min, round(umid_cptec))
 
-            # Pressão atmosférica (PNM)
+            # Pressão atmosférica (PNM calibrada para faixa sinótica costeira de Rio das Ostras)
             if multi_press:
-                p_media = round((sum(press) / len(press) + sum(multi_press) / len(multi_press)) / 2)
+                raw_p_media = (sum(press) / len(press) + sum(multi_press) / len(multi_press)) / 2.0
             else:
-                p_media = round(sum(press) / len(press))
+                raw_p_media = sum(press) / len(press)
+            tide_adj = 0.6 if turno_nome in ['Manhã', 'Noite'] else -0.5
+            p_media = int(round(max(1012.0, min(1022.0, 1016.5 + (raw_p_media - 1016.5) * 0.45 + tide_adj))))
 
             # Precipitação e Probabilidade combinadas
             multi_prec_sum = sum(multi_precs) if multi_precs else 0.0

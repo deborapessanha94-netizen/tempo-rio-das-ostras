@@ -575,10 +575,11 @@ const bulletinEnhancerPlugin = {
             borderColor = 'rgba(100, 116, 139, 0.35)';
           }
         } else if (metric === 'pressure') {
+          if (datasetIndex !== 0) return;
           labelText = `${rawVal}`;
-          yOffset = index % 2 === 0 ? -13 : 14;
-          textColor = '#9a3412';
-          borderColor = 'rgba(234, 88, 12, 0.4)';
+          yOffset = -13;
+          textColor = '#c2410c';
+          borderColor = 'rgba(234, 88, 12, 0.45)';
         } else if (metric === 'humidity') {
           labelText = `${rawVal}%`;
           if (datasetIndex === 0) {
@@ -830,11 +831,16 @@ export function renderBulletinChart(canvas, metric, bulletinRows, viewOptions = 
     };
   } else if (metric === 'pressure') {
     const pVal = bulletinRows.map(r => r.pressao_hpa);
+    const pRef = bulletinRows.map(() => 1013);
     const validP = pVal.filter(v => typeof v === 'number' && !isNaN(v));
     const minP = validP.length ? Math.min(...validP) : 1012;
-    const maxP = validP.length ? Math.max(...validP) : 1024;
-    const yMinP = Math.floor(minP / 2) * 2 - 2;
-    const yMaxP = Math.ceil(maxP / 2) * 2 + 3;
+    const maxP = validP.length ? Math.max(...validP) : 1022;
+    const yMinP = Math.min(1010, Math.floor(minP / 2) * 2 - 2);
+    const yMaxP = Math.max(1024, Math.ceil(maxP / 2) * 2 + 2);
+
+    const gradPressBulletin = ctx.createLinearGradient(0, 0, 0, 340);
+    gradPressBulletin.addColorStop(0, 'rgba(234, 88, 12, 0.16)');
+    gradPressBulletin.addColorStop(1, 'rgba(234, 88, 12, 0.01)');
 
     config = {
       type: 'line',
@@ -845,15 +851,28 @@ export function renderBulletinChart(canvas, metric, bulletinRows, viewOptions = 
           {
             label: 'Pressão ao Nível Médio do Mar (hPa)',
             data: pVal,
-            borderColor: c.secondary,
-            backgroundColor: c.gradStart,
-            borderWidth: 2.5,
-            tension: 0.25,
+            borderColor: '#ea580c',
+            backgroundColor: gradPressBulletin,
+            borderWidth: 2.8,
+            tension: 0.3,
             fill: true,
-            pointBackgroundColor: c.secondary,
+            pointBackgroundColor: '#ea580c',
             pointBorderColor: '#ffffff',
             pointBorderWidth: 1.5,
-            pointRadius: unCrowded ? 5 : 4.5
+            pointRadius: unCrowded ? 5 : 4.5,
+            pointHoverRadius: 7
+          },
+          {
+            label: 'Referência Normal PNM (1013 hPa)',
+            data: pRef,
+            borderColor: '#64748b',
+            backgroundColor: 'transparent',
+            borderWidth: 1.8,
+            borderDash: [5, 5],
+            tension: 0,
+            fill: false,
+            pointRadius: 0,
+            pointHoverRadius: 0
           }
         ]
       },
@@ -867,9 +886,14 @@ export function renderBulletinChart(canvas, metric, bulletinRows, viewOptions = 
           y: {
             min: yMinP,
             max: yMaxP,
-            ticks: { stepSize: 2, color: c.text, font: { weight: '600' } },
+            ticks: {
+              stepSize: 2,
+              color: c.text,
+              font: { weight: '600' },
+              callback: (val) => `${val} hPa`
+            },
             grid: { color: c.grid },
-            title: { display: true, text: 'Pressão (hPa)', color: c.text }
+            title: { display: true, text: 'Pressão Atmosférica PNM (hPa)', color: c.text }
           }
         }
       }

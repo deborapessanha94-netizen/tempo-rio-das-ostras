@@ -165,6 +165,17 @@ async def main():
             print(f"Verified metric={metric}:", m_info)
             assert m_info["labelsLen"] == 32
 
+        # Switch to Pressão at 175% Zoom and capture screenshot
+        await cdp.eval("document.querySelector('.bulletin-tab-btn[data-metric=\"pressure\"]').click()")
+        await cdp.eval("document.querySelector('.bulletin-zoom-preset-btn[data-zoom=\"175\"]').click()")
+        await asyncio.sleep(0.5)
+        await cdp.screenshot(os.path.join(BRAIN_DIR, "v202_pressao_175_desktop.png"))
+
+        # Switch to Pressão at 100% Compact Zoom (full 8-day view) and capture screenshot
+        await cdp.eval("document.querySelector('.bulletin-zoom-preset-btn[data-zoom=\"100\"]').click()")
+        await asyncio.sleep(0.5)
+        await cdp.screenshot(os.path.join(BRAIN_DIR, "v202_pressao_100_desktop.png"))
+
         # Switch to Vento and set Zoom 250%
         await cdp.eval("document.querySelector('.bulletin-tab-btn[data-metric=\"wind\"]').click()")
         await cdp.eval("document.querySelector('.bulletin-zoom-preset-btn[data-zoom=\"250\"]').click()")
