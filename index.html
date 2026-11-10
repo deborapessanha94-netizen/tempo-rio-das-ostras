@@ -706,29 +706,6 @@
                 <span class="nav-dropdown-item-desc">Níveis e protocolos operacionais da Defesa Civil</span>
               </div>
             </a>
-
-            <!-- Ações de Baixar Imagens Oficiais para Redes Sociais -->
-            <div class="border-t border-slate-200 dark:border-slate-800 my-1.5 pt-2 px-1">
-              <div class="text-[10px] font-black uppercase tracking-wider text-[#ea580c] dark:text-[#ea580c] mb-1.5 px-2 flex items-center justify-between">
-                <span class="flex items-center gap-1.5">
-                  <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                  <span>Baixar Card Oficial (Redes Sociais)</span>
-                </span>
-                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-[#ffebe4] dark:bg-orange-950/60 text-[#c2410c] dark:text-orange-300">Feed & Story</span>
-              </div>
-              <div class="space-y-1">
-                <a onclick="window.closeAllNavDropdowns(); window.openSocialModalWithTab ? window.openSocialModalWithTab('tempo') : window.openSocialModalTempoAgora();" class="nav-dropdown-item cursor-pointer bg-[#fff7ed] hover:bg-[#ffedd5] dark:bg-slate-800/90 dark:hover:bg-slate-700/90 border border-[#fed7aa] dark:border-slate-700 rounded-xl">
-                  <i data-lucide="sun-medium" class="w-4 h-4 text-[#ea580c] shrink-0"></i>
-                  <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between gap-1">
-                      <span class="font-bold text-xs text-[#9a3412] dark:text-[#fb923c]">Baixar Card Tempo Agora</span>
-                      <span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-800 dark:text-amber-200 uppercase">Post / Story</span>
-                    </div>
-                    <span class="nav-dropdown-item-desc">Imagem oficial completa com temperatura, chuva e 8 sensores</span>
-                  </div>
-                </a>
-              </div>
-            </div>
             <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('previsao');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
               <i data-lucide="layers" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
               <div>
@@ -792,13 +769,6 @@
                   <span class="text-[9px] font-black px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 uppercase">Baixar</span>
                 </div>
                 <span class="nav-dropdown-item-desc">Hora a hora, totais do dia e do mês, ventos, rajadas e sistemas atuantes</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.switchAppTab('chuva'); window.openSocialModal && window.openSocialModal()" class="nav-dropdown-item">
-              <i data-lucide="share-2" class="w-3.5 h-3.5 text-[#059669] shrink-0"></i>
-              <div>
-                <span>Card Oficial Diário</span>
-                <span class="nav-dropdown-item-desc">Gerador de imagem oficial para Instagram Story/Post</span>
               </div>
             </a>
             <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('chuva');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
@@ -1990,18 +1960,6 @@
 
 
 
-        </div>
-        <div class="flex items-center gap-2">
-          <button 
-            type="button" 
-            onclick="window.openSocialModalWithTab ? window.openSocialModalWithTab('tempo') : window.openSocialModalTempoAgora()" 
-            class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border border-[#f07a53] shadow-xs transition cursor-pointer" 
-            title="Baixar imagem oficial para postar nas redes sociais"
-          >
-            <i data-lucide="camera" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-            <span class="hidden sm:inline">Baixar Card</span>
-            <span class="sm:hidden">Baixar</span>
-          </button>
         </div>
 
 
