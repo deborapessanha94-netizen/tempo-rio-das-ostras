@@ -49,9 +49,9 @@
     "temperatura_min": "17",
     "vento": "5",
     "umidade": 66,
-    "temperatura_prev": "23",
-    "sensacao_termica": "23",
-    "hora_atual": "2026-11-10T19:00:00.000Z"
+    "temperatura_prev": "21",
+    "sensacao_termica": "22",
+    "hora_atual": "2026-11-10T23:00:00.000Z"
   },
   "proximos_dias": [
     {

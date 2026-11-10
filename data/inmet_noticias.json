@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-10 19:19:18",
+  "coleta_iso": "2026-11-10 23:48:55",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Inmet participa de coletiva sobre o período chuvoso e os efeitos do El Niño no DF",
+      "data": "10/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-coletiva-sobre-o-período-chuvoso-e-os-efeitos-do-el-niño-no-df",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para quarta-feira (11) e quinta-feira (12)",
       "data": "10/11/2026",
@@ -57,12 +63,6 @@
       "data": "05/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-evento-internacional-sobre-sustentabilidade-espacial-em-brasília",
       "relevancia_sudeste": true
-    },
-    {
-      "titulo": "Previsão para quinta-feira (5) e sexta-feira (6)",
-      "data": "04/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-5-e-sexta-feira-6",
-      "relevancia_sudeste": false
     }
   ]
 }
