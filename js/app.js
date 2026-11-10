@@ -8158,305 +8158,150 @@ function renderCondicoesMarList(orlaData, dayKey = 'd0') {
 
 
 function renderBalneabilidadeList(balnearData) {
-
-
-
   const modalBalnearListEl = document.getElementById('modal-balnear-pontos-list');
-
-
-
+  const inlineGridEl = document.getElementById('balnear-inline-pontos-grid');
   const tituloEl = document.getElementById('balnear-boletim-titulo');
-
-
-
   const modalTituloEl = document.getElementById('modal-balnear-titulo');
-
-
-
   const dataBadgeEl = document.getElementById('balnear-data-badge');
-
-
-
   const modalDataBadgeEl = document.getElementById('modal-balnear-data');
-
-
-
   const obsEl = document.getElementById('balnear-obs-tecnica');
-
-
-
   const modalObsEl = document.getElementById('modal-balnear-obs');
-
-
-
   const statusGeralTxt = document.getElementById('balnear-status-geral-txt');
-
-
-
   const countPropriasEl = document.getElementById('balnear-proprias-count');
-
-
-
   const countImpropriasEl = document.getElementById('balnear-improprias-count');
-
-
-
-
-
-
+  const nomesPropriasEl = document.getElementById('balnear-proprias-nomes');
+  const nomesImpropriasEl = document.getElementById('balnear-improprias-nomes');
 
   const data = (balnearData && balnearData.pontos) ? balnearData : null;
-
-
-
   if (!data) return;
 
-
-
-
-
-
-
-  const boletimNome = data.boletim_numero ? `Boletim nº ${data.boletim_numero} (INEA)` : 'Boletim de Balneabilidade (INEA)';
-
-
-
+  const boletimNome = data.boletim_numero
+    ? `Boletim nº ${data.boletim_numero} (INEA • Power BI DISEQ / SEIRHI)`
+    : 'Boletim Oficial de Balneabilidade (INEA • Power BI)';
   if (tituloEl) tituloEl.textContent = boletimNome;
-
-
-
   if (modalTituloEl) modalTituloEl.textContent = boletimNome;
 
-
-
-  if (dataBadgeEl && data.data_boletim) dataBadgeEl.textContent = data.data_boletim;
-
-
-
+  const dataCurta = data.data_boletim_curta || data.data_boletim || '';
+  if (dataBadgeEl && dataCurta) dataBadgeEl.textContent = `Coleta: ${dataCurta}`;
   if (modalDataBadgeEl && data.data_boletim) modalDataBadgeEl.textContent = data.data_boletim;
 
-
-
-
-
-
-
   if (obsEl && data.observacao_tecnica) {
-
-
-
     obsEl.innerHTML = `<strong>Recomendação Oficial do INEA:</strong> ${data.observacao_tecnica}`;
-
-
-
   }
-
-
-
   if (modalObsEl && data.observacao_tecnica) {
-
-
-
     modalObsEl.innerHTML = `<strong>Recomendação Oficial do INEA:</strong> ${data.observacao_tecnica}`;
-
-
-
   }
-
-
-
-
-
-
 
   const pontos = data.pontos || [];
-
-
-
   if (pontos.length > 0) {
-
-
-
     const proprias = pontos.filter(pt => String(pt.status).toUpperCase() === 'PRÓPRIA');
-
-
-
     const improprias = pontos.filter(pt => String(pt.status).toUpperCase() !== 'PRÓPRIA');
-
-
-
     const perc = Math.round((proprias.length / pontos.length) * 100);
-
-
-
-
-
-
-
-    if (statusGeralTxt) statusGeralTxt.textContent = `${proprias.length} de ${pontos.length} Praias Próprias para Banho (${perc}%)`;
-
-
-
-    if (countPropriasEl) countPropriasEl.textContent = `${proprias.length} Pontos`;
-
-
-
-    if (countImpropriasEl) countImpropriasEl.textContent = `${improprias.length} Pontos`;
-
-
-
-
-
-
-
-    // Renderiza os pontos no MODAL
-
-
-
-    if (modalBalnearListEl) {
-
-
-
-      modalBalnearListEl.innerHTML = pontos.map(pt => {
-
-
-
-        const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
-
-
-
-        const themeCard = isPropria
-
-
-
-          ? 'border-[#6d8ba6]/40 bg-gradient-to-br from-[#ffffff] to-[#f4f8fb]'
-
-
-
-          : 'border-[#f07a53]/60 bg-gradient-to-br from-[#ffffff] to-[#fff5f2]';
-
-
-
-        const badgeClass = isPropria 
-
-
-
-          ? 'bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] font-black' 
-
-
-
-          : 'bg-[#ffebe4] text-black border-2 border-[#f07a53] font-black';
-
-
-
-
-
-
-
-        const motivoHtml = pt.motivo 
-
-
-
-          ? `<span class="text-[11px] text-black font-semibold block mt-1 bg-white/90 p-1.5 rounded-lg border border-[#f07a53]/30">⚠️ ${pt.motivo}</span>` 
-
-
-
-          : '';
-
-
-
-
-
-
-
-        return `
-
-
-
-          <div class="p-3.5 rounded-2xl border-2 ${themeCard} shadow-xs flex flex-col justify-between space-y-2 transition hover:shadow-md">
-
-
-
-            <div class="flex items-start justify-between gap-2">
-
-
-
-              <div class="min-w-0">
-
-
-
-                <div class="flex items-center gap-2">
-
-
-
-                  <strong class="font-black text-black text-sm">${pt.praia}</strong>
-
-
-
-                  <span class="font-mono font-bold text-[10px] bg-white px-2 py-0.5 rounded border border-[#cbd5e1] text-black">${pt.codigo}</span>
-
-
-
-                </div>
-
-
-
-                <span class="text-xs text-black font-medium block mt-0.5">${pt.localizacao}</span>
-
-
-
-              </div>
-
-
-
-              <span class="text-[11px] px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0 uppercase tracking-wide">
-
-
-
-                ${pt.status}
-
-
-
-              </span>
-
-
-
-            </div>
-
-
-
-            ${motivoHtml}
-
-
-
-          </div>
-
-
-
-        `;
-
-
-
-      }).join('');
-
-
-
+    const percImp = 100 - perc;
+
+    if (statusGeralTxt) statusGeralTxt.textContent = `${proprias.length} de ${pontos.length} Pontos Próprios para Banho (${perc}%)`;
+    if (countPropriasEl) countPropriasEl.textContent = `${proprias.length} Pontos (${perc}%)`;
+    if (countImpropriasEl) countImpropriasEl.textContent = `${improprias.length} Pontos (${percImp}%)`;
+
+    if (nomesPropriasEl && proprias.length > 0) {
+      nomesPropriasEl.textContent = proprias.map(p => {
+        const shortName = String(p.praia || '').replace(/^Praia d[aeo]s?\s+/i, '');
+        return p.enterococos_nmp !== undefined && p.enterococos_nmp !== null
+          ? `${shortName} (${p.enterococos_nmp} NMP)`
+          : shortName;
+      }).join(', ');
+    }
+    if (nomesImpropriasEl && improprias.length > 0) {
+      nomesImpropriasEl.textContent = improprias.map(p => {
+        const shortName = String(p.praia || '').replace(/^Praia d[aeo]s?\s+/i, '');
+        return p.enterococos_nmp !== undefined && p.enterococos_nmp !== null
+          ? `${shortName} (${p.enterococos_nmp} NMP/100 mL)`
+          : shortName;
+      }).join(', ');
     }
 
+    const buildCardHtml = (pt) => {
+      const isPropria = String(pt.status).toUpperCase() === 'PRÓPRIA';
+      const themeCard = isPropria
+        ? 'border-[#6d8ba6]/50 bg-gradient-to-br from-[#ffffff] to-[#f4f8fb]'
+        : 'border-[#f07a53]/70 bg-gradient-to-br from-[#ffffff] to-[#fff5f2]';
+      const badgeClass = isPropria
+        ? 'bg-[#eaf0f6] text-black border-2 border-[#6d8ba6] font-black'
+        : 'bg-[#ffebe4] text-black border-2 border-[#f07a53] font-black';
 
+      const entVal = (pt.enterococos_nmp !== undefined && pt.enterococos_nmp !== null) ? Number(pt.enterococos_nmp) : null;
+      const entPct = entVal !== null ? Math.min(100, Math.max(4, Math.round((entVal / 400) * 100))) : 0;
+      const entBarColor = entVal === null ? 'bg-slate-400' : (entVal <= 100 ? 'bg-[#0d9488]' : (entVal <= 400 ? 'bg-[#d97706]' : 'bg-[#e11d48]'));
+      const entPillClass = entVal !== null && entVal <= 100
+        ? 'bg-[#ccfbf1] text-[#0f766e] border-[#0d9488]/40'
+        : 'bg-[#ffe4e6] text-[#9f1239] border-[#f43f5e]/40';
 
+      const catAnual = pt.categoria_anual && pt.categoria_anual !== 'Não Categorizada'
+        ? `${pt.categoria_anual}${pt.pbp_anual_pct !== null && pt.pbp_anual_pct !== undefined ? ` (${pt.pbp_anual_pct}% Própria)` : ''}`
+        : (pt.tipo === 'lagoa' ? 'Corpo Lagunar Monitorado' : 'Monitoramento Contínuo');
+
+      const seirhiCode = pt.codigo_seirhi || pt.codigo;
+      const pbiCode = pt.codigo_pbi || pt.codigo;
+      const dtBr = pt.data_coleta_br || dataCurta || '';
+      const coordsTxt = (pt.latitude && pt.longitude)
+        ? `${Number(pt.latitude).toFixed(4)}°, ${Number(pt.longitude).toFixed(4)}°`
+        : '';
+
+      return `
+        <div class="p-3.5 rounded-2xl border-2 ${themeCard} shadow-xs flex flex-col justify-between space-y-2.5 transition hover:shadow-md">
+          <div class="space-y-1.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <strong class="font-black text-black text-sm leading-tight">${pt.praia}</strong>
+                  <span class="font-mono font-bold text-[10px] bg-white px-1.5 py-0.5 rounded border border-[#cbd5e1] text-black" title="Código no Painel Power BI INEA">${pbiCode}</span>
+                </div>
+                <span class="text-[11px] text-black font-semibold block mt-0.5">${pt.localizacao}</span>
+              </div>
+              <span class="text-[10.5px] px-2.5 py-0.5 rounded-full ${badgeClass} shrink-0 uppercase tracking-wide">
+                ${pt.status}
+              </span>
+            </div>
+
+            <!-- Métrica Microbiológica Enterococos (Power BI INEA) -->
+            ${entVal !== null ? `
+            <div class="p-2 rounded-xl bg-white/95 border border-[#cbd5e1] space-y-1">
+              <div class="flex items-center justify-between text-[10.5px]">
+                <span class="font-bold text-black">Enterococos (Última Coleta):</span>
+                <span class="font-mono font-black px-1.5 py-0.2 rounded border ${entPillClass}">${entVal} NMP/100 mL</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                <div class="h-full ${entBarColor} rounded-full" style="width: ${entPct}%"></div>
+              </div>
+              <div class="flex items-center justify-between text-[9.5px] text-[#475569] font-medium">
+                <span>Limite Própria: ≤ 100 NMP</span>
+                <span>Máx. CONAMA: 400 NMP/100 mL</span>
+              </div>
+            </div>
+            ` : ''}
+          </div>
+
+          <div class="space-y-1.5 pt-1 border-t border-[#cbd5e1]/60 text-[10.5px] text-black">
+            <div class="flex items-center justify-between gap-1 flex-wrap">
+              <span class="font-semibold text-[#334155]">Histórico Anual (PBP):</span>
+              <span class="font-bold text-black bg-white px-2 py-0.5 rounded border border-[#cbd5e1]">${catAnual}</span>
+            </div>
+            <div class="flex items-center justify-between gap-1 text-[10px] text-[#475569] font-mono">
+              <span>SEIRHI: ${seirhiCode}</span>
+              ${dtBr ? `<span>Coleta: ${dtBr}</span>` : ''}
+            </div>
+            ${coordsTxt ? `<div class="text-[9.5px] text-[#64748b] font-mono">GPS: ${coordsTxt} • RH-${pt.rh || 'VIII'}</div>` : ''}
+          </div>
+        </div>
+      `;
+    };
+
+    const allCardsHtml = pontos.map(buildCardHtml).join('');
+    if (inlineGridEl) inlineGridEl.innerHTML = allCardsHtml;
+    if (modalBalnearListEl) modalBalnearListEl.innerHTML = allCardsHtml;
   }
 
-
-
-
-
-
-
   if (window.lucide) window.lucide.createIcons();
-
-
-
 }
 
 
@@ -13553,7 +13398,8 @@ window.scrollToSection = function(sectionId) {
 window.handleNavTabClick = function(tabName, event) {
   if (event) event.stopPropagation();
   const isMobile = window.innerWidth < 1024;
-  const viewEl = document.getElementById('view-tab-' + tabName);
+  const viewEl = document.getElementById('view-tab-' + tabName);
+
   const isCurrentlyActive = (window.state && window.state.activeTab === tabName) || (viewEl && !viewEl.classList.contains('hidden'));
 
   if (isMobile) {

@@ -512,13 +512,173 @@ export async function getRealtimeUvWunderground() {
 /**
  * Obtém os dados de balneabilidade das praias de Rio das Ostras (INEA)
  */
-export async function getBalneabilidade() {
-  const ts = Date.now();
+export async function fetchLivePowerBiBalneabilidade(baseData = null) {
+  const PBI_QUERY_URL = 'https://wabi-brazil-south-api.analysis.windows.net/public/reports/querydata?synchronous=true';
+  const RESOURCE_KEY = '5b801b31-4f49-43f5-a91f-ece742be0290';
+  const props = [
+    'Ponto de Coleta',
+    'Código Ponto de Coleta',
+    'Praia',
+    'Lagoa',
+    'Localização',
+    'Classificação',
+    'Data da coleta',
+    'Choveu nas últimas 24h?',
+    'Observação',
+    'Concentração NMP/100ml Enterococos',
+    'Latitude ',
+    'Longitude'
+  ];
+  const payload = {
+    version: '1.0.0',
+    queries: [{
+      Query: {
+        Commands: [{
+          SemanticQueryDataShapeCommand: {
+            Query: {
+              Version: 2,
+              From: [{ Name: 'f', Entity: 'fDISEQ_Balneabilidade_Praias', Type: 0 }],
+              Select: props.map(p => ({
+                Column: { Expression: { SourceRef: { Source: 'f' } }, Property: p },
+                Name: p
+              })),
+              Where: [{
+                Condition: {
+                  In: {
+                    Expressions: [{ Column: { Expression: { SourceRef: { Source: 'f' } }, Property: 'Município' } }],
+                    Values: [[{ Literal: { Value: "'Rio das Ostras'" } }]]
+                  }
+                }
+              }]
+            },
+            Binding: {
+              Primary: { Groupings: [{ Projections: props.map((_, i) => i) }] },
+              DataReduction: { DataVolume: 4, Primary: { Window: { Count: 100 } } },
+              Version: 1
+            },
+            ExecutionMetricsKind: 1
+          }
+        }]
+      },
+      QueryId: '',
+      ApplicationContext: {
+        DatasetId: '3f9a82b6-9c0c-4a62-835f-610e0f8b41c7',
+        Sources: [{ ReportId: '5d29285b-4347-4479-9e69-9f7e1c2b8c32' }]
+      }
+    }],
+    cancelQueries: [],
+    modelId: 5721923
+  };
+
   try {
-    const res = await fetch(`./data/balneabilidade.json?t=${ts}`, { cache: 'no-store' });
-    if (res.ok) return await res.json();
-  } catch (e) {}
-  return [];
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(PBI_QUERY_URL, {
+      method: 'POST',
+      headers: {
+        'X-PowerBI-ResourceKey': RESOURCE_KEY,
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    if (!res.ok) return baseData;
+    const json = await res.json();
+    const ds = json?.results?.[0]?.result?.data?.dsr?.DS?.[0];
+    const dm = ds?.PH?.[0]?.DM0;
+    if (!Array.isArray(dm) || dm.length === 0) return baseData;
+
+    const vdicts = ds.ValueDicts || {};
+    const schema = dm[0].S || [];
+    const ncols = schema.length;
+    const prevVals = new Array(ncols).fill(null);
+    const liveByPbiCode = {};
+
+    for (const item of dm) {
+      const rMask = item.R || 0;
+      const nullMask = item['Ø'] || 0;
+      const cArr = item.C || [];
+      let cIdx = 0;
+      const currVals = [];
+      for (let colI = 0; colI < ncols; colI++) {
+        let val = null;
+        if ((rMask >> colI) & 1) {
+          val = prevVals[colI];
+        } else if ((nullMask >> colI) & 1) {
+          val = null;
+        } else {
+          const rawV = cIdx < cArr.length ? cArr[cIdx++] : null;
+          const dn = schema[colI]?.DN;
+          if (dn && vdicts[dn] && typeof rawV === 'number' && rawV >= 0 && rawV < vdicts[dn].length) {
+            val = vdicts[dn][rawV];
+          } else if (schema[colI]?.T === 7 && typeof rawV === 'number') {
+            val = new Date(rawV).toISOString().slice(0, 10);
+          } else {
+            val = rawV;
+          }
+        }
+        currVals.push(val);
+        prevVals[colI] = val;
+      }
+      const rowObj = {};
+      props.forEach((p, idx) => { rowObj[p] = currVals[idx]; });
+      const pbiCode = String(rowObj['Ponto de Coleta'] || '').trim();
+      if (pbiCode) liveByPbiCode[pbiCode] = rowObj;
+    }
+
+    if (baseData && Array.isArray(baseData.pontos)) {
+      let latestIso = baseData.data_coleta_iso || '';
+      baseData.pontos.forEach(pt => {
+        const key = pt.codigo_pbi || String(pt.codigo || '').replace('RO00', 'RO0');
+        const live = liveByPbiCode[key];
+        if (!live) return;
+        const rawClass = String(live['Classificação'] || '').toUpperCase();
+        const isPropria = rawClass.includes('PRÓPRIA') && !rawClass.includes('IMPRÓPRIA');
+        pt.status = isPropria ? 'PRÓPRIA' : 'IMPRÓPRIA';
+        pt.badge = isPropria ? 'success' : 'danger';
+        if (live['Código Ponto de Coleta']) pt.codigo_seirhi = String(live['Código Ponto de Coleta']).trim();
+        if (live['Localização']) pt.localizacao = String(live['Localização']).trim();
+        const entNum = parseInt(String(live['Concentração NMP/100ml Enterococos'] || '').replace(',', '.'), 10);
+        if (!isNaN(entNum)) {
+          pt.enterococos_nmp = entNum;
+          pt.enterococos_label = `${entNum} NMP/100 mL`;
+          if (isPropria) {
+            pt.motivo = `Enterococos: ${entNum} NMP/100 mL (Dentro do limite seguro ≤ 100 NMP/100 mL da Resolução CONAMA nº 274/2000)`;
+          } else if (entNum > 400) {
+            pt.motivo = `Enterococos: ${entNum} NMP/100 mL (Acima do limite máximo de 400 NMP/100 mL na última coleta — CONAMA nº 274/2000)`;
+          } else {
+            pt.motivo = `Enterococos: ${entNum} NMP/100 mL (Acima de 100 NMP/100 mL em 2 ou mais das últimas 5 campanhas — CONAMA nº 274/2000)`;
+          }
+        }
+        const dtIso = String(live['Data da coleta'] || '').trim();
+        if (dtIso && /^\d{4}-\d{2}-\d{2}$/.test(dtIso)) {
+          pt.data_coleta_iso = dtIso;
+          const [y, m, d] = dtIso.split('-');
+          pt.data_coleta_br = `${d}/${m}/${y}`;
+          if (!latestIso || dtIso > latestIso) latestIso = dtIso;
+        }
+      });
+      if (latestIso && /^\d{4}-\d{2}-\d{2}$/.test(latestIso)) {
+        const [y, m, d] = latestIso.split('-');
+        const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        baseData.data_coleta_iso = latestIso;
+        baseData.data_boletim_curta = `${d}/${m}/${y}`;
+        baseData.data_boletim = `${d} de ${meses[parseInt(m, 10)]} de ${y}`;
+      }
+      baseData.powerbi_conectado = true;
+    }
+    return baseData;
+  } catch (e) {
+    return baseData;
+  }
+}
+
+export async function getBalneabilidade() {
+  const baseData = await fetchLiveCloudOrLocalJson('balneabilidade.json', null);
+  if (!baseData) return [];
+  return await fetchLivePowerBiBalneabilidade(baseData);
 }
 
 /**

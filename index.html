@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=206">
+  <link rel="stylesheet" href="css/styles.css?v=207">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=206" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=207" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -6539,270 +6539,96 @@
 
 
 
-          <!-- PAINEL 3: BALNEABILIDADE OFICIAL DO INEA (RESUMO EXECUTIVO INTEGRADO + LINK CLICÁVEL) -->
-
-
-
-          <div id="orla-panel-balnear" class="space-y-3.5 hidden">
-
-
-
-            <div id="balnear-summary-content" class="space-y-3">
-
-
-
-              <div class="p-3.5 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-3 shadow-xs">
-
-
-
+          <!-- PAINEL 3: BALNEABILIDADE INEA (SINCRONIZADO COM POWER BI OFICIAL INEA / SEIRHI) -->
+          <div id="orla-panel-balnear" class="orla-tab-panel hidden space-y-4">
+            <div id="balnear-summary-content" class="space-y-4">
+              <!-- Banner Executivo de Balneabilidade (Power BI INEA + CONAMA 274/2000) -->
+              <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] via-[#f1f6fa] to-[#eaf2f8] border border-[#6d8ba6]/50 space-y-3.5 shadow-xs">
                 <div class="flex items-center justify-between flex-wrap gap-2">
-
-
-
-                  <div class="flex items-center gap-2">
-
-
-
-                    <div class="w-8 h-8 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black">
-
-
-
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-[#eaf0f6] border border-[#6d8ba6] flex items-center justify-center text-black shrink-0">
                       <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
-
-
-
                     </div>
-
-
-
                     <div>
-
-
-
-                      <span class="text-[10px] font-bold uppercase text-black block tracking-wider" id="balnear-boletim-titulo">Boletim nº 20 (INEA)</span>
-
-
-
-                      <strong class="text-sm font-black text-black block" id="balnear-status-geral-txt">8 de 11 Praias Próprias para Banho (73%)</strong>
-
-
-
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <span class="text-[10px] font-black uppercase text-black tracking-wider" id="balnear-boletim-titulo">Boletim nº 20 (INEA • Power BI DISEQ / SEIRHI)</span>
+                        <span class="text-[9.5px] font-black uppercase px-2 py-0.5 rounded-md bg-[#ccfbf1] text-[#0f766e] border border-[#0d9488]/40">CONAMA nº 274/2000 • RH-VIII</span>
+                      </div>
+                      <strong class="text-sm sm:text-base font-black text-black block mt-0.5" id="balnear-status-geral-txt">9 de 12 Pontos Próprios para Banho (75%)</strong>
                     </div>
-
-
-
                   </div>
-
-
-
-                  <span class="text-[11px] font-black uppercase px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="balnear-data-badge">Favorável</span>
-
-
-
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-[11px] font-black uppercase px-2.5 py-1 rounded-full bg-white text-black border border-[#6d8ba6]" id="balnear-data-badge">Coleta: 29/09/2026</span>
+                    <a href="https://app.powerbi.com/view?r=eyJrIjoiNWI4MDFiMzEtNGY0OS00M2Y1LWE5MWYtZWNlNzQyYmUwMjkwIiwidCI6IjZkYjc3YWU3LWQwYTQtNDYxNi1iNzM4LTg4ODE4NTQxOWIzOSJ9&pageName=64fcd9486da0b10c1015" target="_blank" rel="noopener noreferrer" class="text-[11px] font-black px-3 py-1 rounded-full bg-[#ffebe4] hover:bg-[#fed7cc] text-black border border-[#f07a53] transition flex items-center gap-1 shadow-2xs">
+                      <i data-lucide="bar-chart-3" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                      <span>Abrir Power BI INEA ↗</span>
+                    </a>
+                  </div>
                 </div>
 
-
-
-
-
-
-
-                <div class="grid grid-cols-2 gap-2 text-xs">
-
-
-
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#6d8ba6]/30 shadow-2xs space-y-0.5">
-
-
-
+                <!-- Resumo Próprias x Impróprias + Critério Enterococos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                  <div class="p-3 rounded-xl bg-white/95 border border-[#6d8ba6]/40 shadow-2xs space-y-1">
                     <div class="flex items-center justify-between">
-
-
-
-                      <span class="text-[10px] font-black uppercase text-black">Praias Próprias</span>
-
-
-
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black" id="balnear-proprias-count">8 Pontos</span>
-
-
-
+                      <span class="text-[10px] font-black uppercase text-[#0f766e]">Pontos Próprios para Banho</span>
+                      <span class="text-[9.5px] font-extrabold uppercase px-2 py-0.5 rounded bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black" id="balnear-proprias-count">9 Pontos (75%)</span>
                     </div>
-
-
-
-                    <span class="text-[10.5px] text-black font-medium block">Tartarugas, Bosque, Centro, Costazul, Remanso, Joana, Mar do Norte e Areia Negra</span>
-
-
-
+                    <span class="text-[11px] text-black font-semibold block leading-snug" id="balnear-proprias-nomes">Tartarugas (10), Bosque (10), Centro Av. Amazonas (10), Cemitério (31), Joana (10), Areia Negra (10), Remanso (52), Costazul (20) e Mar do Norte (10 NMP/100 mL)</span>
                   </div>
 
-
-
-                  
-
-
-
-                  <div class="p-2.5 rounded-xl bg-white/95 border border-[#f07a53]/30 shadow-2xs space-y-0.5">
-
-
-
+                  <div class="p-3 rounded-xl bg-white/95 border border-[#f07a53]/50 shadow-2xs space-y-1">
                     <div class="flex items-center justify-between">
-
-
-
-                      <span class="text-[10px] font-black uppercase text-black">Pontos de Atenção</span>
-
-
-
-                      <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-[#ffebe4] border border-[#f07a53]/50 text-black" id="balnear-improprias-count">3 Pontos</span>
-
-
-
+                      <span class="text-[10px] font-black uppercase text-[#b91c1c]">Pontos Impróprios / Atenção</span>
+                      <span class="text-[9.5px] font-extrabold uppercase px-2 py-0.5 rounded bg-[#ffebe4] border border-[#f07a53]/60 text-black" id="balnear-improprias-count">3 Pontos (25%)</span>
                     </div>
-
-
-
-                    <span class="text-[10.5px] text-black font-medium block">Boca da Barra (foz do rio) e Lagoa de Iriri (baixa renovação hídrica)</span>
-
-
-
+                    <span class="text-[11px] text-black font-semibold block leading-snug" id="balnear-improprias-nomes">Centro R. Bento Costa Jr (700 NMP/100 mL), Boca da Barra (291 NMP/100 mL) e Lagoa de Iriri (683 NMP/100 mL)</span>
                   </div>
 
-
-
+                  <div class="p-3 rounded-xl bg-white/95 border border-[#cbd5e1] shadow-2xs space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] font-black uppercase text-black">Critério Enterococos (CONAMA)</span>
+                      <span class="text-[9.5px] font-extrabold uppercase px-2 py-0.5 rounded bg-[#f1f5f9] border border-[#94a3b8] text-black">Res. nº 274/2000</span>
+                    </div>
+                    <span class="text-[11px] text-black font-medium block leading-snug">Próprio se Enterococos ≤ <strong>100 NMP/100 mL</strong> em ao menos 4 das últimas 5 coletas e &lt; <strong>400 NMP/100 mL</strong> na coleta mais recente.</span>
+                  </div>
                 </div>
-
-
-
-
-
-
 
                 <p class="text-[11px] text-black font-medium leading-relaxed bg-white/90 p-2.5 rounded-xl border border-[#cbd5e1]" id="balnear-obs-tecnica">
-
-
-
-                  <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas fortes e próximo à saída de canais de drenagem pluvial.
-
-
-
+                  <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e manter distância das saídas de galerias de águas pluviais ou canais de drenagem.
                 </p>
-
-
-
               </div>
 
-
-
-
-
-
-
-              <!-- Botão Clicável de Destaque para abrir a lista completa da Balneabilidade -->
-
-
-
-              <button type="button" onclick="openModalPraias('balnear')" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-[#eaf0f6] to-[#d8e5f0] hover:brightness-95 border-2 border-[#6d8ba6] text-black font-black text-xs shadow-xs hover:scale-[1.01] transition flex items-center justify-between cursor-pointer group">
-
-
-
-                <span class="flex items-center gap-2">
-
-
-
-                  <i data-lucide="clipboard-check" class="w-4 h-4 text-black"></i>
-
-
-
-                  <span>Ver Relatório Oficial dos 11 Pontos de Balneabilidade (INEA)</span>
-
-
-
-                </span>
-
-
-
-                <span class="bg-white/95 px-2.5 py-1 rounded-lg border border-[#6d8ba6]/40 font-black text-[11px] text-black group-hover:tracking-wider transition-all">Abrir Lista ↗</span>
-
-
-
-              </button>
-
-
-
-
-
-
-
-          <!-- Rodapé de Advertências & Links Oficiais -->
-
-
-
-          <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
-
-
-
-            <span id="orla-aviso-resumo" class="font-medium text-black">* Condições em conformidade com o Serviço Meteorológico Marinho (CHM) e INEA.</span>
-
-
-
-            <div class="flex items-center gap-2 flex-wrap">
-
-
-
-              <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-
-
-
-                Avisos CHM ↗
-
-
-
-              </a>
-
-
-
-              <a href="https://seirhi.inea.rj.gov.br/publico" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-
-
-
-                SEIRHI INEA ↗
-
-
-
-              </a>
-
-
-
-              <a href="https://www.instagram.com/rj_inea/" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
-
-
-
-                Instagram INEA ↗
-
-
-
-              </a>
-
-
-
+              <!-- GRADE COMPLETA DOS 12 PONTOS DE COLETA DO INEA DIRETO NA ABA -->
+              <div class="space-y-2.5">
+                <div class="flex items-center justify-between flex-wrap gap-2 px-0.5">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-[#0284c7]"></i>
+                    <h4 class="text-xs sm:text-sm font-black text-black uppercase tracking-tight">Detalhamento Ponto a Ponto — 12 Estações de Coleta INEA (Circuito Macaé e Rio das Ostras)</h4>
+                  </div>
+                  <span class="text-[10.5px] font-bold text-[#475569]">Valores de Enterococos (NMP/100 mL) e Qualificação Anual (PBP) extraídos do Power BI INEA</span>
+                </div>
+
+                <div id="balnear-inline-pontos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <!-- Preenchido dinamicamente por renderBalneabilidadeList() em js/app.js -->
+                </div>
+              </div>
+
+              <!-- Rodapé de Advertências & Links Oficiais -->
+              <div class="pt-2.5 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
+                <span id="orla-aviso-resumo" class="font-medium text-black">* Dados sincronizados com o Painel Power BI de Balneabilidade do INEA (DISEQ/SEIRHI) e Marinha do Brasil (CHM).</span>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <a href="https://app.powerbi.com/view?r=eyJrIjoiNWI4MDFiMzEtNGY0OS00M2Y1LWE5MWYtZWNlNzQyYmUwMjkwIiwidCI6IjZkYjc3YWU3LWQwYTQtNDYxNi1iNzM4LTg4ODE4NTQxOWIzOSJ9&pageName=64fcd9486da0b10c1015" target="_blank" rel="noopener noreferrer" class="bg-[#ffebe4] border border-[#f07a53] text-black font-bold px-2.5 py-1 rounded-lg text-[11px] hover:bg-[#fed7cc] transition flex items-center gap-1">
+                    Painel Power BI INEA ↗
+                  </a>
+                  <a href="https://seirhi.inea.rj.gov.br/publico" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                    SEIRHI INEA ↗
+                  </a>
+                  <a href="https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo" target="_blank" rel="noopener" class="bg-[#eaf0f6] border border-[#6d8ba6]/50 text-black font-bold px-2 py-1 rounded-lg text-[11px] hover:bg-[#d8e5f0] transition flex items-center gap-0.5">
+                    Avisos CHM ↗
+                  </a>
+                </div>
+              </div>
             </div>
-
-
-
-          </div>
-
-
-
-
-
-
-
-        </div>
-
-
-
           </div> <!-- /#orla-panel-balnear -->
 
 
@@ -9095,7 +8921,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=206" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=207" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -10911,8 +10737,8 @@
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=206"></script>
-  <script type="module" src="js/app.js?v=206"></script>
+  <script src="js/historico_planilha.js?v=207"></script>
+  <script type="module" src="js/app.js?v=207"></script>
 
 
 

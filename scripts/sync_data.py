@@ -334,6 +334,14 @@ if __name__ == '__main__':
     sync_inmet_meteograma()
     sync_inmet_alerts()
     sync_inea_cheias()
+    try:
+        try:
+            from scripts.powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
+        except ImportError:
+            from powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
+        sync_powerbi_balneabilidade(DATA_DIR)
+    except Exception as e:
+        print(f"Aviso ao sincronizar Balneabilidade Power BI INEA: {e}")
     
     # Atualiza a cota ao vivo do Rio Jundiá sem alterar a previsão oficial de chuva
     try:
