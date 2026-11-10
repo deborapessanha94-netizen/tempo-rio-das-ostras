@@ -1,7 +1,7 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "10/11 (Terça-feira) a 17/11 (Terça-feira)",
-  "emissao": "10/11/2026 às 16:00h",
+  "emissao": "10/11/2026 às 16:09h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.54 m. Sem avisos meteorológicos severos vigentes para hoje. Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 45.4 mm com temperatura máxima alcançando 32°C.",
   "analise_precipitacao_multifonte": {
     "metodologia": "Síntese cruzada e integrativa de todas as fontes de precipitação (INMET Avisos, INMET Turnos, CPTEC Multimodel, CEMADEN PCD 18789, INEA 224103620 e Open-Meteo)",
@@ -11,7 +11,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 3.0,
         "chuva_96h": 31.8,
-        "leitura": "2026-11-10 12:10:00"
+        "leitura": "2026-11-10 13:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -1297,7 +1297,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-10T16:01:25.085789"
+    "atualizado_em": "2026-11-10T16:10:07.632939"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -1305,7 +1305,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-10 16:02:00",
+    "data_coleta": "2026-11-10 16:10:42",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_10-11-2026.pdf",
@@ -1764,7 +1764,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-10 00z",
-    "atualizacao": "10/11/2026 13:01",
+    "atualizacao": "10/11/2026 13:10",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -1850,7 +1850,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "10/11/2026",
-    "atualizacao": "10/11/2026 13:01",
+    "atualizacao": "10/11/2026 13:10",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -2027,7 +2027,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-10T16:02:22.854143",
+    "atualizado_em": "2026-11-10T16:11:03.636515",
     "proxima_mare": null,
     "dias": [
       {
