@@ -599,8 +599,20 @@ export function renderSocialCanvas() {
   }
 }
 
+function fillFittedText(ctx, text, x, y, maxWidth, weight = 'bold', maxPx = 20, minPx = 11, family = 'sans-serif') {
+  const str = String(text || '');
+  let px = maxPx;
+  ctx.font = `${weight} ${px}px ${family}`;
+  while (px > minPx && ctx.measureText(str).width > maxWidth) {
+    px -= 0.5;
+    ctx.font = `${weight} ${px}px ${family}`;
+  }
+  ctx.fillText(str, x, y);
+  return px;
+}
+
 /**
- * RENDERIZADOR 1: CARD OFICIAL DO TEMPO AGORA (Padrão Idêntico ao Card de Chuva)
+ * RENDERIZADOR 1: CARD OFICIAL DO TEMPO AGORA (Padrão Idêntico ao Card de Chuva, Sem Cortes)
  */
 export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory, isDark) {
   // Fundo e Moldura Externa (100% idênticos ao Card de Chuva)
@@ -626,7 +638,7 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
     ctx.strokeRect(12, 12, width - 24, height - 24);
   }
 
-  // Extrai valores exatos em tempo real do DOM (sem emojis coloridos)
+  // Extrai valores exatos em tempo real do DOM (sem emojis coloridos e sem cortes)
   const getTxt = (id, fallback = '') => {
     if (typeof document === 'undefined') return fallback;
     const el = document.getElementById(id);
@@ -634,89 +646,92 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
     return raw.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').trim() || fallback;
   };
 
-  const tempRaw = getTxt('sidebar-temp', '20°').replace(/°C?/g, '').trim();
-  const sensRaw = getTxt('hero-sensacao', 'Sensação em Tempo Real: 20°C').replace(/^Sensação[^:]*:\s*/i, '').trim();
+  const tempRaw = getTxt('sidebar-temp', '23°').replace(/°C?/g, '').trim();
+  const sensRaw = getTxt('hero-sensacao', 'Sensação em Tempo Real: 23°C').replace(/^Sensação[^:]*:\s*/i, '').trim();
+  const skyCond = getTxt('hero-sky-condition', 'Céu no Momento');
   const condTitle = getTxt('hero-condition', 'Muitas nuvens com pancadas de chuva isoladas');
-  const chuvaVal = getTxt('hero-chip-chuva-val', '15,9 mm');
-  const chuvaSub = getTxt('hero-chip-chuva-sub', 'Pico: 20 a 30 mm/h');
-  const ventoVal = getTxt('sidebar-wind', '50 km/h');
+  const condSub = getTxt('hero-subcondition', 'Monitoramento costeiro em tempo real');
+  const chuvaVal = getTxt('hero-chip-chuva-val', '4,5 mm');
+  const chuvaSub = getTxt('hero-chip-chuva-sub', 'Probabilidade: 31%');
+  const ventoVal = getTxt('sidebar-wind', '15 km/h');
   const ventoSub = getTxt('hero-chip-vento-sub', 'Rajadas na orla marítima');
-  const umidVal = getTxt('sidebar-hum', '60% a 90%');
-  const umidSub = getTxt('hero-chip-umid-sub', 'Ar Muito Úmido');
-  const marVal = getTxt('sidebar-sea', '1,0 m');
-  const marSub = getTxt('hero-chip-mar-sub', 'Atenção • Moderado');
+  const umidVal = getTxt('sidebar-hum', '65%');
+  const umidSub = getTxt('hero-chip-umid-sub', 'Umidade relativa do ar');
+  const marVal = getTxt('sidebar-sea', '0,9 a 0,9 m');
+  const marSub = getTxt('hero-chip-mar-sub', 'Condição da orla marítima');
   const pressVal = getTxt('hero-chip-press-val', '1018 hPa');
   const pressSub = getTxt('hero-chip-press-sub', 'Estável ao nível do mar');
-  const uvVal = getTxt('hero-chip-uv-val', '8 - Muito Alto');
+  const uvVal = getTxt('hero-chip-uv-val', '3 - Moderado');
   const uvSub = getTxt('hero-chip-uv-sub', 'Proteção solar recomendada');
-  const solVal = getTxt('hero-chip-sol-val', '04:57 • 18:06');
-  const solSub = getTxt('hero-chip-sol-sub', '13h 08m de luz solar');
+  const solVal = getTxt('hero-chip-sol-val', '04:58 • 18:05');
+  const solSub = getTxt('hero-chip-sol-sub', '13h 09m de luz solar');
   const luaVal = getTxt('hero-chip-lua-val', 'Lua Nova');
+  const luaSub = getTxt('hero-chip-lua-sub', 'Fase lunar atual');
 
   const rows = [
     {
-      name: 'Temperatura & Condição Atual',
+      name: `Temperatura & Céu (${skyCond})`,
       code: 'AGORA',
-      desc: condTitle.length > 44 ? condTitle.slice(0, 43) + '…' : condTitle,
+      desc: `${condTitle} • ${condSub}`,
       valMain: `${tempRaw}`,
       valUnit: '°C',
       subRight: `Sensação térmica: ${sensRaw}`
     },
     {
-      name: 'Chuva Prevista (24h)',
+      name: 'Chuva Prevista (Horizonte 24h)',
       code: 'CHUVA',
-      desc: chuvaSub,
+      desc: `${chuvaSub} • Estimativa diária na rede municipal`,
       valMain: chuvaVal.replace(/\s*\(.*\)/, '').replace('mm', '').trim().replace('.', ','),
       valUnit: 'mm',
       subRight: chuvaVal.includes('(') ? chuvaVal.slice(chuvaVal.indexOf('(')).replace(/[()]/g, '') : 'Acumulado previsto hoje'
     },
     {
-      name: 'Vento & Rajadas na Orla',
+      name: 'Vento Sustentado & Rajadas na Orla',
       code: 'VENTO',
-      desc: ventoSub,
+      desc: `${ventoSub} • Monitoramento anemométrico costeiro`,
       valMain: ventoVal.replace('km/h', '').trim(),
       valUnit: 'km/h',
-      subRight: 'Velocidade / Rajada máxima'
+      subRight: ventoSub
     },
     {
       name: 'Umidade Relativa do Ar',
       code: 'UMID',
-      desc: umidSub,
-      valMain: umidVal.replace(/\s*a\s*/i, '–'),
+      desc: `${umidSub} • Balanço higrométrico na sede municipal`,
+      valMain: umidVal.replace(/\s*a\s*/i, ' a '),
       valUnit: '',
       subRight: 'Faixa higrométrica do dia'
     },
     {
-      name: 'Condição do Mar na Orla',
+      name: 'Agitação Marítima na Orla',
       code: 'ORLA',
-      desc: marSub,
-      valMain: marVal.replace('m', '').replace(/\s*a\s*/i, '–').trim().replace(/\./g, ','),
+      desc: `${marSub} • Altura significativa de ondas na costa`,
+      valMain: marVal.replace('m', '').trim().replace(/\./g, ','),
       valUnit: 'm',
-      subRight: 'Altura significativa de onda'
+      subRight: marSub
     },
     {
-      name: 'Pressão Atmosférica (PNM)',
+      name: 'Pressão Atmosférica ao Nível do Mar',
       code: 'PNM',
-      desc: pressSub,
+      desc: `${pressSub} • Referência normal costeira: 1013 hPa`,
       valMain: pressVal.replace('hPa', '').trim(),
       valUnit: 'hPa',
-      subRight: 'Referência normal: 1013 hPa'
+      subRight: pressSub
     },
     {
-      name: 'Radiação & Índice UV',
+      name: 'Radiação Solar & Índice UV',
       code: 'IUV',
-      desc: uvSub,
+      desc: `${uvSub} • Monitoramento de radiação ultravioleta`,
       valMain: `IUV ${uvVal.split('-')[0].trim()}`,
       valUnit: '',
-      subRight: uvVal.includes('-') ? uvVal.split('-')[1].trim() : 'Incidência solar'
+      subRight: uvVal.includes('-') ? `Nível ${uvVal.split('-')[1].trim()}` : 'Incidência solar'
     },
     {
       name: 'Ciclo Solar & Fase da Lua',
       code: 'ASTRO',
-      desc: `Nascer / Pôr do Sol: ${solVal}`,
+      desc: `Nascer / Pôr do Sol: ${solVal} (${solSub})`,
       valMain: luaVal,
       valUnit: '',
-      subRight: solSub
+      subRight: luaSub
     }
   ];
 
@@ -778,7 +793,7 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
   ctx.lineTo(rightPad, subY + 18);
   ctx.stroke();
 
-  // Linhas Horizontais (Exatamente igual ao layout de Chuva e Vento)
+  // Linhas Horizontais (Exatamente igual ao layout de Chuva e Vento, sem qualquer corte)
   const startY = subY + 36;
   const footerY = height - (isStory ? 65 : 48);
   const availableHeight = (footerY - 45) - startY;
@@ -799,14 +814,13 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Título da Linha à esquerda
+    // Título da Linha à esquerda (auto-ajustado para nunca cortar)
     ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-    ctx.font = isStory ? 'bold 30px sans-serif' : 'bold 24px sans-serif';
     const nameY = rowY + (isStory ? 42 : 32);
-    ctx.fillText(item.name, leftPad + 18, nameY);
+    fillFittedText(ctx, item.name, leftPad + 18, nameY, 620, 'bold', isStory ? 28 : 23, 15);
 
-    // Badge Padrão Azul-Oceano + Subtítulo
-    const badgeY = rowY + (isStory ? 74 : 54);
+    // Badge Padrão Azul-Oceano + Subtítulo Completo (sem cortes)
+    const badgeY = rowY + (isStory ? 76 : 56);
     const badgeText = item.code;
     ctx.font = 'bold 13px monospace';
     const badgeWidth = ctx.measureText(badgeText).width + 12;
@@ -823,8 +837,9 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
     ctx.fillText(badgeText, leftPad + 24, badgeY);
 
     ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
-    ctx.font = '600 15px sans-serif';
-    ctx.fillText(`  ${item.desc}`, leftPad + 18 + badgeWidth + 4, badgeY);
+    const descX = leftPad + 18 + badgeWidth + 10;
+    const maxDescW = (rightPad - 245) - descX;
+    fillFittedText(ctx, item.desc, descX, badgeY, maxDescW, '600', isStory ? 16 : 15, 11.5);
 
     // Valor Principal à direita (Idêntico ao padrão de Chuva)
     ctx.textAlign = 'right';
@@ -844,7 +859,7 @@ export function renderSocialCanvasTempoAgora(canvas, ctx, width, height, isStory
 
     ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
     ctx.font = 'bold 14px sans-serif';
-    ctx.fillText(item.subRight, rightPad - 18, rowY + (isStory ? 70 : 52));
+    ctx.fillText(item.subRight, rightPad - 18, rowY + (isStory ? 72 : 54));
     ctx.textAlign = 'left';
   });
 
@@ -1359,7 +1374,9 @@ export function renderSocialCanvasVento(canvas, ctx, width, height, isStory, isD
 
 /**
  * RENDERIZADOR 4: CARD OFICIAL DO PANORAMA SEMANAL (7 DIAS)
- * Segue estritamente o mesmo padrão visual e paleta do Card de Chuva e Vento.
+ * Segue estritamente o mesmo padrão visual e paleta do Card de Chuva e Vento,
+ * exibindo 100% das informações (Condição do Céu, Temperatura, Chuva, Probabilidade,
+ * Vento, Rajadas em km/h, Sistema Atuante e Evento Extremo/Risco) SEM NENHUM CORTE.
  */
 export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, isDark) {
   // 1. Fundo e Moldura Externa (100% idênticos ao Card de Chuva)
@@ -1409,18 +1426,18 @@ export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, i
 
   const leftPad = 65;
   const rightPad = width - 65;
-  const topPad = isStory ? 95 : 70;
+  const topPad = isStory ? 90 : 62;
 
   // Barra de Destaque Vertical (Idêntica à Chuva)
   ctx.fillStyle = '#ea580c';
   ctx.beginPath();
-  ctx.roundRect(leftPad, topPad + 4, 9, isStory ? 82 : 72, 4.5);
+  ctx.roundRect(leftPad, topPad + 4, 9, isStory ? 82 : 70, 4.5);
   ctx.fill();
 
   // Título Superior (Idêntico à Chuva)
   ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-  ctx.font = isStory ? '900 36px sans-serif' : '900 28px sans-serif';
-  ctx.fillText('PANORAMA SEMANAL', leftPad + 24, topPad + (isStory ? 34 : 26));
+  ctx.font = isStory ? '900 36px sans-serif' : '900 27px sans-serif';
+  ctx.fillText('PANORAMA SEMANAL', leftPad + 24, topPad + (isStory ? 34 : 25));
 
   if (isDark) {
     const titleGrad = ctx.createLinearGradient(leftPad + 24, 0, leftPad + 360, 0);
@@ -1430,22 +1447,21 @@ export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, i
   } else {
     ctx.fillStyle = '#ea580c';
   }
-  ctx.font = isStory ? '900 68px sans-serif' : '900 56px sans-serif';
-  ctx.fillText('7 DIAS', leftPad + 24, topPad + (isStory ? 94 : 78));
+  ctx.font = isStory ? '900 68px sans-serif' : '900 54px sans-serif';
+  ctx.fillText('7 DIAS', leftPad + 24, topPad + (isStory ? 94 : 74));
 
-  const subY = topPad + (isStory ? 148 : 122);
+  const subY = topPad + (isStory ? 142 : 114);
   ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
-  ctx.font = '700 20px sans-serif';
-  ctx.fillText('Previsão de Chuva, Ventos e Sistemas Atuantes', leftPad, subY);
+  fillFittedText(ctx, 'Chuva, Ventos, Sistemas e Alertas', leftPad, subY, 410, '700', 18.5, 14);
 
   const totalRainStr = formatDec1(totalRainMm);
   ctx.textAlign = 'right';
-  ctx.font = 'bold 20px monospace';
+  ctx.font = 'bold 17.5px monospace';
   if (isDark) {
     ctx.fillStyle = '#38bdf8';
-    ctx.fillText(`${periodLabel} • TOTAL: ${totalRainStr} MM`, rightPad, subY);
+    ctx.fillText(`${periodLabel} • ACUMULADO: ${totalRainStr} MM`, rightPad, subY);
   } else {
-    const horizonSuffix = ` • TOTAL: ${totalRainStr} MM`;
+    const horizonSuffix = ` • ACUMULADO: ${totalRainStr} MM`;
     const suffixWidth = ctx.measureText(horizonSuffix).width;
     ctx.fillStyle = '#ea580c';
     ctx.fillText(horizonSuffix, rightPad, subY);
@@ -1457,19 +1473,19 @@ export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, i
   ctx.strokeStyle = isDark ? 'rgba(0, 194, 255, 0.3)' : '#cbd5e1';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.moveTo(leftPad, subY + 18);
-  ctx.lineTo(rightPad, subY + 18);
+  ctx.moveTo(leftPad, subY + 16);
+  ctx.lineTo(rightPad, subY + 16);
   ctx.stroke();
 
-  // As 7 Linhas Diárias (100% no padrão das linhas de Chuva e Vento)
-  const startY = subY + 36;
-  const footerY = height - (isStory ? 65 : 48);
-  const availableHeight = (footerY - 45) - startY;
+  // As 7 Linhas Diárias Completas (3 faixas internas em cada cartão para exibir 100% dos textos sem cortes)
+  const startY = subY + 30;
+  const footerY = height - (isStory ? 65 : 46);
+  const availableHeight = (footerY - 42) - startY;
   const displayDays = days.slice(0, 7);
   const count = displayDays.length || 1;
 
-  const rowGap = isStory ? Math.min(24, Math.floor(availableHeight / count * 0.18)) : Math.min(15, Math.floor(availableHeight / count * 0.18));
-  const rowHeight = Math.min(isStory ? 135 : 102, Math.floor((availableHeight - (count - 1) * rowGap) / count));
+  const rowGap = isStory ? Math.min(20, Math.floor(availableHeight / count * 0.14)) : Math.min(11, Math.floor(availableHeight / count * 0.12));
+  const rowHeight = Math.min(isStory ? 165 : 118, Math.floor((availableHeight - (count - 1) * rowGap) / count));
 
   displayDays.forEach((d, idx) => {
     const rowY = startY + idx * (rowHeight + rowGap);
@@ -1483,56 +1499,94 @@ export function renderSocialCanvasSemanal(canvas, ctx, width, height, isStory, i
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Linha 1 Esquerda: Dia da Semana + Data + Temperatura Máx/Mín
-    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
-    ctx.font = isStory ? 'bold 28px sans-serif' : 'bold 23px sans-serif';
-    const nameY = rowY + (isStory ? 42 : 34);
-    const todaySuffix = d.isToday ? ' (HOJE)' : '';
-    ctx.fillText(`${d.dayOfWeek}${todaySuffix}  •  ${d.tempMax}° / ${d.tempMin}°C`, leftPad + 18, nameY);
+    const yLine1 = rowY + Math.round(rowHeight * 0.29);
+    const yLine2 = rowY + Math.round(rowHeight * 0.59);
+    const yLine3 = rowY + Math.round(rowHeight * 0.85);
 
-    // Linha 2 Esquerda: Badge Azul-Oceano com Data + Sistema Atuante & Condição
-    const badgeY = rowY + (isStory ? 78 : 60);
-    const badgeText = `${d.dayOfWeekShort.toUpperCase()} ${d.dateFormatted}`;
-    ctx.font = 'bold 13px monospace';
-    const badgeWidth = ctx.measureText(badgeText).width + 12;
+    // -------------------------------------------------------------------------
+    // LADO ESQUERDO (3 Linhas Completas Sem Nenhum Corte)
+    // -------------------------------------------------------------------------
+    // Linha 1 Esquerda: Dia da Semana (Data) + Temperatura Máx/Mín + Condição do Céu Completa
+    ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';
+    const todaySuffix = d.isToday ? ' (HOJE)' : '';
+    const line1LeftText = `${d.dayOfWeek} (${d.dateFormatted})${todaySuffix}  •  ${d.tempMax}° / ${d.tempMin}°C  •  ${d.weatherLabel}`;
+    fillFittedText(ctx, line1LeftText, leftPad + 18, yLine1, 650, 'bold', isStory ? 23 : 19.5, 13.5);
+
+    // Linha 2 Esquerda: Badge Azul-Oceano [SISTEMA] + Nome Completo do Sistema Atuante
+    const sysBadgeText = 'SISTEMA';
+    ctx.font = 'bold 12px monospace';
+    const sysBadgeW = ctx.measureText(sysBadgeText).width + 12;
 
     ctx.fillStyle = isDark ? 'rgba(56, 189, 248, 0.15)' : '#e0f2fe';
     ctx.beginPath();
-    ctx.roundRect(leftPad + 18, badgeY - 14, badgeWidth, 20, 6);
+    ctx.roundRect(leftPad + 18, yLine2 - 14, sysBadgeW, 19, 5);
     ctx.fill();
     ctx.strokeStyle = isDark ? '#38bdf8' : '#0284c7';
     ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.fillStyle = isDark ? '#38bdf8' : '#0369a1';
-    ctx.fillText(badgeText, leftPad + 24, badgeY);
+    ctx.fillText(sysBadgeText, leftPad + 24, yLine2);
 
-    ctx.fillStyle = isDark ? '#94a3b8' : '#475569';
-    ctx.font = '600 15px sans-serif';
-    const sysClean = (d.sistemaAtuante || '').length > 56 ? d.sistemaAtuante.slice(0, 55) + '…' : d.sistemaAtuante;
-    ctx.fillText(`  ${sysClean}`, leftPad + 18 + badgeWidth + 4, badgeY);
+    ctx.fillStyle = isDark ? '#cbd5e1' : '#334155';
+    const sysX = leftPad + 18 + sysBadgeW + 8;
+    fillFittedText(ctx, d.sistemaAtuante, sysX, yLine2, 650 - sysBadgeW - 8, '700', isStory ? 16 : 14.5, 11.5);
 
-    // Lado Direito: Acumulado de Chuva em destaque + Vento e Rajada abaixo (Idêntico à Chuva)
+    // Linha 3 Esquerda: Badge [CONDIÇÃO / ALERTA] + Texto Completo do Evento / Condição Operacional
+    const isHighRisk = d.riskLevel === 'alert' || d.riskLevel === 'warning';
+    const riskBadgeText = d.riskBadge || 'NORMALIDADE OPERACIONAL';
+    ctx.font = 'bold 11.5px monospace';
+    const riskBadgeW = ctx.measureText(riskBadgeText).width + 12;
+
+    ctx.fillStyle = isHighRisk
+      ? (isDark ? 'rgba(234, 88, 12, 0.2)' : '#ffebe4')
+      : (isDark ? 'rgba(56, 189, 248, 0.12)' : '#f1f5f9');
+    ctx.beginPath();
+    ctx.roundRect(leftPad + 18, yLine3 - 13, riskBadgeW, 18, 5);
+    ctx.fill();
+    ctx.strokeStyle = isHighRisk ? '#ea580c' : (isDark ? '#38bdf8' : '#94a3b8');
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    ctx.fillStyle = isHighRisk ? (isDark ? '#fdba74' : '#c2410c') : (isDark ? '#38bdf8' : '#475569');
+    ctx.fillText(riskBadgeText, leftPad + 24, yLine3);
+
+    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
+    const evtX = leftPad + 18 + riskBadgeW + 8;
+    const cleanEvt = (d.eventoExtremo || '').replace(/^(ALERTA|ATENÇÃO|NORMALIDADE):\s*/i, '');
+    fillFittedText(ctx, cleanEvt, evtX, yLine3, 625 - riskBadgeW - 8, '600', isStory ? 14 : 13, 10.5);
+
+    // -------------------------------------------------------------------------
+    // LADO DIREITO (Chuva em mm + Probabilidade % + Vento e Rajada em km/h)
+    // -------------------------------------------------------------------------
     ctx.textAlign = 'right';
     const rainStr = formatDec1(d.rainMm);
 
+    // Linha 1 Direita: Volume de Chuva em destaque
     ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
-    ctx.font = '900 40px sans-serif';
-    ctx.fillText(rainStr, rightPad - 72, rowY + (isStory ? 44 : 36));
+    ctx.font = isStory ? '900 38px sans-serif' : '900 33px sans-serif';
+    ctx.fillText(rainStr, rightPad - 68, yLine1 + 3);
 
-    ctx.font = 'bold 24px sans-serif';
-    ctx.fillText('mm', rightPad - 18, rowY + (isStory ? 44 : 36));
+    ctx.font = isStory ? 'bold 22px sans-serif' : 'bold 20px sans-serif';
+    ctx.fillText('mm', rightPad - 18, yLine1 + 3);
 
-    ctx.fillStyle = isDark ? '#94a3b8' : '#64748b';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText(`Rajada ${d.windGust} km/h (${d.windDirCardinal}) • Vento ${d.windSpeed} km/h`, rightPad - 18, rowY + (isStory ? 76 : 58));
+    // Linha 2 Direita: Probabilidade de Chuva e Classificação
+    ctx.fillStyle = isDark ? '#38bdf8' : '#0284c7';
+    ctx.font = isStory ? 'bold 15px sans-serif' : 'bold 13.5px sans-serif';
+    ctx.fillText(`Probabilidade de chuva: ${d.rainProb}%`, rightPad - 18, yLine2);
+
+    // Linha 3 Direita: Vento Médio + Direção + Rajada Máxima com km/h completo
+    ctx.fillStyle = isDark ? '#cbd5e1' : '#475569';
+    ctx.font = isStory ? 'bold 14.5px sans-serif' : 'bold 13px sans-serif';
+    ctx.fillText(`Vento ${d.windSpeed} km/h (${d.windDirCardinal}) • Rajada ${d.windGust} km/h`, rightPad - 18, yLine3);
+
     ctx.textAlign = 'left';
   });
 
   // Rodapé Oficial (Idêntico ao de Chuva)
   ctx.fillStyle = isDark ? '#38bdf8' : '#ea580c';
   ctx.beginPath();
-  ctx.roundRect(leftPad, footerY - (isStory ? 40 : 30), width - 130, 3, 1.5);
+  ctx.roundRect(leftPad, footerY - (isStory ? 40 : 28), width - 130, 3, 1.5);
   ctx.fill();
 
   ctx.fillStyle = isDark ? '#ffffff' : '#0f172a';

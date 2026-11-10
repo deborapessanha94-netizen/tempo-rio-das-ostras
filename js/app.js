@@ -38,8 +38,8 @@ import {
 
   openSocialModalVento,
   openSocialModalSemanal
-} from './social-cards.js?v=204';
-import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=204';
+} from './social-cards.js?v=205';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=205';
 
 
 
@@ -219,7 +219,7 @@ import {
 
 
 
-} from './api.js?v=179';
+} from './api.js?v=205';
 
 
 
@@ -227,7 +227,7 @@ import {
 
 
 
-import { renderBulletinChart } from './charts.js?v=202';
+import { renderBulletinChart } from './charts.js?v=205';
 
 
 
@@ -7267,7 +7267,7 @@ function setupPWA() {
 
 
 
-    navigator.serviceWorker.register('./sw.js?v=175').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=205').catch(() => {});
 
 
 
