@@ -6438,21 +6438,330 @@ function renderModalData(meta, rows, inmetAlerts, marinhaAvisos) {
 
 
 function updateBulletinChart() {
-
-
-
   const canvas = document.getElementById('bulletin-chart');
-
-
-
   if (!canvas || !state.boletimData || state.boletimData.length === 0) return;
 
+  // Inicializa o estado de zoom/recorte se ainda não existir
+  if (!state.chartView) {
+    state.chartView = {
+      rangeMode: 'all',        // 'all' | 'first16' | 'first8' | 'last16'
+      selectedDateIso: '',     // ex: '2026-11-10'
+      zoomPercent: 175,
+      showValues: true,
+      expandedHeight: false
+    };
+  }
 
+  initBulletinChartZoomControls();
+  populateBulletinDayFilterSelect();
 
-  renderBulletinChart(canvas, state.activeMetric, state.boletimData);
+  const fullRows = state.boletimData || [];
+  let filteredRows = fullRows;
+  let periodLabel = `8 Dias (${fullRows.length} Turnos)`;
 
+  if (state.chartView.selectedDateIso) {
+    filteredRows = fullRows.filter(r => r.data_iso === state.chartView.selectedDateIso);
+    if (filteredRows.length > 0) {
+      const d0 = filteredRows[0];
+      const parts = (d0.data_iso || '').split('-');
+      const dtBr = parts.length === 3 ? `${parts[2]}/${parts[1]}` : d0.data_iso;
+      periodLabel = `${d0.dia_semana} (${dtBr} • ${filteredRows.length} Turnos)`;
+    }
+  } else if (state.chartView.rangeMode === 'first16') {
+    filteredRows = fullRows.slice(0, 16);
+    periodLabel = `Próx. 4 Dias (${filteredRows.length} Turnos)`;
+  } else if (state.chartView.rangeMode === 'first8') {
+    filteredRows = fullRows.slice(0, 8);
+    periodLabel = `Próx. 48h (${filteredRows.length} Turnos)`;
+  } else if (state.chartView.rangeMode === 'last16') {
+    filteredRows = fullRows.slice(Math.max(0, fullRows.length - 16));
+    periodLabel = `Dias 5 a 8 (${filteredRows.length} Turnos)`;
+  }
 
+  // Ajusta largura do palco (#bulletin-chart-stage) garantindo espaçamento mínimo em pixels por turno
+  const stage = document.getElementById('bulletin-chart-stage');
+  if (stage) {
+    const effectiveZoom = Math.max(100, Math.min(350, Number(state.chartView.zoomPercent) || 175));
+    const count = Math.max(4, filteredRows.length);
 
+    if (effectiveZoom <= 100 || count <= 8) {
+      stage.style.width = `${effectiveZoom}%`;
+      stage.style.minWidth = '100%';
+    } else {
+      // Garante espaço confortável por turno tanto no Desktop quanto no Mobile (ex: 76px a 175%, 104px a 250%, 132px a 325%)
+      const pxPerShift = Math.round(44 + (effectiveZoom - 100) * 0.42);
+      const minTotalPx = count * pxPerShift;
+      stage.style.width = `${effectiveZoom}%`;
+      stage.style.minWidth = `${minTotalPx}px`;
+    }
+
+    if (state.chartView.expandedHeight) {
+      stage.className = 'relative h-[460px] sm:h-[500px] transition-all duration-150';
+    } else {
+      stage.className = 'relative h-[340px] sm:h-[370px] transition-all duration-150';
+    }
+  }
+
+  // Atualiza status textual e estado visual dos botões
+  syncBulletinZoomToolbarUI(periodLabel);
+
+  renderBulletinChart(canvas, state.activeMetric, filteredRows, {
+    zoomPercent: state.chartView.zoomPercent,
+    showValues: state.chartView.showValues,
+    rangeMode: state.chartView.rangeMode,
+    selectedDateIso: state.chartView.selectedDateIso
+  });
+
+  if (canvas._activeBulletinChart) {
+    canvas._activeBulletinChart.resize();
+  }
+}
+
+function populateBulletinDayFilterSelect() {
+  const select = document.getElementById('bulletin-day-filter-select');
+  if (!select || !state.boletimData || !state.boletimData.length) return;
+
+  const uniqueDays = [];
+  const seen = new Set();
+  state.boletimData.forEach(r => {
+    if (r.data_iso && !seen.has(r.data_iso)) {
+      seen.add(r.data_iso);
+      const parts = r.data_iso.split('-');
+      const dtBr = parts.length === 3 ? `${parts[2]}/${parts[1]}` : r.data_iso;
+      uniqueDays.push({ iso: r.data_iso, label: `${r.dia_semana} (${dtBr})` });
+    }
+  });
+
+  const currentKey = uniqueDays.map(d => d.iso).join(',');
+  if (select.dataset.daysKey !== currentKey) {
+    select.dataset.daysKey = currentKey;
+    select.innerHTML = `<option value="">Dia específico (Todos)</option>` +
+      uniqueDays.map((d, idx) => `<option value="${d.iso}">Dia ${idx + 1}: ${d.label}</option>`).join('');
+  }
+  select.value = (state.chartView && state.chartView.selectedDateIso) ? state.chartView.selectedDateIso : '';
+}
+
+function syncBulletinZoomToolbarUI(periodLabel) {
+  if (!state.chartView) return;
+  const zp = Number(state.chartView.zoomPercent) || 175;
+
+  // Botões de período (alto contraste preto sobre âmbar quando ativo)
+  document.querySelectorAll('.bulletin-range-btn').forEach(btn => {
+    const r = btn.getAttribute('data-range');
+    const isActive = !state.chartView.selectedDateIso && r === state.chartView.rangeMode;
+    if (isActive) {
+      btn.className = 'bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c] shadow-2xs';
+    } else {
+      btn.className = 'bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+    }
+  });
+
+  // Botões de preset de zoom
+  document.querySelectorAll('.bulletin-zoom-preset-btn').forEach(btn => {
+    const val = Number(btn.getAttribute('data-zoom'));
+    if (val === zp) {
+      btn.className = 'bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-[#fed7aa] text-black border border-[#ea580c] shadow-2xs transition-colors';
+    } else {
+      btn.className = 'bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-bold text-[#475569] hover:bg-[#f1f5f9] transition-colors';
+    }
+  });
+
+  // Botão Valores ON/OFF
+  const valBtn = document.getElementById('bulletin-toggle-values-btn');
+  if (valBtn) {
+    valBtn.textContent = state.chartView.showValues ? 'Valores: ON' : 'Valores: OFF';
+    valBtn.className = state.chartView.showValues
+      ? 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#ffedd5] text-black border-[#ea580c] hover:bg-[#fed7aa]'
+      : 'px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+  }
+
+  // Botão Expandir Altura
+  const hBtn = document.getElementById('bulletin-toggle-height-btn');
+  if (hBtn) {
+    hBtn.textContent = state.chartView.expandedHeight ? 'Altura Normal ↕' : 'Expandir Altura ↕';
+    hBtn.className = state.chartView.expandedHeight
+      ? 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c]'
+      : 'px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+  }
+
+  // Rótulo de status
+  const statusEl = document.getElementById('bulletin-zoom-status-label');
+  if (statusEl) {
+    const metricNames = {
+      temperature: 'Temperatura',
+      precipitation: 'Chuva',
+      wind: 'Vento',
+      pressure: 'Pressão',
+      humidity: 'Umidade'
+    };
+    const mName = metricNames[state.activeMetric] || 'Temperatura';
+    const scrollHint = zp > 100
+      ? '(arraste para os lados ou use ◀ ▶ para navegar)'
+      : '(visão compacta ajustada à tela)';
+    statusEl.innerHTML = `Gráfico: <strong>${mName}</strong> • Exibindo: <strong>${periodLabel}</strong> • Zoom <strong>${zp}%</strong> ${scrollHint}`;
+  }
+}
+
+function initBulletinChartZoomControls() {
+  const toolbar = document.getElementById('bulletin-chart-zoom-toolbar');
+  if (!toolbar || toolbar.dataset.boundZoom === 'true') return;
+  toolbar.dataset.boundZoom = 'true';
+
+  const setZoom = (newZoom) => {
+    if (!state.chartView) return;
+    state.chartView.zoomPercent = Math.max(100, Math.min(350, Math.round(newZoom / 25) * 25));
+    updateBulletinChart();
+  };
+
+  // Botões de Período (Recorte Rápido)
+  document.querySelectorAll('.bulletin-range-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!state.chartView) return;
+      const range = btn.getAttribute('data-range') || 'all';
+      state.chartView.rangeMode = range;
+      state.chartView.selectedDateIso = '';
+      if (range === 'first8') {
+        state.chartView.zoomPercent = 100;
+      } else if (range === 'first16' || range === 'last16') {
+        state.chartView.zoomPercent = 150;
+      } else {
+        state.chartView.zoomPercent = 175;
+      }
+      const viewport = document.getElementById('bulletin-chart-scroll-viewport');
+      if (viewport) viewport.scrollLeft = 0;
+      updateBulletinChart();
+    });
+  });
+
+  // Seletor de Dia Específico
+  const daySelect = document.getElementById('bulletin-day-filter-select');
+  if (daySelect) {
+    daySelect.addEventListener('change', () => {
+      if (!state.chartView) return;
+      const val = daySelect.value || '';
+      state.chartView.selectedDateIso = val;
+      if (val) {
+        state.chartView.zoomPercent = 100;
+      } else {
+        state.chartView.zoomPercent = 175;
+      }
+      const viewport = document.getElementById('bulletin-chart-scroll-viewport');
+      if (viewport) viewport.scrollLeft = 0;
+      updateBulletinChart();
+    });
+  }
+
+  // Botões Preset de Zoom (100%, 175%, 250%, 325%)
+  document.querySelectorAll('.bulletin-zoom-preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const z = Number(btn.getAttribute('data-zoom')) || 175;
+      setZoom(z);
+    });
+  });
+
+  // Zoom - / Zoom +
+  const zoomOutBtn = document.getElementById('bulletin-zoom-out-btn');
+  if (zoomOutBtn) {
+    zoomOutBtn.addEventListener('click', () => {
+      setZoom((state.chartView?.zoomPercent || 175) - 25);
+    });
+  }
+  const zoomInBtn = document.getElementById('bulletin-zoom-in-btn');
+  if (zoomInBtn) {
+    zoomInBtn.addEventListener('click', () => {
+      setZoom((state.chartView?.zoomPercent || 175) + 25);
+    });
+  }
+
+  // Botões Pan ◀ / ▶
+  const panLeftBtn = document.getElementById('bulletin-pan-left-btn');
+  const panRightBtn = document.getElementById('bulletin-pan-right-btn');
+  const viewport = document.getElementById('bulletin-chart-scroll-viewport');
+
+  if (panLeftBtn && viewport) {
+    panLeftBtn.addEventListener('click', () => {
+      viewport.scrollBy({ left: -Math.max(240, viewport.clientWidth * 0.55), behavior: 'smooth' });
+    });
+  }
+  if (panRightBtn && viewport) {
+    panRightBtn.addEventListener('click', () => {
+      viewport.scrollBy({ left: Math.max(240, viewport.clientWidth * 0.55), behavior: 'smooth' });
+    });
+  }
+
+  // Toggle Valores ON/OFF
+  const valBtn = document.getElementById('bulletin-toggle-values-btn');
+  if (valBtn) {
+    valBtn.addEventListener('click', () => {
+      if (!state.chartView) return;
+      state.chartView.showValues = !state.chartView.showValues;
+      updateBulletinChart();
+    });
+  }
+
+  // Toggle Expandir Altura
+  const hBtn = document.getElementById('bulletin-toggle-height-btn');
+  if (hBtn) {
+    hBtn.addEventListener('click', () => {
+      if (!state.chartView) return;
+      state.chartView.expandedHeight = !state.chartView.expandedHeight;
+      updateBulletinChart();
+    });
+  }
+
+  // Botão Resetar
+  const resetBtn = document.getElementById('bulletin-zoom-reset-btn');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      state.chartView = {
+        rangeMode: 'all',
+        selectedDateIso: '',
+        zoomPercent: 175,
+        showValues: true,
+        expandedHeight: false
+      };
+      if (viewport) viewport.scrollLeft = 0;
+      updateBulletinChart();
+    });
+  }
+
+  // Arrastar com o mouse (Click & Drag) e Zoom com Ctrl + Roda do Mouse no viewport
+  if (viewport) {
+    let isDown = false;
+    let startX = 0;
+    let scrollLeftStart = 0;
+
+    viewport.addEventListener('mousedown', (e) => {
+      isDown = true;
+      viewport.classList.remove('cursor-grab');
+      viewport.classList.add('cursor-grabbing');
+      startX = e.pageX - viewport.offsetLeft;
+      scrollLeftStart = viewport.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDown) return;
+      isDown = false;
+      viewport.classList.remove('cursor-grabbing');
+      viewport.classList.add('cursor-grab');
+    });
+
+    viewport.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - viewport.offsetLeft;
+      const walk = (x - startX) * 1.35;
+      viewport.scrollLeft = scrollLeftStart - walk;
+    });
+
+    viewport.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 25 : -25;
+        setZoom((state.chartView?.zoomPercent || 175) + delta);
+      }
+    }, { passive: false });
+  }
 }
 window.updateBulletinChart = updateBulletinChart;
 window.state = state;
