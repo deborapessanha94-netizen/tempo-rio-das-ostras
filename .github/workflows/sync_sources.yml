@@ -46,6 +46,7 @@ jobs:
         run: |
           python scripts/sync_jundia_10d.py || true
           python scripts/stations_service.py || true
+          python scripts/historico_estacoes_service.py || true
           python scripts/sync_data.py || true
           python scripts/inea_cheias_service.py || true
           python scripts/inmet_noticias_service.py || true

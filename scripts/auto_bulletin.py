@@ -2318,6 +2318,16 @@ def run_auto_bulletin_pipeline():
     except Exception as e:
         print(f"   [AVISO] Não foi possível gerar PDFs: {e}")
 
+    # Atualiza Histórico Diário e Horário das Estações em Formato de Planilha (XLSX / CSV / JSON)
+    try:
+        try:
+            from scripts.historico_estacoes_service import update_historical_spreadsheet
+        except ImportError:
+            from historico_estacoes_service import update_historical_spreadsheet
+        update_historical_spreadsheet()
+    except Exception as e:
+        print(f"   [AVISO] Não foi possível atualizar histórico de estações: {e}")
+
     print(">> [Auto-Bulletin] Rodada concluída com 100% de sucesso!")
     return True
 

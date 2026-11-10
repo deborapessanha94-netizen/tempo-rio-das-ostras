@@ -13093,7 +13093,8 @@ window.SUB_SECTIONS_CONFIG = {
     sections: [
       'section-chuva-resumo',
       'section-chuva-cards',
-      'section-chuva-tabela'
+      'section-chuva-tabela',
+      'section-chuva-historico'
     ]
   },
   rio: {
@@ -13352,10 +13353,12 @@ document.addEventListener('keydown', (e) => {
 // Inicialização do roteamento exclusivo no carregamento da página
 document.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
-  const initialTab = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'].includes(hash) ? hash : 'previsao';
+  const initialTab = (window.state && window.state.activeTab) ? window.state.activeTab : (['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'].includes(hash) ? hash : 'previsao');
   const initialSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[initialTab]) || window.SUB_SECTIONS_CONFIG[initialTab]?.default;
   setTimeout(() => {
-    window.switchSubSection(initialTab, initialSub);
+    const curTab = (window.state && window.state.activeTab) || initialTab;
+    const curSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[curTab]) || initialSub;
+    window.switchSubSection(curTab, curSub);
   }, 50);
 });
 
