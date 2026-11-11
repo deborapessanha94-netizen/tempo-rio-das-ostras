@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-11 17:53:06",
+  "coleta_iso": "2026-11-11 18:38:34",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Temporais no Sul e Sudeste: entenda a influência do El Niño nos eventos meteorológicos extremos",
+      "data": "11/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temporais-no-sul-e-sudeste-entenda-a-influência-do-el-niño-nos-eventos-meteorológicos-extremos",
+      "relevancia_sudeste": true
+    },
     {
       "titulo": "Inmet participa de coletiva sobre o período chuvoso e os efeitos do El Niño no DF",
       "data": "10/11/2026",
@@ -57,12 +63,6 @@
       "data": "05/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-6-e-sábado-7",
       "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de evento internacional sobre sustentabilidade espacial em Brasília",
-      "data": "05/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-evento-internacional-sobre-sustentabilidade-espacial-em-brasília",
-      "relevancia_sudeste": true
     }
   ]
 }
