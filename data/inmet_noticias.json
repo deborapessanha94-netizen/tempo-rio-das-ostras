@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-11 18:38:34",
+  "coleta_iso": "2026-11-11 19:15:33",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para quinta-feira (12) e sexta-feira (13)",
+      "data": "11/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-12-e-sexta-feira-13",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Temporais no Sul e Sudeste: entenda a influência do El Niño nos eventos meteorológicos extremos",
       "data": "11/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "INMET participa da celebração dos 56 anos do INPE em Cachoeira Paulista (SP)",
       "data": "06/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/inmet-participa-da-celebração-dos-56-anos-do-inpe-em-cachoeira-paulista-sp",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sexta-feira (6) e Sábado (7)",
-      "data": "05/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-6-e-sábado-7",
       "relevancia_sudeste": false
     }
   ]
