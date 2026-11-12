@@ -1,9 +1,21 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-12 19:33:02",
+  "coleta_iso": "2026-11-12 22:32:32",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "INMET participa de capacitação internacional sobre radares meteorológicos na Guatemala",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-radares-meteorológicos-na-guatemala",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa de capacitação internacional sobre inteligência artificial aplicada à meteorologia",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-inteligência-artificial-aplicada-à-meteorologia",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para sexta-feira (13) e sábado (14)",
       "data": "12/11/2026",
@@ -50,18 +62,6 @@
       "titulo": "Previsão para terça-feira (10) e quarta-feira (11)",
       "data": "09/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-10-e-quarta-feira-11",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET divulga previsão para semana de 9 a 16 de novembro de 2026",
-      "data": "09/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-9-a-16-de-novembro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Nota sobre os Destaques Meteorológicos de outubro de 2026",
-      "data": "09/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/nota-sobre-os-destaques-meteorológicos-de-outubro-de-2026",
       "relevancia_sudeste": false
     }
   ]
