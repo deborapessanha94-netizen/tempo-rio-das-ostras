@@ -1093,6 +1093,589 @@
       </div>
     </div>
 
+    <!-- Bloco Central: Hero Condições Atuais ao Vivo + Gráfico Horário 24h -->
+
+
+
+    <!-- SEÇÃO 1: TEMPO AGORA (HERO CARD) -->
+    <div id="section-hero-previsao" class="max-w-7xl mx-auto px-4 sm:px-6">
+
+
+
+
+
+
+        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO COMPACTO) -->
+
+
+
+      <div class="hero-card p-4 sm:p-5">
+
+
+
+          
+
+
+
+          <!-- Topo do Hero Compacto -->
+
+
+
+          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/20 pb-2.5 mb-3">
+
+
+
+            <div class="flex items-center gap-2">
+
+
+
+              <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
+
+
+
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div>
+
+
+
+                <div class="flex items-center gap-2 flex-wrap">
+                  <h1 class="text-sm sm:text-base font-bold text-black dark:text-white tracking-tight leading-none">
+                    Rio das Ostras, RJ - Tempo agora
+                  </h1>
+                  <span id="hero-estacao-ano" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shadow-2xs" title="Estação do Ano Vigente no Hemisfério Sul">
+                    <span>🌸</span>
+                    <span id="hero-estacao-txt">Estação: Primavera</span>
+                  </span>
+                </div>
+
+                <span class="text-[11px] font-normal text-black dark:text-slate-300">Região dos Lagos • Costa do Sol • Estação Telemétrica Sede</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <div class="flex items-center gap-1.5 flex-wrap justify-end">
+                <span id="hero-alert-pill" class="badge-title-orange text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase shadow-xs">
+                  Alerta Oficial Vigente
+                </span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
+                  24H
+                </span>
+              </div>
+
+
+
+          </div>
+
+
+
+
+
+
+
+          <!-- Centro do Hero: Temperatura e Condição do Tempo Compactos -->
+
+
+
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
+
+
+
+            
+
+
+
+            <div class="space-y-1">
+
+
+
+              <div class="flex items-baseline gap-2.5">
+
+
+
+                <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">29°</span>
+
+
+
+                <div class="flex items-center gap-1.5">
+
+
+
+                  <span class="text-xl font-bold text-black leading-none">C</span>
+
+
+
+                  <span id="hero-sensacao" class="inline-flex items-center gap-1 badge-title-orange px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block" title="Sensação térmica em tempo real"><i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação em Tempo Real: 33°C</span></span>
+
+
+
+                </div>
+
+
+
+              </div>
+
+
+
+              
+
+
+
+              <div class="space-y-1">
+
+
+
+                <!-- Condição do Céu no Momento -->
+
+                <div class="flex items-center gap-1.5 flex-wrap">
+
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800/60 shadow-2xs">
+
+                    <i data-lucide="eye" class="w-3 h-3 text-orange-600 dark:text-orange-400"></i>
+
+                    <span>Céu no Momento</span>
+
+                  </span>
+
+                  <span id="hero-sky-condition" class="text-xs font-semibold text-black dark:text-slate-200">
+
+                    Céu Carregado com Trovoadas e Raios
+
+                  </span>
+
+                </div>
+
+
+
+                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black dark:text-white leading-snug">
+
+
+
+                  Muitas nuvens com pancadas de chuva e trovoadas
+
+
+
+                </h3>
+
+
+
+                <p id="hero-subcondition" class="text-xs font-medium text-black dark:text-slate-300">
+
+
+
+                  Chuva prevista: 7.3 mm (Até 50 mm em tempestade) • Rajadas 64 km/h na orla marítima
+
+
+
+                </p>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <div class="flex items-center gap-2.5 sm:gap-3.5 justify-center sm:justify-end shrink-0 flex-wrap">
+
+              <!-- Mini-Mapa Interativo do RJ com Localização de Rio das Ostras -->
+              <button id="btn-hero-mapa-rj" type="button" class="group relative flex items-center p-1 sm:p-1.5 rounded-2xl bg-white/95 dark:bg-[#131d35]/95 border border-[#cbd5e1] dark:border-slate-800 hover:border-[#f07a53] dark:hover:border-[#f07a53] shadow-xs hover:shadow-md transition cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#f07a53]/40" title="Ver localização geográfica de Rio das Ostras no Mapa do Estado do RJ">
+                <div class="relative w-28 sm:w-36 aspect-[571/413] overflow-hidden rounded-xl bg-slate-50/80 dark:bg-[#0b1322] border border-slate-200/90 dark:border-slate-800/90 flex items-center justify-center p-0.5">
+                  <!-- Contorno do RJ (Light & Dark) -->
+                  <img src="img/mapa_rj_light.png" alt="Mapa do Estado do Rio de Janeiro" class="w-full h-full object-contain dark:hidden transition-transform duration-300 group-hover:scale-105 pointer-events-none">
+                  <img src="img/mapa_rj_dark.png" alt="Mapa do Estado do Rio de Janeiro" class="w-full h-full object-contain hidden dark:block transition-transform duration-300 group-hover:scale-105 pointer-events-none">
+                  
+                  <!-- Ponto Pulsante Indicando Rio das Ostras (78.8% X, 60.0% Y) -->
+                  <div class="absolute" style="left: 78.8%; top: 60.0%; transform: translate(-50%, -50%); pointer-events: none;">
+                    <span class="relative flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-80"></span>
+                      <span class="relative inline-flex rounded-full h-2 sm:h-2.5 w-2 sm:w-2.5 bg-orange-600 border border-white dark:border-slate-900 shadow-xs"></span>
+                    </span>
+                  </div>
+
+                  <!-- Tag Rio das Ostras -->
+                  <span class="absolute bottom-1 right-1 px-1 sm:px-1.5 py-0.5 rounded text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight bg-orange-500/95 dark:bg-orange-600/95 text-white shadow-xs pointer-events-none flex items-center gap-0.5">
+                    <i data-lucide="map-pin" class="w-2 h-2 sm:w-2.5 sm:h-2.5"></i>
+                    <span>Rio das Ostras</span>
+                  </span>
+
+                  <!-- Badge Superior RJ & Ícone Zoom -->
+                  <span class="absolute top-1 left-1 px-1 py-0.5 rounded text-[7px] sm:text-[7.5px] font-bold text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pointer-events-none flex items-center gap-0.5 group-hover:text-orange-600 transition">
+                    <i data-lucide="maximize-2" class="w-2 h-2 text-orange-600 dark:text-orange-400"></i>
+                    <span>RJ</span>
+                  </span>
+                </div>
+              </button>
+
+              <!-- Medalhão do Ícone Meteorológico da Previsão -->
+              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-[#192439] text-black dark:text-white border-2 border-[#f07a53] shadow-sm">
+                <i data-lucide="cloud-lightning" class="w-8 h-8 sm:w-9 sm:h-9 text-amber-500 dark:text-amber-400"></i>
+              </div>
+
+            </div>
+
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+          <!-- Base do Hero: Grade de 6 Métricas Essenciais Compactas -->
+
+
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
+
+
+
+            
+
+
+
+            <!-- 1. Chuva -->
+
+
+
+            <div class="metric-chip">
+
+
+
+              <div class="metric-icon-wrap metric-icon-coral">
+
+
+
+                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div class="min-w-0">
+
+
+
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
+
+
+
+                <span id="hero-chip-chuva-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
+
+
+
+                <span id="hero-chip-chuva-sub" class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- 2. Vento -->
+
+
+
+            <div class="metric-chip">
+
+
+
+              <div class="metric-icon-wrap metric-icon-slate">
+
+
+
+                <i data-lucide="wind" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div class="min-w-0">
+
+
+
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
+
+
+
+                <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
+
+
+
+                <span id="hero-chip-vento-sub" class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- 3. Umidade -->
+
+
+
+            <div class="metric-chip">
+
+
+
+              <div class="metric-icon-wrap metric-icon-coral">
+
+
+
+                <i data-lucide="droplets" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div class="min-w-0">
+
+
+
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
+
+
+
+                <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
+
+
+
+                <span id="hero-chip-umid-sub" class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- 4. Mar / Ondas -->
+
+
+
+            <div class="metric-chip">
+
+
+
+              <div class="metric-icon-wrap metric-icon-sandstone">
+
+
+
+                <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div class="min-w-0">
+
+
+
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
+
+
+
+                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">0.7 a 1.2 m</span>
+
+
+
+                <span id="hero-chip-mar-sub" class="text-[9.5px] font-medium text-black">Moderado</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- 5. Pressão -->
+
+
+
+            <div class="metric-chip">
+
+
+
+              <div class="metric-icon-wrap metric-icon-slate">
+
+
+
+                <i data-lucide="gauge" class="w-3.5 h-3.5 text-black"></i>
+
+
+
+              </div>
+
+
+
+              <div class="min-w-0">
+
+
+
+                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
+
+
+
+                <span id="hero-chip-press-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
+
+
+
+                <span id="hero-chip-press-sub" class="text-[9.5px] font-medium text-black">Estável</span>
+
+
+
+              </div>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- 6. Índice UV -->
+            <a href="https://www.wunderground.com/dashboard/pws/IRIODA17" target="_blank" rel="noopener noreferrer" class="metric-chip hover:border-amber-400 transition cursor-pointer" title="Índice UV em Tempo Real (Estação IRIODA17 - Praia da Tartaruga). Clique para ver telemetria no Weather Underground.">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Índice UV</span>
+                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black dark:text-white font-mono block">0 - Baixo</span>
+                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300">Tempo real • IRIODA17</span>
+              </div>
+            </a>
+
+            <!-- 7. Nascer e Pôr do Sol (Com Emojis e Ícone Lucide) -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-coral">
+                <i data-lucide="sunrise" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Nascer & Pôr do Sol</span>
+                <span id="hero-chip-sol-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌅 05:04 • 🌇 17:57</span>
+                <span id="hero-chip-sol-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">12h 53m de Sol</span>
+              </div>
+            </div>
+
+            <!-- 8. Fase da Lua do Dia (Com Emoji e Ícone Lucide) -->
+            <div class="metric-chip">
+              <div class="metric-icon-wrap metric-icon-slate">
+                <i data-lucide="moon" class="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Fase da Lua</span>
+                <span id="hero-chip-lua-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌕 Lua Cheia</span>
+                <span id="hero-chip-lua-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">Ilum. 100% • Noite</span>
+              </div>
+            </div>
+
+
+
+
+
+
+
+          </div>
+
+
+
+
+
+
+
+          <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
+
+
+
+          <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
+            <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 5 minutos">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span id="hero-sync-label">Atualização a cada 5 min (Tempo Real)</span>
+              </span>
+            </div>
+          </div>
+
+
+
+
+
+
+
+        </div>
+    </div>
 
 
 
@@ -1103,7 +1686,9 @@
 
 
 
-        <!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
+
+
+<!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
     <!-- SEÇÃO 2: GRÁFICOS DE TENDÊNCIA 72H -->
     <div id="section-graficos-tendencia" class="max-w-7xl mx-auto px-4 sm:px-6 hidden">
       <div class="modern-card p-5 sm:p-6 space-y-4">
