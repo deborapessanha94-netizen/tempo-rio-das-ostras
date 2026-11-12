@@ -46,42 +46,6 @@
       "chuva_30d": 44.0,
       "chuva_4h": 0.0,
       "chuva_96h": 0.0,
-      "datai": 202611021830,
-      "datetime_brt": "2026-11-02T15:30:00-03:00",
-      "nivel": 1.39
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 44.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611021900,
-      "datetime_brt": "2026-11-02T16:00:00-03:00",
-      "nivel": 1.39
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 44.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611021930,
-      "datetime_brt": "2026-11-02T16:30:00-03:00",
-      "nivel": 1.39
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 44.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
       "datai": 202611022000,
       "datetime_brt": "2026-11-02T17:00:00-03:00",
       "nivel": 1.39
@@ -5713,6 +5677,42 @@
       "datai": 202611121430,
       "datetime_brt": "2026-11-12T11:30:00-03:00",
       "nivel": 1.38
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 64.6,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611121500,
+      "datetime_brt": "2026-11-12T12:00:00-03:00",
+      "nivel": 1.38
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 64.6,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611121530,
+      "datetime_brt": "2026-11-12T12:30:00-03:00",
+      "nivel": 1.37
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 64.6,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611121600,
+      "datetime_brt": "2026-11-12T13:00:00-03:00",
+      "nivel": 1.37
     }
   ],
   "estacao": "2241036",
