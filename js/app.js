@@ -38,8 +38,8 @@ import {
 
   openSocialModalVento,
   openSocialModalSemanal
-} from './social-cards.js?v=205';
-import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=205';
+} from './social-cards.js?v=210';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=210';
 
 
 
@@ -219,7 +219,7 @@ import {
 
 
 
-} from './api.js?v=205';
+} from './api.js?v=210';
 
 
 
@@ -227,7 +227,7 @@ import {
 
 
 
-import { renderBulletinChart } from './charts.js?v=205';
+import { renderBulletinChart } from './charts.js?v=210';
 
 
 
@@ -6545,34 +6545,42 @@ function syncBulletinZoomToolbarUI(periodLabel) {
   if (!state.chartView) return;
   const zp = Number(state.chartView.zoomPercent) || 175;
 
-  // Botões de período (alto contraste preto sobre âmbar quando ativo)
-  document.querySelectorAll('.bulletin-range-btn').forEach(btn => {
-    const r = btn.getAttribute('data-range');
-    const isActive = !state.chartView.selectedDateIso && r === state.chartView.rangeMode;
-    if (isActive) {
-      btn.className = 'bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c] shadow-2xs';
+  // Caixinha de Seleção de Período
+  const periodSelect = document.getElementById('bulletin-period-select');
+  if (periodSelect) {
+    if (state.chartView.selectedDateIso) {
+      periodSelect.value = 'all';
     } else {
-      btn.className = 'bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+      periodSelect.value = state.chartView.rangeMode || 'all';
     }
-  });
+  }
 
-  // Botões de preset de zoom
-  document.querySelectorAll('.bulletin-zoom-preset-btn').forEach(btn => {
-    const val = Number(btn.getAttribute('data-zoom'));
-    if (val === zp) {
-      btn.className = 'bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-[#fed7aa] text-black border border-[#ea580c] shadow-2xs transition-colors';
-    } else {
-      btn.className = 'bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-bold text-[#475569] hover:bg-[#f1f5f9] transition-colors';
+  // Caixinha de Seleção de Dia Específico
+  const daySelect = document.getElementById('bulletin-day-filter-select');
+  if (daySelect) {
+    daySelect.value = state.chartView.selectedDateIso || '';
+  }
+
+  // Caixinha de Seleção de Zoom
+  const zoomSelect = document.getElementById('bulletin-zoom-select');
+  if (zoomSelect) {
+    const existingOption = Array.from(zoomSelect.options).find(o => Number(o.value) === zp);
+    if (!existingOption) {
+      const newOpt = document.createElement('option');
+      newOpt.value = String(zp);
+      newOpt.textContent = `${zp}%`;
+      zoomSelect.appendChild(newOpt);
     }
-  });
+    zoomSelect.value = String(zp);
+  }
 
   // Botão Valores ON/OFF
   const valBtn = document.getElementById('bulletin-toggle-values-btn');
   if (valBtn) {
     valBtn.textContent = state.chartView.showValues ? 'Valores: ON' : 'Valores: OFF';
     valBtn.className = state.chartView.showValues
-      ? 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#ffedd5] text-black border-[#ea580c] hover:bg-[#fed7aa]'
-      : 'px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+      ? 'px-3 py-1.5 rounded-xl text-xs font-black border-2 transition-all bg-[#ffedd5] text-black border-[#ea580c] hover:bg-[#fed7aa] shadow-2xs cursor-pointer'
+      : 'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white dark:bg-slate-900 text-[#475569] dark:text-slate-300 border-[#cbd5e1] dark:border-slate-600 hover:bg-[#f1f5f9] dark:hover:bg-slate-800 shadow-2xs cursor-pointer';
   }
 
   // Botão Expandir Altura
@@ -6580,8 +6588,8 @@ function syncBulletinZoomToolbarUI(periodLabel) {
   if (hBtn) {
     hBtn.textContent = state.chartView.expandedHeight ? 'Altura Normal ↕' : 'Expandir Altura ↕';
     hBtn.className = state.chartView.expandedHeight
-      ? 'px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c]'
-      : 'px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]';
+      ? 'px-3 py-1.5 rounded-xl text-xs font-black border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c] shadow-2xs cursor-pointer'
+      : 'px-3 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white dark:bg-slate-900 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-600 hover:bg-[#f1f5f9] dark:hover:bg-slate-800 shadow-2xs cursor-pointer';
   }
 
   // Rótulo de status
@@ -6613,13 +6621,18 @@ function initBulletinChartZoomControls() {
     updateBulletinChart();
   };
 
-  // Botões de Período (Recorte Rápido)
-  document.querySelectorAll('.bulletin-range-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  // Caixinha de Seleção de Período
+  const periodSelect = document.getElementById('bulletin-period-select');
+  const daySelect = document.getElementById('bulletin-day-filter-select');
+  const viewport = document.getElementById('bulletin-chart-scroll-viewport');
+
+  if (periodSelect) {
+    periodSelect.addEventListener('change', () => {
       if (!state.chartView) return;
-      const range = btn.getAttribute('data-range') || 'all';
+      const range = periodSelect.value || 'all';
       state.chartView.rangeMode = range;
       state.chartView.selectedDateIso = '';
+      if (daySelect) daySelect.value = '';
       if (range === 'first8') {
         state.chartView.zoomPercent = 100;
       } else if (range === 'first16' || range === 'last16') {
@@ -6627,14 +6640,12 @@ function initBulletinChartZoomControls() {
       } else {
         state.chartView.zoomPercent = 175;
       }
-      const viewport = document.getElementById('bulletin-chart-scroll-viewport');
       if (viewport) viewport.scrollLeft = 0;
       updateBulletinChart();
     });
-  });
+  }
 
-  // Seletor de Dia Específico
-  const daySelect = document.getElementById('bulletin-day-filter-select');
+  // Caixinha de Seleção de Dia Específico
   if (daySelect) {
     daySelect.addEventListener('change', () => {
       if (!state.chartView) return;
@@ -6645,21 +6656,21 @@ function initBulletinChartZoomControls() {
       } else {
         state.chartView.zoomPercent = 175;
       }
-      const viewport = document.getElementById('bulletin-chart-scroll-viewport');
       if (viewport) viewport.scrollLeft = 0;
       updateBulletinChart();
     });
   }
 
-  // Botões Preset de Zoom (100%, 175%, 250%, 325%)
-  document.querySelectorAll('.bulletin-zoom-preset-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const z = Number(btn.getAttribute('data-zoom')) || 175;
+  // Caixinha de Seleção de Nível de Zoom
+  const zoomSelect = document.getElementById('bulletin-zoom-select');
+  if (zoomSelect) {
+    zoomSelect.addEventListener('change', () => {
+      const z = Number(zoomSelect.value) || 175;
       setZoom(z);
     });
-  });
+  }
 
-  // Zoom - / Zoom +
+  // Zoom - / Zoom + (Stepper de 25%)
   const zoomOutBtn = document.getElementById('bulletin-zoom-out-btn');
   if (zoomOutBtn) {
     zoomOutBtn.addEventListener('click', () => {
@@ -6676,7 +6687,6 @@ function initBulletinChartZoomControls() {
   // Botões Pan ◀ / ▶
   const panLeftBtn = document.getElementById('bulletin-pan-left-btn');
   const panRightBtn = document.getElementById('bulletin-pan-right-btn');
-  const viewport = document.getElementById('bulletin-chart-scroll-viewport');
 
   if (panLeftBtn && viewport) {
     panLeftBtn.addEventListener('click', () => {
@@ -7271,7 +7281,7 @@ function setupPWA() {
 
 
 
-    navigator.serviceWorker.register('./sw.js?v=205').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=210').catch(() => {});
 
 
 

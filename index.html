@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=209">
+  <link rel="stylesheet" href="css/styles.css?v=210">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=209" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=210" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -1752,89 +1752,86 @@
 
 
           </div>
+          <!-- Barra de Zoom e Recorte Temporal com Caixinhas de Seleção Otimizadas (v210) -->
+          <div id="bulletin-chart-zoom-toolbar" class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-[#f8fafc] dark:bg-slate-800/90 border border-[#cbd5e1] dark:border-slate-700 rounded-2xl p-2.5 sm:p-3 shadow-2xs">
+            <!-- Janela de Período & Filtro por Dia com Caixinhas de Seleção -->
+            <div class="flex flex-wrap items-center gap-2.5 sm:gap-3">
+              <!-- Caixinha de Seleção de Período -->
+              <div class="flex items-center gap-1.5">
+                <label for="bulletin-period-select" class="text-[11px] font-extrabold uppercase tracking-wider text-[#334155] dark:text-slate-200 flex items-center gap-1">
+                  <i data-lucide="calendar-range" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                  <span>Período:</span>
+                </label>
+                <select id="bulletin-period-select" aria-label="Selecionar período do gráfico" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 text-[#0f172a] dark:text-white border border-[#cbd5e1] dark:border-slate-600 hover:border-[#ea580c] focus:outline-none focus:border-[#ea580c] cursor-pointer shadow-2xs">
+                  <option value="all">8 Dias (32 Turnos)</option>
+                  <option value="first16">Próx. 4 Dias (16 Turnos)</option>
+                  <option value="first8">Próx. 48h (8 Turnos)</option>
+                  <option value="last16">Dias 5 a 8 (16 Turnos)</option>
+                </select>
+              </div>
 
-
-
-
-
-
-
-                              <!-- Barra de Zoom, Recorte Temporal e Desembaraçamento Visual (v201 - Todos os Gráficos) -->
-          <div id="bulletin-chart-zoom-toolbar" class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-xl p-2.5 sm:px-3.5">
-            <!-- Janela de Período & Filtro por Dia -->
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#334155] flex items-center gap-1 mr-1">
-                <i data-lucide="calendar-range" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                Período:
-              </span>
-              <button type="button" class="bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#fed7aa] text-black border-[#ea580c] shadow-2xs" data-range="all" title="Exibir todos os 8 dias (32 turnos)">
-                8 Dias (32 Turnos)
-              </button>
-              <button type="button" class="bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]" data-range="first16" title="Focar nos primeiros 4 dias (16 turnos)">
-                Próx. 4 Dias
-              </button>
-              <button type="button" class="bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]" data-range="first8" title="Dar zoom nas próximas 48 horas (8 turnos)">
-                Próx. 48h
-              </button>
-              <button type="button" class="bulletin-range-btn px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]" data-range="last16" title="Focar nos dias 5 a 8 da previsão">
-                Dias 5 a 8
-              </button>
-              <div class="flex items-center gap-1 ml-0.5">
-                <select id="bulletin-day-filter-select" aria-label="Filtrar dia específico no gráfico" class="px-2 py-1 rounded-lg text-[11px] font-bold bg-white text-[#0f172a] border border-[#cbd5e1] focus:outline-none focus:border-[#ea580c] cursor-pointer">
+              <!-- Caixinha de Seleção de Dia Específico -->
+              <div class="flex items-center gap-1.5">
+                <label for="bulletin-day-filter-select" class="text-[11px] font-extrabold uppercase tracking-wider text-[#334155] dark:text-slate-200 flex items-center gap-1">
+                  <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+                  <span>Dia:</span>
+                </label>
+                <select id="bulletin-day-filter-select" aria-label="Filtrar dia específico no gráfico" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-white dark:bg-slate-900 text-[#0f172a] dark:text-white border border-[#cbd5e1] dark:border-slate-600 hover:border-[#ea580c] focus:outline-none focus:border-[#ea580c] cursor-pointer shadow-2xs">
                   <option value="">Dia específico (Todos)</option>
                 </select>
               </div>
             </div>
 
-            <!-- Controles de Zoom Horizontal, Valores e Altura -->
-            <div class="flex flex-wrap items-center gap-1.5">
-              <span class="text-[11px] font-extrabold uppercase tracking-wider text-[#334155] flex items-center gap-1 mr-0.5">
-                <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-                Zoom:
-              </span>
-              <div class="inline-flex items-center bg-white border border-[#cbd5e1] rounded-lg p-0.5 shadow-2xs">
-                <button type="button" id="bulletin-zoom-out-btn" class="px-2 py-0.5 rounded-md text-xs font-extrabold text-[#0f172a] hover:bg-[#f1f5f9] transition-colors" title="Diminuir Zoom (-25%)">
-                  −
-                </button>
-                <button type="button" class="bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-bold text-[#475569] hover:bg-[#f1f5f9] transition-colors" data-zoom="100" title="100% (Compacto na tela)">
-                  100%
-                </button>
-                <button type="button" class="bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-extrabold bg-[#fed7aa] text-black border border-[#ea580c] shadow-2xs transition-colors" data-zoom="175" title="175% (Espaçado ideal sem embolar)">
-                  175%
-                </button>
-                <button type="button" class="bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-bold text-[#475569] hover:bg-[#f1f5f9] transition-colors" data-zoom="250" title="250% (Zoom detalhado)">
-                  250%
-                </button>
-                <button type="button" class="bulletin-zoom-preset-btn px-2 py-0.5 rounded-md text-[11px] font-bold text-[#475569] hover:bg-[#f1f5f9] transition-colors" data-zoom="325" title="325% (Zoom máximo por turno)">
-                  325%
-                </button>
-                <button type="button" id="bulletin-zoom-in-btn" class="px-2 py-0.5 rounded-md text-xs font-extrabold text-[#0f172a] hover:bg-[#f1f5f9] transition-colors" title="Aumentar Zoom (+25%)">
-                  +
-                </button>
+            <!-- Controles de Zoom em Caixinha de Seleção, Navegação e Ações -->
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Caixinha de Seleção de Zoom com Stepper (-) e (+) -->
+              <div class="flex items-center gap-1.5">
+                <label for="bulletin-zoom-select" class="text-[11px] font-extrabold uppercase tracking-wider text-[#334155] dark:text-slate-200 flex items-center gap-1">
+                  <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                  <span>Zoom:</span>
+                </label>
+                <div class="inline-flex items-center bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-600 rounded-xl p-0.5 shadow-2xs">
+                  <button type="button" id="bulletin-zoom-out-btn" class="px-2 py-1 rounded-lg text-xs font-black text-[#0f172a] dark:text-white hover:bg-[#f1f5f9] dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Diminuir Zoom (-25%)">
+                    −
+                  </button>
+                  <select id="bulletin-zoom-select" aria-label="Selecionar nível de zoom" class="px-2 py-1 text-xs font-bold bg-transparent text-[#0f172a] dark:text-white border-none focus:outline-none cursor-pointer">
+                    <option value="100">100% (Compacto)</option>
+                    <option value="125">125%</option>
+                    <option value="150">150%</option>
+                    <option value="175" selected>175% (Ideal)</option>
+                    <option value="200">200%</option>
+                    <option value="250">250% (Detalhado)</option>
+                    <option value="300">300%</option>
+                    <option value="350">350% (Máximo)</option>
+                  </select>
+                  <button type="button" id="bulletin-zoom-in-btn" class="px-2 py-1 rounded-lg text-xs font-black text-[#0f172a] dark:text-white hover:bg-[#f1f5f9] dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Aumentar Zoom (+25%)">
+                    +
+                  </button>
+                </div>
               </div>
 
               <!-- Navegação Horizontal Rápida (Pan) -->
-              <div class="inline-flex items-center bg-white border border-[#cbd5e1] rounded-lg p-0.5 shadow-2xs" title="Deslizar gráfico para a esquerda ou direita">
-                <button type="button" id="bulletin-pan-left-btn" class="px-2 py-0.5 rounded-md text-[11px] font-bold text-[#0f172a] hover:bg-[#f1f5f9] transition-colors" title="Rolar para turnos anteriores">
+              <div class="inline-flex items-center bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-600 rounded-xl p-0.5 shadow-2xs" title="Deslizar gráfico para a esquerda ou direita">
+                <button type="button" id="bulletin-pan-left-btn" class="px-2.5 py-1 rounded-lg text-xs font-black text-[#0f172a] dark:text-white hover:bg-[#f1f5f9] dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Rolar para turnos anteriores">
                   ◀
                 </button>
-                <button type="button" id="bulletin-pan-right-btn" class="px-2 py-0.5 rounded-md text-[11px] font-bold text-[#0f172a] hover:bg-[#f1f5f9] transition-colors" title="Rolar para próximos turnos">
+                <button type="button" id="bulletin-pan-right-btn" class="px-2.5 py-1 rounded-lg text-xs font-black text-[#0f172a] dark:text-white hover:bg-[#f1f5f9] dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Rolar para próximos turnos">
                   ▶
                 </button>
               </div>
 
               <!-- Toggle Rótulos de Valores nos Pontos -->
-              <button type="button" id="bulletin-toggle-values-btn" class="px-2.5 py-1 rounded-lg text-[11px] font-extrabold border-2 transition-all bg-[#ffedd5] text-black border-[#ea580c] hover:bg-[#fed7aa]" title="Mostrar ou ocultar os números diretamente em cima dos pontos e barras">
+              <button type="button" id="bulletin-toggle-values-btn" class="px-3 py-1.5 rounded-xl text-xs font-black border-2 transition-all bg-[#ffedd5] text-black border-[#ea580c] hover:bg-[#fed7aa] shadow-2xs cursor-pointer" title="Mostrar ou ocultar os números diretamente em cima dos pontos e barras">
                 Valores: ON
               </button>
 
               <!-- Toggle Expandir Altura Vertical -->
-              <button type="button" id="bulletin-toggle-height-btn" class="px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all bg-white text-[#1e293b] border-[#cbd5e1] hover:bg-[#f1f5f9]" title="Aumentar a altura vertical do gráfico para leitura mais ampla">
+              <button type="button" id="bulletin-toggle-height-btn" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition-all bg-white dark:bg-slate-900 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-600 hover:bg-[#f1f5f9] dark:hover:bg-slate-800 shadow-2xs cursor-pointer" title="Aumentar a altura vertical do gráfico para leitura mais ampla">
                 Expandir Altura ↕
               </button>
 
               <!-- Resetar Visualização -->
-              <button type="button" id="bulletin-zoom-reset-btn" class="px-2 py-1 rounded-lg text-[11px] font-bold border border-[#cbd5e1] bg-white text-[#475569] hover:text-black hover:bg-[#f1f5f9] transition-colors" title="Restaurar visualização padrão">
+              <button type="button" id="bulletin-zoom-reset-btn" class="px-3 py-1.5 rounded-xl text-xs font-bold border border-[#cbd5e1] dark:border-slate-600 bg-white dark:bg-slate-900 text-[#475569] dark:text-slate-300 hover:text-black dark:hover:text-white hover:bg-[#f1f5f9] dark:hover:bg-slate-800 transition-colors shadow-2xs cursor-pointer" title="Restaurar visualização padrão">
                 Resetar
               </button>
             </div>
@@ -8899,7 +8896,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=209" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=210" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -10715,8 +10712,8 @@
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=209"></script>
-  <script type="module" src="js/app.js?v=209"></script>
+  <script src="js/historico_planilha.js?v=210"></script>
+  <script type="module" src="js/app.js?v=210"></script>
 
 
 
