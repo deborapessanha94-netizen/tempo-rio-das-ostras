@@ -40,9 +40,9 @@
     document.querySelectorAll('.panorama-mode-btn').forEach(btn => {
       const bMode = btn.getAttribute('data-mode');
       if (bMode === mode) {
-        btn.className = 'panorama-mode-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black border-2 transition-all bg-[#FF8244] text-black border-[#FF8244] shadow-md cursor-pointer flex items-center gap-1.5';
+        btn.className = 'panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black border-2 transition-all bg-[#ffebe4] text-black border-[#f07a53] shadow-xs cursor-pointer flex items-center gap-1.5';
       } else {
-        btn.className = 'panorama-mode-btn px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5';
+        btn.className = 'panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-white dark:bg-slate-800 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-700 hover:bg-[#f1f5f9] dark:hover:bg-slate-700 shadow-2xs cursor-pointer flex items-center gap-1.5';
       }
     });
 
@@ -85,7 +85,7 @@
 
     const fileName = PANORAMA_STATE.slideFiles[idx - 1];
     const title = PANORAMA_STATE.slideTitles[idx - 1];
-    const path = `img/panorama/feed/${fileName}?v=211`;
+    const path = `img/panorama/feed/${fileName}?v=212`;
 
     if (imgEl) {
       imgEl.src = path;
@@ -101,9 +101,9 @@
     // Atualiza bolinhas indicadoras
     document.querySelectorAll('.panorama-feed-dot').forEach((dot, dIdx) => {
       if (dIdx + 1 === idx) {
-        dot.className = 'panorama-feed-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer';
+        dot.className = 'panorama-feed-dot w-6 h-2.5 rounded-full bg-[#ea580c] transition-all cursor-pointer';
       } else {
-        dot.className = 'panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer';
+        dot.className = 'panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer';
       }
     });
   };
@@ -127,7 +127,7 @@
 
     const fileName = PANORAMA_STATE.slideFiles[idx - 1];
     const title = PANORAMA_STATE.slideTitles[idx - 1];
-    const path = `img/panorama/stories/${fileName}?v=211`;
+    const path = `img/panorama/stories/${fileName}?v=212`;
 
     if (imgEl) {
       imgEl.src = path;
@@ -143,9 +143,9 @@
     // Atualiza bolinhas indicadoras
     document.querySelectorAll('.panorama-story-dot').forEach((dot, dIdx) => {
       if (dIdx + 1 === idx) {
-        dot.className = 'panorama-story-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer';
+        dot.className = 'panorama-story-dot w-6 h-2.5 rounded-full bg-[#ea580c] transition-all cursor-pointer';
       } else {
-        dot.className = 'panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer';
+        dot.className = 'panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer';
       }
     });
   };

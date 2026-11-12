@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=211">
+  <link rel="stylesheet" href="css/styles.css?v=212">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=211" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=212" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -1064,625 +1064,33 @@
 
   <div id="view-tab-previsao" class="app-tab-view space-y-6">
 
-    <!-- BANNER DE DESTAQUE: RETROSPECTIVA / PANORAMA MENSAL OUTUBRO 2026 (v211) -->
+    <!-- BANNER DE DESTAQUE: RETROSPECTIVA / PANORAMA MENSAL OUTUBRO 2026 (v212) -->
     <div id="banner-panorama-mensal" class="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
-      <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-[#1D1F26] via-[#283964] to-[#1D1F26] text-white border-2 border-[#FF8244]/60 shadow-lg flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+      <div class="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 text-[#0f172a] dark:text-white border-2 border-[#f07a53] shadow-xs flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#FF8244]/20 border border-[#FF8244] flex items-center justify-center shrink-0">
-            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6 text-[#FF8244]"></i>
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#ffebe4] dark:bg-amber-950/40 border border-[#f07a53] flex items-center justify-center shrink-0 shadow-xs">
+            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6 text-[#ea580c] dark:text-amber-400"></i>
           </div>
           <div>
             <div class="flex items-center gap-2 flex-wrap">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FF8244] text-black">Retrospectiva Oficial</span>
-              <span class="text-xs font-bold text-[#CDDAEE]">Rio das Ostras, RJ</span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#ffebe4] dark:bg-amber-950/60 text-[#c2410c] dark:text-amber-300 border border-[#f07a53]/40">Retrospectiva Oficial</span>
+              <span class="text-xs font-bold text-[#475569] dark:text-slate-300">Rio das Ostras, RJ</span>
             </div>
-            <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight mt-0.5">
+            <h2 class="text-sm sm:text-base font-extrabold text-[#0f172a] dark:text-white tracking-tight mt-0.5">
               Panorama Mensal do Clima • Outubro 2026
             </h2>
-            <p class="text-xs text-[#CDDAEE] hidden sm:block">
+            <p class="text-xs text-[#475569] dark:text-slate-300 hidden sm:block">
               Pico de 410 mm na Região Rural, 25 dias chuvosos, rajadas de 62 km/h e ranking de todas as estações.
             </p>
           </div>
         </div>
         <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
-          <button onclick="handleNavTabClick('panorama', event)" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
-            <i data-lucide="play" class="w-4 h-4 fill-black"></i>
+          <button onclick="handleNavTabClick('panorama', event)" class="flex-1 md:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <i data-lucide="play" class="w-4 h-4 fill-black text-black"></i>
             <span>Ver Vídeo & Imagens</span>
           </button>
         </div>
       </div>
-    </div>
-
-
-
-
-
-
-
-
-
-    <!-- Bloco Central: Hero Condições Atuais ao Vivo + Gráfico Horário 24h -->
-
-
-
-    <!-- SEÇÃO 1: TEMPO AGORA (HERO CARD) -->
-    <div id="section-hero-previsao" class="max-w-7xl mx-auto px-4 sm:px-6">
-
-
-
-
-
-
-        <!-- CARD HERO: CONDIÇÕES ATUAIS EM RIO DAS OSTRAS (DESIGN NÓRDICO CERÂMICO COMPACTO) -->
-
-
-
-      <div class="hero-card p-4 sm:p-5">
-
-
-
-          
-
-
-
-          <!-- Topo do Hero Compacto -->
-
-
-
-          <div class="flex items-center justify-between gap-2 border-b border-[#dfb992]/20 pb-2.5 mb-3">
-
-
-
-            <div class="flex items-center gap-2">
-
-
-
-              <div class="medallion-title-orange w-7 h-7 rounded-lg flex items-center justify-center text-black shadow-xs">
-
-
-
-                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div>
-
-
-
-                <div class="flex items-center gap-2 flex-wrap">
-                  <h1 class="text-sm sm:text-base font-bold text-black dark:text-white tracking-tight leading-none">
-                    Rio das Ostras, RJ - Tempo agora
-                  </h1>
-                  <span id="hero-estacao-ano" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60 shadow-2xs" title="Estação do Ano Vigente no Hemisfério Sul">
-                    <span>🌸</span>
-                    <span id="hero-estacao-txt">Estação: Primavera</span>
-                  </span>
-                </div>
-
-                <span class="text-[11px] font-normal text-black dark:text-slate-300">Região dos Lagos • Costa do Sol • Estação Telemétrica Sede</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <div class="flex items-center gap-1.5 flex-wrap justify-end">
-                <span id="hero-alert-pill" class="badge-title-orange text-[10.5px] px-2 py-0.5 rounded-full font-bold uppercase shadow-xs">
-                  Alerta Oficial Vigente
-                </span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase bg-white text-black border border-[#cbd5e1]">
-                  24H
-                </span>
-              </div>
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <!-- Centro do Hero: Temperatura e Condição do Tempo Compactos -->
-
-
-
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 py-1">
-
-
-
-            
-
-
-
-            <div class="space-y-1">
-
-
-
-              <div class="flex items-baseline gap-2.5">
-
-
-
-                <span id="sidebar-temp" class="text-4xl sm:text-5xl font-black font-heading text-black tracking-tight leading-none">29°</span>
-
-
-
-                <div class="flex items-center gap-1.5">
-
-
-
-                  <span class="text-xl font-bold text-black leading-none">C</span>
-
-
-
-                  <span id="hero-sensacao" class="inline-flex items-center gap-1 badge-title-orange px-2.5 py-0.5 rounded-full font-bold text-xs text-black shadow-xs inline-block" title="Sensação térmica em tempo real"><i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i><span>Sensação em Tempo Real: 33°C</span></span>
-
-
-
-                </div>
-
-
-
-              </div>
-
-
-
-              
-
-
-
-              <div class="space-y-1">
-
-
-
-                <!-- Condição do Céu no Momento -->
-
-                <div class="flex items-center gap-1.5 flex-wrap">
-
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-orange-100 dark:bg-orange-950/60 text-orange-800 dark:text-orange-300 border border-orange-200 dark:border-orange-800/60 shadow-2xs">
-
-                    <i data-lucide="eye" class="w-3 h-3 text-orange-600 dark:text-orange-400"></i>
-
-                    <span>Céu no Momento</span>
-
-                  </span>
-
-                  <span id="hero-sky-condition" class="text-xs font-semibold text-black dark:text-slate-200">
-
-                    Céu Carregado com Trovoadas e Raios
-
-                  </span>
-
-                </div>
-
-
-
-                <h3 id="hero-condition" class="text-base sm:text-lg font-bold text-black dark:text-white leading-snug">
-
-
-
-                  Muitas nuvens com pancadas de chuva e trovoadas
-
-
-
-                </h3>
-
-
-
-                <p id="hero-subcondition" class="text-xs font-medium text-black dark:text-slate-300">
-
-
-
-                  Chuva prevista: 7.3 mm (Até 50 mm em tempestade) • Rajadas 64 km/h na orla marítima
-
-
-
-                </p>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <div class="flex items-center gap-2.5 sm:gap-3.5 justify-center sm:justify-end shrink-0 flex-wrap">
-
-              <!-- Mini-Mapa Interativo do RJ com Localização de Rio das Ostras -->
-              <button id="btn-hero-mapa-rj" type="button" class="group relative flex items-center p-1 sm:p-1.5 rounded-2xl bg-white/95 dark:bg-[#131d35]/95 border border-[#cbd5e1] dark:border-slate-800 hover:border-[#f07a53] dark:hover:border-[#f07a53] shadow-xs hover:shadow-md transition cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-[#f07a53]/40" title="Ver localização geográfica de Rio das Ostras no Mapa do Estado do RJ">
-                <div class="relative w-28 sm:w-36 aspect-[571/413] overflow-hidden rounded-xl bg-slate-50/80 dark:bg-[#0b1322] border border-slate-200/90 dark:border-slate-800/90 flex items-center justify-center p-0.5">
-                  <!-- Contorno do RJ (Light & Dark) -->
-                  <img src="img/mapa_rj_light.png" alt="Mapa do Estado do Rio de Janeiro" class="w-full h-full object-contain dark:hidden transition-transform duration-300 group-hover:scale-105 pointer-events-none">
-                  <img src="img/mapa_rj_dark.png" alt="Mapa do Estado do Rio de Janeiro" class="w-full h-full object-contain hidden dark:block transition-transform duration-300 group-hover:scale-105 pointer-events-none">
-                  
-                  <!-- Ponto Pulsante Indicando Rio das Ostras (78.8% X, 60.0% Y) -->
-                  <div class="absolute" style="left: 78.8%; top: 60.0%; transform: translate(-50%, -50%); pointer-events: none;">
-                    <span class="relative flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-80"></span>
-                      <span class="relative inline-flex rounded-full h-2 sm:h-2.5 w-2 sm:w-2.5 bg-orange-600 border border-white dark:border-slate-900 shadow-xs"></span>
-                    </span>
-                  </div>
-
-                  <!-- Tag Rio das Ostras -->
-                  <span class="absolute bottom-1 right-1 px-1 sm:px-1.5 py-0.5 rounded text-[7.5px] sm:text-[8.5px] font-black uppercase tracking-tight bg-orange-500/95 dark:bg-orange-600/95 text-white shadow-xs pointer-events-none flex items-center gap-0.5">
-                    <i data-lucide="map-pin" class="w-2 h-2 sm:w-2.5 sm:h-2.5"></i>
-                    <span>Rio das Ostras</span>
-                  </span>
-
-                  <!-- Badge Superior RJ & Ícone Zoom -->
-                  <span class="absolute top-1 left-1 px-1 py-0.5 rounded text-[7px] sm:text-[7.5px] font-bold text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 pointer-events-none flex items-center gap-0.5 group-hover:text-orange-600 transition">
-                    <i data-lucide="maximize-2" class="w-2 h-2 text-orange-600 dark:text-orange-400"></i>
-                    <span>RJ</span>
-                  </span>
-                </div>
-              </button>
-
-              <!-- Medalhão do Ícone Meteorológico da Previsão -->
-              <div id="hero-weather-icon" class="icon-medallion w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-[#192439] text-black dark:text-white border-2 border-[#f07a53] shadow-sm">
-                <i data-lucide="cloud-lightning" class="w-8 h-8 sm:w-9 sm:h-9 text-amber-500 dark:text-amber-400"></i>
-              </div>
-
-            </div>
-
-
-
-
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <!-- Base do Hero: Grade de 6 Métricas Essenciais Compactas -->
-
-
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2.5 mt-2.5 border-t border-[#dfb992]/20">
-
-
-
-            
-
-
-
-            <!-- 1. Chuva -->
-
-
-
-            <div class="metric-chip">
-
-
-
-              <div class="metric-icon-wrap metric-icon-coral">
-
-
-
-                <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Chuva Prevista</span>
-
-
-
-                <span id="hero-chip-chuva-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1.4 mm</span>
-
-
-
-                <span id="hero-chip-chuva-sub" class="text-[9.5px] font-medium text-black">Probab.: 75%</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <!-- 2. Vento -->
-
-
-
-            <div class="metric-chip">
-
-
-
-              <div class="metric-icon-wrap metric-icon-slate">
-
-
-
-                <i data-lucide="wind" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Vento / Rajadas</span>
-
-
-
-                <span id="sidebar-wind" class="text-xs sm:text-sm font-bold text-black font-mono block">24 km/h</span>
-
-
-
-                <span id="hero-chip-vento-sub" class="text-[9.5px] font-medium text-black">Rajadas 42 km/h</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <!-- 3. Umidade -->
-
-
-
-            <div class="metric-chip">
-
-
-
-              <div class="metric-icon-wrap metric-icon-coral">
-
-
-
-                <i data-lucide="droplets" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Umidade do Ar</span>
-
-
-
-                <span id="sidebar-hum" class="text-xs sm:text-sm font-bold text-black font-mono block">69% a 80%</span>
-
-
-
-                <span id="hero-chip-umid-sub" class="text-[9.5px] font-medium text-black">Ar Muito Úmido</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <!-- 4. Mar / Ondas -->
-
-
-
-            <div class="metric-chip">
-
-
-
-              <div class="metric-icon-wrap metric-icon-sandstone">
-
-
-
-                <i data-lucide="waves" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Mar na Orla</span>
-
-
-
-                <span id="sidebar-sea" class="text-xs sm:text-sm font-bold text-black font-mono block">0.7 a 1.2 m</span>
-
-
-
-                <span id="hero-chip-mar-sub" class="text-[9.5px] font-medium text-black">Moderado</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <!-- 5. Pressão -->
-
-
-
-            <div class="metric-chip">
-
-
-
-              <div class="metric-icon-wrap metric-icon-slate">
-
-
-
-                <i data-lucide="gauge" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-              </div>
-
-
-
-              <div class="min-w-0">
-
-
-
-                <span class="text-[9.5px] font-bold uppercase text-black block truncate">Pressão Atm.</span>
-
-
-
-                <span id="hero-chip-press-val" class="text-xs sm:text-sm font-bold text-black font-mono block">1018 hPa</span>
-
-
-
-                <span id="hero-chip-press-sub" class="text-[9.5px] font-medium text-black">Estável</span>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <!-- 6. Índice UV -->
-            <a href="https://www.wunderground.com/dashboard/pws/IRIODA17" target="_blank" rel="noopener noreferrer" class="metric-chip hover:border-amber-400 transition cursor-pointer" title="Índice UV em Tempo Real (Estação IRIODA17 - Praia da Tartaruga). Clique para ver telemetria no Weather Underground.">
-              <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="sun" class="w-3.5 h-3.5 text-black"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Índice UV</span>
-                <span id="hero-chip-uv-val" class="text-xs sm:text-sm font-bold text-black dark:text-white font-mono block">0 - Baixo</span>
-                <span id="hero-chip-uv-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300">Tempo real • IRIODA17</span>
-              </div>
-            </a>
-
-            <!-- 7. Nascer e Pôr do Sol (Com Emojis e Ícone Lucide) -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-coral">
-                <i data-lucide="sunrise" class="w-3.5 h-3.5 text-amber-500 dark:text-amber-400"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Nascer & Pôr do Sol</span>
-                <span id="hero-chip-sol-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌅 05:04 • 🌇 17:57</span>
-                <span id="hero-chip-sol-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">12h 53m de Sol</span>
-              </div>
-            </div>
-
-            <!-- 8. Fase da Lua do Dia (Com Emoji e Ícone Lucide) -->
-            <div class="metric-chip">
-              <div class="metric-icon-wrap metric-icon-slate">
-                <i data-lucide="moon" class="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400"></i>
-              </div>
-              <div class="min-w-0">
-                <span class="text-[9.5px] font-bold uppercase text-black dark:text-slate-200 block truncate">Fase da Lua</span>
-                <span id="hero-chip-lua-val" class="text-[11px] sm:text-xs font-bold text-black dark:text-white font-mono block truncate">🌕 Lua Cheia</span>
-                <span id="hero-chip-lua-sub" class="text-[9.5px] font-medium text-black dark:text-slate-300 block truncate">Ilum. 100% • Noite</span>
-              </div>
-            </div>
-
-
-
-
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <!-- Rodapé do Hero: Data Oficial e Frequência de Atualização -->
-
-
-
-          <div class="pt-2 mt-2 border-t border-[#dfb992]/20 flex items-center justify-between text-[11px] text-black flex-wrap gap-2">
-            <span id="hero-date" class="font-bold text-black">Terça-feira, 20 de Outubro de 2026</span>
-            <div class="flex items-center gap-2 flex-wrap">
-              <span id="hero-sync-badge" class="flex items-center gap-1.5 font-medium text-black bg-[#f1f5f9] px-2.5 py-0.5 rounded-full border border-[#cbd5e1] text-[10px]" title="Atualizado automaticamente a cada 5 minutos">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span id="hero-sync-label">Atualização a cada 5 min (Tempo Real)</span>
-              </span>
-            </div>
-          </div>
-
-
-
-
-
-
-
-        </div>
     </div>
 
 
@@ -8983,7 +8391,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=211" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=212" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -9422,128 +8830,125 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- VIEW 7: RETROSPECTIVA / PANORAMA MENSAL DO CLIMA (OUTUBRO 2026 - v211)      -->
+  <!-- VIEW 7: RETROSPECTIVA / PANORAMA MENSAL DO CLIMA (OUTUBRO 2026 - v212)      -->
   <!-- ========================================================================= -->
   <div id="view-tab-panorama" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-8 space-y-6">
     <div id="section-panorama-mensal-viewer" class="space-y-6">
       
-      <!-- Cabeçalho Principal do Panorama -->
-      <div class="p-5 sm:p-6 rounded-3xl bg-[#1D1F26] text-white border-2 border-[#3C7BC4]/40 shadow-2xl relative overflow-hidden">
-        <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-[#FF8244]/10 blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-[#3C7BC4]/15 blur-3xl pointer-events-none"></div>
-        
-        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <!-- Cabeçalho Principal do Panorama Nórdico Cerâmico -->
+      <div class="p-5 sm:p-6 rounded-3xl bg-white dark:bg-slate-900 text-[#0f172a] dark:text-white border border-[#cbd5e1] dark:border-slate-800 shadow-sm relative overflow-hidden">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap mb-2">
-              <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#FF8244] text-black flex items-center gap-1.5 shadow-xs">
-                <i data-lucide="award" class="w-3.5 h-3.5"></i>
+              <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#ffebe4] text-[#c2410c] dark:bg-amber-950/60 dark:text-amber-300 border border-[#f07a53]/40 flex items-center gap-1.5 shadow-2xs">
+                <i data-lucide="award" class="w-3.5 h-3.5 text-[#ea580c]"></i>
                 <span>Retrospectiva Oficial</span>
               </span>
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/50">
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#f1f5f9] dark:bg-slate-800 text-[#334155] dark:text-slate-300 border border-[#cbd5e1] dark:border-slate-700">
                 Rio das Ostras, RJ • Outubro 2026
               </span>
-              <span class="text-xs font-bold text-[#FF8244]">@tempoemriodasostras</span>
+              <span class="text-xs font-bold text-[#ea580c]">@tempoemriodasostras</span>
             </div>
-            <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-[#0f172a] dark:text-white tracking-tight">
               Panorama Mensal do Clima • Outubro 2026
             </h1>
-            <p class="text-xs sm:text-sm text-[#CDDAEE] mt-1.5 max-w-3xl leading-relaxed">
+            <p class="text-xs sm:text-sm text-[#475569] dark:text-slate-300 mt-1.5 max-w-3xl leading-relaxed">
               Consolidação técnica oficial das 5 estações meteorológicas de Rio das Ostras. Chuva que variou de 131 mm na orla a 410 mm na Região Rural, 25 dias chuvosos e rajadas de 62,3 km/h.
             </p>
           </div>
 
           <!-- Ações Rápidas -->
           <div class="flex flex-wrap items-center gap-2.5 shrink-0 w-full lg:w-auto">
-            <a href="img/panorama/panorama-clima-outubro-2026.zip" download="panorama-clima-outubro-2026.zip" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer" title="Baixar todas as imagens em PNG Lossless e o Vídeo Master MP4">
+            <a href="img/panorama/panorama-clima-outubro-2026.zip" download="panorama-clima-outubro-2026.zip" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer" title="Baixar todas as imagens em PNG Lossless e o Vídeo Master MP4">
               <i data-lucide="download" class="w-4 h-4"></i>
-              <span>Baixar Pacote ZIP (10.7 MB)</span>
+              <span>Baixar Pacote ZIP (3.5 MB)</span>
             </a>
-            <button onclick="window.copyPanoramaCaption()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#283964] hover:bg-[#344b82] text-white border border-[#3C7BC4] shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer" title="Copiar legenda formatada para colar no Instagram">
-              <i data-lucide="copy" class="w-4 h-4"></i>
+            <button onclick="window.copyPanoramaCaption()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-white dark:bg-slate-800 hover:bg-[#f1f5f9] text-[#0f172a] dark:text-white border border-[#cbd5e1] dark:border-slate-700 shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer" title="Copiar legenda formatada para colar no Instagram">
+              <i data-lucide="copy" class="w-4 h-4 text-[#ea580c]"></i>
               <span>Copiar Legenda</span>
             </button>
           </div>
         </div>
 
-        <!-- Barra de Modos de Visualização (Abas Interativas) -->
-        <div class="mt-6 pt-5 border-t border-[#CDDAEE]/15 flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <button onclick="window.switchPanoramaMode('video')" data-mode="video" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black border-2 transition-all bg-[#FF8244] text-black border-[#FF8244] shadow-md cursor-pointer flex items-center gap-1.5 shrink-0">
-            <i data-lucide="play-circle" class="w-4 h-4"></i>
+        <!-- Barra de Modos de Visualização (Abas Interativas Nórdicas) -->
+        <div class="mt-6 pt-5 border-t border-[#cbd5e1] dark:border-slate-800 flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <button onclick="window.switchPanoramaMode('video')" data-mode="video" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black border-2 transition-all bg-[#ffebe4] text-black border-[#f07a53] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="play-circle" class="w-4 h-4 text-[#ea580c]"></i>
             <span>📱 Vídeo Reels (9:16)</span>
           </button>
-          <button onclick="window.switchPanoramaMode('feed')" data-mode="feed" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
-            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+          <button onclick="window.switchPanoramaMode('feed')" data-mode="feed" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-white dark:bg-slate-800 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-700 hover:bg-[#f1f5f9] dark:hover:bg-slate-700 shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-[#0284c7]"></i>
             <span>📸 Carrossel Feed (4:5)</span>
           </button>
-          <button onclick="window.switchPanoramaMode('stories')" data-mode="stories" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
-            <i data-lucide="smartphone" class="w-4 h-4"></i>
+          <button onclick="window.switchPanoramaMode('stories')" data-mode="stories" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-white dark:bg-slate-800 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-700 hover:bg-[#f1f5f9] dark:hover:bg-slate-700 shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="smartphone" class="w-4 h-4 text-[#16a34a]"></i>
             <span>📱 Stories (9:16)</span>
           </button>
-          <button onclick="window.switchPanoramaMode('legenda')" data-mode="legenda" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
-            <i data-lucide="file-text" class="w-4 h-4"></i>
+          <button onclick="window.switchPanoramaMode('legenda')" data-mode="legenda" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-white dark:bg-slate-800 text-[#1e293b] dark:text-slate-200 border-[#cbd5e1] dark:border-slate-700 hover:bg-[#f1f5f9] dark:hover:bg-slate-700 shadow-2xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="file-text" class="w-4 h-4 text-[#64748b]"></i>
             <span>📋 Legenda Pronta</span>
           </button>
         </div>
       </div>
 
       <!-- PAINEL 1: VÍDEO MASTER REELS (9:16) -->
-      <div id="panorama-panel-video" class="p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+      <div id="panorama-panel-video" class="p-5 sm:p-7 rounded-3xl bg-[#f8fafc] dark:bg-slate-950/80 border border-[#cbd5e1] dark:border-slate-800 shadow-xs flex flex-col items-center">
         <div class="text-center max-w-lg mb-4">
-          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Formato Vertical Instagram Reels</span>
-          <h3 class="text-lg sm:text-xl font-black text-white mt-0.5">Vídeo Master Oficial • 1080x1920 (46.8s)</h3>
-          <p class="text-xs text-[#CDDAEE] mt-1">Renderização sem perdas (CRF 15) com áudio silencioso para você adicionar músicas em alta direto no Instagram.</p>
+          <span class="text-xs font-extrabold text-[#ea580c] uppercase tracking-wider">Formato Vertical Instagram Reels</span>
+          <h3 class="text-lg sm:text-xl font-black text-[#0f172a] dark:text-white mt-0.5">Vídeo Master Oficial • 1080x1920 (46.8s)</h3>
+          <p class="text-xs text-[#475569] dark:text-slate-300 mt-1">Renderização sem perdas (CRF 15) na paleta oficial nórdica com áudio silencioso para adicionar músicas em alta no Instagram.</p>
         </div>
 
-        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#283964] bg-black aspect-[9/16]">
+        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-800 bg-[#f4f1ea] aspect-[9/16]">
           <video id="panorama-reels-video" controls playsinline preload="metadata" class="w-full h-full object-cover">
-            <source src="img/panorama/video_reels_outubro_2026.mp4?v=211" type="video/mp4">
+            <source src="img/panorama/video_reels_outubro_2026.mp4?v=212" type="video/mp4">
             Seu navegador não suporta a tag de vídeo.
           </video>
         </div>
 
         <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
-          <a href="img/panorama/video_reels_outubro_2026.mp4" download="video_reels_outubro_2026.mp4" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <a href="img/panorama/video_reels_outubro_2026.mp4" download="video_reels_outubro_2026.mp4" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs transition-all flex items-center gap-2 cursor-pointer">
             <i data-lucide="download" class="w-4 h-4"></i>
-            <span>Baixar Vídeo Reels (MP4 • 2.4 MB)</span>
+            <span>Baixar Vídeo Reels (MP4 • 1.6 MB)</span>
           </a>
         </div>
       </div>
 
       <!-- PAINEL 2: CARROSSEL FEED (4:5) -->
-      <div id="panorama-panel-feed" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+      <div id="panorama-panel-feed" class="hidden p-5 sm:p-7 rounded-3xl bg-[#f8fafc] dark:bg-slate-950/80 border border-[#cbd5e1] dark:border-slate-800 shadow-xs flex flex-col items-center">
         <div class="text-center max-w-lg mb-3">
-          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Feed do Instagram • Proporção Nativa 4:5</span>
-          <h3 id="panorama-feed-title" class="text-lg sm:text-xl font-black text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
-          <span id="panorama-feed-counter" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/40">Lâmina 1 de 6</span>
+          <span class="text-xs font-extrabold text-[#ea580c] uppercase tracking-wider">Feed do Instagram • Proporção Nativa 4:5</span>
+          <h3 id="panorama-feed-title" class="text-lg sm:text-xl font-black text-[#0f172a] dark:text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
+          <span id="panorama-feed-counter" class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-extrabold bg-[#ffebe4] text-[#c2410c] border border-[#f07a53]/40">Lâmina 1 de 6</span>
         </div>
 
         <!-- Container do Carrossel 4:5 -->
-        <div class="relative w-full max-w-[460px] sm:max-w-[480px] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#3C7BC4]/40 bg-[#15171D] aspect-[4/5] flex items-center justify-center">
-          <img id="panorama-feed-image" src="img/panorama/feed/lamina_01_abertura_outubro_2026.png?v=211" alt="Lâmina 1 de 6" class="w-full h-full object-cover">
+        <div class="relative w-full max-w-[460px] sm:max-w-[480px] rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-800 bg-[#f4f1ea] aspect-[4/5] flex items-center justify-center">
+          <img id="panorama-feed-image" src="img/panorama/feed/lamina_01_abertura_outubro_2026.png?v=212" alt="Lâmina 1 de 6" class="w-full h-full object-cover">
           
           <!-- Botão Anterior ◀ -->
-          <button onclick="window.navigatePanoramaFeed(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Lâmina Anterior (ou use a seta esquerda do teclado)">
+          <button onclick="window.navigatePanoramaFeed(-1)" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-[#0f172a] dark:text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-md border border-[#cbd5e1] dark:border-slate-700" title="Lâmina Anterior">
             <i data-lucide="chevron-left" class="w-6 h-6"></i>
           </button>
 
           <!-- Botão Próximo ▶ -->
-          <button onclick="window.navigatePanoramaFeed(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Próxima Lâmina (ou use a seta direita do teclado)">
+          <button onclick="window.navigatePanoramaFeed(1)" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-[#0f172a] dark:text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-md border border-[#cbd5e1] dark:border-slate-700" title="Próxima Lâmina">
             <i data-lucide="chevron-right" class="w-6 h-6"></i>
           </button>
         </div>
 
         <!-- Indicadores de Pontos (Dots) -->
         <div class="flex items-center gap-2 mt-4">
-          <div onclick="window.setPanoramaFeedSlide(1)" class="panorama-feed-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaFeedSlide(2)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaFeedSlide(3)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaFeedSlide(4)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaFeedSlide(5)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaFeedSlide(6)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(1)" class="panorama-feed-dot w-6 h-2.5 rounded-full bg-[#ea580c] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(2)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(3)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(4)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(5)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(6)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
         </div>
 
         <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-          <a id="panorama-feed-download-btn" href="img/panorama/feed/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <a id="panorama-feed-download-btn" href="img/panorama/feed/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs transition-all flex items-center gap-2 cursor-pointer">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>Baixar esta Lâmina (PNG HD 4:5)</span>
           </a>
@@ -9551,40 +8956,40 @@
       </div>
 
       <!-- PAINEL 3: STORIES (9:16) -->
-      <div id="panorama-panel-stories" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+      <div id="panorama-panel-stories" class="hidden p-5 sm:p-7 rounded-3xl bg-[#f8fafc] dark:bg-slate-950/80 border border-[#cbd5e1] dark:border-slate-800 shadow-xs flex flex-col items-center">
         <div class="text-center max-w-lg mb-3">
-          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Stories do Instagram • Vertical 9:16</span>
-          <h3 id="panorama-story-title" class="text-lg sm:text-xl font-black text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
-          <span id="panorama-story-counter" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/40">Story 1 de 6</span>
+          <span class="text-xs font-extrabold text-[#ea580c] uppercase tracking-wider">Stories do Instagram • Vertical 9:16</span>
+          <h3 id="panorama-story-title" class="text-lg sm:text-xl font-black text-[#0f172a] dark:text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
+          <span id="panorama-story-counter" class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-extrabold bg-[#ffebe4] text-[#c2410c] border border-[#f07a53]/40">Story 1 de 6</span>
         </div>
 
         <!-- Container Stories 9:16 -->
-        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#3C7BC4]/40 bg-[#15171D] aspect-[9/16] flex items-center justify-center">
-          <img id="panorama-story-image" src="img/panorama/stories/lamina_01_abertura_outubro_2026.png?v=211" alt="Story 1 de 6" class="w-full h-full object-cover">
+        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-xl border-4 border-white dark:border-slate-800 bg-[#f4f1ea] aspect-[9/16] flex items-center justify-center">
+          <img id="panorama-story-image" src="img/panorama/stories/lamina_01_abertura_outubro_2026.png?v=212" alt="Story 1 de 6" class="w-full h-full object-cover">
           
           <!-- Botão Anterior ◀ -->
-          <button onclick="window.navigatePanoramaStory(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Story Anterior">
+          <button onclick="window.navigatePanoramaStory(-1)" class="absolute left-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-[#0f172a] dark:text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-md border border-[#cbd5e1] dark:border-slate-700" title="Story Anterior">
             <i data-lucide="chevron-left" class="w-6 h-6"></i>
           </button>
 
           <!-- Botão Próximo ▶ -->
-          <button onclick="window.navigatePanoramaStory(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Próximo Story">
+          <button onclick="window.navigatePanoramaStory(1)" class="absolute right-2.5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-black/80 hover:bg-white dark:hover:bg-black text-[#0f172a] dark:text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-md border border-[#cbd5e1] dark:border-slate-700" title="Próximo Story">
             <i data-lucide="chevron-right" class="w-6 h-6"></i>
           </button>
         </div>
 
         <!-- Indicadores de Pontos (Dots) -->
         <div class="flex items-center gap-2 mt-4">
-          <div onclick="window.setPanoramaStorySlide(1)" class="panorama-story-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaStorySlide(2)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaStorySlide(3)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaStorySlide(4)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaStorySlide(5)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
-          <div onclick="window.setPanoramaStorySlide(6)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(1)" class="panorama-story-dot w-6 h-2.5 rounded-full bg-[#ea580c] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(2)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(3)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(4)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(5)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(6)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#cbd5e1] dark:bg-slate-700 hover:bg-[#94a3b8] transition-all cursor-pointer"></div>
         </div>
 
         <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
-          <a id="panorama-story-download-btn" href="img/panorama/stories/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+          <a id="panorama-story-download-btn" href="img/panorama/stories/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs transition-all flex items-center gap-2 cursor-pointer">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span>Baixar este Story (PNG HD 9:16)</span>
           </a>
@@ -9592,19 +8997,19 @@
       </div>
 
       <!-- PAINEL 4: LEGENDA PRONTA PARA INSTAGRAM -->
-      <div id="panorama-panel-legenda" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl">
+      <div id="panorama-panel-legenda" class="hidden p-5 sm:p-7 rounded-3xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 shadow-sm text-[#0f172a] dark:text-white">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <div>
-            <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Texto Oficial Pronto para Postar</span>
-            <h3 class="text-lg sm:text-xl font-black text-white mt-0.5">Legenda Formatada para Feed & Reels</h3>
+            <span class="text-xs font-extrabold text-[#ea580c] uppercase tracking-wider">Texto Oficial Pronto para Postar</span>
+            <h3 class="text-lg sm:text-xl font-black text-[#0f172a] dark:text-white mt-0.5">Legenda Formatada para Feed & Reels</h3>
           </div>
-          <button id="panorama-copy-caption-btn" onclick="window.copyPanoramaCaption()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-md transition-all flex items-center gap-2 cursor-pointer">
-            <i data-lucide="copy" class="w-4 h-4"></i>
+          <button id="panorama-copy-caption-btn" onclick="window.copyPanoramaCaption()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] hover:bg-[#ffd9cb] text-black border-2 border-[#f07a53] shadow-xs transition-all flex items-center gap-2 cursor-pointer">
+            <i data-lucide="copy" class="w-4 h-4 text-[#ea580c]"></i>
             <span>Copiar Legenda</span>
           </button>
         </div>
 
-        <div class="p-4 sm:p-5 rounded-2xl bg-[#15171D] border border-[#3C7BC4]/30 font-mono text-xs sm:text-sm leading-relaxed text-[#CDDAEE] whitespace-pre-wrap select-all">
+        <div class="p-4 sm:p-5 rounded-2xl bg-[#f8fafc] dark:bg-slate-950 border border-[#cbd5e1] dark:border-slate-800 font-mono text-xs sm:text-sm leading-relaxed text-[#1e293b] dark:text-slate-200 whitespace-pre-wrap select-all">
 <span id="panorama-caption-content">🌧️ RETROSPECTIVA CLIMÁTICA • OUTUBRO 2026
 Confira os dados consolidados das estações meteorológicas oficiais de Rio das Ostras:
 
@@ -9636,41 +9041,32 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
         </div>
       </div>
 
-      <!-- Resumo Analítico em Cards Rápidos -->
+      <!-- Resumo Analítico em Cards Nórdicos -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
-          <span class="text-[11px] font-black uppercase text-[#FF8244]">Pico do Mês</span>
-          <div class="text-2xl font-black text-white mt-1">410,0 mm</div>
-          <span class="text-xs text-[#CDDAEE]">Rocha Leão (Região Rural)</span>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 shadow-2xs">
+          <span class="text-[11px] font-black uppercase text-[#ea580c]">Pico do Mês</span>
+          <div class="text-2xl font-black text-[#0f172a] dark:text-white mt-1">410,0 mm</div>
+          <span class="text-xs text-[#475569] dark:text-slate-400">Rocha Leão (Região Rural)</span>
         </div>
-        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
-          <span class="text-[11px] font-black uppercase text-[#7bb5f5]">Frequência</span>
-          <div class="text-2xl font-black text-white mt-1">25 Dias</div>
-          <span class="text-xs text-[#CDDAEE]">Com chuva registrada (80% do mês)</span>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 shadow-2xs">
+          <span class="text-[11px] font-black uppercase text-[#0284c7]">Frequência</span>
+          <div class="text-2xl font-black text-[#0f172a] dark:text-white mt-1">25 Dias</div>
+          <span class="text-xs text-[#475569] dark:text-slate-400">Com chuva registrada (80% do mês)</span>
         </div>
-        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
-          <span class="text-[11px] font-black uppercase text-[#FF8244]">Rajada Máxima</span>
-          <div class="text-2xl font-black text-white mt-1">62,3 km/h</div>
-          <span class="text-xs text-[#CDDAEE]">Praia da Tartaruga (26/10)</span>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 shadow-2xs">
+          <span class="text-[11px] font-black uppercase text-[#ea580c]">Rajada Máxima</span>
+          <div class="text-2xl font-black text-[#0f172a] dark:text-white mt-1">62,3 km/h</div>
+          <span class="text-xs text-[#475569] dark:text-slate-400">Praia da Tartaruga (26/10)</span>
         </div>
-        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
-          <span class="text-[11px] font-black uppercase text-[#7bb5f5]">Extremos Térmicos</span>
-          <div class="text-2xl font-black text-white mt-1">18,4° • 32,6°</div>
-          <span class="text-xs text-[#CDDAEE]">Menor mínima e maior máxima</span>
+        <div class="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-[#cbd5e1] dark:border-slate-800 shadow-2xs">
+          <span class="text-[11px] font-black uppercase text-[#0284c7]">Extremos Térmicos</span>
+          <div class="text-2xl font-black text-[#0f172a] dark:text-white mt-1">18,4° • 32,6°</div>
+          <span class="text-xs text-[#475569] dark:text-slate-400">Menor mínima e maior máxima</span>
         </div>
       </div>
 
     </div>
-  </div>
-
-
-
-
-
-
-
-
-  <!-- ========================================================================= -->
+  </div><!-- ========================================================================= -->
 
 
 
@@ -11042,9 +10438,9 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=211"></script>
-  <script src="js/panorama_mensal.js?v=211"></script>
-  <script type="module" src="js/app.js?v=211"></script>
+  <script src="js/historico_planilha.js?v=212"></script>
+  <script src="js/panorama_mensal.js?v=212"></script>
+  <script type="module" src="js/app.js?v=212"></script>
 
 
 

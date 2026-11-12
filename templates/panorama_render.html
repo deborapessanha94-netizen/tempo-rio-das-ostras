@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Panorama Mensal - Outubro 2026 - Renderizador de Lâminas</title>
+  <title>Panorama Mensal - Outubro 2026 - Paleta Oficial Nórdica Cerâmica</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -15,9 +15,9 @@
     }
 
     body {
-      background-color: #0b0d11;
+      background-color: #cbd5e1;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      color: #CDDAEE;
+      color: #0f172a;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,14 +25,11 @@
       overflow: hidden;
     }
 
-    /* Dimensões Estritas de Renderização */
+    /* Dimensões Estritas de Renderização na Paleta Oficial Nórdica */
     .slide-canvas {
       position: relative;
-      background-color: #1D1F26;
-      background-image: 
-        radial-gradient(circle at 85% 12%, rgba(255, 130, 68, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 15% 85%, rgba(60, 123, 196, 0.15) 0%, transparent 48%),
-        linear-gradient(180deg, #1D1F26 0%, #15171D 100%);
+      background-color: #f4f1ea;
+      background-image: linear-gradient(180deg, #f8fafc 0%, #f4f1ea 40%, #eae5dc 100%);
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -51,42 +48,60 @@
       padding: 55px 60px 48px 60px;
     }
 
-    /* Cartões Temáticos Azul Escuro (#283964) */
+    /* Moldura externa idêntica aos cards de redes sociais do site */
+    .slide-border-frame {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      border: 4px solid #cbd5e1;
+      border-radius: 32px;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    /* Cartões Brancos Cerâmicos Oficiais */
     .card-box {
-      background: #283964;
-      background: linear-gradient(135deg, rgba(40, 57, 100, 0.95) 0%, rgba(29, 41, 74, 0.95) 100%);
-      border: 2px solid rgba(60, 123, 196, 0.35);
-      border-radius: 28px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 26px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
       position: relative;
       overflow: hidden;
     }
 
-    .card-box::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255, 130, 68, 0.6), transparent);
+    /* Cores Oficiais da Marca e do Portal */
+    .text-orange { color: #ea580c; }
+    .text-blue { color: #0284c7; }
+    .text-slate { color: #475569; }
+    .text-black { color: #0f172a; }
+    .bg-orange { background-color: #ea580c; }
+    .bg-blue { background-color: #0284c7; }
+
+    /* Barra vertical oficial no título */
+    .header-bar {
+      width: 10px;
+      height: 64px;
+      background-color: #ea580c;
+      border-radius: 5px;
+      margin-right: 20px;
+      flex-shrink: 0;
     }
 
-    /* Cores e Destaques */
-    .text-orange { color: #FF8244; }
-    .text-blue { color: #3C7BC4; }
-    .text-light { color: #CDDAEE; }
-    .text-white { color: #FFFFFF; }
-    .bg-orange { background-color: #FF8244; }
-    .bg-blue { background-color: #3C7BC4; }
+    .format-feed .header-bar {
+      height: 56px;
+      width: 8px;
+      margin-right: 16px;
+    }
 
     /* Tipografia Estrita com Anti-Acúmulo */
     .title-h1 {
-      font-size: 50px;
-      line-height: 1.15;
+      font-size: 52px;
+      line-height: 1.1;
       font-weight: 900;
       letter-spacing: -0.02em;
-      color: #FFFFFF;
+      color: #0f172a;
       text-transform: uppercase;
       font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
     }
@@ -99,7 +114,7 @@
       font-size: 26px;
       line-height: 1.35;
       font-weight: 600;
-      color: #CDDAEE;
+      color: #475569;
     }
 
     .format-feed .subtitle-p {
@@ -130,82 +145,93 @@
       font-size: 78px;
     }
 
+    /* Badges de Código / Região no padrão idêntico a Chuva */
     .badge-pill {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 22px;
-      border-radius: 9999px;
-      font-size: 22px;
+      gap: 10px;
+      padding: 8px 20px;
+      border-radius: 12px;
+      font-size: 20px;
       font-weight: 800;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      background: rgba(255, 130, 68, 0.16);
-      border: 1.5px solid rgba(255, 130, 68, 0.5);
-      color: #FF8244;
+      background: #ffebe4;
+      border: 1.5px solid #f07a53;
+      color: #c2410c;
     }
 
     .badge-pill.blue {
-      background: rgba(60, 123, 196, 0.18);
-      border-color: rgba(60, 123, 196, 0.6);
-      color: #7bb5f5;
+      background: #e0f2fe;
+      border-color: #0284c7;
+      color: #0369a1;
     }
 
-    /* Rodapé Padrão */
+    .badge-pill.slate {
+      background: #f1f5f9;
+      border-color: #94a3b8;
+      color: #334155;
+    }
+
+    /* Rodapé Oficial Idêntico aos Cards do Site */
     .slide-footer {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1.5px solid rgba(205, 218, 238, 0.15);
-      padding-top: 24px;
+      flex-direction: column;
+      gap: 12px;
       width: 100%;
     }
 
-    .format-feed .slide-footer {
-      padding-top: 18px;
+    .slide-footer-line {
+      height: 4px;
+      width: 100%;
+      background-color: #ea580c;
+      border-radius: 2px;
     }
 
-    .slide-footer .source {
-      font-size: 24px;
-      font-weight: 600;
-      color: #8fa2c4;
+    .slide-footer-content {
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
     }
 
     .slide-footer .handle {
       font-size: 26px;
-      font-weight: 800;
-      color: #FF8244;
-      letter-spacing: 0.02em;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: 0.01em;
+    }
+
+    .slide-footer .source {
+      font-size: 22px;
+      font-weight: 600;
+      color: #64748b;
     }
 
     .slide-footer .page-count {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
-      color: #FFFFFF;
-      background: rgba(40, 57, 100, 0.8);
-      padding: 4px 16px;
+      color: #0f172a;
+      background: #ffffff;
+      padding: 6px 18px;
       border-radius: 999px;
-      border: 1px solid rgba(60, 123, 196, 0.4);
+      border: 1.5px solid #cbd5e1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    /* Barras de Ranking */
+    /* Barras de Ranking no padrão Cerâmico */
     .rank-bar-bg {
-      background: rgba(16, 23, 42, 0.6);
-      border-radius: 16px;
-      height: 28px;
+      background: #f1f5f9;
+      border-radius: 14px;
+      height: 24px;
       width: 100%;
       overflow: hidden;
-      border: 1px solid rgba(205, 218, 238, 0.15);
+      border: 1px solid #cbd5e1;
       margin-top: 8px;
     }
 
     .rank-bar-fill {
       height: 100%;
-      border-radius: 14px;
-      transition: width 0.3s;
+      border-radius: 12px;
     }
   </style>
 </head>
@@ -215,95 +241,109 @@
   <!-- SLIDE 1: ABERTURA & OS 3 GRANDES NÚMEROS   -->
   <!-- ========================================== -->
   <div id="slide-1" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+    
+    <!-- Header Oficial -->
     <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <div class="badge-pill">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span>Retrospectiva Oficial</span>
         </div>
         <div style="display: flex; align-items: center; gap: 14px;">
-          <img src="/img/logo-rounded.png" style="width: 54px; height: 54px; border-radius: 50%; border: 2px solid #FF8244; box-shadow: 0 4px 14px rgba(0,0,0,0.4);" alt="Logo">
-          <span style="font-size: 26px; font-weight: 900; color: #FFFFFF;">@tempoemriodasostras</span>
+          <img src="/img/logo-rounded.png" style="width: 54px; height: 54px; border-radius: 50%; border: 2px solid #ea580c; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" alt="Logo">
+          <span style="font-size: 26px; font-weight: 900; color: #0f172a;">@tempoemriodasostras</span>
         </div>
       </div>
-      <h1 class="title-h1">PANORAMA DO CLIMA</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Outubro 2026 em Rio das Ostras • Os 3 Grandes Números do Mês</p>
+      
+      <div style="display: flex; align-items: center;">
+        <div class="header-bar"></div>
+        <div>
+          <h1 class="title-h1">PANORAMA DO <span class="text-orange">CLIMA</span></h1>
+          <p class="subtitle-p" style="margin-top: 4px;">Outubro 2026 em Rio das Ostras • Os 3 Grandes Números do Mês</p>
+        </div>
+      </div>
     </div>
 
-    <!-- 3 Grandes Números em Cards Independentes -->
-    <div style="display: flex; flex-direction: column; gap: 26px; margin: 30px 0;">
+    <!-- 3 Grandes Números em Cards Brancos Oficiais -->
+    <div style="display: flex; flex-direction: column; gap: 24px; margin: 28px 0;">
       <!-- Card 1: Volume Máximo -->
-      <div class="card-box" style="padding: 32px 38px;">
+      <div class="card-box" style="padding: 30px 36px; border-left: 8px solid #ea580c;">
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <div>
-            <div style="font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #FF8244; margin-bottom: 6px;">
-              Volume Total Máximo
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill">Região Rural</span>
+              <span style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #ea580c; letter-spacing: 0.04em;">Volume Total Máximo</span>
             </div>
             <div class="num-huge text-orange">410 mm</div>
-            <div style="font-size: 26px; font-weight: 700; color: #FFFFFF; margin-top: 10px;">
-              Rocha Leão • Região Rural
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-top: 8px;">
+              Rocha Leão / REBIO União
             </div>
-            <div style="font-size: 22px; color: #CDDAEE; margin-top: 4px;">
-              Maior registro acumulado de todo o município no mês
+            <div style="font-size: 22px; color: #475569; margin-top: 4px;">
+              Maior volume acumulado de todo o município no mês
             </div>
           </div>
-          <div style="background: rgba(255, 130, 68, 0.18); border: 2px solid rgba(255, 130, 68, 0.4); border-radius: 20px; width: 78px; height: 78px; display: flex; align-items: center; justify-content: center;">
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FF8244" stroke-width="2.5"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M16 14v6M8 14v6M12 16v6"/></svg>
+          <div style="background: #ffebe4; border: 2px solid #f07a53; border-radius: 20px; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M16 14v6M8 14v6M12 16v6"/></svg>
           </div>
         </div>
       </div>
 
       <!-- Card 2: Frequência de Chuva -->
-      <div class="card-box" style="padding: 32px 38px;">
+      <div class="card-box" style="padding: 30px 36px; border-left: 8px solid #0284c7;">
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <div>
-            <div style="font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #7bb5f5; margin-bottom: 6px;">
-              Frequência de Precipitação
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill blue">Frequência</span>
+              <span style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #0284c7; letter-spacing: 0.04em;">Dias com Chuva</span>
             </div>
             <div class="num-huge text-blue">25 Dias</div>
-            <div style="font-size: 26px; font-weight: 700; color: #FFFFFF; margin-top: 10px;">
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-top: 8px;">
               Com Chuva Registrada
             </div>
-            <div style="font-size: 22px; color: #CDDAEE; margin-top: 4px;">
-              De 31 dias de Outubro, 80% tiveram registros de chuva
+            <div style="font-size: 22px; color: #475569; margin-top: 4px;">
+              De 31 dias no mês, em 80% houve registro de precipitação
             </div>
           </div>
-          <div style="background: rgba(60, 123, 196, 0.2); border: 2px solid rgba(60, 123, 196, 0.4); border-radius: 20px; width: 78px; height: 78px; display: flex; align-items: center; justify-content: center;">
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#3C7BC4" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <div style="background: #e0f2fe; border: 2px solid #0284c7; border-radius: 20px; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
         </div>
       </div>
 
       <!-- Card 3: Maior Rajada -->
-      <div class="card-box" style="padding: 32px 38px;">
+      <div class="card-box" style="padding: 30px 36px; border-left: 8px solid #0f172a;">
         <div style="display: flex; align-items: flex-start; justify-content: space-between;">
           <div>
-            <div style="font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #FFFFFF; margin-bottom: 6px;">
-              Maior Rajada de Vento
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+              <span class="badge-pill slate">Vento Forte</span>
+              <span style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #0f172a; letter-spacing: 0.04em;">Maior Rajada de Vento</span>
             </div>
-            <div class="num-huge text-white">62,3 <span style="font-size: 60px;">km/h</span></div>
-            <div style="font-size: 26px; font-weight: 700; color: #FFFFFF; margin-top: 10px;">
+            <div class="num-huge text-black">62,3 <span style="font-size: 58px; color: #64748b;">km/h</span></div>
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-top: 8px;">
               Praia da Tartaruga • Orla
             </div>
-            <div style="font-size: 22px; color: #CDDAEE; margin-top: 4px;">
+            <div style="font-size: 22px; color: #475569; margin-top: 4px;">
               Registrada em 26/10 às 10:00 (vento forte de quadrante NE)
             </div>
           </div>
-          <div style="background: rgba(255, 255, 255, 0.12); border: 2px solid rgba(255, 255, 255, 0.3); border-radius: 20px; width: 78px; height: 78px; display: flex; align-items: center; justify-content: center;">
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+          <div style="background: #f1f5f9; border: 2px solid #cbd5e1; border-radius: 20px; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">1 / 6</div>
       </div>
-      <div class="page-count">1 / 6</div>
     </div>
   </div>
 
@@ -312,81 +352,92 @@
   <!-- SLIDE 2: VOLUME TOTAL DE CHUVA & PICO     -->
   <!-- ========================================== -->
   <div id="slide-2" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+
+    <!-- Header Oficial -->
     <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <div class="badge-pill">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
           <span>Volume Pluviométrico</span>
         </div>
-        <span style="font-size: 26px; font-weight: 800; color: #FF8244;">@tempoemriodasostras</span>
+        <span style="font-size: 26px; font-weight: 900; color: #0f172a;">@tempoemriodasostras</span>
       </div>
-      <h1 class="title-h1">COMO A CHUVA CAIU</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Variou de 131 mm na orla a 410 mm na Região Rural</p>
+      
+      <div style="display: flex; align-items: center;">
+        <div class="header-bar"></div>
+        <div>
+          <h1 class="title-h1">COMO A <span class="text-orange">CHUVA CAIU</span></h1>
+          <p class="subtitle-p" style="margin-top: 4px;">Variou de 131 mm na orla a 410 mm na Região Rural</p>
+        </div>
+      </div>
     </div>
 
     <!-- Centro: Card Destaque + 2 Colunas -->
-    <div style="display: flex; flex-direction: column; gap: 28px; margin: 30px 0;">
+    <div style="display: flex; flex-direction: column; gap: 24px; margin: 26px 0;">
       <!-- Card Recorde Absoluto -->
-      <div class="card-box" style="padding: 38px 42px; border-left: 8px solid #FF8244;">
-        <div style="font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #FF8244; margin-bottom: 8px;">
+      <div class="card-box" style="padding: 34px 38px; border-left: 8px solid #ea580c;">
+        <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #ea580c; margin-bottom: 6px;">
           Pico Máximo Acumulado no Mês
         </div>
         <div class="num-huge text-orange">410,0 mm</div>
-        <div style="font-size: 32px; font-weight: 800; color: #FFFFFF; margin-top: 14px;">
-          Rocha Leão / REBIO União
+        <div style="font-size: 32px; font-weight: 800; color: #0f172a; margin-top: 10px;">
+          Rocha Leão / REBIO União (Região Rural)
         </div>
-        <div style="font-size: 24px; color: #CDDAEE; margin-top: 6px; line-height: 1.4;">
+        <div style="font-size: 23px; color: #475569; margin-top: 6px; line-height: 1.4;">
           A Região Rural concentrou os maiores acumulados devido à convergência orográfica da serra vizinha.
         </div>
       </div>
 
       <!-- Grid 2 Colunas: Frequência e Dia Mais Chuvoso -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
         <!-- Coluna 1: Frequência -->
-        <div class="card-box" style="padding: 32px 30px; border-top: 4px solid #3C7BC4;">
-          <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #7bb5f5; margin-bottom: 6px;">
+        <div class="card-box" style="padding: 28px 28px; border-top: 5px solid #0284c7;">
+          <div style="font-size: 20px; font-weight: 800; text-transform: uppercase; color: #0284c7; margin-bottom: 4px;">
             Frequência
           </div>
           <div class="num-large text-blue">25 Dias</div>
-          <div style="font-size: 24px; font-weight: 800; color: #FFFFFF; margin-top: 10px;">
+          <div style="font-size: 24px; font-weight: 800; color: #0f172a; margin-top: 8px;">
             Com Precipitação
           </div>
-          <div style="font-size: 22px; color: #CDDAEE; margin-top: 6px; line-height: 1.35;">
-            Chuva recorrente ao longo de quase todo o mês.
+          <div style="font-size: 21px; color: #475569; margin-top: 6px; line-height: 1.35;">
+            Chuva recorrente e bem distribuída pelo mês.
           </div>
         </div>
 
         <!-- Coluna 2: Dia Mais Chuvoso -->
-        <div class="card-box" style="padding: 32px 30px; border-top: 4px solid #FF8244;">
-          <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #FF8244; margin-bottom: 6px;">
+        <div class="card-box" style="padding: 28px 28px; border-top: 5px solid #ea580c;">
+          <div style="font-size: 20px; font-weight: 800; text-transform: uppercase; color: #ea580c; margin-bottom: 4px;">
             Dia Mais Chuvoso
           </div>
           <div class="num-large text-orange">84,3 mm</div>
-          <div style="font-size: 24px; font-weight: 800; color: #FFFFFF; margin-top: 10px;">
+          <div style="font-size: 24px; font-weight: 800; color: #0f172a; margin-top: 8px;">
             Sexta, 02 de Outubro
           </div>
-          <div style="font-size: 22px; color: #CDDAEE; margin-top: 6px; line-height: 1.35;">
+          <div style="font-size: 21px; color: #475569; margin-top: 6px; line-height: 1.35;">
             Maior temporal do mês concentrado em 24h.
           </div>
         </div>
       </div>
 
       <!-- Card Informativo Sintético -->
-      <div class="card-box" style="padding: 26px 32px; background: rgba(30, 41, 74, 0.7);">
-        <div style="font-size: 24px; color: #CDDAEE; line-height: 1.45;">
-          💡 <strong style="color: #FFFFFF;">Leitura Real:</strong> Enquanto a praia teve períodos ensolarados entre chuvas rápidas, o interior acumulou chuva forte contínua.
+      <div class="card-box" style="padding: 24px 30px; background: #ffffff; border: 1.5px dashed #ea580c;">
+        <div style="font-size: 23px; color: #0f172a; line-height: 1.45;">
+          💡 <strong style="color: #ea580c;">Leitura Real:</strong> Enquanto a faixa de praia teve períodos ensolarados entre chuvas passageiras, a Região Rural acumulou chuva persistente e volumosa.
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">2 / 6</div>
       </div>
-      <div class="page-count">2 / 6</div>
     </div>
   </div>
 
@@ -395,29 +446,37 @@
   <!-- SLIDE 3: RANKING DE TODAS AS ESTAÇÕES     -->
   <!-- ========================================== -->
   <div id="slide-3" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+
+    <!-- Header Oficial -->
     <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <div class="badge-pill">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
           <span>Rede Pluviométrica</span>
         </div>
-        <span style="font-size: 26px; font-weight: 800; color: #FF8244;">@tempoemriodasostras</span>
+        <span style="font-size: 26px; font-weight: 900; color: #0f172a;">@tempoemriodasostras</span>
       </div>
-      <h1 class="title-h1">RANKING DAS ESTAÇÕES</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Volume total de chuva acumulado em Outubro 2026</p>
+      
+      <div style="display: flex; align-items: center;">
+        <div class="header-bar"></div>
+        <div>
+          <h1 class="title-h1">RANKING DAS <span class="text-orange">ESTAÇÕES</span></h1>
+          <p class="subtitle-p" style="margin-top: 4px;">Volume total de chuva acumulado em Outubro 2026</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Centro: Ranking em Barras com Alto Contraste -->
-    <div style="display: flex; flex-direction: column; gap: 20px; margin: 26px 0;">
+    <!-- Centro: Ranking em Barras com Alto Contraste Nórdico -->
+    <div style="display: flex; flex-direction: column; gap: 18px; margin: 24px 0;">
       <!-- 1º Lugar -->
-      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #FF8244;">
+      <div class="card-box" style="padding: 22px 28px; border-left: 6px solid #ea580c;">
         <div style="display: flex; justify-content: space-between; align-items: baseline;">
           <div>
-            <span style="font-size: 22px; font-weight: 800; color: #FF8244;">1º LUGAR • REGIÃO RURAL</span>
-            <div style="font-size: 28px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Rocha Leão / REBIO União</div>
+            <span class="badge-pill" style="font-size: 16px; padding: 4px 12px;">1º LUGAR • REGIÃO RURAL</span>
+            <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 4px;">Rocha Leão / REBIO União</div>
           </div>
-          <div style="font-size: 42px; font-weight: 900; color: #FF8244; font-family: 'Outfit';">410,0 mm</div>
+          <div style="font-size: 44px; font-weight: 900; color: #ea580c; font-family: 'Outfit';">410,0 mm</div>
         </div>
         <div class="rank-bar-bg">
           <div class="rank-bar-fill bg-orange" style="width: 100%;"></div>
@@ -425,13 +484,13 @@
       </div>
 
       <!-- 2º Lugar -->
-      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #3C7BC4;">
+      <div class="card-box" style="padding: 22px 28px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: baseline;">
           <div>
-            <span style="font-size: 22px; font-weight: 800; color: #7bb5f5;">2º LUGAR • REGIÃO CENTRAL</span>
-            <div style="font-size: 28px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Cantagalo / Bosque</div>
+            <span class="badge-pill blue" style="font-size: 16px; padding: 4px 12px;">2º LUGAR • REGIÃO CENTRAL</span>
+            <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 4px;">Cantagalo / Bosque</div>
           </div>
-          <div style="font-size: 42px; font-weight: 900; color: #7bb5f5; font-family: 'Outfit';">191,7 mm</div>
+          <div style="font-size: 44px; font-weight: 900; color: #0284c7; font-family: 'Outfit';">191,7 mm</div>
         </div>
         <div class="rank-bar-bg">
           <div class="rank-bar-fill bg-blue" style="width: 47%;"></div>
@@ -439,13 +498,13 @@
       </div>
 
       <!-- 3º Lugar -->
-      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #3C7BC4;">
+      <div class="card-box" style="padding: 22px 28px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: baseline;">
           <div>
-            <span style="font-size: 22px; font-weight: 800; color: #7bb5f5;">3º LUGAR • DIVISA SUL</span>
-            <div style="font-size: 28px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Praiamar / Divisa Sul</div>
+            <span class="badge-pill blue" style="font-size: 16px; padding: 4px 12px;">3º LUGAR • DIVISA SUL</span>
+            <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 4px;">Praiamar / Divisa Sul</div>
           </div>
-          <div style="font-size: 42px; font-weight: 900; color: #7bb5f5; font-family: 'Outfit';">177,3 mm</div>
+          <div style="font-size: 44px; font-weight: 900; color: #0284c7; font-family: 'Outfit';">177,3 mm</div>
         </div>
         <div class="rank-bar-bg">
           <div class="rank-bar-fill bg-blue" style="width: 43%;"></div>
@@ -453,13 +512,13 @@
       </div>
 
       <!-- 4º Lugar -->
-      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #3C7BC4;">
+      <div class="card-box" style="padding: 22px 28px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: baseline;">
           <div>
-            <span style="font-size: 22px; font-weight: 800; color: #7bb5f5;">4º LUGAR • ORLA / SEDE</span>
-            <div style="font-size: 28px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Praia da Tartaruga</div>
+            <span class="badge-pill blue" style="font-size: 16px; padding: 4px 12px;">4º LUGAR • ORLA / SEDE</span>
+            <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 4px;">Praia da Tartaruga</div>
           </div>
-          <div style="font-size: 42px; font-weight: 900; color: #7bb5f5; font-family: 'Outfit';">167,9 mm</div>
+          <div style="font-size: 44px; font-weight: 900; color: #0284c7; font-family: 'Outfit';">167,9 mm</div>
         </div>
         <div class="rank-bar-bg">
           <div class="rank-bar-fill bg-blue" style="width: 41%;"></div>
@@ -467,13 +526,13 @@
       </div>
 
       <!-- 5º Lugar -->
-      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #3C7BC4;">
+      <div class="card-box" style="padding: 22px 28px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: baseline;">
           <div>
-            <span style="font-size: 22px; font-weight: 800; color: #7bb5f5;">5º LUGAR • ORLA CENTRAL</span>
-            <div style="font-size: 28px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">Costazul (Escola Jacinto)</div>
+            <span class="badge-pill blue" style="font-size: 16px; padding: 4px 12px;">5º LUGAR • ORLA CENTRAL</span>
+            <div style="font-size: 28px; font-weight: 900; color: #0f172a; margin-top: 4px;">Costazul (Escola Jacinto)</div>
           </div>
-          <div style="font-size: 42px; font-weight: 900; color: #7bb5f5; font-family: 'Outfit';">131,3 mm</div>
+          <div style="font-size: 44px; font-weight: 900; color: #0284c7; font-family: 'Outfit';">131,3 mm</div>
         </div>
         <div class="rank-bar-bg">
           <div class="rank-bar-fill bg-blue" style="width: 32%;"></div>
@@ -481,13 +540,16 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">3 / 6</div>
       </div>
-      <div class="page-count">3 / 6</div>
     </div>
   </div>
 
@@ -496,84 +558,95 @@
   <!-- SLIDE 4: VENTOS & EXTREMOS TÉRMICOS        -->
   <!-- ========================================== -->
   <div id="slide-4" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+
+    <!-- Header Oficial -->
     <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <div class="badge-pill">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
           <span>Ventos & Temperatura</span>
         </div>
-        <span style="font-size: 26px; font-weight: 800; color: #FF8244;">@tempoemriodasostras</span>
+        <span style="font-size: 26px; font-weight: 900; color: #0f172a;">@tempoemriodasostras</span>
       </div>
-      <h1 class="title-h1">VENTOS E TEMPERATURA</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Os extremos atmosféricos registrados no mês</p>
+      
+      <div style="display: flex; align-items: center;">
+        <div class="header-bar"></div>
+        <div>
+          <h1 class="title-h1">VENTOS E <span class="text-orange">TEMPERATURA</span></h1>
+          <p class="subtitle-p" style="margin-top: 4px;">Os extremos atmosféricos registrados no mês</p>
+        </div>
+      </div>
     </div>
 
     <!-- Centro: Bloco Ventos + Bloco Extremos Térmicos -->
-    <div style="display: flex; flex-direction: column; gap: 28px; margin: 30px 0;">
+    <div style="display: flex; flex-direction: column; gap: 26px; margin: 28px 0;">
       <!-- Bloco Ventos -->
-      <div class="card-box" style="padding: 34px 38px;">
-        <div style="font-size: 24px; font-weight: 800; text-transform: uppercase; color: #FF8244; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF8244" stroke-width="2.5"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+      <div class="card-box" style="padding: 32px 36px; border-left: 8px solid #ea580c;">
+        <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #ea580c; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2.5"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
           Ventos em Rio das Ostras
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <div>
-            <div class="num-large text-white">62,3 <span style="font-size: 52px; color: #CDDAEE;">km/h</span></div>
-            <div style="font-size: 26px; font-weight: 800; color: #FFFFFF; margin-top: 8px;">
+            <div class="num-large text-orange">62,3 <span style="font-size: 52px; color: #475569;">km/h</span></div>
+            <div style="font-size: 28px; font-weight: 800; color: #0f172a; margin-top: 6px;">
               Maior Rajada: Praia da Tartaruga
             </div>
-            <div style="font-size: 22px; color: #CDDAEE; margin-top: 4px;">
+            <div style="font-size: 22px; color: #475569; margin-top: 4px;">
               26/10 às 10:00 • Rajada intensa durante a manhã
             </div>
           </div>
-          <div style="text-align: right; border-left: 2px solid rgba(205, 218, 238, 0.2); padding-left: 32px;">
-            <div style="font-size: 20px; font-weight: 700; color: #7bb5f5;">DIREÇÃO PREDOMINANTE</div>
-            <div style="font-size: 56px; font-weight: 900; color: #3C7BC4; font-family: 'Outfit';">NE</div>
-            <div style="font-size: 20px; color: #CDDAEE;">Média: 16,6 km/h</div>
+          <div style="text-align: right; border-left: 2px solid #cbd5e1; padding-left: 32px;">
+            <div style="font-size: 19px; font-weight: 800; color: #0284c7; text-transform: uppercase;">DIREÇÃO PREDOMINANTE</div>
+            <div style="font-size: 60px; font-weight: 900; color: #0284c7; font-family: 'Outfit';">NE</div>
+            <div style="font-size: 20px; font-weight: 700; color: #475569;">Média: 16,6 km/h</div>
           </div>
         </div>
       </div>
 
       <!-- Bloco Extremos Térmicos (2 Colunas Gigantes) -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px;">
         <!-- Coluna Menor Mínima -->
-        <div class="card-box" style="padding: 34px 30px; border-bottom: 6px solid #3C7BC4;">
-          <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #7bb5f5; margin-bottom: 8px;">
+        <div class="card-box" style="padding: 30px 28px; border-bottom: 6px solid #0284c7;">
+          <div style="font-size: 20px; font-weight: 800; text-transform: uppercase; color: #0284c7; margin-bottom: 6px;">
             Menor Mínima
           </div>
           <div class="num-huge text-blue">18,4°</div>
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF; margin-top: 10px;">
+          <div style="font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 8px;">
             Madrugadas Frescas
           </div>
-          <div style="font-size: 22px; color: #CDDAEE; margin-top: 6px; line-height: 1.35;">
+          <div style="font-size: 21px; color: #475569; margin-top: 6px; line-height: 1.35;">
             Sentidas durante a passagem de frentes frias no início do mês.
           </div>
         </div>
 
         <!-- Coluna Maior Máxima -->
-        <div class="card-box" style="padding: 34px 30px; border-bottom: 6px solid #FF8244;">
-          <div style="font-size: 22px; font-weight: 800; text-transform: uppercase; color: #FF8244; margin-bottom: 8px;">
+        <div class="card-box" style="padding: 30px 28px; border-bottom: 6px solid #ea580c;">
+          <div style="font-size: 20px; font-weight: 800; text-transform: uppercase; color: #ea580c; margin-bottom: 6px;">
             Maior Máxima
           </div>
           <div class="num-huge text-orange">32,6°</div>
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF; margin-top: 10px;">
+          <div style="font-size: 26px; font-weight: 800; color: #0f172a; margin-top: 8px;">
             Tardes Quentes
           </div>
-          <div style="font-size: 22px; color: #CDDAEE; margin-top: 6px; line-height: 1.35;">
+          <div style="font-size: 21px; color: #475569; margin-top: 6px; line-height: 1.35;">
             Sob influência da massa de ar seco e quente do ASAS.
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">4 / 6</div>
       </div>
-      <div class="page-count">4 / 6</div>
     </div>
   </div>
 
@@ -582,81 +655,92 @@
   <!-- SLIDE 5: O QUE COMANDOU O TEMPO (SISTEMAS) -->
   <!-- ========================================== -->
   <div id="slide-5" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+
+    <!-- Header Oficial -->
     <div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
         <div class="badge-pill">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24M14.83 9.17l4.24-4.24M14.83 14.83l4.24 4.24M9.17 14.83l-4.24 4.24"/></svg>
           <span>Diagnóstico Sinótico</span>
         </div>
-        <span style="font-size: 26px; font-weight: 800; color: #FF8244;">@tempoemriodasostras</span>
+        <span style="font-size: 26px; font-weight: 900; color: #0f172a;">@tempoemriodasostras</span>
       </div>
-      <h1 class="title-h1">O QUE COMANDOU O TEMPO</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Os sistemas atmosféricos que ditaram o ritmo de Outubro</p>
+      
+      <div style="display: flex; align-items: center;">
+        <div class="header-bar"></div>
+        <div>
+          <h1 class="title-h1">O QUE COMANDOU <span class="text-orange">O TEMPO</span></h1>
+          <p class="subtitle-p" style="margin-top: 4px;">Os sistemas atmosféricos que ditaram o ritmo de Outubro</p>
+        </div>
+      </div>
     </div>
 
-    <!-- Centro: 4 Sistemas Atmosféricos em Cards Espaçosos -->
-    <div style="display: flex; flex-direction: column; gap: 20px; margin: 26px 0;">
+    <!-- Centro: 4 Sistemas Atmosféricos em Cards Brancos -->
+    <div style="display: flex; flex-direction: column; gap: 18px; margin: 24px 0;">
       <!-- Sistema 1: ASAS -->
-      <div class="card-box" style="padding: 24px 30px;">
+      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #ea580c;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF;">
+          <div style="font-size: 26px; font-weight: 900; color: #0f172a;">
             ☀️ Alta Subtropical do Atlântico Sul (ASAS)
           </div>
-          <div class="badge-pill" style="font-size: 20px; padding: 6px 18px;">12 DIAS</div>
+          <div class="badge-pill" style="font-size: 18px; padding: 6px 16px;">12 DIAS</div>
         </div>
-        <div style="font-size: 22px; color: #CDDAEE; margin-top: 8px; line-height: 1.4;">
+        <div style="font-size: 22px; color: #475569; margin-top: 6px; line-height: 1.4;">
           Períodos de sol, calor intenso, ar seco e predominância dos ventos do quadrante Nordeste.
         </div>
       </div>
 
       <!-- Sistema 2: Cavados e Instabilidade -->
-      <div class="card-box" style="padding: 24px 30px;">
+      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF;">
+          <div style="font-size: 26px; font-weight: 900; color: #0f172a;">
             ⛈️ Cavados Costeiros e Instabilidade Local
           </div>
-          <div class="badge-pill blue" style="font-size: 20px; padding: 6px 18px;">12 DIAS</div>
+          <div class="badge-pill blue" style="font-size: 18px; padding: 6px 16px;">12 DIAS</div>
         </div>
-        <div style="font-size: 22px; color: #CDDAEE; margin-top: 8px; line-height: 1.4;">
+        <div style="font-size: 22px; color: #475569; margin-top: 6px; line-height: 1.4;">
           Convergência de umidade que provocou pancadas convectivas de fim de tarde e trovoadas.
         </div>
       </div>
 
       <!-- Sistema 3: Frentes Frias -->
-      <div class="card-box" style="padding: 24px 30px;">
+      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #ea580c;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF;">
+          <div style="font-size: 26px; font-weight: 900; color: #0f172a;">
             🌧️ Passagem de Frentes Frias
           </div>
-          <div class="badge-pill" style="font-size: 20px; padding: 6px 18px;">4 DIAS</div>
+          <div class="badge-pill" style="font-size: 18px; padding: 6px 16px;">4 DIAS</div>
         </div>
-        <div style="font-size: 22px; color: #CDDAEE; margin-top: 8px; line-height: 1.4;">
+        <div style="font-size: 22px; color: #475569; margin-top: 6px; line-height: 1.4;">
           Viradas no tempo com chuva persistente, rajadas marítimas e alívio imediato no calor.
         </div>
       </div>
 
       <!-- Sistema 4: Circulação Marítima -->
-      <div class="card-box" style="padding: 24px 30px;">
+      <div class="card-box" style="padding: 24px 30px; border-left: 6px solid #0284c7;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div style="font-size: 26px; font-weight: 800; color: #FFFFFF;">
+          <div style="font-size: 26px; font-weight: 900; color: #0f172a;">
             🌊 Circulação Marítima Pós-Frontal
           </div>
-          <div class="badge-pill blue" style="font-size: 20px; padding: 6px 18px;">3 DIAS</div>
+          <div class="badge-pill blue" style="font-size: 18px; padding: 6px 16px;">3 DIAS</div>
         </div>
-        <div style="font-size: 22px; color: #CDDAEE; margin-top: 8px; line-height: 1.4;">
+        <div style="font-size: 22px; color: #475569; margin-top: 6px; line-height: 1.4;">
           Ventos do mar (SE/S), muita nebulosidade baixa e chuviscos intermitentes na orla.
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">5 / 6</div>
       </div>
-      <div class="page-count">5 / 6</div>
     </div>
   </div>
 
@@ -665,65 +749,68 @@
   <!-- SLIDE 6: ENCERRAMENTO & CHAMADA DE AÇÃO    -->
   <!-- ========================================== -->
   <div id="slide-6" class="slide-canvas format-stories">
-    <!-- Header -->
+    <div class="slide-border-frame"></div>
+
+    <!-- Header Oficial -->
     <div style="text-align: center;">
-      <div class="badge-pill" style="margin-bottom: 20px;">
+      <div class="badge-pill" style="margin-bottom: 16px;">
         <span>Comunidade & Informação</span>
       </div>
-      <h1 class="title-h1" style="font-size: 54px;">RIO DAS OSTRAS</h1>
-      <p class="subtitle-p" style="margin-top: 8px;">Informação meteorológica séria, clara e em tempo real</p>
+      <h1 class="title-h1" style="font-size: 54px;">TEMPO EM <span class="text-orange">RIO DAS OSTRAS</span></h1>
+      <p class="subtitle-p" style="margin-top: 6px;">Informação meteorológica séria, clara e em tempo real</p>
     </div>
 
     <!-- Centro: Card de Destaque Oficial -->
-    <div style="display: flex; flex-direction: column; align-items: center; gap: 32px; margin: 36px 0;">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 28px; margin: 32px 0;">
       <div style="position: relative;">
-        <img src="/img/logo-rounded.png" style="width: 170px; height: 170px; border-radius: 50%; border: 4px solid #FF8244; box-shadow: 0 16px 50px rgba(255, 130, 68, 0.35);" alt="Logo">
+        <img src="/img/logo-rounded.png" style="width: 170px; height: 170px; border-radius: 50%; border: 4px solid #ea580c; box-shadow: 0 12px 40px rgba(234, 88, 12, 0.25);" alt="Logo">
       </div>
 
-      <div class="card-box" style="padding: 38px 44px; text-align: center; width: 100%;">
-        <div style="font-size: 34px; font-weight: 900; color: #FFFFFF; font-family: 'Outfit';">
+      <div class="card-box" style="padding: 36px 42px; text-align: center; width: 100%;">
+        <div style="font-size: 34px; font-weight: 900; color: #0f172a; font-family: 'Outfit';">
           @tempoemriodasostras
         </div>
-        <p style="font-size: 24px; color: #CDDAEE; margin-top: 14px; line-height: 1.45;">
-          Acompanhe todos os dias: previsão turno a turno, condições da orla, tábua de marés e alertas da Defesa Civil.
+        <p style="font-size: 24px; color: #475569; margin-top: 12px; line-height: 1.45;">
+          Acompanhe diariamente: previsão turno a turno, condições da orla, tábua de marés e avisos da Defesa Civil.
         </p>
 
         <!-- Ações do Seguidor -->
-        <div style="display: flex; justify-content: center; gap: 32px; margin-top: 28px; border-top: 1.5px solid rgba(205, 218, 238, 0.15); padding-top: 24px;">
+        <div style="display: flex; justify-content: center; gap: 32px; margin-top: 26px; border-top: 2px solid #cbd5e1; padding-top: 24px;">
           <div style="text-align: center;">
             <div style="font-size: 32px;">💬</div>
-            <div style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin-top: 4px;">Compartilhe</div>
+            <div style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">Compartilhe</div>
           </div>
           <div style="text-align: center;">
             <div style="font-size: 32px;">📌</div>
-            <div style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin-top: 4px;">Salve o Post</div>
+            <div style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">Salve o Post</div>
           </div>
           <div style="text-align: center;">
             <div style="font-size: 32px;">🔔</div>
-            <div style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin-top: 4px;">Siga o Perfil</div>
+            <div style="font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 4px;">Siga o Perfil</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Oficial -->
     <div class="slide-footer">
-      <div class="source">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Fontes: Estações Meteorológicas do Município
+      <div class="slide-footer-line"></div>
+      <div class="slide-footer-content">
+        <div>
+          <div class="handle">@tempoemriodasostras</div>
+          <div class="source">Fontes: Estações em tempo real dos bairros • Rio das Ostras - RJ</div>
+        </div>
+        <div class="page-count">6 / 6</div>
       </div>
-      <div class="page-count">6 / 6</div>
     </div>
   </div>
 
   <script>
-    // Configura o slide e formato baseado nos parâmetros da URL (?format=stories|feed&slide=1..6)
     (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const format = urlParams.get('format') || 'stories';
       const slideNum = urlParams.get('slide') || '1';
 
-      // Esconde todos os slides exceto o selecionado
       for (let i = 1; i <= 6; i++) {
         const el = document.getElementById('slide-' + i);
         if (el) {
