@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-12 14:37:18",
+  "coleta_iso": "2026-11-12 16:53:49",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Semeadura do feijão de 1ª safra avança em ritmos diferentes nas principais regiões produtoras",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/semeadura-do-feijão-de-1ª-safra-avança-em-ritmos-diferentes-nas-principais-regiões-produtoras",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para quinta-feira (12) e sexta-feira (13)",
       "data": "11/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "Previsão para sábado (7), domingo (8) e segunda-feira (9)",
       "data": "06/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-7-domingo-8-e-segunda-feira-9",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa da celebração dos 56 anos do INPE em Cachoeira Paulista (SP)",
-      "data": "06/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-da-celebração-dos-56-anos-do-inpe-em-cachoeira-paulista-sp",
       "relevancia_sudeste": false
     }
   ]
