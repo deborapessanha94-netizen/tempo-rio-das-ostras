@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-12 16:53:49",
+  "coleta_iso": "2026-11-12 18:09:04",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para sexta-feira (13) e sábado (14)",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-13-e-sábado-14",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Semeadura do feijão de 1ª safra avança em ritmos diferentes nas principais regiões produtoras",
       "data": "12/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "Nota sobre os Destaques Meteorológicos de outubro de 2026",
       "data": "09/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/nota-sobre-os-destaques-meteorológicos-de-outubro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sábado (7), domingo (8) e segunda-feira (9)",
-      "data": "06/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-7-domingo-8-e-segunda-feira-9",
       "relevancia_sudeste": false
     }
   ]
