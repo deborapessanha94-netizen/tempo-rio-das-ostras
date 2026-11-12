@@ -1,0 +1,60 @@
+name: Retrospectiva Mensal do Clima Oficial (Todo dia 01 às 06:00 BRT)
+
+on:
+  schedule:
+    # 06:00 BRT (Horário de Brasília, UTC-3) = 09:00 UTC todo dia 01 de cada mês
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+    inputs:
+      mes_ano:
+        description: 'Mês e Ano para gerar retrospectiva (formato YYYY-MM, ex: 2026-11). Deixe vazio para o mês recém-encerrado.'
+        required: false
+        default: ''
+
+concurrency:
+  group: panorama-mensal-schedule
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish-retrospectiva:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar Dependências e FFmpeg
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl reportlab matplotlib imageio-ffmpeg || true
+
+      - name: Atualizar Base Histórica das Estações
+        run: |
+          python scripts/historico_estacoes_service.py || true
+
+      - name: Executar Motor Autônomo de Retrospectiva Mensal
+        run: |
+          python scripts/atualizar_retrospectiva_mensal.py "${{ github.event.inputs.mes_ano }}"
+
+      - name: Salvar Imagens, Vídeo, ZIP e Frontend Atualizados no Repositório
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ img/panorama/ templates/ js/panorama_mensal.js index.html
+          if ! git diff --cached --quiet; then
+            git commit -m "feat(panorama): retrospectiva mensal oficial do clima publicada [skip ci]"
+            git push origin main || (git fetch origin main && git merge -X theirs origin/main -m "merge panorama [skip ci]" && git push origin main)
+          else
+            echo "Nenhuma alteração para publicar."
+          fi

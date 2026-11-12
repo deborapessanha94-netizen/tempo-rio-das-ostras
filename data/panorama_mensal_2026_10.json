@@ -1,0 +1,92 @@
+{
+  "mes_nome": "Outubro",
+  "ano": 2026,
+  "ano_mes": "2026-10",
+  "gerado_em": "12/11/2026 20:35:22",
+  "resumo": {
+    "ano_mes": "2026-10",
+    "ano": 2026,
+    "mes_num": 10,
+    "mes_nome": "Outubro",
+    "rotulo_mes": "Outubro/2026 (31 dias)",
+    "dias_registrados": 31,
+    "dias_com_chuva": 26,
+    "chuva_total_media_mm": 237.7,
+    "chuva_maior_estacao_mm": 410.0,
+    "chuva_maior_estacao_nome": "Rocha Leão / REBIO União",
+    "estacoes_totais_mes": {
+      "IRIODA17": 167.9,
+      "IRIODA6": 131.3,
+      "IRIODA16": 191.7,
+      "IRIODA15": 410.0,
+      "ICASIM5": 177.3,
+      "PCD18789": 222.0
+    },
+    "dia_mais_chuvoso": "02/10/2026 (48.8 mm na média / 84.3 mm máx)",
+    "vento_vel_media_kmh": 16.6,
+    "vento_vel_max_kmh": 51.1,
+    "vento_dir_predominante": "NE",
+    "vento_rajada_max_kmh": 62.3,
+    "vento_rajada_max_detalhe": "62.3 km/h em 26/10/2026 às 10:00 (Praia da Tartaruga)",
+    "temp_min_c": 18.4,
+    "temp_max_c": 32.6,
+    "sistema_atuante_mes": "Sistemas atuantes em Outubro/2026 (31 dias): Alta Subtropical do Atlântico Sul (ASAS) (12 dias); Cavado Costeiro / Instabilidade Local (8 dias); Cavado Costeiro / Convergência de Umidade (4 dias); Passagem de Frente Fria / Sistema Frontal (4 dias); Circulação Marítima Pós-Frontal (SE/S) (3 dias).",
+    "caracteristicas_mes": "Resumo de Outubro/2026 (31 dias): Chuva acumulada média na rede de 237.7 mm em 26 dias com chuva (Acumulados nas estações: Praia da Tartaruga: 167.9 mm | Costazul (Escola Jacinto): 131.3 mm | Cantagalo / Extensão do Bosque: 191.7 mm | Rocha Leão / REBIO União: 410.0 mm | Praiamar / Divisa Sul: 177.3 mm | Palmital (PCD 18789): 222.0 mm) | Dia mais chuvoso: 02/10/2026 (48.8 mm na média / 84.3 mm máx) | Vento médio mensal: 16.6 km/h, velocidade máxima sustentada: 51.1 km/h (25/10/2026), direção predominante: NE e rajada máxima do mês: 62.3 km/h em 26/10/2026 às 10:00 (Praia da Tartaruga) | Extremos térmicos no mês: mínima de 18.4°C e máxima de 32.6°C."
+  },
+  "ranking": [
+    {
+      "id": "IRIODA15",
+      "nome": "Rocha Leão / REBIO União",
+      "regiao": "Região Rural",
+      "badge": "Região Rural",
+      "val_mm": 410.0,
+      "pos": 1,
+      "bar_pct": 100
+    },
+    {
+      "id": "PCD18789",
+      "nome": "Palmital (PCD 18789)",
+      "regiao": "Região Rural",
+      "badge": "Região Rural",
+      "val_mm": 222.0,
+      "pos": 2,
+      "bar_pct": 54
+    },
+    {
+      "id": "IRIODA16",
+      "nome": "Cantagalo / Bosque",
+      "regiao": "Região Central",
+      "badge": "Região Central",
+      "val_mm": 191.7,
+      "pos": 3,
+      "bar_pct": 47
+    },
+    {
+      "id": "ICASIM5",
+      "nome": "Praiamar / Divisa Sul",
+      "regiao": "Divisa Sul",
+      "badge": "Divisa Sul",
+      "val_mm": 177.3,
+      "pos": 4,
+      "bar_pct": 43
+    },
+    {
+      "id": "IRIODA17",
+      "nome": "Praia da Tartaruga",
+      "regiao": "Orla / Sede",
+      "badge": "Orla / Sede",
+      "val_mm": 167.9,
+      "pos": 5,
+      "bar_pct": 41
+    },
+    {
+      "id": "IRIODA6",
+      "nome": "Costazul (Escola Jacinto)",
+      "regiao": "Orla Central",
+      "badge": "Orla Central",
+      "val_mm": 131.3,
+      "pos": 6,
+      "bar_pct": 32
+    }
+  ]
+}

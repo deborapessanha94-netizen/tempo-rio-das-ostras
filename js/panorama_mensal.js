@@ -21,13 +21,13 @@
       'Encerramento Oficial e Chamada de Ação'
     ],
     slideFiles: [
-      'lamina_01_abertura_outubro_2026.png',
-      'lamina_02_volume_chuva_outubro_2026.png',
-      'lamina_03_ranking_estacoes_outubro_2026.png',
-      'lamina_04_ventos_extremos_termicos_outubro_2026.png',
-      'lamina_05_sistemas_meteorologicos_outubro_2026.png',
-      'lamina_06_encerramento_oficial_outubro_2026.png'
-    ]
+      "lamina_01_abertura_outubro_2026.png",
+      "lamina_02_volume_chuva_outubro_2026.png",
+      "lamina_03_ranking_estacoes_outubro_2026.png",
+      "lamina_04_ventos_extremos_termicos_outubro_2026.png",
+      "lamina_05_sistemas_meteorologicos_outubro_2026.png",
+      "lamina_06_encerramento_oficial_outubro_2026.png"
+]
   };
 
   /**
