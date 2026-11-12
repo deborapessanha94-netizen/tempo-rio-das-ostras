@@ -45,68 +45,68 @@
     "probabilidade_chuva": 5,
     "precipitacao_acumulada": "0",
     "indice_uv": 13,
-    "temperatura_max": "25",
-    "temperatura_min": "19",
-    "vento": "6",
+    "temperatura_max": "29",
+    "temperatura_min": "21",
+    "vento": "8",
     "umidade": 68,
-    "temperatura_prev": "19",
-    "sensacao_termica": "19",
-    "hora_atual": "2026-11-11T05:00:00.000Z"
+    "temperatura_prev": "20",
+    "sensacao_termica": "20",
+    "hora_atual": "2026-11-11T08:00:00.000Z"
   },
   "proximos_dias": [
     {
+      "data_atual": "13",
+      "semana_dia": "Sex",
+      "probabilidade_chuva": 5,
+      "temperatura_max": "29",
+      "temperatura_min": "23",
+      "umidade": 63,
+      "indice_uv": 13
+    },
+    {
       "data_atual": "14",
       "semana_dia": "Sáb",
-      "probabilidade_chuva": 20,
-      "temperatura_max": "26",
-      "temperatura_min": "21",
-      "umidade": 83,
+      "probabilidade_chuva": 5,
+      "temperatura_max": "28",
+      "temperatura_min": "22",
+      "umidade": 72,
       "indice_uv": 13
     },
     {
       "data_atual": "15",
       "semana_dia": "Dom",
-      "probabilidade_chuva": 20,
-      "temperatura_max": "28",
-      "temperatura_min": "21",
+      "probabilidade_chuva": 5,
+      "temperatura_max": "30",
+      "temperatura_min": "22",
       "umidade": 76,
       "indice_uv": 13
     },
     {
       "data_atual": "16",
       "semana_dia": "Seg",
-      "probabilidade_chuva": 40,
-      "temperatura_max": "31",
+      "probabilidade_chuva": 5,
+      "temperatura_max": "32",
       "temperatura_min": "22",
-      "umidade": 68,
-      "indice_uv": 14
+      "umidade": 64,
+      "indice_uv": 13
     },
     {
       "data_atual": "17",
       "semana_dia": "Ter",
-      "probabilidade_chuva": 20,
-      "temperatura_max": "28",
-      "temperatura_min": "22",
-      "umidade": 78,
+      "probabilidade_chuva": 5,
+      "temperatura_max": "30",
+      "temperatura_min": "24",
+      "umidade": 79,
       "indice_uv": 14
     },
     {
       "data_atual": "18",
       "semana_dia": "Qua",
-      "probabilidade_chuva": null,
-      "temperatura_max": null,
-      "temperatura_min": null,
-      "umidade": null,
-      "indice_uv": null
-    },
-    {
-      "data_atual": "19",
-      "semana_dia": "Qui",
-      "probabilidade_chuva": null,
-      "temperatura_max": null,
-      "temperatura_min": null,
-      "umidade": null,
-      "indice_uv": null
+      "probabilidade_chuva": 95,
+      "temperatura_max": "31",
+      "temperatura_min": "24",
+      "umidade": 58,
+      "indice_uv": 14
     }
   ],
   "meteograma_multimodel": {
