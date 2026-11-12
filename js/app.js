@@ -38,8 +38,8 @@ import {
 
   openSocialModalVento,
   openSocialModalSemanal
-} from './social-cards.js?v=210';
-import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=210';
+} from './social-cards.js?v=211';
+import { renderPanoramaSemanal, resolveWeeklyForecast7Days } from './weekly-overview.js?v=211';
 
 
 
@@ -219,7 +219,7 @@ import {
 
 
 
-} from './api.js?v=210';
+} from './api.js?v=211';
 
 
 
@@ -227,7 +227,7 @@ import {
 
 
 
-import { renderBulletinChart } from './charts.js?v=210';
+import { renderBulletinChart } from './charts.js?v=211';
 
 
 
@@ -7281,7 +7281,7 @@ function setupPWA() {
 
 
 
-    navigator.serviceWorker.register('./sw.js?v=210').catch(() => {});
+    navigator.serviceWorker.register('./sw.js?v=211').catch(() => {});
 
 
 
@@ -8736,7 +8736,7 @@ window.switchAppTab = function(tabName) {
 
 
 
-  const ALL_TABS = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'];
+  const ALL_TABS = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'];
 
 
 
@@ -12232,7 +12232,7 @@ const handleUrlHash = () => {
   const params = new URLSearchParams(window.location.search);
   const qTab = (params.get('tab') || '').toLowerCase();
   const rawHash = (window.location.hash || '').replace('#', '').trim().toLowerCase();
-  const ALL_TABS = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'];
+  const ALL_TABS = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'];
 
   const targetTab = ALL_TABS.includes(qTab) ? qTab : (ALL_TABS.includes(rawHash) ? rawHash : null);
   if (targetTab) {
@@ -13153,6 +13153,12 @@ window.toggleNavDropdown = function(tabName, event) {
 // =========================================================================
 
 window.SUB_SECTIONS_CONFIG = {
+  panorama: {
+    default: 'section-panorama-mensal-viewer',
+    sections: [
+      'section-panorama-mensal-viewer'
+    ]
+  },
   previsao: {
     default: 'section-hero-previsao',
     sections: [
@@ -13455,7 +13461,7 @@ document.addEventListener('keydown', (e) => {
 // Inicialização do roteamento exclusivo no carregamento da página
 document.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash ? window.location.hash.replace('#', '') : '';
-  const initialTab = (window.state && window.state.activeTab) ? window.state.activeTab : (['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim'].includes(hash) ? hash : 'previsao');
+  const initialTab = (window.state && window.state.activeTab) ? window.state.activeTab : (['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'].includes(hash) ? hash : 'previsao');
   const initialSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[initialTab]) || window.SUB_SECTIONS_CONFIG[initialTab]?.default;
   setTimeout(() => {
     const curTab = (window.state && window.state.activeTab) || initialTab;

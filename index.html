@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=210">
+  <link rel="stylesheet" href="css/styles.css?v=211">
 
 
 
@@ -372,7 +372,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=210" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=211" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -624,7 +624,7 @@
 
 
   <nav id="app-main-tabs" class="max-w-7xl mx-auto px-2 sm:px-6 pt-1.5 pb-2.5">
-    <div class="w-full flex items-center gap-1.5 sm:gap-2 overflow-x-auto lg:overflow-visible no-scrollbar lg:grid lg:grid-cols-6 p-1.5 bg-[#f5efe8]/90 dark:bg-slate-900/90 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 shadow-xs" role="tablist">
+    <div class="w-full flex items-center gap-1.5 sm:gap-2 overflow-x-auto lg:overflow-visible no-scrollbar lg:grid lg:grid-cols-7 p-1.5 bg-[#f5efe8]/90 dark:bg-slate-900/90 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 shadow-xs" role="tablist">
 
       <!-- Aba 1: Previsão & Tempo com Dropdown INMET -->
       <div id="nav-wrapper-previsao" class="nav-dropdown-wrapper shrink-0 lg:w-full">
@@ -975,6 +975,63 @@
         </div>
       </div>
 
+      <!-- Aba 7: Panorama Mensal com Dropdown INMET (v211) -->
+      <div id="nav-wrapper-panorama" class="nav-dropdown-wrapper shrink-0 lg:w-full">
+        <div class="flex items-center w-full">
+          <button id="nav-tab-panorama" onclick="handleNavTabClick('panorama', event)" class="app-nav-tab flex items-center justify-center gap-1 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-[12px] font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 shrink-0 text-[#ea580c]"></i>
+            <span class="leading-none whitespace-nowrap">Panorama Mensal</span>
+            <span class="px-1 py-0.2 rounded text-[8.5px] font-black bg-amber-500 text-black uppercase shrink-0">Novo</span>
+            <span onclick="toggleNavDropdown('panorama', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver opções do Panorama Mensal">
+              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
+            </span>
+          </button>
+        </div>
+        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
+        <div class="nav-dropdown-menu right-0">
+          <div class="nav-dropdown-header flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>Panorama Mensal • Out/2026</span>
+              <i data-lucide="sparkles" class="w-3 h-3 text-[#ea580c]"></i>
+            </div>
+            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
+              <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+          <div class="space-y-0.5">
+            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('video');" class="nav-dropdown-item cursor-pointer">
+              <i data-lucide="play-circle" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
+              <div>
+                <span class="font-bold text-slate-800 dark:text-slate-100">Vídeo Reels (9:16)</span>
+                <span class="nav-dropdown-item-desc">Vídeo master vertical em alta resolução para Instagram</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('feed');" class="nav-dropdown-item cursor-pointer">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
+              <div>
+                <span>Carrossel Feed (4:5)</span>
+                <span class="nav-dropdown-item-desc">6 Lâminas completas formatadas para o Feed</span>
+              </div>
+            </a>
+            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('stories');" class="nav-dropdown-item cursor-pointer">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
+              <div>
+                <span>Stories / Reels (9:16)</span>
+                <span class="nav-dropdown-item-desc">6 Lâminas verticais prontas para postar nos Stories</span>
+              </div>
+            </a>
+            <a href="img/panorama/panorama-clima-outubro-2026.zip" download="panorama-clima-outubro-2026.zip" class="nav-dropdown-item cursor-pointer border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
+              <div>
+                <span class="text-[#ea580c]">Baixar Pacote Completo (ZIP)</span>
+                <span class="nav-dropdown-item-desc">12 Imagens PNG HD + Vídeo Reels MP4 (10.7 MB)</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
     <!-- PAINEL DROPDOWN MOBILE (LISTINHA ESTILO INMET EM DISPOSITIVOS MÓVEIS) -->
@@ -1006,6 +1063,36 @@
 
 
   <div id="view-tab-previsao" class="app-tab-view space-y-6">
+
+    <!-- BANNER DE DESTAQUE: RETROSPECTIVA / PANORAMA MENSAL OUTUBRO 2026 (v211) -->
+    <div id="banner-panorama-mensal" class="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+      <div class="p-3.5 sm:p-4 rounded-2xl bg-gradient-to-r from-[#1D1F26] via-[#283964] to-[#1D1F26] text-white border-2 border-[#FF8244]/60 shadow-lg flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#FF8244]/20 border border-[#FF8244] flex items-center justify-center shrink-0">
+            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6 text-[#FF8244]"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-[#FF8244] text-black">Retrospectiva Oficial</span>
+              <span class="text-xs font-bold text-[#CDDAEE]">Rio das Ostras, RJ</span>
+            </div>
+            <h2 class="text-sm sm:text-base font-extrabold text-white tracking-tight mt-0.5">
+              Panorama Mensal do Clima • Outubro 2026
+            </h2>
+            <p class="text-xs text-[#CDDAEE] hidden sm:block">
+              Pico de 410 mm na Região Rural, 25 dias chuvosos, rajadas de 62 km/h e ranking de todas as estações.
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 w-full md:w-auto">
+          <button onclick="handleNavTabClick('panorama', event)" class="flex-1 md:flex-none px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer">
+            <i data-lucide="play" class="w-4 h-4 fill-black"></i>
+            <span>Ver Vídeo & Imagens</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
 
 
 
@@ -8896,7 +8983,7 @@
 
 
 
-        <img src="img/logo-rounded.png?v=210" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
+        <img src="img/logo-rounded.png?v=211" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
 
 
 
@@ -9333,6 +9420,249 @@
 
 
   </div>
+
+  <!-- ========================================================================= -->
+  <!-- VIEW 7: RETROSPECTIVA / PANORAMA MENSAL DO CLIMA (OUTUBRO 2026 - v211)      -->
+  <!-- ========================================================================= -->
+  <div id="view-tab-panorama" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-8 space-y-6">
+    <div id="section-panorama-mensal-viewer" class="space-y-6">
+      
+      <!-- Cabeçalho Principal do Panorama -->
+      <div class="p-5 sm:p-6 rounded-3xl bg-[#1D1F26] text-white border-2 border-[#3C7BC4]/40 shadow-2xl relative overflow-hidden">
+        <div class="absolute -right-16 -top-16 w-64 h-64 rounded-full bg-[#FF8244]/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-[#3C7BC4]/15 blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2.5 flex-wrap mb-2">
+              <span class="px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-[#FF8244] text-black flex items-center gap-1.5 shadow-xs">
+                <i data-lucide="award" class="w-3.5 h-3.5"></i>
+                <span>Retrospectiva Oficial</span>
+              </span>
+              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/50">
+                Rio das Ostras, RJ • Outubro 2026
+              </span>
+              <span class="text-xs font-bold text-[#FF8244]">@tempoemriodasostras</span>
+            </div>
+            <h1 class="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight">
+              Panorama Mensal do Clima • Outubro 2026
+            </h1>
+            <p class="text-xs sm:text-sm text-[#CDDAEE] mt-1.5 max-w-3xl leading-relaxed">
+              Consolidação técnica oficial das 5 estações meteorológicas de Rio das Ostras. Chuva que variou de 131 mm na orla a 410 mm na Região Rural, 25 dias chuvosos e rajadas de 62,3 km/h.
+            </p>
+          </div>
+
+          <!-- Ações Rápidas -->
+          <div class="flex flex-wrap items-center gap-2.5 shrink-0 w-full lg:w-auto">
+            <a href="img/panorama/panorama-clima-outubro-2026.zip" download="panorama-clima-outubro-2026.zip" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer" title="Baixar todas as imagens em PNG Lossless e o Vídeo Master MP4">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Baixar Pacote ZIP (10.7 MB)</span>
+            </a>
+            <button onclick="window.copyPanoramaCaption()" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#283964] hover:bg-[#344b82] text-white border border-[#3C7BC4] shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer" title="Copiar legenda formatada para colar no Instagram">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+              <span>Copiar Legenda</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Modos de Visualização (Abas Interativas) -->
+        <div class="mt-6 pt-5 border-t border-[#CDDAEE]/15 flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <button onclick="window.switchPanoramaMode('video')" data-mode="video" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black border-2 transition-all bg-[#FF8244] text-black border-[#FF8244] shadow-md cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="play-circle" class="w-4 h-4"></i>
+            <span>📱 Vídeo Reels (9:16)</span>
+          </button>
+          <button onclick="window.switchPanoramaMode('feed')" data-mode="feed" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            <span>📸 Carrossel Feed (4:5)</span>
+          </button>
+          <button onclick="window.switchPanoramaMode('stories')" data-mode="stories" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            <span>📱 Stories (9:16)</span>
+          </button>
+          <button onclick="window.switchPanoramaMode('legenda')" data-mode="legenda" class="panorama-mode-btn px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold border transition-all bg-[#1D1F26] text-[#CDDAEE] border-[#3C7BC4]/40 hover:bg-[#283964] shadow-xs cursor-pointer flex items-center gap-1.5 shrink-0">
+            <i data-lucide="file-text" class="w-4 h-4"></i>
+            <span>📋 Legenda Pronta</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PAINEL 1: VÍDEO MASTER REELS (9:16) -->
+      <div id="panorama-panel-video" class="p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+        <div class="text-center max-w-lg mb-4">
+          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Formato Vertical Instagram Reels</span>
+          <h3 class="text-lg sm:text-xl font-black text-white mt-0.5">Vídeo Master Oficial • 1080x1920 (46.8s)</h3>
+          <p class="text-xs text-[#CDDAEE] mt-1">Renderização sem perdas (CRF 15) com áudio silencioso para você adicionar músicas em alta direto no Instagram.</p>
+        </div>
+
+        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#283964] bg-black aspect-[9/16]">
+          <video id="panorama-reels-video" controls playsinline preload="metadata" class="w-full h-full object-cover">
+            <source src="img/panorama/video_reels_outubro_2026.mp4?v=211" type="video/mp4">
+            Seu navegador não suporta a tag de vídeo.
+          </video>
+        </div>
+
+        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+          <a href="img/panorama/video_reels_outubro_2026.mp4" download="video_reels_outubro_2026.mp4" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Baixar Vídeo Reels (MP4 • 2.4 MB)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- PAINEL 2: CARROSSEL FEED (4:5) -->
+      <div id="panorama-panel-feed" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+        <div class="text-center max-w-lg mb-3">
+          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Feed do Instagram • Proporção Nativa 4:5</span>
+          <h3 id="panorama-feed-title" class="text-lg sm:text-xl font-black text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
+          <span id="panorama-feed-counter" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/40">Lâmina 1 de 6</span>
+        </div>
+
+        <!-- Container do Carrossel 4:5 -->
+        <div class="relative w-full max-w-[460px] sm:max-w-[480px] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#3C7BC4]/40 bg-[#15171D] aspect-[4/5] flex items-center justify-center">
+          <img id="panorama-feed-image" src="img/panorama/feed/lamina_01_abertura_outubro_2026.png?v=211" alt="Lâmina 1 de 6" class="w-full h-full object-cover">
+          
+          <!-- Botão Anterior ◀ -->
+          <button onclick="window.navigatePanoramaFeed(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Lâmina Anterior (ou use a seta esquerda do teclado)">
+            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+          </button>
+
+          <!-- Botão Próximo ▶ -->
+          <button onclick="window.navigatePanoramaFeed(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Próxima Lâmina (ou use a seta direita do teclado)">
+            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+        <!-- Indicadores de Pontos (Dots) -->
+        <div class="flex items-center gap-2 mt-4">
+          <div onclick="window.setPanoramaFeedSlide(1)" class="panorama-feed-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(2)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(3)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(4)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(5)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaFeedSlide(6)" class="panorama-feed-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <a id="panorama-feed-download-btn" href="img/panorama/feed/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Baixar esta Lâmina (PNG HD 4:5)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- PAINEL 3: STORIES (9:16) -->
+      <div id="panorama-panel-stories" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl flex flex-col items-center">
+        <div class="text-center max-w-lg mb-3">
+          <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Stories do Instagram • Vertical 9:16</span>
+          <h3 id="panorama-story-title" class="text-lg sm:text-xl font-black text-white mt-0.5">Abertura Oficial • Os 3 Grandes Números</h3>
+          <span id="panorama-story-counter" class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-[#283964] text-[#CDDAEE] border border-[#3C7BC4]/40">Story 1 de 6</span>
+        </div>
+
+        <!-- Container Stories 9:16 -->
+        <div class="relative w-full max-w-[360px] sm:max-w-[380px] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#3C7BC4]/40 bg-[#15171D] aspect-[9/16] flex items-center justify-center">
+          <img id="panorama-story-image" src="img/panorama/stories/lamina_01_abertura_outubro_2026.png?v=211" alt="Story 1 de 6" class="w-full h-full object-cover">
+          
+          <!-- Botão Anterior ◀ -->
+          <button onclick="window.navigatePanoramaStory(-1)" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Story Anterior">
+            <i data-lucide="chevron-left" class="w-6 h-6"></i>
+          </button>
+
+          <!-- Botão Próximo ▶ -->
+          <button onclick="window.navigatePanoramaStory(1)" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-lg border border-white/20" title="Próximo Story">
+            <i data-lucide="chevron-right" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+        <!-- Indicadores de Pontos (Dots) -->
+        <div class="flex items-center gap-2 mt-4">
+          <div onclick="window.setPanoramaStorySlide(1)" class="panorama-story-dot w-6 h-2.5 rounded-full bg-[#FF8244] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(2)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(3)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(4)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(5)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+          <div onclick="window.setPanoramaStorySlide(6)" class="panorama-story-dot w-2.5 h-2.5 rounded-full bg-[#3C7BC4]/40 hover:bg-[#3C7BC4] transition-all cursor-pointer"></div>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <a id="panorama-story-download-btn" href="img/panorama/stories/lamina_01_abertura_outubro_2026.png" download="lamina_01_abertura_outubro_2026.png" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-lg transition-all flex items-center gap-2 cursor-pointer">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>Baixar este Story (PNG HD 9:16)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- PAINEL 4: LEGENDA PRONTA PARA INSTAGRAM -->
+      <div id="panorama-panel-legenda" class="hidden p-5 sm:p-7 rounded-3xl bg-[#1D1F26] text-white border border-[#3C7BC4]/30 shadow-2xl">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+          <div>
+            <span class="text-xs font-bold text-[#FF8244] uppercase tracking-wider">Texto Oficial Pronto para Postar</span>
+            <h3 class="text-lg sm:text-xl font-black text-white mt-0.5">Legenda Formatada para Feed & Reels</h3>
+          </div>
+          <button id="panorama-copy-caption-btn" onclick="window.copyPanoramaCaption()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#FF8244] hover:bg-[#ff945e] text-black shadow-md transition-all flex items-center gap-2 cursor-pointer">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            <span>Copiar Legenda</span>
+          </button>
+        </div>
+
+        <div class="p-4 sm:p-5 rounded-2xl bg-[#15171D] border border-[#3C7BC4]/30 font-mono text-xs sm:text-sm leading-relaxed text-[#CDDAEE] whitespace-pre-wrap select-all">
+<span id="panorama-caption-content">🌧️ RETROSPECTIVA CLIMÁTICA • OUTUBRO 2026
+Confira os dados consolidados das estações meteorológicas oficiais de Rio das Ostras:
+
+📊 OS NÚMEROS DO MÊS:
+• Volume Total Máximo: 410,0 mm em Rocha Leão / REBIO União (Região Rural)
+• Variação no Município: de 131,3 mm na orla a 410,0 mm no interior
+• Frequência de Chuva: 25 dias com registro de chuva ao longo do mês
+• Dia Mais Chuvoso: 02/10 com até 84,3 mm em 24h
+• Maior Rajada de Vento: 62,3 km/h em 26/10 às 10:00 (Praia da Tartaruga)
+• Vento Médio: 16,6 km/h com direção predominante de Nordeste (NE)
+• Extremos Térmicos: Mínima de 18,4°C e Máxima de 32,6°C
+
+🌧️ RANKING DE CHUVA POR BAIRRO / REGIÃO:
+1º Rocha Leão (Região Rural): 410,0 mm
+2º Cantagalo / Bosque (Região Central): 191,7 mm
+3º Praiamar (Divisa Sul): 177,3 mm
+4º Praia da Tartaruga (Orla / Sede): 167,9 mm
+5º Costazul - Escola Jacinto (Orla Central): 131,3 mm
+
+☀️ SISTEMAS METEOROLÓGICOS QUE ATUARAM:
+• Alta Subtropical do Atlântico Sul (ASAS): 12 dias de sol, calor e vento NE
+• Cavados Costeiros e Instabilidade Local: 12 dias de pancadas convectivas
+• Passagem de Frentes Frias: 4 dias de chuva e queda na temperatura
+• Circulação Marítima Pós-Frontal: 3 dias de ventos marítimos e umidade
+
+Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa Civil no nosso portal.
+
+#riodasostras #clima #tempo #outubro2026 #meteorologia #costazul #regiaodoslagos #chuva #defesacivil</span>
+        </div>
+      </div>
+
+      <!-- Resumo Analítico em Cards Rápidos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
+          <span class="text-[11px] font-black uppercase text-[#FF8244]">Pico do Mês</span>
+          <div class="text-2xl font-black text-white mt-1">410,0 mm</div>
+          <span class="text-xs text-[#CDDAEE]">Rocha Leão (Região Rural)</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
+          <span class="text-[11px] font-black uppercase text-[#7bb5f5]">Frequência</span>
+          <div class="text-2xl font-black text-white mt-1">25 Dias</div>
+          <span class="text-xs text-[#CDDAEE]">Com chuva registrada (80% do mês)</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
+          <span class="text-[11px] font-black uppercase text-[#FF8244]">Rajada Máxima</span>
+          <div class="text-2xl font-black text-white mt-1">62,3 km/h</div>
+          <span class="text-xs text-[#CDDAEE]">Praia da Tartaruga (26/10)</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-[#1D1F26] border border-[#3C7BC4]/30 shadow-md">
+          <span class="text-[11px] font-black uppercase text-[#7bb5f5]">Extremos Térmicos</span>
+          <div class="text-2xl font-black text-white mt-1">18,4° • 32,6°</div>
+          <span class="text-xs text-[#CDDAEE]">Menor mínima e maior máxima</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 
 
 
@@ -10712,8 +11042,9 @@
     };
 
     </script>
-  <script src="js/historico_planilha.js?v=210"></script>
-  <script type="module" src="js/app.js?v=210"></script>
+  <script src="js/historico_planilha.js?v=211"></script>
+  <script src="js/panorama_mensal.js?v=211"></script>
+  <script type="module" src="js/app.js?v=211"></script>
 
 
 
