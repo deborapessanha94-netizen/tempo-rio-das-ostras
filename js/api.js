@@ -466,6 +466,15 @@ export async function getBoletimMetadata() {
 }
 
 /**
+ * Obtém o calendário astronômico oficial de fases da lua do INMET / IAG-USP
+ * Fonte: https://portal.inmet.gov.br/paginas/luas
+ */
+export async function getInmetFasesLua() {
+  return await fetchLiveCloudOrLocalJson('fases_lua_inmet.json', null);
+}
+
+
+/**
  * Obtém a rede de monitoramento de estações com acumulados de 1h a 96h
  */
 export async function getAcumuladosEstacoes() {

@@ -2259,11 +2259,12 @@ def run_auto_bulletin_pipeline():
             "nascer_sol": "05:04",
             "por_sol": "17:57",
             "duracao_dia": "12h 53m",
-            "fase_lua": "Lua Cheia",
-            "fase_lua_emoji": "🌕",
-            "iluminacao_lua": "99%",
-            "idade_lua_dias": 15.4,
-            "visibilidade_lua": "Visível a noite toda"
+            "fase_lua": "Crescente",
+            "fase_lua_emoji": "🌒",
+            "iluminacao_lua": "12%",
+            "idade_lua_dias": 3.7,
+            "visibilidade_lua": "Ilum. 12% • Próx: Quarto Crescente (17/11)",
+            "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
         },
         "kpis": {
             "jundia_nivel": f"{jundia_nivel_txt} m",

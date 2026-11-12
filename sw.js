@@ -1,4 +1,4 @@
-const CACHE_NAME = 'meteo-ostras-v214';
+const CACHE_NAME = 'meteo-ostras-v215';
 const STATIC_ASSETS = [
   './js/panorama_mensal.js',
   './css/styles.css',
@@ -19,6 +19,7 @@ const STATIC_ASSETS = [
   './data/cptec_previsao.json',
   './data/boletim_oficial.json',
   './data/boletim_metadata.json',
+  './data/fases_lua_inmet.json',
   './data/acumulados_estacoes.json',
   './data/balneabilidade.json',
   './data/marinha_avisos.json',
