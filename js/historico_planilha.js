@@ -532,6 +532,7 @@
             '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Costazul: ' + fmtNum(stMap.IRIODA6 || 0, 1) + ' mm</span>' +
             '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Rocha Leão: ' + fmtNum(stMap.IRIODA15 || 0, 1) + ' mm</span>' +
             '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Praiamar: ' + fmtNum(stMap.ICASIM5 || 0, 1) + ' mm</span>' +
+            '<span class="px-2 py-0.5 rounded bg-sky-50 dark:bg-slate-800 text-sky-900 dark:text-sky-300 font-bold">Palmital: ' + fmtNum(stMap.PCD18789 != null ? stMap.PCD18789 : (stMap['18789'] != null ? stMap['18789'] : (stMap.palmital || 0)), 1) + ' mm</span>' +
           '</div>' +
 
           '<div class="space-y-1.5 text-xs">' +

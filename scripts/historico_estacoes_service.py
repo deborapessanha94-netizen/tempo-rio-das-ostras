@@ -76,6 +76,16 @@ STATIONS_META = [
         "peso_vento": 0.90,
         "costeira": True,
     },
+    {
+        "id": "PCD18789",
+        "nome": "Palmital (PCD 18789)",
+        "bairro": "Palmital / Casimiro-Ostras",
+        "peso_vento": 0.0,
+        "costeira": False,
+        "tipo": "pluviometrica",
+        "rede": "CEMADEN",
+        "url": "https://resources.cemaden.gov.br/graficos/interativo/grafico_CEMADEN.php?idpcd=18789&uf=RJ",
+    },
 ]
 
 MESES_PT = {
@@ -221,6 +231,68 @@ def fetch_station_day_hourly(station_id, day_date, wu_key):
         }
 
     return hours_map
+
+
+def fetch_cemaden_station_history(pcd_id="18789"):
+    """
+    Busca o historico horario oficial da PCD CEMADEN (PCD 18789 Palmital / Casimiro-Ostras)
+    convertendo UTC para BRT (UTC-3) e agrupando por data_iso e hora.
+    """
+    url = f"https://mapservices.cemaden.gov.br/MapaInterativoWS/resources/horario/{pcd_id}/2000"
+    try:
+        data = fetch_json(url, timeout=15)
+    except Exception:
+        return {}
+    if not data or not isinstance(data, dict):
+        return {}
+    datas = data.get("datas", [])
+    horarios = data.get("horarios", [])
+    acumulados = data.get("acumulados", [])
+
+    by_day_hour = {}
+    for d_idx, d_str in enumerate(datas):
+        if d_idx >= len(acumulados):
+            continue
+        row = acumulados[d_idx]
+        parts = str(d_str).split("/")
+        if len(parts) != 3:
+            continue
+        try:
+            dd, mm, yyyy = int(parts[0]), int(parts[1]), int(parts[2])
+        except ValueError:
+            continue
+        for h_idx, h_str in enumerate(horarios):
+            if h_idx >= len(row):
+                continue
+            val = row[h_idx]
+            if val is None or val < 0:
+                val = 0.0
+            try:
+                hr_utc = int("".join(c for c in str(h_str) if c.isdigit()))
+            except ValueError:
+                continue
+            dt_utc = datetime(yyyy, mm, dd, hr_utc, 0, 0, tzinfo=timezone.utc)
+            dt_brt = dt_utc - timedelta(hours=3)
+            day_iso = dt_brt.strftime("%Y-%m-%d")
+            hr_key = f"{dt_brt.hour:02d}"
+
+            day_dict = by_day_hour.setdefault(day_iso, {})
+            cur_rain = day_dict.get(hr_key, {}).get("rain_mm", 0.0)
+            new_rain = round(cur_rain + float(val), 2)
+            day_dict[hr_key] = {
+                "rain_mm": new_rain,
+                "cum_rain_mm": new_rain,
+                "wind_avg": 0.0,
+                "wind_high": 0.0,
+                "gust_high": 0.0,
+                "wind_dir": None,
+                "temp": None,
+                "temp_high": None,
+                "temp_low": None,
+                "humidity": None,
+                "pressure": None,
+            }
+    return by_day_hour
 
 
 def fetch_open_meteo_reference(start_dt, end_dt):
@@ -531,6 +603,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
         "COSTAZUL - IRIODA6 (mm)",
         "ROCHA LEÃO - IRIODA15 (mm)",
         "PRAIAMAR - ICASIM5 (mm)",
+        "PALMITAL - PCD 18789 (mm)",
         "VENTO VELOCIDADE (km/h)",
         "VENTO VELOCIDADE MÉDIA (km/h)",
         "VENTO DIREÇÃO",
@@ -578,6 +651,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                     st_r.get("IRIODA6", 0.0),
                     st_r.get("IRIODA15", 0.0),
                     st_r.get("ICASIM5", 0.0),
+                    st_r.get("PCD18789", 0.0),
                     hr_row["vento_velocidade_kmh"],
                     hr_row["vento_velocidade_media_kmh"],
                     hr_row["vento_direcao_completa"],
@@ -612,6 +686,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                 st_d.get("IRIODA6", {}).get("chuva_mm", 0.0),
                 st_d.get("IRIODA15", {}).get("chuva_mm", 0.0),
                 st_d.get("ICASIM5", {}).get("chuva_mm", 0.0),
+                st_d.get("PCD18789", {}).get("chuva_mm", 0.0),
                 d_sum["vento_vel_max_kmh"],
                 d_sum["vento_vel_media_kmh"],
                 f"Predom.: {d_sum['vento_dir_predominante']}",
@@ -651,6 +726,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                     st_m.get("IRIODA6", 0.0),
                     st_m.get("IRIODA15", 0.0),
                     st_m.get("ICASIM5", 0.0),
+                    st_m.get("PCD18789", 0.0),
                     m_sum["vento_vel_max_kmh"],
                     m_sum["vento_vel_media_kmh"],
                     f"Predom.: {m_sum['vento_dir_predominante']}",
@@ -695,6 +771,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                 st_all.get("IRIODA6", 0.0),
                 st_all.get("IRIODA15", 0.0),
                 st_all.get("ICASIM5", 0.0),
+                st_all.get("PCD18789", 0.0),
                 max_w_all,
                 avg_w_all,
                 "NE / S",
@@ -807,6 +884,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
             "COSTAZUL IRIODA6 (mm)",
             "ROCHA LEÃO IRIODA15 (mm)",
             "PRAIAMAR ICASIM5 (mm)",
+            "PALMITAL PCD 18789 (mm)",
             "VENTO VEL. MÉDIA (km/h)",
             "VENTO VEL. MÁXIMA (km/h)",
             "VENTO DIREÇÃO PREDOMINANTE",
@@ -850,6 +928,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                 st_d.get("IRIODA6", {}).get("chuva_mm", 0.0),
                 st_d.get("IRIODA15", {}).get("chuva_mm", 0.0),
                 st_d.get("ICASIM5", {}).get("chuva_mm", 0.0),
+                st_d.get("PCD18789", {}).get("chuva_mm", 0.0),
                 d_sum["vento_vel_media_kmh"],
                 d_sum["vento_vel_max_kmh"],
                 d_sum["vento_dir_predominante"],
@@ -895,6 +974,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                     st_m.get("IRIODA6", 0.0),
                     st_m.get("IRIODA15", 0.0),
                     st_m.get("IRIODA15", 0.0) if "ICASIM5" not in st_m else st_m.get("ICASIM5", 0.0),
+                    st_m.get("PCD18789", 0.0),
                     m_sum["vento_vel_media_kmh"],
                     m_sum["vento_vel_max_kmh"],
                     m_sum["vento_dir_predominante"],
@@ -936,6 +1016,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
             "COSTAZUL IRIODA6 (mm)",
             "ROCHA LEÃO IRIODA15 (mm)",
             "PRAIAMAR ICASIM5 (mm)",
+            "PALMITAL PCD 18789 (mm)",
             "DIA MAIS CHUVOSO DO MÊS",
             "VENTO VEL. MÉDIA MENSAL (km/h)",
             "VENTO VEL. MÁXIMA NO MÊS (km/h)",
@@ -970,6 +1051,7 @@ def export_excel_and_csv(hourly_rows, daily_summaries, monthly_summaries):
                 st_m.get("IRIODA6", 0.0),
                 st_m.get("IRIODA15", 0.0),
                 st_m.get("ICASIM5", 0.0),
+                st_m.get("PCD18789", 0.0),
                 m_sum["dia_mais_chuvoso"],
                 m_sum["vento_vel_media_kmh"],
                 m_sum["vento_vel_max_kmh"],
@@ -1039,8 +1121,17 @@ def update_historical_spreadsheet(force_refresh_all=False):
         cached_day = raw_cache.get(d_iso, {})
         for st in STATIONS_META:
             sid = st["id"]
+            if sid == "PCD18789":
+                continue
             if is_recent_day or sid not in cached_day:
                 tasks.append((d, d_iso, sid))
+
+    # Sincroniza serie historica da PCD CEMADEN 18789 (Palmital)
+    print(">> [Histórico Estações] Sincronizando PCD 18789 (Palmital) via CEMADEN API...")
+    cemaden_data = fetch_cemaden_station_history("18789")
+    if cemaden_data:
+        for c_iso, c_hours in cemaden_data.items():
+            raw_cache.setdefault(c_iso, {})["PCD18789"] = c_hours
 
     if tasks:
         print(f">> [Histórico Estações] Sincronizando {len(tasks)} blocos diários/estação na Weather Underground...")
