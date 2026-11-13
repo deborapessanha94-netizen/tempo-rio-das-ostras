@@ -35,80 +35,8 @@
   "id_cidade": 3866,
   "id_ibge": 3304524,
   "url_portal": "https://www.cptec.inpe.br/",
-  "hoje": {
-    "id_cidade": 3866,
-    "id_ibge": 3304524,
-    "latitude": "-22.52690",
-    "longitude": "-41.94500",
-    "cidade": "Rio das Ostras",
-    "uf": "RJ",
-    "probabilidade_chuva": 30,
-    "precipitacao_acumulada": "5",
-    "indice_uv": 13,
-    "temperatura_max": "29",
-    "temperatura_min": "22",
-    "vento": "7",
-    "umidade": 73,
-    "temperatura_prev": "29",
-    "sensacao_termica": "27",
-    "hora_atual": "2026-11-13T15:00:00.000Z"
-  },
-  "proximos_dias": [
-    {
-      "data_atual": "14",
-      "semana_dia": "Sáb",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "27",
-      "temperatura_min": "20",
-      "umidade": 78,
-      "indice_uv": 13
-    },
-    {
-      "data_atual": "15",
-      "semana_dia": "Dom",
-      "probabilidade_chuva": 10,
-      "temperatura_max": "27",
-      "temperatura_min": "20",
-      "umidade": 80,
-      "indice_uv": 13
-    },
-    {
-      "data_atual": "16",
-      "semana_dia": "Seg",
-      "probabilidade_chuva": 80,
-      "temperatura_max": "25",
-      "temperatura_min": "21",
-      "umidade": 87,
-      "indice_uv": 13
-    },
-    {
-      "data_atual": "17",
-      "semana_dia": "Ter",
-      "probabilidade_chuva": 20,
-      "temperatura_max": "27",
-      "temperatura_min": "22",
-      "umidade": 83,
-      "indice_uv": 13
-    },
-    {
-      "data_atual": "18",
-      "semana_dia": "Qua",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "30",
-      "temperatura_min": "22",
-      "umidade": 79,
-      "indice_uv": 14
-    },
-    {
-      "data_atual": "19",
-      "semana_dia": "Qui",
-      "probabilidade_chuva": 5,
-      "temperatura_max": "30",
-      "temperatura_min": "24",
-      "umidade": 71,
-      "indice_uv": 14
-    }
-  ],
+  "hoje": {},
+  "proximos_dias": [],
   "meteograma_multimodel": {
     "area": "Rio/RJ",
     "data": [
