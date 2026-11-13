@@ -3,7 +3,7 @@
   "status_geral_cor": "danger",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": true,
-  "atualizacao_hora": "13/11/2026 às 10:52h",
+  "atualizacao_hora": "13/11/2026 às 14:11h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -246,25 +246,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 1.5,
-        "teto_tempestade_alerta_mm": 2.2,
-        "faixa_completa_txt": "1.5 mm",
+        "media_continua_modelos_mm": 1.6,
+        "teto_tempestade_alerta_mm": 2.4,
+        "faixa_completa_txt": "1.6 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "10:00 às 14:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
-            "volume_estimado": "1.1 a 1.7 mm",
+            "volume_estimado": "1.2 a 1.8 mm",
             "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
-            "volume_estimado": "1.5 a 2.2 mm",
+            "volume_estimado": "1.6 a 2.4 mm",
             "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
           },
           "regiao_rural": {
             "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
-            "volume_estimado": "1.9 a 2.2 mm",
+            "volume_estimado": "2.0 a 2.4 mm",
             "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
           }
         },
