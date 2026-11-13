@@ -107,6 +107,15 @@
       "temperatura_min": "24",
       "umidade": 71,
       "indice_uv": 14
+    },
+    {
+      "data_atual": "19",
+      "semana_dia": "Qui",
+      "probabilidade_chuva": null,
+      "temperatura_max": null,
+      "temperatura_min": null,
+      "umidade": null,
+      "indice_uv": null
     }
   ],
   "meteograma_multimodel": {
@@ -468,7 +477,7 @@
         "fcst": 27,
         "heat_index": 22.7,
         "temp": 21.4,
-        "ur": 94,
+        "ur": 93,
         "prob_prec": 0,
         "prec": 0.0,
         "vent": 3.1,

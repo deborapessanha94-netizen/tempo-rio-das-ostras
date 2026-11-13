@@ -591,8 +591,8 @@
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
-        "chuva_96h": 5.0,
-        "leitura": "2026-11-12 20:10:00"
+        "chuva_96h": 3.0,
+        "leitura": "2026-11-13 07:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -911,7 +911,7 @@
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Rajadas 50 km/h",
+            "val": "Rajadas 42 km/h",
             "icon": "wind"
           },
           "chuva": {
@@ -1705,7 +1705,7 @@
         },
         "agua_precipitavel": {
           "label": "ÁGUA PRECIPITÁVEL (VIME)",
-          "val": "12.3 mm",
+          "val": "13.7 mm",
           "icon": "droplets"
         }
       }
@@ -1898,7 +1898,7 @@
       },
       "sensacao_min": 27,
       "sensacao_max": 36,
-      "sensacao_faixa": "27° a 36°C",
+      "sensacao_faixa": "25° a 36°C",
       "informe_populacao": [
         "Nesta quinta-feira, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia.",
         "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 0.1 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
@@ -1914,13 +1914,13 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "24° a 30°C",
+          "val": "22° a 27°C",
           "icon": "thermometer"
         },
         "sensacao": {
           "label": "SENSAÇÃO TÉRMICA",
-          "val": "Menor: 27°C • Maior: 36°C",
-          "sensacao_min": 27,
+          "val": "Menor: 25°C • Maior: 36°C",
+          "sensacao_min": 25,
           "sensacao_max": 36,
           "icon": "flame"
         },
@@ -1941,7 +1941,7 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.9 a 0.9 m",
+          "val": "0.9 a 1.0 m",
           "icon": "waves"
         },
         "uv": {
@@ -3373,6 +3373,15 @@
         "temperatura_min": "24",
         "umidade": 71,
         "indice_uv": 14
+      },
+      {
+        "data_atual": "19",
+        "semana_dia": "Qui",
+        "probabilidade_chuva": null,
+        "temperatura_max": null,
+        "temperatura_min": null,
+        "umidade": null,
+        "indice_uv": null
       }
     ],
     "tem_meteograma_multimodel": true
@@ -3398,7 +3407,7 @@
       "setor": "Cidade Praiana, Parque Mariléa, Beira Mar e Jardim Mariléa",
       "risco_sab": "ATENÇÃO",
       "risco_dom": "ATENÇÃO",
-      "risco_seg": "ATENÇÃO",
+      "risco_seg": "OBS",
       "impactos": "Drenagem pluvial operando normalmente em vias urbanas e margens da RJ-106.",
       "acoes": "Prontidão de equipamentos de sucção e desobstrução das principais vias de acesso."
     },
@@ -3406,7 +3415,7 @@
       "setor": "Bosque, Extensão do Bosque, Nova Aliança e Centro",
       "risco_sab": "ATENÇÃO",
       "risco_dom": "ATENÇÃO",
-      "risco_seg": "ATENÇÃO",
+      "risco_seg": "OBS",
       "impactos": "Escoamento normal de galerias pluviais no Centro comercial e canal da Praça da Baleia.",
       "acoes": "Limpeza preventiva de grelhas pluviais e patrulhamento de trânsito."
     },
