@@ -4,7 +4,7 @@
     "curso_dagua": "rio Jundiá",
     "nome_estacao": "Jundiá",
     "codigo": "2241036",
-    "ultima_leitura": "12/11/2026 22:00",
+    "ultima_leitura": "13/11/2026 04:00",
     "status": "VIGILÂNCIA",
     "tendencia": "Estável",
     "chuva_1h": "0.0",
@@ -16,11 +16,11 @@
     "chuva_48h": "0.0",
     "chuva_96h": "0.0",
     "chuva_30d": "0.0",
-    "nivel_rio": "1.35",
+    "nivel_rio": "1.32",
     "cota_atencao": "1.99 m",
     "cota_alerta": "2.27 m",
     "cota_transborda": "2.84 m",
-    "porcentagem_calha": 48,
+    "porcentagem_calha": 46,
     "eh_rio_das_ostras": true
   }
 ]
