@@ -251,9 +251,9 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 1.5,
-          "teto_tempestade_alerta_mm": 2.2,
-          "faixa_completa_txt": "1.5 mm",
+          "media_continua_modelos_mm": 1.6,
+          "teto_tempestade_alerta_mm": 2.4,
+          "faixa_completa_txt": "1.6 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "11:00 às 13:00h",
           "distribuicao_geografica": {
@@ -592,7 +592,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 3.0,
-        "leitura": "2026-11-13 07:10:00"
+        "leitura": "2026-11-13 11:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -652,9 +652,9 @@
         "data_iso": "2026-11-17",
         "data_br": "17/11/2026",
         "dia_semana": "Terça-feira",
-        "chuva_media_modelos_mm": 1.5,
-        "chuva_pico_convectivo_mm": 2.2,
-        "faixa_oficial": "1.5 mm",
+        "chuva_media_modelos_mm": 1.6,
+        "chuva_pico_convectivo_mm": 2.4,
+        "faixa_oficial": "1.6 mm",
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "taxa_horaria_pico": "< 5 mm/h"
@@ -695,16 +695,16 @@
     ],
     "acumulado_3dias_media": 38.4,
     "acumulado_4dias_media": 46.3,
-    "acumulado_semana_media": 50.7,
-    "acumulado_semana_formula": "15.3 mm (Sex) + 13.0 mm (Sáb) + 10.1 mm (Dom) + 7.9 mm (Seg) + 1.5 mm (Ter) + 0.0 mm (Qua) + 0.1 mm (Qui) + 2.8 mm (Sex) = 50.7 mm",
-    "acumulado_8dias_formula": "15.3 mm (Sex) + 13.0 mm (Sáb) + 10.1 mm (Dom) + 7.9 mm (Seg) + 1.5 mm (Ter) + 0.0 mm (Qua) + 0.1 mm (Qui) + 2.8 mm (Sex) = 50.7 mm",
-    "acumulado_8dias_media": 50.7,
+    "acumulado_semana_media": 50.8,
+    "acumulado_semana_formula": "15.3 mm (Sex) + 13.0 mm (Sáb) + 10.1 mm (Dom) + 7.9 mm (Seg) + 1.6 mm (Ter) + 0.0 mm (Qua) + 0.1 mm (Qui) + 2.8 mm (Sex) = 50.8 mm",
+    "acumulado_8dias_formula": "15.3 mm (Sex) + 13.0 mm (Sáb) + 10.1 mm (Dom) + 7.9 mm (Seg) + 1.6 mm (Ter) + 0.0 mm (Qua) + 0.1 mm (Qui) + 2.8 mm (Sex) = 50.8 mm",
+    "acumulado_8dias_media": 50.8,
     "dias_somados": [
       15.3,
       13.0,
       10.1,
       7.9,
-      1.5,
+      1.6,
       0.0,
       0.1,
       2.8
@@ -1009,7 +1009,7 @@
       "pilares": [
         {
           "label": "Modelos Numéricos (4 Dias)",
-          "val": "INMET e Open-Meteo (50.7 mm em 96h)"
+          "val": "INMET e Open-Meteo (50.8 mm em 96h)"
         },
         {
           "label": "Gradiente Térmico Oficial",
@@ -1592,7 +1592,7 @@
       "subtitulo": "Garoa Fraca",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 18°C e máxima de 27°C. Volume pluviométrico diário estimado em 1.5 mm com rajadas de vento de até 35 km/h na faixa litorânea.",
+      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 18°C e máxima de 27°C. Volume pluviométrico diário estimado em 1.6 mm com rajadas de vento de até 35 km/h na faixa litorânea.",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-17",
         "data_br": "17/11/2026",
@@ -1605,9 +1605,9 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 1.5,
-          "teto_tempestade_alerta_mm": 2.2,
-          "faixa_completa_txt": "1.5 mm",
+          "media_continua_modelos_mm": 1.6,
+          "teto_tempestade_alerta_mm": 2.4,
+          "faixa_completa_txt": "1.6 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "11:00 às 13:00h",
           "distribuicao_geografica": {
@@ -1655,7 +1655,7 @@
       "sensacao_faixa": "25° a 31°C",
       "informe_populacao": [
         "Nesta terça-feira, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia.",
-        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 1.5 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
+        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 1.6 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
         "Temperaturas variam entre mínima de 18°C ao amanhecer e máxima de 27°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 31°C no pico do calor. Na região rural, oscilam entre 16°C e 25°C.",
         "A umidade relativa do ar oscila entre 83% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos de W rondando para SE moderados com rajadas de até 35 km/h na orla (Sem avisos meteorológicos vigentes)."
@@ -1690,7 +1690,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "1.5 mm",
+          "val": "1.6 mm",
           "icon": "cloud-drizzle"
         },
         "mar": {
@@ -2347,7 +2347,7 @@
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_13-11-2026.pdf",
       "data_boletim": "13/11/2026",
-      "label": "Boletim HidrometeorolÃ³gico 13/11/2026",
+      "label": "Boletim Hidrometeorológico 13/11/2026",
       "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_13-11-2026.pdf"
     },
     "previsao_rh8": {
@@ -3435,8 +3435,8 @@
   "kpis": {
     "jundia_nivel": "1.31 m",
     "jundia_status": "Vigilância",
-    "chuva_3d": "50.7 mm",
-    "chuva_4d": "50.7 mm",
+    "chuva_3d": "50.8 mm",
+    "chuva_4d": "50.8 mm",
     "aviso_marinha": "NORMAL",
     "pico_calor": "30°C",
     "plancon_status": "ATENÇÃO"

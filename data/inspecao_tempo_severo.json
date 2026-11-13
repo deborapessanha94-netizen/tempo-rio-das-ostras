@@ -246,9 +246,9 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 1.5,
-        "teto_tempestade_alerta_mm": 2.2,
-        "faixa_completa_txt": "1.5 mm",
+        "media_continua_modelos_mm": 1.6,
+        "teto_tempestade_alerta_mm": 2.4,
+        "faixa_completa_txt": "1.6 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "11:00 às 13:00h",
         "distribuicao_geografica": {

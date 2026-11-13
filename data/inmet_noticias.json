@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-13 10:27:55",
+  "coleta_iso": "2026-11-13 14:07:55",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "INMET participa de simpósio internacional sobre tempestades severas em São Paulo",
+      "data": "13/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-simpósio-internacional-sobre-tempestades-severas-em-são-paulo",
+      "relevancia_sudeste": true
+    },
     {
       "titulo": "INMET participa de capacitação internacional sobre radares meteorológicos na Guatemala",
       "data": "12/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "BOLETIM AGROCLIMATOLÓGICO MENSAL - NOVEMBRO/2026",
       "data": "09/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/boletim-agroclimatológico-mensal-novembro-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para terça-feira (10) e quarta-feira (11)",
-      "data": "09/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-10-e-quarta-feira-11",
       "relevancia_sudeste": false
     }
   ]
