@@ -13300,7 +13300,7 @@ window.switchPlanconTab = function(tabName) {
 
 
 
-  const tabs = ['volumes', 'bairros', 'niveis', 'protocolos'];
+  const tabs = ['volumes', 'bairros', 'niveis', 'protocolos', 'elnino'];
 
 
 

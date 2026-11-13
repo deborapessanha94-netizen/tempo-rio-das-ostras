@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=217">
+  <link rel="stylesheet" href="css/styles.css?v=218">
 
 
 
@@ -3098,6 +3098,10 @@
 
 
           </a>
+          <a href="docs/plancon_el_nino_rio_das_ostras.pdf" target="_blank" download="PLANCON_El_Nino_Rio_das_Ostras_2026_2027.pdf" class="btn-action-slate text-xs py-1.5 px-3 whitespace-nowrap border-[#ea580c]/40 hover:bg-[#ffebe4] cursor-pointer" title="Baixar Plano de Contingência Oficial do El Niño (PDF 64 páginas)">
+            <i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>PLANCON El Niño (PDF) ↗</span>
+          </a>
 
 
 
@@ -3181,6 +3185,12 @@
 
 
 
+        </button>
+
+        <button type="button" onclick="switchPlanconTab('elnino')" id="plancon-tab-btn-elnino" class="plancon-tab-btn px-3.5 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap cursor-pointer flex items-center gap-1.5 border border-[#ea580c]/30 hover:border-[#ea580c]">
+          <i data-lucide="flame" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+          <span>Riscos El Niño (2026/2027)</span>
+          <span class="ml-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-black bg-[#ffedd5] text-[#c2410c] dark:bg-amber-950/80 dark:text-amber-200 border border-[#ea580c]/30">SUBDEC</span>
         </button>
 
 
@@ -4120,6 +4130,435 @@
 
 
       </div>
+
+
+      <!-- PAINEL 5: RISCOS EL NIÑO PARA RIO DAS OSTRAS (PLANO DE CONTINGÊNCIA OFICIAL 2026/2027) -->
+      <div id="plancon-panel-elnino" class="hidden space-y-5">
+
+        <!-- CABEÇALHO OFICIAL DO PLANCON EL NIÑO & DOWNLOAD -->
+        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/70 via-white to-orange-50/50 border border-[#f07a53]/40 shadow-xs space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="space-y-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-tight bg-[#ea580c] text-white">
+                  SUBDEC • SEGTRAN • SIMDEC
+                </span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-tight bg-orange-100 text-orange-900 border border-orange-200">
+                  Vigência 2026 / 2027
+                </span>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-tight bg-red-100 text-red-900 border border-red-200">
+                  Super El Niño • Pacífico &gt; +2,0°C
+                </span>
+              </div>
+              <h3 class="text-base sm:text-lg font-black text-black tracking-tight leading-tight pt-1">
+                Plano de Contingência para Enfrentamento dos Efeitos do Fenômeno El Niño
+              </h3>
+              <p class="text-xs text-black/75 font-medium">
+                Subsecretaria de Proteção e Defesa Civil de Rio das Ostras • Diretrizes municipais de prevenção, mitigação e resposta rápida integrada
+              </p>
+            </div>
+            <div class="shrink-0">
+              <a href="docs/plancon_el_nino_rio_das_ostras.pdf" target="_blank" download="PLANCON_El_Nino_Rio_das_Ostras_2026_2027.pdf" class="btn-action-slate text-xs py-2 px-3.5 whitespace-nowrap inline-flex items-center gap-2 font-bold shadow-2xs hover:bg-[#ffebe4] border-[#ea580c]/50 text-black cursor-pointer" title="Baixar Plano de Contingência Oficial do El Niño (PDF 64 páginas)">
+                <i data-lucide="file-down" class="w-4 h-4 text-[#ea580c]"></i>
+                <span>Baixar PLANCON El Niño (PDF Oficial 64 pág.) ↗</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- SÍNTESE DO COMPORTAMENTO CLIMÁTICO EM RIO DAS OSTRAS -->
+          <div class="p-3 rounded-xl bg-white border border-[#cbd5e1] text-xs text-black/85 leading-relaxed space-y-1.5">
+            <div class="flex items-center gap-2 text-black font-extrabold text-xs">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-[#ea580c] shrink-0"></i>
+              <span>Comportamento do El Niño na Baixada Litorânea de Rio das Ostras:</span>
+            </div>
+            <p>
+              Ao contrário do senso comum, na Baixada Litorânea Fluminense o El Niño <strong>não significa estiagem pacífica contínua</strong>. Ele provoca uma <strong>desregulação climática severa</strong>: longos períodos de <em>veranico escaldante</em> com ar seco e picos térmicos históricos, rompidos repentinamente por <strong>temporais convectivos violentos</strong> com vendavais, granizo isolado, alagamentos rápidos em cotas baixas e risco crítico de <strong>incêndios em vegetação e em solos de turfa</strong>.
+            </p>
+          </div>
+        </div>
+
+        <!-- OS 4 GRANDES EIXOS DE RISCO MAPEADOS PELO PLANO (COBRADE) -->
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <div class="flex items-center gap-2">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-[#ea580c]"></i>
+              <h4 class="text-xs font-black uppercase text-black tracking-wide">
+                Os 4 Principais Riscos Mapeados em Rio das Ostras (Classificação COBRADE)
+              </h4>
+            </div>
+            <span class="text-[11px] font-bold text-black/60 hidden sm:inline">Pág. 9 do PLANCON</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <!-- Risco 1: Picos Térmicos & Ondas de Calor -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2.5 shadow-2xs hover:border-[#ea580c]/50 transition flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-tight bg-orange-100 text-orange-950 border border-orange-300">
+                    COBRADE 1.3.3.1.0
+                  </span>
+                  <i data-lucide="sun-medium" class="w-4 h-4 text-[#ea580c]"></i>
+                </div>
+                <strong class="text-sm font-black text-black block leading-tight">Ondas de Calor & Picos Térmicos</strong>
+                <p class="text-[11.5px] text-black/85 leading-relaxed">
+                  Temperaturas de <strong>34°C a 38°C</strong> com sensação térmica ultrapassando <strong>42°C a 45°C</strong>.
+                </p>
+                <div class="text-[11px] text-black/80 space-y-1 pt-1.5 border-t border-slate-200">
+                  <p>• <strong>Impacto Urbano:</strong> Sobrecarga na rede elétrica e queima de transformadores pelo uso intenso de ar-condicionado.</p>
+                  <p>• <strong>Abastecimento:</strong> Picos de consumo de água gerando desabastecimento em áreas periféricas e cotas elevadas.</p>
+                  <p>• <strong>Saúde Pública:</strong> Picos de desidratação, insolação, hipertensão e AVC, especialmente em idosos e crianças.</p>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 text-[10px] font-extrabold text-[#c2410c] flex items-center gap-1">
+                <i data-lucide="activity" class="w-3 h-3 text-[#ea580c]"></i>
+                <span>Gatilho GAE: Acima de 32°C e URA &lt; 40%</span>
+              </div>
+            </div>
+
+            <!-- Risco 2: Temporais Convectivos & Vendavais -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2.5 shadow-2xs hover:border-[#0284c7]/50 transition flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-tight bg-sky-100 text-sky-950 border border-sky-300">
+                    COBRADE 1.3.2.1.4 / 1.5
+                  </span>
+                  <i data-lucide="cloud-lightning" class="w-4 h-4 text-[#0284c7]"></i>
+                </div>
+                <strong class="text-sm font-black text-black block leading-tight">Temporais & Vendavais Severos</strong>
+                <p class="text-[11.5px] text-black/85 leading-relaxed">
+                  Ar quente instabiliza a atmosfera e atrai umidade tropical, gerando <strong>microexplosões térmicas de fim de tarde</strong>.
+                </p>
+                <div class="text-[11px] text-black/80 space-y-1 pt-1.5 border-t border-slate-200">
+                  <p>• <strong>Ventos Críticos:</strong> Rajadas de <strong>56 km/h a mais de 75 km/h</strong> (Escala Beaufort 7 a 9).</p>
+                  <p>• <strong>Danos Estruturais:</strong> Queda de árvores de grande porte, destelhamentos, postes inclinados e fiações rompidas.</p>
+                  <p>• <strong>Granizo Isolado:</strong> Nuvens Cumulonimbus de grande desenvolvimento vertical com granizo rápido.</p>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 text-[10px] font-extrabold text-[#0369a1] flex items-center gap-1">
+                <i data-lucide="wind" class="w-3 h-3 text-[#0284c7]"></i>
+                <span>Gatilho GAE: Rajadas &gt; 55 km/h</span>
+              </div>
+            </div>
+
+            <!-- Risco 3: Alagamentos Instantâneos & Maré -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2.5 shadow-2xs hover:border-blue-400 transition flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-tight bg-blue-100 text-blue-950 border border-blue-300">
+                    PLANÍCIE COSTEIRA
+                  </span>
+                  <i data-lucide="waves" class="w-4 h-4 text-blue-600"></i>
+                </div>
+                <strong class="text-sm font-black text-black block leading-tight">Alagamentos Instantâneos</strong>
+                <p class="text-[11.5px] text-black/85 leading-relaxed">
+                  Pancadas repentinas de <strong>40 a 60 mm em menos de 1 hora</strong> colapsam a drenagem natural das bacias de cota baixa.
+                </p>
+                <div class="text-[11px] text-black/80 space-y-1 pt-1.5 border-t border-slate-200">
+                  <p>• <strong>Topografia Plana:</strong> Baixa declividade (cotas de 1m a 3m) dificulta o escoamento rápido até o oceano.</p>
+                  <p>• <strong>Efeito Maré (Sizígia):</strong> Maré cheia ou ressaca represa a foz do Canal de Medeiros e do Rio das Ostras.</p>
+                  <p>• <strong>Bairros Monitorados:</strong> Cidade Praiana, Âncora, Beira-Mar, Campomar, Recanto, Nova Cidade e Palmital.</p>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 text-[10px] font-extrabold text-blue-800 flex items-center gap-1">
+                <i data-lucide="droplets" class="w-3 h-3 text-blue-600"></i>
+                <span>Gatilho GAE: &gt; 30 mm/h ou transbordo</span>
+              </div>
+            </div>
+
+            <!-- Risco 4: Queimadas em Restinga e Fogo em Turfa -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2.5 shadow-2xs hover:border-red-400 transition flex flex-col justify-between">
+              <div class="space-y-1.5">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-tight bg-red-100 text-red-950 border border-red-300">
+                    COBRADE 1.4.1.3.1
+                  </span>
+                  <i data-lucide="flame" class="w-4 h-4 text-red-600"></i>
+                </div>
+                <strong class="text-sm font-black text-black block leading-tight">Incêndios em Vegetação & Turfa</strong>
+                <p class="text-[11.5px] text-black/85 leading-relaxed">
+                  Baixa umidade (&lt; 30%) e vegetação ressecada geram focos rápidos em pastagens rurais, restingas e <strong>solos de turfa</strong>.
+                </p>
+                <div class="text-[11px] text-black/80 space-y-1 pt-1.5 border-t border-slate-200">
+                  <p>• <strong>Atenção Máxima às Turfas:</strong> Fogo subterrâneo que queima sem chamas visíveis por semanas, de difícil extinção.</p>
+                  <p>• <strong>Fumaça Tóxica:</strong> Emissão densa de monóxido de carbono e partículas rente ao chão, cobrindo bairros inteiros.</p>
+                  <p>• <strong>Rodovia Amaral Peixoto (RJ-106):</strong> Risco crítico de colisões por visibilidade nula em Cantagalo e Mar do Norte.</p>
+                </div>
+              </div>
+              <div class="pt-2 border-t border-slate-100 text-[10px] font-extrabold text-red-700 flex items-center gap-1">
+                <i data-lucide="alert-octagon" class="w-3 h-3 text-red-600"></i>
+                <span>Gatilho GAE: URA &lt; 20% ou fumaça na pista</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MATRIZ OPERACIONAL DE GATILHOS DO GAE (GRUPO DE AÇÕES EMERGENCIAIS) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="gauge" class="w-4 h-4 text-[#ea580c]"></i>
+              <h4 class="text-xs font-black uppercase text-black tracking-wide">
+                Matriz Operacional dos Níveis de Alerta do GAE / SUBDEC
+              </h4>
+            </div>
+            <span class="text-[11px] font-bold text-black/60 hidden sm:inline">Págs. 22-24, 32 e 43 do PLANCON</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-2 sm:gap-2.5">
+            <!-- Nível Verde: Vigilância -->
+            <div class="p-2.5 sm:p-3 rounded-xl border-2 border-emerald-500/50 bg-gradient-to-br from-emerald-50/50 to-white flex flex-col justify-between space-y-2 shadow-2xs">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-tight bg-emerald-100 text-emerald-900 border border-emerald-300">
+                    Nível Verde
+                  </span>
+                  <span class="text-[11px] font-black text-emerald-800">Vigilância</span>
+                </div>
+                <div class="text-[10px] font-mono font-bold text-black pt-1 space-y-0.5">
+                  <p>• <strong>Temp:</strong> Até 28,0°C</p>
+                  <p>• <strong>URA:</strong> &gt; 60% (Ótima)</p>
+                  <p>• <strong>Vento:</strong> Até 40 km/h</p>
+                </div>
+                <p class="text-[9.5px] text-black/85 pt-1.5 border-t border-emerald-200/60 leading-snug">
+                  Monitoramento hidrometeorológico contínuo pelas estações telemétricas da SUBDEC/CEMADEN/INMET.
+                </p>
+              </div>
+              <div class="pt-1.5 border-t border-emerald-200/60 text-[9px] font-bold text-emerald-900 flex items-center gap-1">
+                <i data-lucide="check" class="w-3 h-3 text-emerald-700"></i>
+                <span>Rotina Preventiva</span>
+              </div>
+            </div>
+
+            <!-- Nível Amarelo: Atenção -->
+            <div class="p-2.5 sm:p-3 rounded-xl border-2 border-amber-400/60 bg-gradient-to-br from-amber-50/50 to-white flex flex-col justify-between space-y-2 shadow-2xs">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-tight bg-amber-100 text-amber-900 border border-amber-300">
+                    Nível Amarelo
+                  </span>
+                  <span class="text-[11px] font-black text-amber-800">Atenção</span>
+                </div>
+                <div class="text-[10px] font-mono font-bold text-black pt-1 space-y-0.5">
+                  <p>• <strong>Temp:</strong> 28,1°C a 32,0°C</p>
+                  <p>• <strong>URA:</strong> 41% a 60% (Boa)</p>
+                  <p>• <strong>Vento:</strong> 41 a 55 km/h</p>
+                </div>
+                <p class="text-[9.5px] text-black/85 pt-1.5 border-t border-amber-200/60 leading-snug">
+                  Aviso antecipado às secretarias do SIMDEC. Vistoria preventiva em calhas, bueiros e bacias de amortecimento.
+                </p>
+              </div>
+              <div class="pt-1.5 border-t border-amber-200/60 text-[9px] font-bold text-amber-900 flex items-center gap-1">
+                <i data-lucide="eye" class="w-3 h-3 text-amber-700"></i>
+                <span>Mitigação Inicial</span>
+              </div>
+            </div>
+
+            <!-- Nível Laranja: Mobilização Parcial -->
+            <div class="p-2.5 sm:p-3 rounded-xl border-2 border-orange-500/60 bg-gradient-to-br from-orange-50/50 to-white flex flex-col justify-between space-y-2 shadow-2xs">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-tight bg-orange-100 text-orange-950 border border-orange-300">
+                    Nível Laranja
+                  </span>
+                  <span class="text-[11px] font-black text-orange-900">Alerta</span>
+                </div>
+                <div class="text-[10px] font-mono font-bold text-black pt-1 space-y-0.5">
+                  <p>• <strong>Temp:</strong> 32,1°C a 35,0°C</p>
+                  <p>• <strong>URA:</strong> 21% a 40% (Seco)</p>
+                  <p>• <strong>Vento:</strong> 56 a 75 km/h</p>
+                </div>
+                <p class="text-[9.5px] text-black/85 pt-1.5 border-t border-orange-200/60 leading-snug">
+                  Equipes operacionais da Defesa Civil e Guarda de sobreaviso. Campanhas de hidratação na saúde e rondas em áreas de turfa.
+                </p>
+              </div>
+              <div class="pt-1.5 border-t border-orange-200/60 text-[9px] font-bold text-orange-900 flex items-center gap-1">
+                <i data-lucide="alert-triangle" class="w-3 h-3 text-orange-700"></i>
+                <span>Mobilização Parcial</span>
+              </div>
+            </div>
+
+            <!-- Nível Vermelho: Alarme Máximo -->
+            <div class="p-2.5 sm:p-3 rounded-xl border-2 border-red-500/60 bg-gradient-to-br from-red-50/50 to-white flex flex-col justify-between space-y-2 shadow-2xs">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-tight bg-red-100 text-red-950 border border-red-300">
+                    Nível Vermelho
+                  </span>
+                  <span class="text-[11px] font-black text-red-900">Alarme</span>
+                </div>
+                <div class="text-[10px] font-mono font-bold text-black pt-1 space-y-0.5">
+                  <p>• <strong>Temp:</strong> 35,1°C a 38,0°C</p>
+                  <p>• <strong>URA:</strong> 12% a 20% (Crítica)</p>
+                  <p>• <strong>Vento:</strong> &gt; 75 km/h</p>
+                </div>
+                <p class="text-[9.5px] text-black/85 pt-1.5 border-t border-red-200/60 leading-snug">
+                  Instalação imediata do <strong>Gabinete de Crise Integrado 24h</strong>. Pontos públicos de hidratação e abrigos municipais de prontidão.
+                </p>
+              </div>
+              <div class="pt-1.5 border-t border-red-200/60 text-[9px] font-bold text-red-900 flex items-center gap-1">
+                <i data-lucide="siren" class="w-3 h-3 text-red-700"></i>
+                <span>Gabinete de Crise 24h</span>
+              </div>
+            </div>
+
+            <!-- Nível Roxo: Desastre Extremo -->
+            <div class="p-2.5 sm:p-3 rounded-xl border-2 border-purple-500/60 bg-gradient-to-br from-purple-50/50 to-white flex flex-col justify-between space-y-2 shadow-2xs">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="px-1.5 py-0.5 rounded-md text-[8.5px] font-black uppercase tracking-tight bg-purple-100 text-purple-950 border border-purple-300">
+                    Nível Roxo
+                  </span>
+                  <span class="text-[11px] font-black text-purple-900">Extremo</span>
+                </div>
+                <div class="text-[10px] font-mono font-bold text-black pt-1 space-y-0.5">
+                  <p>• <strong>Temp:</strong> &gt; 38,0°C (Sens. &gt;45°)</p>
+                  <p>• <strong>URA:</strong> &lt; 12% (Emergência)</p>
+                  <p>• <strong>Vento:</strong> Danos múltiplos</p>
+                </div>
+                <p class="text-[9.5px] text-black/85 pt-1.5 border-t border-purple-200/60 leading-snug">
+                  Múltiplos sinistros simultâneos. Decretação de <strong>Situação de Emergência ou Calamidade Pública</strong> pelo Prefeito Municipal.
+                </p>
+              </div>
+              <div class="pt-1.5 border-t border-purple-200/60 text-[9px] font-bold text-purple-900 flex items-center gap-1">
+                <i data-lucide="flame" class="w-3 h-3 text-purple-700"></i>
+                <span>Calamidade / Socorro Geral</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROTOCOLOS SETORIAIS DAS SECRETARIAS (SIMDEC) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i data-lucide="life-buoy" class="w-4 h-4 text-[#ea580c]"></i>
+              <h4 class="text-xs font-black uppercase text-black tracking-wide">
+                Protocolos Integrados das Secretarias Municipais (SIMDEC)
+              </h4>
+            </div>
+            <span class="text-[11px] font-bold text-black/60 hidden sm:inline">Ações Articuladas</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+            <!-- SEMUSA (Saúde) -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="heart-pulse" class="w-4 h-4 text-rose-600"></i>
+                <strong class="text-xs font-black uppercase text-black">SEMUSA • Saúde</strong>
+              </div>
+              <p class="text-black/85 leading-relaxed text-[11.5px]">
+                UPAs e Postos de Saúde em alerta para insolação, estresse térmico e desidratação. Distribuição de soro de reidratação oral e colírios/soro fisiológico em caso de fumaça de turfa. Pontos de hidratação em praias e áreas centrais.
+              </p>
+            </div>
+
+            <!-- SEMOP & SAAE (Obras e Água) -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="wrench" class="w-4 h-4 text-[#0284c7]"></i>
+                <strong class="text-xs font-black uppercase text-black">SEMOP & SAAE • Obras/Água</strong>
+              </div>
+              <p class="text-black/85 leading-relaxed text-[11.5px]">
+                Desassoreamento contínuo das calhas dos canais de drenagem e bueiros. Caminhões-pipa posicionados para abastecimento emergencial de UPAs, escolas e bairros sem água. Geradores nas elevatórias contra quedas de energia.
+              </p>
+            </div>
+
+            <!-- SEMA (Meio Ambiente) -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="trees" class="w-4 h-4 text-emerald-600"></i>
+                <strong class="text-xs font-black uppercase text-black">SEMA • Meio Ambiente</strong>
+              </div>
+              <p class="text-black/85 leading-relaxed text-[11.5px]">
+                Manutenção preventiva de aceiros em restingas e áreas de turfa. Brigadas municipais integradas com o Corpo de Bombeiros (193). Fiscalização ambiental rigorosa com tolerância zero e multas para queima irregular de vegetação ou lixo.
+              </p>
+            </div>
+
+            <!-- SEGTRAN & SUBDEC (Defesa Civil e Trânsito) -->
+            <div class="p-3.5 rounded-2xl bg-white border border-[#cbd5e1] space-y-2 shadow-2xs">
+              <div class="flex items-center gap-2">
+                <i data-lucide="shield" class="w-4 h-4 text-[#ea580c]"></i>
+                <strong class="text-xs font-black uppercase text-black">SEGTRAN & SUBDEC</strong>
+              </div>
+              <p class="text-black/85 leading-relaxed text-[11.5px]">
+                Coordenação geral do Gabinete de Crise. Alertas via SMS 40199 e vistorias de campo 24h. Guarda Civil monitorando e sinalizando a Rodovia Amaral Peixoto (RJ-106) caso a fumaça de turfa ou alagamentos reduzam a segurança viária.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ORIENTAÇÕES PRÁTICAS DE AUTOPROTEÇÃO AO CIDADÃO -->
+        <div class="p-4 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="user-check" class="w-4 h-4 text-[#0284c7]"></i>
+            <h4 class="text-xs font-black uppercase text-black tracking-wide">
+              Guia Rápido de Autoproteção do Cidadão (Recomendações da Defesa Civil)
+            </h4>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1.5">
+              <strong class="text-xs font-extrabold text-[#c2410c] flex items-center gap-1.5">
+                <i data-lucide="sun" class="w-3.5 h-3.5"></i>
+                <span>Durante Ondas de Calor & Ar Seco</span>
+              </strong>
+              <ul class="text-[11px] text-black/85 space-y-1 list-disc list-inside">
+                <li>Beba água e sucos naturais mesmo sem sede evidente.</li>
+                <li>Evite exposição solar e exercícios físicos entre 10h e 16h.</li>
+                <li>Umedeça ambientes com toalhas molhadas ou recipientes de água.</li>
+                <li>Atenção redobrada a bebês, idosos e animais de estimação.</li>
+              </ul>
+            </div>
+
+            <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1.5">
+              <strong class="text-xs font-extrabold text-[#0369a1] flex items-center gap-1.5">
+                <i data-lucide="cloud-lightning" class="w-3.5 h-3.5"></i>
+                <span>Em Temporais & Vendavais Rápidos</span>
+              </strong>
+              <ul class="text-[11px] text-black/85 space-y-1 list-disc list-inside">
+                <li>Nunca se abrigue debaixo de árvores isoladas ou estruturas frágeis.</li>
+                <li>Desconecte eletrodomésticos da tomada contra picos elétricos.</li>
+                <li>Mantenha distância de postes, fios caídos e muros instáveis.</li>
+                <li>Não dirija nem caminhe por vias tomadas por enxurradas.</li>
+              </ul>
+            </div>
+
+            <div class="p-3 rounded-xl bg-white border border-slate-200 space-y-1.5">
+              <strong class="text-xs font-extrabold text-red-700 flex items-center gap-1.5">
+                <i data-lucide="flame" class="w-3.5 h-3.5"></i>
+                <span>Prevenção a Queimadas & Fumaça de Turfa</span>
+              </strong>
+              <ul class="text-[11px] text-black/85 space-y-1 list-disc list-inside">
+                <li><strong>Jamais queime lixo</strong>, folhas ou pasto seco (crime ambiental).</li>
+                <li>Não jogue pontas de cigarro pelas janelas nas rodovias.</li>
+                <li>Ao ver foco de fumaça, acione imediatamente o <strong>193</strong> ou <strong>199</strong>.</li>
+                <li>Se houver fumaça de turfa, feche portas e janelas e use máscara protetora.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- BARRA RÁPIDA DE EMERGÊNCIA & CADASTRO SMS 40199 -->
+        <div class="p-3 rounded-xl bg-[#ffebe4] border border-[#f07a53]/40 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2">
+            <i data-lucide="phone-call" class="w-4 h-4 text-[#ea580c] shrink-0"></i>
+            <div>
+              <span class="font-extrabold text-black block">Canais de Emergência e Alerta da Defesa Civil:</span>
+              <span class="text-[10.5px] text-black/75">Plantão municipal 24h para atendimento imediato de ocorrências</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <a href="tel:199" class="px-2.5 py-1 rounded-lg bg-white border border-[#f07a53] font-black text-black hover:bg-[#ffebe4]">Defesa Civil: 199</a>
+            <a href="tel:193" class="px-2.5 py-1 rounded-lg bg-white border border-[#f07a53] font-black text-black hover:bg-[#ffebe4]">Bombeiros: 193</a>
+            <a href="tel:192" class="px-2.5 py-1 rounded-lg bg-white border border-[#f07a53] font-black text-black hover:bg-[#ffebe4]">SAMU: 192</a>
+            <a href="tel:153" class="px-2.5 py-1 rounded-lg bg-white border border-[#f07a53] font-black text-black hover:bg-[#ffebe4]">Guarda Civil: 153</a>
+            <div class="px-2.5 py-1 rounded-lg bg-white border border-slate-300 font-bold text-black text-[11px]" title="Envie SMS com seu CEP para 40199 para receber alertas oficiais no celular">
+              SMS Alerta Grátis: <span class="font-black text-[#ea580c]">Envie CEP para 40199</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
 
 
 
@@ -11020,7 +11459,7 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
     </script>
   <script src="js/historico_planilha.js?v=217"></script>
   <script src="js/panorama_mensal.js?v=217"></script>
-  <script type="module" src="js/app.js?v=217"></script>
+  <script type="module" src="js/app.js?v=218"></script>
 
 
 
