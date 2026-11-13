@@ -1,0 +1,581 @@
+{
+  "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
+  "status_geral_cor": "danger",
+  "tem_alerta_severo": true,
+  "tem_alerta_hoje": true,
+  "atualizacao_hora": "13/11/2026 às 10:52h",
+  "cidade": "Rio das Ostras - RJ",
+  "dias_inspecionados": [
+    {
+      "data_iso": "2026-11-13",
+      "data_br": "13/11/2026",
+      "dia_semana": "Sexta-feira",
+      "alerta_ativo": true,
+      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56392",
+      "alerta_id": 56392,
+      "alerta_cor": "Amarelo",
+      "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
+      "granizo": true,
+      "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
+      "chuva": {
+        "media_continua_modelos_mm": 15.3,
+        "teto_tempestade_alerta_mm": 50.0,
+        "faixa_completa_txt": "15.3 mm (Média) • Até 50 mm (Teto Alerta)",
+        "taxa_horaria_pico": "20 a 30 mm/h",
+        "janela_critica_horaria": "13:00 às 19:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "11.5 a 42.5 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "15.3 a 50.0 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "19.1 a 67.5 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "40 a 60 km/h",
+        "rajada_pico_modelado_kmh": 41.4,
+        "horario_pico": "Pico estimado por volta das 00:00",
+        "direcao_pico": "Nordeste (NE)",
+        "rotacao": "Nordeste (NE) pela manhã rondando para Oeste-Sudoeste (WSW) à tarde e Sudoeste (SW) à noite",
+        "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-14",
+      "data_br": "14/11/2026",
+      "dia_semana": "Sábado",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 13.0,
+        "teto_tempestade_alerta_mm": 19.5,
+        "faixa_completa_txt": "13.0 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
+        "janela_critica_horaria": "07:00 às 17:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "9.8 a 14.3 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "13.0 a 19.5 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "16.2 a 19.5 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 35 km/h",
+        "rajada_pico_modelado_kmh": 34.9,
+        "horario_pico": "Pico estimado por volta das 15:00",
+        "direcao_pico": "Sul-Sudoeste (SSW)",
+        "rotacao": "Oeste-Sudoeste (WSW) pela manhã rondando para Sul-Sudoeste (SSW) à tarde e Sudoeste (SW) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-15",
+      "data_br": "15/11/2026",
+      "dia_semana": "Domingo",
+      "alerta_ativo": true,
+      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56399",
+      "alerta_id": 56399,
+      "alerta_cor": "Amarelo",
+      "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
+      "granizo": true,
+      "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
+      "chuva": {
+        "media_continua_modelos_mm": 10.1,
+        "teto_tempestade_alerta_mm": 50.0,
+        "faixa_completa_txt": "10.1 mm (Média) • Até 50 mm (Teto Alerta)",
+        "taxa_horaria_pico": "20 a 30 mm/h",
+        "janela_critica_horaria": "18:00 às 21:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "7.6 a 42.5 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "10.1 a 50.0 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "12.6 a 67.5 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "40 a 60 km/h",
+        "rajada_pico_modelado_kmh": 41.0,
+        "horario_pico": "Pico estimado por volta das 13:00",
+        "direcao_pico": "Leste-Sudeste (ESE)",
+        "rotacao": "Nordeste (NE) pela manhã rondando para Leste-Sudeste (ESE) à tarde e Leste-Nordeste (ENE) à noite",
+        "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-16",
+      "data_br": "16/11/2026",
+      "dia_semana": "Segunda-feira",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 7.9,
+        "teto_tempestade_alerta_mm": 11.9,
+        "faixa_completa_txt": "7.9 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
+        "janela_critica_horaria": "10:00 às 18:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "5.9 a 8.7 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "7.9 a 11.9 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "9.9 a 11.9 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 43 km/h",
+        "rajada_pico_modelado_kmh": 43.2,
+        "horario_pico": "Pico estimado por volta das 15:00",
+        "direcao_pico": "Sul (S)",
+        "rotacao": "Sudoeste (SW) pela manhã rondando para Sul (S) à tarde e Sul-Sudoeste (SSW) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-17",
+      "data_br": "17/11/2026",
+      "dia_semana": "Terça-feira",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 1.5,
+        "teto_tempestade_alerta_mm": 2.2,
+        "faixa_completa_txt": "1.5 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
+        "janela_critica_horaria": "10:00 às 14:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "1.1 a 1.7 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "1.5 a 2.2 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "1.9 a 2.2 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 35 km/h",
+        "rajada_pico_modelado_kmh": 35.3,
+        "horario_pico": "Pico estimado por volta das 17:00",
+        "direcao_pico": "Sudeste (SE)",
+        "rotacao": "Oeste-Sudoeste (WSW) pela manhã rondando para Sul-Sudeste (SSE) à tarde e Nordeste (NE) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-18",
+      "data_br": "18/11/2026",
+      "dia_semana": "Quarta-feira",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 0.0,
+        "teto_tempestade_alerta_mm": 0.0,
+        "faixa_completa_txt": "0.0 mm",
+        "taxa_horaria_pico": "0 mm/h",
+        "janela_critica_horaria": "Período da tarde e início da noite (13h às 19h)",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "0.0 a 0.0 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "0.0 a 0.0 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "0.0 a 0.0 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 45 km/h",
+        "rajada_pico_modelado_kmh": 45.4,
+        "horario_pico": "Pico estimado por volta das 14:00",
+        "direcao_pico": "Leste (E)",
+        "rotacao": "Leste-Nordeste (ENE) pela manhã rondando para Leste (E) à tarde e Nordeste (NE) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-19",
+      "data_br": "19/11/2026",
+      "dia_semana": "Quinta-feira",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 0.1,
+        "teto_tempestade_alerta_mm": 0.2,
+        "faixa_completa_txt": "0.1 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
+        "janela_critica_horaria": "11:00 às 22:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "0.1 a 0.1 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "0.1 a 0.2 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "0.1 a 0.2 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 41 km/h",
+        "rajada_pico_modelado_kmh": 41.0,
+        "horario_pico": "Pico estimado por volta das 17:00",
+        "direcao_pico": "Leste-Sudeste (ESE)",
+        "rotacao": "Leste-Nordeste (ENE) pela manhã rondando para Leste-Sudeste (ESE) à tarde e Leste (E) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    },
+    {
+      "data_iso": "2026-11-20",
+      "data_br": "20/11/2026",
+      "dia_semana": "Sexta-feira",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
+      "chuva": {
+        "media_continua_modelos_mm": 2.8,
+        "teto_tempestade_alerta_mm": 4.2,
+        "faixa_completa_txt": "2.8 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
+        "janela_critica_horaria": "04:00 às 20:00h",
+        "distribuicao_geografica": {
+          "orla_costeira": {
+            "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+            "volume_estimado": "2.1 a 3.1 mm",
+            "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+          },
+          "centro_urbano": {
+            "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+            "volume_estimado": "2.8 a 4.2 mm",
+            "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+          },
+          "regiao_rural": {
+            "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+            "volume_estimado": "3.5 a 4.2 mm",
+            "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+          }
+        },
+        "hidrologia_jundia": {
+          "cota_atual_m": "1.32",
+          "cota_transbordo_m": "2.84",
+          "margem_segura_m": "1.52 m",
+          "status": "Vigilância",
+          "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+        }
+      },
+      "vento": {
+        "rajada_faixa": "Até 34 km/h",
+        "rajada_pico_modelado_kmh": 34.2,
+        "horario_pico": "Pico estimado por volta das 15:00",
+        "direcao_pico": "Sudeste (SE)",
+        "rotacao": "Leste (E) pela manhã rondando para Sudeste (SE) à tarde e Norte-Nordeste (NNE) à noite",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+      },
+      "instrucoes_seguranca": [
+        "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+        "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+        "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+      ]
+    }
+  ],
+  "hoje_inspecao": {
+    "data_iso": "2026-11-13",
+    "data_br": "13/11/2026",
+    "dia_semana": "Sexta-feira",
+    "alerta_ativo": true,
+    "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56392",
+    "alerta_id": 56392,
+    "alerta_cor": "Amarelo",
+    "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
+    "granizo": true,
+    "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
+    "chuva": {
+      "media_continua_modelos_mm": 15.3,
+      "teto_tempestade_alerta_mm": 50.0,
+      "faixa_completa_txt": "15.3 mm (Média) • Até 50 mm (Teto Alerta)",
+      "taxa_horaria_pico": "20 a 30 mm/h",
+      "janela_critica_horaria": "13:00 às 19:00h",
+      "distribuicao_geografica": {
+        "orla_costeira": {
+          "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+          "volume_estimado": "11.5 a 42.5 mm",
+          "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+        },
+        "centro_urbano": {
+          "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+          "volume_estimado": "15.3 a 50.0 mm",
+          "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+        },
+        "regiao_rural": {
+          "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+          "volume_estimado": "19.1 a 67.5 mm",
+          "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+        }
+      },
+      "hidrologia_jundia": {
+        "cota_atual_m": "1.32",
+        "cota_transbordo_m": "2.84",
+        "margem_segura_m": "1.52 m",
+        "status": "Vigilância",
+        "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+      }
+    },
+    "vento": {
+      "rajada_faixa": "40 a 60 km/h",
+      "rajada_pico_modelado_kmh": 41.4,
+      "horario_pico": "Pico estimado por volta das 00:00",
+      "direcao_pico": "Nordeste (NE)",
+      "rotacao": "Nordeste (NE) pela manhã rondando para Oeste-Sudoeste (WSW) à tarde e Sudoeste (SW) à noite",
+      "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
+      "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+    },
+    "instrucoes_seguranca": [
+      "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+      "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+      "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+    ]
+  },
+  "amanha_inspecao": {
+    "data_iso": "2026-11-14",
+    "data_br": "14/11/2026",
+    "dia_semana": "Sábado",
+    "alerta_ativo": false,
+    "alerta_rotulo": "Sem alertas severos vigentes",
+    "alerta_id": null,
+    "alerta_cor": null,
+    "alerta_riscos": null,
+    "granizo": false,
+    "granizo_detalhe": "Sem previsão de granizo.",
+    "chuva": {
+      "media_continua_modelos_mm": 13.0,
+      "teto_tempestade_alerta_mm": 19.5,
+      "faixa_completa_txt": "13.0 mm",
+      "taxa_horaria_pico": "< 5 mm/h",
+      "janela_critica_horaria": "07:00 às 17:00h",
+      "distribuicao_geografica": {
+        "orla_costeira": {
+          "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
+          "volume_estimado": "9.8 a 14.3 mm",
+          "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+        },
+        "centro_urbano": {
+          "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
+          "volume_estimado": "13.0 a 19.5 mm",
+          "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+        },
+        "regiao_rural": {
+          "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
+          "volume_estimado": "16.2 a 19.5 mm",
+          "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+        }
+      },
+      "hidrologia_jundia": {
+        "cota_atual_m": "1.32",
+        "cota_transbordo_m": "2.84",
+        "margem_segura_m": "1.52 m",
+        "status": "Vigilância",
+        "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
+      }
+    },
+    "vento": {
+      "rajada_faixa": "Até 35 km/h",
+      "rajada_pico_modelado_kmh": 34.9,
+      "horario_pico": "Pico estimado por volta das 15:00",
+      "direcao_pico": "Sul-Sudoeste (SSW)",
+      "rotacao": "Oeste-Sudoeste (WSW) pela manhã rondando para Sul-Sudoeste (SSW) à tarde e Sudoeste (SW) à noite",
+      "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
+      "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
+    },
+    "instrucoes_seguranca": [
+      "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
+      "Evite utilizar aparelhos elétricos conectados à tomada durante tempestades com incidência de descargas atmosféricas.",
+      "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
+    ]
+  },
+  "sintese_tecnica_precisao": "A inspeção minuciosa resolve a divergência entre a média numérica dos modelos de grade (que espalha a precipitação homogeneamente) e o teto quantitativo de tempestades convectivas dos alertas do INMET (que prevê pancadas torrenciais pontuais de 20 a 30 mm/h). Para as rajadas de vento, identifica o horário de pico exato da modelagem e a rotação de quadrante associada à chegada da instabilidade."
+}

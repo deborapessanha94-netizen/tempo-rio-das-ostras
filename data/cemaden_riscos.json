@@ -1,8 +1,8 @@
 {
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
-  "data_boletim": "12/11/2026",
-  "atualizacao": "12/11/2026 20:35",
+  "data_boletim": "13/11/2026",
+  "atualizacao": "13/11/2026 10:52",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -31,16 +31,16 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "ALTO": 18,
-          "BAIXO": 73,
+          "MODERADO": 15,
+          "BAIXO": 76,
           "SEM DADOS": 1
         }
       },
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "MODERADO": 18,
-          "BAIXO": 73,
+          "MODERADO": 35,
+          "BAIXO": 56,
           "SEM DADOS": 1
         }
       }
