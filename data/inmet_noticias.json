@@ -1,9 +1,21 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-13 19:12:34",
+  "coleta_iso": "2026-11-13 23:31:31",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "INMET participa de encontro internacional sobre calor extremo e saúde na Bolívia",
+      "data": "13/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-encontro-internacional-sobre-calor-extremo-e-saúde-na-bolívia",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "El Niño deve perder força a partir do início de 2027 e chegar ao fim no outono",
+      "data": "13/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/el-niño-deve-atingir-sua-intensidade-máxima-no-trimestre-novembro-dezembro-janeiro-e-deve-persistir-até-o-outono-de-2027",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para sábado (14), domingo (15) e segunda-feira (16)",
       "data": "13/11/2026",
@@ -51,18 +63,6 @@
       "data": "11/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/temporais-no-sul-e-sudeste-entenda-a-influência-do-el-niño-nos-eventos-meteorológicos-extremos",
       "relevancia_sudeste": true
-    },
-    {
-      "titulo": "Inmet participa de coletiva sobre o período chuvoso e os efeitos do El Niño no DF",
-      "data": "10/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-coletiva-sobre-o-período-chuvoso-e-os-efeitos-do-el-niño-no-df",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para quarta-feira (11) e quinta-feira (12)",
-      "data": "10/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-11-e-quinta-feira-12",
-      "relevancia_sudeste": false
     }
   ]
 }
