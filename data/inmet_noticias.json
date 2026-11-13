@@ -1,20 +1,68 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-13 02:55:23",
-  "total_noticias": 2,
+  "coleta_iso": "2026-11-13 04:56:46",
+  "total_noticias": 10,
   "noticias": [
     {
-      "titulo": "Previsão aponta avanço de frente fria e temporais com queda de temperatura no Sudeste",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias",
+      "titulo": "INMET participa de capacitação internacional sobre radares meteorológicos na Guatemala",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-radares-meteorológicos-na-guatemala",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET participa de capacitação internacional sobre inteligência artificial aplicada à meteorologia",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-inteligência-artificial-aplicada-à-meteorologia",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para sexta-feira (13) e sábado (14)",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-13-e-sábado-14",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Semeadura do feijão de 1ª safra avança em ritmos diferentes nas principais regiões produtoras",
+      "data": "12/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/semeadura-do-feijão-de-1ª-safra-avança-em-ritmos-diferentes-nas-principais-regiões-produtoras",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para quinta-feira (12) e sexta-feira (13)",
+      "data": "11/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-12-e-sexta-feira-13",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Temporais no Sul e Sudeste: entenda a influência do El Niño nos eventos meteorológicos extremos",
+      "data": "11/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/temporais-no-sul-e-sudeste-entenda-a-influência-do-el-niño-nos-eventos-meteorológicos-extremos",
       "relevancia_sudeste": true
     },
     {
-      "titulo": "Informativo Meteorológico Semanal: Ciclone e frente fria organizam canal de umidade",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias",
-      "relevancia_sudeste": true
+      "titulo": "Inmet participa de coletiva sobre o período chuvoso e os efeitos do El Niño no DF",
+      "data": "10/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-coletiva-sobre-o-período-chuvoso-e-os-efeitos-do-el-niño-no-df",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para quarta-feira (11) e quinta-feira (12)",
+      "data": "10/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-11-e-quinta-feira-12",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "BOLETIM AGROCLIMATOLÓGICO MENSAL - NOVEMBRO/2026",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/boletim-agroclimatológico-mensal-novembro-2026",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "Previsão para terça-feira (10) e quarta-feira (11)",
+      "data": "09/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-10-e-quarta-feira-11",
+      "relevancia_sudeste": false
     }
   ]
 }
