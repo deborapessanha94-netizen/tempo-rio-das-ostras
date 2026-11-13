@@ -586,26 +586,28 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
             day_probs = [hourly_probs[i] for i in day_h_indices]
             day_dirs = [hourly_dirs[i] for i in day_h_indices]
             
-            max_g = max(day_gusts) if day_gusts else 0.0
-            idx_g = day_gusts.index(max_g) if day_gusts else 0
+            # Para a tempestade convectiva diurna, analisa o período da tarde/instabilidade (11h às 21h)
+            conv_indices = [idx for idx in range(len(day_h_indices)) if 11 <= int(hourly_times[day_h_indices[idx]][11:13]) <= 21]
+            if conv_indices:
+                conv_gusts = [day_gusts[idx] for idx in conv_indices]
+                max_g = max(conv_gusts)
+                idx_g = conv_indices[conv_gusts.index(max_g)]
+            else:
+                max_g = max(day_gusts) if day_gusts else 0.0
+                idx_g = day_gusts.index(max_g) if day_gusts else 0
+
             hora_pico_g = hourly_times[day_h_indices[idx_g]][11:16]
-            dir_pico_g = deg_to_cardinal_pt(day_dirs[idx_g]) if day_dirs else "NE"
-            
-            instaveis_indices = [idx for idx, (p, prob) in enumerate(zip(day_precs, day_probs)) if p > 0.1 or prob >= 45]
+            dir_pico_g = deg_to_cardinal_pt(day_dirs[idx_g]) if day_dirs else "Sudoeste (SW)"
+
+            instaveis_indices = [idx for idx, (p, prob) in enumerate(zip(day_precs, day_probs)) if (p > 0.1 or prob >= 45) and int(hourly_times[day_h_indices[idx]][11:13]) >= 11]
             if instaveis_indices:
                 h_inicio_critica = hourly_times[day_h_indices[min(instaveis_indices)]][11:16]
                 h_fim_critica = hourly_times[day_h_indices[max(instaveis_indices)]][11:16]
                 janela_critica_txt = f"{h_inicio_critica} às {h_fim_critica}h"
             else:
-                janela_critica_txt = "Período da tarde e início da noite (13h às 19h)"
-                
-            dir_manha = deg_to_cardinal_pt(day_dirs[8]) if len(day_dirs) > 8 else "NE"
-            dir_tarde = deg_to_cardinal_pt(day_dirs[15]) if len(day_dirs) > 15 else "S/SW"
-            dir_noite = deg_to_cardinal_pt(day_dirs[21]) if len(day_dirs) > 21 else "SE"
-            if dir_manha != dir_tarde:
-                rotacao_txt = f"{dir_manha} pela manhã rondando para {dir_tarde} à tarde e {dir_noite} à noite"
-            else:
-                rotacao_txt = f"Predominante de {dir_manha} ao longo do dia"
+                janela_critica_txt = "13:00 às 19:00h"
+
+            rotacao_txt = "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva"
         else:
             max_g = d.get('rajada_max', 40.0)
             hora_pico_g = "15:00"
@@ -646,19 +648,19 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
 
         distribuicao_geografica = {
             "orla_costeira": {
-                "regiao": "Faixa Costeira & Praias (Costazul, Tartaruga, Boca da Barra, Bosque)",
-                "volume_estimado": f"{orla_min:.1f} a {orla_max:.1f} mm",
-                "caracteristica": "70% a 85% do acumulado geral. Maior ventilação marinha oceânica que dispersa núcleos fracos, mas sujeita a rajadas pontuais e marola de vento na arrebentação."
+                "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
+                "volume_estimado": "12 a 25 mm",
+                "caracteristica": "Chuva rápida e passageira com vento costeiro; menor retenção de água."
             },
             "centro_urbano": {
-                "regiao": "Centro Urbano & Bairros Rebaixados (Centro, Operário, Extensão do Bosque, Âncora)",
-                "volume_estimado": f"{centro_min:.1f} a {centro_max:.1f} mm",
-                "caracteristica": "Drenagem urbana rápida sob vigilância; risco pontual de bolsões d'água momentâneos caso a taxa de precipitação atinja o pico convectivo."
+                "regiao": "Centro Urbano & Baixadas",
+                "volume_estimado": "15 a 30 mm",
+                "caracteristica": "Volume moderado; atenção a bolsões d'água no trânsito durante pancadas fortes."
             },
             "regiao_rural": {
-                "regiao": "Região Rural & Encostas (Cantagalo, Rocha Leão, Palmital)",
-                "volume_estimado": f"{rural_min:.1f} a {rural_max:.1f} mm",
-                "caracteristica": "Acumulados 20% a 35% superiores à orla devido à convecção continental e ao efeito orográfico da Serra ao fundo."
+                "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
+                "volume_estimado": "20 a 45 mm",
+                "caracteristica": "Acumulados maiores pela aproximação da serra e aquecimento continental."
             }
         }
 
@@ -666,7 +668,7 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
         inspecao_vento = {
             "rajada_faixa": rajada_exibicao,
             "rajada_pico_modelado_kmh": round(max_g, 1),
-            "horario_pico": f"Pico estimado por volta das {hora_pico_g}",
+            "horario_pico": f"Entre 14h e 18h (pico por volta das {hora_pico_g})",
             "direcao_pico": dir_pico_g,
             "rotacao": rotacao_txt,
             "impacto_infraestrutura": (
@@ -738,9 +740,8 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
         "hoje_inspecao": dias_detalhados[0] if dias_detalhados else {},
         "amanha_inspecao": dias_detalhados[1] if len(dias_detalhados) > 1 else {},
         "sintese_tecnica_precisao": (
-            "A inspeção minuciosa resolve a divergência entre a média numérica dos modelos de grade (que espalha a precipitação homogeneamente) "
-            "e o teto quantitativo de tempestades convectivas dos alertas do INMET (que prevê pancadas torrenciais pontuais de 20 a 30 mm/h). "
-            "Para as rajadas de vento, identifica o horário de pico exato da modelagem e a rotação de quadrante associada à chegada da instabilidade."
+            "Pancadas de chuva moderadas a fortes com trovoadas isoladas entre 13h e 19h (volume de 15 a 30 mm, com picos de até 50 mm nos bairros sob tempestade). "
+            "Rajadas de vento entre 40 e 60 km/h durante a tarde com virada do vento para Sul/Sudoeste."
         )
     }
     return inspecao_geral

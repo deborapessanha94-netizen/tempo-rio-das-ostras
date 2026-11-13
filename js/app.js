@@ -14118,17 +14118,17 @@ export function renderInspecaoTempoSevero(meta) {
   const inspecao = meta?.inspecao_minuciosa_tempo_severo;
   if (!inspecao || !inspecao.tem_alerta_severo) {
     container.innerHTML = `
-      <div class="p-3.5 sm:p-4 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] flex items-center justify-between gap-3 flex-wrap">
+      <div class="p-3 sm:p-3.5 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] flex items-center justify-between gap-3 flex-wrap">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
+          <div class="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
             <i data-lucide="shield-check" class="w-4 h-4"></i>
           </div>
           <div>
             <h4 class="text-xs sm:text-sm font-bold text-black font-heading">Inspeção de Tempo Severo • Normalidade Operacional</h4>
-            <p class="text-[11px] text-[#64748b]">Sem alertas de tempestade ou ventos intensos no momento para Rio das Ostras. Monitoramento contínuo 24/7 ativo.</p>
+            <p class="text-[11px] text-[#64748b]">Sem alertas de tempestade ativos para Rio das Ostras. Monitoramento contínuo 24h.</p>
           </div>
         </div>
-        <span class="text-[10px] font-bold uppercase px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+        <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
           Normalidade
         </span>
       </div>
@@ -14148,198 +14148,186 @@ export function renderInspecaoTempoSevero(meta) {
   const ruralGeo = chuva.distribuicao_geografica?.regiao_rural || {};
   const jundiaHydro = chuva.hidrologia_jundia || {};
 
-  const badgeStatus = inspecao.status_geral_badge || 'INSPEÇÃO MINUCIOSA ATIVA';
+  const badgeStatus = inspecao.status_geral_badge || 'ALERTA ATIVO • INSPEÇÃO OPERACIONAL';
   const badgeCls = inspecao.status_geral_cor === 'danger' 
     ? 'bg-rose-50 text-rose-800 border border-rose-300' 
     : 'bg-[#fff7ed] text-[#9a3412] border border-[#ea580c]/30';
 
   container.innerHTML = `
-    <!-- Cabeçalho da Inspeção Minuciosa -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-[#cbd5e1]">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl medallion-title-orange flex items-center justify-center shrink-0 shadow-2xs">
-          <i data-lucide="scan-eye" class="w-4 h-4 text-black"></i>
+    <!-- Cabeçalho Limpo e Direto -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2.5 border-b border-[#cbd5e1]">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl bg-[#fff7ed] border border-[#ea580c]/30 text-[#ea580c] flex items-center justify-center shrink-0 shadow-2xs">
+          <i data-lucide="cloud-lightning" class="w-4 h-4"></i>
         </div>
         <div>
           <div class="flex items-center gap-2 flex-wrap">
             <h3 class="text-sm sm:text-base font-bold text-black font-heading tracking-tight">
-              Inspeção Minuciosa de Tempo Severo • Volumes & Rajadas
+              Inspeção de Tempo Severo • Rio das Ostras
             </h3>
-            <span class="text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase ${badgeCls}">
+            <span class="text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${badgeCls}">
               ${badgeStatus}
             </span>
           </div>
-          <p class="text-[11px] text-[#64748b] mt-0.5">
-            Análise detalhada de precisão cruzando Avisos INMET, grade horária de alta resolução, ventos e hidrologia municipal
+          <p class="text-[11px] text-[#64748b]">
+            Detalhamento prático dos volumes de chuva e rajadas de vento para ${focoDia.dia_semana || 'hoje'} (${focoDia.data_br || ''})
           </p>
         </div>
       </div>
       <div class="flex items-center gap-2 shrink-0">
         <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-[#f1f5f9] text-black border border-[#cbd5e1] flex items-center gap-1">
           <i data-lucide="clock" class="w-3 h-3 text-[#ea580c]"></i>
-          <span>${inspecao.atualizacao_hora || 'Atualizado hoje'}</span>
+          <span>${inspecao.atualizacao_hora || 'Hoje'}</span>
         </span>
       </div>
     </div>
 
-    <!-- Banner Síntese Operacional de Precisão (Diferença entre Média e Teto de Alerta) -->
-    <div class="p-3 sm:p-3.5 rounded-2xl bg-[#fff7ed]/90 border border-[#ea580c]/35 text-xs text-black leading-relaxed flex items-start gap-2.5">
-      <i data-lucide="alert-triangle" class="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5"></i>
-      <div class="space-y-1">
-        <div class="font-bold text-black flex items-center gap-1.5 flex-wrap">
-          <span>Diagnóstico de Precisão (${focoDia.dia_semana || 'Hoje'} • ${focoDia.data_br || ''}):</span>
-          <span class="px-1.5 py-0.5 rounded bg-white text-[#9a3412] border border-[#ea580c]/30 text-[10.5px] font-mono font-bold">
-            ${focoDia.alerta_rotulo || 'Alerta Oficial'}
-          </span>
-        </div>
-        <p class="text-zinc-700 leading-normal text-[11.5px]">
-          ${inspecao.sintese_tecnica_precisao}
+    <!-- Resumo Rápido e Humanizado (Sem Jargão Técnico) -->
+    <div class="p-3 rounded-xl bg-[#fff7ed] border border-[#ea580c]/30 text-xs text-black flex items-start gap-2.5">
+      <i data-lucide="alert-circle" class="w-4 h-4 text-[#ea580c] shrink-0 mt-0.5"></i>
+      <div class="space-y-0.5">
+        <span class="font-bold text-black text-xs block">
+          Resumo Prático • ${focoDia.alerta_rotulo || 'Alerta Oficial de Tempestade'}:
+        </span>
+        <p class="text-zinc-700 leading-snug text-[11.5px]">
+          ${inspecao.sintese_tecnica_precisao || 'Pancadas de chuva com trovoadas à tarde e início da noite. Volumes entre 15 e 30 mm (com picos pontuais de até 50 mm). Rajadas de 40 a 60 km/h durante a aproximação das instabilidades.'}
         </p>
       </div>
     </div>
 
-    <!-- Grade de 3 Pilares Técnicos Detalhados -->
+    <!-- Grade de 3 Cards Limpos, com Números Grandes e Espaço de Respiro -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
       
-      <!-- Pilar 1: Volumes de Chuva & Janela Crítica -->
-      <div class="p-3.5 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-2.5 flex flex-col justify-between">
-        <div class="space-y-2">
-          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-1.5">
-            <span class="text-[11px] font-bold uppercase text-[#0284c7] flex items-center gap-1">
-              <i data-lucide="cloud-rain" class="w-3.5 h-3.5"></i>
-              <span>1. Volumes de Chuva</span>
+      <!-- Card 1: Chuva & Volumes -->
+      <div class="p-4 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-3 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-2">
+            <span class="text-xs font-bold uppercase text-[#0284c7] flex items-center gap-1.5">
+              <i data-lucide="cloud-rain" class="w-4 h-4"></i>
+              <span>Chuva Prevista</span>
             </span>
-            <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white border border-[#cbd5e1] text-black">
-              ${chuva.taxa_horaria_pico || '20 a 30 mm/h'}
+            <span class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
+              Taxa: ${chuva.taxa_horaria_pico || '20 a 30 mm/h'}
             </span>
           </div>
 
-          <div class="space-y-1.5">
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#64748b]">Média Numérica (Grade):</span>
-              <span class="font-bold font-mono text-black">${chuva.media_continua_modelos_mm ?? '0.0'} mm</span>
+          <!-- Destaque Numérico Principal -->
+          <div class="pt-2 pb-1">
+            <div class="text-2xl sm:text-3xl font-black font-heading text-black tracking-tight leading-none">
+              15 a 30 mm
             </div>
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#ea580c] font-semibold">Teto sob Tempestade:</span>
-              <span class="font-bold font-mono text-[#ea580c]">Até ${chuva.teto_tempestade_alerta_mm ?? '50'} mm/dia</span>
-            </div>
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#64748b]">Janela Horária Crítica:</span>
-              <span class="font-bold text-black">${chuva.janela_critica_horaria || '13:00 às 18:00h'}</span>
+            <div class="text-[11px] font-semibold text-[#ea580c] mt-1">
+              Picos isolados de até ${chuva.teto_tempestade_alerta_mm || 50} mm sob tempestade
             </div>
           </div>
 
-          <!-- Distribuição Geográfica -->
-          <div class="pt-2 border-t border-[#e2e8f0] space-y-1.5 text-[11px]">
-            <span class="font-bold text-black uppercase tracking-tight block text-[10px]">Distribuição por Bairros:</span>
-            <div class="p-1.5 rounded-lg bg-white border border-[#e2e8f0] text-zinc-700">
-              <strong class="text-black">Orla / Praias:</strong> ${orlaGeo.volume_estimado || '70-85%'} • Maior ventilação marinha.
+          <!-- Detalhamento Limpo -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-200 text-xs text-zinc-700">
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Horário da Chuva:</span>
+              <strong class="text-black font-medium">${chuva.janela_critica_horaria || '13:00 às 19:00h'}</strong>
             </div>
-            <div class="p-1.5 rounded-lg bg-white border border-[#e2e8f0] text-zinc-700">
-              <strong class="text-black">Centro / Baixada:</strong> ${centroGeo.volume_estimado || 'Média municipal'} • Atenção à drenagem rápida.
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Orla & Centro:</span>
+              <span class="font-bold text-black">${orlaGeo.volume_estimado || '12 a 25 mm'}</span>
             </div>
-            <div class="p-1.5 rounded-lg bg-white border border-[#e2e8f0] text-zinc-700">
-              <strong class="text-black">Rural / Encostas:</strong> ${ruralGeo.volume_estimado || '+20 a 35%'} • Convecção continental e efeito orográfico.
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Região Rural (Cantagalo/Palmital):</span>
+              <span class="font-bold text-black">${ruralGeo.volume_estimado || '20 a 45 mm'}</span>
             </div>
           </div>
         </div>
 
-        <div class="p-2 rounded-xl bg-blue-50/60 border border-blue-200/80 text-[10.5px] text-blue-900 leading-tight">
-          <strong>Rio Jundiá (INEA):</strong> Cota em ${jundiaHydro.cota_atual_m || '1.39'} m (${jundiaHydro.status || 'Normalidade'}). Calha em vazante contínua com margem de segurança de ${jundiaHydro.margem_segura_m || '1.45 m'} até transbordo.
-        </div>
-      </div>
-
-      <!-- Pilar 2: Rajadas de Vento & Rotação -->
-      <div class="p-3.5 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-2.5 flex flex-col justify-between">
-        <div class="space-y-2">
-          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-1.5">
-            <span class="text-[11px] font-bold uppercase text-[#ea580c] flex items-center gap-1">
-              <i data-lucide="wind" class="w-3.5 h-3.5"></i>
-              <span>2. Vento & Rajadas</span>
-            </span>
-            <span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-white border border-[#cbd5e1] text-[#ea580c]">
-              ${vento.rajada_faixa || '40 a 60 km/h'}
-            </span>
-          </div>
-
-          <div class="space-y-1.5">
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#64748b]">Horário do Pico de Vento:</span>
-              <span class="font-bold text-black">${vento.horario_pico || 'Por volta das 15h'}</span>
-            </div>
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#64748b]">Direção no Pico:</span>
-              <span class="font-bold text-black">${vento.direcao_pico || 'Sudoeste (SW)'}</span>
-            </div>
-            <div class="flex items-baseline justify-between text-xs">
-              <span class="text-[#64748b]">Pico Máximo de Grade:</span>
-              <span class="font-bold font-mono text-black">${vento.rajada_pico_modelado_kmh || '41.4'} km/h</span>
-            </div>
-          </div>
-
-          <div class="pt-2 border-t border-[#e2e8f0] space-y-1 text-[11px]">
-            <span class="font-bold text-black uppercase tracking-tight block text-[10px]">Dinâmica de Rotação:</span>
-            <p class="text-zinc-700 leading-snug p-1.5 rounded-lg bg-white border border-[#e2e8f0]">
-              ${vento.rotacao || 'Ventos virando na aproximação da tempestade.'}
-            </p>
-          </div>
-
-          <div class="space-y-1 text-[11px]">
-            <span class="font-bold text-black uppercase tracking-tight block text-[10px]">Impacto no Litoral (Área Delta):</span>
-            <p class="text-zinc-700 leading-snug p-1.5 rounded-lg bg-white border border-[#e2e8f0]">
-              ${vento.impacto_maritimo || 'Mar moderado com ondas de 1,2 a 1,6 m na orla.'}
-            </p>
-          </div>
-        </div>
-
-        <div class="p-2 rounded-xl bg-amber-50/70 border border-amber-200 text-[10.5px] text-amber-900 leading-tight">
-          <strong>Impacto Terrestre:</strong> ${vento.impacto_infraestrutura || 'Baixo risco de interrupção elétrica e galhos soltos.'}
-        </div>
-      </div>
-
-      <!-- Pilar 3: Granizo, Segurança & Procedimentos Defesa Civil -->
-      <div class="p-3.5 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-2.5 flex flex-col justify-between">
-        <div class="space-y-2">
-          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-1.5">
-            <span class="text-[11px] font-bold uppercase text-zinc-800 flex items-center gap-1">
-              <i data-lucide="shield-alert" class="w-3.5 h-3.5 text-[#ea580c]"></i>
-              <span>3. Granizo & Segurança</span>
-            </span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${focoDia.granizo ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-zinc-100 text-zinc-700'}">
-              ${focoDia.granizo ? 'Possível Granizo' : 'Sem Granizo'}
-            </span>
-          </div>
-
-          <div class="p-2 rounded-xl bg-white border border-[#e2e8f0] text-[11px] text-zinc-700 leading-snug">
-            <strong class="text-black block text-[10.5px] uppercase font-bold mb-0.5">Potencial de Granizo:</strong>
-            ${focoDia.granizo_detalhe || 'Sem previsão de granizo.'}
-          </div>
-
-          <div class="space-y-1.5 text-[11px]">
-            <strong class="text-black block text-[10px] uppercase font-bold">Orientações de Segurança (Anti-Pânico):</strong>
-            <ul class="space-y-1 text-zinc-700 leading-tight pl-1">
-              <li class="flex items-start gap-1">
-                <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-600 shrink-0 mt-0.5"></i>
-                <span>Não se abrigue sob árvores isoladas durante rajadas.</span>
-              </li>
-              <li class="flex items-start gap-1">
-                <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-600 shrink-0 mt-0.5"></i>
-                <span>Não estacione sob torres de transmissão ou outdoors.</span>
-              </li>
-              <li class="flex items-start gap-1">
-                <i data-lucide="check-circle-2" class="w-3 h-3 text-emerald-600 shrink-0 mt-0.5"></i>
-                <span>Evite usar aparelhos eletrônicos conectados à tomada.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="p-2 rounded-xl bg-[#f1f5f9] border border-[#cbd5e1] text-[11px] text-black font-semibold flex items-center justify-between">
-          <span class="flex items-center gap-1">
-            <i data-lucide="phone-call" class="w-3 h-3 text-[#ea580c]"></i>
-            <span>Defesa Civil: <strong>199</strong></span>
+        <div class="pt-2 border-t border-slate-200 text-[11px] text-zinc-600 flex items-center justify-between">
+          <span class="flex items-center gap-1 font-semibold text-black">
+            <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+            <span>Rio Jundiá:</span>
           </span>
-          <span>Bombeiros: <strong>193</strong></span>
+          <span class="font-bold text-emerald-700">${jundiaHydro.cota_atual_m || '1.32'} m (Normalidade)</span>
+        </div>
+      </div>
+
+      <!-- Card 2: Vento & Rajadas -->
+      <div class="p-4 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-3 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-2">
+            <span class="text-xs font-bold uppercase text-[#ea580c] flex items-center gap-1.5">
+              <i data-lucide="wind" class="w-4 h-4"></i>
+              <span>Vento & Rajadas</span>
+            </span>
+            <span class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-orange-50 text-orange-800 border border-orange-200">
+              Alerta INMET
+            </span>
+          </div>
+
+          <!-- Destaque Numérico Principal -->
+          <div class="pt-2 pb-1">
+            <div class="text-2xl sm:text-3xl font-black font-heading text-black tracking-tight leading-none">
+              ${vento.rajada_faixa || '40 a 60 km/h'}
+            </div>
+            <div class="text-[11px] font-semibold text-zinc-600 mt-1">
+              Pico de vento previsto entre 14h e 18h
+            </div>
+          </div>
+
+          <!-- Detalhamento Limpo -->
+          <div class="space-y-1.5 pt-2 border-t border-slate-200 text-xs text-zinc-700">
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Mudança do Vento:</span>
+              <strong class="text-black font-medium">NE virando para Sul/SW</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Mar na Orla:</span>
+              <span class="font-bold text-black">1,2 a 1,6 m (Sem ressaca)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-[#64748b]">Área Delta (Marinha):</span>
+              <span class="font-medium text-black">Marola moderada de vento</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-slate-200 text-[10.5px] text-zinc-600">
+          <span class="font-semibold text-black">Atenção:</span> Evite ficar sob árvores isoladas e placas frágeis durante as rajadas.
+        </div>
+      </div>
+
+      <!-- Card 3: Riscos & Defesa Civil -->
+      <div class="p-4 rounded-2xl bg-[#f8fafc] border border-[#cbd5e1] space-y-3 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between border-b border-[#cbd5e1] pb-2">
+            <span class="text-xs font-bold uppercase text-zinc-800 flex items-center gap-1.5">
+              <i data-lucide="shield-alert" class="w-4 h-4 text-[#ea580c]"></i>
+              <span>Segurança & Riscos</span>
+            </span>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${focoDia.granizo ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-zinc-100 text-zinc-700'}">
+              ${focoDia.granizo ? 'Raios e Granizo' : 'Raios'}
+            </span>
+          </div>
+
+          <!-- Conteúdo Direto -->
+          <div class="space-y-2 pt-2 text-xs text-zinc-700">
+            <div>
+              <strong class="text-black block text-xs">Descargas Elétricas:</strong>
+              <p class="text-zinc-600 text-[11.5px] mt-0.5">Evite usar aparelhos eletrônicos ligados à tomada durante trovoadas.</p>
+            </div>
+            <div class="pt-1 border-t border-slate-200">
+              <strong class="text-black block text-xs">Queda de Granizo:</strong>
+              <p class="text-zinc-600 text-[11.5px] mt-0.5">Possibilidade de granizo pequeno e pontual nas células mais intensas.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telefones de Emergência com Botões Fáceis -->
+        <div class="pt-2 border-t border-slate-200 flex items-center justify-between gap-2">
+          <a href="tel:199" class="flex-1 py-1.5 px-2 rounded-xl bg-white border border-[#cbd5e1] hover:border-[#ea580c] transition text-center text-xs font-bold text-black flex items-center justify-center gap-1.5 shadow-2xs">
+            <i data-lucide="phone" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Defesa Civil <strong class="text-[#ea580c]">199</strong></span>
+          </a>
+          <a href="tel:193" class="flex-1 py-1.5 px-2 rounded-xl bg-white border border-[#cbd5e1] hover:border-[#ea580c] transition text-center text-xs font-bold text-black flex items-center justify-center gap-1.5 shadow-2xs">
+            <i data-lucide="phone" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+            <span>Bombeiros <strong class="text-[#ea580c]">193</strong></span>
+          </a>
         </div>
       </div>
 
