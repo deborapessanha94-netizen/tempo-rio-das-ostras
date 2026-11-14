@@ -2,7 +2,7 @@
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
   "data_boletim": "14/11/2026",
-  "atualizacao": "14/11/2026 00:35",
+  "atualizacao": "14/11/2026 07:57",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -31,17 +31,17 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "MUITO ALTO": 3,
-          "ALTO": 53,
-          "MODERADO": 35,
+          "ALTO": 46,
+          "MODERADO": 10,
+          "BAIXO": 35,
           "SEM DADOS": 1
         }
       },
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "ALTO": 6,
-          "MODERADO": 85,
+          "ALTO": 3,
+          "MODERADO": 88,
           "SEM DADOS": 1
         }
       }
@@ -65,11 +65,11 @@
       },
       "casimiro-de-abreu": {
         "nome": "CASIMIRO DE ABREU",
-        "fill": "#dc3545",
-        "nivel": "MUITO ALTO",
-        "status": "Alerta Máximo",
-        "badge": "danger-extreme",
-        "cor_hex": "#dc2626"
+        "fill": "#fd7e14",
+        "nivel": "ALTO",
+        "status": "Alerta",
+        "badge": "danger",
+        "cor_hex": "#ea580c"
       },
       "cabo-frio": {
         "nome": "CABO FRIO",
@@ -129,11 +129,11 @@
       },
       "campos-dos-goytacazes": {
         "nome": "CAMPOS DOS GOYTACAZES",
-        "fill": "#ffe510",
-        "nivel": "MODERADO",
-        "status": "Atenção",
-        "badge": "warning",
-        "cor_hex": "#d97706"
+        "fill": "#28a745",
+        "nivel": "BAIXO",
+        "status": "Normalidade",
+        "badge": "success",
+        "cor_hex": "#16a34a"
       }
     }
   },
