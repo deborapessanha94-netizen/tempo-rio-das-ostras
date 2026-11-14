@@ -72,7 +72,6 @@ import {
 } from './data/planconStatic';
 import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart';
 import { RiverChart } from './components/RiverChart';
-import { CssExportModal } from './components/CssExportModal';
 import { SocialExportModal } from './components/SocialExportModal';
 
 type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'boletim' | 'panorama';
@@ -229,7 +228,6 @@ export default function App() {
     } catch {}
     return false;
   });
-  const [isCssModalOpen, setIsCssModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Live datasets
@@ -5895,17 +5893,11 @@ export default function App() {
               <Wind className="w-3.5 h-3.5 text-[#FCA311]" />
               Fontes: INMET · CPTEC/INPE · Marinha (CHM) · INEA · CEMADEN · Open-Meteo
             </span>
-            <button
-              onClick={() => setIsCssModalOpen(true)}
-              className="font-medium text-[#14213D] dark:text-[#FCA311] hover:underline cursor-pointer"
-            >
-              Copiar CSS do Tema
-            </button>
+
           </div>
         </div>
       </footer>
 
-      <CssExportModal isOpen={isCssModalOpen} onClose={() => setIsCssModalOpen(false)} />
       <SocialExportModal openMeteo={openMeteo} acumulados={acumulados} boletimMeta={boletimMeta} />
     </div>
   );
