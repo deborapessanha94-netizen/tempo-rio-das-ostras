@@ -4110,17 +4110,14 @@ export default function App() {
                             </div>
                           </div>
 
-                          <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
-                            <span className="truncate max-w-md" title={av.estados || ''}>
-                              {av.estados ? `Abrangência: ${av.estados.split(',').join(', ')}` : 'Área: Costa do Sol / RJ'}
-                            </span>
+                          <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex items-center justify-end text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
                             <a
                               href={`https://alertas2.inmet.gov.br/${av.id}`}
                               target="_blank"
                               rel="noreferrer"
                               className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FCA311] hover:underline shrink-0"
                             >
-                              Ver no INMET <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                              Ver detalhes no INMET <ExternalLink className="w-3 h-3 text-[#FCA311]" />
                             </a>
                           </div>
                         </article>
