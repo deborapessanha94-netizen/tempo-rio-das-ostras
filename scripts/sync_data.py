@@ -31,15 +31,20 @@ COTAS_REFERENCIA = {
     'Ponte do Baião': {'atencao': 1.12, 'alerta': 1.28, 'transborda': 1.60}
 }
 
-def format_date_br(d_str, h_str):
+def format_date_br(d_str, h_str=None):
     if not d_str: return ''
-    date_part = str(d_str).split('T')[0]
+    date_part = str(d_str).split('T')[0].split(' ')[0]
     parts = date_part.split('-')
     if len(parts) == 3:
         formatted = f'{parts[2]}/{parts[1]}/{parts[0]}'
     else:
         formatted = date_part
-    return f'{formatted} às {h_str}' if h_str else formatted
+    if h_str:
+        h_clean = str(h_str).strip()
+        if not h_clean.endswith('h'):
+            h_clean = f'{h_clean}h'
+        return f'{formatted} às {h_clean}'
+    return formatted
 
 def sync_inmet_forecast():
     url = "https://apiprevmet3.inmet.gov.br/previsao/3304524"
@@ -60,12 +65,24 @@ def sync_inmet_alerts():
         with urllib.request.urlopen(req, timeout=10) as res:
             data = json.loads(res.read().decode('utf-8'))
         
+        # Load existing alerts to merge recent past alerts
+        existing_path = os.path.join(DATA_DIR, 'inmet_avisos.json')
+        existing_map = {}
+        if os.path.exists(existing_path):
+            try:
+                with open(existing_path, 'r', encoding='utf-8') as f:
+                    for old_a in json.load(f):
+                        if old_a.get('id'):
+                            existing_map[old_a['id']] = old_a
+            except Exception:
+                pass
+
         seen = set()
-        unique = []
+        active_list = []
         for cat in ['hoje', 'futuro']:
             for a in data.get(cat, []):
                 aid = a.get('id')
-                if aid in seen: continue
+                if not aid or aid in seen: continue
                 estados = str(a.get('estados', '') or '')
                 geocodes = str(a.get('geocodes', '') or '')
                 municipios = str(a.get('municipios', '') or '')
@@ -75,44 +92,79 @@ def sync_inmet_alerts():
 
                 if eh_direto or eh_rj:
                     seen.add(aid)
-                    dt_inicio = format_date_br(a.get('data_inicio'), a.get('hora_inicio'))
-                    dt_fim = format_date_br(a.get('data_fim'), a.get('hora_fim'))
-                    sev = a.get('severidade', 'Perigo Potencial')
                     
-                    cor_inmet = '#EAB308'
-                    if sev == 'Perigo': cor_inmet = '#F97316'
-                    elif sev == 'Grande Perigo': cor_inmet = '#EF4444'
+                    # Strictly preserve exact hours and minutes from official feed
+                    raw_h_ini = str(a.get('hora_inicio', '00:00')).strip()
+                    raw_h_fim = str(a.get('hora_fim', '23:59')).strip()
+                    
+                    raw_d_ini = str(a.get('data_inicio', '')).split('T')[0]
+                    raw_d_fim = str(a.get('data_fim', '')).split('T')[0]
+                    
+                    dt_inicio_fmt = format_date_br(raw_d_ini, raw_h_ini)
+                    dt_fim_fmt = format_date_br(raw_d_fim, raw_h_fim)
+                    
+                    clean_h_ini = raw_h_ini.replace('h', '').strip()
+                    clean_h_fim = raw_h_fim.replace('h', '').strip()
+                    
+                    inicio_iso = f"{raw_d_ini} {clean_h_ini}".strip()
+                    fim_iso = f"{raw_d_fim} {clean_h_fim}".strip()
 
-                    unique.append({
+                    sev = a.get('severidade', 'Perigo Potencial')
+                    cor_hex = '#EAB308'
+                    cor_nome = 'Amarelo'
+                    cor_badge = f'Alerta Amarelo • {sev}'
+                    if sev == 'Perigo':
+                        cor_hex = '#F97316'
+                        cor_nome = 'Laranja'
+                        cor_badge = 'Alerta Laranja • Perigo'
+                    elif sev == 'Grande Perigo':
+                        cor_hex = '#EF4444'
+                        cor_nome = 'Vermelho'
+                        cor_badge = 'Alerta Vermelho • Grande Perigo'
+
+                    alert_obj = {
                         'id': aid,
                         'descricao': a.get('descricao', 'Alerta Meteorológico'),
                         'severidade': sev,
-                        'cor_inmet': cor_inmet,
+                        'cor_nome': cor_nome,
+                        'cor_badge': cor_badge,
+                        'cor_hex': cor_hex,
+                        'cor_inmet': cor_hex,
                         'eh_direto_ostras': eh_direto,
-                        'inicio': dt_inicio,
-                        'fim': dt_fim,
-                        'inicio_formatado': dt_inicio,
-                        'fim_formatado': dt_fim,
-                        'data_inicio': a.get('data_inicio'),
-                        'hora_inicio': a.get('hora_inicio'),
-                        'data_fim': a.get('data_fim'),
-                        'hora_fim': a.get('hora_fim'),
+                        'inicio': inicio_iso,
+                        'fim': fim_iso,
+                        'inicio_formatado': dt_inicio_fmt,
+                        'fim_formatado': dt_fim_fmt,
+                        'data_inicio': raw_d_ini,
+                        'hora_inicio': clean_h_ini,
+                        'data_fim': raw_d_fim,
+                        'hora_fim': clean_h_fim,
                         'riscos': a.get('riscos', []),
                         'instrucoes': a.get('instrucoes', []),
                         'estados': estados
-                    })
+                    }
+                    active_list.append(alert_obj)
+                    existing_map[aid] = alert_obj
+
+        # Combine active and recent existing alerts (keeping up to 6 most relevant)
+        all_alerts = list(existing_map.values())
         
         def alert_rank(item):
             score = 0
-            if item['eh_direto_ostras']: score += 10
-            if item['severidade'] == 'Grande Perigo': score += 5
-            elif item['severidade'] == 'Perigo': score += 3
-            return score
+            if item.get('eh_direto_ostras'): score += 100
+            if item.get('severidade') == 'Grande Perigo': score += 50
+            elif item.get('severidade') == 'Perigo': score += 30
+            # Prefer active/upcoming
+            dt_fim = str(item.get('fim', ''))
+            score += hash(item.get('id', 0)) % 10
+            return (item.get('fim', ''), score)
 
-        unique.sort(key=alert_rank, reverse=True)
+        all_alerts.sort(key=alert_rank, reverse=True)
+        final_list = all_alerts[:8]
+
         with open(os.path.join(DATA_DIR, 'inmet_avisos.json'), 'w', encoding='utf-8') as f:
-            json.dump(unique, f, ensure_ascii=False, indent=2)
-        print("OK: inmet_avisos.json atualizado")
+            json.dump(final_list, f, ensure_ascii=False, indent=2)
+        print(f"OK: inmet_avisos.json atualizado ({len(active_list)} ativos, {len(final_list)} total com histórico recente)")
     except Exception as e:
         print(f"Aviso ao sincronizar avisos INMET: {e}")
 

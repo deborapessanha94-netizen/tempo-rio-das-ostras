@@ -340,29 +340,67 @@ def collect_inmet_data():
                 if eh_direto or eh_rj:
                     seen.add(aid)
                     sev = a.get('severidade', 'Perigo Potencial')
-                    dt_inicio = format_date_br(a.get('data_inicio'), a.get('hora_inicio'))
-                    dt_fim = format_date_br(a.get('data_fim'), a.get('hora_fim'))
+                    
+                    raw_h_ini = str(a.get('hora_inicio', '00:00')).strip()
+                    raw_h_fim = str(a.get('hora_fim', '23:59')).strip()
+                    raw_d_ini = str(a.get('data_inicio', '')).split('T')[0]
+                    raw_d_fim = str(a.get('data_fim', '')).split('T')[0]
+                    
+                    dt_inicio = format_date_br(raw_d_ini, raw_h_ini)
+                    dt_fim = format_date_br(raw_d_fim, raw_h_fim)
+                    
+                    clean_h_ini = raw_h_ini.replace('h', '').strip()
+                    clean_h_fim = raw_h_fim.replace('h', '').strip()
+                    
+                    inicio_iso = f"{raw_d_ini} {clean_h_ini}".strip()
+                    fim_iso = f"{raw_d_fim} {clean_h_fim}".strip()
+
+                    cor_hex = "#EF4444" if sev == "Grande Perigo" else ("#F97316" if sev == "Perigo" else "#EAB308")
+                    cor_nome = "Vermelho" if sev == "Grande Perigo" else ("Laranja" if sev == "Perigo" else "Amarelo")
+                    cor_badge = f"Alerta {cor_nome} • {sev}"
+
                     avisos_data.append({
                         "id": aid,
                         "descricao": a.get("descricao", "Alerta Meteorológico"),
                         "severidade": sev,
-                        "cor_inmet": "#EF4444" if sev == "Grande Perigo" else ("#F97316" if sev == "Perigo" else "#EAB308"),
+                        "cor_nome": cor_nome,
+                        "cor_badge": cor_badge,
+                        "cor_hex": cor_hex,
+                        "cor_inmet": cor_hex,
                         "eh_direto_ostras": eh_direto,
-                        "inicio": dt_inicio,
-                        "fim": dt_fim,
+                        "inicio": inicio_iso,
+                        "fim": fim_iso,
                         "inicio_formatado": dt_inicio,
                         "fim_formatado": dt_fim,
-                        "data_inicio": a.get('data_inicio'),
-                        "hora_inicio": a.get('hora_inicio'),
-                        "data_fim": a.get('data_fim'),
-                        "hora_fim": a.get('hora_fim'),
+                        "data_inicio": raw_d_ini,
+                        "hora_inicio": clean_h_ini,
+                        "data_fim": raw_d_fim,
+                        "hora_fim": clean_h_fim,
                         "riscos": a.get("riscos", []),
                         "instrucoes": a.get("instrucoes", []),
                         "estados": estados
                     })
+        
+        # Merge with existing file to preserve recent ended alerts like 56392
+        existing_file = DATA_DIR / "inmet_avisos.json"
+        all_map = {}
+        if existing_file.exists():
+            try:
+                with open(existing_file, 'r', encoding='utf-8') as f:
+                    for old_it in json.load(f):
+                        if old_it.get('id'): all_map[old_it['id']] = old_it
+            except Exception:
+                pass
+        for a_new in avisos_data:
+            all_map[a_new['id']] = a_new
+            
+        all_list = list(all_map.values())
+        all_list.sort(key=lambda it: (it.get('eh_direto_ostras', False), it.get('fim', '')), reverse=True)
+        final_avisos = all_list[:8]
+
         with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:
-            json.dump(avisos_data, f, ensure_ascii=False, indent=2)
-        print(f"   [SUCESSO] {len(avisos_data)} avisos INMET salvos em data/inmet_avisos.json")
+            json.dump(final_avisos, f, ensure_ascii=False, indent=2)
+        print(f"   [SUCESSO] {len(avisos_data)} avisos INMET ativos ({len(final_avisos)} no total) salvos em data/inmet_avisos.json")
     except Exception as e:
         print(f"   [AVISO] Erro avisos INMET: {e}")
 

@@ -22,6 +22,7 @@ import {
   Film,
   Flame,
   Gauge,
+  Info,
   MapPin,
   Menu,
   Moon,
@@ -3988,21 +3989,69 @@ export default function App() {
                   </p>
                 </div>
 
+                {/* Banner de Garantia de Sincronia de Horários Oficiais */}
+                <div className="p-3.5 rounded-lg bg-sky-50 dark:bg-sky-950/20 border border-sky-200 dark:border-sky-800/40 text-xs text-sky-900 dark:text-sky-200 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <Info className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
+                    <span>
+                      <strong>Sincronização Oficial INMET:</strong> Os horários de início e término respeitam rigorosamente os minutos exatos da publicação no portal do INMET (Horário Oficial de Brasília — UTC-3).
+                    </span>
+                  </div>
+                  <a
+                    href="https://alertas2.inmet.gov.br/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 font-semibold text-sky-700 dark:text-sky-300 hover:underline shrink-0 text-[11px]"
+                  >
+                    Portal INMET Alertas <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+
                 {inmetAvisos.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {inmetAvisos.map((av) => {
-                      const todayIso = new Date().toISOString().slice(0, 10);
-                      const iniIso = (av.inicio || '').slice(0, 10);
-                      const fimIso = (av.fim || '').slice(0, 10);
-                      const isVigenteHoje = Boolean(iniIso && fimIso && iniIso <= todayIso && todayIso <= fimIso);
-                      const isFuturo = Boolean(iniIso && iniIso > todayIso);
-                      const vigenciaLabel = isVigenteHoje
-                        ? 'Vigente Hoje'
-                        : isFuturo
-                          ? `Programado ${av.inicio_formatado ? av.inicio_formatado.slice(0, 5) : ''}`
-                          : fimIso && fimIso < todayIso
-                            ? 'Encerrado'
-                            : 'Aviso Ativo';
+                      // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
+                      const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+                      const nowMs = nowBrt.getTime();
+
+                      const parseAlertDate = (dStr?: string, hStr?: string) => {
+                        if (!dStr) return null;
+                        const cleanD = dStr.split('T')[0].split(' ')[0].trim();
+                        let cleanH = (hStr || (dStr.includes(' ') ? dStr.split(' ')[1] : '00:00')).replace('h', '').trim();
+                        if (cleanD.includes('/')) {
+                          const [dia, mes, ano] = cleanD.split('/').map(Number);
+                          const [hh, mm] = cleanH.split(':').map(Number);
+                          return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
+                        } else if (cleanD.includes('-')) {
+                          const [ano, mes, dia] = cleanD.split('-').map(Number);
+                          const [hh, mm] = cleanH.split(':').map(Number);
+                          return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
+                        }
+                        return null;
+                      };
+
+                      const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
+                      const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
+
+                      let vigenciaLabel = 'Aviso Ativo';
+                      let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/75 border-[#E5E5E5] dark:border-[#233354]';
+
+                      if (startDate && endDate) {
+                        const startMs = startDate.getTime();
+                        const endMs = endDate.getTime();
+
+                        if (nowMs < startMs) {
+                          const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
+                          vigenciaLabel = hTxt ? `Programado (${hTxt})` : 'Programado';
+                          vigenciaBadgeClass = 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border-sky-300 dark:border-sky-800 font-medium';
+                        } else if (nowMs >= startMs && nowMs <= endMs) {
+                          vigenciaLabel = 'Vigente Agora';
+                          vigenciaBadgeClass = 'bg-amber-50 dark:bg-amber-950/40 text-[#FCA311] border-[#FCA311]/50 font-bold';
+                        } else {
+                          vigenciaLabel = 'Encerrado';
+                          vigenciaBadgeClass = 'bg-slate-100 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700';
+                        }
+                      }
                       return (
                         <article
                           key={av.id}
@@ -4023,17 +4072,13 @@ export default function App() {
                                   </span>
                                 )}
                                 <span
-                                  className={`px-2 py-0.5 rounded font-mono text-[10px] font-semibold border ${
-                                    isVigenteHoje
-                                      ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FCA311] border-[#FCA311]/50'
-                                      : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/75 border-[#E5E5E5] dark:border-[#233354]'
-                                  }`}
+                                  className={`px-2 py-0.5 rounded font-mono text-[10px] border ${vigenciaBadgeClass}`}
                                 >
                                   {vigenciaLabel}
                                 </span>
                               </div>
                               <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FCA311]">
-                                {av.cor_badge}
+                                {av.cor_badge || 'Alerta Oficial'}
                               </span>
                             </div>
 
@@ -4041,9 +4086,11 @@ export default function App() {
                               <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
                                 {av.descricao} — {av.severidade}
                               </h2>
-                              <span className="inline-flex items-center gap-1 font-mono text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                              <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354]">
                                 <Clock className="w-3.5 h-3.5 text-[#FCA311]" />
-                                {av.inicio_formatado} → {av.fim_formatado}
+                                <span>{av.inicio_formatado || av.inicio}</span>
+                                <span className="text-slate-400">→</span>
+                                <span>{av.fim_formatado || av.fim}</span>
                               </span>
                             </div>
 
