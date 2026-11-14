@@ -2189,6 +2189,8 @@ def run_auto_bulletin_pipeline():
         informe_pop = gerar_informe_populacao_5_topicos(
             d_idx, d, day_turnos, jundia_nivel_txt, jundia_status_txt, tem_aviso_marinha, inmet_alerts
         )
+        if informe_pop and len(informe_pop) >= 6:
+            desc_card = f"{desc_card} {informe_pop[-1]}"
 
         sub_desc = day_turnos[2]['tempo_desc'] if len(day_turnos) > 2 else res_txt
 
