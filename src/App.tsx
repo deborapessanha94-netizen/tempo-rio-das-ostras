@@ -571,10 +571,190 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
-  const mensalOutubro = historico?.resumo_mensal?.[0];
-  const panoramaCaption = mensalOutubro
-    ? `PANORAMA CLIMÁTICO • RIO DAS OSTRAS (${mensalOutubro.rotulo_mes.toUpperCase()})\n\n• Média municipal de chuva: ${mensalOutubro.chuva_total_media_mm.toFixed(1)} mm\n• Dias com registro de chuva: ${mensalOutubro.dias_com_chuva} de ${mensalOutubro.dias_registrados} dias\n• Maior acumulado na rede: ${mensalOutubro.chuva_maior_estacao_mm.toFixed(1)} mm (${mensalOutubro.chuva_maior_estacao_nome})\n\nMonitoramento completo no portal TEMPO em Rio das Ostras.`
-    : 'PANORAMA CLIMÁTICO • RIO DAS OSTRAS';
+  const [panoramaPreset, setPanoramaPreset] = useState<string>('nov_semana1');
+  const [panoramaStart, setPanoramaStart] = useState<string>(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const s = p.get('start');
+      if (s && /^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    } catch {}
+    return '2026-11-01';
+  });
+  const [panoramaEnd, setPanoramaEnd] = useState<string>(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const e = p.get('end');
+      if (e && /^\d{4}-\d{2}-\d{2}$/.test(e)) return e;
+    } catch {}
+    return '2026-11-07';
+  });
+  const [panoramaVideoPlaying, setPanoramaVideoPlaying] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!panoramaVideoPlaying) return;
+    const interval = setInterval(() => {
+      setPanoramaSlideIdx((idx) => (idx + 1) % 6);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [panoramaVideoPlaying]);
+
+  const mensalOutubro = historico?.resumo_mensal?.find((m) => m.ano_mes === '2026-10') || historico?.resumo_mensal?.[0];
+  const mensalNovembro = historico?.resumo_mensal?.find((m) => m.ano_mes === '2026-11');
+  const bannerMes = mensalNovembro || mensalOutubro;
+
+  const panoramaData = useMemo(() => {
+    const diarios = historico?.resumo_diario || [];
+    if (diarios.length === 0) return null;
+
+    const start = panoramaStart <= panoramaEnd ? panoramaStart : panoramaEnd;
+    const end = panoramaStart <= panoramaEnd ? panoramaEnd : panoramaStart;
+
+    const filtered = diarios.filter((d) => d.data_iso >= start && d.data_iso <= end);
+    if (filtered.length === 0) return null;
+
+    const totalDias = filtered.length;
+    const diasComChuva = filtered.filter(
+      (d) => (d.chuva_total_media_mm ?? d.media_mm ?? 0) > 0.05 || (d.horas_com_chuva ?? 0) > 0
+    ).length;
+
+    // Station totals
+    const stationTotals: Record<string, { nome: string; chuva_mm: number; rajada_max_kmh: number }> = {};
+    filtered.forEach((d) => {
+      const ests = d.estacoes_totais_dia || {};
+      Object.entries(ests).forEach(([code, info]) => {
+        if (!stationTotals[code]) {
+          stationTotals[code] = {
+            nome: info.nome || code,
+            chuva_mm: 0,
+            rajada_max_kmh: 0,
+          };
+        }
+        stationTotals[code].chuva_mm += info.chuva_mm || 0;
+        if ((info.rajada_max_kmh || 0) > stationTotals[code].rajada_max_kmh) {
+          stationTotals[code].rajada_max_kmh = info.rajada_max_kmh || 0;
+        }
+      });
+    });
+
+    const mediaMunicipal = filtered.reduce(
+      (acc, d) => acc + (d.chuva_total_media_mm ?? d.media_mm ?? 0),
+      0
+    );
+
+    const sortedStations = Object.entries(stationTotals)
+      .map(([code, data]) => ({ code, ...data }))
+      .sort((a, b) => b.chuva_mm - a.chuva_mm);
+
+    const maiorEstacao = sortedStations[0] || {
+      nome: 'Rede Municipal',
+      chuva_mm: 0,
+      code: 'NONE',
+    };
+
+    let maxGust = 0;
+    let gustInfo = '';
+    let minTemp = 999;
+    let maxTemp = -999;
+    const sistemasSet = new Set<string>();
+
+    filtered.forEach((d) => {
+      const g = d.vento_rajada_max_kmh || 0;
+      if (g > maxGust) {
+        maxGust = g;
+        gustInfo = `${g.toFixed(1)} km/h em ${d.data_br || d.data_iso}${
+          d.vento_rajada_max_horario ? ` às ${d.vento_rajada_max_horario}` : ''
+        }${d.vento_rajada_max_estacao ? ` (${d.vento_rajada_max_estacao})` : ''}`;
+      }
+      if (d.temp_min_c !== undefined && d.temp_min_c !== null && d.temp_min_c < minTemp) {
+        minTemp = d.temp_min_c;
+      }
+      if (d.temp_max_c !== undefined && d.temp_max_c !== null && d.temp_max_c > maxTemp) {
+        maxTemp = d.temp_max_c;
+      }
+      if (d.categoria_sistema) sistemasSet.add(d.categoria_sistema);
+      else if (d.sistema_atuante_dia) sistemasSet.add(d.sistema_atuante_dia);
+    });
+
+    const startParts = start.split('-');
+    const endParts = end.split('-');
+    const monthNames = [
+      '',
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
+    ];
+
+    let labelPeriodo = '';
+    if (start === end) {
+      labelPeriodo = `${startParts[2]}/${startParts[1]}/${startParts[0]} (Dia Único)`;
+    } else if (startParts[1] === endParts[1] && startParts[0] === endParts[0]) {
+      const mName = monthNames[parseInt(startParts[1], 10)];
+      labelPeriodo = `${startParts[2]} a ${endParts[2]} de ${mName}/${startParts[0]} (${totalDias} dias)`;
+    } else {
+      labelPeriodo = `${startParts[2]}/${startParts[1]} a ${endParts[2]}/${endParts[1]}/${endParts[0]} (${totalDias} dias)`;
+    }
+
+    const isOutubroFull = start === '2026-10-01' && end === '2026-10-31';
+
+    return {
+      start,
+      end,
+      labelPeriodo,
+      totalDias,
+      diasComChuva,
+      mediaMunicipal: Number(mediaMunicipal.toFixed(1)),
+      maiorEstacaoNome: maiorEstacao.nome,
+      maiorEstacaoChuva: Number(maiorEstacao.chuva_mm.toFixed(1)),
+      rankingEstacoes: sortedStations,
+      maxGust: Number(maxGust.toFixed(1)),
+      gustInfo,
+      minTemp: minTemp !== 999 ? Number(minTemp.toFixed(1)) : null,
+      maxTemp: maxTemp !== -999 ? Number(maxTemp.toFixed(1)) : null,
+      sistemas: Array.from(sistemasSet),
+      diasDetalhados: filtered,
+      isOutubroFull,
+    };
+  }, [historico, panoramaStart, panoramaEnd]);
+
+  const panoramaCaption = useMemo(() => {
+    if (!panoramaData) return 'PANORAMA CLIMÁTICO • RIO DAS OSTRAS';
+    const lines = [
+      `PANORAMA CLIMÁTICO • RIO DAS OSTRAS`,
+      `📅 Período: ${panoramaData.labelPeriodo.toUpperCase()}`,
+      ``,
+      `🌧️ Média municipal de chuva: ${panoramaData.mediaMunicipal.toFixed(1)} mm`,
+      `☔ Dias com registro de chuva: ${panoramaData.diasComChuva} de ${panoramaData.totalDias} dias (${((panoramaData.diasComChuva / panoramaData.totalDias) * 100).toFixed(0)}% do período)`,
+      `🏆 Maior acumulado na rede: ${panoramaData.maiorEstacaoChuva.toFixed(1)} mm em ${panoramaData.maiorEstacaoNome}`,
+      ``,
+      `📊 Ranking por Estação Pluviométrica:`,
+      ...panoramaData.rankingEstacoes.map(
+        (s, i) => ` ${i + 1}. ${s.nome}: ${s.chuva_mm.toFixed(1)} mm`
+      ),
+      ``,
+      panoramaData.maxGust > 0
+        ? `💨 Vento Máximo / Rajada: ${panoramaData.gustInfo}`
+        : '',
+      panoramaData.minTemp && panoramaData.maxTemp
+        ? `🌡️ Extremos Térmicos: Mínima de ${panoramaData.minTemp.toFixed(1)}°C e Máxima de ${panoramaData.maxTemp.toFixed(1)}°C`
+        : '',
+      panoramaData.sistemas.length > 0
+        ? `⛅ Sistemas Meteorológicos Atuantes: ${panoramaData.sistemas.join('; ')}`
+        : '',
+      ``,
+      `Acompanhe a cobertura oficial completa em tempo real no portal: https://tempoemriodasostras.com.br`,
+      `#RioDasOstras #Meteorologia #Chuva #PrevisaoDoTempo #DefesaCivil #Clima #Novembro2026`
+    ].filter(Boolean);
+    return lines.join('\n');
+  }, [panoramaData]);
 
   const handleCopyCaption = async () => {
     try {
@@ -816,14 +996,14 @@ export default function App() {
 
         {/* Main Content */}
         <main className="flex-1 min-w-0 w-full space-y-8">
-        {activeTab === 'previsao' && showSub('tempo-agora') && mensalOutubro && (
+        {activeTab === 'previsao' && showSub('tempo-agora') && bannerMes && (
           <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl px-5 py-3.5 flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap items-center gap-2.5 text-xs">
               <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
                 Retrospectiva Oficial
               </span>
               <span className="font-semibold text-[#14213D] dark:text-white">
-                Panorama Mensal • {mensalOutubro.rotulo_mes}
+                Panorama do Clima • {bannerMes.rotulo_mes}
               </span>
               <span className="text-slate-600 dark:text-[#E5E5E5]/75">
                 Pico de {mensalOutubro.chuva_maior_estacao_mm.toFixed(0)} mm em {mensalOutubro.chuva_maior_estacao_nome}, {mensalOutubro.dias_com_chuva} dias chuvosos
@@ -4977,78 +5157,330 @@ export default function App() {
           </div>
         )}
 
-        {/* ================= ABA 7: PANORAMA MENSAL ================= */}
+        {/* ================= ABA 7: PANORAMA DO CLIMA ================= */}
         {activeTab === 'panorama' && (
           <div className="space-y-8">
             <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-6">
-              <div className="pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
-                <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60">
-                  Consolidado Oficial da Rede Pluviométrica
+              <div className="pb-4 border-b border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#FCA311] animate-pulse"></span>
+                    Consolidado Oficial da Rede Pluviométrica · Personalizável
+                  </div>
+                  <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[#14213D] dark:text-white mt-1">
+                    Panorama do Clima — {panoramaData?.labelPeriodo || 'Período Selecionado'}
+                  </h1>
+                  <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-0.5">
+                    Gere métricas, gráficos e retrospectivas oficiais para qualquer mês, semana ou dias agrupados de Rio das Ostras.
+                  </p>
                 </div>
-                <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[#14213D] dark:text-white mt-1">
-                  Panorama Mensal do Clima — {mensalOutubro?.rotulo_mes || 'Outubro/2026'}
-                </h1>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="p-6 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
-                  <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Média Municipal Acumulada</div>
-                  <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
-                    {mensalOutubro ? `${mensalOutubro.chuva_total_media_mm.toFixed(1)} mm` : '--'}
+              {/* BARRA DE SELEÇÃO DE PERÍODO E DATAS LIVRES */}
+              <div className="p-4 sm:p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#14213D] dark:text-white">
+                    <Calendar className="w-4 h-4 text-[#FCA311]" />
+                    Atalhos Rápidos de Período:
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {[
+                      { id: 'nov_semana1', label: '01 a 07/11 (Semana 1 Nov)', start: '2026-11-01', end: '2026-11-07' },
+                      { id: 'nov_semana2', label: '08 a 14/11 (Semana 2 Nov)', start: '2026-11-08', end: '2026-11-14' },
+                      { id: 'nov_full', label: 'Novembro Completo (01 a 14/11)', start: '2026-11-01', end: '2026-11-14' },
+                      { id: 'out_full', label: 'Outubro Completo (31 dias)', start: '2026-10-01', end: '2026-10-31' },
+                    ].map((btn) => {
+                      const isSelected = panoramaStart === btn.start && panoramaEnd === btn.end;
+                      return (
+                        <button
+                          key={btn.id}
+                          onClick={() => {
+                            setPanoramaPreset(btn.id);
+                            setPanoramaStart(btn.start);
+                            setPanoramaEnd(btn.end);
+                          }}
+                          className={`px-3 py-1.5 text-xs font-medium rounded-lg cursor-pointer transition-colors ${
+                            isSelected
+                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold shadow-sm'
+                              : 'bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-slate-700 dark:text-[#E5E5E5]/80 hover:border-[#FCA311]'
+                          }`}
+                        >
+                          {btn.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
-                <div className="p-6 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
-                  <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Dias com Chuva</div>
-                  <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
-                    {mensalOutubro ? `${mensalOutubro.dias_com_chuva} / ${mensalOutubro.dias_registrados}` : '--'}
+
+                <div className="pt-3 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 flex-wrap text-xs">
+                    <span className="font-semibold text-slate-700 dark:text-white">Juntar Datas / Intervalo Livre:</span>
+                    <div className="flex items-center gap-1.5">
+                      <label className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">Data Início:</label>
+                      <input
+                        type="date"
+                        value={panoramaStart}
+                        min="2026-10-01"
+                        max="2026-11-14"
+                        onChange={(e) => {
+                          setPanoramaPreset('custom');
+                          setPanoramaStart(e.target.value);
+                        }}
+                        className="px-2.5 py-1 text-xs rounded-md border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white cursor-pointer font-mono"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <label className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">Data Fim:</label>
+                      <input
+                        type="date"
+                        value={panoramaEnd}
+                        min="2026-10-01"
+                        max="2026-11-14"
+                        onChange={(e) => {
+                          setPanoramaPreset('custom');
+                          setPanoramaEnd(e.target.value);
+                        }}
+                        className="px-2.5 py-1 text-xs rounded-md border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white cursor-pointer font-mono"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="p-6 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
-                  <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Maior Estação do Mês</div>
-                  <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#FCA311] mt-2 tabular-nums">
-                    {mensalOutubro ? `${mensalOutubro.chuva_maior_estacao_mm.toFixed(1)} mm` : '--'}
-                  </div>
-                  <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
-                    {mensalOutubro?.chuva_maior_estacao_nome || ''}
+
+                  {/* Seleção rápida dia a dia de Novembro */}
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <span className="text-[11px] font-medium text-slate-500 dark:text-[#E5E5E5]/70 mr-1">Dia avulso (Nov):</span>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map((diaNum) => {
+                      const dStr = `2026-11-${String(diaNum).padStart(2, '0')}`;
+                      const isSel = panoramaStart === dStr && panoramaEnd === dStr;
+                      return (
+                        <button
+                          key={diaNum}
+                          onClick={() => {
+                            setPanoramaPreset('custom');
+                            setPanoramaStart(dStr);
+                            setPanoramaEnd(dStr);
+                          }}
+                          title={`Gerar panorama do dia ${diaNum}/11/2026`}
+                          className={`w-6 h-6 text-[11px] font-mono rounded flex items-center justify-center cursor-pointer transition-colors ${
+                            isSel
+                              ? 'bg-[#FCA311] text-[#000000] font-bold shadow-sm'
+                              : 'bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]/75 hover:border-[#FCA311]'
+                          }`}
+                        >
+                          {diaNum}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
+
+              {/* OS 4 GRANDES NÚMEROS DO PERÍODO SELECIONADO */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Média Municipal Acumulada</div>
+                    <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
+                      {panoramaData ? `${panoramaData.mediaMunicipal.toFixed(1)} mm` : '--'}
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    Média ponderada da rede pluviométrica
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Dias com Chuva no Período</div>
+                    <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
+                      {panoramaData ? `${panoramaData.diasComChuva} / ${panoramaData.totalDias}` : '--'}
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    {panoramaData
+                      ? `${((panoramaData.diasComChuva / panoramaData.totalDias) * 100).toFixed(0)}% dos dias com precipitação`
+                      : '--'}
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Maior Estação do Período</div>
+                    <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#FCA311] mt-2 tabular-nums">
+                      {panoramaData ? `${panoramaData.maiorEstacaoChuva.toFixed(1)} mm` : '--'}
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800 truncate" title={panoramaData?.maiorEstacaoNome}>
+                    {panoramaData?.maiorEstacaoNome || '--'}
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between">
+                  <div>
+                    <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Rajada Máx & Térmica</div>
+                    <div className="font-mono text-xl sm:text-2xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
+                      {panoramaData && panoramaData.maxGust > 0 ? `${panoramaData.maxGust} km/h` : 'Mod. a Fraco'}
+                    </div>
+                  </div>
+                  <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    {panoramaData && panoramaData.minTemp !== null
+                      ? `${panoramaData.minTemp}°C a ${panoramaData.maxTemp}°C`
+                      : 'Amplitude térmica normal'}
+                  </div>
+                </div>
+              </div>
+
+              {/* RANKING PLUVIOMÉTRICO DAS ESTAÇÕES NO PERÍODO */}
+              {panoramaData && panoramaData.rankingEstacoes.length > 0 && (
+                <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
+                  <div className="flex items-center justify-between text-xs font-semibold text-[#14213D] dark:text-white">
+                    <span>Ranking Pluviométrico por Estação ({panoramaData.labelPeriodo})</span>
+                    <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">6 estações monitoradas</span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {panoramaData.rankingEstacoes.map((st, idx) => {
+                      const maxRain = Math.max(0.1, panoramaData.maiorEstacaoChuva);
+                      const pct = Math.min(100, Math.round((st.chuva_mm / maxRain) * 100));
+                      return (
+                        <div
+                          key={st.code}
+                          className="p-3 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between gap-2"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-xs font-medium text-[#14213D] dark:text-white truncate">
+                              <span className="font-bold text-[#FCA311] mr-1.5">{idx + 1}º</span>
+                              {st.nome}
+                            </span>
+                            <span className="font-mono text-xs font-bold text-[#14213D] dark:text-[#FCA311] shrink-0">
+                              {st.chuva_mm.toFixed(1)} mm
+                            </span>
+                          </div>
+                          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                            <div
+                              className="bg-[#FCA311] h-1.5 rounded-full transition-all duration-500"
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          {st.rajada_max_kmh > 0 && (
+                            <div className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/60 flex items-center justify-between">
+                              <span>Rajada máxima:</span>
+                              <span className="font-mono font-medium">{st.rajada_max_kmh.toFixed(1)} km/h</span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </section>
 
+            {/* ================= SUB-ABA: VÍDEO REELS ================= */}
             {subSection === 'video' && (
-              <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 flex flex-col items-center space-y-5">
-                <div className="text-center">
+              <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 flex flex-col items-center space-y-6">
+                <div className="text-center max-w-lg">
                   <h2 className="font-display text-xl font-semibold text-[#14213D] dark:text-white">
-                    Vídeo Master Oficial • 1080x1920 (46.8s)
+                    Vídeo Reels Master (9:16) • {panoramaData?.labelPeriodo}
                   </h2>
                   <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
-                    Renderização em alta definição pronta para Reels / Stories.
+                    {panoramaData?.isOutubroFull
+                      ? 'Renderização em alta definição com narração e dados consolidados oficiais de Outubro/2026.'
+                      : `Simulador interativo em tempo real para Reels/Stories gerado com os dados de ${panoramaData?.labelPeriodo}.`}
                   </p>
                 </div>
 
-                <div className="w-full max-w-[340px] rounded-2xl overflow-hidden border border-[#E5E5E5] dark:border-[#233354] bg-[#05080F] aspect-[9/16]">
-                  <video
-                    controls
-                    playsInline
-                    preload="metadata"
-                    className="w-full h-full object-cover"
-                    src={`${SITE_BASE}/img/panorama/video_reels_outubro_2026.mp4`}
-                  />
-                </div>
+                {panoramaData?.isOutubroFull ? (
+                  <div className="w-full max-w-[340px] rounded-2xl overflow-hidden border border-[#E5E5E5] dark:border-[#233354] bg-[#05080F] aspect-[9/16] shadow-xl">
+                    <video
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full h-full object-cover"
+                      src={`${SITE_BASE}/img/panorama/video_reels_outubro_2026.mp4`}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full max-w-[340px] rounded-2xl overflow-hidden border border-[#E5E5E5] dark:border-[#233354] bg-[#0B1324] aspect-[9/16] shadow-xl relative flex flex-col justify-between p-6 text-white select-none">
+                    {/* Header */}
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-1 rounded-full bg-[#FCA311]/20 text-[#FCA311] border border-[#FCA311]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
+                        RETROSPECTIVA
+                      </span>
+                      <span className="text-[11px] font-mono text-slate-300">@tempoemriodasostras</span>
+                    </div>
 
-                <a
-                  href={`${SITE_BASE}/img/panorama/video_reels_outubro_2026.mp4`}
-                  download="video_reels_outubro_2026.mp4"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
-                >
-                  <ArrowDownToLine className="w-4 h-4" />
-                  Baixar Vídeo Master (.MP4)
-                </a>
+                    {/* Dynamic Slide Content */}
+                    <div className="space-y-4 my-auto">
+                      <div>
+                        <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider">PANORAMA DO CLIMA</div>
+                        <h3 className="text-xl font-black text-white leading-tight mt-1">{panoramaData?.labelPeriodo}</h3>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 space-y-1">
+                        <div className="text-[10px] uppercase font-mono text-[#FCA311] font-bold tracking-wider">Volume Total Máximo</div>
+                        <div className="text-3xl font-black text-white font-mono">{panoramaData?.maiorEstacaoChuva} mm</div>
+                        <div className="text-xs font-medium text-slate-200">{panoramaData?.maiorEstacaoNome}</div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="text-[10px] text-slate-300">Média Municipal</div>
+                          <div className="text-lg font-bold font-mono text-white mt-0.5">{panoramaData?.mediaMunicipal} mm</div>
+                        </div>
+                        <div className="p-3 rounded-lg bg-white/5 border border-white/10">
+                          <div className="text-[10px] text-slate-300">Dias com Chuva</div>
+                          <div className="text-lg font-bold font-mono text-emerald-400 mt-0.5">
+                            {panoramaData?.diasComChuva} / {panoramaData?.totalDias}
+                          </div>
+                        </div>
+                      </div>
+
+                      {panoramaData && panoramaData.maxGust > 0 && (
+                        <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-center">
+                          <div className="text-[10px] text-slate-300">Rajada Máxima</div>
+                          <div className="text-sm font-bold text-[#FCA311] font-mono">{panoramaData.gustInfo}</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer Controls */}
+                    <div className="space-y-2 pt-2 border-t border-white/10">
+                      <div className="flex items-center justify-between text-xs">
+                        <button
+                          onClick={() => setPanoramaVideoPlaying(!panoramaVideoPlaying)}
+                          className="px-3 py-1 rounded-md bg-[#FCA311] text-[#000000] font-bold text-xs cursor-pointer hover:opacity-90"
+                        >
+                          {panoramaVideoPlaying ? 'Pausar Reels' : 'Reproduzir Reels (Auto)'}
+                        </button>
+                        <span className="text-[11px] font-mono text-slate-400">9:16 HD</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {panoramaData?.isOutubroFull ? (
+                  <a
+                    href={`${SITE_BASE}/img/panorama/video_reels_outubro_2026.mp4`}
+                    download="video_reels_outubro_2026.mp4"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                  >
+                    <ArrowDownToLine className="w-4 h-4" />
+                    Baixar Vídeo Master (.MP4)
+                  </a>
+                ) : (
+                  <button
+                    onClick={handleCopyCaption}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
+                  >
+                    {copiedCaption ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copiedCaption ? 'Legenda e Dados Copiados!' : 'Copiar Dados do Período para Post'}
+                  </button>
+                )}
               </section>
             )}
 
+            {/* ================= SUB-ABA: CARROSSEL FEED & STORIES ================= */}
             {(subSection === 'feed' || subSection === 'stories') && (
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
@@ -5068,6 +5500,9 @@ export default function App() {
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
+                    <span className="text-xs font-mono font-medium text-slate-600 dark:text-[#E5E5E5]/80 px-2">
+                      {panoramaSlideIdx + 1} / {PANORAMA_SLIDES.length}
+                    </span>
                     <button
                       onClick={() => setPanoramaSlideIdx((i) => (i + 1) % PANORAMA_SLIDES.length)}
                       className="p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] cursor-pointer transition-colors"
@@ -5075,39 +5510,265 @@ export default function App() {
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
-                    <a
-                      href={`${SITE_BASE}/img/panorama/${subSection === 'feed' ? 'feed' : 'stories'}/${PANORAMA_SLIDES[panoramaSlideIdx].file}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
-                    >
-                      <ArrowDownToLine className="w-3.5 h-3.5" />
-                      Baixar PNG HD
-                    </a>
+                    {panoramaData?.isOutubroFull ? (
+                      <a
+                        href={`${SITE_BASE}/img/panorama/${subSection === 'feed' ? 'feed' : 'stories'}/${PANORAMA_SLIDES[panoramaSlideIdx].file}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                      >
+                        <ArrowDownToLine className="w-3.5 h-3.5" />
+                        Baixar PNG HD
+                      </a>
+                    ) : (
+                      <button
+                        onClick={handleCopyCaption}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
+                      >
+                        {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                        {copiedCaption ? 'Copiado!' : 'Copiar Texto da Lâmina'}
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                <img
-                  src={`${SITE_BASE}/img/panorama/${subSection === 'feed' ? 'feed' : 'stories'}/${PANORAMA_SLIDES[panoramaSlideIdx].file}`}
-                  alt={PANORAMA_SLIDES[panoramaSlideIdx].title}
-                  referrerPolicy="no-referrer"
-                  className="w-full max-h-[520px] object-contain rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#05080F]"
-                />
+                {/* VISUALIZAÇÃO: Se for Outubro Completo mostra as imagens PNG gravadas; para qualquer outro período renderiza as Lâminas Dinâmicas */}
+                {panoramaData?.isOutubroFull ? (
+                  <img
+                    src={`${SITE_BASE}/img/panorama/${subSection === 'feed' ? 'feed' : 'stories'}/${PANORAMA_SLIDES[panoramaSlideIdx].file}`}
+                    alt={PANORAMA_SLIDES[panoramaSlideIdx].title}
+                    referrerPolicy="no-referrer"
+                    className="w-full max-h-[540px] object-contain rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#05080F]"
+                  />
+                ) : (
+                  <div className="w-full flex justify-center">
+                    <div
+                      className={`w-full ${
+                        subSection === 'feed' ? 'max-w-[480px] aspect-[4/5]' : 'max-w-[360px] aspect-[9/16]'
+                      } rounded-2xl border border-[#E5E5E5] dark:border-[#233354] bg-[#0B1324] text-white p-6 sm:p-8 flex flex-col justify-between shadow-2xl relative select-none`}
+                    >
+                      {/* Top Bar da Lâmina */}
+                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#FCA311]/20 text-[#FCA311] border border-[#FCA311]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
+                          RETROSPECTIVA OFICIAL
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-300">@tempoemriodasostras</span>
+                      </div>
+
+                      {/* Conteúdo Dinâmico por Índice de Lâmina */}
+                      {panoramaSlideIdx === 0 && (
+                        <div className="space-y-4 my-auto">
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              PANORAMA DO CLIMA
+                            </div>
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                              {panoramaData?.labelPeriodo}
+                            </h3>
+                            <p className="text-xs text-slate-300 mt-1">Os 3 Grandes Números do Período em Rio das Ostras</p>
+                          </div>
+
+                          <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
+                            <div className="text-[10px] uppercase font-mono text-[#FCA311] font-bold tracking-wider">
+                              Região Mais Chuvosa · Volume Máximo
+                            </div>
+                            <div className="text-3xl sm:text-4xl font-black text-white font-mono mt-1">
+                              {panoramaData?.maiorEstacaoChuva} mm
+                            </div>
+                            <div className="text-xs font-semibold text-slate-200 mt-0.5">{panoramaData?.maiorEstacaoNome}</div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                              <div className="text-[10px] text-slate-300">Média Municipal</div>
+                              <div className="text-xl sm:text-2xl font-bold font-mono text-white mt-1">
+                                {panoramaData?.mediaMunicipal} mm
+                              </div>
+                            </div>
+                            <div className="p-3.5 rounded-xl bg-white/5 border border-white/10">
+                              <div className="text-[10px] text-slate-300">Dias com Chuva</div>
+                              <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-400 mt-1">
+                                {panoramaData?.diasComChuva} / {panoramaData?.totalDias}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {panoramaSlideIdx === 1 && (
+                        <div className="space-y-4 my-auto">
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              VOLUME DE CHUVA NO PERÍODO
+                            </div>
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                              {panoramaData?.mediaMunicipal} mm Acumulados
+                            </h3>
+                          </div>
+
+                          <div className="p-4 rounded-xl bg-white/10 border border-white/15 space-y-2">
+                            <div className="text-xs text-slate-300">Média ponderada municipal entre todas as estações</div>
+                            <div className="text-sm text-white">
+                              • <b>{panoramaData?.diasComChuva} dias com chuva</b> em {panoramaData?.totalDias} dias analisados (
+                              {panoramaData ? ((panoramaData.diasComChuva / panoramaData.totalDias) * 100).toFixed(0) : 0}%).
+                            </div>
+                            <div className="text-sm text-white">
+                              • Volume pico municipal: <b>{panoramaData?.maiorEstacaoChuva} mm</b> em {panoramaData?.maiorEstacaoNome}.
+                            </div>
+                            <div className="text-sm text-white">
+                              • Taxa média diária: <b>{panoramaData ? (panoramaData.mediaMunicipal / panoramaData.totalDias).toFixed(1) : 0} mm/dia</b>.
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {panoramaSlideIdx === 2 && (
+                        <div className="space-y-3 my-auto">
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              RANKING POR ESTAÇÃO
+                            </div>
+                            <h3 className="text-lg sm:text-xl font-black text-white leading-tight mt-0.5">
+                              Acumulado das Estações
+                            </h3>
+                          </div>
+
+                          <div className="space-y-2">
+                            {panoramaData?.rankingEstacoes.map((st, i) => {
+                              const maxVal = Math.max(0.1, panoramaData?.maiorEstacaoChuva || 1);
+                              const pct = Math.min(100, Math.round((st.chuva_mm / maxVal) * 100));
+                              return (
+                                <div key={st.code} className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-1">
+                                  <div className="flex items-center justify-between text-xs">
+                                    <span className="font-semibold text-white truncate max-w-[200px]">
+                                      <span className="text-[#FCA311] font-bold mr-1">{i + 1}º</span> {st.nome}
+                                    </span>
+                                    <span className="font-mono font-bold text-[#FCA311]">{st.chuva_mm.toFixed(1)} mm</span>
+                                  </div>
+                                  <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                                    <div className="bg-[#FCA311] h-1.5 rounded-full" style={{ width: `${pct}%` }} />
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+
+                      {panoramaSlideIdx === 3 && (
+                        <div className="space-y-4 my-auto">
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              VENTOS E EXTREMOS TÉRMICOS
+                            </div>
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                              Comportamento da Atmosfera
+                            </h3>
+                          </div>
+
+                          <div className="p-4 rounded-xl bg-white/10 border border-white/15 space-y-1">
+                            <div className="text-[10px] text-slate-300 font-mono uppercase">Rajada Máxima Observada</div>
+                            <div className="text-2xl sm:text-3xl font-black text-[#FCA311] font-mono">
+                              {panoramaData && panoramaData.maxGust > 0 ? `${panoramaData.maxGust} km/h` : 'Ventos Normais'}
+                            </div>
+                            <div className="text-xs text-white">{panoramaData?.gustInfo || 'Sem ocorrência de ventania severa'}</div>
+                          </div>
+
+                          <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-1">
+                            <div className="text-[10px] text-slate-300 font-mono uppercase">Extremos de Temperatura</div>
+                            <div className="text-xl sm:text-2xl font-black text-white font-mono">
+                              {panoramaData && panoramaData.minTemp !== null
+                                ? `${panoramaData.minTemp}°C a ${panoramaData.maxTemp}°C`
+                                : '--'}
+                            </div>
+                            <div className="text-xs text-slate-300">Amplitude térmica registrada no período selecionado</div>
+                          </div>
+                        </div>
+                      )}
+
+                      {panoramaSlideIdx === 4 && (
+                        <div className="space-y-4 my-auto">
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              SISTEMAS METEOROLÓGICOS
+                            </div>
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                              O Que Comandou o Tempo
+                            </h3>
+                          </div>
+
+                          <div className="space-y-2">
+                            {panoramaData && panoramaData.sistemas.length > 0 ? (
+                              panoramaData.sistemas.map((sis, i) => (
+                                <div key={i} className="p-3 rounded-lg bg-white/10 border border-white/15 flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-[#FCA311]"></span>
+                                  <span className="text-xs sm:text-sm font-semibold text-white">{sis}</span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="p-4 rounded-lg bg-white/5 text-xs text-slate-300">
+                                Sistemas de circulação marítima pós-frontal e instabilidades locais típicas da costa norte fluminense.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {panoramaSlideIdx === 5 && (
+                        <div className="space-y-4 my-auto text-center">
+                          <div className="w-12 h-12 rounded-full bg-[#FCA311]/20 border border-[#FCA311]/40 flex items-center justify-center mx-auto text-[#FCA311]">
+                            <Wind className="w-6 h-6" />
+                          </div>
+
+                          <div>
+                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                              ENCERRAMENTO OFICIAL
+                            </div>
+                            <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                              TEMPO em Rio das Ostras
+                            </h3>
+                            <p className="text-xs text-slate-300 mt-1 max-w-xs mx-auto">
+                              Portal integrado de monitoramento meteorológico, alerta hidrológico e orla marítima.
+                            </p>
+                          </div>
+
+                          <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1 text-xs">
+                            <div className="font-semibold text-white">Siga e Acompanhe:</div>
+                            <div className="font-mono text-[#FCA311] text-sm">@tempoemriodasostras</div>
+                            <div className="text-[11px] text-slate-400">tempoemriodasostras.com.br</div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Bottom Bar da Lâmina */}
+                      <div className="flex items-center justify-between pt-3 border-t border-white/10 text-[10px] text-slate-400 font-mono">
+                        <span>Lâmina {panoramaSlideIdx + 1} de {PANORAMA_SLIDES.length}</span>
+                        <span>Rede Pluviométrica de Rio das Ostras</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </section>
             )}
 
+            {/* ================= SUB-ABA: LEGENDA FORMATADA ================= */}
             {subSection === 'legenda' && (
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
-                  <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
-                    Legenda Formatada para Feed & Reels
-                  </h2>
+                  <div>
+                    <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                      Legenda Formatada para Feed & Reels
+                    </h2>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-0.5">
+                      Texto oficial formatado para o período selecionado ({panoramaData?.labelPeriodo}).
+                    </p>
+                  </div>
                   <button
                     onClick={handleCopyCaption}
                     className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
                   >
                     {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    {copiedCaption ? 'Legenda Copiada' : 'Copiar Legenda'}
+                    {copiedCaption ? 'Legenda Copiada!' : 'Copiar Legenda'}
                   </button>
                 </div>
 

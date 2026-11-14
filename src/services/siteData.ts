@@ -253,26 +253,88 @@ export interface TabuaMares {
   }>;
 }
 
+export interface HistoricoDiaEstacao {
+  nome: string;
+  chuva_mm: number;
+  rajada_max_kmh?: number;
+}
+
+export interface HistoricoResumoDiario {
+  data_iso: string;
+  data_br?: string;
+  dia?: number;
+  mes_num?: number;
+  mes_nome?: string;
+  ano?: number;
+  horas_registradas?: number;
+  horas_com_chuva?: number;
+  chuva_total_media_mm?: number;
+  chuva_maior_estacao_mm?: number;
+  chuva_maior_estacao_nome?: string;
+  chuva_pico_hora_mm?: number;
+  chuva_pico_horario?: string;
+  estacoes_totais_dia?: Record<string, HistoricoDiaEstacao>;
+  vento_vel_media_kmh?: number;
+  vento_vel_max_kmh?: number;
+  vento_dir_predominante?: string;
+  giro_quadrante_sul?: boolean;
+  vento_rajada_max_kmh?: number;
+  vento_rajada_max_horario?: string;
+  vento_rajada_max_estacao?: string;
+  temp_min_c?: number;
+  temp_max_c?: number;
+  umidade_media_pct?: number;
+  pressao_min_hpa?: number;
+  pressao_max_hpa?: number;
+  pressao_media_hpa?: number;
+  sistema_atuante_dia?: string;
+  categoria_sistema?: string;
+  caracteristicas_dia?: string;
+  media_mm?: number;
+  maior_mm?: number;
+  estacao_maior?: string;
+}
+
+export interface HistoricoResumoMensal {
+  ano_mes: string;
+  ano?: number;
+  mes_num?: number;
+  mes_nome?: string;
+  rotulo_mes: string;
+  dias_registrados?: number;
+  dias_com_chuva: number;
+  chuva_total_media_mm: number;
+  chuva_maior_estacao_mm: number;
+  chuva_maior_estacao_nome: string;
+  estacoes_totais_mes?: Record<string, number>;
+  dia_mais_chuvoso?: string;
+  vento_vel_media_kmh?: number;
+  vento_vel_max_kmh?: number;
+  vento_dir_predominante?: string;
+  vento_rajada_max_kmh?: number;
+  vento_rajada_max_detalhe?: string;
+  temp_min_c?: number;
+  temp_max_c?: number;
+  sistema_atuante_mes?: string;
+  caracteristicas_mes?: string;
+  chuva_total_mm?: number;
+  maior_chuva_dia_mm?: number;
+  estacao_mais_chuvosa?: string;
+}
+
 export interface HistoricoEstacoesDataset {
-  ano: number;
-  atualizacao: string;
-  resumo_mensal: Array<{
-    ano_mes: string;
-    rotulo_mes: string;
-    chuva_total_mm: number;
-    dias_com_chuva: number;
-    maior_chuva_dia_mm: number;
-    estacao_mais_chuvosa: string;
-    vento_rajada_max_kmh?: number;
-  }>;
-  resumo_diario: Array<{
-    data_iso: string;
-    media_mm: number;
-    maior_mm: number;
-    estacao_maior: string;
-    vento_rajada_max_kmh?: number;
-    sistema_atuante?: string;
-  }>;
+  ano?: number;
+  atualizacao?: string;
+  atualizacao_iso?: string;
+  periodo_inicio?: string;
+  periodo_fim?: string;
+  total_dias?: number;
+  total_horas?: number;
+  estacoes_monitoradas?: Array<{ id: string; nome: string; bairro?: string; tipo?: string }>;
+  arquivos_planilha?: string[];
+  resumo_mensal: HistoricoResumoMensal[];
+  resumo_diario: HistoricoResumoDiario[];
+  registros_horarios?: any[];
 }
 
 export interface OpenMeteoData {
