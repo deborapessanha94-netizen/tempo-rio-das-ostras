@@ -255,6 +255,7 @@ export default function App() {
   const [meteoView, setMeteoView] = useState<'prob' | 'wwatch' | 'inmet'>('prob');
   const [cemadenSubView, setCemadenSubView] = useState<'sintese' | 'nacional' | 'mapas'>('sintese');
 
+  const [alertaFiltroLocal, setAlertaFiltroLocal] = useState<'todos' | 'ostras' | 'outros'>('todos');
   const [panoramaSlideIdx, setPanoramaSlideIdx] = useState(0);
   const [copiedCaption, setCopiedCaption] = useState(false);
 
@@ -4007,9 +4008,59 @@ export default function App() {
                   </a>
                 </div>
 
+                {/* Seletor Rápido de Localidade (Rio das Ostras vs Outras Regiões do RJ) */}
+                {inmetAvisos.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
+                    <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-medium text-[11px]">
+                      Visualizar abrangência:
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setAlertaFiltroLocal('todos')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                        alertaFiltroLocal === 'todos'
+                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-black border-[#14213D] dark:border-[#FCA311] shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                      }`}
+                    >
+                      Todos os Alertas do RJ ({inmetAvisos.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAlertaFiltroLocal('ostras')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
+                        alertaFiltroLocal === 'ostras'
+                          ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-black border-emerald-600 dark:border-emerald-500 shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-emerald-800 dark:text-emerald-300 border-[#E5E5E5] dark:border-[#233354] hover:border-emerald-500'
+                      }`}
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      Apenas Rio das Ostras ({inmetAvisos.filter((a) => a.eh_direto_ostras !== false).length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAlertaFiltroLocal('outros')}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
+                        alertaFiltroLocal === 'outros'
+                          ? 'bg-amber-600 dark:bg-amber-500 text-white dark:text-black border-amber-600 dark:border-amber-500 shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-amber-800 dark:text-amber-300 border-[#E5E5E5] dark:border-[#233354] hover:border-amber-500'
+                      }`}
+                    >
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      Outras Localidades do RJ ({inmetAvisos.filter((a) => a.eh_direto_ostras === false).length})
+                    </button>
+                  </div>
+                )}
+
                 {inmetAvisos.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {inmetAvisos.map((av) => {
+                    {inmetAvisos
+                      .filter((av) => {
+                        if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras !== false;
+                        if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras === false;
+                        return true;
+                      })
+                      .map((av) => {
                       // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
                       const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
                       const nowMs = nowBrt.getTime();
@@ -4047,7 +4098,11 @@ export default function App() {
                       return (
                         <article
                           key={av.id}
-                          className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] border-l-2 border-l-[#FCA311] rounded-xl p-6 flex flex-col justify-between gap-4"
+                          className={`bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] ${
+                            av.eh_direto_ostras !== false
+                              ? 'border-l-4 border-l-emerald-500 shadow-xs'
+                              : 'border-l-4 border-l-amber-500/80 dark:border-l-amber-500/60 opacity-95'
+                          } rounded-xl p-6 flex flex-col justify-between gap-4`}
                         >
                           <div className="space-y-3">
                             <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
@@ -4058,9 +4113,15 @@ export default function App() {
                                 <span className="font-mono text-xs text-[#FCA311] font-semibold">
                                   Aviso nº {av.id}
                                 </span>
-                                {av.eh_direto_ostras !== false && (
-                                  <span className="px-2 py-0.5 rounded font-mono text-[10px] bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border border-[#E5E5E5] dark:border-[#233354]">
-                                    Rio das Ostras
+                                {av.eh_direto_ostras !== false ? (
+                                  <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                                    <MapPin className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                    Rio das Ostras (Válido no Município)
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3 text-amber-600 dark:text-amber-400 shrink-0" />
+                                    Outras Localidades do RJ (Não inclui Rio das Ostras)
                                   </span>
                                 )}
                                 <span
@@ -4085,6 +4146,23 @@ export default function App() {
                                 <span>{av.fim_formatado || av.fim}</span>
                               </span>
                             </div>
+
+                            {/* Destaque Explícito de Abrangência Territorial */}
+                            {av.eh_direto_ostras !== false ? (
+                              <div className="p-2.5 rounded-lg bg-emerald-50/80 dark:bg-emerald-950/25 border border-emerald-200 dark:border-emerald-800/40 text-xs text-emerald-900 dark:text-emerald-200 flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                <span>
+                                  <strong>Válido em Rio das Ostras:</strong> O município está incluído diretamente no polígono de risco deste alerta oficial.
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="p-2.5 rounded-lg bg-amber-50/80 dark:bg-amber-950/25 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200 flex items-center gap-2">
+                                <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                                <span>
+                                  <strong>Apenas Outras Regiões do RJ:</strong> Este alerta NÃO abrange o município de Rio das Ostras (válido somente para outras localidades fluminenses).
+                                </span>
+                              </div>
+                            )}
 
                             <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
                               <div>
