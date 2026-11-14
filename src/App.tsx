@@ -1315,7 +1315,7 @@ export default function App() {
                       src={`${SITE_BASE}/${isDark ? 'img/mapa_rj_marcado_hd_dark.png' : 'img/mapa_rj_marcado_hd.png'}`}
                       alt="Mapa do Estado do Rio de Janeiro com marcação de Rio das Ostras"
                       referrerPolicy="no-referrer"
-                      className="w-full h-auto max-h-64 object-contain rounded"
+                      className="w-full h-auto max-h-72 sm:max-h-80 object-contain rounded drop-shadow-xs transition-all"
                     />
                   </div>
 
