@@ -10,7 +10,7 @@ export default {
       colors: {
         midnight: '#14213D',
         deep: '#0B1324',
-        solar: '#FCA311',
+        solar: '#FF8244',
         slateSoft: '#E5E5E5',
       },
       fontFamily: {

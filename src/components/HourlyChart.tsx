@@ -118,7 +118,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
   const getMetricColor = () => {
     switch (metric) {
       case 'temp':
-        return { line: '#FCA311', fill: 'rgba(252, 163, 17, 0.15)', text: '#FCA311' };
+        return { line: '#FF8244', fill: 'rgba(255, 130, 68, 0.15)', text: '#FF8244' };
       case 'rain':
         return { line: '#3b82f6', fill: 'rgba(59, 130, 246, 0.25)', text: '#3b82f6' };
       case 'wind':
@@ -128,7 +128,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
       case 'humidity':
         return { line: '#06b6d4', fill: 'rgba(6, 182, 212, 0.15)', text: '#06b6d4' };
       default:
-        return { line: '#FCA311', fill: 'rgba(252, 163, 17, 0.15)', text: '#FCA311' };
+        return { line: '#FF8244', fill: 'rgba(255, 130, 68, 0.15)', text: '#FF8244' };
     }
   };
 
@@ -270,7 +270,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                     y={chartHeight - paddingBottom + 30}
                     textAnchor="middle"
                     fill="currentColor"
-                    className="text-[9.5px] font-mono font-semibold text-[#FCA311] select-none"
+                    className="text-[9.5px] font-mono font-semibold text-[#FF8244] select-none"
                   >
                     {pt.p.dayLabel}
                   </text>

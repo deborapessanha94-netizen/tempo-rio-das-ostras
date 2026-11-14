@@ -836,7 +836,7 @@ export default function App() {
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => setMobileMenuOpen((v) => !v)}
-              className="lg:hidden p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] cursor-pointer"
+              className="lg:hidden p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] cursor-pointer"
               aria-label="Alternar menu de abas vertical"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -846,7 +846,7 @@ export default function App() {
                 setActiveTab('previsao');
                 setSubForTab('previsao', 'tempo-agora');
               }}
-              className="flex items-center shrink-0 cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FCA311]"
+              className="flex items-center shrink-0 cursor-pointer rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FF8244]"
               aria-label="Início Tempo em Rio das Ostras"
             >
               <img
@@ -871,17 +871,17 @@ export default function App() {
             <button
               onClick={fetchAll}
               disabled={syncing}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311]/70 transition-colors cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244]/70 transition-colors cursor-pointer whitespace-nowrap"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${syncing ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Atualizar</span>
             </button>
             <button
               onClick={() => setIsDark((prev) => !prev)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311]/70 transition-colors cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244]/70 transition-colors cursor-pointer whitespace-nowrap"
               aria-label="Alternar tema"
             >
-              {isDark ? <Sun className="w-3.5 h-3.5 text-[#FCA311]" /> : <Moon className="w-3.5 h-3.5 text-[#14213D]" />}
+              {isDark ? <Sun className="w-3.5 h-3.5 text-[#FF8244]" /> : <Moon className="w-3.5 h-3.5 text-[#14213D]" />}
               <span className="hidden sm:inline">{isDark ? 'Tema Claro' : 'Tema Escuro'}</span>
             </button>
           </div>
@@ -893,7 +893,7 @@ export default function App() {
         {/* Mobile Active Tab Bar */}
         <div className="w-full lg:hidden flex items-center justify-between gap-3 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl px-4 py-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            <activeTabItem.icon className="w-4 h-4 text-[#FCA311] shrink-0" />
+            <activeTabItem.icon className="w-4 h-4 text-[#FF8244] shrink-0" />
             <div className="truncate">
               <div className="text-xs font-semibold text-[#14213D] dark:text-white truncate">
                 {activeTabItem.label}
@@ -905,7 +905,7 @@ export default function App() {
           </div>
           <button
             onClick={() => setMobileMenuOpen((v) => !v)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] shrink-0 cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] shrink-0 cursor-pointer"
           >
             {mobileMenuOpen ? 'Ocultar Abas' : 'Abas & Seções'}
             <ChevronDown className={`w-3.5 h-3.5 transition-transform ${mobileMenuOpen ? 'rotate-180' : ''}`} />
@@ -927,7 +927,7 @@ export default function App() {
                 Abas do Portal
               </span>
               {boletimMeta?.emissao && (
-                <span className="text-[10px] font-mono text-[#FCA311] truncate max-w-[120px]" title={boletimMeta.emissao}>
+                <span className="text-[10px] font-mono text-[#FF8244] truncate max-w-[120px]" title={boletimMeta.emissao}>
                   {boletimMeta.emissao}
                 </span>
               )}
@@ -946,14 +946,14 @@ export default function App() {
                       }}
                       className={`w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-lg text-left text-sm transition-colors cursor-pointer ${
                         isActive
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                           : 'text-slate-700 dark:text-[#E5E5E5]/85 hover:bg-slate-100 dark:hover:bg-[#0B1324]'
                       }`}
                     >
                       <span className="flex items-center gap-2.5 min-w-0">
                         <Icon
                           className={`w-4 h-4 shrink-0 ${
-                            isActive ? 'text-[#FCA311] dark:text-[#000000]' : 'text-slate-400 dark:text-[#E5E5E5]/60'
+                            isActive ? 'text-[#FF8244] dark:text-[#000000]' : 'text-slate-400 dark:text-[#E5E5E5]/60'
                           }`}
                         />
                         <span className="truncate">{item.label}</span>
@@ -978,7 +978,7 @@ export default function App() {
                               }}
                               className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors cursor-pointer ${
                                 isSubActive
-                                  ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] font-semibold'
+                                  ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] font-semibold'
                                   : 'text-slate-600 dark:text-[#E5E5E5]/70 hover:text-[#14213D] dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-[#0B1324]/70'
                               }`}
                             >
@@ -1027,7 +1027,7 @@ export default function App() {
                       <span className="inline-flex items-center gap-1.5 font-medium text-[#14213D] dark:text-white">
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${
-                            inmetAvisos.length > 0 ? 'bg-[#FCA311]' : 'bg-emerald-500'
+                            inmetAvisos.length > 0 ? 'bg-[#FF8244]' : 'bg-emerald-500'
                           }`}
                           aria-hidden="true"
                         />
@@ -1046,12 +1046,12 @@ export default function App() {
                         <span className="font-mono text-6xl font-semibold tracking-tight text-[#14213D] dark:text-white tabular-nums leading-none">
                           {currentTempVal !== undefined && currentTempVal !== null ? Math.round(currentTempVal) : '--'}°
                         </span>
-                        <span className="font-mono text-2xl text-[#FCA311]">C</span>
+                        <span className="font-mono text-2xl text-[#FF8244]">C</span>
                       </div>
 
                       <div className="space-y-1.5">
                         <div className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-[#E5E5E5]/85">
-                          <Flame className="w-4 h-4 text-[#FCA311] shrink-0" />
+                          <Flame className="w-4 h-4 text-[#FF8244] shrink-0" />
                           <span>
                             Sensação agora:{' '}
                             <strong className="font-mono text-[#14213D] dark:text-white tabular-nums">
@@ -1080,7 +1080,7 @@ export default function App() {
                     <div className="md:col-span-7 md:border-l md:border-[#E5E5E5] dark:md:border-[#233354] md:pl-6 space-y-3.5">
                       <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                         <span className="inline-flex items-center gap-1.5">
-                          <Eye className="w-3.5 h-3.5 text-[#FCA311]" />
+                          <Eye className="w-3.5 h-3.5 text-[#FF8244]" />
                           <span className="font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65">
                             Céu:
                           </span>
@@ -1113,7 +1113,7 @@ export default function App() {
                               {mainCond}
                             </h2>
                             {alertNote && (
-                              <div className="text-xs font-medium text-[#FCA311] mt-1">
+                              <div className="text-xs font-medium text-[#FF8244] mt-1">
                                 {alertNote}
                               </div>
                             )}
@@ -1149,7 +1149,7 @@ export default function App() {
                     {/* 1. Chuva Prevista */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <CloudRain className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <CloudRain className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Chuva Prevista</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1171,7 +1171,7 @@ export default function App() {
                     {/* 2. Vento / Rajadas */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Wind className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Wind className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Vento / Rajadas</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1193,7 +1193,7 @@ export default function App() {
                     {/* 3. Umidade do Ar */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Droplets className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Droplets className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Umidade do Ar</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1210,7 +1210,7 @@ export default function App() {
                     {/* 4. Mar na Orla */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Waves className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Waves className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Mar na Orla</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1224,7 +1224,7 @@ export default function App() {
                     {/* 5. Pressão Atmosférica */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Gauge className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Gauge className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Pressão Atm.</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1240,16 +1240,16 @@ export default function App() {
                       href={acumulados?.uv_tempo_real?.url_estacao || 'https://www.wunderground.com/dashboard/pws/IRIODA17'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] transition-colors space-y-1 block"
+                      className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] transition-colors space-y-1 block"
                     >
                       <div className="flex items-center justify-between gap-1 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                         <span className="inline-flex items-center gap-1.5">
-                          <Sun className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                          <Sun className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                           <span>Índice UV</span>
                         </span>
                         <ExternalLink className="w-3 h-3 shrink-0 opacity-70" />
                       </div>
-                      <div className="font-mono text-sm sm:text-base font-semibold text-[#FCA311] tabular-nums leading-snug">
+                      <div className="font-mono text-sm sm:text-base font-semibold text-[#FF8244] tabular-nums leading-snug">
                         {acumulados?.uv_tempo_real ? `${acumulados.uv_tempo_real.uv.toFixed(0)} - ${uvLabel}` : '--'}
                       </div>
                       <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
@@ -1262,7 +1262,7 @@ export default function App() {
                     {/* 7. Nascer & Pôr do Sol */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Sunrise className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Sunrise className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Nascer & Pôr</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
@@ -1278,7 +1278,7 @@ export default function App() {
                     {/* 8. Fase da Lua */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                       <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Moon className="w-3.5 h-3.5 text-slate-400 dark:text-[#FCA311]/80 shrink-0" />
+                        <Moon className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
                         <span>Fase da Lua</span>
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white leading-snug">
@@ -1304,7 +1304,7 @@ export default function App() {
                 <div className="lg:col-span-4 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 flex flex-col justify-between space-y-5">
                   <div className="flex items-center justify-between gap-2">
                     <div className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-600 dark:text-[#E5E5E5]/80">
-                      <MapPin className="w-3.5 h-3.5 text-[#FCA311] shrink-0" />
+                      <MapPin className="w-3.5 h-3.5 text-[#FF8244] shrink-0" />
                       <span>Localização · Rio das Ostras RJ</span>
                     </div>
                     <span className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/65">22.52°S 41.94°W</span>
@@ -1334,7 +1334,7 @@ export default function App() {
                     </div>
                     <div>
                       <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/65">Chuva Prev. 4 Dias</div>
-                      <div className="font-mono text-xs sm:text-sm font-semibold text-[#FCA311] mt-0.5 tabular-nums">
+                      <div className="font-mono text-xs sm:text-sm font-semibold text-[#FF8244] mt-0.5 tabular-nums">
                         {boletimMeta?.kpis?.chuva_4d || '--'}
                       </div>
                     </div>
@@ -1377,7 +1377,7 @@ export default function App() {
                           onClick={() => setChartMetric(m.id)}
                           className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                             chartMetric === m.id
-                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                               : 'text-slate-600 dark:text-[#E5E5E5]/75'
                           }`}
                         >
@@ -1405,7 +1405,7 @@ export default function App() {
                           }}
                           className={`px-2.5 py-1.5 text-xs font-mono rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                             chartDayFilter === 'all' && horizonCount === h.count
-                              ? 'bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] font-semibold'
+                              ? 'bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] font-semibold'
                               : 'text-slate-500 dark:text-[#E5E5E5]/70'
                           }`}
                         >
@@ -1419,7 +1419,7 @@ export default function App() {
                         value={chartDayFilter}
                         onChange={(e) => setChartDayFilter(e.target.value)}
                         aria-label="Filtrar dia específico no gráfico"
-                        className="px-2.5 py-1.5 text-xs font-mono rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FCA311]/50 cursor-pointer"
+                        className="px-2.5 py-1.5 text-xs font-mono rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FF8244]/50 cursor-pointer"
                       >
                         <option value="all">Todos os dias</option>
                         {chartDayOptions.map((d, idx) => (
@@ -1434,8 +1434,8 @@ export default function App() {
                       onClick={() => setShowChartValues((v) => !v)}
                       className={`px-3 py-1.5 text-xs font-mono rounded-lg border transition-colors cursor-pointer whitespace-nowrap ${
                         showChartValues
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] border-[#14213D] dark:border-[#FCA311] text-white dark:text-[#000000] font-semibold'
-                          : 'border-[#E5E5E5] dark:border-[#233354] text-slate-500 dark:text-[#E5E5E5]/70 hover:border-[#FCA311]'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] border-[#14213D] dark:border-[#FF8244] text-white dark:text-[#000000] font-semibold'
+                          : 'border-[#E5E5E5] dark:border-[#233354] text-slate-500 dark:text-[#E5E5E5]/70 hover:border-[#FF8244]'
                       }`}
                     >
                       Valores: {showChartValues ? 'ON' : 'OFF'}
@@ -1484,7 +1484,7 @@ export default function App() {
 
                       const cardBgClass = 'bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs';
                       const leftBorderClass = hasAlert
-                        ? 'border-l-4 border-l-[#FCA311]'
+                        ? 'border-l-4 border-l-[#FF8244]'
                         : 'border-l-4 border-l-[#14213D] dark:border-l-[#233354]';
 
                       return (
@@ -1494,7 +1494,7 @@ export default function App() {
                         >
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                              <Calendar className={`w-4 h-4 ${hasAlert ? 'text-[#FCA311]' : isDark ? 'text-[#FCA311]' : 'text-[#14213D]'} shrink-0`} />
+                              <Calendar className={`w-4 h-4 ${hasAlert ? 'text-[#FF8244]' : isDark ? 'text-[#FF8244]' : 'text-[#14213D]'} shrink-0`} />
                               <span className="font-display text-sm font-bold text-[#14213D] dark:text-white">
                                 {d.dia}
                               </span>
@@ -1503,11 +1503,11 @@ export default function App() {
                               <span
                                 className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-tight border ${
                                   hasAlert
-                                    ? 'bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border-[#FCA311]/50'
+                                    ? 'bg-[#FF8244]/15 text-[#14213D] dark:text-[#FF8244] border-[#FF8244]/50'
                                     : 'bg-[#F7F8FA] dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5]/90 border-[#E5E5E5] dark:border-[#233354]'
                                 }`}
                               >
-                                {hasAlert && <AlertTriangle className="w-3 h-3 text-[#FCA311]" />}
+                                {hasAlert && <AlertTriangle className="w-3 h-3 text-[#FF8244]" />}
                                 {d.badge}
                               </span>
                             )}
@@ -1522,7 +1522,7 @@ export default function App() {
                               {d.pilares.temp?.val && (
                                 <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                    <Thermometer className="w-3.5 h-3.5 text-[#FCA311]" /> Temperatura
+                                    <Thermometer className="w-3.5 h-3.5 text-[#FF8244]" /> Temperatura
                                   </span>
                                   <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.temp.val}
@@ -1532,7 +1532,7 @@ export default function App() {
                               {d.pilares.chuva?.val && (
                                 <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                    <CloudRain className="w-3.5 h-3.5 text-[#FCA311]" /> Chuva
+                                    <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" /> Chuva
                                   </span>
                                   <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.chuva.val.split(' (')[0]}
@@ -1542,7 +1542,7 @@ export default function App() {
                               {d.pilares.vento?.val && (
                                 <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                    <Wind className="w-3.5 h-3.5 text-[#FCA311]" /> Vento
+                                    <Wind className="w-3.5 h-3.5 text-[#FF8244]" /> Vento
                                   </span>
                                   <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.vento.val}
@@ -1552,7 +1552,7 @@ export default function App() {
                               {d.pilares.mar?.val && (
                                 <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                    <Waves className="w-3.5 h-3.5 text-[#FCA311]" /> Mar na Orla
+                                    <Waves className="w-3.5 h-3.5 text-[#FF8244]" /> Mar na Orla
                                   </span>
                                   <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.mar.val}
@@ -1587,7 +1587,7 @@ export default function App() {
                         <span>Chuva: {openMeteo.daily.precipitation_sum[i].toFixed(1)} mm ({openMeteo.daily.precipitation_probability_max[i]}%)</span>
                         <span>
                           {Math.round(openMeteo.daily.temperature_2m_min[i])}° /{' '}
-                          <strong className="text-[#FCA311]">{Math.round(openMeteo.daily.temperature_2m_max[i])}°</strong>
+                          <strong className="text-[#FF8244]">{Math.round(openMeteo.daily.temperature_2m_max[i])}°</strong>
                         </span>
                       </div>
                     ))}
@@ -1608,7 +1608,7 @@ export default function App() {
                           </p>
                         </div>
                         {boletimMeta.inspecao_minuciosa_tempo_severo.status_geral_badge && (
-                          <span className="text-[11px] font-mono font-bold uppercase px-3 py-1 rounded-full bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40">
+                          <span className="text-[11px] font-mono font-bold uppercase px-3 py-1 rounded-full bg-[#FF8244]/15 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/40">
                             {boletimMeta.inspecao_minuciosa_tempo_severo.status_geral_badge}
                           </span>
                         )}
@@ -1626,8 +1626,8 @@ export default function App() {
                               </div>
                               <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                                 {ins.alerta_rotulo && (
-                                  <span className="px-2.5 py-0.5 rounded-full bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40 font-bold inline-flex items-center gap-1">
-                                    <AlertTriangle className="w-3 h-3 text-[#FCA311]" />
+                                  <span className="px-2.5 py-0.5 rounded-full bg-[#FF8244]/15 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/40 font-bold inline-flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3 text-[#FF8244]" />
                                     {ins.alerta_rotulo}
                                   </span>
                                 )}
@@ -1653,7 +1653,7 @@ export default function App() {
                                     className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1 text-xs"
                                   >
                                     <div className="font-bold text-[#14213D] dark:text-white">{setor.regiao}</div>
-                                    <div className="font-mono text-[#14213D] dark:text-[#FCA311] font-bold">
+                                    <div className="font-mono text-[#14213D] dark:text-[#FF8244] font-bold">
                                       {setor.volume_estimado}
                                     </div>
                                     <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75 leading-snug">
@@ -1705,7 +1705,7 @@ export default function App() {
                       Panorama Sinótico Geral
                     </h2>
                     {boletimMeta?.periodo && (
-                      <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full border bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border-[#E5E5E5] dark:border-[#233354]">
+                      <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full border bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] border-[#E5E5E5] dark:border-[#233354]">
                         {boletimMeta.periodo}
                       </span>
                     )}
@@ -1750,12 +1750,12 @@ export default function App() {
                         return (
                           <div
                             key={idx}
-                            className="p-4 sm:p-5 rounded-xl border border-l-4 border-l-[#14213D] dark:border-l-[#FCA311] bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs space-y-3"
+                            className="p-4 sm:p-5 rounded-xl border border-l-4 border-l-[#14213D] dark:border-l-[#FF8244] bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs space-y-3"
                           >
                             <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#E5E5E5] dark:border-[#233354]">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1.5 bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border-[#E5E5E5] dark:border-[#233354]">
-                                  <IconComponent className="w-3.5 h-3.5 text-[#FCA311]" />
+                                <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1.5 bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border-[#E5E5E5] dark:border-[#233354]">
+                                  <IconComponent className="w-3.5 h-3.5 text-[#FF8244]" />
                                   {metaItem.tag}
                                 </span>
                                 <h3 className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white">
@@ -1790,7 +1790,7 @@ export default function App() {
                           key={g.termo}
                           className="p-3.5 rounded-lg border space-y-1 text-xs bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354]"
                         >
-                          <div className="font-semibold text-[#14213D] dark:text-[#FCA311]">{g.termo}</div>
+                          <div className="font-semibold text-[#14213D] dark:text-[#FF8244]">{g.termo}</div>
                           <div className="text-slate-600 dark:text-[#E5E5E5]/80 leading-snug">{g.def}</div>
                         </div>
                       ))}
@@ -1808,7 +1808,7 @@ export default function App() {
                       <h2 className="font-display text-xl font-semibold text-[#14213D] dark:text-white">
                         Limiares de Chuva & Impactos — PLANCON Rio das Ostras
                       </h2>
-                      <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                      <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
                         Plano Oficial 2025/2026
                       </span>
                     </div>
@@ -1822,17 +1822,17 @@ export default function App() {
                       href={PLANCON_PDF_URL}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors"
                     >
-                      Baixar PLANCON 4.0 (PDF) <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                      Baixar PLANCON 4.0 (PDF) <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                     </a>
                     <a
                       href={PLANCON_EL_NINO_PDF_URL}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors"
                     >
-                      PLANCON El Niño (PDF) <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                      PLANCON El Niño (PDF) <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                     </a>
                   </div>
                 </div>
@@ -1852,7 +1852,7 @@ export default function App() {
                       onClick={() => setPlanconTab(t.id)}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-md transition-colors cursor-pointer ${
                         planconTab === t.id
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                           : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white font-medium'
                       }`}
                     >
@@ -1862,7 +1862,7 @@ export default function App() {
                           className={`px-1.5 py-0.5 rounded text-[9px] font-mono uppercase ${
                             planconTab === t.id
                               ? 'bg-white/15 dark:bg-black/15 text-current'
-                              : 'bg-white dark:bg-[#14213D] text-slate-600 dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]'
+                              : 'bg-white dark:bg-[#14213D] text-slate-600 dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]'
                           }`}
                         >
                           SUBDEC
@@ -1878,7 +1878,7 @@ export default function App() {
                       const dotColor = {
                         normal: 'bg-emerald-500',
                         observacao: 'bg-amber-400',
-                        atencao: 'bg-[#FA824C]',
+                        atencao: 'bg-[#FF8244]',
                         alerta: 'bg-rose-500',
                         maximo: 'bg-rose-600',
                       }[l.tone];
@@ -1893,7 +1893,7 @@ export default function App() {
                               <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
                               <span className="text-xs font-semibold text-[#14213D] dark:text-white">{l.nivel}</span>
                             </div>
-                            <div className="font-mono text-sm font-semibold text-[#FCA311]">
+                            <div className="font-mono text-sm font-semibold text-[#FF8244]">
                               {l.volume}
                             </div>
                             <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">{l.impacto}</p>
@@ -1919,7 +1919,7 @@ export default function App() {
                           className="p-5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3"
                         >
                           <div>
-                            <div className="font-display text-sm font-semibold text-[#14213D] dark:text-[#FCA311]">
+                            <div className="font-display text-sm font-semibold text-[#14213D] dark:text-[#FF8244]">
                               {cat.categoria}
                             </div>
                             <div className="font-mono text-[11px] text-slate-500 dark:text-[#E5E5E5]/65 mt-0.5">
@@ -1951,7 +1951,7 @@ export default function App() {
                             >
                               <div className="flex flex-wrap items-center justify-between gap-2">
                                 <span className="font-semibold text-xs sm:text-sm text-[#14213D] dark:text-white">{ib.setor}</span>
-                                <span className="font-mono text-xs text-[#FCA311]">
+                                <span className="font-mono text-xs text-[#FF8244]">
                                   {ib.risco_sab} · {ib.risco_dom} · {ib.risco_seg}
                                 </span>
                               </div>
@@ -1968,7 +1968,7 @@ export default function App() {
                 {planconTab === 'niveis' && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {PLANCON_NIVEIS_OPERACIONAIS.map((n, idx) => {
-                      const dotColor = ['bg-emerald-500', 'bg-amber-400', 'bg-[#FA824C]', 'bg-rose-500'][idx % 4];
+                      const dotColor = ['bg-emerald-500', 'bg-amber-400', 'bg-[#FF8244]', 'bg-rose-500'][idx % 4];
                       return (
                         <div
                           key={n.codigo}
@@ -1992,7 +1992,7 @@ export default function App() {
                         key={r.titulo}
                         className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5"
                       >
-                        <div className="font-display text-sm font-semibold text-[#14213D] dark:text-[#FCA311]">
+                        <div className="font-display text-sm font-semibold text-[#14213D] dark:text-[#FF8244]">
                           {r.titulo}
                         </div>
                         <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">{r.descricao}</p>
@@ -2013,7 +2013,7 @@ export default function App() {
                                 key={b}
                                 className={`text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded border ${
                                   i === 0
-                                    ? 'bg-[#14213D] text-white border-[#14213D] dark:bg-[#FCA311] dark:text-[#000000] dark:border-[#FCA311]'
+                                    ? 'bg-[#14213D] text-white border-[#14213D] dark:bg-[#FF8244] dark:text-[#000000] dark:border-[#FF8244]'
                                     : 'bg-white dark:bg-[#14213D] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354]'
                                 }`}
                               >
@@ -2033,9 +2033,9 @@ export default function App() {
                           href={PLANCON_EL_NINO_PDF_URL}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white hover:border-[#FCA311] shrink-0 transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white hover:border-[#FF8244] shrink-0 transition-colors"
                         >
-                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FCA311]" />
+                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244]" />
                           Baixar PLANCON El Niño (PDF Oficial 64 pág.)
                           <ExternalLink className="w-3 h-3" />
                         </a>
@@ -2043,7 +2043,7 @@ export default function App() {
 
                       <div className="p-4 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5 text-xs">
                         <div className="flex items-center gap-2 font-semibold text-[#14213D] dark:text-white">
-                          <AlertTriangle className="w-4 h-4 text-[#FCA311] shrink-0" />
+                          <AlertTriangle className="w-4 h-4 text-[#FF8244] shrink-0" />
                           <span>{PLANCON_EL_NINO.comportamentoTitulo}</span>
                         </div>
                         <p className="text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed text-justify">
@@ -2056,7 +2056,7 @@ export default function App() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
                         <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
-                          <ShieldAlert className="w-4 h-4 text-[#FCA311]" />
+                          <ShieldAlert className="w-4 h-4 text-[#FF8244]" />
                           <span>Os 4 Principais Riscos Mapeados em Rio das Ostras (Classificação COBRADE)</span>
                         </h4>
                         <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 hidden sm:inline">
@@ -2086,7 +2086,7 @@ export default function App() {
                                 ))}
                               </ul>
                             </div>
-                            <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] text-[11px] font-mono font-semibold text-[#FCA311]">
+                            <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] text-[11px] font-mono font-semibold text-[#FF8244]">
                               {r.gatilho}
                             </div>
                           </div>
@@ -2098,7 +2098,7 @@ export default function App() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
                         <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
-                          <Gauge className="w-4 h-4 text-[#FCA311]" />
+                          <Gauge className="w-4 h-4 text-[#FF8244]" />
                           <span>Matriz Operacional dos Níveis de Alerta do GAE / SUBDEC</span>
                         </h4>
                         <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 hidden sm:inline">
@@ -2111,7 +2111,7 @@ export default function App() {
                           const dotColor = {
                             emerald: 'bg-emerald-500',
                             amber: 'bg-amber-400',
-                            orange: 'bg-[#FA824C]',
+                            orange: 'bg-[#FF8244]',
                             red: 'bg-rose-500',
                             purple: 'bg-rose-600',
                           }[m.cor];
@@ -2140,7 +2140,7 @@ export default function App() {
                                   {m.descricao}
                                 </p>
                               </div>
-                              <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] text-[10px] font-mono font-semibold text-[#FCA311]">
+                              <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] text-[10px] font-mono font-semibold text-[#FF8244]">
                                 {m.acao}
                               </div>
                             </div>
@@ -2153,7 +2153,7 @@ export default function App() {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2">
                         <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
-                          <Flame className="w-4 h-4 text-[#FCA311]" />
+                          <Flame className="w-4 h-4 text-[#FF8244]" />
                           <span>Protocolos Integrados das Secretarias Municipais (SIMDEC)</span>
                         </h4>
                         <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 hidden sm:inline">
@@ -2167,7 +2167,7 @@ export default function App() {
                             key={p.orgao}
                             className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2"
                           >
-                            <div className="text-xs font-semibold uppercase text-[#14213D] dark:text-[#FCA311]">
+                            <div className="text-xs font-semibold uppercase text-[#14213D] dark:text-[#FF8244]">
                               {p.orgao}
                             </div>
                             <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
@@ -2181,7 +2181,7 @@ export default function App() {
                     {/* Guia Rápido de Autoproteção do Cidadão */}
                     <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
                       <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
-                        <Check className="w-4 h-4 text-[#FCA311]" />
+                        <Check className="w-4 h-4 text-[#FF8244]" />
                         <span>Guia Rápido de Autoproteção do Cidadão (Recomendações da Defesa Civil)</span>
                       </h4>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -2206,7 +2206,7 @@ export default function App() {
                     {/* Canais de Emergência & Cadastro SMS 40199 */}
                     <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-4 text-xs">
                       <div className="flex items-center gap-2.5">
-                        <Phone className="w-4 h-4 text-[#FCA311] shrink-0" />
+                        <Phone className="w-4 h-4 text-[#FF8244] shrink-0" />
                         <div>
                           <div className="font-semibold text-[#14213D] dark:text-white">
                             Canais de Emergência e Alerta da Defesa Civil:
@@ -2218,20 +2218,20 @@ export default function App() {
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2 font-mono">
-                        <a href="tel:199" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] font-semibold text-[#14213D] dark:text-white transition-colors">
+                        <a href="tel:199" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] font-semibold text-[#14213D] dark:text-white transition-colors">
                           Defesa Civil: 199
                         </a>
-                        <a href="tel:193" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] font-semibold text-[#14213D] dark:text-white transition-colors">
+                        <a href="tel:193" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] font-semibold text-[#14213D] dark:text-white transition-colors">
                           Bombeiros: 193
                         </a>
-                        <a href="tel:192" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] font-semibold text-[#14213D] dark:text-white transition-colors">
+                        <a href="tel:192" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] font-semibold text-[#14213D] dark:text-white transition-colors">
                           SAMU: 192
                         </a>
-                        <a href="tel:153" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] font-semibold text-[#14213D] dark:text-white transition-colors">
+                        <a href="tel:153" className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] font-semibold text-[#14213D] dark:text-white transition-colors">
                           Guarda Civil: 153
                         </a>
                         <span className="px-2.5 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white">
-                          SMS Alerta Grátis: <strong className="text-[#FCA311]">Envie CEP para 40199</strong>
+                          SMS Alerta Grátis: <strong className="text-[#FF8244]">Envie CEP para 40199</strong>
                         </span>
                       </div>
                     </div>
@@ -2263,28 +2263,28 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => (window as any).openSocialModalChuva?.(`${rainHorizonHours}h`)}
-                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] shadow-2xs active:scale-95"
+                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] shadow-2xs active:scale-95"
                       title="Exportar imagem oficial de Acumulados de Chuva para Instagram / WhatsApp"
                     >
-                      <CloudRain className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" />
                       <span>Card de Chuva</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => (window as any).openSocialModalVento?.()}
-                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] shadow-2xs active:scale-95"
+                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] shadow-2xs active:scale-95"
                       title="Exportar imagem oficial dos Maiores Ventos e Rajadas para Instagram / WhatsApp"
                     >
-                      <Wind className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <Wind className="w-3.5 h-3.5 text-[#FF8244]" />
                       <span>Card Ventos & Rajadas</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => (window as any).openSocialModalTempoAgora?.()}
-                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] shadow-2xs active:scale-95"
+                      className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg text-xs font-medium transition cursor-pointer bg-[#F7F8FA] hover:bg-slate-200 dark:bg-[#0B1324] dark:hover:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] shadow-2xs active:scale-95"
                       title="Exportar imagem oficial do Tempo Agora para Instagram / WhatsApp"
                     >
-                      <SunMedium className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <SunMedium className="w-3.5 h-3.5 text-[#FF8244]" />
                       <span>Card Tempo Agora</span>
                     </button>
                   </div>
@@ -2295,7 +2295,7 @@ export default function App() {
                         onClick={() => selectRainHorizon(h)}
                         className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                           rainHorizonHours === h
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                         }`}
                       >
@@ -2322,7 +2322,7 @@ export default function App() {
                     <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/70">
                       Maior Acumulado ({rainHorizonHours}h)
                     </div>
-                    <div className="font-mono text-2xl sm:text-3xl font-semibold text-[#FCA311] mt-1.5 tabular-nums">
+                    <div className="font-mono text-2xl sm:text-3xl font-semibold text-[#FF8244] mt-1.5 tabular-nums">
                       {rainHorizonStats.maxVal !== null ? `${rainHorizonStats.maxVal.toFixed(1)} mm` : '--'}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65 mt-1 truncate" title={rainHorizonStats.maxName}>
@@ -2362,7 +2362,7 @@ export default function App() {
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5E5E5] dark:border-[#233354] pb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#FCA311]">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#FF8244]">
                       <Camera className="w-5 h-5" />
                     </div>
                     <div>
@@ -2370,7 +2370,7 @@ export default function App() {
                         <h3 className="font-display text-sm sm:text-base font-bold text-[#14213D] dark:text-white">
                           Exportar Imagens Oficiais para Redes Sociais
                         </h3>
-                        <span className="text-[10px] font-mono font-bold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354] px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-mono font-bold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354] px-2 py-0.5 rounded-full">
                           Feed (4:5) & Stories (9:16)
                         </span>
                       </div>
@@ -2386,8 +2386,8 @@ export default function App() {
                   <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
-                          <CloudRain className="w-3.5 h-3.5 text-[#FCA311]" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
+                          <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" />
                           Acumulados de Chuva
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2403,7 +2403,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalChuva?.('24h')}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FF8244] dark:hover:bg-[#E66E30] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FF8244] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card de Chuva</span>
@@ -2415,8 +2415,8 @@ export default function App() {
                   <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
-                          <Wind className="w-3.5 h-3.5 text-[#FCA311]" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
+                          <Wind className="w-3.5 h-3.5 text-[#FF8244]" />
                           Ventos & Rajadas
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2432,7 +2432,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalVento?.()}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FF8244] dark:hover:bg-[#E66E30] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FF8244] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card de Vento</span>
@@ -2444,8 +2444,8 @@ export default function App() {
                   <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
-                          <SunMedium className="w-3.5 h-3.5 text-[#FCA311]" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
+                          <SunMedium className="w-3.5 h-3.5 text-[#FF8244]" />
                           Tempo Agora
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2461,7 +2461,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalTempoAgora?.()}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FF8244] dark:hover:bg-[#E66E30] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FF8244] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card Tempo Agora</span>
@@ -2488,7 +2488,7 @@ export default function App() {
                         onClick={() => setNetworkFilter(tab.id as 'all' | 'pws' | 'cemaden' | 'inea')}
                         className={`px-3 py-1.5 text-xs rounded-md transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
                           networkFilter === tab.id
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white font-medium'
                         }`}
                       >
@@ -2505,14 +2505,14 @@ export default function App() {
                         value={stationQuery}
                         onChange={(e) => setStationQuery(e.target.value)}
                         placeholder="Filtrar estação ou bairro..."
-                        className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FCA311]"
+                        className="w-full pl-8 pr-3 py-1.5 text-xs rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FF8244]"
                       />
                     </div>
                     <button
                       onClick={handleDownloadStationsCsv}
-                      className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white hover:border-[#FCA311] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                      className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white hover:border-[#FF8244] transition-colors cursor-pointer whitespace-nowrap shrink-0"
                     >
-                      <ArrowDownToLine className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244]" />
                       Exportar CSV
                     </button>
                   </div>
@@ -2521,7 +2521,7 @@ export default function App() {
                 <div className="pt-3.5 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-2.5">
                     <span className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-[#E5E5E5]/80">
-                      <Clock className="w-3.5 h-3.5 text-[#FCA311] shrink-0" />
+                      <Clock className="w-3.5 h-3.5 text-[#FF8244] shrink-0" />
                       <span>Horizonte:</span>
                     </span>
 
@@ -2532,7 +2532,7 @@ export default function App() {
                           onClick={() => selectRainHorizon(h)}
                           className={`px-2.5 py-1 text-xs font-mono rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                             rainHorizonHours === h
-                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                               : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                           }`}
                         >
@@ -2558,7 +2558,7 @@ export default function App() {
                         }}
                         onBlur={() => selectRainHorizon(parseInt(rainHorizonInput, 10) || 24)}
                         aria-label="Horizonte de tempo personalizado em horas"
-                        className="w-14 px-2 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono font-semibold text-center text-[#14213D] dark:text-white focus:outline-none focus:ring-1 focus:ring-[#FCA311]"
+                        className="w-14 px-2 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono font-semibold text-center text-[#14213D] dark:text-white focus:outline-none focus:ring-1 focus:ring-[#FF8244]"
                       />
                       <span className="font-mono">h</span>
                     </label>
@@ -2646,9 +2646,9 @@ export default function App() {
                           <div className="flex items-center justify-between gap-2">
                             <div className="font-mono text-[11px] text-slate-500 dark:text-[#E5E5E5]/65 truncate">
                               {isInea ? (
-                                <span className="font-semibold text-[#14213D] dark:text-[#FCA311]">NÍVEL DO RIO</span>
+                                <span className="font-semibold text-[#14213D] dark:text-[#FF8244]">NÍVEL DO RIO</span>
                               ) : (
-                                <span className={showTopBadge ? 'font-semibold text-[#FCA311]' : 'font-semibold text-[#14213D] dark:text-white'}>
+                                <span className={showTopBadge ? 'font-semibold text-[#FF8244]' : 'font-semibold text-[#14213D] dark:text-white'}>
                                   #{rankNum}
                                   {showTopBadge ? ' MAIOR VOLUME' : ''}
                                 </span>
@@ -2672,7 +2672,7 @@ export default function App() {
                               {st.nome}
                             </h3>
                             <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
-                              <MapPin className="w-3 h-3 text-[#FCA311] shrink-0" />
+                              <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
                               <span>{st.bairro || 'Rio das Ostras'}</span>
                             </div>
                           </div>
@@ -2697,7 +2697,7 @@ export default function App() {
                                   </div>
                                   <div className="w-full h-1.5 rounded-full bg-[#E5E5E5] dark:bg-[#233354] overflow-hidden">
                                     <div
-                                      className="h-full bg-[#14213D] dark:bg-[#FCA311] rounded-full"
+                                      className="h-full bg-[#14213D] dark:bg-[#FF8244] rounded-full"
                                       style={{ width: `${Math.min(100, Math.max(2, calhaPct))}%` }}
                                     />
                                   </div>
@@ -2705,7 +2705,7 @@ export default function App() {
 
                                 <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
                                   <span>Atenção: {cotaAtencaoStr} · Alerta: {cotaAlertaStr}</span>
-                                  <span className="font-semibold text-[#14213D] dark:text-[#FCA311] uppercase">
+                                  <span className="font-semibold text-[#14213D] dark:text-[#FF8244] uppercase">
                                     {statusRioStr} · {tendenciaRioStr}
                                   </span>
                                 </div>
@@ -2729,33 +2729,33 @@ export default function App() {
                               {!isStandardHorizon && (
                                 <div className="flex items-center justify-between font-mono text-xs pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70">Horizonte ({rainHorizonHours}h)</span>
-                                  <strong className="text-[#FCA311] tabular-nums">{formatMm(selectedRain)}</strong>
+                                  <strong className="text-[#FF8244] tabular-nums">{formatMm(selectedRain)}</strong>
                                 </div>
                               )}
 
                               {/* Janelas Principais: 24h · 36h · 48h */}
                               <div className="grid grid-cols-3 divide-x divide-[#E5E5E5] dark:divide-[#233354] text-center font-mono text-xs">
                                 <div className="px-1">
-                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 24 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
+                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 24 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
                                     24 Horas
                                   </span>
-                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 24 ? 'text-[#FCA311]' : 'text-[#14213D] dark:text-white'}`}>
+                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 24 ? 'text-[#FF8244]' : 'text-[#14213D] dark:text-white'}`}>
                                     {formatMm(st.chuva_24h)}
                                   </strong>
                                 </div>
                                 <div className="px-1">
-                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 36 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
+                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 36 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
                                     36 Horas
                                   </span>
-                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 36 ? 'text-[#FCA311]' : 'text-[#14213D] dark:text-white'}`}>
+                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 36 ? 'text-[#FF8244]' : 'text-[#14213D] dark:text-white'}`}>
                                     {formatMm(st.chuva_36h ?? st.chuva_24h)}
                                   </strong>
                                 </div>
                                 <div className="px-1">
-                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 48 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
+                                  <span className={`text-[10px] uppercase block ${rainHorizonHours === 48 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
                                     48 Horas
                                   </span>
-                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 48 ? 'text-[#FCA311]' : 'text-[#14213D] dark:text-white'}`}>
+                                  <strong className={`tabular-nums mt-0.5 block ${rainHorizonHours === 48 ? 'text-[#FF8244]' : 'text-[#14213D] dark:text-white'}`}>
                                     {formatMm(st.chuva_48h)}
                                   </strong>
                                 </div>
@@ -2764,20 +2764,20 @@ export default function App() {
                               {/* Janelas Complementares: 1h · 4h · 12h · 96h */}
                               <div className="grid grid-cols-4 gap-1 pt-2.5 border-t border-[#E5E5E5] dark:border-[#233354] text-center font-mono text-[11px]">
                                 <div>
-                                  <span className={`text-[10px] block ${rainHorizonHours === 1 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>1h</span>
-                                  <span className={`tabular-nums ${rainHorizonHours === 1 ? 'text-[#FCA311] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_1h)}</span>
+                                  <span className={`text-[10px] block ${rainHorizonHours === 1 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>1h</span>
+                                  <span className={`tabular-nums ${rainHorizonHours === 1 ? 'text-[#FF8244] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_1h)}</span>
                                 </div>
                                 <div>
-                                  <span className={`text-[10px] block ${rainHorizonHours === 4 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>4h</span>
-                                  <span className={`tabular-nums ${rainHorizonHours === 4 ? 'text-[#FCA311] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_4h)}</span>
+                                  <span className={`text-[10px] block ${rainHorizonHours === 4 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>4h</span>
+                                  <span className={`tabular-nums ${rainHorizonHours === 4 ? 'text-[#FF8244] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_4h)}</span>
                                 </div>
                                 <div>
-                                  <span className={`text-[10px] block ${rainHorizonHours === 12 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>12h</span>
-                                  <span className={`tabular-nums ${rainHorizonHours === 12 ? 'text-[#FCA311] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_12h)}</span>
+                                  <span className={`text-[10px] block ${rainHorizonHours === 12 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>12h</span>
+                                  <span className={`tabular-nums ${rainHorizonHours === 12 ? 'text-[#FF8244] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_12h)}</span>
                                 </div>
                                 <div>
-                                  <span className={`text-[10px] block ${rainHorizonHours === 96 ? 'text-[#FCA311] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>96h</span>
-                                  <span className={`tabular-nums ${rainHorizonHours === 96 ? 'text-[#FCA311] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_96h)}</span>
+                                  <span className={`text-[10px] block ${rainHorizonHours === 96 ? 'text-[#FF8244] font-semibold' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>96h</span>
+                                  <span className={`tabular-nums ${rainHorizonHours === 96 ? 'text-[#FF8244] font-semibold' : 'text-[#14213D] dark:text-white'}`}>{formatMm(st.chuva_96h)}</span>
                                 </div>
                               </div>
 
@@ -2795,7 +2795,7 @@ export default function App() {
                                         {st.inicio_chuva_hoje ? `iniciou às ${st.inicio_chuva_hoje}` : 'registrada'}
                                       </strong>
                                     </span>
-                                    <span className="font-mono font-semibold text-[#14213D] dark:text-[#FCA311] tabular-nums shrink-0">
+                                    <span className="font-mono font-semibold text-[#14213D] dark:text-[#FF8244] tabular-nums shrink-0">
                                       {formatMm(chHoje)}
                                       {chuvaTaxa > 0 ? ` (${chuvaTaxa.toFixed(1).replace('.', ',')} mm/h)` : ''}
                                     </span>
@@ -2827,7 +2827,7 @@ export default function App() {
                                     </div>
                                     <div className="border-l border-[#E5E5E5] dark:border-[#233354] pl-1">
                                       <span className="text-[9.5px] uppercase text-slate-500 dark:text-[#E5E5E5]/65 block">Sensação</span>
-                                      <strong className="text-xs text-[#FCA311] tabular-nums">
+                                      <strong className="text-xs text-[#FF8244] tabular-nums">
                                         {formatNum1(st.sensacao_atual ?? st.temp_atual, '°C')}
                                       </strong>
                                     </div>
@@ -2889,7 +2889,7 @@ export default function App() {
                                       </div>
                                       <div className="border-l border-[#E5E5E5] dark:border-[#233354] pl-2">
                                         <span className="text-slate-500 dark:text-[#E5E5E5]/65">Maior Rajada: </span>
-                                        <strong className="text-[#FCA311] tabular-nums">
+                                        <strong className="text-[#FF8244] tabular-nums">
                                           {formatNum1(rajadaMaxHoje, ' km/h')}
                                         </strong>
                                         {st.hora_rajada_max_hoje && (
@@ -2925,7 +2925,7 @@ export default function App() {
                               href={st.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#E5E5E5] hover:text-[#FCA311] transition-colors whitespace-nowrap shrink-0"
+                              className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#E5E5E5] hover:text-[#FF8244] transition-colors whitespace-nowrap shrink-0"
                             >
                               <span>{extLinkLabel}</span>
                               <ExternalLink className="w-3 h-3" />
@@ -2962,7 +2962,7 @@ export default function App() {
                             <button
                               onClick={() => selectRainHorizon(h)}
                               className={`cursor-pointer hover:text-[#14213D] dark:hover:text-white ${
-                                rainHorizonHours === h ? 'text-[#FCA311] font-semibold underline underline-offset-4' : ''
+                                rainHorizonHours === h ? 'text-[#FF8244] font-semibold underline underline-offset-4' : ''
                               }`}
                             >
                               {h}h
@@ -2989,25 +2989,25 @@ export default function App() {
                           <td className="py-4 px-3 text-xs text-slate-600 dark:text-[#E5E5E5]/80 whitespace-nowrap align-top">
                             {st.rede}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 1 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 1 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_1h !== null ? st.chuva_1h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 4 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 4 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_4h !== null ? st.chuva_4h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 12 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 12 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_12h !== null ? st.chuva_12h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 24 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 24 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_24h !== null ? st.chuva_24h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 36 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 36 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_36h !== null && st.chuva_36h !== undefined ? st.chuva_36h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 48 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 48 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_48h !== null ? st.chuva_48h.toFixed(1) : '--'}
                           </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 96 ? 'font-semibold text-[#FCA311]' : ''}`}>
+                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 96 ? 'font-semibold text-[#FF8244]' : ''}`}>
                             {st.chuva_96h !== null ? st.chuva_96h.toFixed(1) : '--'}
                           </td>
                           <td className="py-4 pl-4 text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap align-top">
@@ -3042,16 +3042,16 @@ export default function App() {
                           href={`${SITE_BASE}/${historico.arquivos_planilha.xlsx}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] transition-colors whitespace-nowrap"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors whitespace-nowrap"
                         >
-                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FCA311]" />
+                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244]" />
                           Excel (.XLSX)
                         </a>
                         <a
                           href={`${SITE_BASE}/${historico.arquivos_planilha.csv}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] transition-colors whitespace-nowrap"
+                          className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors whitespace-nowrap"
                         >
                           Planilha Completa (.CSV)
                         </a>
@@ -3059,7 +3059,7 @@ export default function App() {
                     )}
                     <button
                       onClick={handleDownloadFilteredHistCsv}
-                      className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] transition-colors cursor-pointer whitespace-nowrap"
+                      className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors cursor-pointer whitespace-nowrap"
                     >
                       Filtro Atual (.CSV)
                     </button>
@@ -3080,7 +3080,7 @@ export default function App() {
                           onClick={() => setHistoryMode(m.id as 'horario' | 'diario' | 'mensal')}
                           className={`px-3.5 py-1.5 text-xs rounded-md transition-colors cursor-pointer whitespace-nowrap ${
                             historyMode === m.id
-                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                               : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white font-medium'
                           }`}
                         >
@@ -3119,7 +3119,7 @@ export default function App() {
                         value={histDateFilter}
                         onChange={(e) => setHistDateFilter(e.target.value)}
                         placeholder="Buscar data (ex: 26/10)..."
-                        className="w-44 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FCA311]"
+                        className="w-44 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FF8244]"
                       />
 
                       <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] cursor-pointer whitespace-nowrap">
@@ -3127,14 +3127,14 @@ export default function App() {
                           type="checkbox"
                           checked={histRainOnly}
                           onChange={(e) => setHistRainOnly(e.target.checked)}
-                          className="accent-[#FCA311]"
+                          className="accent-[#FF8244]"
                         />
                         <span>Com chuva (&gt; 0 mm)</span>
                       </label>
 
                       <button
                         onClick={() => setHistSortOrder((s) => (s === 'desc' ? 'asc' : 'desc'))}
-                        className="px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono cursor-pointer hover:border-[#FCA311] transition-colors whitespace-nowrap"
+                        className="px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono cursor-pointer hover:border-[#FF8244] transition-colors whitespace-nowrap"
                       >
                         {histSortOrder === 'desc' ? 'Mais Recentes ↓' : 'Cronológica ↑'}
                       </button>
@@ -3171,7 +3171,7 @@ export default function App() {
                               </td>
                               <td className="py-4 px-3 text-right font-mono align-top">
                                 <div className="space-y-1">
-                                  <div className="font-semibold text-[#FCA311] whitespace-nowrap">
+                                  <div className="font-semibold text-[#FF8244] whitespace-nowrap">
                                     {m.chuva_maior_estacao_mm.toFixed(1)} mm
                                   </div>
                                   <div className="text-[11px] font-sans font-normal text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
@@ -3238,7 +3238,7 @@ export default function App() {
                             </td>
                             <td className="py-3.5 px-3 text-right font-mono align-top">
                               <div className="space-y-0.5">
-                                <div className="font-semibold text-[#FCA311] whitespace-nowrap">
+                                <div className="font-semibold text-[#FF8244] whitespace-nowrap">
                                   {d.chuva_maior_estacao_mm.toFixed(1)} mm
                                 </div>
                                 <div className="text-[11px] font-sans text-slate-500 dark:text-[#E5E5E5]/65 leading-snug">
@@ -3284,14 +3284,14 @@ export default function App() {
                         {filteredHistHourly.map((h) => (
                           <tr key={`${h.data_iso}-${h.horario}`} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60">
                             <td className="py-3.5 pr-4 font-mono whitespace-nowrap text-[#14213D] dark:text-white align-top">
-                              {h.data_br} · <strong className="text-[#FCA311]">{h.horario}</strong>
+                              {h.data_br} · <strong className="text-[#FF8244]">{h.horario}</strong>
                             </td>
                             <td className="py-3.5 px-3 text-right font-mono text-[#14213D] dark:text-white whitespace-nowrap align-top">
                               {h.chuva_mm_hora.toFixed(1)} mm
                             </td>
                             <td className="py-3.5 px-3 text-right font-mono align-top">
                               <div className="space-y-0.5">
-                                <div className="font-semibold text-[#FCA311] whitespace-nowrap">
+                                <div className="font-semibold text-[#FF8244] whitespace-nowrap">
                                   {h.chuva_max_estacao_mm.toFixed(1)} mm
                                 </div>
                                 <div className="text-[11px] font-sans text-slate-500 dark:text-[#E5E5E5]/65 leading-snug">
@@ -3342,9 +3342,9 @@ export default function App() {
                       href={rj.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                     >
-                      Portal INEA Alerta de Cheias <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                      Portal INEA Alerta de Cheias <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                     </a>
                   )}
                 </div>
@@ -3364,13 +3364,13 @@ export default function App() {
                   </div>
                   <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                     <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/65">Ocupação Calha</div>
-                    <div className="font-mono text-2xl font-semibold text-[#FCA311] mt-1 tabular-nums">
+                    <div className="font-mono text-2xl font-semibold text-[#FF8244] mt-1 tabular-nums">
                       {rj ? `${rj.alerta_maximo_pct.toFixed(1)}%` : '--'}
                     </div>
                   </div>
                   <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                     <div className="inline-flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-[#E5E5E5]/65">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                       Cota de Atenção
                     </div>
                     <div className="font-mono text-xl font-semibold text-[#14213D] dark:text-white mt-1.5 tabular-nums">
@@ -3379,7 +3379,7 @@ export default function App() {
                   </div>
                   <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                     <div className="inline-flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-[#E5E5E5]/65">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FA824C]" aria-hidden="true" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                       Cota de Alerta
                     </div>
                     <div className="font-mono text-xl font-semibold text-[#14213D] dark:text-white mt-1.5 tabular-nums">
@@ -3431,7 +3431,7 @@ export default function App() {
                         onClick={() => setRiverInterval('hourly')}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                           riverInterval === 'hourly'
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                         }`}
                       >
@@ -3441,7 +3441,7 @@ export default function App() {
                         onClick={() => setRiverInterval('all')}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                           riverInterval === 'all'
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                         }`}
                       >
@@ -3450,9 +3450,9 @@ export default function App() {
                     </div>
                     <button
                       onClick={handleDownloadRiverCsv}
-                      className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-white cursor-pointer transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-white cursor-pointer transition-colors"
                     >
-                      <ArrowDownToLine className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244]" />
                       CSV
                     </button>
                   </div>
@@ -3475,7 +3475,7 @@ export default function App() {
                     </div>
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                       <div className="text-[11px] font-sans text-slate-500 dark:text-[#E5E5E5]/65">Variação da Lâmina</div>
-                      <div className="text-base font-semibold text-[#FCA311] mt-0.5 tabular-nums">
+                      <div className="text-base font-semibold text-[#FF8244] mt-0.5 tabular-nums">
                         {riverDayStats.variation.toFixed(2)} m
                       </div>
                     </div>
@@ -3526,9 +3526,9 @@ export default function App() {
                           r.nivel >= transbordo
                             ? 'bg-rose-500'
                             : r.nivel >= 2.27
-                              ? 'bg-[#FA824C]'
+                              ? 'bg-[#FF8244]'
                               : r.nivel >= 1.99
-                                ? 'bg-[#FCA311]'
+                                ? 'bg-[#FF8244]'
                                 : r.nivel >= 1.5
                                   ? 'bg-[#3A73BA]'
                                   : 'bg-emerald-500';
@@ -3576,11 +3576,11 @@ export default function App() {
                     1,50–1,98 m Vigilância
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                     ≥ 1,99 m Atenção
                   </span>
                   <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#FA824C]" aria-hidden="true" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                     ≥ 2,27 m Alerta
                   </span>
                   <span className="inline-flex items-center gap-1.5">
@@ -3608,7 +3608,7 @@ export default function App() {
                     </p>
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs space-y-1">
                       <div className="inline-flex items-center gap-1.5 font-semibold text-[#14213D] dark:text-white">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                         Influência das Marés Oceânicas
                       </div>
                       <div className="text-slate-600 dark:text-[#E5E5E5]/75 leading-relaxed">
@@ -3642,14 +3642,14 @@ export default function App() {
                         </div>
                       </div>
                       <div className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex items-start gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#FCA311] mt-1 shrink-0" aria-hidden="true" />
+                        <span className="w-2 h-2 rounded-full bg-[#FF8244] mt-1 shrink-0" aria-hidden="true" />
                         <div>
                           <div className="font-semibold text-[#14213D] dark:text-white">Atenção ({rj?.cota_atencao || '1.99 m'})</div>
                           <div className="text-slate-500 dark:text-[#E5E5E5]/70">Prontidão operacional</div>
                         </div>
                       </div>
                       <div className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex items-start gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#FA824C] mt-1 shrink-0" aria-hidden="true" />
+                        <span className="w-2 h-2 rounded-full bg-[#FF8244] mt-1 shrink-0" aria-hidden="true" />
                         <div>
                           <div className="font-semibold text-[#14213D] dark:text-white">Alerta ({rj?.cota_alerta || '2.27 m'})</div>
                           <div className="text-slate-500 dark:text-[#E5E5E5]/70">Risco de alagamentos</div>
@@ -3689,9 +3689,9 @@ export default function App() {
                           href={boletimMeta.inea_boletim_hidrometeorologico.bulletin_info.url_pdf}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                         >
-                          {boletimMeta.inea_boletim_hidrometeorologico.bulletin_info.label} <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                          {boletimMeta.inea_boletim_hidrometeorologico.bulletin_info.label} <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                         </a>
                       )}
                     </div>
@@ -3711,7 +3711,7 @@ export default function App() {
                                 <span className="font-semibold text-[#14213D] dark:text-white">
                                   {key} ({item.data}) — {item.intensidade}
                                 </span>
-                                <span className="font-mono text-[#14213D] dark:text-[#FCA311] font-semibold tabular-nums">
+                                <span className="font-mono text-[#14213D] dark:text-[#FF8244] font-semibold tabular-nums">
                                   {item.faixa_chuva_mm} · {item.temp_min}°/{item.temp_max}°C
                                 </span>
                               </div>
@@ -3745,7 +3745,7 @@ export default function App() {
                     </h1>
                     <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
                       Previsão marítima (1 Semana / 8 Dias), ondulação, swell e enseadas ·{' '}
-                      <strong className="text-[#14213D] dark:text-[#FCA311]">{orla?.mar_ondas || '--'}</strong> ({orla?.status_geral || 'Sem avisos vigentes'})
+                      <strong className="text-[#14213D] dark:text-[#FF8244]">{orla?.mar_ondas || '--'}</strong> ({orla?.status_geral || 'Sem avisos vigentes'})
                     </p>
                   </div>
 
@@ -3760,7 +3760,7 @@ export default function App() {
                         onClick={() => setOrlaDay(d.key as 'd0' | 'd1' | 'd2')}
                         className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                           orlaDay === d.key
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                         }`}
                       >
@@ -3790,11 +3790,11 @@ export default function App() {
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-semibold text-[#14213D] dark:text-white">Orla Oceânica</span>
                       <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                         Moderado
                       </span>
                     </div>
-                    <div className="font-mono text-base font-semibold text-[#FCA311] tabular-nums">
+                    <div className="font-mono text-base font-semibold text-[#FF8244] tabular-nums">
                       {orla?.praias_condicoes?.find((p) => p.perfil === 'oceanica')?.dias[orlaDay]?.ondas || orla?.mar_ondas || '1,2 a 1,6 m'}
                     </div>
                     <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/70">
@@ -3826,7 +3826,7 @@ export default function App() {
                             <td className="py-3.5 px-3 align-top text-xs font-medium whitespace-nowrap">
                               <span className="inline-flex items-center gap-1.5 text-[#14213D] dark:text-[#E5E5E5]">
                                 <span
-                                  className={`w-1.5 h-1.5 rounded-full ${isWarn ? 'bg-[#FCA311]' : 'bg-emerald-500'}`}
+                                  className={`w-1.5 h-1.5 rounded-full ${isWarn ? 'bg-[#FF8244]' : 'bg-emerald-500'}`}
                                   aria-hidden="true"
                                 />
                                 {diaInfo.estado}
@@ -3865,9 +3865,9 @@ export default function App() {
                         href={tabuaMares.url_oficial}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Tábua Completa CHM <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                        Tábua Completa CHM <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                       </a>
                     )}
                     {tabuaMares?.url_avisos && (
@@ -3875,9 +3875,9 @@ export default function App() {
                         href={tabuaMares.url_avisos}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Avisos CHM <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                        Avisos CHM <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                       </a>
                     )}
                   </div>
@@ -3887,7 +3887,7 @@ export default function App() {
                 {tabuaMares?.proxima_mare && (
                   <div className="p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354] text-[#FCA311]">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354] text-[#FF8244]">
                         {tabuaMares.proxima_mare.tipo === 'PREAMAR' ? (
                           <ArrowUp className="w-5 h-5 stroke-[2.5]" />
                         ) : (
@@ -3896,12 +3896,12 @@ export default function App() {
                       </div>
                       <div>
                         <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/70 flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-[#FCA311] animate-pulse"></span>
+                          <span className="w-2 h-2 rounded-full bg-[#FF8244] animate-pulse"></span>
                           Próximo Evento Astronômico de Maré
                         </div>
                         <div className="text-base font-bold text-[#14213D] dark:text-white mt-0.5">
                           {tabuaMares.proxima_mare.tipo === 'PREAMAR' ? 'Preia-mar (Maré Alta)' : 'Baixa-mar (Maré Baixa)'} às{' '}
-                          <span className="font-mono text-[#FCA311] font-bold">{tabuaMares.proxima_mare.hora}</span> · Cota:{' '}
+                          <span className="font-mono text-[#FF8244] font-bold">{tabuaMares.proxima_mare.hora}</span> · Cota:{' '}
                           <span className="font-mono text-[#14213D] dark:text-white font-bold">{Number(tabuaMares.proxima_mare.altura).toFixed(1).replace('.', ',')} m</span>
                         </div>
                       </div>
@@ -3916,7 +3916,7 @@ export default function App() {
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <h3 className="font-display text-base font-bold text-[#14213D] dark:text-white flex items-center gap-2">
-                      <Waves className="w-4 h-4 text-[#FCA311]" />
+                      <Waves className="w-4 h-4 text-[#FF8244]" />
                       Eventos de Maré de Hoje ({tabuaMares?.dias?.[0]?.dia_semana || 'Hoje'} · {tabuaMares?.dias?.[0]?.data_br || ''})
                     </h3>
                     <span className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70">
@@ -3935,8 +3935,8 @@ export default function App() {
                           >
                             <div className="flex items-center justify-center gap-1.5 mb-1.5">
                               {isHigh ? (
-                                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-[#FCA311]">
-                                  <ArrowUp className="w-3.5 h-3.5 text-[#FCA311] stroke-[2.5]" /> Preia-mar
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-[#FF8244]">
+                                  <ArrowUp className="w-3.5 h-3.5 text-[#FF8244] stroke-[2.5]" /> Preia-mar
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase text-slate-500 dark:text-[#E5E5E5]/70">
@@ -3947,7 +3947,7 @@ export default function App() {
                             <div className="text-2xl font-bold text-[#14213D] dark:text-white tabular-nums tracking-tight">
                               {ev.hora}
                             </div>
-                            <div className={`text-xs font-bold mt-1 tabular-nums ${isHigh ? 'text-[#FCA311]' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>
+                            <div className={`text-xs font-bold mt-1 tabular-nums ${isHigh ? 'text-[#FF8244]' : 'text-slate-500 dark:text-[#E5E5E5]/60'}`}>
                               {Number(ev.altura).toFixed(1).replace('.', ',')} m
                             </div>
                           </div>
@@ -3966,7 +3966,7 @@ export default function App() {
                   <div className="pt-2 space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="font-display text-base font-bold text-[#14213D] dark:text-white flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#FCA311]" />
+                        <Calendar className="w-4 h-4 text-[#FF8244]" />
                         Tábua Semanal Completa de Marés (Próximos 7 Dias)
                       </h3>
                       <span className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70">
@@ -3999,7 +3999,7 @@ export default function App() {
                                 <div className="font-bold text-[#14213D] dark:text-white flex items-center gap-2">
                                   <span>{dia.dia_semana}</span>
                                   {dIdx === 0 && (
-                                    <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40 font-bold">
+                                    <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-[#FF8244]/15 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/40 font-bold">
                                       Hoje
                                     </span>
                                   )}
@@ -4014,11 +4014,11 @@ export default function App() {
                                   <td key={evIdx} className="py-3 px-3 text-center whitespace-nowrap">
                                     <span className="inline-flex items-center gap-1.5 text-xs font-mono">
                                       {isHigh ? (
-                                        <ArrowUp className="w-3.5 h-3.5 text-[#FCA311] stroke-[2.5]" />
+                                        <ArrowUp className="w-3.5 h-3.5 text-[#FF8244] stroke-[2.5]" />
                                       ) : (
                                         <ArrowDown className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 stroke-[2.5]" />
                                       )}
-                                      <strong className={`font-bold ${isHigh ? 'text-[#14213D] dark:text-[#FCA311]' : 'text-slate-700 dark:text-slate-200'}`}>
+                                      <strong className={`font-bold ${isHigh ? 'text-[#14213D] dark:text-[#FF8244]' : 'text-slate-700 dark:text-slate-200'}`}>
                                         {ev.hora}
                                       </strong>
                                       <span className={`text-[11px] ${isHigh ? 'text-slate-500 dark:text-[#E5E5E5]/70 font-medium' : 'text-slate-400 dark:text-[#E5E5E5]/50'}`}>
@@ -4052,7 +4052,7 @@ export default function App() {
                             href={c.url}
                             target="_blank"
                             rel="noreferrer"
-                            className="px-2.5 py-1 rounded border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                            className="px-2.5 py-1 rounded border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                           >
                             Carta {c.horario}
                           </a>
@@ -4083,7 +4083,7 @@ export default function App() {
                         href={balneabilidade?.url_portal_inea || 'https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/'}
                         target="_blank"
                         rel="noreferrer"
-                        className="underline hover:text-[#FCA311] text-[#14213D] dark:text-[#FCA311] font-medium transition-colors"
+                        className="underline hover:text-[#FF8244] text-[#14213D] dark:text-[#FF8244] font-medium transition-colors"
                       >
                         inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/
                       </a>
@@ -4094,7 +4094,7 @@ export default function App() {
                       href={balneabilidade?.url_portal_inea || 'https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/'}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FCA311] text-[#14213D] hover:bg-[#FCA311]/90 shadow-sm transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FF8244] text-[#14213D] hover:bg-[#FF8244]/90 shadow-sm transition-colors"
                     >
                       Portal Oficial INEA <ExternalLink className="w-3.5 h-3.5 text-[#14213D]" />
                     </a>
@@ -4103,9 +4103,9 @@ export default function App() {
                         href={balneabilidade.url_boletim_pdf}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Boletim Semanal PDF <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                        Boletim Semanal PDF <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                       </a>
                     )}
                     {balneabilidade?.url_seirhi && (
@@ -4113,9 +4113,9 @@ export default function App() {
                         href={balneabilidade.url_seirhi}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        SEIRHI INEA <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                        SEIRHI INEA <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                       </a>
                     )}
                   </div>
@@ -4150,7 +4150,7 @@ export default function App() {
                   </div>
 
                   <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
-                    <div className="font-semibold text-[#14213D] dark:text-[#FCA311]">Critério CONAMA nº 274/2000</div>
+                    <div className="font-semibold text-[#14213D] dark:text-[#FF8244]">Critério CONAMA nº 274/2000</div>
                     <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed text-[11px]">
                       Próprio se Enterococos ≤ 100 NMP/100 mL em ao menos 4 das últimas 5 coletas e &lt; 400 NMP/100 mL na coleta mais recente.
                     </p>
@@ -4159,7 +4159,7 @@ export default function App() {
 
                 {balneabilidade?.observacao_tecnica && (
                   <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5] flex items-center gap-2.5">
-                    <AlertTriangle className="w-4 h-4 text-[#FCA311] shrink-0" />
+                    <AlertTriangle className="w-4 h-4 text-[#FF8244] shrink-0" />
                     <div>
                       <strong className="text-[#14213D] dark:text-white font-semibold">Recomendação Oficial do INEA:</strong> {balneabilidade.observacao_tecnica}
                     </div>
@@ -4171,7 +4171,7 @@ export default function App() {
                   <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
                     <div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <MapPin className="w-4 h-4 text-[#FCA311]" />
+                        <MapPin className="w-4 h-4 text-[#FF8244]" />
                         <h3 className="font-display text-sm sm:text-base font-bold text-[#14213D] dark:text-white">
                           Mapa Oficial de Balneabilidade de Rio das Ostras — INEA
                         </h3>
@@ -4189,16 +4189,16 @@ export default function App() {
                         href={`${SITE_BASE}/img/inea_mapa_balneabilidade.png`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Ampliar Imagem <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                        Ampliar Imagem <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                       </a>
                       {balneabilidade?.url_boletim_pdf && (
                         <a
                           href={balneabilidade.url_boletim_pdf}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FCA311] text-[#14213D] hover:bg-[#FCA311]/90 shadow-sm transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FF8244] text-[#14213D] hover:bg-[#FF8244]/90 shadow-sm transition-colors"
                         >
                           Boletim PDF Completo <ExternalLink className="w-3.5 h-3.5 text-[#14213D]" />
                         </a>
@@ -4316,7 +4316,7 @@ export default function App() {
                 {/* Banner de Garantia de Sincronia de Horários Oficiais */}
                 <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5] flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <Info className="w-4 h-4 text-[#FCA311] shrink-0" />
+                    <Info className="w-4 h-4 text-[#FF8244] shrink-0" />
                     <span>
                       <strong className="text-[#14213D] dark:text-white">Sincronização Oficial INMET:</strong> Os horários de início e término respeitam rigorosamente os minutos exatos da publicação no portal do INMET (Horário Oficial de Brasília — UTC-3).
                     </span>
@@ -4325,7 +4325,7 @@ export default function App() {
                     href="https://alertas2.inmet.gov.br/"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold text-[#14213D] dark:text-[#FCA311] hover:underline shrink-0 text-[11px]"
+                    className="inline-flex items-center gap-1 font-semibold text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0 text-[11px]"
                   >
                     Portal INMET Alertas <ExternalLink className="w-3 h-3" />
                   </a>
@@ -4342,8 +4342,8 @@ export default function App() {
                       onClick={() => setAlertaFiltroLocal('todos')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
                         alertaFiltroLocal === 'todos'
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-black border-[#14213D] dark:border-[#FCA311] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-black border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                       }`}
                     >
                       Todos os Alertas do RJ ({inmetAvisos.length})
@@ -4353,11 +4353,11 @@ export default function App() {
                       onClick={() => setAlertaFiltroLocal('ostras')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
                         alertaFiltroLocal === 'ostras'
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FCA311] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                       }`}
                     >
-                      <MapPin className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#FF8244]" />
                       Apenas Rio das Ostras ({inmetAvisos.filter((a) => a.eh_direto_ostras !== false).length})
                     </button>
                     <button
@@ -4365,11 +4365,11 @@ export default function App() {
                       onClick={() => setAlertaFiltroLocal('outros')}
                       className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
                         alertaFiltroLocal === 'outros'
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FCA311] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                       }`}
                     >
-                      <AlertTriangle className="w-3.5 h-3.5 text-[#FCA311]" />
+                      <AlertTriangle className="w-3.5 h-3.5 text-[#FF8244]" />
                       Outras Localidades do RJ ({inmetAvisos.filter((a) => a.eh_direto_ostras === false).length})
                     </button>
                   </div>
@@ -4428,7 +4428,7 @@ export default function App() {
                         const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
 
                         let vigenciaLabel = 'Vigente Agora';
-                        let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FCA311] border-[#FCA311]/50 font-bold';
+                        let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold';
 
                         if (startDate) {
                           const startMs = startDate.getTime();
@@ -4453,12 +4453,12 @@ export default function App() {
                                 <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white">
                                   INMET
                                 </span>
-                                <span className="font-mono text-xs text-[#FCA311] font-semibold">
+                                <span className="font-mono text-xs text-[#FF8244] font-semibold">
                                   Aviso nº {av.id}
                                 </span>
                                 {av.eh_direto_ostras !== false ? (
                                   <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
-                                    <MapPin className="w-3 h-3 text-[#FCA311] shrink-0" />
+                                    <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
                                     Rio das Ostras (Válido no Município)
                                   </span>
                                 ) : (
@@ -4473,7 +4473,7 @@ export default function App() {
                                   {vigenciaLabel}
                                 </span>
                               </div>
-                              <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FCA311]">
+                              <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244]">
                                 {av.cor_badge || 'Alerta Oficial'}
                               </span>
                             </div>
@@ -4483,7 +4483,7 @@ export default function App() {
                                 {av.descricao} — {av.severidade}
                               </h2>
                               <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354]">
-                                <Clock className="w-3.5 h-3.5 text-[#FCA311]" />
+                                <Clock className="w-3.5 h-3.5 text-[#FF8244]" />
                                 <span>{av.inicio_formatado || av.inicio}</span>
                                 <span className="text-slate-400">→</span>
                                 <span>{av.fim_formatado || av.fim}</span>
@@ -4493,7 +4493,7 @@ export default function App() {
                             {/* Destaque Explícito de Abrangência Territorial */}
                             {av.eh_direto_ostras !== false ? (
                               <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5]/90 flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-[#FCA311] shrink-0" />
+                                <MapPin className="w-4 h-4 text-[#FF8244] shrink-0" />
                                 <span>
                                   <strong className="text-[#14213D] dark:text-white">Válido em Rio das Ostras:</strong> O município está incluído diretamente no polígono de risco deste alerta oficial.
                                 </span>
@@ -4528,9 +4528,9 @@ export default function App() {
                               href={`https://alertas2.inmet.gov.br/${av.id}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FCA311] hover:underline shrink-0"
+                              className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0"
                             >
-                              Ver detalhes no INMET <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                              Ver detalhes no INMET <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                             </a>
                           </div>
                         </article>
@@ -4547,7 +4547,7 @@ export default function App() {
                 {marinhaAvisos && (
                   <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4 text-xs">
                     <div className="space-y-1">
-                      <div className="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-[#FCA311] font-semibold">
+                      <div className="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-[#FF8244] font-semibold">
                         MARINHA DO BRASIL (CHM / SMM) · {marinhaAvisos.tipo}
                       </div>
                       <div className="font-semibold text-sm text-[#14213D] dark:text-white">
@@ -4566,9 +4566,9 @@ export default function App() {
                             href={c.url}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                           >
-                            Carta Sinótica {c.horario} <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                            Carta Sinótica {c.horario} <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                           </a>
                         ))}
                       </div>
@@ -4583,11 +4583,11 @@ export default function App() {
                         key={al.titulo}
                         className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 space-y-2"
                       >
-                        <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#FCA311]">{al.status}</div>
+                        <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#FF8244]">{al.status}</div>
                         <div className="font-display text-base font-semibold text-[#14213D] dark:text-white">
                           {al.titulo}
                         </div>
-                        <div className="text-xs font-medium text-[#FCA311]">{al.detalhe}</div>
+                        <div className="text-xs font-medium text-[#FF8244]">{al.detalhe}</div>
                         <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">{al.impacto}</p>
                       </div>
                     ))}
@@ -4616,9 +4616,9 @@ export default function App() {
                         href={boletimMeta.cemaden_riscos.url_boletim_hoje}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Boletim Nacional CEMADEN <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                        Boletim Nacional CEMADEN <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                       </a>
                     )}
                     {cemadenRj?.portal_url && (
@@ -4626,9 +4626,9 @@ export default function App() {
                         href={cemadenRj.portal_url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
                       >
-                        Painel CEMADEN-RJ <ExternalLink className="w-3.5 h-3.5 text-[#FCA311]" />
+                        Painel CEMADEN-RJ <ExternalLink className="w-3.5 h-3.5 text-[#FF8244]" />
                       </a>
                     )}
                   </div>
@@ -4646,7 +4646,7 @@ export default function App() {
                       onClick={() => setCemadenSubView(t.id as 'sintese' | 'nacional' | 'mapas')}
                       className={`px-3 py-1.5 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                         cemadenSubView === t.id
-                          ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                           : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                       }`}
                     >
@@ -4663,8 +4663,8 @@ export default function App() {
                           <span className="font-display text-base font-semibold text-[#14213D] dark:text-white">
                             CEMADEN-RJ • Risco Hidrológico
                           </span>
-                          <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                          <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#14213D] dark:text-[#FF8244]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                             {cemadenRj?.risco_hidrologico?.nivel || 'ALTO'}
                           </span>
                         </div>
@@ -4689,8 +4689,8 @@ export default function App() {
                           <span className="font-display text-base font-semibold text-[#14213D] dark:text-white">
                             CEMADEN-RJ • Risco Geológico
                           </span>
-                          <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#FCA311]" aria-hidden="true" />
+                          <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold text-[#14213D] dark:text-[#FF8244]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#FF8244]" aria-hidden="true" />
                             {cemadenRj?.risco_geologico?.nivel || 'MODERADO'}
                           </span>
                         </div>
@@ -4721,7 +4721,7 @@ export default function App() {
                             key={m.nome}
                             className={`p-2.5 rounded-lg border ${
                               m.destaque
-                                ? 'border-[#FCA311] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] font-semibold'
+                                ? 'border-[#FF8244] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] font-semibold'
                                 : 'border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80'
                             }`}
                           >
@@ -4746,7 +4746,7 @@ export default function App() {
                             className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3 text-xs"
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-mono text-[#FCA311] font-semibold">{al.processo}</span>
+                              <span className="font-mono text-[#FF8244] font-semibold">{al.processo}</span>
                               <span className="font-mono font-semibold text-[#14213D] dark:text-white">{al.nivel}</span>
                             </div>
                             <h3 className="font-display text-base font-semibold text-[#14213D] dark:text-white">{al.titulo}</h3>
@@ -4816,12 +4816,12 @@ export default function App() {
                     )}
                     {boletimMeta?.analise_precipitacao_multifonte?.acumulado_semana_media !== undefined && (
                       <span className="px-2.5 py-1.5 rounded-lg text-[11px] font-mono bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]/80">
-                        Semana: <strong className="text-[#FCA311] tabular-nums">{boletimMeta.analise_precipitacao_multifonte.acumulado_semana_media.toFixed(1)} mm</strong>
+                        Semana: <strong className="text-[#FF8244] tabular-nums">{boletimMeta.analise_precipitacao_multifonte.acumulado_semana_media.toFixed(1)} mm</strong>
                       </span>
                     )}
                     <button
                       onClick={() => setShowFullBoletimTable((v) => !v)}
-                      className="px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] cursor-pointer transition-colors"
+                      className="px-3.5 py-2 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] cursor-pointer transition-colors"
                     >
                       {showFullBoletimTable ? 'Ver Cards por Dia' : 'Ver Tabela Completa dos Turnos'}
                     </button>
@@ -4859,7 +4859,7 @@ export default function App() {
                     <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-3 shadow-xs">
                       <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b border-[#E5E5E5] dark:border-[#233354]">
                         <div className="flex items-center gap-2">
-                          <CloudRain className="w-4 h-4 text-[#FCA311] shrink-0" />
+                          <CloudRain className="w-4 h-4 text-[#FF8244] shrink-0" />
                           <div>
                             <h3 className="font-semibold text-xs text-[#14213D] dark:text-white">
                               Previsão Diária de Chuva — Hoje + 7 Dias
@@ -4875,7 +4875,7 @@ export default function App() {
                               Total 3 Dias: <strong className="ml-1 text-[#14213D] dark:text-white">{Number(multifonte.acumulado_3dias_media).toFixed(1)} mm</strong>
                             </span>
                           )}
-                          <span className="px-3 py-1 rounded-md font-bold bg-amber-50 dark:bg-amber-950/40 text-[#FCA311] border border-[#FCA311]/40">
+                          <span className="px-3 py-1 rounded-md font-bold bg-[#FF8244]/10 dark:bg-[#FF8244]/15 text-[#FF8244] border border-[#FF8244]/40">
                             Total 7 Dias: {totalVal.toFixed(1)} mm
                           </span>
                         </div>
@@ -4890,7 +4890,7 @@ export default function App() {
                               key={idx}
                               className={`p-2 rounded-lg border text-center flex flex-col justify-between items-center transition-all bg-[#F7F8FA] dark:bg-[#0B1324] ${
                                 isChuvaExpressiva
-                                  ? 'border-[#FCA311]/50 text-[#14213D] dark:text-white shadow-2xs'
+                                  ? 'border-[#FF8244]/50 text-[#14213D] dark:text-white shadow-2xs'
                                   : 'border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]'
                               }`}
                             >
@@ -4906,7 +4906,7 @@ export default function App() {
                                 <span
                                   className={`font-mono text-sm font-bold tabular-nums ${
                                     isChuvaExpressiva
-                                      ? 'text-[#FCA311]'
+                                      ? 'text-[#FF8244]'
                                       : d.val > 0
                                       ? 'text-[#14213D] dark:text-white'
                                       : 'text-slate-400'
@@ -4917,7 +4917,7 @@ export default function App() {
                                 <span className="text-[9px] font-mono text-slate-400 ml-0.5">mm</span>
                               </div>
                               {isChuvaExpressiva ? (
-                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FCA311]/15 text-[#FCA311]">
+                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244]">
                                   Moderada
                                 </span>
                               ) : d.val > 0 ? (
@@ -4946,7 +4946,7 @@ export default function App() {
                           onClick={() => setSelectedBoletimDate(d.data_iso)}
                           className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap cursor-pointer transition-colors ${
                             (selectedBoletimDate || boletimDates[0]?.data_iso) === d.data_iso
-                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                               : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                           }`}
                         >
@@ -4967,7 +4967,7 @@ export default function App() {
                               {s.temp_min}° – {s.temp_max}°C
                             </span>
                           </div>
-                          <div className="font-mono text-2xl font-semibold text-[#FCA311] tabular-nums">
+                          <div className="font-mono text-2xl font-semibold text-[#FF8244] tabular-nums">
                             {s.chuva_media.toFixed(1)} <span className="text-xs font-normal text-slate-500">mm</span>
                           </div>
                           <div className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 space-y-0.5 font-mono">
@@ -4999,7 +4999,7 @@ export default function App() {
                             <td className="py-2.5 pr-3 align-top text-slate-600 dark:text-[#E5E5E5]/80 whitespace-nowrap">{formatDateBr(row.data_iso)}</td>
                             <td className="py-2.5 px-3 align-top font-sans font-medium text-[#14213D] dark:text-white whitespace-nowrap">{row.turno}</td>
                             <td className="py-2.5 px-3 align-top text-right tabular-nums whitespace-nowrap">{row.temp_min}–{row.temp_max}°</td>
-                            <td className="py-2.5 px-3 align-top text-right text-[#FCA311] font-semibold tabular-nums whitespace-nowrap">
+                            <td className="py-2.5 px-3 align-top text-right text-[#FF8244] font-semibold tabular-nums whitespace-nowrap">
                               {row.chuva_media.toFixed(1)} mm ({row.chuva_prob ?? 0}%)
                             </td>
                             <td className="py-2.5 px-3 align-top text-right tabular-nums whitespace-nowrap">{row.vento_dir} {row.vento_vel_media}/{row.rajada_max}</td>
@@ -5038,7 +5038,7 @@ export default function App() {
                         onClick={() => setMeteoView(m.id as 'cptec' | 'inmet' | 'wwatch')}
                         className={`px-3 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                           meteoView === m.id
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
                             : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white'
                         }`}
                       >
@@ -5076,7 +5076,7 @@ export default function App() {
                           href="https://previsaonumerica.cptec.inpe.br/meteograma/3866"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
                         >
                           Portal CPTEC <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -5111,7 +5111,7 @@ export default function App() {
                     <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col md:flex-row md:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
                             INMET COSMO 7x7km · Município 3304524
                           </span>
                           <span className="text-xs font-semibold text-[#14213D] dark:text-white">
@@ -5134,7 +5134,7 @@ export default function App() {
                           href="https://meteograma.inmet.gov.br/3304524/dinamico"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
                         >
                           Portal Dinâmico INMET <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -5169,7 +5169,7 @@ export default function App() {
                     <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col md:flex-row md:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
                             CPTEC / INPE WaveWatch III
                           </span>
                           <span className="text-xs font-semibold text-[#14213D] dark:text-white">
@@ -5192,7 +5192,7 @@ export default function App() {
                           href="https://previsaonumerica.cptec.inpe.br/"
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
                         >
                           Portal WaveWatch <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -5248,9 +5248,9 @@ export default function App() {
                         </div>
                         <a
                           href={`tel:${item.telefone}`}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] font-mono text-sm font-semibold text-[#14213D] dark:text-white transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] font-mono text-sm font-semibold text-[#14213D] dark:text-white transition-colors"
                         >
-                          <Phone className="w-3.5 h-3.5 text-[#FCA311]" />
+                          <Phone className="w-3.5 h-3.5 text-[#FF8244]" />
                           {item.telefone}
                         </a>
                       </div>
@@ -5275,12 +5275,12 @@ export default function App() {
                           href={f.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] transition-colors flex flex-col justify-between gap-1.5"
+                          className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] transition-colors flex flex-col justify-between gap-1.5"
                         >
                           <div className="font-semibold text-[#14213D] dark:text-white leading-snug">{f.nome}</div>
                           <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
                             <span>{f.tipo}</span>
-                            <ExternalLink className="w-3 h-3 text-[#FCA311] shrink-0" />
+                            <ExternalLink className="w-3 h-3 text-[#FF8244] shrink-0" />
                           </div>
                         </a>
                       ))}
@@ -5299,7 +5299,7 @@ export default function App() {
               <div className="pb-4 border-b border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#FCA311] animate-pulse"></span>
+                    <span className="w-2 h-2 rounded-full bg-[#FF8244] animate-pulse"></span>
                     Consolidado Oficial da Rede Pluviométrica · Personalizável
                   </div>
                   <h1 className="font-display text-2xl sm:text-3xl font-semibold text-[#14213D] dark:text-white mt-1">
@@ -5317,7 +5317,7 @@ export default function App() {
                   {/* OPÇÃO 1: ESCOLHA O MÊS */}
                   <div className="space-y-2">
                     <div className="text-xs font-semibold text-[#14213D] dark:text-white flex items-center gap-1.5">
-                      <Calendar className="w-4 h-4 text-[#FCA311]" />
+                      <Calendar className="w-4 h-4 text-[#FF8244]" />
                       <span>Escolha o Mês:</span>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -5330,8 +5330,8 @@ export default function App() {
                         }}
                         className={`py-2 px-3 text-xs font-semibold rounded-lg border transition cursor-pointer text-center ${
                           panoramaStart.startsWith('2026-11')
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FCA311] shadow-xs'
-                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                         }`}
                       >
                         Novembro / 2026
@@ -5345,8 +5345,8 @@ export default function App() {
                         }}
                         className={`py-2 px-3 text-xs font-semibold rounded-lg border transition cursor-pointer text-center ${
                           panoramaStart.startsWith('2026-10')
-                            ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FCA311] shadow-xs'
-                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                         }`}
                       >
                         Outubro / 2026
@@ -5358,7 +5358,7 @@ export default function App() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs font-semibold text-[#14213D] dark:text-white">
                       <div className="flex items-center gap-1.5">
-                        <CalendarClock className="w-4 h-4 text-[#FCA311]" />
+                        <CalendarClock className="w-4 h-4 text-[#FF8244]" />
                         <span>Escolha o Dia ou Período:</span>
                       </div>
                       <button
@@ -5373,7 +5373,7 @@ export default function App() {
                             setPanoramaEnd('2026-10-31');
                           }
                         }}
-                        className="text-[11px] font-medium text-[#14213D] dark:text-[#FCA311] hover:underline cursor-pointer"
+                        className="text-[11px] font-medium text-[#14213D] dark:text-[#FF8244] hover:underline cursor-pointer"
                       >
                         Mês Completo
                       </button>
@@ -5443,10 +5443,10 @@ export default function App() {
                           title={`Ver dados do dia ${diaNum}/${monthPrefix.slice(5)}/2026`}
                           className={`w-7 h-7 text-xs font-mono font-semibold rounded-md transition cursor-pointer flex items-center justify-center ${
                             isSingle
-                              ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#0B1324] shadow-xs'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] shadow-xs'
                               : isInRange
-                              ? 'bg-[#FCA311]/25 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/50 font-bold'
-                              : 'bg-white dark:bg-[#14213D] text-slate-600 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311]'
+                              ? 'bg-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/50 font-bold'
+                              : 'bg-white dark:bg-[#14213D] text-slate-600 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
                           }`}
                         >
                           {diaNum}
@@ -5488,7 +5488,7 @@ export default function App() {
                 <div className="p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between">
                   <div>
                     <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Maior Estação do Período</div>
-                    <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#FCA311] mt-2 tabular-nums">
+                    <div className="font-mono text-3xl sm:text-4xl font-semibold text-[#FF8244] mt-2 tabular-nums">
                       {panoramaData ? `${panoramaData.maiorEstacaoChuva.toFixed(1)} mm` : '--'}
                     </div>
                   </div>
@@ -5530,16 +5530,16 @@ export default function App() {
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-xs font-medium text-[#14213D] dark:text-white truncate">
-                              <span className="font-bold text-[#FCA311] mr-1.5">{idx + 1}º</span>
+                              <span className="font-bold text-[#FF8244] mr-1.5">{idx + 1}º</span>
                               {st.nome}
                             </span>
-                            <span className="font-mono text-xs font-bold text-[#14213D] dark:text-[#FCA311] shrink-0">
+                            <span className="font-mono text-xs font-bold text-[#14213D] dark:text-[#FF8244] shrink-0">
                               {st.chuva_mm.toFixed(1)} mm
                             </span>
                           </div>
                           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden">
                             <div
-                              className="bg-[#FCA311] h-1.5 rounded-full transition-all duration-500"
+                              className="bg-[#FF8244] h-1.5 rounded-full transition-all duration-500"
                               style={{ width: `${pct}%` }}
                             />
                           </div>
@@ -5585,7 +5585,7 @@ export default function App() {
                   <div className="w-full max-w-[340px] rounded-2xl overflow-hidden border border-[#E5E5E5] dark:border-[#233354] bg-[#0B1324] aspect-[9/16] shadow-xl relative flex flex-col justify-between p-6 text-white select-none">
                     {/* Header */}
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-1 rounded-full bg-[#FCA311]/20 text-[#FCA311] border border-[#FCA311]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
+                      <span className="px-2.5 py-1 rounded-full bg-[#FF8244]/20 text-[#FF8244] border border-[#FF8244]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
                         RETROSPECTIVA
                       </span>
                       <span className="text-[11px] font-mono text-slate-300">@tempoemriodasostras</span>
@@ -5594,12 +5594,12 @@ export default function App() {
                     {/* Dynamic Slide Content */}
                     <div className="space-y-4 my-auto">
                       <div>
-                        <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider">PANORAMA DO CLIMA</div>
+                        <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider">PANORAMA DO CLIMA</div>
                         <h3 className="text-xl font-black text-white leading-tight mt-1">{panoramaData?.labelPeriodo}</h3>
                       </div>
 
                       <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 space-y-1">
-                        <div className="text-[10px] uppercase font-mono text-[#FCA311] font-bold tracking-wider">Volume Total Máximo</div>
+                        <div className="text-[10px] uppercase font-mono text-[#FF8244] font-bold tracking-wider">Volume Total Máximo</div>
                         <div className="text-3xl font-black text-white font-mono">{panoramaData?.maiorEstacaoChuva} mm</div>
                         <div className="text-xs font-medium text-slate-200">{panoramaData?.maiorEstacaoNome}</div>
                       </div>
@@ -5620,7 +5620,7 @@ export default function App() {
                       {panoramaData && panoramaData.maxGust > 0 && (
                         <div className="p-2.5 rounded-lg bg-white/5 border border-white/10 text-center">
                           <div className="text-[10px] text-slate-300">Rajada Máxima</div>
-                          <div className="text-sm font-bold text-[#FCA311] font-mono">{panoramaData.gustInfo}</div>
+                          <div className="text-sm font-bold text-[#FF8244] font-mono">{panoramaData.gustInfo}</div>
                         </div>
                       )}
                     </div>
@@ -5630,7 +5630,7 @@ export default function App() {
                       <div className="flex items-center justify-between text-xs">
                         <button
                           onClick={() => setPanoramaVideoPlaying(!panoramaVideoPlaying)}
-                          className="px-3 py-1 rounded-md bg-[#FCA311] text-[#000000] font-bold text-xs cursor-pointer hover:opacity-90"
+                          className="px-3 py-1 rounded-md bg-[#FF8244] text-[#000000] font-bold text-xs cursor-pointer hover:opacity-90"
                         >
                           {panoramaVideoPlaying ? 'Pausar Reels' : 'Reproduzir Reels (Auto)'}
                         </button>
@@ -5646,7 +5646,7 @@ export default function App() {
                     download="video_reels_outubro_2026.mp4"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
                   >
                     <ArrowDownToLine className="w-4 h-4" />
                     Baixar Vídeo Master (.MP4)
@@ -5654,7 +5654,7 @@ export default function App() {
                 ) : (
                   <button
                     onClick={handleCopyCaption}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
                   >
                     {copiedCaption ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     {copiedCaption ? 'Legenda e Dados Copiados!' : 'Copiar Dados do Período para Post'}
@@ -5678,7 +5678,7 @@ export default function App() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setPanoramaSlideIdx((i) => (i - 1 + PANORAMA_SLIDES.length) % PANORAMA_SLIDES.length)}
-                      className="p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] cursor-pointer transition-colors"
+                      className="p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] cursor-pointer transition-colors"
                       aria-label="Lâmina anterior"
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -5688,7 +5688,7 @@ export default function App() {
                     </span>
                     <button
                       onClick={() => setPanoramaSlideIdx((i) => (i + 1) % PANORAMA_SLIDES.length)}
-                      className="p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] cursor-pointer transition-colors"
+                      className="p-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] cursor-pointer transition-colors"
                       aria-label="Próxima lâmina"
                     >
                       <ChevronRight className="w-4 h-4" />
@@ -5698,7 +5698,7 @@ export default function App() {
                         href={`${SITE_BASE}/img/panorama/${subSection === 'feed' ? 'feed' : 'stories'}/${PANORAMA_SLIDES[panoramaSlideIdx].file}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
                       >
                         <ArrowDownToLine className="w-3.5 h-3.5" />
                         Baixar PNG HD
@@ -5706,7 +5706,7 @@ export default function App() {
                     ) : (
                       <button
                         onClick={handleCopyCaption}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
                       >
                         {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                         {copiedCaption ? 'Copiado!' : 'Copiar Texto da Lâmina'}
@@ -5732,7 +5732,7 @@ export default function App() {
                     >
                       {/* Top Bar da Lâmina */}
                       <div className="flex items-center justify-between pb-3 border-b border-white/10">
-                        <span className="px-2.5 py-0.5 rounded-full bg-[#FCA311]/20 text-[#FCA311] border border-[#FCA311]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#FF8244]/20 text-[#FF8244] border border-[#FF8244]/40 font-mono text-[10px] font-bold uppercase tracking-wider">
                           RETROSPECTIVA OFICIAL
                         </span>
                         <span className="text-[11px] font-mono text-slate-300">@tempoemriodasostras</span>
@@ -5742,7 +5742,7 @@ export default function App() {
                       {panoramaSlideIdx === 0 && (
                         <div className="space-y-4 my-auto">
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               PANORAMA DO CLIMA
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
@@ -5752,7 +5752,7 @@ export default function App() {
                           </div>
 
                           <div className="p-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
-                            <div className="text-[10px] uppercase font-mono text-[#FCA311] font-bold tracking-wider">
+                            <div className="text-[10px] uppercase font-mono text-[#FF8244] font-bold tracking-wider">
                               Região Mais Chuvosa · Volume Máximo
                             </div>
                             <div className="text-3xl sm:text-4xl font-black text-white font-mono mt-1">
@@ -5781,7 +5781,7 @@ export default function App() {
                       {panoramaSlideIdx === 1 && (
                         <div className="space-y-4 my-auto">
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               VOLUME DE CHUVA NO PERÍODO
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
@@ -5808,7 +5808,7 @@ export default function App() {
                       {panoramaSlideIdx === 2 && (
                         <div className="space-y-3 my-auto">
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               RANKING POR ESTAÇÃO
                             </div>
                             <h3 className="text-lg sm:text-xl font-black text-white leading-tight mt-0.5">
@@ -5824,12 +5824,12 @@ export default function App() {
                                 <div key={st.code} className="p-2 rounded-lg bg-white/5 border border-white/10 space-y-1">
                                   <div className="flex items-center justify-between text-xs">
                                     <span className="font-semibold text-white truncate max-w-[200px]">
-                                      <span className="text-[#FCA311] font-bold mr-1">{i + 1}º</span> {st.nome}
+                                      <span className="text-[#FF8244] font-bold mr-1">{i + 1}º</span> {st.nome}
                                     </span>
-                                    <span className="font-mono font-bold text-[#FCA311]">{st.chuva_mm.toFixed(1)} mm</span>
+                                    <span className="font-mono font-bold text-[#FF8244]">{st.chuva_mm.toFixed(1)} mm</span>
                                   </div>
                                   <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                                    <div className="bg-[#FCA311] h-1.5 rounded-full" style={{ width: `${pct}%` }} />
+                                    <div className="bg-[#FF8244] h-1.5 rounded-full" style={{ width: `${pct}%` }} />
                                   </div>
                                 </div>
                               );
@@ -5841,7 +5841,7 @@ export default function App() {
                       {panoramaSlideIdx === 3 && (
                         <div className="space-y-4 my-auto">
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               VENTOS E EXTREMOS TÉRMICOS
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
@@ -5851,7 +5851,7 @@ export default function App() {
 
                           <div className="p-4 rounded-xl bg-white/10 border border-white/15 space-y-1">
                             <div className="text-[10px] text-slate-300 font-mono uppercase">Rajada Máxima Observada</div>
-                            <div className="text-2xl sm:text-3xl font-black text-[#FCA311] font-mono">
+                            <div className="text-2xl sm:text-3xl font-black text-[#FF8244] font-mono">
                               {panoramaData && panoramaData.maxGust > 0 ? `${panoramaData.maxGust} km/h` : 'Ventos Normais'}
                             </div>
                             <div className="text-xs text-white">{panoramaData?.gustInfo || 'Sem ocorrência de ventania severa'}</div>
@@ -5872,7 +5872,7 @@ export default function App() {
                       {panoramaSlideIdx === 4 && (
                         <div className="space-y-4 my-auto">
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               SISTEMAS METEOROLÓGICOS
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
@@ -5884,7 +5884,7 @@ export default function App() {
                             {panoramaData && panoramaData.sistemas.length > 0 ? (
                               panoramaData.sistemas.map((sis, i) => (
                                 <div key={i} className="p-3 rounded-lg bg-white/10 border border-white/15 flex items-center gap-2">
-                                  <span className="w-2 h-2 rounded-full bg-[#FCA311]"></span>
+                                  <span className="w-2 h-2 rounded-full bg-[#FF8244]"></span>
                                   <span className="text-xs sm:text-sm font-semibold text-white">{sis}</span>
                                 </div>
                               ))
@@ -5899,12 +5899,12 @@ export default function App() {
 
                       {panoramaSlideIdx === 5 && (
                         <div className="space-y-4 my-auto text-center">
-                          <div className="w-12 h-12 rounded-full bg-[#FCA311]/20 border border-[#FCA311]/40 flex items-center justify-center mx-auto text-[#FCA311]">
+                          <div className="w-12 h-12 rounded-full bg-[#FF8244]/20 border border-[#FF8244]/40 flex items-center justify-center mx-auto text-[#FF8244]">
                             <Wind className="w-6 h-6" />
                           </div>
 
                           <div>
-                            <div className="text-xs font-mono text-[#FCA311] uppercase tracking-wider font-bold">
+                            <div className="text-xs font-mono text-[#FF8244] uppercase tracking-wider font-bold">
                               ENCERRAMENTO OFICIAL
                             </div>
                             <h3 className="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
@@ -5917,7 +5917,7 @@ export default function App() {
 
                           <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1 text-xs">
                             <div className="font-semibold text-white">Siga e Acompanhe:</div>
-                            <div className="font-mono text-[#FCA311] text-sm">@tempoemriodasostras</div>
+                            <div className="font-mono text-[#FF8244] text-sm">@tempoemriodasostras</div>
                             <div className="text-[11px] text-slate-400">tempoemriodasostras.com.br</div>
                           </div>
                         </div>
@@ -5948,7 +5948,7 @@ export default function App() {
                   </div>
                   <button
                     onClick={handleCopyCaption}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] hover:opacity-90 transition-opacity cursor-pointer"
                   >
                     {copiedCaption ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                     {copiedCaption ? 'Legenda Copiada!' : 'Copiar Legenda'}
@@ -5973,7 +5973,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5">
-              <Wind className="w-3.5 h-3.5 text-[#FCA311]" />
+              <Wind className="w-3.5 h-3.5 text-[#FF8244]" />
               Fontes: INMET · CPTEC/INPE · Marinha (CHM) · INEA · CEMADEN · Open-Meteo
             </span>
 
