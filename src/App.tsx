@@ -4375,49 +4375,69 @@ export default function App() {
                   </div>
                 )}
 
-                {inmetAvisos.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {inmetAvisos
-                      .filter((av) => {
-                        if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras !== false;
-                        if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras === false;
-                        return true;
-                      })
-                      .map((av) => {
-                      // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
-                      const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
-                      const nowMs = nowBrt.getTime();
+                {inmetAvisos.length > 0 ? (() => {
+                  // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
+                  const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+                  const nowMs = nowBrt.getTime();
 
-                      const parseAlertDate = (dStr?: string, hStr?: string) => {
-                        if (!dStr) return null;
-                        const cleanD = dStr.split('T')[0].split(' ')[0].trim();
-                        let cleanH = (hStr || (dStr.includes(' ') ? dStr.split(' ')[1] : '00:00')).replace('h', '').trim();
-                        if (cleanD.includes('/')) {
-                          const [dia, mes, ano] = cleanD.split('/').map(Number);
-                          const [hh, mm] = cleanH.split(':').map(Number);
-                          return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
-                        } else if (cleanD.includes('-')) {
-                          const [ano, mes, dia] = cleanD.split('-').map(Number);
-                          const [hh, mm] = cleanH.split(':').map(Number);
-                          return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
+                  const parseAlertDate = (dStr?: string, hStr?: string) => {
+                    if (!dStr) return null;
+                    const cleanD = dStr.split('T')[0].split(' ')[0].trim();
+                    let cleanH = (hStr || (dStr.includes(' ') ? dStr.split(' ')[1] : '00:00')).replace('h', '').trim();
+                    if (cleanD.includes('/')) {
+                      const [dia, mes, ano] = cleanD.split('/').map(Number);
+                      const [hh, mm] = cleanH.split(':').map(Number);
+                      return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
+                    } else if (cleanD.includes('-')) {
+                      const [ano, mes, dia] = cleanD.split('-').map(Number);
+                      const [hh, mm] = cleanH.split(':').map(Number);
+                      return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
+                    }
+                    return null;
+                  };
+
+                  const getAlertTimeMs = (dStr?: string, hStr?: string) => {
+                    const d = parseAlertDate(dStr, hStr);
+                    return d ? d.getTime() : 0;
+                  };
+
+                  const sortedAvisos = inmetAvisos
+                    .filter((av) => {
+                      if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras !== false;
+                      if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras === false;
+                      return true;
+                    })
+                    .slice()
+                    .sort((a, b) => {
+                      const startA = getAlertTimeMs(a.inicio || a.data_inicio, a.hora_inicio);
+                      const startB = getAlertTimeMs(b.inicio || b.data_inicio, b.hora_inicio);
+                      if (startA !== startB) return startA - startB; // Ordem cronológica por data de início (mais próximo primeiro)
+                      const endA = getAlertTimeMs(a.fim || a.data_fim, a.hora_fim);
+                      const endB = getAlertTimeMs(b.fim || b.data_fim, b.hora_fim);
+                      if (endA !== endB) return endA - endB;
+                      const ostrasA = a.eh_direto_ostras !== false ? 1 : 0;
+                      const ostrasB = b.eh_direto_ostras !== false ? 1 : 0;
+                      if (ostrasA !== ostrasB) return ostrasB - ostrasA;
+                      return (Number(a.id) || 0) - (Number(b.id) || 0);
+                    });
+
+                  return (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      {sortedAvisos.map((av) => {
+                        const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
+                        const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
+
+                        let vigenciaLabel = 'Vigente Agora';
+                        let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FCA311] border-[#FCA311]/50 font-bold';
+
+                        if (startDate) {
+                          const startMs = startDate.getTime();
+                          if (nowMs < startMs) {
+                            const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
+                            vigenciaLabel = hTxt ? `Programado (${hTxt})` : 'Programado';
+                            vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium';
+                          }
                         }
-                        return null;
-                      };
-
-                      const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
-                      const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
-
-                      let vigenciaLabel = 'Vigente Agora';
-                      let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FCA311] border-[#FCA311]/50 font-bold';
-
-                      if (startDate) {
-                        const startMs = startDate.getTime();
-                        if (nowMs < startMs) {
-                          const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
-                          vigenciaLabel = hTxt ? `Programado (${hTxt})` : 'Programado';
-                          vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium';
-                        }
-                      }
                       return (
                         <article
                           key={av.id}
@@ -4516,8 +4536,9 @@ export default function App() {
                         </article>
                       );
                     })}
-                  </div>
-                ) : (
+                    </div>
+                  );
+                })() : (
                   <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 text-sm">
                     Sem avisos ativos no INMET no momento.
                   </div>

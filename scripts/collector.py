@@ -395,7 +395,11 @@ def collect_inmet_data():
             all_map[a_new['id']] = a_new
             
         all_list = list(all_map.values())
-        all_list.sort(key=lambda it: (it.get('eh_direto_ostras', False), it.get('fim', '')), reverse=True)
+        def alert_sort_key(it):
+            ini = str(it.get('inicio', '') or it.get('data_inicio', ''))
+            fim = str(it.get('fim', '') or it.get('data_fim', ''))
+            return (ini, fim, it.get('id', 0))
+        all_list.sort(key=alert_sort_key)
         final_avisos = all_list[:8]
 
         with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:

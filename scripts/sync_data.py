@@ -150,16 +150,11 @@ def sync_inmet_alerts():
         all_alerts = list(existing_map.values())
         
         def alert_rank(item):
-            score = 0
-            if item.get('eh_direto_ostras'): score += 100
-            if item.get('severidade') == 'Grande Perigo': score += 50
-            elif item.get('severidade') == 'Perigo': score += 30
-            # Prefer active/upcoming
-            dt_fim = str(item.get('fim', ''))
-            score += hash(item.get('id', 0)) % 10
-            return (item.get('fim', ''), score)
+            ini = str(item.get('inicio', '') or item.get('data_inicio', ''))
+            fim = str(item.get('fim', '') or item.get('data_fim', ''))
+            return (ini, fim, item.get('id', 0))
 
-        all_alerts.sort(key=alert_rank, reverse=True)
+        all_alerts.sort(key=alert_rank)
         final_list = all_alerts[:8]
 
         with open(os.path.join(DATA_DIR, 'inmet_avisos.json'), 'w', encoding='utf-8') as f:
