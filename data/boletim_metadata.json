@@ -1,14 +1,14 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "14/11 (Sábado) a 21/11 (Sábado)",
-  "emissao": "14/11/2026 às 03:03h",
+  "emissao": "14/11/2026 às 03:41h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.29 m. Tempo sem alertas severos para hoje; atenção prevista para Domingo (15/11), sob Alerta Amarelo de Tempestade do INMET (nº 56399). Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 42.5 mm com temperatura máxima alcançando 30°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA PROGRAMADO (Domingo) • VIGILÂNCIA PREVENTIVA",
     "status_geral_cor": "warning",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": false,
-    "atualizacao_hora": "14/11/2026 às 03:04h",
+    "atualizacao_hora": "14/11/2026 às 03:42h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -592,7 +592,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 2.4,
-        "leitura": "2026-11-13 23:10:00"
+        "leitura": "2026-11-14 00:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -2334,7 +2334,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-14T03:03:51.465443"
+    "atualizado_em": "2026-11-14T03:41:38.235105"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -2342,7 +2342,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-14 03:04:27",
+    "data_coleta": "2026-11-14 03:42:11",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_14-11-2026.pdf",
@@ -2769,8 +2769,38 @@
     "tabua_resumo": {
       "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
       "data": "2026-11-14",
-      "proxima_mare": null,
-      "mares_do_dia": []
+      "proxima_mare": {
+        "tipo": "PREAMAR",
+        "hora": "06:16",
+        "altura": 0.87,
+        "rotulo": "Preia-mar (0.9 m)"
+      },
+      "mares_do_dia": [
+        {
+          "tipo": "BAIXA-MAR",
+          "hora": "00:04",
+          "altura": 0.43,
+          "rotulo": "Baixa-mar (0.4 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "06:16",
+          "altura": 0.87,
+          "rotulo": "Preia-mar (0.9 m)"
+        },
+        {
+          "tipo": "BAIXA-MAR",
+          "hora": "12:29",
+          "altura": 0.44,
+          "rotulo": "Baixa-mar (0.4 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "18:41",
+          "altura": 0.85,
+          "rotulo": "Preia-mar (0.8 m)"
+        }
+      ]
     },
     "consenso_multimodelo": {
       "cptec_ww3": {
@@ -2801,7 +2831,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-13 00z",
-    "atualizacao": "14/11/2026 00:03",
+    "atualizacao": "14/11/2026 00:41",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -2887,7 +2917,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "14/11/2026",
-    "atualizacao": "14/11/2026 00:04",
+    "atualizacao": "14/11/2026 00:41",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -3065,50 +3095,230 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-14T03:04:49.014459",
-    "proxima_mare": null,
+    "atualizado_em": "2026-11-14T03:42:32.223336",
+    "proxima_mare": {
+      "tipo": "PREAMAR",
+      "hora": "06:16",
+      "altura": 0.87,
+      "rotulo": "Preia-mar (0.9 m)"
+    },
     "dias": [
       {
         "data_iso": "2026-11-14",
         "data_br": "14/11/2026",
         "dia_semana": "Sábado",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "00:04",
+            "altura": 0.43,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "06:16",
+            "altura": 0.87,
+            "rotulo": "Preia-mar (0.9 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "12:29",
+            "altura": 0.44,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "18:41",
+            "altura": 0.85,
+            "rotulo": "Preia-mar (0.8 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-15",
         "data_br": "15/11/2026",
         "dia_semana": "Domingo",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "00:54",
+            "altura": 0.45,
+            "rotulo": "Baixa-mar (0.5 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "07:07",
+            "altura": 0.85,
+            "rotulo": "Preia-mar (0.8 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "13:19",
+            "altura": 0.45,
+            "rotulo": "Baixa-mar (0.5 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "19:32",
+            "altura": 0.86,
+            "rotulo": "Preia-mar (0.9 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-16",
         "data_br": "16/11/2026",
         "dia_semana": "Segunda",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "01:45",
+            "altura": 0.44,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "07:57",
+            "altura": 0.88,
+            "rotulo": "Preia-mar (0.9 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "14:10",
+            "altura": 0.42,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "20:22",
+            "altura": 0.92,
+            "rotulo": "Preia-mar (0.9 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-17",
         "data_br": "17/11/2026",
         "dia_semana": "Terça",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "02:35",
+            "altura": 0.4,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "08:48",
+            "altura": 0.97,
+            "rotulo": "Preia-mar (1.0 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "15:00",
+            "altura": 0.38,
+            "rotulo": "Baixa-mar (0.4 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "21:13",
+            "altura": 1.03,
+            "rotulo": "Preia-mar (1.0 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-18",
         "data_br": "18/11/2026",
         "dia_semana": "Quarta",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "03:25",
+            "altura": 0.35,
+            "rotulo": "Baixa-mar (0.3 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "09:38",
+            "altura": 1.09,
+            "rotulo": "Preia-mar (1.1 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "15:51",
+            "altura": 0.31,
+            "rotulo": "Baixa-mar (0.3 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "22:03",
+            "altura": 1.15,
+            "rotulo": "Preia-mar (1.1 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-19",
         "data_br": "19/11/2026",
         "dia_semana": "Quinta",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "04:16",
+            "altura": 0.28,
+            "rotulo": "Baixa-mar (0.3 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "10:29",
+            "altura": 1.22,
+            "rotulo": "Preia-mar (1.2 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "16:41",
+            "altura": 0.25,
+            "rotulo": "Baixa-mar (0.2 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "22:54",
+            "altura": 1.28,
+            "rotulo": "Preia-mar (1.3 m)"
+          }
+        ]
       },
       {
         "data_iso": "2026-11-20",
         "data_br": "20/11/2026",
         "dia_semana": "Sexta",
-        "eventos": []
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "05:06",
+            "altura": 0.22,
+            "rotulo": "Baixa-mar (0.2 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "11:19",
+            "altura": 1.34,
+            "rotulo": "Preia-mar (1.3 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "17:32",
+            "altura": 0.19,
+            "rotulo": "Baixa-mar (0.2 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "23:44",
+            "altura": 1.38,
+            "rotulo": "Preia-mar (1.4 m)"
+          }
+        ]
       }
     ]
   },
