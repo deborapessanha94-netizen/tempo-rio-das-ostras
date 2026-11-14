@@ -1,8 +1,8 @@
-const CACHE_NAME = 'meteo-ostras-v239';
+const CACHE_NAME = 'meteo-ostras-v240';
 const STATIC_ASSETS = [
   './index.html',
-  './assets/index-B0HYZ80y.js',
-  './assets/index-oPM8fqVh.css',
+  './assets/index-BPT_7erx.js',
+  './assets/index-B73xt2PJ.css',
   './img/logo-dark-text.png',
   './img/logo-transparent.png',
   './img/logo.png',
@@ -17,6 +17,7 @@ const STATIC_ASSETS = [
   './data/fases_lua_inmet.json',
   './data/acumulados_estacoes.json',
   './data/balneabilidade.json',
+  './img/inea_mapa_balneabilidade.png',
   './data/marinha_avisos.json',
   './data/tabua_mares.json',
   './data/orla_condicoes.json',
