@@ -124,8 +124,8 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string }[]> = {
   ],
 };
 
-const LOGO_LIGHT = './img/logo-transparent.png';
-const LOGO_DARK = './img/logo.png';
+const LOGO_LIGHT = './img/logo-dark-text.png';
+const LOGO_DARK = './img/logo-transparent.png';
 
 const PANORAMA_SLIDES = [
   { title: 'Abertura Oficial • Os 3 Grandes Números', file: 'lamina_01_abertura_outubro_2026.png' },
