@@ -1,8 +1,8 @@
-const CACHE_NAME = 'meteo-ostras-v243';
+const CACHE_NAME = 'meteo-ostras-v244';
 const STATIC_ASSETS = [
   './index.html',
-  './assets/index-DWl1V6xr.js',
-  './assets/index-U_IiHLZH.css',
+  './assets/index-DhgZZBz8.js',
+  './assets/index-CQvPOOe7.css',
   './img/logo-dark-text.png',
   './img/logo-transparent.png',
   './img/logo.png',

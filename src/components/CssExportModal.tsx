@@ -13,7 +13,7 @@ const DESIGN_SYSTEM_CSS = `/* ==================================================
 :root {
   --color-primary: #14213D;      /* Midnight Navy */
   --color-secondary: #0B1324;    /* Deep Blue */
-  --color-accent: #FCA311;       /* Solar Gold */
+  --color-accent: #FF8244;       /* Solar Gold */
   --color-border: #E5E5E5;       /* Soft Slate */
   --color-surface-light: #FFFFFF;
   --color-surface-dark: #14213D;
@@ -48,13 +48,13 @@ const DESIGN_SYSTEM_CSS = `/* ==================================================
 }
 
 .dark .sidebar-tab-btn.active {
-  background-color: #FCA311;
+  background-color: #FF8244;
   color: #000000;
   font-weight: 700;
 }
 
 .sidebar-sub-btn.active {
-  color: #FCA311;
+  color: #FF8244;
   font-weight: 600;
 }
 `;
@@ -80,7 +80,7 @@ export const CssExportModal: React.FC<CssExportModalProps> = ({ isOpen, onClose 
               Design System Tokens & CSS Oficial
             </h3>
             <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-0.5">
-              Paleta oficial: Midnight Navy (#14213D), Solar Gold (#FCA311), Deep Blue (#0B1324)
+              Paleta oficial: Midnight Navy (#14213D), Solar Gold (#FF8244), Deep Blue (#0B1324)
             </p>
           </div>
           <button
@@ -109,7 +109,7 @@ export const CssExportModal: React.FC<CssExportModalProps> = ({ isOpen, onClose 
           </button>
           <button
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-[#FCA311] hover:bg-[#e5920c] text-black transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-[#FF8244] hover:bg-[#E66E30] text-black transition-colors cursor-pointer"
           >
             {copied ? (
               <>

@@ -68,7 +68,7 @@ export const RiverChart: React.FC<RiverChartProps> = ({
           <span className="text-slate-600 dark:text-[#E5E5E5]/80">Atenção ({cotaAtencaoNum.toFixed(2)}m)</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#FA824C]"></span>
+          <span className="w-2.5 h-2.5 rounded-full bg-[#FF8244]"></span>
           <span className="text-slate-600 dark:text-[#E5E5E5]/80">Alerta ({cotaAlertaNum.toFixed(2)}m)</span>
         </div>
         <div className="flex items-center gap-1.5">
@@ -123,7 +123,7 @@ export const RiverChart: React.FC<RiverChartProps> = ({
                   y1={yAlerta}
                   x2={chartWidth}
                   y2={yAlerta}
-                  stroke="#FA824C"
+                  stroke="#FF8244"
                   strokeWidth="1.5"
                   strokeDasharray="4 4"
                 />
@@ -131,7 +131,7 @@ export const RiverChart: React.FC<RiverChartProps> = ({
                   x={chartWidth - 8}
                   y={yAlerta - 4}
                   textAnchor="end"
-                  fill="#FA824C"
+                  fill="#FF8244"
                   className="text-[9.5px] font-mono font-bold select-none"
                 >
                   Alerta: {cotaAlertaNum.toFixed(2)}m
@@ -244,7 +244,7 @@ export const RiverChart: React.FC<RiverChartProps> = ({
                       y={chartHeight - paddingBottom + 30}
                       textAnchor="middle"
                       fill="currentColor"
-                      className="text-[9.5px] font-mono font-semibold text-[#FCA311] select-none"
+                      className="text-[9.5px] font-mono font-semibold text-[#FF8244] select-none"
                     >
                       {datePart.split('-').reverse().join('/')}
                     </text>
