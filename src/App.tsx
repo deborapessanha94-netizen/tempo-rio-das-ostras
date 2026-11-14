@@ -1482,13 +1482,10 @@ export default function App() {
                         d.badge?.toUpperCase().includes('ATENÇÃO') ||
                         d.badge_tipo === 'warning';
 
-                      const cardBgClass = isDark
-                        ? 'bg-[#0B1324] border-[#233354]'
-                        : hasAlert
-                        ? 'bg-gradient-to-br from-amber-50/70 via-white to-orange-50/40 border-amber-300/90 shadow-xs'
-                        : 'bg-gradient-to-br from-sky-50/60 via-white to-slate-50/60 border-sky-200/80 shadow-xs';
-
-                      const leftBorderClass = hasAlert ? 'border-l-4 border-l-amber-500' : 'border-l-4 border-l-sky-500';
+                      const cardBgClass = 'bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs';
+                      const leftBorderClass = hasAlert
+                        ? 'border-l-4 border-l-[#FCA311]'
+                        : 'border-l-4 border-l-[#14213D] dark:border-l-[#233354]';
 
                       return (
                         <div
@@ -1497,8 +1494,8 @@ export default function App() {
                         >
                           <div className="flex flex-wrap items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
-                              <Calendar className={`w-4 h-4 ${hasAlert ? (isDark ? 'text-[#FCA311]' : 'text-amber-600') : (isDark ? 'text-sky-400' : 'text-sky-600')} shrink-0`} />
-                              <span className={`font-display text-sm font-bold ${isDark ? 'text-white' : 'text-[#14213D]'}`}>
+                              <Calendar className={`w-4 h-4 ${hasAlert ? 'text-[#FCA311]' : isDark ? 'text-[#FCA311]' : 'text-[#14213D]'} shrink-0`} />
+                              <span className="font-display text-sm font-bold text-[#14213D] dark:text-white">
                                 {d.dia}
                               </span>
                             </div>
@@ -1506,62 +1503,58 @@ export default function App() {
                               <span
                                 className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-tight border ${
                                   hasAlert
-                                    ? isDark
-                                      ? 'bg-amber-950/60 text-[#FCA311] border-amber-700/60'
-                                      : 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
-                                    : isDark
-                                    ? 'bg-emerald-950/40 text-emerald-300 border-emerald-700/60'
-                                    : 'bg-emerald-100 text-emerald-800 border-emerald-300 shadow-2xs'
+                                    ? 'bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border-[#FCA311]/50'
+                                    : 'bg-[#F7F8FA] dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5]/90 border-[#E5E5E5] dark:border-[#233354]'
                                 }`}
                               >
-                                {hasAlert && <AlertTriangle className={`w-3 h-3 ${isDark ? 'text-[#FCA311]' : 'text-amber-600'}`} />}
+                                {hasAlert && <AlertTriangle className="w-3 h-3 text-[#FCA311]" />}
                                 {d.badge}
                               </span>
                             )}
                           </div>
 
-                          <div className={`text-xs font-semibold ${isDark ? 'text-[#E5E5E5]/90' : 'text-slate-700'}`}>
+                          <div className="text-xs font-semibold text-slate-600 dark:text-[#E5E5E5]/80">
                             {d.subtitulo}
                           </div>
 
                           {d.pilares && (
                             <div className="grid grid-cols-2 gap-2.5 text-[11px] font-mono">
                               {d.pilares.temp?.val && (
-                                <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-[#14213D] border-[#233354]' : 'bg-gradient-to-br from-orange-50 to-amber-50/80 border-orange-200 shadow-2xs'}`}>
-                                  <span className={`${isDark ? 'text-orange-400' : 'text-orange-700'} font-bold uppercase text-[9.5px] flex items-center gap-1`}>
-                                    <Thermometer className="w-3.5 h-3.5 text-orange-500" /> Temperatura
+                                <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
+                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
+                                    <Thermometer className="w-3.5 h-3.5 text-[#FCA311]" /> Temperatura
                                   </span>
-                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-orange-950'} text-xs leading-snug block mt-0.5`}>
+                                  <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.temp.val}
                                   </span>
                                 </div>
                               )}
                               {d.pilares.chuva?.val && (
-                                <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-[#14213D] border-[#233354]' : 'bg-gradient-to-br from-sky-50 to-blue-50/80 border-sky-200 shadow-2xs'}`}>
-                                  <span className={`${isDark ? 'text-sky-400' : 'text-sky-700'} font-bold uppercase text-[9.5px] flex items-center gap-1`}>
-                                    <CloudRain className="w-3.5 h-3.5 text-sky-500" /> Chuva
+                                <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
+                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
+                                    <CloudRain className="w-3.5 h-3.5 text-[#FCA311]" /> Chuva
                                   </span>
-                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-sky-950'} text-xs leading-snug block mt-0.5`}>
+                                  <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.chuva.val.split(' (')[0]}
                                   </span>
                                 </div>
                               )}
                               {d.pilares.vento?.val && (
-                                <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-[#14213D] border-[#233354]' : 'bg-gradient-to-br from-teal-50 to-emerald-50/80 border-teal-200 shadow-2xs'}`}>
-                                  <span className={`${isDark ? 'text-teal-400' : 'text-teal-700'} font-bold uppercase text-[9.5px] flex items-center gap-1`}>
-                                    <Wind className="w-3.5 h-3.5 text-teal-500" /> Vento
+                                <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
+                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
+                                    <Wind className="w-3.5 h-3.5 text-[#FCA311]" /> Vento
                                   </span>
-                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-teal-950'} text-xs leading-snug block mt-0.5`}>
+                                  <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.vento.val}
                                   </span>
                                 </div>
                               )}
                               {d.pilares.mar?.val && (
-                                <div className={`p-2.5 rounded-lg border ${isDark ? 'bg-[#14213D] border-[#233354]' : 'bg-gradient-to-br from-indigo-50 to-blue-50/80 border-indigo-200 shadow-2xs'}`}>
-                                  <span className={`${isDark ? 'text-indigo-400' : 'text-indigo-700'} font-bold uppercase text-[9.5px] flex items-center gap-1`}>
-                                    <Waves className="w-3.5 h-3.5 text-indigo-500" /> Mar na Orla
+                                <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
+                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
+                                    <Waves className="w-3.5 h-3.5 text-[#FCA311]" /> Mar na Orla
                                   </span>
-                                  <span className={`font-bold ${isDark ? 'text-white' : 'text-indigo-950'} text-xs leading-snug block mt-0.5`}>
+                                  <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
                                     {d.pilares.mar.val}
                                   </span>
                                 </div>
@@ -1570,8 +1563,8 @@ export default function App() {
                           )}
 
                           {textoOficial && (
-                            <div className={`p-3 rounded-lg border ${isDark ? 'bg-[#14213D]/60 border-[#233354]/60' : 'bg-white/80 border-slate-200/80 shadow-2xs'}`}>
-                              <p className={`text-xs ${isDark ? 'text-[#E5E5E5]/90' : 'text-slate-700'} leading-relaxed text-justify`}>
+                            <div className="p-3 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D]/60 border-[#E5E5E5] dark:border-[#233354]">
+                              <p className="text-xs text-slate-700 dark:text-[#E5E5E5]/90 leading-relaxed text-justify">
                                 {textoOficial}
                               </p>
                             </div>
@@ -1615,7 +1608,7 @@ export default function App() {
                           </p>
                         </div>
                         {boletimMeta.inspecao_minuciosa_tempo_severo.status_geral_badge && (
-                          <span className="text-[11px] font-mono font-bold uppercase px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-[#0B1324] dark:text-[#FCA311] dark:border-[#233354] shadow-2xs">
+                          <span className="text-[11px] font-mono font-bold uppercase px-3 py-1 rounded-full bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40">
                             {boletimMeta.inspecao_minuciosa_tempo_severo.status_geral_badge}
                           </span>
                         )}
@@ -1633,8 +1626,8 @@ export default function App() {
                               </div>
                               <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
                                 {ins.alerta_rotulo && (
-                                  <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 dark:bg-[#14213D] dark:text-[#FCA311] dark:border-[#233354] font-bold shadow-2xs inline-flex items-center gap-1">
-                                    <AlertTriangle className="w-3 h-3 text-amber-600 dark:text-[#FCA311]" />
+                                  <span className="px-2.5 py-0.5 rounded-full bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40 font-bold inline-flex items-center gap-1">
+                                    <AlertTriangle className="w-3 h-3 text-[#FCA311]" />
                                     {ins.alerta_rotulo}
                                   </span>
                                 )}
@@ -1657,10 +1650,10 @@ export default function App() {
                                 {Object.values(ins.chuva.distribuicao_geografica).map((setor) => (
                                   <div
                                     key={setor.regiao}
-                                    className="p-3 rounded-lg bg-gradient-to-br from-amber-50/40 via-white to-orange-50/30 dark:bg-[#14213D] border border-amber-200/80 dark:border-[#233354] shadow-2xs space-y-1 text-xs"
+                                    className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1 text-xs"
                                   >
                                     <div className="font-bold text-[#14213D] dark:text-white">{setor.regiao}</div>
-                                    <div className="font-mono text-amber-700 dark:text-[#FCA311] font-bold">
+                                    <div className="font-mono text-[#14213D] dark:text-[#FCA311] font-bold">
                                       {setor.volume_estimado}
                                     </div>
                                     <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75 leading-snug">
@@ -1712,9 +1705,7 @@ export default function App() {
                       Panorama Sinótico Geral
                     </h2>
                     {boletimMeta?.periodo && (
-                      <span className={`text-[11px] font-mono font-bold px-3 py-1 rounded-full border ${
-                        isDark ? 'bg-[#0B1324] text-[#FCA311] border-[#233354]' : 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
-                      }`}>
+                      <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-full border bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border-[#E5E5E5] dark:border-[#233354]">
                         {boletimMeta.periodo}
                       </span>
                     )}
@@ -1734,68 +1725,48 @@ export default function App() {
                             tag: 'Escoamento & Dinâmica Sinótica',
                             title: 'Configuração Sinótica Regional, Campos de Pressão & Escoamento Troposférico',
                             badgeTech: 'ASAS (1020 hPa) • Cavados em 500 hPa • Advecção de Umidade',
-                            borderLeft: 'border-l-blue-500',
-                            cardBg: isDark ? 'bg-[#0B1324] border-[#233354]' : 'bg-gradient-to-br from-blue-50/60 via-white to-sky-50/40 border-blue-200/90 shadow-xs',
-                            chipStyle: isDark ? 'bg-blue-950/60 text-blue-300 border-blue-700/60' : 'bg-blue-100 text-blue-900 border-blue-300 shadow-2xs',
-                            techStyle: isDark ? 'bg-blue-950/40 text-blue-200 border-blue-800/40' : 'bg-blue-50 text-blue-800 border-blue-200',
                             icon: Compass,
-                            iconColor: isDark ? 'text-blue-400' : 'text-blue-600',
                           },
                           {
                             tag: 'Termodinâmica & Hidrometeorologia',
                             title: 'Termodinâmica Atmosférica, Instabilidade Convectiva & Resposta Hidrológica do Rio Jundiá',
                             badgeTech: 'Convecção Diurna • Índices CAPE / CINE • Telemetria INEA 2241036',
-                            borderLeft: 'border-l-amber-500',
-                            cardBg: isDark ? 'bg-[#0B1324] border-[#233354]' : 'bg-gradient-to-br from-amber-50/60 via-white to-orange-50/40 border-amber-200/90 shadow-xs',
-                            chipStyle: isDark ? 'bg-amber-950/60 text-[#FCA311] border-amber-700/60' : 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs',
-                            techStyle: isDark ? 'bg-amber-950/40 text-amber-200 border-amber-800/40' : 'bg-amber-50 text-amber-800 border-amber-200',
                             icon: Zap,
-                            iconColor: isDark ? 'text-[#FCA311]' : 'text-amber-600',
                           },
                           {
                             tag: 'Modelagem Numérica & Oceanografia',
                             title: 'Prognóstico Numérico de Mesoescala (ECMWF/GFS), Oceanografia Costeira & Tendência',
                             badgeTech: 'Modelos ECMWF/GFS 12Z • Swell E/SE • Área Delta CHM',
-                            borderLeft: 'border-l-teal-500',
-                            cardBg: isDark ? 'bg-[#0B1324] border-[#233354]' : 'bg-gradient-to-br from-teal-50/60 via-white to-emerald-50/40 border-teal-200/90 shadow-xs',
-                            chipStyle: isDark ? 'bg-teal-950/60 text-teal-300 border-teal-700/60' : 'bg-teal-100 text-teal-900 border-teal-300 shadow-2xs',
-                            techStyle: isDark ? 'bg-teal-950/40 text-teal-200 border-teal-800/40' : 'bg-teal-50 text-teal-800 border-teal-200',
                             icon: Waves,
-                            iconColor: isDark ? 'text-teal-400' : 'text-teal-600',
                           },
                         ];
                         const metaItem = metaCards[idx] || {
                           tag: `Tópico ${idx + 1}`,
                           title: `Diagnóstico Técnico — Setor ${idx + 1}`,
                           badgeTech: 'Telemetria Municipal',
-                          borderLeft: 'border-l-[#FCA311]',
-                          cardBg: isDark ? 'bg-[#0B1324] border-[#233354]' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100/50 border-slate-200',
-                          chipStyle: isDark ? 'bg-[#14213D] text-[#FCA311] border-[#233354]' : 'bg-slate-100 text-[#14213D] border-slate-300',
-                          techStyle: isDark ? 'bg-[#0B1324] text-[#E5E5E5]/70 border-[#233354]' : 'bg-slate-50 text-slate-700 border-slate-200',
                           icon: Activity,
-                          iconColor: isDark ? 'text-[#FCA311]' : 'text-[#14213D]',
                         };
                         const IconComponent = metaItem.icon;
                         return (
                           <div
                             key={idx}
-                            className={`p-4 sm:p-5 rounded-xl border border-l-4 ${metaItem.borderLeft} ${metaItem.cardBg} shadow-xs space-y-3`}
+                            className="p-4 sm:p-5 rounded-xl border border-l-4 border-l-[#14213D] dark:border-l-[#FCA311] bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs space-y-3"
                           >
-                            <div className={`flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b ${isDark ? 'border-[#233354]' : 'border-slate-200/80'}`}>
+                            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#E5E5E5] dark:border-[#233354]">
                               <div className="flex flex-wrap items-center gap-2">
-                                <span className={`text-[10.5px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1.5 ${metaItem.chipStyle}`}>
-                                  <IconComponent className={`w-3 h-3 ${metaItem.iconColor}`} />
+                                <span className="text-[10.5px] font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-flex items-center gap-1.5 bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border-[#E5E5E5] dark:border-[#233354]">
+                                  <IconComponent className="w-3.5 h-3.5 text-[#FCA311]" />
                                   {metaItem.tag}
                                 </span>
-                                <h3 className={`text-xs sm:text-sm font-bold ${isDark ? 'text-white' : 'text-[#14213D]'}`}>
+                                <h3 className="text-xs sm:text-sm font-bold text-[#14213D] dark:text-white">
                                   {metaItem.title}
                                 </h3>
                               </div>
-                              <span className={`text-[10.5px] font-mono px-2.5 py-0.5 rounded-full border ${metaItem.techStyle}`}>
+                              <span className="text-[10.5px] font-mono px-2.5 py-0.5 rounded-full border bg-[#F7F8FA] dark:bg-[#14213D] text-slate-600 dark:text-[#E5E5E5]/70 border-[#E5E5E5] dark:border-[#233354]">
                                 {metaItem.badgeTech}
                               </span>
                             </div>
-                            <p className={`text-xs sm:text-sm ${isDark ? 'text-[#E5E5E5]/90' : 'text-slate-700'} leading-relaxed text-justify`}>
+                            <p className="text-xs sm:text-sm text-slate-700 dark:text-[#E5E5E5]/90 leading-relaxed text-justify">
                               {paragrafo}
                             </p>
                           </div>
@@ -1817,12 +1788,10 @@ export default function App() {
                       {boletimMeta.glossario.map((g) => (
                         <div
                           key={g.termo}
-                          className={`p-3.5 rounded-lg border space-y-1 text-xs ${
-                            isDark ? 'bg-[#0B1324] border-[#233354]' : 'bg-gradient-to-br from-slate-50 to-amber-50/30 border-slate-200'
-                          }`}
+                          className="p-3.5 rounded-lg border space-y-1 text-xs bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354]"
                         >
-                          <div className={`font-semibold ${isDark ? 'text-[#FCA311]' : 'text-amber-800'}`}>{g.termo}</div>
-                          <div className={`${isDark ? 'text-[#E5E5E5]/80' : 'text-slate-600'} leading-snug`}>{g.def}</div>
+                          <div className="font-semibold text-[#14213D] dark:text-[#FCA311]">{g.termo}</div>
+                          <div className="text-slate-600 dark:text-[#E5E5E5]/80 leading-snug">{g.def}</div>
                         </div>
                       ))}
                     </div>
@@ -2390,10 +2359,10 @@ export default function App() {
 
             {/* Seção Oficial: Exportar Imagens de Acumulados de Chuva e Vento */}
             {showSub('resumo') && (
-              <section className="bg-gradient-to-r from-orange-50/70 via-white to-sky-50/70 dark:from-[#14213D] dark:via-[#0B1324] dark:to-[#14213D] border border-orange-200 dark:border-[#233354] rounded-xl p-5 sm:p-6 space-y-4 shadow-2xs">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-orange-100 dark:border-[#233354] pb-3">
+              <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E5E5E5] dark:border-[#233354] pb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#ffebe4] border border-[#f07a53]/50 text-[#ea580c] shadow-2xs">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#FCA311]">
                       <Camera className="w-5 h-5" />
                     </div>
                     <div>
@@ -2401,7 +2370,7 @@ export default function App() {
                         <h3 className="font-display text-sm sm:text-base font-bold text-[#14213D] dark:text-white">
                           Exportar Imagens Oficiais para Redes Sociais
                         </h3>
-                        <span className="text-[10px] font-mono font-bold uppercase bg-[#ffebe4] text-[#ea580c] border border-[#f07a53]/40 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-mono font-bold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354] px-2 py-0.5 rounded-full">
                           Feed (4:5) & Stories (9:16)
                         </span>
                       </div>
@@ -2414,11 +2383,11 @@ export default function App() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Card 1: Imagem de Acumulados de Chuva */}
-                  <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#f07a53]/30 dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
+                  <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ffebe4] text-[#c2410c] border border-[#f07a53]/40">
-                          <CloudRain className="w-3.5 h-3.5" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                          <CloudRain className="w-3.5 h-3.5 text-[#FCA311]" />
                           Acumulados de Chuva
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2430,11 +2399,11 @@ export default function App() {
                         Ranking completo de chuva das 10 estações com barras proporcionais e total do município.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-[#233354]">
+                    <div className="flex items-center gap-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalChuva?.('24h')}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#ffebe4] hover:bg-[#ffd9cb] text-[#9a3412] dark:text-[#ea580c] border border-[#f07a53] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card de Chuva</span>
@@ -2443,11 +2412,11 @@ export default function App() {
                   </div>
 
                   {/* Card 2: Imagem de Maiores Ventos & Rajadas */}
-                  <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#0284c7]/30 dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
+                  <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#e0f2fe] text-[#0369a1] border border-[#0284c7]/40">
-                          <Wind className="w-3.5 h-3.5" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                          <Wind className="w-3.5 h-3.5 text-[#FCA311]" />
                           Ventos & Rajadas
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2459,11 +2428,11 @@ export default function App() {
                         Maiores ventos e rajadas na orla e bairros, separados da imagem de chuva para postagem oficial.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-[#233354]">
+                    <div className="flex items-center gap-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalVento?.()}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#e0f2fe] hover:bg-[#bae6fd] text-[#0369a1] dark:text-[#0284c7] border border-[#0284c7] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card de Vento</span>
@@ -2472,11 +2441,11 @@ export default function App() {
                   </div>
 
                   {/* Card 3: Imagem do Tempo Agora */}
-                  <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-amber-300/40 dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
+                  <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs flex flex-col justify-between space-y-3">
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#fff7ed] text-[#c2410c] border border-amber-400/40">
-                          <SunMedium className="w-3.5 h-3.5" />
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
+                          <SunMedium className="w-3.5 h-3.5 text-[#FCA311]" />
                           Tempo Agora
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">1080px HD</span>
@@ -2488,11 +2457,11 @@ export default function App() {
                         Temperatura, sensação térmica, umidade, vento e condições costeiras em tempo real.
                       </p>
                     </div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-[#233354]">
+                    <div className="flex items-center gap-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
                       <button
                         type="button"
                         onClick={() => (window as any).openSocialModalTempoAgora?.()}
-                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#fff7ed] hover:bg-[#ffedd5] text-[#c2410c] dark:text-[#ea580c] border border-[#ea580c] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                        className="flex-1 py-2 px-3 rounded-lg text-xs font-bold bg-[#14213D] hover:bg-[#1c2e54] text-white dark:bg-[#FCA311] dark:hover:bg-[#e0910f] dark:text-[#0B1324] border border-[#14213D] dark:border-[#FCA311] shadow-2xs transition flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                       >
                         <Camera className="w-3.5 h-3.5" />
                         <span>Abrir Card Tempo Agora</span>
@@ -3917,16 +3886,10 @@ export default function App() {
                 {/* Card Destaque: Próxima Maré */}
                 {tabuaMares?.proxima_mare && (
                   <div className={`p-4 rounded-xl border flex flex-wrap items-center justify-between gap-3 ${
-                    isDark
-                      ? 'bg-[#0B1324] border-[#233354]'
-                      : 'bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-amber-50/60 border-blue-200/90 shadow-xs'
+                    'bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xs'
                   }`}>
                     <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${
-                        tabuaMares.proxima_mare.tipo === 'PREAMAR'
-                          ? isDark ? 'bg-amber-950/60 border-amber-700/60 text-[#FCA311]' : 'bg-orange-100 border-orange-300 text-orange-700 shadow-2xs'
-                          : isDark ? 'bg-sky-950/60 border-sky-700/60 text-sky-400' : 'bg-sky-100 border-sky-300 text-sky-700 shadow-2xs'
-                      }`}>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354] text-[#FCA311]">
                         {tabuaMares.proxima_mare.tipo === 'PREAMAR' ? (
                           <ArrowUp className="w-5 h-5 stroke-[2.5]" />
                         ) : (
@@ -3940,7 +3903,7 @@ export default function App() {
                         </div>
                         <div className="text-base font-bold text-[#14213D] dark:text-white mt-0.5">
                           {tabuaMares.proxima_mare.tipo === 'PREAMAR' ? 'Preia-mar (Maré Alta)' : 'Baixa-mar (Maré Baixa)'} às{' '}
-                          <span className="font-mono text-orange-600 dark:text-[#FCA311]">{tabuaMares.proxima_mare.hora}</span> · Cota:{' '}
+                          <span className="font-mono text-[#14213D] dark:text-[#FCA311]">{tabuaMares.proxima_mare.hora}</span> · Cota:{' '}
                           <span className="font-mono">{Number(tabuaMares.proxima_mare.altura).toFixed(1).replace('.', ',')} m</span>
                         </div>
                       </div>
@@ -3972,37 +3935,23 @@ export default function App() {
                         return (
                           <div
                             key={idx}
-                            className={`p-4 rounded-xl border text-center transition-all ${
-                              isDark
-                                ? 'bg-[#0B1324] border-[#233354]'
-                                : isHigh
-                                ? 'bg-gradient-to-br from-orange-50 to-amber-50/70 border-orange-200/90 shadow-2xs'
-                                : 'bg-gradient-to-br from-sky-50 to-blue-50/70 border-sky-200/90 shadow-2xs'
-                            }`}
+                            className="p-4 rounded-xl border text-center transition-all bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354]"
                           >
                             <div className="flex items-center justify-center gap-1.5 mb-1.5">
                               {isHigh ? (
-                                <span className={`inline-flex items-center gap-1 text-[11px] font-bold uppercase ${
-                                  isDark ? 'text-orange-400' : 'text-orange-700'
-                                }`}>
-                                  <ArrowUp className="w-3.5 h-3.5 text-orange-500" /> Preia-mar
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-[#14213D] dark:text-[#FCA311]">
+                                  <ArrowUp className="w-3.5 h-3.5 text-[#FCA311]" /> Preia-mar
                                 </span>
                               ) : (
-                                <span className={`inline-flex items-center gap-1 text-[11px] font-bold uppercase ${
-                                  isDark ? 'text-sky-400' : 'text-sky-700'
-                                }`}>
-                                  <ArrowDown className="w-3.5 h-3.5 text-sky-500" /> Baixa-mar
+                                <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase text-slate-600 dark:text-[#E5E5E5]/70">
+                                  <ArrowDown className="w-3.5 h-3.5 text-slate-500 dark:text-[#E5E5E5]/60" /> Baixa-mar
                                 </span>
                               )}
                             </div>
                             <div className="text-2xl font-bold text-[#14213D] dark:text-white tabular-nums">
                               {ev.hora}
                             </div>
-                            <div className={`text-xs font-bold mt-1 tabular-nums ${
-                              isHigh
-                                ? isDark ? 'text-[#FCA311]' : 'text-orange-900'
-                                : isDark ? 'text-sky-300' : 'text-sky-900'
-                            }`}>
+                            <div className="text-xs font-bold mt-1 tabular-nums text-[#14213D] dark:text-[#E5E5E5]">
                               {Number(ev.altura).toFixed(1).replace('.', ',')} m
                             </div>
                           </div>
@@ -4054,7 +4003,7 @@ export default function App() {
                                 <div className="font-bold text-[#14213D] dark:text-white flex items-center gap-2">
                                   <span>{dia.dia_semana}</span>
                                   {dIdx === 0 && (
-                                    <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 dark:bg-amber-950/60 dark:text-[#FCA311] dark:border-amber-700/60 font-bold">
+                                    <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-[#FCA311]/15 text-[#14213D] dark:text-[#FCA311] border border-[#FCA311]/40 font-bold">
                                       Hoje
                                     </span>
                                   )}
@@ -4067,10 +4016,10 @@ export default function App() {
                                 const isHigh = ev.tipo === 'PREAMAR';
                                 return (
                                   <td key={evIdx} className="py-3 px-3 text-center">
-                                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-semibold border ${
+                                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-[11px] font-mono font-semibold border ${
                                       isHigh
-                                        ? isDark ? 'bg-orange-950/50 text-orange-300 border-orange-800/50' : 'bg-orange-50 text-orange-800 border-orange-200 shadow-2xs'
-                                        : isDark ? 'bg-sky-950/50 text-sky-300 border-sky-800/50' : 'bg-sky-50 text-sky-800 border-sky-200 shadow-2xs'
+                                        ? 'bg-[#FCA311]/10 text-[#14213D] dark:text-[#FCA311] border-[#FCA311]/30'
+                                        : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-700 dark:text-[#E5E5E5]/90 border-[#E5E5E5] dark:border-[#233354]'
                                     }`}>
                                       {isHigh ? <ArrowUp className="w-3 h-3 text-orange-500" /> : <ArrowDown className="w-3 h-3 text-sky-500" />}
                                       <strong className="text-xs">{ev.hora}</strong>
