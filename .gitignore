@@ -3,3 +3,6 @@ __pycache__/
 .DS_Store
 *.log
 backups_*
+node_modules/
+dist/
+chrome_test_profile*

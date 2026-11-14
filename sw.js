@@ -1,21 +1,15 @@
-const CACHE_NAME = 'meteo-ostras-v219';
+const CACHE_NAME = 'meteo-ostras-v220';
 const STATIC_ASSETS = [
-  './js/panorama_mensal.js',
-  './css/styles.css',
-  './js/app.js',
-  './js/api.js',
-  './js/charts.js',
-  './js/social-cards.js',
-  './js/weather-codes.js',
+  './index.html',
+  './assets/index-D_fDrYFo.js',
+  './assets/index-37rQiySB.css',
   './img/logo.png',
-  './img/logo-full.png',
+  './img/logo-transparent.png',
   './img/icon-192.png',
   './img/icon-512.png',
-  './img/meteograma_inmet.png',
   './data/inea_cheias.json',
   './data/inmet_avisos.json',
   './data/inmet_previsao.json',
-  './data/inmet_meteograma.json',
   './data/cptec_previsao.json',
   './data/boletim_oficial.json',
   './data/boletim_metadata.json',
@@ -25,8 +19,8 @@ const STATIC_ASSETS = [
   './data/marinha_avisos.json',
   './data/tabua_mares.json',
   './data/orla_condicoes.json',
-  './docs/boletim_operacional.pdf',
-  './docs/informativo_populacao.pdf'
+  './docs/plancon_rio_das_ostras.pdf',
+  './docs/plancon_el_nino_rio_das_ostras.pdf'
 ];
 
 // Instalação do Service Worker com ativação imediata
@@ -34,7 +28,15 @@ self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(STATIC_ASSETS);
+      return Promise.allSettled(
+        STATIC_ASSETS.map(url =>
+          fetch(url)
+            .then(res => {
+              if (res.ok) return cache.put(url, res);
+            })
+            .catch(() => {})
+        )
+      );
     })
   );
 });
@@ -68,8 +70,24 @@ self.addEventListener('fetch', event => {
       fetch(event.request)
         .then(response => {
           if (response && response.status === 200) {
-            const respClone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
+  // 2. DADOS JSON / TELEMETRIA: Network-first com fallback
+  if (url.pathname.includes('/data/') || url.pathname.endsWith('.json')) {
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
           }
           return response;
         })
@@ -78,42 +96,19 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 2. Chamadas de dados oficiais (JSON ou APIs)
-  if (url.pathname.includes('/data/') || url.pathname.includes('/api/') || url.hostname.includes('open-meteo.com') || url.hostname.includes('rainviewer.com') || url.hostname.includes('weather.com') || url.hostname.includes('githubusercontent.com')) {
-    event.respondWith(
-      fetch(event.request)
-        .then(response => {
-          if (response && response.status === 200) {
-            const respClone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
-          }
-          return response;
-        })
-        .catch(() => {
-          return caches.match(event.request).then(cached => {
-            if (cached) return cached;
-            if (url.pathname.includes('inea_cheias')) return caches.match('./data/inea_cheias.json');
-            if (url.pathname.includes('inmet_avisos')) return caches.match('./data/inmet_avisos.json');
-            if (url.pathname.includes('inmet_previsao')) return caches.match('./data/inmet_previsao.json');
-            return new Response(JSON.stringify({ offline: true, error: 'Sem conexão de rede' }), {
-              headers: { 'Content-Type': 'application/json' }
-            });
-          });
-        })
-    );
-    return;
-  }
-
-  // 3. Demais arquivos com Network-First e fallback para Cache
+  // 3. ASSETS ESTÁTICOS / SCRIPTS / CSS: Stale-While-Revalidate
   event.respondWith(
-    fetch(event.request)
-      .then(networkResponse => {
-        if (networkResponse && networkResponse.status === 200) {
-          const respClone = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, respClone));
-        }
-        return networkResponse;
-      })
-      .catch(() => caches.match(event.request))
+    caches.match(event.request).then(cachedResponse => {
+      const fetchPromise = fetch(event.request)
+        .then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => {});
+      return cachedResponse || fetchPromise;
+    })
   );
 });
