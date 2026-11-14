@@ -999,53 +999,6 @@ export default function App() {
 
         {/* Main Content */}
         <main className="flex-1 min-w-0 w-full space-y-8">
-        {activeTab === 'previsao' && showSub('tempo-agora') && bannerMes && (
-          <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl px-5 py-3.5 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-2.5 text-xs">
-              <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FCA311] border border-[#E5E5E5] dark:border-[#233354]">
-                Retrospectiva Oficial
-              </span>
-              <span className="font-semibold text-[#14213D] dark:text-white">
-                Panorama do Clima • {bannerMes.rotulo_mes}
-              </span>
-              <span className="text-slate-600 dark:text-[#E5E5E5]/75">
-                Pico de {mensalOutubro.chuva_maior_estacao_mm.toFixed(0)} mm em {mensalOutubro.chuva_maior_estacao_nome}, {mensalOutubro.dias_com_chuva} dias chuvosos
-                {mensalOutubro.vento_rajada_max_kmh ? ` e rajadas de ${mensalOutubro.vento_rajada_max_kmh.toFixed(1)} km/h` : ''}.
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                setActiveTab('panorama');
-                setSubForTab('panorama', 'video');
-              }}
-              className="text-xs font-medium text-[#14213D] dark:text-[#FCA311] hover:underline whitespace-nowrap cursor-pointer"
-            >
-              Ver Vídeo & Imagens →
-            </button>
-          </div>
-        )}
-
-        {activeTab === 'previsao' && showSub('tempo-agora') && boletimMeta?.informe_alerta && (
-          <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] border-l-2 border-l-[#FCA311] rounded-xl px-5 py-4 flex flex-wrap items-start justify-between gap-4">
-            <div className="flex items-start gap-3">
-              <AlertTriangle className="w-4 h-4 text-[#FCA311] shrink-0 mt-0.5" />
-              <div className="text-xs sm:text-sm text-[#14213D] dark:text-[#E5E5E5] leading-relaxed">
-                <span className="font-semibold text-[#14213D] dark:text-[#FCA311] mr-2">Informe Operacional:</span>
-                {boletimMeta.informe_alerta}
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setActiveTab('alertas');
-                setSubForTab('alertas', 'avisos');
-              }}
-              className="text-xs font-medium text-[#14213D] dark:text-[#FCA311] hover:underline whitespace-nowrap cursor-pointer"
-            >
-              Ir para Alertas & Sinótico →
-            </button>
-          </div>
-        )}
-
         {/* ================= ABA 1: PREVISÃO & TEMPO ================= */}
         {activeTab === 'previsao' && (
           <div className="space-y-8">
