@@ -79,8 +79,8 @@ print("Updated index.html for production.")
 with open(sw_path, 'r', encoding='utf-8') as f:
     sw_code = f.read()
 
-# bump version to meteo-ostras-v232
-sw_code = re.sub(r"const CACHE_NAME = 'meteo-ostras-v\d+';", "const CACHE_NAME = 'meteo-ostras-v232';", sw_code)
+# bump version to meteo-ostras-v234
+sw_code = re.sub(r"const CACHE_NAME = 'meteo-ostras-v\d+';", "const CACHE_NAME = 'meteo-ostras-v234';", sw_code)
 sw_code = re.sub(r"'./assets/index-[^']+\.js'", f"'./assets/{new_js}'", sw_code)
 if new_css:
     sw_code = re.sub(r"'./assets/index-[^']+\.css'", f"'./assets/{new_css}'", sw_code)
@@ -88,4 +88,4 @@ if new_css:
 with open(sw_path, 'w', encoding='utf-8') as f:
     f.write(sw_code)
 
-print("Updated sw.js to meteo-ostras-v232.")
+print("Updated sw.js to meteo-ostras-v234.")
