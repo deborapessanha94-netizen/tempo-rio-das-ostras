@@ -4033,23 +4033,15 @@ export default function App() {
                       const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
                       const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
 
-                      let vigenciaLabel = 'Aviso Ativo';
-                      let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/75 border-[#E5E5E5] dark:border-[#233354]';
+                      let vigenciaLabel = 'Vigente Agora';
+                      let vigenciaBadgeClass = 'bg-amber-50 dark:bg-amber-950/40 text-[#FCA311] border-[#FCA311]/50 font-bold';
 
-                      if (startDate && endDate) {
+                      if (startDate) {
                         const startMs = startDate.getTime();
-                        const endMs = endDate.getTime();
-
                         if (nowMs < startMs) {
                           const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
                           vigenciaLabel = hTxt ? `Programado (${hTxt})` : 'Programado';
                           vigenciaBadgeClass = 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border-sky-300 dark:border-sky-800 font-medium';
-                        } else if (nowMs >= startMs && nowMs <= endMs) {
-                          vigenciaLabel = 'Vigente Agora';
-                          vigenciaBadgeClass = 'bg-amber-50 dark:bg-amber-950/40 text-[#FCA311] border-[#FCA311]/50 font-bold';
-                        } else {
-                          vigenciaLabel = 'Encerrado';
-                          vigenciaBadgeClass = 'bg-slate-100 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 border-slate-300 dark:border-slate-700';
                         }
                       }
                       return (
