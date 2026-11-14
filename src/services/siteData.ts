@@ -96,19 +96,46 @@ export interface AcumuladosDataset {
 }
 
 export interface BoletimTurnoRow {
-  turno_label: string;
-  periodo: string;
-  icone: string;
-  condicao_resumo: string;
-  chuva_mm_est: string;
-  chuva_prob_pct: number;
-  temp_c: number;
-  vento_dir: string;
-  vento_vel_kmh: number;
-  rajada_max_kmh: number;
-  modelos_consenso: string;
+  turno_label?: string;
+  periodo?: string;
+  icone?: string;
+  condicao_resumo?: string;
+  chuva_mm_est?: string;
+  chuva_prob_pct?: number;
+  temp_c?: number;
+  vento_dir?: string;
+  vento_vel_kmh?: number;
+  rajada_max_kmh?: number;
+  modelos_consenso?: string;
   data_iso: string;
-  turno_id: string;
+  turno_id?: string;
+  turno?: string;
+  dia_semana?: string;
+  rotulo_eixo?: string;
+  temp_min?: number;
+  temp_max?: number;
+  temp_media?: number;
+  sensacao_termica?: number;
+  umid_min?: number;
+  umid_max?: number;
+  pressao_hpa?: number;
+  vento_vel_min?: number;
+  vento_vel_max?: number;
+  vento_vel_media?: number;
+  rajada_max?: number;
+  chuva_media?: number;
+  chuva_max?: number;
+  taxa_horaria_max?: number;
+  taxa_horaria_txt?: string;
+  alerta_tempestade?: string | null;
+  chuva_faixa_turno?: string;
+  chuva_prob?: number;
+  mar_ondas?: string;
+  mar_condicao?: string;
+  indice_uv?: number;
+  agua_precipitavel_mm?: number;
+  tempo_desc?: string;
+  tempo_icone?: string;
 }
 
 export interface BoletimMetadata {
