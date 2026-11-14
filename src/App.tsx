@@ -4484,14 +4484,116 @@ export default function App() {
                   </div>
                 </div>
 
-                {boletimMeta?.analise_precipitacao_multifonte?.acumulado_semana_formula && (
-                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs font-mono text-slate-600 dark:text-[#E5E5E5]/85">
-                    <span className="font-sans font-semibold text-[#14213D] dark:text-white mr-2">
-                      Somatório 1 Semana (Hoje + 7 Dias):
-                    </span>
-                    {boletimMeta.analise_precipitacao_multifonte.acumulado_semana_formula}
-                  </div>
-                )}
+                {/* Projeção Diária de Precipitação (Hoje + 7 Dias) — Layout Desembolado em Mini-Cards */}
+                {(() => {
+                  const multifonte = (boletimMeta as any)?.analise_precipitacao_multifonte;
+                  if (!multifonte) return null;
+
+                  let dias: { label: string; data?: string; val: number }[] = [];
+                  if (Array.isArray(multifonte.previsto_por_dia) && multifonte.previsto_por_dia.length > 0) {
+                    dias = multifonte.previsto_por_dia.map((p: any, i: number) => ({
+                      label: p.dia_semana ? p.dia_semana.slice(0, 3) : `Dia ${i + 1}`,
+                      data: p.data_br ? p.data_br.slice(0, 5) : '',
+                      val: Number(p.chuva_media_modelos_mm ?? 0),
+                    }));
+                  } else if (typeof multifonte.acumulado_semana_formula === 'string') {
+                    const regex = /(\d+(?:\.\d+)?)\s*mm\s*\(([^)]+)\)/g;
+                    let match;
+                    while ((match = regex.exec(multifonte.acumulado_semana_formula)) !== null) {
+                      dias.push({ label: match[2].trim(), val: parseFloat(match[1]) });
+                    }
+                  }
+
+                  if (dias.length === 0) return null;
+
+                  const totalVal =
+                    typeof multifonte.acumulado_semana_media === 'number'
+                      ? multifonte.acumulado_semana_media
+                      : dias.reduce((acc, d) => acc + d.val, 0);
+
+                  return (
+                    <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-3 shadow-xs">
+                      <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b border-[#E5E5E5] dark:border-[#233354]">
+                        <div className="flex items-center gap-2">
+                          <CloudRain className="w-4 h-4 text-[#FCA311] shrink-0" />
+                          <div>
+                            <h3 className="font-semibold text-xs text-[#14213D] dark:text-white">
+                              Previsão Diária de Chuva — Hoje + 7 Dias
+                            </h3>
+                            <p className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
+                              Projeção multimodelo consolidada para Rio das Ostras
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 font-mono text-xs">
+                          {multifonte.acumulado_3dias_media !== undefined && (
+                            <span className="hidden sm:inline-flex px-2.5 py-1 rounded-md text-[11px] bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]/80">
+                              Total 3 Dias: <strong className="ml-1 text-[#14213D] dark:text-white">{Number(multifonte.acumulado_3dias_media).toFixed(1)} mm</strong>
+                            </span>
+                          )}
+                          <span className="px-3 py-1 rounded-md font-bold bg-amber-50 dark:bg-amber-950/40 text-[#FCA311] border border-[#FCA311]/40">
+                            Total 7 Dias: {totalVal.toFixed(1)} mm
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Grade dos 8 dias totalmente desembolada */}
+                      <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
+                        {dias.map((d, idx) => {
+                          const isChuvaExpressiva = d.val >= 10;
+                          return (
+                            <div
+                              key={idx}
+                              className={`p-2 rounded-lg border text-center flex flex-col justify-between items-center transition-all ${
+                                isChuvaExpressiva
+                                  ? 'bg-amber-50/80 dark:bg-amber-950/30 border-[#FCA311]/60 text-[#14213D] dark:text-white shadow-2xs'
+                                  : d.val > 0
+                                  ? 'bg-sky-50/50 dark:bg-sky-950/20 border-sky-200 dark:border-sky-800/40 text-slate-700 dark:text-[#E5E5E5]'
+                                  : 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] text-slate-400 dark:text-[#E5E5E5]/50'
+                              }`}
+                            >
+                              <span className="text-[11px] font-semibold text-slate-600 dark:text-[#E5E5E5]/80">
+                                {d.label}
+                              </span>
+                              {d.data && (
+                                <span className="text-[9px] font-mono text-slate-400 dark:text-[#E5E5E5]/60">
+                                  {d.data}
+                                </span>
+                              )}
+                              <div className="my-1">
+                                <span
+                                  className={`font-mono text-sm font-bold tabular-nums ${
+                                    isChuvaExpressiva
+                                      ? 'text-[#FCA311]'
+                                      : d.val > 0
+                                      ? 'text-sky-600 dark:text-sky-400'
+                                      : 'text-slate-400'
+                                  }`}
+                                >
+                                  {d.val.toFixed(1)}
+                                </span>
+                                <span className="text-[9px] font-mono text-slate-400 ml-0.5">mm</span>
+                              </div>
+                              {isChuvaExpressiva ? (
+                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-amber-500/20 text-[#FCA311]">
+                                  Moderada
+                                </span>
+                              ) : d.val > 0 ? (
+                                <span className="text-[8px] text-sky-600 dark:text-sky-400 font-medium">
+                                  Leve
+                                </span>
+                              ) : (
+                                <span className="text-[8px] text-slate-400">
+                                  Sem chuva
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {!showFullBoletimTable ? (
                   <>
