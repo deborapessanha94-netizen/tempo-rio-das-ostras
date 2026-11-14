@@ -190,13 +190,38 @@ export interface BalneabilidadeDataset {
   }>;
 }
 
+export interface TabuaMaresEvento {
+  tipo: 'PREAMAR' | 'BAIXA-MAR' | string;
+  hora: string;
+  altura: number;
+  rotulo?: string;
+}
+
+export interface TabuaMaresDia {
+  data_iso: string;
+  data_br: string;
+  dia_semana: string;
+  eventos: TabuaMaresEvento[];
+}
+
 export interface TabuaMares {
-  porto: string;
-  data: string;
-  mares: Array<{
+  estacao?: string;
+  id_estacao_chm?: number;
+  latitude?: string;
+  longitude?: string;
+  fuso?: string;
+  orgao_oficial?: string;
+  url_oficial?: string;
+  url_avisos?: string;
+  atualizado_em?: string;
+  proxima_mare?: TabuaMaresEvento | null;
+  dias?: TabuaMaresDia[];
+  porto?: string;
+  data?: string;
+  mares?: Array<{
     hora: string;
     altura_m: number;
-    tipo: 'Prevedor' | 'Baixamar' | 'Preamar' | string;
+    tipo: string;
   }>;
 }
 
