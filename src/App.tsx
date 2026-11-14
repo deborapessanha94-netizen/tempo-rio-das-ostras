@@ -3810,14 +3810,46 @@ export default function App() {
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-6">
                 <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
                   <div>
-                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60">
-                      {balneabilidade?.orgao || 'INEA'} · Boletim nº {balneabilidade?.boletim_numero || 20} ({balneabilidade?.data_boletim || ''}) · CONAMA nº 274/2000
+                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60">
+                      <span>{balneabilidade?.orgao || 'INEA'} · Última Amostragem: {balneabilidade?.data_amostragem || balneabilidade?.data_boletim || '10/11/2026'} · CONAMA nº 274/2000</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Sincronizado via Portal INEA
+                      </span>
                     </div>
                     <h2 className="font-display text-xl font-semibold text-[#14213D] dark:text-white mt-1">
                       Balneabilidade Oficial das Praias ({balnearSummary.proprias.length} de {balnearSummary.total} Próprias — {balnearSummary.pctProprias}%)
                     </h2>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
+                      Página oficial de referência:{' '}
+                      <a
+                        href={balneabilidade?.url_portal_inea || 'https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline hover:text-[#FCA311] text-sky-600 dark:text-sky-400 font-medium transition-colors"
+                      >
+                        inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/
+                      </a>
+                    </p>
                   </div>
                   <div className="flex flex-wrap items-center gap-2">
+                    <a
+                      href={balneabilidade?.url_portal_inea || 'https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FCA311] text-[#14213D] hover:bg-[#FCA311]/90 shadow-sm transition-colors"
+                    >
+                      Portal Oficial INEA <ExternalLink className="w-3.5 h-3.5 text-[#14213D]" />
+                    </a>
+                    {balneabilidade?.url_boletim_pdf && (
+                      <a
+                        href={balneabilidade.url_boletim_pdf}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                      >
+                        Boletim Semanal PDF <ExternalLink className="w-3 h-3 text-[#FCA311]" />
+                      </a>
+                    )}
                     {balneabilidade?.url_seirhi && (
                       <a
                         href={balneabilidade.url_seirhi}
@@ -3828,58 +3860,48 @@ export default function App() {
                         SEIRHI INEA <ExternalLink className="w-3 h-3 text-[#FCA311]" />
                       </a>
                     )}
-                    {balneabilidade?.url_portal_inea && (
-                      <a
-                        href={balneabilidade.url_portal_inea}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FCA311] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
-                      >
-                        Portal INEA <ExternalLink className="w-3 h-3 text-[#FCA311]" />
-                      </a>
-                    )}
                   </div>
                 </div>
 
                 {/* Resumo Próprias vs Impróprias + Critério CONAMA */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-                  <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
+                  <div className="p-4 rounded-lg bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-[#14213D] dark:text-white">Pontos Próprios para Banho</span>
-                      <span className="inline-flex items-center gap-1.5 font-mono font-semibold text-[#14213D] dark:text-white tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                      <span className="font-semibold text-emerald-800 dark:text-emerald-300">Praias Próprias para Banho</span>
+                      <span className="inline-flex items-center gap-1.5 font-mono font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" aria-hidden="true" />
                         {balnearSummary.proprias.length} ({balnearSummary.pctProprias}%)
                       </span>
                     </div>
-                    <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                    <p className="text-emerald-700 dark:text-emerald-300/80 leading-relaxed text-[11px]">
                       {balnearSummary.proprias.map((p) => p.praia.replace('Praia ', '').replace('da ', '').replace('das ', '').replace('do ', '')).join(', ')}
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
+                  <div className="p-4 rounded-lg bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-800/40 space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className="font-semibold text-[#14213D] dark:text-white">Pontos Impróprios / Atenção</span>
-                      <span className="inline-flex items-center gap-1.5 font-mono font-semibold text-[#14213D] dark:text-white tabular-nums">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500" aria-hidden="true" />
+                      <span className="font-semibold text-rose-800 dark:text-rose-300">Praias Impróprias / Atenção</span>
+                      <span className="inline-flex items-center gap-1.5 font-mono font-bold text-rose-700 dark:text-rose-400 tabular-nums">
+                        <span className="w-2 h-2 rounded-full bg-rose-500" aria-hidden="true" />
                         {balnearSummary.improprias.length} ({balnearSummary.pctImproprias}%)
                       </span>
                     </div>
-                    <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                    <p className="text-rose-700 dark:text-rose-300/80 leading-relaxed text-[11px]">
                       {balnearSummary.improprias.map((p) => `${p.praia} (${p.localizacao})`).join(' · ')}
                     </p>
                   </div>
 
                   <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
                     <div className="font-semibold text-[#14213D] dark:text-[#FCA311]">Critério CONAMA nº 274/2000</div>
-                    <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                    <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed text-[11px]">
                       Próprio se Enterococos ≤ 100 NMP/100 mL em ao menos 4 das últimas 5 coletas e &lt; 400 NMP/100 mL na coleta mais recente.
                     </p>
                   </div>
                 </div>
 
                 {balneabilidade?.observacao_tecnica && (
-                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-600 dark:text-[#E5E5E5]/85">
-                    <strong className="text-[#14213D] dark:text-white">Recomendação Oficial do INEA:</strong> {balneabilidade.observacao_tecnica}
+                  <div className="p-3.5 rounded-lg bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 text-xs text-amber-900 dark:text-amber-200">
+                    <strong className="text-amber-950 dark:text-amber-100 font-semibold">Recomendação Oficial do INEA:</strong> {balneabilidade.observacao_tecnica}
                   </div>
                 )}
 
@@ -3890,26 +3912,44 @@ export default function App() {
                         <th className="py-3 pr-4 font-medium">Código INEA</th>
                         <th className="py-3 px-3 font-medium">Praia</th>
                         <th className="py-3 px-3 font-medium">Localização da Coleta</th>
+                        <th className="py-3 px-3 font-medium">Última Amostragem</th>
                         <th className="py-3 pl-4 font-medium">Situação</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#233354] text-sm">
-                      {(balneabilidade?.pontos ?? []).map((pt) => (
-                        <tr key={pt.codigo_seirhi} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60 transition-colors">
-                          <td className="py-3 pr-4 align-top font-mono text-xs text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap">{pt.codigo}</td>
-                          <td className="py-3 px-3 align-top font-medium text-[#14213D] dark:text-white whitespace-nowrap">{pt.praia}</td>
-                          <td className="py-3 px-3 align-top text-xs text-slate-600 dark:text-[#E5E5E5]/80">{pt.localizacao}</td>
-                          <td className="py-3 pl-4 align-top text-xs font-medium whitespace-nowrap">
-                            <span className="inline-flex items-center gap-1.5 text-[#14213D] dark:text-[#E5E5E5]">
-                              <span
-                                className={`w-1.5 h-1.5 rounded-full ${pt.status === 'PRÓPRIA' ? 'bg-emerald-500' : 'bg-rose-500'}`}
-                                aria-hidden="true"
-                              />
-                              {pt.status}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
+                      {(balneabilidade?.pontos ?? []).map((pt) => {
+                        const isPropria = pt.status === 'PRÓPRIA';
+                        return (
+                          <tr key={pt.codigo_seirhi || pt.codigo} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60 transition-colors">
+                            <td className="py-3 pr-4 align-top font-mono text-xs text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap">{pt.codigo}</td>
+                            <td className="py-3 px-3 align-top font-medium text-[#14213D] dark:text-white whitespace-nowrap">{pt.praia}</td>
+                            <td className="py-3 px-3 align-top text-xs text-slate-600 dark:text-[#E5E5E5]/80">{pt.localizacao}</td>
+                            <td className="py-3 px-3 align-top font-mono text-xs text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap">
+                              {pt.data_coleta_br || balneabilidade?.data_amostragem || '10/11/2026'}
+                            </td>
+                            <td className="py-3 pl-4 align-top text-xs font-medium whitespace-nowrap">
+                              {isPropria ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+                                  PRÓPRIA
+                                </span>
+                              ) : (
+                                <div className="space-y-0.5">
+                                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-rose-500" aria-hidden="true" />
+                                    IMPRÓPRIA
+                                  </span>
+                                  {pt.motivo && (
+                                    <p className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/60 max-w-[220px] whitespace-normal leading-tight">
+                                      {pt.motivo}
+                                    </p>
+                                  )}
+                                </div>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>

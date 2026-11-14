@@ -401,7 +401,22 @@ def collect_marinha_data():
 # 4. INEA — BALNEABILIDADE DAS PRAIAS DE RIO DAS OSTRAS (SEIRHI & PORTAL OFICIAL)
 # ==============================================================================
 def collect_balneabilidade():
-    print(">> [4/7] Coletando Balneabilidade das Praias de Rio das Ostras (SEIRHI / INEA)...")
+    print(">> [4/7] Coletando Balneabilidade das Praias de Rio das Ostras (Portal Oficial INEA)...")
+    try:
+        try:
+            from inea_portal_balneabilidade_sync import sync_portal_balneabilidade
+        except ImportError:
+            from scripts.inea_portal_balneabilidade_sync import sync_portal_balneabilidade
+        balneabilidade_data = sync_portal_balneabilidade(DATA_DIR)
+        return balneabilidade_data
+    except Exception as e:
+        print(f"   [AVISO] Erro ao sincronizar via portal INEA ({e}), usando dados locais...")
+
+    with open(DATA_DIR / "balneabilidade.json", 'r', encoding='utf-8') as f:
+        balneabilidade_data = json.load(f)
+    return balneabilidade_data
+
+def _unused_legacy_collect_balneabilidade():
     balneabilidade_data = {
         'orgao': 'Instituto Estadual do Ambiente - INEA',
         'sistema': 'SEIRHI - Sistema Estadual de Informações sobre Recursos Hídricos',

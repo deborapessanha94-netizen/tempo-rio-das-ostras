@@ -336,12 +336,20 @@ if __name__ == '__main__':
     sync_inea_cheias()
     try:
         try:
-            from scripts.powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
+            from scripts.inea_portal_balneabilidade_sync import sync_portal_balneabilidade
         except ImportError:
-            from powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
-        sync_powerbi_balneabilidade(DATA_DIR)
-    except Exception as e:
-        print(f"Aviso ao sincronizar Balneabilidade Power BI INEA: {e}")
+            from inea_portal_balneabilidade_sync import sync_portal_balneabilidade
+        sync_portal_balneabilidade(DATA_DIR)
+    except Exception as e_portal:
+        print(f"Aviso ao sincronizar Balneabilidade via Portal INEA: {e_portal}, tentando Power BI...")
+        try:
+            try:
+                from scripts.powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
+            except ImportError:
+                from powerbi_balneabilidade_sync import sync_powerbi_balneabilidade
+            sync_powerbi_balneabilidade(DATA_DIR)
+        except Exception as e_pbi:
+            print(f"Aviso ao sincronizar Balneabilidade Power BI INEA: {e_pbi}")
     
     # Atualiza a cota ao vivo do Rio Jundiá sem alterar a previsão oficial de chuva
     try:

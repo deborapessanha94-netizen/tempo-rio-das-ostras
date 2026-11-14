@@ -1,12 +1,24 @@
 {
   "orgao": "Instituto Estadual do Ambiente - INEA",
-  "sistema": "SEIRHI - Sistema Estadual de Informações sobre Recursos Hídricos",
-  "url_fonte": "https://seirhi.inea.rj.gov.br/publico",
+  "sistema": "Portal Oficial INEA & SEIRHI — Balneabilidade das Praias",
+  "norma_tecnica": "Resolução CONAMA nº 274/2000 (Enterococos ≤ 100 NMP/100 mL em 4 de 5 coletas e < 400 NMP/100 mL na última coleta)",
+  "url_portal_inea": "https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/",
+  "url_fonte": "https://www.inea.rj.gov.br/ar-agua-e-solo/balneabilidade-das-praias/",
+  "url_boletim_pdf": "https://www.inea.rj.gov.br/wp-content/uploads/2026/11/Site-Boletim-de-Balneabilidade-do-Estado-do-RJ-2.pdf",
   "url_seirhi": "https://seirhi.inea.rj.gov.br/publico",
-  "url_portal_inea": "https://www.inea.rj.gov.br/rio-das-ostras/",
-  "boletim_numero": 20,
-  "data_boletim": "29 de Setembro de 2026",
+  "data_amostragem": "10/11/2026",
+  "data_coleta_iso": "2026-11-10",
+  "data_coleta_br": "10/11/2026",
+  "data_boletim": "10 de Novembro de 2026",
+  "data_boletim_curta": "10/11/2026",
+  "total_pontos": 12,
+  "total_proprias": 8,
+  "total_improprias": 4,
+  "percentual_proprias": 67,
+  "criterio_conama": "Segundo a Resolução CONAMA nº 274/2000, um ponto é considerado próprio para banho se, em pelo menos 4 das últimas 5 campanhas, a concentração de Enterococos estiver abaixo de 100 NMP/100 mL, e se o resultado da coleta mais recente for inferior a 400 NMP/100 mL.",
   "observacao_tecnica": "Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.",
+  "portal_conectado": true,
+  "ultima_sincronizacao_utc": "2026-11-14T14:39:16Z",
   "pontos": [
     {
       "praia": "Praia das Tartarugas",
@@ -15,7 +27,10 @@
       "localizacao": "Em frente à Rua Jequitibá",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
     },
     {
       "praia": "Praia do Bosque",
@@ -24,16 +39,22 @@
       "localizacao": "Em frente à Rua Figueira",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
     },
     {
       "praia": "Praia do Centro (Av. Amazonas)",
       "codigo": "RO0001",
       "codigo_seirhi": "02RJ01RO0001",
       "localizacao": "Em frente à Avenida Estado do Amazonas",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
+      "status": "IMPRÓPRIA",
+      "badge": "danger",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": "Classificada como Imprópria no boletim semanal oficial do INEA"
     },
     {
       "praia": "Praia do Centro (R. Bento Costa Jr)",
@@ -43,52 +64,9 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "praia",
-      "motivo": "Próximo à drenagem urbana central"
-    },
-    {
-      "praia": "Praia de Costazul",
-      "codigo": "RO0012",
-      "codigo_seirhi": "02RJ01RO0012",
-      "localizacao": "Em frente à Rua Servidão",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
-    },
-    {
-      "praia": "Praia da Joana",
-      "codigo": "RO0009",
-      "codigo_seirhi": "02RJ01RO0009",
-      "localizacao": "Em frente à Rua Maria Amélia",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
-    },
-    {
-      "praia": "Praia do Remanso",
-      "codigo": "RO0011",
-      "codigo_seirhi": "02RJ01RO0011",
-      "localizacao": "Canto direito da praia, próximo ao mirante",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
-    },
-    {
-      "praia": "Praia da Areia Negra",
-      "codigo": "RO0010",
-      "codigo_seirhi": "02RJ01RO0010",
-      "localizacao": "À esquerda da Rua Amaral, próximo às pedras",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
-    },
-    {
-      "praia": "Praia do Mar do Norte",
-      "codigo": "RO0014",
-      "codigo_seirhi": "02RJ01RO0014",
-      "localizacao": "Em frente à Rua F",
-      "status": "PRÓPRIA",
-      "badge": "success",
-      "tipo": "praia"
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": "Classificada como Imprópria no boletim semanal oficial do INEA"
     },
     {
       "praia": "Praia do Cemitério",
@@ -97,7 +75,10 @@
       "localizacao": "Em frente à Rua da Prata",
       "status": "PRÓPRIA",
       "badge": "success",
-      "tipo": "praia"
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
     },
     {
       "praia": "Boca da Barra",
@@ -107,7 +88,57 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "foz",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
       "motivo": "Desembocadura do Rio das Ostras / vazante pluvial"
+    },
+    {
+      "praia": "Praia da Joana",
+      "codigo": "RO0009",
+      "codigo_seirhi": "02RJ01RO0009",
+      "localizacao": "Em frente à Rua Maria Amélia",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
+    },
+    {
+      "praia": "Praia da Areia Negra",
+      "codigo": "RO0010",
+      "codigo_seirhi": "02RJ01RO0010",
+      "localizacao": "À esquerda da Rua Amaral, próximo às pedras",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
+    },
+    {
+      "praia": "Praia do Remanso",
+      "codigo": "RO0011",
+      "codigo_seirhi": "02RJ01RO0011",
+      "localizacao": "Canto direito da praia, próximo ao mirante",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
+    },
+    {
+      "praia": "Praia de Costazul",
+      "codigo": "RO0012",
+      "codigo_seirhi": "02RJ01RO0012",
+      "localizacao": "Em frente à Rua Servidão",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
     },
     {
       "praia": "Lagoa de Iriri (Coca-Cola)",
@@ -117,8 +148,21 @@
       "status": "IMPRÓPRIA",
       "badge": "danger",
       "tipo": "lagoa",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
       "motivo": "Corpo lagunar com baixa renovação hídrica"
+    },
+    {
+      "praia": "Praia do Mar do Norte",
+      "codigo": "RO0014",
+      "codigo_seirhi": "02RJ01RO0014",
+      "localizacao": "Em frente à Rua F",
+      "status": "PRÓPRIA",
+      "badge": "success",
+      "tipo": "praia",
+      "data_coleta_iso": "2026-11-10",
+      "data_coleta_br": "10/11/2026",
+      "motivo": null
     }
-  ],
-  "seirhi_conectado": false
+  ]
 }

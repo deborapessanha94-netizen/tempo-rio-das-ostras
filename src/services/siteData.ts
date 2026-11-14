@@ -178,16 +178,44 @@ export interface OrlaDataset {
   };
 }
 
+export interface BalneabilidadePonto {
+  praia: string;
+  codigo?: string;
+  codigo_seirhi?: string;
+  localizacao?: string;
+  status: 'PRÓPRIA' | 'IMPRÓPRIA' | 'Propria' | 'Impropria' | string;
+  badge?: 'success' | 'danger' | string;
+  tipo?: 'praia' | 'foz' | 'lagoa' | string;
+  data_coleta_iso?: string;
+  data_coleta_br?: string;
+  motivo?: string | null;
+  enterococos_label?: string;
+}
+
 export interface BalneabilidadeDataset {
-  atualizacao: string;
-  orgao: string;
-  status_geral: string;
-  pontos: Array<{
-    praia: string;
-    ponto: string;
-    status: 'Propria' | 'Impropria' | string;
-    data_coleta: string;
-  }>;
+  orgao?: string;
+  sistema?: string;
+  norma_tecnica?: string;
+  url_portal_inea?: string;
+  url_fonte?: string;
+  url_boletim_pdf?: string;
+  url_seirhi?: string;
+  boletim_numero?: number;
+  data_amostragem?: string;
+  data_coleta_iso?: string;
+  data_coleta_br?: string;
+  data_boletim?: string;
+  data_boletim_curta?: string;
+  total_pontos?: number;
+  total_proprias?: number;
+  total_improprias?: number;
+  percentual_proprias?: number;
+  criterio_conama?: string;
+  observacao_tecnica?: string;
+  portal_conectado?: boolean;
+  seirhi_conectado?: boolean;
+  powerbi_conectado?: boolean;
+  pontos: BalneabilidadePonto[];
 }
 
 export interface TabuaMaresEvento {
