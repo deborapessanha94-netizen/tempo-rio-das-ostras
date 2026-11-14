@@ -176,7 +176,7 @@
 
 
 
-  <link rel="stylesheet" href="css/styles.css?v=218">
+  <link rel="stylesheet" href="css/styles.css?v=219">
 
 
 
@@ -328,7 +328,7 @@
 
 
 
-<body class="antialiased selection:bg-[#ffebe4] selection:text-black pb-12 min-h-screen bg-[#f4f6f8] text-[#1e293b] overflow-x-hidden">
+<body class="antialiased selection:bg-[#FCA311] selection:text-black pb-12 min-h-screen bg-[#F7F8FA] dark:bg-[#05080F] text-[#14213D] dark:text-[#F8FAFC] transition-colors duration-200 overflow-x-hidden">
 
 
 
@@ -348,701 +348,361 @@
 
 
 
-  <div id="app-sticky-navigation" class="sticky top-0 z-40 bg-[#f4f6f8]/96 backdrop-blur-md border-b border-[#cbd5e1]/70 shadow-xs transition-all duration-200">
-
-
-
-  <header id="site-header" class="relative z-40 transition-all duration-200">
-
-
-
-    <div class="max-w-7xl mx-auto px-2.5 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4">
-
-
-
+  <!-- ========================================================================= -->
+  <!-- BARRA SUPERIOR INSTITUCIONAL (GOOGLE AI STUDIO DESIGN SYSTEM)              -->
+  <!-- ========================================================================= -->
+  <header id="site-header" class="sticky top-0 z-40 bg-white/95 dark:bg-[#14213D]/95 backdrop-blur-md border-b border-[#E5E5E5] dark:border-[#233354] transition-colors duration-200 shadow-2xs">
+    <div class="max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3 sm:gap-4">
       
+      <!-- Esquerda: Botão Drawer Mobile + Marca Oficial -->
+      <div class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <button
+          id="btn-sidebar-toggle-top"
+          onclick="window.toggleMobileSidebar();"
+          class="lg:hidden p-2 rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311] cursor-pointer transition-colors shadow-2xs"
+          aria-label="Alternar menu de navegação vertical"
+        >
+          <i data-lucide="menu" class="w-4 h-4"></i>
+        </button>
 
-
-
-      <!-- Marca Oficial: Logo e Título Institucional -->
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <img src="img/logo-rounded.png?v=217" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
-
-
-
-        <div class="hidden sm:flex flex-col justify-center">
-
-
-
-            <div class="flex items-center gap-2">
-              <span class="text-base sm:text-lg font-extrabold text-black dark:text-white tracking-tight font-heading">Rio das Ostras</span>
-            </div>
-
-          <p class="text-xs font-semibold text-black dark:text-slate-300 truncate">Portal Integrado de Meteorologia, Alerta Hidrológico & Marítimo</p>
-
-
-
-        </div>
-
-
-
+        <a
+          href="#previsao"
+          onclick="if(window.switchAppTab){window.switchAppTab('previsao'); window.switchSubSection('previsao', 'section-hero-previsao');} return false;"
+          class="flex items-center gap-2.5 shrink-0 cursor-pointer rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FCA311]"
+          aria-label="Início Tempo em Rio das Ostras"
+        >
+          <img
+            src="img/logo-rounded.png?v=219"
+            alt="TEMPO em Rio das Ostras"
+            class="h-9 sm:h-10 w-auto object-contain rounded-lg shadow-2xs"
+          />
+          <div class="hidden sm:flex flex-col text-left">
+            <span class="text-sm sm:text-base font-extrabold text-[#14213D] dark:text-white tracking-tight leading-tight">Rio das Ostras</span>
+            <span class="text-[10px] font-semibold text-slate-500 dark:text-[#E5E5E5]/75 leading-none">Rede Meteorológica & Alerta</span>
+          </div>
+        </a>
       </div>
 
-
-
-
-
-
-
-      <!-- Centro: Status Ao Vivo & Relógio de Brasília (Slate Ice Capsule) -->
-
-
-
-      <div class="hidden md:flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#eaf0f6] border border-[#94a3b8] shadow-xs">
-
-
-
-        <div class="flex items-center gap-1.5">
-
-
-
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 live-pulse"></span>
-
-
-
-          <span class="text-[11px] font-bold text-black uppercase tracking-wider">AO VIVO</span>
-
-
-
-        </div>
-
-
-
-        <div class="h-3.5 w-[1.5px] bg-[#94a3b8]/70"></div>
-
-
-
-        <div class="flex items-center gap-1.5 font-mono text-sm font-bold text-black">
-
-
-
-          <i data-lucide="clock" class="w-3.5 h-3.5 text-[#f07a53]"></i>
-
-
-
-          <span id="hero-clock">--:--</span>
-
-
-
-        </div>
-
-
-
+      <!-- Centro: Status Ao Vivo & Sincronização -->
+      <div class="hidden md:flex items-center gap-2.5 text-xs text-slate-600 dark:text-[#E5E5E5]/75 truncate">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 font-bold text-[10px] tracking-wide uppercase shadow-2xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 live-pulse"></span>
+          AO VIVO
+        </span>
+        <span class="font-semibold text-[#14213D] dark:text-white truncate">
+          Portal Integrado de Meteorologia, Alerta Hidrológico & Marítimo
+        </span>
+        <span aria-hidden="true" class="text-slate-400">•</span>
+        <span id="hero-clock" class="hidden font-mono font-bold text-slate-700 dark:text-slate-300">--:--</span>
+        <span id="header-sync-status" class="font-mono whitespace-nowrap text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">
+          Sincronizado via Open-Meteo & Rede Local
+        </span>
       </div>
 
-
-
-
-
-
-
-      <!-- Ações Rápidas de Topo com Paleta Nórdica Cerâmica -->
-
-
-
-      <div class="flex items-center gap-1 sm:gap-2.5 text-sm">
-
-
-
-        
-
-
-
-        <!-- Plantão 199 Defesa Civil (Coral Terracota Cerâmico) -->
-
-
-
-        <a href="tel:199" class="btn-emergency flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 text-xs font-extrabold whitespace-nowrap" title="Ligue 199 para a Defesa Civil">
-
-
-
-          <i data-lucide="phone-call" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-          <span class="font-extrabold text-black">199</span>
-
-
-
-          <span class="hidden lg:inline text-xs font-bold text-black whitespace-nowrap">• Central 199</span>
-
-
-
+      <!-- Direita: Ações (199 Central, Meteogramas, Atualizar, Tema) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <a href="tel:199" class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-rose-300 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-bold hover:bg-rose-100 dark:hover:bg-rose-900/50 transition-colors shadow-2xs" title="Ligue 199 para a Defesa Civil">
+          <i data-lucide="phone-call" class="w-3.5 h-3.5 text-rose-600 dark:text-rose-400"></i>
+          <span>199</span>
         </a>
 
-
-
-
-
-
-
-        <!-- Download Boletim Técnico PDF (Slate Ice Cerâmico) -->
-
-
-
-        <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="btn-action-slate flex items-center gap-1.5 px-2 sm:px-3 text-xs font-bold whitespace-nowrap" title="Baixar PDF do Boletim Técnico Oficial">
-
-
-
-          <i data-lucide="file-check-2" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-          <span class="hidden md:inline text-black">Boletim</span> <span class="hidden sm:inline font-semibold text-black">(PDF)</span>
-
-
-
-        </a>
-
-        <!-- Meteogramas Numéricos INMET & CPTEC (Ceramic Stoneware) -->
-
-
-
-        <button id="dock-btn-meteogramas" class="hidden sm:flex btn-action-outline items-center gap-1.5 text-xs font-bold cursor-pointer whitespace-nowrap" title="Ver Meteogramas Oficiais do INMET e CPTEC/INPE">
-
-
-
-          <i data-lucide="line-chart" class="w-3.5 h-3.5 text-black"></i>
-
-
-
-          <span class="hidden md:inline text-black">Meteogramas</span>
-
-
-
+        <button
+          id="btn-sync-now"
+          onclick="if(window.refreshData) window.refreshData();"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311]/70 transition-colors cursor-pointer whitespace-nowrap shadow-2xs"
+          title="Sincronizar dados telemétricos agora"
+        >
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#14213D] dark:text-[#FCA311]"></i>
+          <span class="hidden sm:inline">Atualizar</span>
+          <span id="header-sync-countdown" class="font-mono text-[10.5px] font-bold text-sky-700 dark:text-sky-400 ml-0.5">05:00</span>
         </button>
 
-
-
-
-
-
-
-
-
-
-
-        <!-- Sincronizar Agora (Circular Pill) -->
-
-
-
-        <!-- Alternar Modo Escuro / Claro -->
-
-
-
-        <button id="btn-theme-toggle" onclick="toggleTheme()" class="btn-action-outline p-2 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full" title="Alternar entre modo claro e modo escuro" aria-label="Alternar modo escuro">
-
-
-
-          <i id="theme-icon" data-lucide="moon" class="w-3.5 h-3.5 text-black"></i>
-
-
-
+        <button
+          id="btn-theme-toggle"
+          onclick="window.toggleTheme()"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FCA311]/70 transition-colors cursor-pointer whitespace-nowrap shadow-2xs"
+          title="Alternar tema claro / escuro"
+          aria-label="Alternar tema"
+        >
+          <i id="theme-icon" data-lucide="moon" class="w-3.5 h-3.5 text-[#14213D] dark:text-[#FCA311]"></i>
+          <span id="theme-toggle-label" class="hidden sm:inline">Tema</span>
         </button>
-
-
-
-
-
-
-
-        <button id="btn-sync-now" class="btn-action-outline px-2 sm:px-2.5 py-1 sm:py-1.5 text-black hover:bg-[#e2e8f0] cursor-pointer rounded-full flex items-center gap-1 sm:gap-1.5" title="Sincronizar dados agora (ciclo automático de 5 min)">
-
-
-
-          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-black"></i>
-          <span id="header-sync-countdown" class="font-mono text-[10.5px] font-bold text-sky-700">05:00</span>
-
-
-
-        </button>
-
-
-
-
-
-
-
       </div>
-
-
-
-
-
-
-
     </div>
-
-
-
   </header>
 
-
-
-
-
-
-
   <!-- ========================================================================= -->
-
-
-
-  <!-- BARRA DE NAVEGAÇÃO PRINCIPAL DO APLICATIVO (ABAS NÓRDICAS CERÂMICAS)      -->
-
-
-
+  <!-- WORKSPACE SHELL: LEFT VERTICAL TABS RAIL + MAIN CONTENT                   -->
   <!-- ========================================================================= -->
-
-
-
-  <!-- ========================================================================= -->
-
-
-
-  <!-- NAVEGAÇÃO DE ABAS PRINCIPAIS (6 SEÇÕES DISTRIBUÍDAS - ZERO VAZIOS)       -->
-
-
-
-  <!-- ========================================================================= -->
-
-
-
-  <nav id="app-main-tabs" class="max-w-7xl mx-auto px-2 sm:px-6 pt-1.5 pb-2.5">
-    <div class="w-full flex items-center gap-1.5 sm:gap-2 overflow-x-auto lg:overflow-visible no-scrollbar lg:grid lg:grid-cols-7 p-1.5 bg-[#f5efe8]/90 dark:bg-slate-900/90 rounded-2xl border border-[#b8a99a]/50 dark:border-slate-800 shadow-xs" role="tablist">
-
-      <!-- Aba 1: Previsão & Tempo com Dropdown INMET -->
-      <div id="nav-wrapper-previsao" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-previsao" onclick="handleNavTabClick('previsao', event)" class="app-nav-tab active flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs w-full text-center" role="tab" aria-selected="true">
-            <i data-lucide="cloud-sun" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Previsão & Tempo</span>
-            <span onclick="toggleNavDropdown('previsao', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Previsão e Tempo">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
+  <div id="app-workspace-shell" class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+    
+    <!-- BARRA ATIVA MOBILE (Visível apenas em Mobile/Tablet < lg) -->
+    <div id="mobile-tab-bar" class="w-full lg:hidden flex items-center justify-between gap-3 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-2xl px-4 py-3 shadow-xs">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div id="mobile-active-tab-icon" class="w-8 h-8 rounded-lg bg-[#14213D] dark:bg-[#FCA311] flex items-center justify-center shrink-0">
+          <i data-lucide="cloud-sun" class="w-4 h-4 text-[#FCA311] dark:text-[#000000]"></i>
         </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu left-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Previsão & Tempo • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
+        <div class="truncate">
+          <div id="mobile-active-tab-label" class="text-xs font-bold text-[#14213D] dark:text-white truncate">
+            Previsão & Tempo
           </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('previsao', 'section-hero-previsao', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="zap" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
-              <div>
-                <span class="font-bold text-slate-800 dark:text-slate-100">Tempo Agora</span>
-                <span class="nav-dropdown-item-desc">Condições em tempo real, temperatura e sensação</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('previsao', 'section-graficos-tendencia', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="activity" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Gráficos de Tendência</span>
-                <span class="nav-dropdown-item-desc">Evolução horária de 72h (Temp, Chuva, Vento)</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('previsao', 'section-previsao-3dias', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Previsão dos Próximos Dias</span>
-                <span class="nav-dropdown-item-desc">Previsão operacional para 1 semana à frente (Hoje + 7 dias) com mar e detalhes</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('previsao', 'section-panorama-sinotico', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="compass" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
-              <div>
-                <span>Panorama Sinótico Geral</span>
-                <span class="nav-dropdown-item-desc">Diagnóstico sinótico e termodinâmico de mesoescala</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('previsao', 'section-plancon-resumo', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="shield" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
-              <div>
-                <span>Plano de Contingência (PLANCON)</span>
-                <span class="nav-dropdown-item-desc">Níveis e protocolos operacionais da Defesa Civil</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('previsao');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todas as seções de Previsão juntas</span>
-              </div>
-            </a>
+          <div id="mobile-active-sub-label" class="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 truncate">
+            Tempo Agora
           </div>
         </div>
       </div>
-
-      <!-- Aba 2: Acumulados de Chuva com Dropdown INMET -->
-      <div id="nav-wrapper-chuva" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-chuva" onclick="handleNavTabClick('chuva', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="cloud-rain" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Acumulados Chuva</span>
-            <span onclick="toggleNavDropdown('chuva', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Acumulados de Chuva">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Acumulados Chuva • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('chuva', 'section-chuva-resumo', event)" class="nav-dropdown-item">
-              <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Resumo & KPIs de Chuva</span>
-                <span class="nav-dropdown-item-desc">Média municipal, maior acumulado e total de pontos</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('chuva', 'section-chuva-cards', event)" class="nav-dropdown-item">
-              <i data-lucide="cloud-rain" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>10 Estações da Rede</span>
-                <span class="nav-dropdown-item-desc">Cards com acumulados de 24h, 36h, 48h e ventos</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('chuva', 'section-chuva-tabela', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="table" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
-              <div>
-                <span>Tabela Comparativa</span>
-                <span class="nav-dropdown-item-desc">Comparativo ordenado e exportação para planilha</span>
-              </div>
-            </a>
-                        <a id="nav-item-chuva-historico" onclick="navigateSubSection('chuva', 'section-chuva-historico', event)" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <div class="flex items-center gap-1.5">
-                  <span class="font-extrabold text-[#9a3412] dark:text-amber-300">Histórico em Planilha (Out/2026 até Hoje)</span>
-                  <span class="text-[9px] font-black px-1.5 py-0.2 rounded bg-amber-200 text-amber-900 uppercase">Baixar</span>
-                </div>
-                <span class="nav-dropdown-item-desc">Hora a hora, totais do dia e do mês, ventos, rajadas e sistemas atuantes</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('chuva');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todas as seções de Chuva juntas</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba 3: Nível do Rio com Dropdown INMET -->
-      <div id="nav-wrapper-rio" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-rio" onclick="handleNavTabClick('rio', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="waves" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Nível do Rio</span>
-            <span id="nav-badge-rio-macae" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse ml-0.5 shrink-0" title="Aviso: Rios de Macaé fora da cota de segurança"></span>
-            <span onclick="toggleNavDropdown('rio', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Nível do Rio">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu left-0 sm:left-auto lg:left-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Nível do Rio • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('rio', 'card-telemetria-jundia', event)" class="nav-dropdown-item">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Cota Atual & Calha do Rio</span>
-                <span class="nav-dropdown-item-desc">Nível do Rio Jundiá em metros, ocupação e status</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('rio', 'card-tabela-rio-jundia', event)" class="nav-dropdown-item">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Histórico Telemétrico 24h & 10d</span>
-                <span class="nav-dropdown-item-desc">Série de medições horárias e de 15 em 15 min do INEA</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('rio', 'section-rio-macae', event)" class="nav-dropdown-item">
-              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
-              <div>
-                <span>Rios da Região (Macaé)</span>
-                <span class="nav-dropdown-item-desc">Monitoramento preventivo da bacia hidrográfica vizinha</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('rio');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todas as seções do Rio juntas</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba 4: Orla & Praias com Dropdown INMET -->
-      <div id="nav-wrapper-orla" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-orla" onclick="handleNavTabClick('orla', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="anchor" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Orla & Praias</span>
-            <span onclick="toggleNavDropdown('orla', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Orla & Praias">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu right-0 sm:left-auto lg:right-auto lg:left-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Orla & Praias • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('orla', 'orla-panel-mar', event)" class="nav-dropdown-item">
-              <i data-lucide="waves" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Condições do Mar & Ondas</span>
-                <span class="nav-dropdown-item-desc">Wavewatch III, altura de ondas, swell e enseadas</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('orla', 'orla-panel-mares', event)" class="nav-dropdown-item">
-              <i data-lucide="moon" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Tábua de Marés</span>
-                <span class="nav-dropdown-item-desc">Horários oficiais de preamar e baixa-mar na costa</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('orla', 'orla-panel-balnear', event)" class="nav-dropdown-item">
-              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
-              <div>
-                <span>Balneabilidade das Praias</span>
-                <span class="nav-dropdown-item-desc">Boletim oficial do INEA para banhistas e orla</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('orla');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#0f766e] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todas as seções da Orla juntas</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba 5: Alertas & Sinótico com Dropdown INMET -->
-      <div id="nav-wrapper-alertas" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-alertas" onclick="handleNavTabClick('alertas', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="shield-alert" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Alertas & Sinótico</span>
-            <span onclick="toggleNavDropdown('alertas', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções de Alertas e Sinótico">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu right-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Alertas & Sinótico • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('alertas', 'section-alertas-oficiais', event)" class="nav-dropdown-item">
-              <i data-lucide="alert-octagon" class="w-3.5 h-3.5 text-[#dc2626] shrink-0"></i>
-              <div>
-                <span>Alertas Meteorológicos Vigentes</span>
-                <span class="nav-dropdown-item-desc">Avisos oficiais em vigor (INMET / CPTEC / Defesa Civil)</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('alertas', 'section-cemaden-riscos', event)" class="nav-dropdown-item">
-              <i data-lucide="mountain" class="w-3.5 h-3.5 text-[#d97706] shrink-0"></i>
-              <div>
-                <span>Riscos Geo-Hidrológicos (CEMADEN)</span>
-                <span class="nav-dropdown-item-desc">Vigilância de deslizamentos, inundações e enxurradas</span>
-              </div>
-            </a>
-
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('alertas');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#dc2626] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todos os Alertas e Sinótico juntos</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba 6: Boletim 16 Turnos com Dropdown INMET -->
-      <div id="nav-wrapper-boletim" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-boletim" onclick="handleNavTabClick('boletim', event)" class="app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-3 sm:px-2 rounded-xl text-[11px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="file-text" class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 text-black"></i>
-            <span class="leading-none whitespace-nowrap">Boletim 16 Turnos</span>
-            <span onclick="toggleNavDropdown('boletim', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver seções do Boletim">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu right-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Boletim 16 Turnos • Seções</span>
-              <i data-lucide="layers" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('boletim', 'section-boletim-turnos', event)" class="nav-dropdown-item">
-              <i data-lucide="clock" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Previsão Operacional 16 Turnos</span>
-                <span class="nav-dropdown-item-desc">Madrugada, manhã, tarde e noite para 1 semana à frente (Hoje + 7 dias)</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('boletim', 'section-boletim-telefones', event)" class="nav-dropdown-item">
-              <i data-lucide="phone-call" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Telefones Úteis & Pronta Resposta</span>
-                <span class="nav-dropdown-item-desc">Central 199 Defesa Civil, Bombeiros e Guarda Municipal</span>
-              </div>
-            </a>
-            <a href="docs/boletim_operacional.pdf" target="_blank" download="Boletim_Operacional_Rio_das_Ostras.pdf" class="nav-dropdown-item">
-              <i data-lucide="download" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
-              <div>
-                <span>Baixar Boletim em PDF</span>
-                <span class="nav-dropdown-item-desc">Download do relatório técnico oficial de Rio das Ostras</span>
-              </div>
-            </a>
-            <a onclick="window.closeAllNavDropdowns(); window.showAllSubSections('boletim');" class="nav-dropdown-item border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="layers" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span>Ver Todas as Seções</span>
-                <span class="nav-dropdown-item-desc">Exibe todo o Boletim operacional junto</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Aba 7: Panorama Mensal com Dropdown INMET (v211) -->
-      <div id="nav-wrapper-panorama" class="nav-dropdown-wrapper shrink-0 lg:w-full">
-        <div class="flex items-center w-full">
-          <button id="nav-tab-panorama" onclick="handleNavTabClick('panorama', event)" class="app-nav-tab flex items-center justify-center gap-1 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-[12px] font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center" role="tab" aria-selected="false">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5 shrink-0 text-[#ea580c]"></i>
-            <span class="leading-none whitespace-nowrap">Panorama Mensal</span>
-            <span class="px-1 py-0.2 rounded text-[8.5px] font-black bg-amber-500 text-black uppercase shrink-0">Novo</span>
-            <span onclick="toggleNavDropdown('panorama', event)" class="p-0.5 rounded hover:bg-black/10 transition shrink-0" title="Ver opções do Panorama Mensal">
-              <i data-lucide="chevron-down" class="w-3 h-3 text-black nav-dropdown-arrow transition-transform"></i>
-            </span>
-          </button>
-        </div>
-        <!-- Menu Dropdown ("Listinha" estilo INMET) -->
-        <div class="nav-dropdown-menu right-0">
-          <div class="nav-dropdown-header flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span>Panorama Mensal • Out/2026</span>
-              <i data-lucide="sparkles" class="w-3 h-3 text-[#ea580c]"></i>
-            </div>
-            <button type="button" onclick="window.closeAllNavDropdowns(); if(event)event.stopPropagation();" class="p-1 rounded text-slate-400 hover:text-black dark:hover:text-white" title="Fechar menu">
-              <i data-lucide="x" class="w-3.5 h-3.5"></i>
-            </button>
-          </div>
-          <div class="space-y-0.5">
-            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('video');" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="play-circle" class="w-3.5 h-3.5 text-[#f07a53] shrink-0"></i>
-              <div>
-                <span class="font-bold text-slate-800 dark:text-slate-100">Vídeo Reels (9:16)</span>
-                <span class="nav-dropdown-item-desc">Vídeo master vertical em alta resolução para Instagram</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('feed');" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="layout-grid" class="w-3.5 h-3.5 text-[#0284c7] shrink-0"></i>
-              <div>
-                <span>Carrossel Feed (4:5)</span>
-                <span class="nav-dropdown-item-desc">6 Lâminas completas formatadas para o Feed</span>
-              </div>
-            </a>
-            <a onclick="navigateSubSection('panorama', 'section-panorama-mensal-viewer', event); window.switchPanoramaMode('stories');" class="nav-dropdown-item cursor-pointer">
-              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-[#16a34a] shrink-0"></i>
-              <div>
-                <span>Stories / Reels (9:16)</span>
-                <span class="nav-dropdown-item-desc">6 Lâminas verticais prontas para postar nos Stories</span>
-              </div>
-            </a>
-            <a href="img/panorama/panorama-clima-outubro-2026.zip" download="panorama-clima-outubro-2026.zip" class="nav-dropdown-item cursor-pointer border-t border-slate-200 dark:border-slate-800 mt-1 pt-1.5 font-bold">
-              <i data-lucide="download" class="w-3.5 h-3.5 text-[#ea580c] shrink-0"></i>
-              <div>
-                <span class="text-[#ea580c]">Baixar Pacote Completo (ZIP)</span>
-                <span class="nav-dropdown-item-desc">12 Imagens PNG HD + Vídeo Reels MP4 (10.7 MB)</span>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-
-
+      <button
+        id="btn-toggle-mobile-menu"
+        onclick="window.toggleMobileSidebar();"
+        class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] shrink-0 cursor-pointer shadow-xs"
+      >
+        <span id="mobile-menu-text">Abas & Seções</span>
+        <i id="mobile-menu-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+      </button>
     </div>
 
-    <!-- PAINEL DROPDOWN MOBILE (LISTINHA ESTILO INMET EM DISPOSITIVOS MÓVEIS) -->
-    <div id="mobile-dropdown-panel" class="hidden lg:hidden w-full mt-2 p-2 bg-white dark:bg-[#0f172a] rounded-2xl border border-[#cbd5e1] dark:border-[#334155] shadow-2xl transition-all duration-200">
-      <div id="mobile-dropdown-content" class="space-y-1"></div>
-    </div>
-  </nav>
+    <!-- SIDEBAR VERTICAL RAIL (Desktop Fixo & Mobile Drawer) -->
+    <aside id="app-sidebar-nav" class="hidden lg:block w-full lg:w-72 xl:w-76 shrink-0 lg:sticky lg:top-20 z-30 transition-all duration-200">
+      <nav aria-label="Abas principais do portal" class="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-2xl p-3 space-y-1.5 shadow-sm">
+        <div class="px-3 pt-1 pb-2 flex items-center justify-between border-b border-[#E5E5E5] dark:border-[#233354]/80">
+          <span class="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65">
+            Abas do Portal
+          </span>
+          <span id="sidebar-boletim-meta" class="text-[10px] font-mono text-[#FCA311] truncate max-w-[120px]">
+            Rede Operacional
+          </span>
+        </div>
 
+        <div class="space-y-1 pt-1" id="sidebar-nav-tabs">
+          <!-- Aba 1: Previsão & Tempo -->
+          <div class="sidebar-tab-group" data-tab="previsao">
+            <button
+              type="button"
+              id="nav-tab-previsao"
+              onclick="window.handleSidebarTabClick('previsao', event)"
+              class="sidebar-tab-btn active w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="true"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="cloud-sun" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Previsão & Tempo</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform"></i>
+            </button>
+            <div id="sidebar-subsections-previsao" class="sidebar-subsections-tree mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('previsao', 'section-hero-previsao')" data-section="section-hero-previsao" class="sidebar-sub-btn active w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Tempo Agora
+              </button>
+              <button type="button" onclick="window.switchSubSection('previsao', 'section-graficos-tendencia')" data-section="section-graficos-tendencia" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Gráficos de Tendência
+              </button>
+              <button type="button" onclick="window.switchSubSection('previsao', 'section-previsao-3dias')" data-section="section-previsao-3dias" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Previsão dos Próximos Dias
+              </button>
+              <button type="button" onclick="window.switchSubSection('previsao', 'section-panorama-sinotico')" data-section="section-panorama-sinotico" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Panorama Sinótico Geral
+              </button>
+              <button type="button" onclick="window.switchSubSection('previsao', 'section-plancon-resumo')" data-section="section-plancon-resumo" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Plano de Contingência (PLANCON)
+              </button>
+              <button type="button" onclick="window.showAllSubSections('previsao')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
 
+          <!-- Aba 2: Acumulados Chuva -->
+          <div class="sidebar-tab-group" data-tab="chuva">
+            <button
+              type="button"
+              id="nav-tab-chuva"
+              onclick="window.handleSidebarTabClick('chuva', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="cloud-rain" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Acumulados Chuva</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-chuva" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('chuva', 'section-chuva-resumo')" data-section="section-chuva-resumo" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Resumo & KPIs de Chuva
+              </button>
+              <button type="button" onclick="window.switchSubSection('chuva', 'section-chuva-cards')" data-section="section-chuva-cards" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                10 Estações da Rede
+              </button>
+              <button type="button" onclick="window.switchSubSection('chuva', 'section-chuva-tabela')" data-section="section-chuva-tabela" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Tabela Comparativa
+              </button>
+              <button type="button" id="nav-item-chuva-historico" onclick="window.switchSubSection('chuva', 'section-chuva-historico')" data-section="section-chuva-historico" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Histórico em Planilha
+              </button>
+              <button type="button" onclick="window.showAllSubSections('chuva')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
 
-  </div> <!-- /#app-sticky-navigation -->
+          <!-- Aba 3: Nível do Rio -->
+          <div class="sidebar-tab-group" data-tab="rio">
+            <button
+              type="button"
+              id="nav-tab-rio"
+              onclick="window.handleSidebarTabClick('rio', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="waves" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Nível do Rio</span>
+                <span id="nav-badge-rio-macae" class="hidden w-2 h-2 rounded-full bg-rose-500 animate-pulse ml-1" title="Alerta Hidrológico Ativo"></span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-rio" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('rio', 'card-telemetria-jundia')" data-section="card-telemetria-jundia" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Cota Atual & Calha do Rio
+              </button>
+              <button type="button" onclick="window.switchSubSection('rio', 'card-tabela-rio-jundia')" data-section="card-tabela-rio-jundia" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Histórico Telemétrico 24h & 10d
+              </button>
+              <button type="button" onclick="window.switchSubSection('rio', 'section-rio-macae')" data-section="section-rio-macae" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Rios da Região (Macaé & RH-VIII)
+              </button>
+              <button type="button" onclick="window.showAllSubSections('rio')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
+
+          <!-- Aba 4: Orla & Praias -->
+          <div class="sidebar-tab-group" data-tab="orla">
+            <button
+              type="button"
+              id="nav-tab-orla"
+              onclick="window.handleSidebarTabClick('orla', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="umbrella" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Orla & Praias</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-orla" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('orla', 'orla-panel-mar')" data-section="orla-panel-mar" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Condições do Mar & Ondas
+              </button>
+              <button type="button" onclick="window.switchSubSection('orla', 'orla-panel-mares')" data-section="orla-panel-mares" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Tábua de Marés
+              </button>
+              <button type="button" onclick="window.switchSubSection('orla', 'orla-panel-balnear')" data-section="orla-panel-balnear" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Balneabilidade das Praias
+              </button>
+              <button type="button" onclick="window.showAllSubSections('orla')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
+
+          <!-- Aba 5: Alertas & Sinótico -->
+          <div class="sidebar-tab-group" data-tab="alertas">
+            <button
+              type="button"
+              id="nav-tab-alertas"
+              onclick="window.handleSidebarTabClick('alertas', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="shield-alert" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Alertas & Sinótico</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-alertas" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('alertas', 'section-alertas-oficiais')" data-section="section-alertas-oficiais" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Alertas Meteorológicos Vigentes
+              </button>
+              <button type="button" onclick="window.switchSubSection('alertas', 'section-cemaden-riscos')" data-section="section-cemaden-riscos" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Riscos Geo-Hidrológicos (CEMADEN)
+              </button>
+              <button type="button" onclick="window.showAllSubSections('alertas')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
+
+          <!-- Aba 6: Boletim 16 Turnos -->
+          <div class="sidebar-tab-group" data-tab="boletim">
+            <button
+              type="button"
+              id="nav-tab-boletim"
+              onclick="window.handleSidebarTabClick('boletim', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="calendar-clock" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Boletim 16 Turnos</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-boletim" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('boletim', 'section-boletim-turnos')" data-section="section-boletim-turnos" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Previsão Operacional 16 Turnos
+              </button>
+              <button type="button" onclick="window.switchSubSection('boletim', 'section-boletim-telefones')" data-section="section-boletim-telefones" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Telefones Úteis & Pronta Resposta
+              </button>
+              <button type="button" onclick="window.showAllSubSections('boletim')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
+
+          <!-- Aba 7: Panorama Mensal -->
+          <div class="sidebar-tab-group" data-tab="panorama">
+            <button
+              type="button"
+              id="nav-tab-panorama"
+              onclick="window.handleSidebarTabClick('panorama', event)"
+              class="sidebar-tab-btn w-full flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-xl text-left text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              aria-selected="false"
+            >
+              <span class="flex items-center gap-2.5 min-w-0">
+                <i data-lucide="film" class="sidebar-icon w-4 h-4 shrink-0"></i>
+                <span class="truncate">Panorama Mensal</span>
+              </span>
+              <i data-lucide="chevron-down" class="sidebar-chevron w-3.5 h-3.5 shrink-0 transition-transform -rotate-90 opacity-60"></i>
+            </button>
+            <div id="sidebar-subsections-panorama" class="sidebar-subsections-tree hidden mt-1.5 mb-2 ml-4 pl-3 border-l border-[#E5E5E5] dark:border-[#233354] space-y-1">
+              <button type="button" onclick="window.switchSubSection('panorama', 'video')" data-section="video" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Vídeo Reels (9:16)
+              </button>
+              <button type="button" onclick="window.switchSubSection('panorama', 'feed')" data-section="feed" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Post Carrossel (Feed 4:5)
+              </button>
+              <button type="button" onclick="window.switchSubSection('panorama', 'stories')" data-section="stories" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Story Sequencial (9:16)
+              </button>
+              <button type="button" onclick="window.switchSubSection('panorama', 'legenda')" data-section="legenda" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Legenda Oficial Instagram
+              </button>
+              <button type="button" onclick="window.showAllSubSections('panorama')" data-section="all" class="sidebar-sub-btn w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors cursor-pointer">
+                Ver Todas as Seções
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- COLUNA PRINCIPAL DE CONTEÚDO (MAIN) -->
+    <main id="app-main-content" class="flex-1 min-w-0 w-full space-y-6">
 
 
 
@@ -1065,7 +725,7 @@
   <div id="view-tab-previsao" class="app-tab-view space-y-6">
 
     <!-- BANNER DE DESTAQUE: RETROSPECTIVA / PANORAMA MENSAL OUTUBRO 2026 (v217) -->
-    <div id="banner-panorama-mensal" class="max-w-7xl mx-auto px-4 sm:px-6 mb-4">
+    <div id="banner-panorama-mensal" class="w-full mb-4">
       <div class="p-3.5 sm:p-4 rounded-2xl bg-white dark:bg-slate-900 text-[#0f172a] dark:text-white border-2 border-[#f07a53] shadow-xs flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4 transition-all">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#ffebe4] dark:bg-amber-950/40 border border-[#f07a53] flex items-center justify-center shrink-0 shadow-xs">
@@ -1098,7 +758,7 @@
 
 
     <!-- SEÇÃO 1: TEMPO AGORA (HERO CARD) -->
-    <div id="section-hero-previsao" class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div id="section-hero-previsao" class="w-full">
 
 
 
@@ -1690,7 +1350,7 @@
 
 <!-- CARD 2: PREVISÃO HORÁRIA DAS PRÓXIMAS 24 HORAS & GRÁFICO INTERATIVO -->
     <!-- SEÇÃO 2: GRÁFICOS DE TENDÊNCIA 72H -->
-    <div id="section-graficos-tendencia" class="max-w-7xl mx-auto px-4 sm:px-6 hidden">
+    <div id="section-graficos-tendencia" class="w-full hidden">
       <div class="modern-card p-5 sm:p-6 space-y-4">
 
 
@@ -1967,7 +1627,7 @@
 
 
 
-  <section id="section-previsao-3dias" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 hidden">
+  <section id="section-previsao-3dias" class="w-full hidden">
 
 
 
@@ -2867,7 +2527,7 @@
 
 
 
-  <section id="section-panorama-sinotico" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 w-full hidden">
+  <section id="section-panorama-sinotico" class="w-full hidden">
     <div class="modern-card p-5 sm:p-6 bg-white dark:bg-[#0d1527] border border-[#cbd5e1] dark:border-slate-800 space-y-4 shadow-sm">
       
       <!-- Cabeçalho do Panorama Sinótico -->
@@ -2985,7 +2645,7 @@
 
 
 
-  <section id="section-plancon-resumo" class="max-w-7xl mx-auto px-4 sm:px-6 pt-5 hidden">
+  <section id="section-plancon-resumo" class="w-full hidden">
 
 
 
@@ -4586,7 +4246,7 @@
 
 
 
-  <div id="view-tab-chuva" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 space-y-6">
+  <div id="view-tab-chuva" class="app-tab-view hidden w-full space-y-6">
 
 
 
@@ -5380,7 +5040,7 @@
 
 
 
-  <div id="view-tab-rio" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+  <div id="view-tab-rio" class="app-tab-view hidden w-full space-y-6">
 
 
 
@@ -6385,7 +6045,7 @@
 
 
 
-  <div id="view-tab-orla" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+  <div id="view-tab-orla" class="app-tab-view hidden w-full space-y-6">
 
     <!-- Sub-abas da Orla controladas exclusivamente pelo menu superior -->
 
@@ -7283,7 +6943,7 @@
 
 
 
-  <div id="view-tab-alertas" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+  <div id="view-tab-alertas" class="app-tab-view hidden w-full space-y-6">
 
 
 
@@ -8496,7 +8156,7 @@
 
 
 
-  <div id="view-tab-boletim" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-6 space-y-6">
+  <div id="view-tab-boletim" class="app-tab-view hidden w-full space-y-6">
 
 
 
@@ -9394,464 +9054,9 @@
 
 
 
-  <footer class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-6 border-t-2 border-[#cbd5e1] mt-10 text-xs text-black">
-
-
-
-    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-
-
-
-      
-
-
-
-      <div class="flex items-center gap-3">
-
-
-
-        <img src="img/logo-rounded.png?v=217" alt="TEMPO em Rio das Ostras" class="site-logo shrink-0" title="TEMPO em Rio das Ostras">
-
-
-
-        <div>
-
-
-
-          <span class="font-bold text-black text-sm block">TEMPO em Rio das Ostras</span>
-
-
-
-          <span class="text-xs text-black font-medium">Portal independente de monitoramento meteorológico e marítimo.</span>
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-
-
-
-
-      <div class="flex items-center gap-2 text-xs font-medium text-black flex-wrap justify-center">
-
-
-
-        <span class="bg-[#f8fafc] px-3 py-1 rounded-lg border border-[#cbd5e1]">Fontes: INMET • CPTEC/INPE • Marinha • INEA • CEMADEN</span>
-
-
-
-        <span class="flex items-center gap-1.5 text-black font-bold bg-[#eaf0f6] px-3 py-1 rounded-lg border border-[#6d8ba6]/50">
-
-
-
-          <span class="w-2 h-2 rounded-full bg-[#f07a53] live-pulse"></span>
-
-
-
-          Sincronização 24/7 (1h em 1h)
-
-
-
-        </span>
-
-
-
-      </div>
-
-
-
-
-
-
-
-    </div>
-
-
-
-  </footer>
-
-
-
-
-
-
-
-  <!-- MODAL: DETALHAMENTO DAS 11 PRAIAS & BALNEABILIDADE INEA (NÓRDICO CERÂMICO) -->
-
-
-
-  <!-- ========================================================================= -->
-
-
-
-  <div id="modal-praias-detalhes" class="fixed inset-0 z-50 hidden items-center justify-center p-3 sm:p-5 modal-backdrop">
-
-
-
-    <div class="modern-card max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden bg-white border border-[#94a3b8] text-black" style="border-top: 4px solid #3d4f61 !important;">
-
-
-
-      
-
-
-
-      <!-- Cabeçalho do Modal -->
-
-
-
-      <div class="px-5 py-4 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1]">
-
-
-
-        <div class="flex items-center gap-3">
-
-
-
-          <div class="medallion-title-orange w-9 h-9 rounded-xl flex items-center justify-center text-black shadow-xs">
-
-
-
-            <i data-lucide="waves" class="w-5 h-5 text-black"></i>
-
-
-
-          </div>
-
-
-
-          <div>
-
-
-
-            <h3 class="text-base sm:text-lg font-black text-black leading-tight">Detalhamento das 11 Praias & Orla de Rio das Ostras</h3>
-
-
-
-            <span class="text-xs text-black font-medium">Condições Oceanográficas (CHM) e Balneabilidade Oficial (INEA)</span>
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-        <button onclick="closeModalPraias()" class="p-1.5 rounded-lg text-black hover:bg-zinc-200 cursor-pointer transition">
-
-
-
-          <i data-lucide="x" class="w-5 h-5 text-black"></i>
-
-
-
-        </button>
-
-
-
-      </div>
-
-
-
-
-
-
-
-      <!-- Abas de Navegação Interna do Modal -->
-
-
-
-      <div class="flex border-b border-[#cbd5e1] bg-[#f5efe8]/60 px-5 pt-3 gap-2">
-
-
-
-        <button id="modal-praias-tab-mar" onclick="switchModalPraiasTab('mar')" class="px-4 py-2 text-xs sm:text-sm font-black border-b-2 border-[#f07a53] text-black bg-white/80 rounded-t-xl cursor-pointer flex items-center gap-2">
-
-
-
-          <i data-lucide="waves" class="w-4 h-4 text-black"></i>
-
-
-
-          <span>Condições do Mar (11 Praias)</span>
-
-
-
-        </button>
-
-
-
-        <button id="modal-praias-tab-balnear" onclick="switchModalPraiasTab('balnear')" class="px-4 py-2 text-xs sm:text-sm font-bold border-b-2 border-transparent text-black hover:text-black cursor-pointer flex items-center gap-2">
-
-
-
-          <i data-lucide="shield-check" class="w-4 h-4 text-black"></i>
-
-
-
-          <span>Balneabilidade Oficial (11 Pontos INEA)</span>
-
-
-
-        </button>
-
-
-
-      </div>
-
-
-
-
-
-
-
-      <!-- Conteúdo com Scroll -->
-
-
-
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-4 text-sm text-black bg-white flex-1">
-
-
-
-        
-
-
-
-        <!-- Painel 1 do Modal: 11 Praias -->
-
-
-
-        <div id="modal-praias-panel-mar" class="space-y-4">
-
-
-
-          <!-- Seletor de Dias no Modal -->
-
-
-
-          <div class="flex items-center justify-between gap-2 p-2 rounded-xl bg-[#f8fafc] border border-[#cbd5e1] text-xs">
-
-
-
-            <span class="text-xs font-bold text-black flex items-center gap-1.5">
-
-
-
-              <i data-lucide="calendar" class="w-4 h-4 text-black"></i> Previsão para:
-
-
-
-            </span>
-
-
-
-            <div class="flex items-center gap-1.5" id="modal-praias-day-buttons">
-
-
-
-              <button type="button" onclick="selectOrlaDay('d0')" id="modal-day-btn-d0" class="orla-day-btn active px-3.5 py-1.5 rounded-full text-xs font-black bg-[#ffebe4] text-black border-2 border-[#f07a53] shadow-xs cursor-pointer">
-
-
-
-                Hoje (23/10)
-
-
-
-              </button>
-
-
-
-              <button type="button" onclick="selectOrlaDay('d1')" id="modal-day-btn-d1" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
-
-
-
-                Amanhã (24/10)
-
-
-
-              </button>
-
-
-
-              <button type="button" onclick="selectOrlaDay('d2')" id="modal-day-btn-d2" class="orla-day-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#ffffff] text-black hover:bg-[#f1f5f9] border border-[#cbd5e1] cursor-pointer">
-
-
-
-                Domingo (25/10)
-
-
-
-              </button>
-
-
-
-            </div>
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <!-- Grade das 11 Praias -->
-
-
-
-          <div id="modal-praias-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-
-
-            <!-- Preenchido via app.js -->
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-
-
-
-
-        <!-- Painel 2 do Modal: 11 Pontos de Balneabilidade -->
-
-
-
-        <div id="modal-praias-panel-balnear" class="space-y-4 hidden">
-
-
-
-          <div class="p-4 rounded-2xl bg-gradient-to-br from-[#f8fafc] to-[#eaf2f8] border border-[#6d8ba6]/40 space-y-2 text-xs">
-
-
-
-            <div class="flex items-center justify-between flex-wrap gap-2">
-
-
-
-              <span class="font-black text-black text-sm" id="modal-balnear-titulo">Boletim de Balneabilidade nº 20 (INEA)</span>
-
-
-
-              <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#eaf0f6] text-black border border-[#6d8ba6]" id="modal-balnear-data">29 de Setembro de 2026</span>
-
-
-
-            </div>
-
-
-
-            <p class="text-xs text-black leading-relaxed" id="modal-balnear-obs">
-
-
-
-              <strong>Recomendação Oficial do INEA:</strong> Evitar o banho de mar nas primeiras horas após a ocorrência de chuvas e próximo à saída de galerias de águas pluviais ou canais de drenagem.
-
-
-
-            </p>
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <!-- Grade dos 11 Pontos -->
-
-
-
-          <div id="modal-balnear-pontos-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-
-
-            <!-- Preenchido via app.js -->
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-
-
-
-
-      </div>
-
-
-
-
-
-
-
-      <!-- Rodapé do Modal -->
-
-
-
-      <div class="px-5 py-3.5 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between text-xs text-black">
-
-
-
-        <span class="font-medium text-black">Fontes: Marinha do Brasil (CHM) & INEA</span>
-
-
-
-        <button onclick="closeModalPraias()" class="btn-coral-pill text-xs py-1.5 px-4 cursor-pointer font-bold">
-
-
-
-          Fechar
-
-
-
-        </button>
-
-
-
-      </div>
-
-
-
-
-
-
-
-    </div>
-
-
-
-  </div>
-
-  <!-- ========================================================================= -->
   <!-- VIEW 7: RETROSPECTIVA / PANORAMA MENSAL DO CLIMA (OUTUBRO 2026 - v212)      -->
   <!-- ========================================================================= -->
-  <div id="view-tab-panorama" class="app-tab-view hidden max-w-7xl mx-auto px-4 sm:px-6 pt-5 pb-8 space-y-6">
+  <div id="view-tab-panorama" class="app-tab-view hidden w-full space-y-6">
     <div id="section-panorama-mensal-viewer" class="space-y-6">
       
       <!-- Cabeçalho Principal do Panorama Nórdico Cerâmico -->
@@ -10085,7 +9290,31 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
       </div>
 
     </div>
-  </div><!-- ========================================================================= -->
+  </div>
+  </div> <!-- /#view-tab-panorama -->
+</main>
+</div> <!-- /#app-workspace-shell -->
+
+<!-- ========================================================================= -->
+<!-- FOOTER OFICIAL GOOGLE AI STUDIO DESIGN SYSTEM                              -->
+<!-- ========================================================================= -->
+<footer class="border-t border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] transition-colors mt-auto py-8">
+  <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-[#E5E5E5]/70">
+    <div class="flex items-center gap-3">
+      <img src="img/logo-rounded.png?v=219" alt="TEMPO em Rio das Ostras" class="h-8 w-auto object-contain rounded-lg shadow-2xs">
+      <div class="flex flex-col">
+        <span class="font-bold text-[#14213D] dark:text-white text-sm">Rede Meteorológica & Alerta Hidrológico</span>
+        <span class="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">Rio das Ostras, RJ • Portal Oficial de Monitoramento</span>
+      </div>
+    </div>
+    <div class="flex flex-wrap items-center gap-3 text-[11px] font-mono text-center md:text-right">
+      <span>Fontes: Open-Meteo, CEMADEN, INEA, INMET, Marinha do Brasil</span>
+      <span class="hidden sm:inline text-slate-400">•</span>
+      <span class="text-[#FCA311] font-semibold">Atualização contínua a cada 5 min</span>
+    </div>
+  </div>
+</footer>
+<!-- ========================================================================= -->
 
 
 
@@ -11207,7 +10436,17 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
 
 
     <script>
-    // Inicialização síncrona global para garantir que cliques nas abas funcionem instantaneamente
+    // Configuração síncrona das abas e sub-seções (Google AI Studio Navigation Architecture)
+    window.NAV_ITEMS_CONFIG = [
+      { id: 'previsao', label: 'Previsão & Tempo', icon: 'cloud-sun' },
+      { id: 'chuva', label: 'Acumulados Chuva', icon: 'cloud-rain' },
+      { id: 'rio', label: 'Nível do Rio', icon: 'waves' },
+      { id: 'orla', label: 'Orla & Praias', icon: 'umbrella' },
+      { id: 'alertas', label: 'Alertas & Sinótico', icon: 'shield-alert' },
+      { id: 'boletim', label: 'Boletim 16 Turnos', icon: 'calendar-clock' },
+      { id: 'panorama', label: 'Panorama Mensal', icon: 'film' }
+    ];
+
     window.SUB_SECTIONS_CONFIG = {
       previsao: {
         default: 'section-hero-previsao',
@@ -11232,55 +10471,155 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
       boletim: {
         default: 'section-boletim-turnos',
         sections: ['section-boletim-turnos', 'section-boletim-telefones']
+      },
+      panorama: {
+        default: 'video',
+        sections: ['video', 'feed', 'stories', 'legenda']
       }
     };
 
     window.state = window.state || {};
+    window.state.activeTab = window.state.activeTab || 'previsao';
     window.state.activeSubSections = window.state.activeSubSections || {
       previsao: 'section-hero-previsao',
       chuva: 'section-chuva-resumo',
       rio: 'card-telemetria-jundia',
       orla: 'orla-panel-mar',
       alertas: 'section-alertas-oficiais',
-      boletim: 'section-boletim-turnos'
+      boletim: 'section-boletim-turnos',
+      panorama: 'video'
     };
 
-    window.closeAllNavDropdowns = function() {
-      document.querySelectorAll('.nav-dropdown-wrapper.open').forEach(function(el) {
-        el.classList.remove('open');
+    // Atualiza estado visual da barra lateral (Rail) e barra móvel
+    window.updateSidebarNavState = function(activeTab, activeSub) {
+      var tabs = ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'];
+      tabs.forEach(function(t) {
+        var btn = document.getElementById('nav-tab-' + t);
+        var subTree = document.getElementById('sidebar-subsections-' + t);
+        var chevron = btn ? btn.querySelector('.sidebar-chevron') : null;
+        var isThisTab = (t === activeTab);
+
+        if (btn) {
+          if (isThisTab) {
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+          } else {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+          }
+        }
+
+        if (subTree) {
+          if (isThisTab) {
+            subTree.classList.remove('hidden');
+            if (chevron) {
+              chevron.classList.remove('-rotate-90', 'opacity-60');
+              chevron.classList.add('rotate-0', 'opacity-100');
+            }
+            // Destaca a sub-seção ativa
+            subTree.querySelectorAll('.sidebar-sub-btn').forEach(function(subBtn) {
+              var secAttr = subBtn.getAttribute('data-section');
+              if (secAttr === activeSub) {
+                subBtn.classList.add('active');
+              } else {
+                subBtn.classList.remove('active');
+              }
+            });
+          } else {
+            subTree.classList.add('hidden');
+            if (chevron) {
+              chevron.classList.add('-rotate-90', 'opacity-60');
+              chevron.classList.remove('rotate-0', 'opacity-100');
+            }
+          }
+        }
       });
-      var mobilePanel = document.getElementById('mobile-dropdown-panel');
-      if (mobilePanel) {
-        mobilePanel.classList.add('hidden');
-        mobilePanel.removeAttribute('data-active-tab');
+
+      // Atualiza a barra de abas ativa no mobile
+      var activeItem = window.NAV_ITEMS_CONFIG.find(function(item) { return item.id === activeTab; });
+      var mobileTabLabel = document.getElementById('mobile-active-tab-label');
+      var mobileSubLabel = document.getElementById('mobile-active-sub-label');
+      var mobileTabIcon = document.getElementById('mobile-active-tab-icon');
+
+      if (mobileTabLabel && activeItem) {
+        mobileTabLabel.textContent = activeItem.label;
+      }
+      if (mobileTabIcon && activeItem) {
+        mobileTabIcon.innerHTML = '<i data-lucide="' + activeItem.icon + '" class="w-4 h-4 text-[#FCA311] dark:text-[#000000]"></i>';
+      }
+      if (mobileSubLabel) {
+        var subTree = document.getElementById('sidebar-subsections-' + activeTab);
+        var subBtn = subTree ? subTree.querySelector('.sidebar-sub-btn.active') : null;
+        if (subBtn) {
+          mobileSubLabel.textContent = subBtn.textContent.trim();
+        }
+      }
+
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
       }
     };
 
-    window.toggleNavDropdown = function(tabName, event) {
-      if (event) { event.stopPropagation(); event.preventDefault(); }
-      var wrapper = document.getElementById('nav-wrapper-' + tabName);
-      if (!wrapper) return;
-      var isMobile = window.innerWidth < 1024;
-      var mobilePanel = document.getElementById('mobile-dropdown-panel');
-      var mobileContent = document.getElementById('mobile-dropdown-content');
+    window.toggleMobileSidebar = function() {
+      var aside = document.getElementById('app-sidebar-nav');
+      var chevron = document.getElementById('mobile-menu-chevron');
+      var menuText = document.getElementById('mobile-menu-text');
+      if (!aside) return;
+      var isOpen = aside.classList.toggle('mobile-open');
+      aside.classList.remove('hidden');
+      if (isOpen) {
+        if (chevron) chevron.classList.add('rotate-180');
+        if (menuText) menuText.textContent = 'Ocultar Abas';
+      } else {
+        if (chevron) chevron.classList.remove('rotate-180');
+        if (menuText) menuText.textContent = 'Abas & Seções';
+      }
+    };
 
-      if (isMobile && mobilePanel && mobileContent) {
-        var wasOpen = !mobilePanel.classList.contains('hidden') && mobilePanel.getAttribute('data-active-tab') === tabName;
-        window.closeAllNavDropdowns();
-        if (!wasOpen) {
-          var menu = wrapper.querySelector('.nav-dropdown-menu');
-          if (menu) {
-            mobileContent.innerHTML = menu.innerHTML;
-            mobilePanel.setAttribute('data-active-tab', tabName);
-            mobilePanel.classList.remove('hidden');
-            wrapper.classList.add('open');
-            if (window.lucide) window.lucide.createIcons();
-          }
+    window.closeMobileSidebar = function() {
+      if (window.innerWidth >= 1024) return;
+      var aside = document.getElementById('app-sidebar-nav');
+      var chevron = document.getElementById('mobile-menu-chevron');
+      var menuText = document.getElementById('mobile-menu-text');
+      if (aside && aside.classList.contains('mobile-open')) {
+        aside.classList.remove('mobile-open');
+        if (chevron) chevron.classList.remove('rotate-180');
+        if (menuText) menuText.textContent = 'Abas & Seções';
+      }
+    };
+
+    window.handleSidebarTabClick = function(tabName, event) {
+      if (event) event.stopPropagation();
+      var isAlreadyActive = window.state && window.state.activeTab === tabName;
+      if (!isAlreadyActive) {
+        if (typeof window.switchAppTab === 'function') {
+          window.switchAppTab(tabName);
+        } else {
+          document.querySelectorAll('.app-tab-view').forEach(function(v) {
+            if (v.id === 'view-tab-' + tabName) v.classList.remove('hidden');
+            else v.classList.add('hidden');
+          });
+        }
+        var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
+        if (activeSub) {
+          window.switchSubSection(tabName, activeSub);
         }
       } else {
-        var wasOpen = wrapper.classList.contains('open');
-        window.closeAllNavDropdowns();
-        if (!wasOpen) { wrapper.classList.add('open'); }
+        var subTree = document.getElementById('sidebar-subsections-' + tabName);
+        var btn = document.getElementById('nav-tab-' + tabName);
+        var chevron = btn ? btn.querySelector('.sidebar-chevron') : null;
+        if (subTree) {
+          var isHidden = subTree.classList.toggle('hidden');
+          if (chevron) {
+            if (isHidden) {
+              chevron.classList.add('-rotate-90', 'opacity-60');
+              chevron.classList.remove('rotate-0', 'opacity-100');
+            } else {
+              chevron.classList.remove('-rotate-90', 'opacity-60');
+              chevron.classList.add('rotate-0', 'opacity-100');
+            }
+          }
+        }
       }
     };
 
@@ -11336,29 +10675,14 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
           else notifMacae.classList.remove('hidden');
         }
       }
-
-      var parentView = document.getElementById('view-tab-' + tabName);
-      if (parentView) {
-        parentView.querySelectorAll('.section-subnav-pill').forEach(function(p) {
-          var pAttr = p.getAttribute('onclick') || '';
-          if (pAttr.indexOf("'" + targetId + "'") !== -1) {
-            p.classList.add('active');
-          } else {
-            p.classList.remove('active');
-          }
-        });
+      if (tabName === 'panorama') {
+        if (typeof window.switchPanoramaMode === 'function') {
+          window.switchPanoramaMode(targetId);
+        }
       }
 
-      document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(function(item) {
-        var itemClick = item.getAttribute('onclick') || '';
-        if (itemClick.indexOf("'" + targetId + "'") !== -1) {
-          item.classList.add('active-subitem');
-        } else {
-          item.classList.remove('active-subitem');
-        }
-      });
-
-      window.closeAllNavDropdowns();
+      window.updateSidebarNavState(tabName, targetId);
+      window.closeMobileSidebar();
 
       if (targetId === 'section-graficos-tendencia') {
         setTimeout(function() {
@@ -11394,72 +10718,50 @@ Acompanhe a previsão diária em tempo real, tábua de marés e avisos da Defesa
         var notifMacae = document.getElementById('notificacao-rios-macae');
         if (notifMacae) notifMacae.classList.remove('hidden');
       }
-      document.querySelectorAll('.nav-dropdown-wrapper .nav-dropdown-item, #mobile-dropdown-panel .nav-dropdown-item').forEach(function(item) {
-        var itemClick = item.getAttribute('onclick') || '';
-        if (itemClick.indexOf('showAllSubSections') !== -1 && itemClick.indexOf("'" + tabName + "'") !== -1) {
-          item.classList.add('active-subitem');
-        } else {
-          item.classList.remove('active-subitem');
-        }
-      });
-      window.closeAllNavDropdowns();
+
+      window.updateSidebarNavState(tabName, 'all');
+      var mobileSubLabel = document.getElementById('mobile-active-sub-label');
+      if (mobileSubLabel) mobileSubLabel.textContent = 'Todas as Seções';
+      window.closeMobileSidebar();
+
       setTimeout(function() {
         window.dispatchEvent(new Event('resize'));
         if (typeof window.updateBulletinChart === 'function') window.updateBulletinChart();
       }, 60);
     };
 
-    document.addEventListener('DOMContentLoaded', function() {
-      var h = (window.location.hash || '').replace('#', '');
-      if (h && window.SUB_SECTIONS_CONFIG) {
-        for (var t in window.SUB_SECTIONS_CONFIG) {
-          if (window.SUB_SECTIONS_CONFIG[t].sections.indexOf(h) !== -1) {
-            window.switchSubSection(t, h);
-            break;
-          }
-        }
-      }
-    });
-
+    // Backwards-compatible aliases
+    window.closeAllNavDropdowns = function() { window.closeMobileSidebar(); };
+    window.toggleNavDropdown = function(tabName, event) { window.handleSidebarTabClick(tabName, event); };
+    window.handleNavTabClick = function(tabName, event) { window.handleSidebarTabClick(tabName, event); };
     window.navigateSubSection = function(tabName, sectionId, event) {
       if (event) { event.preventDefault(); event.stopPropagation(); }
       window.switchSubSection(tabName, sectionId);
     };
 
-    window.handleNavTabClick = function(tabName, event) {
-      if (event) event.stopPropagation();
-      var isMobile = window.innerWidth < 1024;
-      var viewEl = document.getElementById('view-tab-' + tabName);
-      var isCurrentlyActive = (window.state && window.state.activeTab === tabName) || (viewEl && !viewEl.classList.contains('hidden'));
-
-      if (isMobile) {
-        var mobilePanel = document.getElementById('mobile-dropdown-panel');
-        var isPanelOpenForThisTab = mobilePanel && !mobilePanel.classList.contains('hidden') && mobilePanel.getAttribute('data-active-tab') === tabName;
-
-        if (isCurrentlyActive && isPanelOpenForThisTab) {
-          window.closeAllNavDropdowns();
+    document.addEventListener('DOMContentLoaded', function() {
+      var h = (window.location.hash || '').replace('#', '');
+      if (h) {
+        if (window.SUB_SECTIONS_CONFIG && window.SUB_SECTIONS_CONFIG[h]) {
+          var defaultSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[h]) || window.SUB_SECTIONS_CONFIG[h].default;
+          window.switchSubSection(h, defaultSub);
           return;
         }
-
-        var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
-        window.switchSubSection(tabName, activeSub);
-        window.toggleNavDropdown(tabName, event);
-        return;
+        if (window.SUB_SECTIONS_CONFIG) {
+          for (var t in window.SUB_SECTIONS_CONFIG) {
+            if (window.SUB_SECTIONS_CONFIG[t].sections.indexOf(h) !== -1) {
+              window.switchSubSection(t, h);
+              return;
+            }
+          }
+        }
       }
-
-      if (isCurrentlyActive) {
-        window.toggleNavDropdown(tabName, event);
-        return;
-      }
-      window.closeAllNavDropdowns();
-      var activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[tabName]) || (window.SUB_SECTIONS_CONFIG[tabName] && window.SUB_SECTIONS_CONFIG[tabName].default);
-      window.switchSubSection(tabName, activeSub);
-    };
-
-    </script>
-  <script src="js/historico_planilha.js?v=217"></script>
-  <script src="js/panorama_mensal.js?v=217"></script>
-  <script type="module" src="js/app.js?v=218"></script>
+      window.updateSidebarNavState(window.state.activeTab || 'previsao', (window.state.activeSubSections && window.state.activeSubSections['previsao']) || 'section-hero-previsao');
+    });
+  </script>
+  <script src="js/historico_planilha.js?v=219"></script>
+  <script src="js/panorama_mensal.js?v=219"></script>
+  <script type="module" src="js/app.js?v=219"></script>
 
 
 

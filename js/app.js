@@ -9427,17 +9427,8 @@ window.switchAppTab = function(tabName) {
 
 
       if (btn) {
-
-
-
-        btn.className = 'app-nav-tab active flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-black tracking-tight transition cursor-pointer bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs w-full text-center';
-
-
-
+        btn.classList.add('active');
         btn.setAttribute('aria-selected', 'true');
-
-
-
       }
 
 
@@ -9451,17 +9442,8 @@ window.switchAppTab = function(tabName) {
 
 
       if (btn) {
-
-
-
-        btn.className = 'app-nav-tab flex items-center justify-center gap-1.5 py-2 sm:py-2.5 px-1.5 sm:px-2 rounded-xl text-[10.5px] sm:text-xs lg:text-sm font-bold tracking-tight transition text-black hover:bg-white/80 border-2 border-transparent cursor-pointer w-full text-center';
-
-
-
+        btn.classList.remove('active');
         btn.setAttribute('aria-selected', 'false');
-
-
-
       }
 
 
@@ -9482,7 +9464,11 @@ window.switchAppTab = function(tabName) {
 
 
 
-    window.history.replaceState(null, null, '#' + target);
+    const activeSub = (window.state && window.state.activeSubSections && window.state.activeSubSections[target]) || (window.SUB_SECTIONS_CONFIG && window.SUB_SECTIONS_CONFIG[target] && window.SUB_SECTIONS_CONFIG[target].default);
+  if (typeof window.updateSidebarNavState === 'function') {
+    window.updateSidebarNavState(target, activeSub);
+  }
+  window.history.replaceState(null, null, '#' + target);
 
 
 
@@ -13203,30 +13189,15 @@ window.updateThemeIcon = function(isDark) {
 
 
 
+  const label = document.getElementById('theme-toggle-label');
   if (isDark) {
-
-
-
     icon.setAttribute('data-lucide', 'sun');
-
-
-
-    if (btn) btn.setAttribute('title', 'Alternar para modo claro');
-
-
-
+    if (btn) btn.setAttribute('title', 'Alternar para tema claro');
+    if (label) label.textContent = 'Claro';
   } else {
-
-
-
     icon.setAttribute('data-lucide', 'moon');
-
-
-
-    if (btn) btn.setAttribute('title', 'Alternar para modo escuro');
-
-
-
+    if (btn) btn.setAttribute('title', 'Alternar para tema escuro');
+    if (label) label.textContent = 'Escuro';
   }
 
 
