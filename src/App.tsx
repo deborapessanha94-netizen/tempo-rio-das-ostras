@@ -4670,71 +4670,7 @@ export default function App() {
                   </div>
                 )}
 
-                {/* Síntese Multi-Fonte de Precipitação */}
-                {boletimMeta?.analise_precipitacao_multifonte && (
-                  <div className="pt-5 border-t border-[#E5E5E5] dark:border-[#233354] space-y-4">
-                    <div>
-                      <h2 className="font-display text-base font-semibold text-[#14213D] dark:text-white">
-                        Síntese Multi-Fonte de Precipitação (Observado + Modelos + Alertas INMET)
-                      </h2>
-                      {boletimMeta.analise_precipitacao_multifonte.metodologia && (
-                        <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-0.5">
-                          {boletimMeta.analise_precipitacao_multifonte.metodologia}
-                        </p>
-                      )}
-                    </div>
 
-                    {boletimMeta.analise_precipitacao_multifonte.observado_recente && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                        {boletimMeta.analise_precipitacao_multifonte.observado_recente.cemaden_pcd_18789 && (
-                          <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
-                            <div className="font-semibold text-[#14213D] dark:text-white">
-                              {boletimMeta.analise_precipitacao_multifonte.observado_recente.cemaden_pcd_18789.estacao}
-                            </div>
-                            <div className="font-mono text-slate-600 dark:text-[#E5E5E5]/85 tabular-nums">
-                              1h: {boletimMeta.analise_precipitacao_multifonte.observado_recente.cemaden_pcd_18789.chuva_1h} mm · 24h: {boletimMeta.analise_precipitacao_multifonte.observado_recente.cemaden_pcd_18789.chuva_24h} mm · 96h: {boletimMeta.analise_precipitacao_multifonte.observado_recente.cemaden_pcd_18789.chuva_96h} mm
-                            </div>
-                          </div>
-                        )}
-                        {boletimMeta.analise_precipitacao_multifonte.observado_recente.inea_rio_jundia && (
-                          <div className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
-                            <div className="font-semibold text-[#14213D] dark:text-white">
-                              {boletimMeta.analise_precipitacao_multifonte.observado_recente.inea_rio_jundia.estacao}
-                            </div>
-                            <div className="font-mono text-slate-600 dark:text-[#E5E5E5]/85 tabular-nums">
-                              Cota: <strong className="text-[#14213D] dark:text-[#FCA311]">{boletimMeta.analise_precipitacao_multifonte.observado_recente.inea_rio_jundia.nivel_m} m</strong> ({boletimMeta.analise_precipitacao_multifonte.observado_recente.inea_rio_jundia.status}) · 24h: {boletimMeta.analise_precipitacao_multifonte.observado_recente.inea_rio_jundia.chuva_24h} mm
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {boletimMeta.analise_precipitacao_multifonte.previsto_por_dia && (
-                      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 text-xs font-mono">
-                        {boletimMeta.analise_precipitacao_multifonte.previsto_por_dia.map((d) => (
-                          <div
-                            key={d.data_iso}
-                            className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1"
-                          >
-                            <div className="font-semibold text-[#14213D] dark:text-white">{d.data_br.slice(0, 5)}</div>
-                            <div className="text-[10px] font-sans text-slate-500">{d.dia_semana}</div>
-                            <div className="text-sm font-semibold text-[#FCA311] tabular-nums">{d.chuva_media_modelos_mm.toFixed(1)} mm</div>
-                            <div className="text-[10px] text-slate-500">{d.taxa_horaria_pico}</div>
-                            {d.tem_alerta_inmet && (
-                              <div className="text-[10px] text-slate-600 dark:text-[#FCA311] font-semibold">INMET #{d.alerta_inmet_id}</div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {boletimMeta.analise_precipitacao_multifonte.conclusao_sem_pontas_soltas && (
-                      <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
-                        {boletimMeta.analise_precipitacao_multifonte.conclusao_sem_pontas_soltas}
-                      </p>
-                    )}
-                  </div>
-                )}
               </section>
             )}
 
