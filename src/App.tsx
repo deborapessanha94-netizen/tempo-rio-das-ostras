@@ -1019,7 +1019,6 @@ export default function App() {
                       </div>
                       <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
                         Região dos Lagos · Costa do Sol · Estação Telemétrica Sede
-                        {boletimMeta?.periodo ? ` · Boletim: ${boletimMeta.periodo}` : ''}
                       </p>
                     </div>
 
