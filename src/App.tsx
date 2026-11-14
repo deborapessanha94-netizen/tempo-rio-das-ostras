@@ -1561,13 +1561,28 @@ export default function App() {
                             </div>
                           )}
 
-                          {textoOficial && (
+                          {Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0 ? (
+                            <div className="p-3.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D]/60 border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-700 dark:text-[#E5E5E5]/90 leading-relaxed text-justify">
+                              {d.informe_populacao.map((paragrafo, pIdx) => {
+                                const isMar = paragrafo.toLowerCase().startsWith('condições do mar') || paragrafo.toLowerCase().startsWith('mar na orla');
+                                return (
+                                  <p
+                                    key={pIdx}
+                                    className={isMar ? 'font-medium text-[#14213D] dark:text-white pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex items-start gap-1.5' : ''}
+                                  >
+                                    {isMar && <Waves className="w-4 h-4 text-[#FF8244] shrink-0 mt-0.5" />}
+                                    <span>{paragrafo}</span>
+                                  </p>
+                                );
+                              })}
+                            </div>
+                          ) : textoOficial ? (
                             <div className="p-3 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D]/60 border-[#E5E5E5] dark:border-[#233354]">
                               <p className="text-xs text-slate-700 dark:text-[#E5E5E5]/90 leading-relaxed text-justify">
                                 {textoOficial}
                               </p>
                             </div>
-                          )}
+                          ) : null}
 
                           {!d.pilares && omMin !== undefined && omMax !== undefined && (
                             <div className={`pt-2 border-t ${isDark ? 'border-[#233354] text-[#E5E5E5]/75' : 'border-[#E5E5E5] text-slate-500'} flex items-center gap-4 font-mono text-xs`}>
