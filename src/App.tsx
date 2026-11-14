@@ -188,23 +188,43 @@ function getStationRainByHours(st: EstacaoPluvio, hours: number): number | null 
 }
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<SectionTab>('previsao');
-  const [activeSub, setActiveSub] = useState<Record<SectionTab, string>>({
-    previsao: 'tempo-agora',
-    chuva: 'resumo',
-    rio: 'cota',
-    orla: 'mar',
-    alertas: 'avisos',
-    boletim: 'turnos',
-    panorama: 'video',
+  const [activeTab, setActiveTab] = useState<SectionTab>(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const t = p.get('tab') as SectionTab;
+      if (t && ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'].includes(t)) return t;
+    } catch {}
+    return 'previsao';
+  });
+  const [activeSub, setActiveSub] = useState<Record<SectionTab, string>>(() => {
+    const defaults: Record<SectionTab, string> = {
+      previsao: 'tempo-agora',
+      chuva: 'resumo',
+      rio: 'cota',
+      orla: 'mar',
+      alertas: 'avisos',
+      boletim: 'turnos',
+      panorama: 'video',
+    };
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const s = p.get('sub');
+      const t = (p.get('tab') as SectionTab) || 'previsao';
+      if (s) defaults[t] = s;
+    } catch {}
+    return defaults;
   });
 
   const [isDark, setIsDark] = useState(() => {
     try {
+      const p = new URLSearchParams(window.location.search);
+      const theme = p.get('theme');
+      if (theme === 'dark') return true;
+      if (theme === 'light') return false;
       const saved = localStorage.getItem('theme');
       if (saved) return saved === 'dark';
     } catch {}
-    return false; // Default to Light Mode or saved theme
+    return false;
   });
   const [isCssModalOpen, setIsCssModalOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -252,7 +272,14 @@ export default function App() {
 
   const [selectedBoletimDate, setSelectedBoletimDate] = useState<string>('');
   const [showFullBoletimTable, setShowFullBoletimTable] = useState<boolean>(false);
-  const [meteoView, setMeteoView] = useState<'prob' | 'wwatch' | 'inmet'>('prob');
+  const [meteoView, setMeteoView] = useState<'cptec' | 'inmet' | 'wwatch'>(() => {
+    try {
+      const p = new URLSearchParams(window.location.search);
+      const m = p.get('meteo') as 'cptec' | 'inmet' | 'wwatch';
+      if (m && ['cptec', 'inmet', 'wwatch'].includes(m)) return m;
+    } catch {}
+    return 'cptec';
+  });
   const [cemadenSubView, setCemadenSubView] = useState<'sintese' | 'nacional' | 'mapas'>('sintese');
 
   const [alertaFiltroLocal, setAlertaFiltroLocal] = useState<'todos' | 'ostras' | 'outros'>('todos');
@@ -4677,18 +4704,23 @@ export default function App() {
             {showSub('meteogramas') && (
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
-                  <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
-                    Meteogramas Numéricos Oficiais (CPTEC / INMET)
-                  </h2>
+                  <div>
+                    <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                      Meteogramas Numéricos Oficiais (CPTEC / INMET)
+                    </h2>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-0.5">
+                      Séries temporais e modelagem numérica de alta resolução para Rio das Ostras (CPTEC 3866 / INMET 3304524).
+                    </p>
+                  </div>
                   <div className="flex items-center gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
                     {[
-                      { id: 'prob', label: 'CPTEC Prob. 24h' },
-                      { id: 'wwatch', label: 'WaveWatch III' },
-                      { id: 'inmet', label: 'INMET 3304524' },
+                      { id: 'cptec', label: 'Meteograma CPTEC (3866)' },
+                      { id: 'inmet', label: 'Meteograma INMET (COSMO)' },
+                      { id: 'wwatch', label: 'WaveWatch III Ondas' },
                     ].map((m) => (
                       <button
                         key={m.id}
-                        onClick={() => setMeteoView(m.id as 'prob' | 'wwatch' | 'inmet')}
+                        onClick={() => setMeteoView(m.id as 'cptec' | 'inmet' | 'wwatch')}
                         className={`px-3 py-1 text-xs font-medium rounded-md cursor-pointer transition-colors ${
                           meteoView === m.id
                             ? 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] font-semibold'
@@ -4701,36 +4733,177 @@ export default function App() {
                   </div>
                 </div>
 
-                {meteoView === 'prob' && (
-                  <img
-                    src={`${SITE_BASE}/img/cptec/mapa_prev_prob_24h_chuvaintensa.png`}
-                    alt="Previsão Probabilística 24h CPTEC/INPE"
-                    referrerPolicy="no-referrer"
-                    className="w-full max-h-96 object-contain rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white"
-                  />
+                {meteoView === 'cptec' && (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
+                            CPTEC / INPE WRF · Município 3866
+                          </span>
+                          <span className="text-xs font-semibold text-[#14213D] dark:text-white">
+                            Rio das Ostras - RJ
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 mt-1">
+                          Meteograma numérico oficial de alta resolução horária. Evolução temporal de chuva acumulada e convectiva, temperatura do ar a 2m, ponto de orvalho, vento a 10m com rajadas, pressão ao nível do mar e cobertura de nuvens.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <a
+                          href={`${SITE_BASE}/img/cptec/meteograma_cptec_3866.png`}
+                          download="meteograma_cptec_3866_rio_das_ostras.png"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white hover:bg-slate-50 dark:hover:bg-[#1f2f4e] transition-colors"
+                        >
+                          <ArrowDownToLine className="w-3.5 h-3.5" /> Baixar Imagem
+                        </a>
+                        <a
+                          href="https://previsaonumerica.cptec.inpe.br/meteograma/3866"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                        >
+                          Portal CPTEC <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="relative rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white p-3 flex flex-col items-center justify-center overflow-hidden">
+                      <a
+                        href={`${SITE_BASE}/img/cptec/meteograma_cptec_3866.png`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Clique para abrir em alta resolução"
+                        className="block w-full text-center group cursor-zoom-in"
+                      >
+                        <img
+                          src={`${SITE_BASE}/img/cptec/meteograma_cptec_3866.png`}
+                          alt="Meteograma Numérico Oficial CPTEC/INPE - Rio das Ostras (3866)"
+                          referrerPolicy="no-referrer"
+                          className="w-full max-h-[800px] object-contain mx-auto rounded transition-transform group-hover:scale-[1.01]"
+                        />
+                      </a>
+                      <div className="w-full pt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 mt-2">
+                        <span>Fonte: CPTEC / INPE (Modelo Numérico WRF Alta Resolução · ID 3866)</span>
+                        <span className="italic">Clique na imagem para abrir em resolução cheia</span>
+                      </div>
+                    </div>
+                  </div>
                 )}
-                {meteoView === 'wwatch' && (
-                  <img
-                    src={`${SITE_BASE}/img/cptec/wwatch_alt_onda_sud_000h.png`}
-                    alt="Modelo WaveWatch III Altura Significativa de Onda CPTEC"
-                    referrerPolicy="no-referrer"
-                    className="w-full max-h-96 object-contain rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white"
-                  />
-                )}
+
                 {meteoView === 'inmet' && (
-                  <div className="p-6 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
-                    <div className="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-[#FCA311]">INMET COSMO · Município 3304524 (Rio das Ostras)</div>
-                    <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85">
-                      Acesse o meteograma dinâmico interativo diretamente no portal oficial do INMET:
-                    </p>
-                    <a
-                      href="https://meteograma.inmet.gov.br/3304524/dinamico"
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
-                    >
-                      Abrir Meteograma INMET 3304524 <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                            INMET COSMO 7x7km · Município 3304524
+                          </span>
+                          <span className="text-xs font-semibold text-[#14213D] dark:text-white">
+                            Rio das Ostras - RJ
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 mt-1">
+                          Meteograma numérico oficial INMET gerado pelo modelo regional COSMO rodada 12 UTC. Evolução temporal de chuva, temperatura do ar a 2m, ponto de orvalho, vento a 10m, pressão atmosférica e nebulosidade.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <a
+                          href={`${SITE_BASE}/img/meteograma_inmet.png`}
+                          download="meteograma_inmet_3304524_rio_das_ostras.png"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white hover:bg-slate-50 dark:hover:bg-[#1f2f4e] transition-colors"
+                        >
+                          <ArrowDownToLine className="w-3.5 h-3.5" /> Baixar Imagem
+                        </a>
+                        <a
+                          href="https://meteograma.inmet.gov.br/3304524/dinamico"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                        >
+                          Portal Dinâmico INMET <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="relative rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white p-3 flex flex-col items-center justify-center overflow-hidden">
+                      <a
+                        href={`${SITE_BASE}/img/meteograma_inmet.png`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Clique para abrir em alta resolução"
+                        className="block w-full text-center group cursor-zoom-in"
+                      >
+                        <img
+                          src={`${SITE_BASE}/img/meteograma_inmet.png`}
+                          alt="Meteograma Numérico Oficial INMET COSMO - Rio das Ostras (3304524)"
+                          referrerPolicy="no-referrer"
+                          className="w-full max-h-[800px] object-contain mx-auto rounded transition-transform group-hover:scale-[1.01]"
+                        />
+                      </a>
+                      <div className="w-full pt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 mt-2">
+                        <span>Fonte: Instituto Nacional de Meteorologia (INMET · Modelo Regional COSMO)</span>
+                        <span className="italic">Clique na imagem para abrir em resolução cheia</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {meteoView === 'wwatch' && (
+                  <div className="space-y-4">
+                    <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col md:flex-row md:items-center justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-cyan-100 dark:bg-cyan-900/40 text-cyan-800 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/60">
+                            CPTEC / INPE WaveWatch III
+                          </span>
+                          <span className="text-xs font-semibold text-[#14213D] dark:text-white">
+                            Modelagem Oceânica · Região Sudeste
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 mt-1">
+                          Carta de modelagem marítima de altura significativa de onda (em metros) e vetores de direção do vento costeiro na Região Sudeste e bacia de Campos.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <a
+                          href={`${SITE_BASE}/img/cptec/wwatch_alt_onda_sud_000h.png`}
+                          download="wavewatch3_sudeste_rio_das_ostras.png"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white hover:bg-slate-50 dark:hover:bg-[#1f2f4e] transition-colors"
+                        >
+                          <ArrowDownToLine className="w-3.5 h-3.5" /> Baixar Carta
+                        </a>
+                        <a
+                          href="https://previsaonumerica.cptec.inpe.br/"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#000000] hover:opacity-90 transition-opacity"
+                        >
+                          Portal WaveWatch <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="relative rounded-xl border border-[#E5E5E5] dark:border-[#233354] bg-white p-3 flex flex-col items-center justify-center overflow-hidden">
+                      <a
+                        href={`${SITE_BASE}/img/cptec/wwatch_alt_onda_sud_000h.png`}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Clique para abrir em alta resolução"
+                        className="block w-full text-center group cursor-zoom-in"
+                      >
+                        <img
+                          src={`${SITE_BASE}/img/cptec/wwatch_alt_onda_sud_000h.png`}
+                          alt="Modelo WaveWatch III Altura Significativa de Onda CPTEC Sudeste"
+                          referrerPolicy="no-referrer"
+                          className="w-full max-h-[750px] object-contain mx-auto rounded transition-transform group-hover:scale-[1.01]"
+                        />
+                      </a>
+                      <div className="w-full pt-2 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-800 mt-2">
+                        <span>Fonte: CPTEC / INPE (WaveWatch III Oceânico)</span>
+                        <span className="italic">Clique na imagem para abrir em resolução cheia</span>
+                      </div>
+                    </div>
                   </div>
                 )}
               </section>

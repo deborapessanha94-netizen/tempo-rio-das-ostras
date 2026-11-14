@@ -1226,6 +1226,20 @@ def fetch_cptec_data():
     except Exception as e:
         print(f"[CPTEC/INPE] Erro meteograma multimodel: {e}")
 
+    try:
+        url_meteo_wrf = "https://s1.cptec.inpe.br/grafico/Modelos/WRF/GHT/meteogramas/PPN/3866.png"
+        req = urllib.request.Request(url_meteo_wrf, headers=headers)
+        wrf_bytes = urllib.request.urlopen(req, timeout=15).read()
+        if len(wrf_bytes) > 5000:
+            out_wrf = IMG_DIR / "cptec" / "meteograma_cptec_3866.png"
+            out_wrf.parent.mkdir(parents=True, exist_ok=True)
+            with open(out_wrf, 'wb') as f:
+                f.write(wrf_bytes)
+            cptec_info['meteograma_imagem'] = "img/cptec/meteograma_cptec_3866.png"
+            print(f"[CPTEC/INPE] Meteograma WRF oficial em imagem obtido ({len(wrf_bytes)} bytes)")
+    except Exception as e:
+        print(f"[CPTEC/INPE] Erro ao baixar imagem do meteograma WRF: {e}")
+
     with open(DATA_DIR / "cptec_previsao.json", 'w', encoding='utf-8') as f:
         json.dump(cptec_info, f, ensure_ascii=False, indent=2)
 
