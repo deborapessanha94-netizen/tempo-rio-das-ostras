@@ -998,7 +998,7 @@ export default function App() {
       <div
         className="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-8 py-4 sm:py-6 lg:py-8 flex flex-col lg:flex-row gap-5 lg:gap-8 items-start"
         style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 6.5rem)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)',
           paddingLeft: 'max(env(safe-area-inset-left, 0px), 0.75rem)',
           paddingRight: 'max(env(safe-area-inset-right, 0px), 0.75rem)',
         }}
@@ -6190,74 +6190,6 @@ export default function App() {
           </div>
         </div>
       </footer>
-
-      {/* Mobile Native Bottom Navigation Bar */}
-      <nav
-        aria-label="Navegação rápida no celular"
-        className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-[#14213D]/95 backdrop-blur-md border-t border-[#E5E5E5] dark:border-[#233354] px-2 pt-1.5 shadow-lg flex items-center justify-around"
-        style={{
-          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.45rem)',
-          paddingLeft: 'env(safe-area-inset-left, 0px)',
-          paddingRight: 'env(safe-area-inset-right, 0px)',
-        }}
-      >
-        {[
-          { id: 'previsao' as SectionTab, label: 'Previsão', icon: CloudSun },
-          { id: 'chuva' as SectionTab, label: 'Chuva', icon: CloudRain },
-          { id: 'rio' as SectionTab, label: 'Rio Jundiá', icon: Waves },
-          { id: 'orla' as SectionTab, label: 'Orla', icon: Umbrella },
-        ].map((tab) => {
-          const isActive = activeTab === tab.id;
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setMobileMenuOpen(false);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg transition-colors cursor-pointer ${
-                isActive
-                  ? 'text-[#FF8244] font-semibold'
-                  : 'text-slate-500 dark:text-[#E5E5E5]/65 hover:text-[#14213D] dark:hover:text-white'
-              }`}
-            >
-              <Icon className={`w-5 h-5 ${isActive ? 'text-[#FF8244]' : 'text-current'}`} />
-              <span className="text-[10px] font-sans mt-0.5 tracking-tight whitespace-nowrap">{tab.label}</span>
-            </button>
-          );
-        })}
-
-        {/* Botão Baixar App no Bottom Nav (Somente visível quando não instalado) */}
-        {!isAppInstalled && (
-          <button
-            onClick={() => setShowInstallModal(true)}
-            className="flex flex-col items-center justify-center py-1 px-1 rounded-lg text-[#FF8244] font-bold cursor-pointer shrink-0"
-          >
-            <div className="w-5 h-5 rounded-full bg-[#FF8244] text-[#000000] flex items-center justify-center shadow-xs">
-              <Download className="w-3 h-3" />
-            </div>
-            <span className="text-[9px] font-sans mt-0.5 tracking-tight font-extrabold text-[#FF8244]">Baixar</span>
-          </button>
-        )}
-
-        {/* Botão Mais / Menu */}
-        <button
-          onClick={() => {
-            setMobileMenuOpen((v) => !v);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-lg transition-colors cursor-pointer ${
-            mobileMenuOpen || ['boletim', 'panorama'].includes(activeTab)
-              ? 'text-[#FF8244] font-semibold'
-              : 'text-slate-500 dark:text-[#E5E5E5]/65 hover:text-[#14213D] dark:hover:text-white'
-          }`}
-        >
-          <Menu className="w-5 h-5 text-current" />
-          <span className="text-[10px] font-sans mt-0.5 tracking-tight">Mais</span>
-        </button>
-      </nav>
 
       <PwaInstallModal
         isOpen={showInstallModal}
