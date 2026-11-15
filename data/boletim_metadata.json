@@ -1,14 +1,14 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "14/11 (Sábado) a 21/11 (Sábado)",
-  "emissao": "15/11/2026 às 00:14h",
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.31 m. Tempo sem alertas severos para hoje; atenção prevista para Domingo (15/11), Segunda-feira (16/11), sob Alerta Amarelo de Tempestade do INMET (nº 56408 e nº 56410). Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 48.1 mm com temperatura máxima alcançando 31°C.",
+  "emissao": "15/11/2026 às 00:24h",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.31 m. Tempo sem alertas severos para hoje; atenção prevista para Domingo (15/11), Segunda-feira (16/11), sob Alerta Amarelo de Tempestade do INMET (nº 56408 e nº 56410). Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 47.9 mm com temperatura máxima alcançando 31°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "15/11/2026 às 00:15h",
+    "atualizacao_hora": "15/11/2026 às 00:25h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -84,7 +84,7 @@
           "teto_tempestade_alerta_mm": 50.0,
           "faixa_completa_txt": "16.9 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
-          "janela_critica_horaria": "16:00 às 20:00h",
+          "janela_critica_horaria": "16:00 às 21:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -137,11 +137,11 @@
         "granizo": true,
         "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
         "chuva": {
-          "media_continua_modelos_mm": 10.7,
+          "media_continua_modelos_mm": 11.0,
           "teto_tempestade_alerta_mm": 50.0,
-          "faixa_completa_txt": "10.7 mm (Média) • Até 50 mm (Teto Alerta)",
+          "faixa_completa_txt": "11.0 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
-          "janela_critica_horaria": "11:00 às 23:00h",
+          "janela_critica_horaria": "11:00 às 20:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -194,11 +194,11 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 3.7,
-          "teto_tempestade_alerta_mm": 5.6,
-          "faixa_completa_txt": "3.7 mm",
+          "media_continua_modelos_mm": 4.2,
+          "teto_tempestade_alerta_mm": 6.3,
+          "faixa_completa_txt": "4.2 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "11:00 às 21:00h",
+          "janela_critica_horaria": "11:00 às 16:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -251,9 +251,9 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 0.5,
-          "teto_tempestade_alerta_mm": 0.8,
-          "faixa_completa_txt": "0.5 mm",
+          "media_continua_modelos_mm": 0.3,
+          "teto_tempestade_alerta_mm": 0.4,
+          "faixa_completa_txt": "0.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "17:00 às 18:00h",
           "distribuicao_geografica": {
@@ -312,7 +312,7 @@
           "teto_tempestade_alerta_mm": 2.0,
           "faixa_completa_txt": "1.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "13:00 às 23:00h",
+          "janela_critica_horaria": "13:00 às 22:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -365,11 +365,11 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 6.7,
-          "teto_tempestade_alerta_mm": 10.1,
-          "faixa_completa_txt": "6.7 mm",
+          "media_continua_modelos_mm": 5.9,
+          "teto_tempestade_alerta_mm": 8.9,
+          "faixa_completa_txt": "5.9 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "11:00 às 22:00h",
+          "janela_critica_horaria": "13:00 às 22:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -541,7 +541,7 @@
         "teto_tempestade_alerta_mm": 50.0,
         "faixa_completa_txt": "16.9 mm (Média) • Até 50 mm (Teto Alerta)",
         "taxa_horaria_pico": "20 a 30 mm/h",
-        "janela_critica_horaria": "16:00 às 20:00h",
+        "janela_critica_horaria": "16:00 às 21:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -630,9 +630,9 @@
         "data_iso": "2026-11-16",
         "data_br": "16/11/2026",
         "dia_semana": "Segunda-feira",
-        "chuva_media_modelos_mm": 10.7,
+        "chuva_media_modelos_mm": 11.0,
         "chuva_pico_convectivo_mm": 50,
-        "faixa_oficial": "10.7 mm (Média) • Até 50 mm (Alerta INMET)",
+        "faixa_oficial": "11.0 mm (Média) • Até 50 mm (Alerta INMET)",
         "tem_alerta_inmet": true,
         "alerta_inmet_id": 56410,
         "taxa_horaria_pico": "20 a 30 mm/h"
@@ -641,9 +641,9 @@
         "data_iso": "2026-11-17",
         "data_br": "17/11/2026",
         "dia_semana": "Terça-feira",
-        "chuva_media_modelos_mm": 3.7,
-        "chuva_pico_convectivo_mm": 5.6,
-        "faixa_oficial": "3.7 mm",
+        "chuva_media_modelos_mm": 4.2,
+        "chuva_pico_convectivo_mm": 6.3,
+        "faixa_oficial": "4.2 mm",
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "taxa_horaria_pico": "< 5 mm/h"
@@ -652,9 +652,9 @@
         "data_iso": "2026-11-18",
         "data_br": "18/11/2026",
         "dia_semana": "Quarta-feira",
-        "chuva_media_modelos_mm": 0.5,
-        "chuva_pico_convectivo_mm": 0.8,
-        "faixa_oficial": "0.5 mm",
+        "chuva_media_modelos_mm": 0.3,
+        "chuva_pico_convectivo_mm": 0.4,
+        "faixa_oficial": "0.3 mm",
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "taxa_horaria_pico": "< 5 mm/h"
@@ -674,9 +674,9 @@
         "data_iso": "2026-11-20",
         "data_br": "20/11/2026",
         "dia_semana": "Sexta-feira",
-        "chuva_media_modelos_mm": 6.7,
-        "chuva_pico_convectivo_mm": 10.1,
-        "faixa_oficial": "6.7 mm",
+        "chuva_media_modelos_mm": 5.9,
+        "chuva_pico_convectivo_mm": 8.9,
+        "faixa_oficial": "5.9 mm",
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "taxa_horaria_pico": "< 5 mm/h"
@@ -693,20 +693,20 @@
         "taxa_horaria_pico": "< 5 mm/h"
       }
     ],
-    "acumulado_3dias_media": 30.5,
-    "acumulado_4dias_media": 34.2,
-    "acumulado_semana_media": 48.1,
-    "acumulado_semana_formula": "2.9 mm (Sáb) + 16.9 mm (Dom) + 10.7 mm (Seg) + 3.7 mm (Ter) + 0.5 mm (Qua) + 1.3 mm (Qui) + 6.7 mm (Sex) + 5.4 mm (Sáb) = 48.1 mm",
-    "acumulado_8dias_formula": "2.9 mm (Sáb) + 16.9 mm (Dom) + 10.7 mm (Seg) + 3.7 mm (Ter) + 0.5 mm (Qua) + 1.3 mm (Qui) + 6.7 mm (Sex) + 5.4 mm (Sáb) = 48.1 mm",
-    "acumulado_8dias_media": 48.1,
+    "acumulado_3dias_media": 30.8,
+    "acumulado_4dias_media": 35.0,
+    "acumulado_semana_media": 47.9,
+    "acumulado_semana_formula": "2.9 mm (Sáb) + 16.9 mm (Dom) + 11.0 mm (Seg) + 4.2 mm (Ter) + 0.3 mm (Qua) + 1.3 mm (Qui) + 5.9 mm (Sex) + 5.4 mm (Sáb) = 47.9 mm",
+    "acumulado_8dias_formula": "2.9 mm (Sáb) + 16.9 mm (Dom) + 11.0 mm (Seg) + 4.2 mm (Ter) + 0.3 mm (Qua) + 1.3 mm (Qui) + 5.9 mm (Sex) + 5.4 mm (Sáb) = 47.9 mm",
+    "acumulado_8dias_media": 47.9,
     "dias_somados": [
       2.9,
       16.9,
-      10.7,
-      3.7,
-      0.5,
+      11.0,
+      4.2,
+      0.3,
       1.3,
-      6.7,
+      5.9,
       5.4
     ],
     "conclusao_sem_pontas_soltas": "A previsão diária e por turnos apresenta simultaneamente a média contínua estimada pelos modelos de grade e o teto quantitativo de pico convectivo especificado nos alertas oficiais do INMET, eliminando divergências aparentes e integrando os acumulados antecedentes das estações de monitoramento (CEMADEN e INEA)."
@@ -737,7 +737,7 @@
       "impacto": "Aviso meteorológico programado para quinta-feira (22/10). Hoje o tempo segue em estabilidade com chuva fraca (2.1 mm)."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 14/11 (Sábado) a 21/11 (Sábado) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 28°C no sábado (14/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em 2.9 mm (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 50 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,31 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,53 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na sexta-feira (15/11) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), determinando acentuado declínio de temperatura (21°C a 26°C) e manutenção de chuva com raios (16.9 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56408 do INMET). No sábado (16/11) e domingo (17/11), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo instável sob vigência de novos alertas meteorológicos do INMET (10.7 mm (Média) • Até 50 mm (Alerta INMET) e 3.7 mm). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.8 m e aviso de vento forte, exigindo cautela na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 14/11 (Sábado) a 21/11 (Sábado) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 28°C no sábado (14/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em 2.9 mm (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 50 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,31 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,53 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na sexta-feira (15/11) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), determinando acentuado declínio de temperatura (21°C a 26°C) e manutenção de chuva com raios (16.9 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56408 do INMET). No sábado (16/11) e domingo (17/11), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo instável sob vigência de novos alertas meteorológicos do INMET (11.0 mm (Média) • Até 50 mm (Alerta INMET) e 4.2 mm). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.8 m e aviso de vento forte, exigindo cautela na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "14/11 (Sábado) a 21/11 (Sábado)",
     "evolucao_3_dias": [
@@ -814,7 +814,7 @@
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56408 & Alerta de Cheias INEA)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 26°C. Precipitação: volume médio contínuo de 16.9 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação à noite (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+        "descricao": "Previsão de garoa persistente sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 26°C. Precipitação: volume médio contínuo de 16.9 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação à noite (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Neste domingo, o tempo se mantém instável com predomínio de muitas nuvens sob atuação de cavados atmosféricos e circulação de umidade do oceano.",
           "Previsão de pancadas de chuva com trovoadas pela manhã e chuva no decorrer da tarde (média de 16.9 mm com pico de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56408 do INMET). O Rio Jundiá segue em regime estável de vazante (nível de 1.31 m).",
@@ -826,7 +826,7 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Garoa Fraca",
+            "val": "Garoa Densa",
             "icon": "cloud-drizzle"
           },
           "temp": {
@@ -880,10 +880,10 @@
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56410 & Alerta de Cheias INEA)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 27°C. Precipitação: volume médio contínuo de 10.7 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+        "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 27°C. Precipitação: volume médio contínuo de 11.0 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta segunda-feira, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã.",
-          "Previsão de pancadas de chuva e trovoadas à tarde (média de 10.7 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56410 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
+          "Previsão de pancadas de chuva e trovoadas à tarde (média de 11.0 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56410 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
           "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 27°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 23°C e a maior de 26°C no pico do calor. Na região rural, oscilam entre 18°C e 25°C.",
           "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
           "Ventos de NNE rondando para SSW moderados com rajadas de até 50 km/h na orla (Alerta Amarelo de Tempestade nº 56410 do INMET).",
@@ -919,7 +919,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "10.7 mm (Até 50 mm em tempestade)",
+            "val": "11.0 mm (Até 50 mm em tempestade)",
             "icon": "cloud-rain"
           },
           "mar": {
@@ -946,10 +946,10 @@
         "subtitulo": "Garoa Fraca",
         "badge": "OBSERVAÇÃO",
         "badge_tipo": "info",
-        "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 26°C. Volume pluviométrico diário estimado em 3.7 mm com rajadas de vento de até 43 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+        "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 26°C. Volume pluviométrico diário estimado em 4.2 mm com rajadas de vento de até 43 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta terça-feira, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia.",
-          "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 3.7 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
+          "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 4.2 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
           "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 26°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 18°C e 24°C.",
           "A umidade relativa do ar oscila entre 86% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
           "Ventos de WSW rondando para SE moderados com rajadas de até 43 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -958,7 +958,7 @@
         "pilares": {
           "ceu": {
             "label": "CÉU",
-            "val": "Garoa Fraca",
+            "val": "Garoa Moderada",
             "icon": "cloud-drizzle"
           },
           "temp": {
@@ -985,7 +985,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "3.7 mm",
+            "val": "4.2 mm",
             "icon": "cloud-drizzle"
           },
           "mar": {
@@ -1013,7 +1013,7 @@
       "pilares": [
         {
           "label": "Modelos Numéricos (4 Dias)",
-          "val": "INMET e Open-Meteo (48.1 mm em 96h)"
+          "val": "INMET e Open-Meteo (47.9 mm em 96h)"
         },
         {
           "label": "Gradiente Térmico Oficial",
@@ -1055,7 +1055,7 @@
       "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Telemetria 24/7",
       "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
       "badge_emergencia": "OPERAÇÃO 24/7",
-      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na sexta-feira (15/11) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), determinando acentuado declínio de temperatura (21°C a 26°C) e manutenção de chuva com raios (16.9 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56408 do INMET). No sábado (16/11) e domingo (17/11), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo instável sob vigência de novos alertas meteorológicos do INMET (10.7 mm (Média) • Até 50 mm (Alerta INMET) e 3.7 mm). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.8 m e aviso de vento forte, exigindo cautela na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na sexta-feira (15/11) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), determinando acentuado declínio de temperatura (21°C a 26°C) e manutenção de chuva com raios (16.9 mm (Média) • Até 50 mm (Alerta INMET), sob Alerta Amarelo de Tempestade nº 56408 do INMET). No sábado (16/11) e domingo (17/11), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo instável sob vigência de novos alertas meteorológicos do INMET (11.0 mm (Média) • Até 50 mm (Alerta INMET) e 4.2 mm). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.8 m e aviso de vento forte, exigindo cautela na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
       "pilares": [
         {
           "label": "Ciclo Sinótico Oficial",
@@ -1228,7 +1228,7 @@
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56408 & Alerta de Cheias INEA)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 26°C. Precipitação: volume médio contínuo de 16.9 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação à noite (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de garoa persistente sobre Rio das Ostras. Temperaturas entre mínima de 21°C e máxima de 26°C. Precipitação: volume médio contínuo de 16.9 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação à noite (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-15",
         "data_br": "15/11/2026",
@@ -1245,7 +1245,7 @@
           "teto_tempestade_alerta_mm": 50.0,
           "faixa_completa_txt": "16.9 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
-          "janela_critica_horaria": "16:00 às 20:00h",
+          "janela_critica_horaria": "16:00 às 21:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -1300,7 +1300,7 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Fraca",
+          "val": "Garoa Densa",
           "icon": "cloud-drizzle"
         },
         "temp": {
@@ -1352,7 +1352,7 @@
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56410 & Alerta de Cheias INEA)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 27°C. Precipitação: volume médio contínuo de 10.7 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de pancadas com trovoadas e rajadas sobre Rio das Ostras. Temperaturas entre mínima de 20°C e máxima de 27°C. Precipitação: volume médio contínuo de 11.0 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 50 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-16",
         "data_br": "16/11/2026",
@@ -1365,11 +1365,11 @@
         "granizo": true,
         "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
         "chuva": {
-          "media_continua_modelos_mm": 10.7,
+          "media_continua_modelos_mm": 11.0,
           "teto_tempestade_alerta_mm": 50.0,
-          "faixa_completa_txt": "10.7 mm (Média) • Até 50 mm (Teto Alerta)",
+          "faixa_completa_txt": "11.0 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
-          "janela_critica_horaria": "11:00 às 23:00h",
+          "janela_critica_horaria": "11:00 às 20:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -1415,7 +1415,7 @@
       "sensacao_faixa": "23° a 26°C",
       "informe_populacao": [
         "Nesta segunda-feira, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã.",
-        "Previsão de pancadas de chuva e trovoadas à tarde (média de 10.7 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56410 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
+        "Previsão de pancadas de chuva e trovoadas à tarde (média de 11.0 mm e teto de alerta de até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56410 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 27°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 23°C e a maior de 26°C no pico do calor. Na região rural, oscilam entre 18°C e 25°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos de NNE rondando para SSW moderados com rajadas de até 50 km/h na orla (Alerta Amarelo de Tempestade nº 56410 do INMET).",
@@ -1451,7 +1451,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "10.7 mm (Até 50 mm em tempestade)",
+          "val": "11.0 mm (Até 50 mm em tempestade)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -1476,7 +1476,7 @@
       "subtitulo": "Garoa Fraca",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 26°C. Volume pluviométrico diário estimado em 3.7 mm com rajadas de vento de até 43 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 26°C. Volume pluviométrico diário estimado em 4.2 mm com rajadas de vento de até 43 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-17",
         "data_br": "17/11/2026",
@@ -1489,11 +1489,11 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 3.7,
-          "teto_tempestade_alerta_mm": 5.6,
-          "faixa_completa_txt": "3.7 mm",
+          "media_continua_modelos_mm": 4.2,
+          "teto_tempestade_alerta_mm": 6.3,
+          "faixa_completa_txt": "4.2 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "11:00 às 21:00h",
+          "janela_critica_horaria": "11:00 às 16:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -1539,7 +1539,7 @@
       "sensacao_faixa": "24° a 27°C",
       "informe_populacao": [
         "Nesta terça-feira, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia.",
-        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 3.7 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
+        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 4.2 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
         "Temperaturas variam entre mínima de 20°C ao amanhecer e máxima de 26°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 18°C e 24°C.",
         "A umidade relativa do ar oscila entre 86% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos de WSW rondando para SE moderados com rajadas de até 43 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1548,7 +1548,7 @@
       "pilares": {
         "ceu": {
           "label": "CÉU",
-          "val": "Garoa Fraca",
+          "val": "Garoa Moderada",
           "icon": "cloud-drizzle"
         },
         "temp": {
@@ -1575,7 +1575,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "3.7 mm",
+          "val": "4.2 mm",
           "icon": "cloud-drizzle"
         },
         "mar": {
@@ -1600,7 +1600,7 @@
       "subtitulo": "Nublado",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
-      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 29°C. Volume pluviométrico diário estimado em 0.5 mm com rajadas de vento de até 37 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva fraca / garoa intermitente sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 29°C. Volume pluviométrico diário estimado em 0.3 mm com rajadas de vento de até 37 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-18",
         "data_br": "18/11/2026",
@@ -1613,9 +1613,9 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 0.5,
-          "teto_tempestade_alerta_mm": 0.8,
-          "faixa_completa_txt": "0.5 mm",
+          "media_continua_modelos_mm": 0.3,
+          "teto_tempestade_alerta_mm": 0.4,
+          "faixa_completa_txt": "0.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "17:00 às 18:00h",
           "distribuicao_geografica": {
@@ -1663,7 +1663,7 @@
       "sensacao_faixa": "25° a 34°C",
       "informe_populacao": [
         "Nesta quarta-feira, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia.",
-        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 0.5 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
+        "Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de 0.3 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro.",
         "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 29°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 34°C no pico do calor. Na região rural, oscilam entre 19°C e 27°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos de WSW rondando para ESE moderados com rajadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1699,7 +1699,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "0.5 mm",
+          "val": "0.3 mm",
           "icon": "cloud-drizzle"
         },
         "mar": {
@@ -1741,7 +1741,7 @@
           "teto_tempestade_alerta_mm": 2.0,
           "faixa_completa_txt": "1.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "13:00 às 23:00h",
+          "janela_critica_horaria": "13:00 às 22:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -1848,7 +1848,7 @@
       "subtitulo": "Garoa Fraca",
       "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
-      "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 23°C e máxima de 28°C. Volume pluviométrico diário estimado em 6.7 mm com rajadas de vento de até 36 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 23°C e máxima de 28°C. Volume pluviométrico diário estimado em 5.9 mm com rajadas de vento de até 36 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-20",
         "data_br": "20/11/2026",
@@ -1861,11 +1861,11 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 6.7,
-          "teto_tempestade_alerta_mm": 10.1,
-          "faixa_completa_txt": "6.7 mm",
+          "media_continua_modelos_mm": 5.9,
+          "teto_tempestade_alerta_mm": 8.9,
+          "faixa_completa_txt": "5.9 mm",
           "taxa_horaria_pico": "< 5 mm/h",
-          "janela_critica_horaria": "11:00 às 22:00h",
+          "janela_critica_horaria": "13:00 às 22:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -1911,7 +1911,7 @@
       "sensacao_faixa": "27° a 34°C",
       "informe_populacao": [
         "Nesta sexta-feira, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã.",
-        "Previsão de pancadas de chuva e trovoadas à tarde (média de 6.7 mm e teto de alerta de até 10 mm/dia sem alertas severos vigentes). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
+        "Previsão de pancadas de chuva e trovoadas à tarde (média de 5.9 mm e teto de alerta de até 9 mm/dia sem alertas severos vigentes). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 28°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 27°C e a maior de 34°C no pico do calor. Na região rural, oscilam entre 21°C e 26°C.",
         "A umidade relativa do ar oscila entre 83% nas horas mais quentes da tarde e 97% na madrugada (Ar Muito Úmido).",
         "Ventos de SE rondando para ESE moderados com rajadas de até 36 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1947,7 +1947,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "6.7 mm",
+          "val": "5.9 mm",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -2354,7 +2354,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-15 00:15:20",
+    "data_coleta": "2026-11-15 00:25:31",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_15-11-2026.pdf",
@@ -2843,7 +2843,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-14 00z",
-    "atualizacao": "14/11/2026 21:14",
+    "atualizacao": "14/11/2026 21:25",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -2929,7 +2929,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "14/11/2026",
-    "atualizacao": "14/11/2026 21:15",
+    "atualizacao": "14/11/2026 21:25",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -3106,7 +3106,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-15T00:15:41.238938",
+    "atualizado_em": "2026-11-15T00:25:53.357115",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "00:54",
@@ -3466,8 +3466,8 @@
   "kpis": {
     "jundia_nivel": "1.31 m",
     "jundia_status": "Vigilância",
-    "chuva_3d": "48.1 mm",
-    "chuva_4d": "48.1 mm",
+    "chuva_3d": "47.9 mm",
+    "chuva_4d": "47.9 mm",
     "aviso_marinha": "NORMAL",
     "pico_calor": "31°C",
     "plancon_status": "OBSERVAÇÃO"
