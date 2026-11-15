@@ -3,7 +3,7 @@
   "status_geral_cor": "danger",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": true,
-  "atualizacao_hora": "15/11/2026 às 06:46h",
+  "atualizacao_hora": "15/11/2026 às 15:05h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -11,8 +11,8 @@
       "data_br": "15/11/2026",
       "dia_semana": "Domingo",
       "alerta_ativo": true,
-      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56408",
-      "alerta_id": 56408,
+      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56412",
+      "alerta_id": 56412,
       "alerta_cor": "Amarelo",
       "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
       "granizo": true,
@@ -22,7 +22,7 @@
         "teto_tempestade_alerta_mm": 50.0,
         "faixa_completa_txt": "16.9 mm (Média) • Até 50 mm (Teto Alerta)",
         "taxa_horaria_pico": "20 a 30 mm/h",
-        "janela_critica_horaria": "16:00 às 21:00h",
+        "janela_critica_horaria": "16:00 às 20:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -41,17 +41,17 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "40 a 60 km/h",
-        "rajada_pico_modelado_kmh": 37.1,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+        "rajada_pico_modelado_kmh": 34.2,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
         "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
@@ -68,18 +68,18 @@
       "data_br": "16/11/2026",
       "dia_semana": "Segunda-feira",
       "alerta_ativo": true,
-      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56410",
-      "alerta_id": 56410,
+      "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56415",
+      "alerta_id": 56415,
       "alerta_cor": "Amarelo",
       "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
       "granizo": true,
       "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
       "chuva": {
-        "media_continua_modelos_mm": 19.1,
+        "media_continua_modelos_mm": 19.5,
         "teto_tempestade_alerta_mm": 50.0,
-        "faixa_completa_txt": "19.1 mm (Média) • Até 50 mm (Teto Alerta)",
+        "faixa_completa_txt": "19.5 mm (Média) • Até 50 mm (Teto Alerta)",
         "taxa_horaria_pico": "20 a 30 mm/h",
-        "janela_critica_horaria": "11:00 às 20:00h",
+        "janela_critica_horaria": "11:00 às 22:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -98,18 +98,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "40 a 60 km/h",
-        "rajada_pico_modelado_kmh": 31.3,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 11:00)",
-        "direcao_pico": "Oeste (W)",
+        "rajada_pico_modelado_kmh": 23.4,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 21:00)",
+        "direcao_pico": "Sul-Sudoeste (SSW)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -132,9 +132,9 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 4.2,
-        "teto_tempestade_alerta_mm": 6.3,
-        "faixa_completa_txt": "4.2 mm",
+        "media_continua_modelos_mm": 1.7,
+        "teto_tempestade_alerta_mm": 2.5,
+        "faixa_completa_txt": "1.7 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "11:00 às 16:00h",
         "distribuicao_geografica": {
@@ -155,16 +155,16 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 43 km/h",
-        "rajada_pico_modelado_kmh": 42.8,
+        "rajada_faixa": "Até 40 km/h",
+        "rajada_pico_modelado_kmh": 40.0,
         "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
         "direcao_pico": "Sudeste (SE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -189,9 +189,9 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 0.3,
-        "teto_tempestade_alerta_mm": 0.4,
-        "faixa_completa_txt": "0.3 mm",
+        "media_continua_modelos_mm": 0.7,
+        "teto_tempestade_alerta_mm": 1.0,
+        "faixa_completa_txt": "0.7 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "17:00 às 18:00h",
         "distribuicao_geografica": {
@@ -212,17 +212,17 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 37 km/h",
-        "rajada_pico_modelado_kmh": 36.7,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
+        "rajada_faixa": "Até 40 km/h",
+        "rajada_pico_modelado_kmh": 39.6,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
         "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
@@ -246,9 +246,9 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 1.3,
-        "teto_tempestade_alerta_mm": 2.0,
-        "faixa_completa_txt": "1.3 mm",
+        "media_continua_modelos_mm": 2.4,
+        "teto_tempestade_alerta_mm": 3.6,
+        "faixa_completa_txt": "2.4 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "13:00 às 22:00h",
         "distribuicao_geografica": {
@@ -269,18 +269,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 35 km/h",
-        "rajada_pico_modelado_kmh": 34.9,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 17:00)",
-        "direcao_pico": "Leste (E)",
+        "rajada_faixa": "Até 42 km/h",
+        "rajada_pico_modelado_kmh": 42.5,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
+        "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -303,11 +303,11 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 5.9,
-        "teto_tempestade_alerta_mm": 8.9,
-        "faixa_completa_txt": "5.9 mm",
+        "media_continua_modelos_mm": 4.6,
+        "teto_tempestade_alerta_mm": 6.9,
+        "faixa_completa_txt": "4.6 mm",
         "taxa_horaria_pico": "< 5 mm/h",
-        "janela_critica_horaria": "13:00 às 22:00h",
+        "janela_critica_horaria": "14:00 às 22:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -326,18 +326,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 36 km/h",
-        "rajada_pico_modelado_kmh": 35.6,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
-        "direcao_pico": "Leste-Sudeste (ESE)",
+        "rajada_faixa": "Até 47 km/h",
+        "rajada_pico_modelado_kmh": 47.2,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
+        "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -360,11 +360,11 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 5.9,
-        "teto_tempestade_alerta_mm": 8.9,
-        "faixa_completa_txt": "5.9 mm",
+        "media_continua_modelos_mm": 2.5,
+        "teto_tempestade_alerta_mm": 3.8,
+        "faixa_completa_txt": "2.5 mm",
         "taxa_horaria_pico": "< 5 mm/h",
-        "janela_critica_horaria": "11:00 às 22:00h",
+        "janela_critica_horaria": "15:00 às 22:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -383,18 +383,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 41 km/h",
-        "rajada_pico_modelado_kmh": 41.4,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
-        "direcao_pico": "Sul-Sudoeste (SSW)",
+        "rajada_faixa": "Até 35 km/h",
+        "rajada_pico_modelado_kmh": 35.3,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+        "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -417,11 +417,11 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 4.0,
-        "teto_tempestade_alerta_mm": 6.0,
-        "faixa_completa_txt": "4.0 mm",
-        "taxa_horaria_pico": "< 5 mm/h",
-        "janela_critica_horaria": "11:00 às 23:00h",
+        "media_continua_modelos_mm": 0.0,
+        "teto_tempestade_alerta_mm": 0.0,
+        "faixa_completa_txt": "0.0 mm",
+        "taxa_horaria_pico": "0 mm/h",
+        "janela_critica_horaria": "14:00 às 18:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -440,18 +440,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.29",
+          "cota_atual_m": "1.30",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.55 m",
+          "margem_segura_m": "1.54 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 40 km/h",
-        "rajada_pico_modelado_kmh": 40.0,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
-        "direcao_pico": "Sudeste (SE)",
+        "rajada_faixa": "Até 32 km/h",
+        "rajada_pico_modelado_kmh": 32.4,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+        "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -468,8 +468,8 @@
     "data_br": "15/11/2026",
     "dia_semana": "Domingo",
     "alerta_ativo": true,
-    "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56408",
-    "alerta_id": 56408,
+    "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56412",
+    "alerta_id": 56412,
     "alerta_cor": "Amarelo",
     "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
     "granizo": true,
@@ -479,7 +479,7 @@
       "teto_tempestade_alerta_mm": 50.0,
       "faixa_completa_txt": "16.9 mm (Média) • Até 50 mm (Teto Alerta)",
       "taxa_horaria_pico": "20 a 30 mm/h",
-      "janela_critica_horaria": "16:00 às 21:00h",
+      "janela_critica_horaria": "16:00 às 20:00h",
       "distribuicao_geografica": {
         "orla_costeira": {
           "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -498,17 +498,17 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.29",
+        "cota_atual_m": "1.30",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.55 m",
+        "margem_segura_m": "1.54 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }
     },
     "vento": {
       "rajada_faixa": "40 a 60 km/h",
-      "rajada_pico_modelado_kmh": 37.1,
-      "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+      "rajada_pico_modelado_kmh": 34.2,
+      "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
       "direcao_pico": "Leste (E)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
       "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
@@ -525,18 +525,18 @@
     "data_br": "16/11/2026",
     "dia_semana": "Segunda-feira",
     "alerta_ativo": true,
-    "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56410",
-    "alerta_id": 56410,
+    "alerta_rotulo": "Alerta Amarelo de Tempestade nº 56415",
+    "alerta_id": 56415,
     "alerta_cor": "Amarelo",
     "alerta_riscos": "Chuva entre 20 e 30 mm/h ou até 50 mm/dia, ventos intensos (40-60 km/h), e queda de granizo. Baixo risco de corte de energia elétrica, estragos em plantações, queda de galhos de árvores e de alagamentos.",
     "granizo": true,
     "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
     "chuva": {
-      "media_continua_modelos_mm": 19.1,
+      "media_continua_modelos_mm": 19.5,
       "teto_tempestade_alerta_mm": 50.0,
-      "faixa_completa_txt": "19.1 mm (Média) • Até 50 mm (Teto Alerta)",
+      "faixa_completa_txt": "19.5 mm (Média) • Até 50 mm (Teto Alerta)",
       "taxa_horaria_pico": "20 a 30 mm/h",
-      "janela_critica_horaria": "11:00 às 20:00h",
+      "janela_critica_horaria": "11:00 às 22:00h",
       "distribuicao_geografica": {
         "orla_costeira": {
           "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
@@ -555,18 +555,18 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.29",
+        "cota_atual_m": "1.30",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.55 m",
+        "margem_segura_m": "1.54 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }
     },
     "vento": {
       "rajada_faixa": "40 a 60 km/h",
-      "rajada_pico_modelado_kmh": 31.3,
-      "horario_pico": "Entre 14h e 18h (pico por volta das 11:00)",
-      "direcao_pico": "Oeste (W)",
+      "rajada_pico_modelado_kmh": 23.4,
+      "horario_pico": "Entre 14h e 18h (pico por volta das 21:00)",
+      "direcao_pico": "Sul-Sudoeste (SSW)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
       "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
       "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
