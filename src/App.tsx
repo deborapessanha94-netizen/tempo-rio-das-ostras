@@ -1099,31 +1099,7 @@ export default function App() {
             aria-label="Abas principais do portal"
             className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-3 space-y-1.5"
           >
-            {/* Card de Baixar App no topo do menu lateral/mobile */}
-            {!isAppInstalled && (
-              <div className="p-3 rounded-xl bg-gradient-to-r from-[#14213D] to-[#1E293B] border border-[#FF8244]/40 shadow-sm space-y-2 text-white mb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="w-4 h-4 text-[#FF8244]" />
-                    <span className="text-xs font-bold">Aplicativo no Celular</span>
-                  </div>
-                  <span className="px-1.5 py-0.5 rounded bg-[#FF8244] text-[#000000] text-[9px] font-mono font-bold uppercase">Grátis</span>
-                </div>
-                <p className="text-[11px] text-[#E5E5E5]/80 leading-snug">
-                  Tenha acesso direto em tela cheia na sua tela inicial (Android e iPhone).
-                </p>
-                <button
-                  onClick={() => {
-                    setShowInstallModal(true);
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full py-2 px-3 rounded-lg bg-[#FF8244] hover:bg-[#e0682a] text-[#000000] font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Baixar Aplicativo Agora</span>
-                </button>
-              </div>
-            )}
+
 
             <div className="px-3 pt-1 pb-2 flex items-center justify-between border-b border-[#E5E5E5] dark:border-[#233354]/80">
               <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65">
@@ -3302,72 +3278,142 @@ export default function App() {
                   </p>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[820px] text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-500 dark:text-[#E5E5E5]/70">
-                        <th className="py-3 pr-5 font-medium min-w-[220px]">Estação / Localidade</th>
-                        <th className="py-3 px-3 font-medium whitespace-nowrap">Rede</th>
-                        {[1, 4, 12, 24, 36, 48, 96].map((h) => (
-                          <th key={h} className="py-3 px-2.5 font-medium text-right whitespace-nowrap">
-                            <button
-                              onClick={() => selectRainHorizon(h)}
-                              className={`cursor-pointer hover:text-[#14213D] dark:hover:text-white ${
-                                rainHorizonHours === h ? 'text-[#FF8244] font-semibold underline underline-offset-4' : ''
-                              }`}
-                            >
-                              {h}h
-                            </button>
-                          </th>
-                        ))}
-                        <th className="py-3 pl-4 font-medium whitespace-nowrap">Leitura</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#233354] text-sm">
-                      {filteredStations.map((st) => (
-                        <tr key={st.codigo} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/70 transition-colors">
-                          <td className="py-4 pr-5 min-w-[220px] align-top">
-                            <div className="space-y-1">
-                              <div className="font-medium text-[#14213D] dark:text-white leading-snug">
+                {/* Visualização da Tabela: Mobile Cards (md:hidden) vs Desktop Table (hidden md:block) */}
+                <div>
+                  {/* Seletor de Horizonte Rápido no Celular */}
+                  <div className="md:hidden pb-3">
+                    <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mb-1.5 font-medium">Acumulado em destaque:</div>
+                    <div className="grid grid-cols-7 gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg text-center text-xs">
+                      {[1, 4, 12, 24, 36, 48, 96].map((h) => (
+                        <button
+                          key={h}
+                          onClick={() => selectRainHorizon(h)}
+                          className={`py-1 rounded font-mono font-medium transition-colors cursor-pointer ${
+                            rainHorizonHours === h
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-bold shadow-2xs'
+                              : 'text-slate-600 dark:text-[#E5E5E5]/70'
+                          }`}
+                        >
+                          {h}h
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cards no Celular (md:hidden) */}
+                  <div className="md:hidden space-y-2.5">
+                    {filteredStations.map((st) => {
+                      const rainVal =
+                        rainHorizonHours === 1 ? st.chuva_1h :
+                        rainHorizonHours === 4 ? st.chuva_4h :
+                        rainHorizonHours === 12 ? st.chuva_12h :
+                        rainHorizonHours === 24 ? st.chuva_24h :
+                        rainHorizonHours === 36 ? st.chuva_36h :
+                        rainHorizonHours === 48 ? st.chuva_48h : st.chuva_96h;
+
+                      return (
+                        <div
+                          key={st.codigo}
+                          className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 shadow-2xs"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0">
+                              <div className="font-bold text-sm text-[#14213D] dark:text-white leading-snug">
                                 {st.nome_curto || st.nome}
                               </div>
-                              <div className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 leading-snug">
-                                {st.codigo}
-                                {st.bairro ? ` · ${st.bairro}` : ''}
+                              <div className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                {st.codigo} · {st.rede} {st.bairro ? `· ${st.bairro}` : ''}
                               </div>
                             </div>
-                          </td>
-                          <td className="py-4 px-3 text-xs text-slate-600 dark:text-[#E5E5E5]/80 whitespace-nowrap align-top">
-                            {st.rede}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 1 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_1h !== null ? st.chuva_1h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 4 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_4h !== null ? st.chuva_4h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 12 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_12h !== null ? st.chuva_12h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 24 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_24h !== null ? st.chuva_24h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 36 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_36h !== null && st.chuva_36h !== undefined ? st.chuva_36h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 48 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_48h !== null ? st.chuva_48h.toFixed(1) : '--'}
-                          </td>
-                          <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 96 ? 'font-semibold text-[#FF8244]' : ''}`}>
-                            {st.chuva_96h !== null ? st.chuva_96h.toFixed(1) : '--'}
-                          </td>
-                          <td className="py-4 pl-4 text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap align-top">
-                            {st.ultima_leitura || '--'}
-                          </td>
+                            <div className="text-right shrink-0">
+                              <span className="text-[10px] text-slate-400 dark:text-[#E5E5E5]/50 block">{rainHorizonHours}h acumulado</span>
+                              <span className={`text-base font-mono font-bold ${
+                                rainVal && rainVal > 0 ? 'text-[#FF8244]' : 'text-slate-600 dark:text-[#E5E5E5]/80'
+                              }`}>
+                                {rainVal !== null && rainVal !== undefined ? `${rainVal.toFixed(1)} mm` : '--'}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between pt-1.5 border-t border-[#E5E5E5]/60 dark:border-[#233354]/60 text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/60">
+                            <span>1h: {st.chuva_1h !== null ? `${st.chuva_1h.toFixed(1)}mm` : '--'}</span>
+                            <span>24h: {st.chuva_24h !== null ? `${st.chuva_24h.toFixed(1)}mm` : '--'}</span>
+                            <span>96h: {st.chuva_96h !== null ? `${st.chuva_96h.toFixed(1)}mm` : '--'}</span>
+                            <span>Leitura: {st.ultima_leitura || '--'}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Tabela Ampla para Desktop (hidden md:block) */}
+                  <div className="hidden md:block overflow-x-auto">
+                    <table className="w-full min-w-[820px] text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-500 dark:text-[#E5E5E5]/70">
+                          <th className="py-3 pr-5 font-medium min-w-[220px]">Estação / Localidade</th>
+                          <th className="py-3 px-3 font-medium whitespace-nowrap">Rede</th>
+                          {[1, 4, 12, 24, 36, 48, 96].map((h) => (
+                            <th key={h} className="py-3 px-2.5 font-medium text-right whitespace-nowrap">
+                              <button
+                                onClick={() => selectRainHorizon(h)}
+                                className={`cursor-pointer hover:text-[#14213D] dark:hover:text-white ${
+                                  rainHorizonHours === h ? 'text-[#FF8244] font-semibold underline underline-offset-4' : ''
+                                }`}
+                              >
+                                {h}h
+                              </button>
+                            </th>
+                          ))}
+                          <th className="py-3 pl-4 font-medium whitespace-nowrap">Leitura</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#233354] text-sm">
+                        {filteredStations.map((st) => (
+                          <tr key={st.codigo} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/70 transition-colors">
+                            <td className="py-4 pr-5 min-w-[220px] align-top">
+                              <div className="space-y-1">
+                                <div className="font-medium text-[#14213D] dark:text-white leading-snug">
+                                  {st.nome_curto || st.nome}
+                                </div>
+                                <div className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 leading-snug">
+                                  {st.codigo}
+                                  {st.bairro ? ` · ${st.bairro}` : ''}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-4 px-3 text-xs text-slate-600 dark:text-[#E5E5E5]/80 whitespace-nowrap align-top">
+                              {st.rede}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 1 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_1h !== null ? st.chuva_1h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 4 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_4h !== null ? st.chuva_4h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 12 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_12h !== null ? st.chuva_12h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 24 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_24h !== null ? st.chuva_24h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 36 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_36h !== null && st.chuva_36h !== undefined ? st.chuva_36h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 48 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_48h !== null ? st.chuva_48h.toFixed(1) : '--'}
+                            </td>
+                            <td className={`py-4 px-2.5 text-right font-mono text-xs tabular-nums whitespace-nowrap align-top ${rainHorizonHours === 96 ? 'font-semibold text-[#FF8244]' : ''}`}>
+                              {st.chuva_96h !== null ? st.chuva_96h.toFixed(1) : '--'}
+                            </td>
+                            <td className="py-4 pl-4 text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70 whitespace-nowrap align-top">
+                              {st.ultima_leitura || '--'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </section>
             )}
@@ -3386,33 +3432,35 @@ export default function App() {
                     </p>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <div className="w-full sm:w-auto grid grid-cols-3 sm:flex sm:items-center gap-1.5 shrink-0 pt-2 sm:pt-0">
                     {historico?.arquivos_planilha && (
                       <>
                         <a
                           href={`${SITE_BASE}/${historico.arquivos_planilha.xlsx}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors whitespace-nowrap"
+                          className="inline-flex items-center justify-center gap-1 py-2 sm:py-1.5 px-1 sm:px-3 text-[11px] sm:text-xs font-semibold rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors text-center whitespace-nowrap shadow-2xs"
                         >
-                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244]" />
-                          Excel (.XLSX)
+                          <ArrowDownToLine className="w-3.5 h-3.5 text-[#FF8244] shrink-0" />
+                          <span>Excel</span>
                         </a>
                         <a
                           href={`${SITE_BASE}/${historico.arquivos_planilha.csv}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors whitespace-nowrap"
+                          className="inline-flex items-center justify-center gap-1 py-2 sm:py-1.5 px-1 sm:px-3 text-[11px] sm:text-xs font-semibold rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors text-center whitespace-nowrap shadow-2xs"
                         >
-                          Planilha Completa (.CSV)
+                          <Download className="w-3.5 h-3.5 text-[#FF8244] shrink-0" />
+                          <span>CSV Geral</span>
                         </a>
                       </>
                     )}
                     <button
                       onClick={handleDownloadFilteredHistCsv}
-                      className="px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors cursor-pointer whitespace-nowrap"
+                      className="inline-flex items-center justify-center gap-1 py-2 sm:py-1.5 px-1 sm:px-3 text-[11px] sm:text-xs font-semibold rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors cursor-pointer text-center whitespace-nowrap shadow-2xs"
                     >
-                      Filtro Atual (.CSV)
+                      <Download className="w-3.5 h-3.5 text-[#FF8244] shrink-0" />
+                      <span>CSV Filtro</span>
                     </button>
                   </div>
                 </div>
@@ -3420,22 +3468,23 @@ export default function App() {
                 {/* Controles de Modo e Filtros da Planilha */}
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex flex-wrap items-center gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
+                    <div className="w-full sm:w-auto grid grid-cols-3 sm:flex sm:items-center gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
                       {[
-                        { id: 'horario', label: 'Horário Completo' },
-                        { id: 'diario', label: 'Totais Diários' },
-                        { id: 'mensal', label: 'Totais Mensais' },
+                        { id: 'horario', label: 'Horário', full: 'Horário Completo' },
+                        { id: 'diario', label: 'Diário', full: 'Totais Diários' },
+                        { id: 'mensal', label: 'Mensal', full: 'Totais Mensais' },
                       ].map((m) => (
                         <button
                           key={m.id}
                           onClick={() => setHistoryMode(m.id as 'horario' | 'diario' | 'mensal')}
-                          className={`px-3.5 py-1.5 text-xs rounded-md transition-colors cursor-pointer whitespace-nowrap ${
+                          className={`py-1.5 px-1 sm:px-3.5 text-[11px] sm:text-xs rounded-md transition-all cursor-pointer text-center whitespace-nowrap ${
                             historyMode === m.id
-                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-semibold'
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] font-bold shadow-xs'
                               : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-[#14213D] dark:hover:text-white font-medium'
                           }`}
                         >
-                          {m.label}
+                          <span className="sm:hidden">{m.label}</span>
+                          <span className="hidden sm:inline">{m.full}</span>
                         </button>
                       ))}
                     </div>
@@ -3450,45 +3499,49 @@ export default function App() {
                   </div>
 
                   {historyMode !== 'mensal' && (
-                    <div className="flex flex-wrap items-center gap-2.5 pt-3 border-t border-[#E5E5E5] dark:border-[#233354] text-xs">
-                      <select
-                        value={histMonthFilter}
-                        onChange={(e) => setHistMonthFilter(e.target.value)}
-                        aria-label="Filtrar por mês"
-                        className="px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white cursor-pointer"
-                      >
-                        <option value="all">Todos os Meses</option>
-                        {histMonthOptions.map((m) => (
-                          <option key={m.ano_mes} value={m.ano_mes}>
-                            {m.rotulo}
-                          </option>
-                        ))}
-                      </select>
+                    <div className="space-y-2 pt-3 border-t border-[#E5E5E5] dark:border-[#233354] text-xs">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <select
+                          value={histMonthFilter}
+                          onChange={(e) => setHistMonthFilter(e.target.value)}
+                          aria-label="Filtrar por mês"
+                          className="w-full px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white cursor-pointer"
+                        >
+                          <option value="all">Todos os Meses</option>
+                          {histMonthOptions.map((m) => (
+                            <option key={m.ano_mes} value={m.ano_mes}>
+                              {m.rotulo}
+                            </option>
+                          ))}
+                        </select>
 
-                      <input
-                        type="text"
-                        value={histDateFilter}
-                        onChange={(e) => setHistDateFilter(e.target.value)}
-                        placeholder="Buscar data (ex: 26/10)..."
-                        className="w-44 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FF8244]"
-                      />
-
-                      <label className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] cursor-pointer whitespace-nowrap">
                         <input
-                          type="checkbox"
-                          checked={histRainOnly}
-                          onChange={(e) => setHistRainOnly(e.target.checked)}
-                          className="accent-[#FF8244]"
+                          type="text"
+                          value={histDateFilter}
+                          onChange={(e) => setHistDateFilter(e.target.value)}
+                          placeholder="Buscar data (ex: 26/10)..."
+                          className="w-full px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#FF8244]"
                         />
-                        <span>Com chuva (&gt; 0 mm)</span>
-                      </label>
+                      </div>
 
-                      <button
-                        onClick={() => setHistSortOrder((s) => (s === 'desc' ? 'asc' : 'desc'))}
-                        className="px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono cursor-pointer hover:border-[#FF8244] transition-colors whitespace-nowrap"
-                      >
-                        {histSortOrder === 'desc' ? 'Mais Recentes ↓' : 'Cronológica ↑'}
-                      </button>
+                      <div className="flex items-center justify-between gap-2">
+                        <label className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] cursor-pointer text-xs whitespace-nowrap">
+                          <input
+                            type="checkbox"
+                            checked={histRainOnly}
+                            onChange={(e) => setHistRainOnly(e.target.checked)}
+                            className="accent-[#FF8244]"
+                          />
+                          <span>Com chuva (&gt; 0 mm)</span>
+                        </label>
+
+                        <button
+                          onClick={() => setHistSortOrder((s) => (s === 'desc' ? 'asc' : 'desc'))}
+                          className="px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] font-mono text-xs cursor-pointer hover:border-[#FF8244] transition-colors whitespace-nowrap"
+                        >
+                          {histSortOrder === 'desc' ? 'Mais Recentes ↓' : 'Cronológica ↑'}
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -3944,14 +3997,140 @@ export default function App() {
 
             {showSub('macae') && (
               <section className="space-y-6">
+                {/* Cabeçalho da Bacia */}
+                <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 space-y-4">
+                  <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
+                    <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60">
+                      Bacia Hidrográfica RH-VIII · INEA · ANA
+                    </div>
+                    <h2 className="font-display text-xl font-semibold text-[#14213D] dark:text-white mt-1">
+                      Rios de Macaé e Região — Monitoramento Hidrológico
+                    </h2>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
+                      Estações telemétricas e fluviométricas oficiais INEA e ANA na bacia RH-VIII (Macaé e das Ostras)
+                    </p>
+                  </div>
+
+                  {/* Cards dos principais rios de Macaé */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {[
+                      {
+                        nome: 'Rio Macaé',
+                        subtipo: 'Rio Principal — Foz em Macaé',
+                        descricao: 'Nasce na Serra do Macaé de Cima (Nova Friburgo), percorre ~170 km e deságua no Atlântico em Macaé. Principal rio da bacia RH-VIII.',
+                        estacao: 'ANA 58750000 · INEA Macaé-Foz',
+                        url: 'https://telemetriainea.rj.gov.br/',
+                        ana_url: 'https://www.snirh.gov.br/hidroweb/mapa',
+                        icon: '🌊',
+                      },
+                      {
+                        nome: 'Rio Macabu',
+                        subtipo: 'Afluente — Bacia RH-VIII Norte',
+                        descricao: 'Afluente relevante da margem esquerda do Rio Macaé. Influencia enchentes nas áreas de Carapebus e Macaé rural.',
+                        estacao: 'ANA 58870000 · Carapebus',
+                        url: 'https://www.snirh.gov.br/hidroweb/mapa',
+                        icon: '🏞️',
+                      },
+                      {
+                        nome: 'Rio Sana',
+                        subtipo: 'Cabeceira — Serra do Macaé de Cima',
+                        descricao: 'Afluente do Rio Macaé vindo da Serra Verde. Referência para previsão de cheias 12–24h à frente na parte baixa do Macaé.',
+                        estacao: 'ANA 58765000 · Mury/Lumiar',
+                        url: 'https://www.snirh.gov.br/hidroweb/mapa',
+                        icon: '⛰️',
+                      },
+                      {
+                        nome: 'Rio Jundiá',
+                        subtipo: 'Rio das Ostras — INEA 2241036',
+                        descricao: 'Corta Rio das Ostras (Cantagalo, Âncora, Cláudio Ribeiro). Monitoramento telemétrico em tempo real pelo INEA.',
+                        estacao: `Sensor INEA 2241036 · Cota atual: ${rj?.nivel_rio || '--'}`,
+                        url: rj?.url || 'https://telemetriainea.rj.gov.br/',
+                        icon: '📡',
+                        badge: rj?.status_rio,
+                      },
+                      {
+                        nome: 'Canal das Ostras',
+                        subtipo: 'Ligação Lagos-Mar · RH-VIII Sul',
+                        descricao: 'Sistema lagunar costeiro que conecta as lagoas de Rio das Ostras ao mar. Sofre influência direta das marés e da precipitação local.',
+                        estacao: 'Monitoramento INEA/SUBDEC',
+                        url: 'https://telemetriainea.rj.gov.br/',
+                        icon: '🌐',
+                      },
+                      {
+                        nome: 'Sala de Situação INEA RH-VIII',
+                        subtipo: 'Central de Monitoramento Oficial',
+                        descricao: 'Sala de Situação do INEA monitora em tempo real todas as estações fluviométricas e pluviométricas da Bacia RH-VIII.',
+                        estacao: 'sala.situacao@inea.rj.gov.br',
+                        url: 'https://telemetriainea.rj.gov.br/',
+                        icon: '🏢',
+                        isLink: true,
+                      },
+                    ].map((rio) => (
+                      <div
+                        key={rio.nome}
+                        className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-base">{rio.icon}</span>
+                              <span className="font-semibold text-sm text-[#14213D] dark:text-white">{rio.nome}</span>
+                              {rio.badge && (
+                                <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase bg-[#FF8244]/20 text-[#FF8244]">
+                                  {rio.badge}
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/60 font-mono mt-0.5">{rio.subtipo}</div>
+                          </div>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">{rio.descricao}</p>
+                        <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/60 truncate">{rio.estacao}</span>
+                          {rio.url && (
+                            <a
+                              href={rio.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                            >
+                              Ver <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Links rápidos */}
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {[
+                      { label: 'Telemetria INEA RJ', url: 'https://telemetriainea.rj.gov.br/' },
+                      { label: 'HidroWeb ANA', url: 'https://www.snirh.gov.br/hidroweb/mapa' },
+                      { label: 'INEA Alertas Cheias', url: 'https://www.inea.rj.gov.br/recursos-hidricos/alertas-de-cheias/' },
+                      { label: 'Boletim RH-VIII', url: 'https://www.inea.rj.gov.br/recursos-hidricos/boletins-hidrologicos/' },
+                    ].map((link) => (
+                      <a
+                        key={link.label}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors bg-white dark:bg-[#14213D]"
+                      >
+                        {link.label} <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 space-y-4">
                     <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
                       <div className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60">
-                        Bacia Hidrográfica RH-VIII
+                        Rio Jundiá · Bacia Hidrográfica RH-VIII
                       </div>
                       <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white mt-1">
-                        Macaé e das Ostras • Escoamento e Foz
+                        Rio das Ostras • Escoamento e Influência de Marés
                       </h2>
                     </div>
                     <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">

@@ -1,0 +1,234 @@
+<div id="modal-social-chuva" class="fixed inset-0 z-50 hidden items-center justify-center p-2 sm:p-4 modal-backdrop bg-black/60 backdrop-blur-sm">
+    <div class="modern-card max-w-4xl w-full max-h-[96vh] sm:max-h-[92vh] flex flex-col shadow-2xl overflow-hidden bg-white text-black border border-[#cbd5e1]" style="border-top: 4px solid #f07a53 !important;">
+      
+      <!-- Cabeçalho do Modal (Compacto e Responsivo na Paleta Oficial) -->
+      <div class="px-4 py-3 bg-[#f8fafc] text-black flex items-center justify-between border-b border-[#cbd5e1] gap-2 shrink-0">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="medallion-title-orange w-8 h-8 rounded-xl flex items-center justify-center text-black shadow-xs shrink-0">
+            <i data-lucide="camera" class="w-4 h-4 text-black"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 id="social-modal-title" class="text-sm sm:text-base font-black text-black leading-tight truncate">Exportar Card Oficial Diário</h3>
+              <span class="text-[10px] font-mono font-black uppercase bg-[#ffebe4] text-[#ea580c] border border-[#f07a53] px-2 py-0.5 rounded-full shrink-0">
+                @tempoemriodasostras
+              </span>
+            </div>
+            <span id="social-modal-subtitle" class="text-[11px] text-black font-semibold hidden sm:inline">Acumulados da rede municipal em tempo real para Post e Stories</span>
+          </div>
+        </div>
+
+        <button type="button" onclick="closeSocialModalChuva()" class="p-2 rounded-xl text-black hover:bg-[#e2e8f0] cursor-pointer transition shrink-0" title="Fechar modal">
+          <i data-lucide="x" class="w-5 h-5 text-black"></i>
+        </button>
+      </div>
+
+      <!-- Aba de Seleção: Tempo Agora vs Chuva vs Ventos & Rajadas -->
+      <div class="px-3 sm:px-4 py-2 bg-white border-b border-[#cbd5e1] flex items-center gap-1.5 sm:gap-2 shrink-0 overflow-x-auto">
+        <button 
+          type="button" 
+          id="social-tab-btn-tempo" 
+          onclick="setSocialTab('tempo')" 
+          class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+        >
+          <i data-lucide="sun-medium" class="w-4 h-4 text-[#ea580c]"></i>
+          <span>Tempo Agora</span>
+        </button>
+        <button 
+          type="button" 
+          id="social-tab-btn-chuva" 
+          onclick="setSocialTab('chuva')" 
+          class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+        >
+          <i data-lucide="cloud-rain" class="w-4 h-4 text-[#ea580c]"></i>
+          <span>Chuva</span>
+        </button>
+        <button 
+          type="button" 
+          id="social-tab-btn-vento" 
+          onclick="setSocialTab('vento')" 
+          class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+        >
+          <i data-lucide="wind" class="w-4 h-4 text-[#0284c7]"></i>
+          <span>Ventos & Rajadas</span>
+        </button>
+        <button 
+          type="button" 
+          id="social-tab-btn-semanal" 
+          onclick="setSocialTab('semanal')" 
+          class="flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#f8fafc] hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer flex items-center justify-center gap-1.5 transition whitespace-nowrap"
+        >
+          <i data-lucide="calendar-days" class="w-4 h-4 text-[#0284c7]"></i>
+          <span>Panorama Semanal</span>
+        </button>
+      </div>
+
+      <!-- Barra de Controles e Filtros Rápidos (Otimizada para Celular & Paleta Oficial) -->
+      <div class="p-3 sm:p-4 bg-[#f8fafc] border-b border-[#cbd5e1] space-y-2.5 text-xs shrink-0">
+
+        <!-- Linha 1: Controles Globais (Formato, Tema do Card e Filtro de Ativas - Comum para Chuva e Vento) -->
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+          <div class="flex items-center gap-2 flex-wrap">
+            <!-- Formato (Segmented Touch Targets) -->
+            <div class="flex items-center gap-1.5 p-1 bg-[#eaeff2] rounded-2xl border border-[#cbd5e1] shadow-xs" role="tablist">
+              <button id="social-btn-fmt-post" onclick="setSocialFormat('post')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="square" class="w-3.5 h-3.5 text-black"></i>
+                <span>Post Feed (4:5)</span>
+              </button>
+              <button id="social-btn-fmt-story" onclick="setSocialFormat('story')" class="px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center justify-center gap-1.5 transition">
+                <i data-lucide="smartphone" class="w-3.5 h-3.5 text-black"></i>
+                <span>Stories (9:16)</span>
+              </button>
+            </div>
+
+            <!-- Seletor de Tema do Card (Nórdica Clara vs Escura Noturna) - Disponível para Chuva e Vento -->
+            <div class="flex items-center gap-1 bg-[#eaeff2] p-1 rounded-2xl border border-[#cbd5e1] shadow-xs">
+              <button type="button" id="social-theme-btn-nordic" onclick="setSocialCardTheme('nordic')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Paleta Nórdica Clara Oficial">
+                <span>Clara</span>
+              </button>
+              <button type="button" id="social-theme-btn-dark" onclick="setSocialCardTheme('dark')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Paleta Escura Noturna Oficial (Mesma de Chuva)">
+                <span>Escura</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Filtro de Estações (Todas vs Apenas Ativas + Atualizar) -->
+          <div id="social-filter-station-group" class="flex items-center justify-between sm:justify-end gap-1.5 w-full lg:w-auto">
+            <div class="flex items-center gap-1.5">
+              <button id="social-btn-filter-all" onclick="setSocialStationsFilter('all')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-black hover:bg-[#ffebe4] border border-[#cbd5e1] cursor-pointer flex items-center gap-1 transition" title="Exibe todas as estações">
+                <i data-lucide="layers" class="w-3.5 h-3.5 text-black"></i>
+                <span id="social-filter-all-label">Todas</span>
+              </button>
+              <button id="social-btn-filter-active" onclick="setSocialStationsFilter('active')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs cursor-pointer flex items-center gap-1 transition" title="Exibe exclusivamente estações ativas com dados em tempo real">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                <span>Apenas Ativas</span>
+              </button>
+            </div>
+            <button type="button" onclick="refreshSocialStationsData()" class="p-2 rounded-xl bg-white text-black hover:bg-[#eaeff2] border border-[#cbd5e1] cursor-pointer transition flex items-center justify-center shadow-xs" title="Atualizar dados em tempo real">
+              <i id="social-refresh-icon" data-lucide="refresh-cw" class="w-3.5 h-3.5 text-black"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Linha 2: Controles Específicos da Chuva -->
+        <div id="social-controls-chuva" class="space-y-2.5">
+          <div class="flex items-center justify-between gap-2.5 flex-wrap pt-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <label for="social-custom-hours-input" class="text-xs font-black text-black shrink-0 flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-4 h-4 text-[#ea580c]"></i>
+                <span>Digite o horizonte:</span>
+              </label>
+              <div class="flex items-center gap-1.5 bg-white border-2 border-[#cbd5e1] focus-within:border-[#f07a53] px-3 py-1.5 rounded-xl shadow-xs transition">
+                <input 
+                  type="number" 
+                  id="social-custom-hours-input" 
+                  min="1" 
+                  max="96" 
+                  step="1"
+                  value="24"
+                  placeholder="24" 
+                  class="w-14 sm:w-16 bg-transparent text-sm font-black font-mono text-black outline-none text-center" 
+                  oninput="handleSocialHoursInput(this.value)"
+                  onchange="handleSocialHoursInput(this.value)"
+                  title="Digite qualquer quantidade de horas (ex: 3, 6, 15, 24, 48...)"
+                />
+                <span class="text-xs font-black text-black/80">horas</span>
+              </div>
+              <button type="button" id="social-btn-toggle-hoje" onclick="toggleSocialHoje()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#ffebe4] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5" title="Calcular acumulado desde 00:00 de hoje">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-[#ea580c]"></i>
+                <span>Hoje (desde 00h)</span>
+              </button>
+            </div>
+
+            <!-- Drawer Recolhível de Seleção de Estações -->
+            <button type="button" onclick="toggleSocialChipsDrawer()" class="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1.5 px-3 rounded-xl bg-[#ffebe4]/70 hover:bg-[#ffebe4] border border-[#f07a53]/40 transition shrink-0 shadow-2xs">
+              <span id="social-selected-count">10 de 10 selecionadas</span>
+              <i id="social-chips-chevron" data-lucide="chevron-down" class="w-3.5 h-3.5 text-[#ea580c] transition-transform duration-200"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Linha 2: Controles Específicos do Vento & Rajadas -->
+        <div id="social-controls-vento" class="space-y-2.5 hidden">
+          <div class="flex items-center justify-between gap-2.5 flex-wrap pt-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-black text-black shrink-0 flex items-center gap-1.5">
+                <i data-lucide="gauge" class="w-4 h-4 text-[#0284c7]"></i>
+                <span>Métrica de Vento:</span>
+              </span>
+              <button 
+                type="button" 
+                id="social-wind-btn-hoje" 
+                onclick="setSocialWindMetric('hoje')" 
+                class="px-3 py-1.5 rounded-xl text-xs font-black bg-[#e0f2fe] border-2 border-[#0284c7] text-black shadow-xs cursor-pointer flex items-center gap-1.5 transition"
+                title="Maiores rajadas e ventos registrados hoje desde 00h"
+              >
+                <i data-lucide="trophy" class="w-3.5 h-3.5 text-[#0284c7]"></i>
+                <span>Hoje (Máximas do Dia)</span>
+              </button>
+              <button 
+                type="button" 
+                id="social-wind-btn-24h" 
+                onclick="setSocialWindMetric('24h')" 
+                class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5"
+                title="Maiores rajadas nas últimas 24 horas"
+              >
+                <span>Últimas 24h</span>
+              </button>
+              <button 
+                type="button" 
+                id="social-wind-btn-agora" 
+                onclick="setSocialWindMetric('agora')" 
+                class="px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-[#e0f2fe] border border-[#cbd5e1] text-black cursor-pointer transition shadow-2xs flex items-center gap-1.5"
+                title="Velocidade e rajada instantânea agora"
+              >
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>Tempo Real (Agora)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Drawer Recolhível: Chips das Estações (Não empurra a tela no celular) -->
+        <div id="social-chips-drawer" class="hidden pt-2 border-t border-[#cbd5e1] max-h-32 overflow-y-auto">
+          <div id="social-station-chips" class="flex items-center gap-1.5 flex-wrap">
+            <!-- Chips gerados dinamicamente via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Corpo do Modal: Área de Pré-visualização Centralizada e Fluida -->
+      <div id="social-preview-container" class="flex-1 overflow-y-auto p-2 sm:p-4 bg-[#f4f6f8] flex flex-col items-center justify-center min-h-[220px] max-h-[50vh] sm:max-h-[56vh] border-y border-[#cbd5e1]">
+        <div class="relative max-w-full max-h-full my-auto flex items-center justify-center p-1.5 sm:p-2 bg-white rounded-2xl shadow-md border border-[#cbd5e1]">
+          <img 
+            id="social-preview-image" 
+            src="" 
+            alt="Pré-visualização do Card Oficial para Instagram" 
+            class="max-h-[44vh] sm:max-h-[50vh] w-auto max-w-full rounded-xl shadow-md border border-[#cbd5e1] object-contain transition duration-150"
+          />
+        </div>
+        <p class="text-[11px] font-black text-black mt-2 flex items-center gap-1.5 shrink-0">
+          <i data-lucide="eye" class="w-3.5 h-3.5 text-[#f07a53]"></i>
+          <span>Resolução oficial 1080px • Sem vento • Sincronizado com as 10 estações</span>
+        </p>
+      </div>
+
+      <!-- Rodapé de Ações do Modal (Botão Grande e Acessível para Polegar no Mobile) -->
+      <div class="px-4 py-3 bg-[#f8fafc] border-t border-[#cbd5e1] flex items-center justify-between gap-3 text-xs flex-wrap shrink-0">
+        <span class="text-black font-bold hidden sm:inline">
+          Canal Oficial: <strong class="text-black font-black">@tempoemriodasostras</strong>
+        </span>
+
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+          <button type="button" onclick="closeSocialModalChuva()" class="btn-action-outline px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm cursor-pointer transition">
+            Fechar
+          </button>
+          <button type="button" id="social-download-main-btn" onclick="downloadSocialCurrentFormat()" class="flex-1 sm:flex-initial px-5 py-2.5 rounded-xl font-black bg-[#ffebe4] border-2 border-[#f07a53] text-black shadow-xs hover:bg-[#ffd9cb] active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-xs sm:text-sm transition">
+            <i data-lucide="download" class="w-4 h-4 text-black"></i>
+            <span>Baixar Post Feed (1080x1350)</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
