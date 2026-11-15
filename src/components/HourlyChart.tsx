@@ -103,11 +103,11 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
     maxVal += 1;
   }
 
-  const chartHeight = metric === 'rain' ? 195 : 180;
+  const chartHeight = metric === 'rain' ? 220 : 210;
   const colWidth = 54;
   const chartWidth = Math.max(points.length * colWidth, 480);
-  const paddingBottom = metric === 'rain' ? 46 : 40;
-  const paddingTop = 26;
+  const paddingBottom = metric === 'rain' ? 48 : 42;
+  const paddingTop = 30;
   const innerHeight = chartHeight - paddingTop - paddingBottom;
 
   const getY = (val: number) => {
@@ -178,9 +178,20 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
         </div>
       )}
 
+      {/* Indicador de Deslizar para Ver Todas as Horas */}
+      <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-[#FF8244]/10 border border-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] text-xs font-semibold">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-[#FF8244] animate-pulse" />
+          <span>Deslize o gráfico para os lados para ver as {points.length} horas →</span>
+        </span>
+        <span className="font-mono text-[10px] bg-[#FF8244] text-[#000000] px-2 py-0.5 rounded font-black uppercase">
+          {horizonCount}h
+        </span>
+      </div>
+
       {/* Gráfico SVG com Rolagem Horizontal Suave */}
       <div
-        className="w-full overflow-x-auto pb-2 scrollbar-thin touch-pan-x"
+        className="w-full overflow-x-auto pb-2 scrollbar-thin touch-pan-x rounded-lg"
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
         <div style={{ minWidth: `${chartWidth}px` }} className="relative">
@@ -200,24 +211,59 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
               </linearGradient>
             </defs>
 
-            {/* Linhas de grade horizontal */}
+            {/* Linhas de grade horizontal e Escala Y */}
+            {/* Linha do Topo (Máximo) */}
             <line
               x1="0"
               y1={paddingTop}
               x2={chartWidth}
               y2={paddingTop}
               stroke="currentColor"
-              strokeOpacity="0.08"
+              strokeOpacity="0.12"
               strokeDasharray="4 4"
             />
+            <text
+              x="6"
+              y={paddingTop - 5}
+              className="text-[10px] font-mono font-bold fill-slate-500 dark:fill-[#E5E5E5]/70"
+            >
+              Máx: {maxVal.toFixed(metric === 'rain' ? 1 : 0)}{getMetricUnit()}
+            </text>
+
+            {/* Linha Central de Referência */}
+            <line
+              x1="0"
+              y1={paddingTop + innerHeight / 2}
+              x2={chartWidth}
+              y2={paddingTop + innerHeight / 2}
+              stroke="currentColor"
+              strokeOpacity="0.07"
+              strokeDasharray="3 3"
+            />
+            <text
+              x="6"
+              y={paddingTop + innerHeight / 2 - 4}
+              className="text-[9px] font-mono fill-slate-400 dark:fill-[#E5E5E5]/40"
+            >
+              {((maxVal + minVal) / 2).toFixed(metric === 'rain' ? 1 : 0)}{getMetricUnit()}
+            </text>
+
+            {/* Linha da Base (Mínimo) */}
             <line
               x1="0"
               y1={chartHeight - paddingBottom}
               x2={chartWidth}
               y2={chartHeight - paddingBottom}
               stroke="currentColor"
-              strokeOpacity="0.12"
+              strokeOpacity="0.15"
             />
+            <text
+              x="6"
+              y={chartHeight - paddingBottom - 4}
+              className="text-[10px] font-mono font-bold fill-slate-500 dark:fill-[#E5E5E5]/70"
+            >
+              Mín: {minVal.toFixed(metric === 'rain' ? 1 : 0)}{getMetricUnit()}
+            </text>
 
             {/* Barras de Chuva ou Linha Contínua */}
             {metric === 'rain' ? (
