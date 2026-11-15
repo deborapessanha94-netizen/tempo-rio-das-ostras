@@ -16,6 +16,7 @@ import {
   CloudSun,
   Compass,
   Copy,
+  Download,
   Droplets,
   ExternalLink,
   Eye,
@@ -966,11 +967,11 @@ export default function App() {
             {!isAppInstalled && (
               <button
                 onClick={() => setShowInstallModal(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-[#FF8244]/15 hover:bg-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/40 transition-colors cursor-pointer whitespace-nowrap"
-                title="Acessar como Aplicativo no Celular"
+                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs font-bold rounded-lg bg-[#FF8244] hover:bg-[#e0682a] text-[#000000] shadow-sm transition-all cursor-pointer whitespace-nowrap"
+                title="Baixar Aplicativo no Celular"
               >
-                <Smartphone className="w-3.5 h-3.5 text-[#FF8244]" />
-                <span className="hidden sm:inline">Instalar App</span>
+                <Download className="w-3.5 h-3.5 text-[#000000]" />
+                <span>Baixar App</span>
               </button>
             )}
             <button
@@ -987,6 +988,33 @@ export default function App() {
 
       {/* Workspace Shell: Left Vertical Tabs Rail + Main Content */}
       <div className="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-8 py-6 lg:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
+        {/* Banner de Baixar Aplicativo Mobile (Destacado no Topo) */}
+        {!isAppInstalled && (
+          <div className="w-full lg:hidden p-3.5 rounded-xl bg-gradient-to-r from-[#14213D] to-[#1E293B] border-2 border-[#FF8244] shadow-lg flex items-center justify-between gap-3 text-white">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[#FF8244] text-[#000000] flex items-center justify-center shrink-0 shadow-md">
+                <Download className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-white flex items-center gap-1.5">
+                  <span>Aplicativo para Celular</span>
+                  <span className="px-1.5 py-0.5 rounded bg-[#FF8244] text-[#000000] text-[9px] font-mono font-black uppercase">Grátis</span>
+                </div>
+                <div className="text-[11px] text-[#E5E5E5]/80 truncate">
+                  Instale na sua tela de início sem barra do navegador
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowInstallModal(true)}
+              className="px-3.5 py-2 rounded-lg bg-[#FF8244] hover:bg-[#e0682a] text-[#000000] text-xs font-extrabold cursor-pointer whitespace-nowrap shadow-md flex items-center gap-1.5 shrink-0"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Baixar App</span>
+            </button>
+          </div>
+        )}
+
         {/* Mobile Active Tab Bar */}
         <div className="w-full lg:hidden flex items-center justify-between gap-2.5 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl px-3.5 py-2.5">
           <div className="flex items-center gap-2 min-w-0">
@@ -1004,11 +1032,11 @@ export default function App() {
             {!isAppInstalled && (
               <button
                 onClick={() => setShowInstallModal(true)}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-[#FF8244]/15 hover:bg-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] border border-[#FF8244]/40 transition-colors cursor-pointer"
-                title="Acessar como Aplicativo no Celular"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-lg bg-[#FF8244] text-[#000000] shadow-xs cursor-pointer whitespace-nowrap"
+                title="Baixar Aplicativo no Celular"
               >
-                <Smartphone className="w-3.5 h-3.5 text-[#FF8244]" />
-                <span className="hidden sm:inline">Instalar</span> App
+                <Download className="w-3.5 h-3.5" />
+                <span>Baixar App</span>
               </button>
             )}
             <button
@@ -1056,6 +1084,32 @@ export default function App() {
             aria-label="Abas principais do portal"
             className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-3 space-y-1.5"
           >
+            {/* Card de Baixar App no topo do menu lateral/mobile */}
+            {!isAppInstalled && (
+              <div className="p-3 rounded-xl bg-gradient-to-r from-[#14213D] to-[#1E293B] border border-[#FF8244]/40 shadow-sm space-y-2 text-white mb-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-[#FF8244]" />
+                    <span className="text-xs font-bold">Aplicativo no Celular</span>
+                  </div>
+                  <span className="px-1.5 py-0.5 rounded bg-[#FF8244] text-[#000000] text-[9px] font-mono font-bold uppercase">Grátis</span>
+                </div>
+                <p className="text-[11px] text-[#E5E5E5]/80 leading-snug">
+                  Tenha acesso direto em tela cheia na sua tela inicial (Android e iPhone).
+                </p>
+                <button
+                  onClick={() => {
+                    setShowInstallModal(true);
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full py-2 px-3 rounded-lg bg-[#FF8244] hover:bg-[#e0682a] text-[#000000] font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Baixar Aplicativo Agora</span>
+                </button>
+              </div>
+            )}
+
             <div className="px-3 pt-1 pb-2 flex items-center justify-between border-b border-[#E5E5E5] dark:border-[#233354]/80">
               <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65">
                 Abas do Portal
@@ -6132,7 +6186,6 @@ export default function App() {
           { id: 'chuva' as SectionTab, label: 'Chuva', icon: CloudRain },
           { id: 'rio' as SectionTab, label: 'Rio Jundiá', icon: Waves },
           { id: 'orla' as SectionTab, label: 'Orla', icon: Umbrella },
-          { id: 'alertas' as SectionTab, label: 'Alertas', icon: ShieldAlert },
         ].map((tab) => {
           const isActive = activeTab === tab.id;
           const Icon = tab.icon;
@@ -6155,6 +6208,17 @@ export default function App() {
             </button>
           );
         })}
+
+        {/* Botão Baixar App no Bottom Nav */}
+        <button
+          onClick={() => setShowInstallModal(true)}
+          className="flex flex-col items-center justify-center py-1 px-1.5 rounded-lg text-[#FF8244] font-bold cursor-pointer"
+        >
+          <div className="w-6 h-6 rounded-full bg-[#FF8244] text-[#000000] flex items-center justify-center shadow-xs">
+            <Download className="w-3.5 h-3.5" />
+          </div>
+          <span className="text-[9.5px] font-sans mt-0.5 tracking-tight font-extrabold text-[#FF8244]">Baixar</span>
+        </button>
 
         {/* Botão Mais / Menu */}
         <button
