@@ -2,7 +2,7 @@
 Módulo de Coleta e Monitoramento da Rede Pluviométrica e Hidrológica de Rio das Ostras
 - Weather Underground (6 PWS) — Telemetria decimal em tempo real + início da chuva hoje + picos diários
 - INEA Alerta de Cheias (Estação 2241036 / Rio Jundiá)
-- CEMADEN Nacional (3 PCDs Palmital) — Conversão UTC -> BRT + início da chuva hoje
+- CEMADEN Nacional (PCD 18789 Palmital 03) — Conversão UTC -> BRT + início da chuva hoje
 """
 
 import urllib.request
@@ -185,7 +185,7 @@ def get_wu_api_key():
 
 
 def collect_stations_network():
-    print(">> [Rede Pluviométrica] Coletando todas as 10 estações em tempo real (precisão decimal)...")
+    print(">> [Rede Pluviométrica] Coletando todas as 8 estações em tempo real (precisão decimal)...")
     wu_key = get_wu_api_key()
     now_brt = datetime.now(BRT)
     today_iso = now_brt.strftime("%Y-%m-%d")
@@ -636,22 +636,8 @@ def collect_stations_network():
 
     stations.append(inea_entry)
 
-    # 3. PCDs Pluviométricas Oficiais (CEMADEN) — sem inventar vento/temperatura
+    # 3. PCD Pluviométrica Oficial (CEMADEN Palmital 03 / divisa Rio das Ostras) — sem inventar vento/temperatura
     cemaden_targets = [
-        {
-            "id": "18788",
-            "nome": "Palmital 01 (PCD 18788)",
-            "nome_curto": "Palmital 01",
-            "bairro": "Palmital / Rio Jundiá",
-            "url": "https://resources.cemaden.gov.br/graficos/interativo/grafico_CEMADEN.php?idpcd=18788&uf=RJ"
-        },
-        {
-            "id": "18790",
-            "nome": "Palmital 02 (PCD 18790)",
-            "nome_curto": "Palmital 02",
-            "bairro": "Palmital / Encostas",
-            "url": "https://resources.cemaden.gov.br/graficos/interativo/grafico_CEMADEN.php?idpcd=18790&uf=RJ"
-        },
         {
             "id": "18789",
             "nome": "Palmital 03 (PCD 18789)",
@@ -740,7 +726,7 @@ def collect_stations_network():
 
         stations.append(c_entry)
 
-    # Separa as 9 estações pluviométricas e ordena: maior chuva primeiro; se empatadas, online primeiro
+    # Separa as 7 estações pluviométricas e ordena: maior chuva primeiro; se empatadas, online primeiro
     pluviometric_stations = [s for s in stations if s.get("categoria") != "inea"]
     pluviometric_stations.sort(
         key=lambda s: (
@@ -762,7 +748,7 @@ def collect_stations_network():
 
     all_stations = pluviometric_stations + [inea_entry]
 
-    # Métricas agregadas municipais (calculadas apenas sobre as 9 estações pluviométricas)
+    # Métricas agregadas municipais (calculadas apenas sobre as 7 estações pluviométricas)
     val_24h = [s["chuva_24h"] for s in pluviometric_stations if s.get("chuva_24h") is not None]
     media_24h = round(sum(val_24h) / len(val_24h), 1) if val_24h else 0.0
     max_val_24h = max(val_24h, default=0.0)

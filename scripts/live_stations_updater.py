@@ -4,7 +4,7 @@ Serviço Contínuo de Atualização em Tempo Real das Estações (5 em 5 minutos
 Executa a cada 300 segundos consultando:
 - Weather Underground (6 PWS: IRIODA17, IRIODA16, IRIODA15, ICASIM5, IRIODA6, IRIODA5)
 - INEA Alerta de Cheias (Estação 2241036 / Rio Jundiá)
-- CEMADEN Nacional (3 PCDs Palmital: 18788, 18789, 18790)
+- CEMADEN Nacional (PCD 18789 Palmital 03)
 Atualiza data/acumulados_estacoes.json diretamente no disco.
 """
 import time

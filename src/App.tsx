@@ -102,7 +102,7 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string; shortLabe
   ],
   chuva: [
     { id: 'resumo', label: 'Resumo & KPIs de Chuva', shortLabel: 'Resumo' },
-    { id: 'cards', label: '10 Estações da Rede', shortLabel: '10 Estações' },
+    { id: 'cards', label: '8 Estações da Rede', shortLabel: '8 Estações' },
     { id: 'tabela', label: 'Tabela Comparativa', shortLabel: 'Tabela' },
     { id: 'planilha', label: 'Histórico em Planilha', shortLabel: 'Planilha' },
     { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
@@ -2795,7 +2795,7 @@ export default function App() {
                         Card Oficial de Acumulados
                       </h4>
                       <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
-                        Ranking completo de chuva das 10 estações com barras proporcionais e total do município.
+                        Ranking completo de chuva das {acumulados?.total_estacoes || 8} estações com barras proporcionais e total do município.
                       </p>
                     </div>
                     <div className="flex items-center gap-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
@@ -2877,10 +2877,10 @@ export default function App() {
                 <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                   <div className="flex flex-wrap items-center gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
                     {[
-                      { id: 'all', label: `Todas (${acumulados?.estacoes.length || 10})` },
-                      { id: 'pws', label: 'Weather Underground (6)' },
-                      { id: 'cemaden', label: 'CEMADEN PCDs (3)' },
-                      { id: 'inea', label: 'INEA Cheias (1)' },
+                      { id: 'all', label: `Todas (${acumulados?.estacoes.length || 8})` },
+                      { id: 'pws', label: `Weather Underground (${acumulados ? acumulados.estacoes.filter((s) => s.categoria === 'pws').length : 6})` },
+                      { id: 'cemaden', label: `CEMADEN PCD (${acumulados ? acumulados.estacoes.filter((s) => s.categoria === 'cemaden').length : 1})` },
+                      { id: 'inea', label: `INEA Cheias (${acumulados ? acumulados.estacoes.filter((s) => s.categoria === 'inea').length : 1})` },
                     ].map((tab) => (
                       <button
                         key={tab.id}
@@ -2970,7 +2970,7 @@ export default function App() {
               </div>
             )}
 
-            {/* Sub-aba 2: 10 Estações da Rede — Cards Minimalistas */}
+            {/* Sub-aba 2: 8 Estações da Rede — Cards Minimalistas */}
             {showSub('cards') && (
               <section className="space-y-4">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">

@@ -75,29 +75,9 @@ const PWS_CATALOG: StationSeedMeta[] = [
   },
 ];
 
+const EXCLUDED_STATION_CODES = new Set(['PCD 18788', 'PCD 18790']);
+
 const CEMADEN_CATALOG: (StationSeedMeta & { cid: string })[] = [
-  {
-    cid: '18788',
-    codigo: 'PCD 18788',
-    nome: 'Palmital 01 (PCD 18788)',
-    nome_curto: 'Palmital 01',
-    bairro: 'Palmital / Rio Jundiá',
-    rede: 'CEMADEN Nacional',
-    categoria: 'cemaden',
-    url: 'https://resources.cemaden.gov.br/graficos/interativo/grafico_CEMADEN.php?idpcd=18788&uf=RJ',
-    url_portal: 'https://mapainterativo.cemaden.gov.br/',
-  },
-  {
-    cid: '18790',
-    codigo: 'PCD 18790',
-    nome: 'Palmital 02 (PCD 18790)',
-    nome_curto: 'Palmital 02',
-    bairro: 'Palmital / Encostas',
-    rede: 'CEMADEN Nacional',
-    categoria: 'cemaden',
-    url: 'https://resources.cemaden.gov.br/graficos/interativo/grafico_CEMADEN.php?idpcd=18790&uf=RJ',
-    url_portal: 'https://mapainterativo.cemaden.gov.br/',
-  },
   {
     cid: '18789',
     codigo: 'PCD 18789',
@@ -936,7 +916,9 @@ export async function enrichAcumuladosWithLiveTelemetry(
     const existingList = Array.isArray(base?.estacoes) ? base!.estacoes : [];
     const byCode = new Map<string, EstacaoPluvio>();
     existingList.forEach((st) => {
-      if (st?.codigo) byCode.set(st.codigo, st);
+      if (st?.codigo && !EXCLUDED_STATION_CODES.has(st.codigo)) {
+        byCode.set(st.codigo, st);
+      }
     });
 
     const pwsPromises = PWS_CATALOG.map(async (meta) => ({

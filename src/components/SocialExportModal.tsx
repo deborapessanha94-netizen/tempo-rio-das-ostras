@@ -317,7 +317,7 @@ export const SocialExportModal: React.FC<SocialExportModalProps> = ({
                   onClick={() => (window as any).toggleSocialChipsDrawer?.()}
                   className="text-[11px] font-black text-[#ea580c] hover:text-[#c2410c] flex items-center gap-1 cursor-pointer py-1.5 px-3 rounded-xl bg-[#ffebe4]/70 hover:bg-[#ffebe4] border border-[#f07a53]/40 transition shrink-0 shadow-2xs"
                 >
-                  <span id="social-selected-count">10 de 10 selecionadas</span>
+                  <span id="social-selected-count">{acumulados?.estacoes?.length || 8} de {acumulados?.estacoes?.length || 8} selecionadas</span>
                   <ChevronDown id="social-chips-chevron" className="w-3.5 h-3.5 text-[#ea580c] transition-transform duration-200" />
                 </button>
               </div>
