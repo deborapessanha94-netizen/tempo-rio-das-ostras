@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-16 18:33:10",
+  "coleta_iso": "2026-11-16 20:17:36",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para terça-feira (17) e quarta-feira (18)",
+      "data": "16/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-17-e-quarta-feira-18",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "INMET divulga previsão para semana de 16 a 23 de novembro de 2026",
       "data": "16/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "Semeadura do feijão de 1ª safra avança em ritmos diferentes nas principais regiões produtoras",
       "data": "12/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/semeadura-do-feijão-de-1ª-safra-avança-em-ritmos-diferentes-nas-principais-regiões-produtoras",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para quinta-feira (12) e sexta-feira (13)",
-      "data": "11/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-12-e-sexta-feira-13",
       "relevancia_sudeste": false
     }
   ]
