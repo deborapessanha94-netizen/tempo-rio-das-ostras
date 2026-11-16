@@ -182,7 +182,7 @@
     "mar_condicao": "Calmo",
     "indice_uv": 13.0,
     "agua_precipitavel_mm": 10.1,
-    "tempo_desc": "Céu nublado com pancadas de chuva e raios (Transporte de Umidade / Frente Fria)",
+    "tempo_desc": "Céu nublado com pancadas de chuva e raios (Sistema Pós-Frontal / Transporte de Umidade)",
     "tempo_icone": "cloud-rain"
   },
   {
@@ -213,7 +213,7 @@
     "mar_condicao": "Calmo",
     "indice_uv": 13.0,
     "agua_precipitavel_mm": 11.5,
-    "tempo_desc": "Céu nublado com pancadas de chuva e raios (Transporte de Umidade / Frente Fria)",
+    "tempo_desc": "Céu nublado com pancadas de chuva e raios (Sistema Pós-Frontal / Transporte de Umidade)",
     "tempo_icone": "cloud-rain"
   },
   {

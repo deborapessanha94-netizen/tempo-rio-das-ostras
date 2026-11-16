@@ -1710,12 +1710,22 @@ def run_auto_bulletin_pipeline():
                     chuva_sum = min(chuva_sum, 0.5)
 
             # Integração dos Alertas INMET vigentes & Boletim Oficial Alerta de Cheias INEA nos cálculos do turno
-            inea_rh8 = inea_boletim_data.get('previsao_rh8', {})
+            inea_rh8 = inea_boletim_data.get('previsao_rh8', {}) if inea_boletim_data else {}
             inea_hoje = inea_rh8.get('hoje', {})
             inea_amanha = inea_rh8.get('amanha', {})
-            inea_prev_dia = inea_hoje if day_idx == 0 else (inea_amanha if day_idx == 1 else {})
+            if inea_hoje.get('data') == dt_br_format:
+                inea_prev_dia = inea_hoje
+            elif inea_amanha.get('data') == dt_br_format:
+                inea_prev_dia = inea_amanha
+            elif not inea_hoje.get('data') and day_idx == 0:
+                inea_prev_dia = inea_hoje
+            elif not inea_amanha.get('data') and day_idx == 1:
+                inea_prev_dia = inea_amanha
+            else:
+                inea_prev_dia = {}
             inea_faixa = inea_prev_dia.get('faixa_chuva_mm', '')
-            inea_tem_chuva_mod = ('10 a 25' in inea_faixa or 'moderada' in inea_prev_dia.get('condicao', '').lower() or 'pancadas' in inea_prev_dia.get('condicao', '').lower())
+            inea_cond_str = inea_prev_dia.get('condicao', '').lower()
+            inea_tem_chuva_mod = ('10 a 25' in inea_faixa or 'moderada' in inea_cond_str or 'pancadas' in inea_cond_str)
 
             if tem_alerta_inmet_dia and alerta_dia:
                 sev_alerta = alerta_dia.get('cor_nome', 'Amarelo')
@@ -1734,18 +1744,21 @@ def run_auto_bulletin_pipeline():
                     icon_name = "cloud-lightning"
                 elif turno_nome == 'Manhã':
                     chuva_prob_max = max(chuva_prob_max, 50)
-            elif day_idx == 1 and inea_tem_chuva_mod:
-                # Sexta-feira: passagem pós-frontal e transporte de umidade com declínio térmico
+            elif inea_prev_dia and day_idx == 1 and inea_tem_chuva_mod:
+                # Dia seguinte sob atuação frontal/pós-frontal e transporte de umidade oceânica (INEA)
+                eh_pos_frontal = 'pós-frontal' in inea_cond_str or 'pos-frontal' in inea_cond_str
+                tem_raios_inea = 'raios' in inea_cond_str or 'trovoada' in inea_cond_str
+                sistema_tag = "Sistema Pós-Frontal / Transporte de Umidade" if eh_pos_frontal else "Transporte de Umidade / Frente Fria"
                 if turno_nome in ['Manhã', 'Tarde']:
                     chuva_prob_max = max(chuva_prob_max, 75)
                     chuva_sum = max(chuva_sum, 4.0)
-                    tempo_desc = "Céu nublado com pancadas de chuva e raios (Transporte de Umidade / Frente Fria)"
+                    tempo_desc = f"Céu nublado com pancadas de chuva {'e raios ' if tem_raios_inea else ''}({sistema_tag})"
                     icon_name = "cloud-rain"
                 elif turno_nome in ['Madrugada', 'Noite']:
                     chuva_prob_max = max(chuva_prob_max, 65)
                     chuva_sum = max(chuva_sum, 2.5)
-                    tempo_desc = "Chuva intermitente pós-frontal"
-                    icon_name = "cloud-rain" 
+                    tempo_desc = "Chuva intermitente pós-frontal" if eh_pos_frontal else "Chuva intermitente com nebulosidade"
+                    icon_name = "cloud-rain"
 
             # Se Marinha tiver aviso ativo
             if tem_aviso_marinha and day_idx == 0:
@@ -1952,6 +1965,292 @@ def run_auto_bulletin_pipeline():
 
     informe_alerta = ". ".join(alerta_partes) + "."
 
+    # Helpers de Diagnóstico Sinótico Diário (INEA + INMET + Marinha + Escoamento de Turnos)
+    def get_inea_prev_for_date(date_br_str, dia_idx=None):
+        rh8 = inea_boletim_data.get('previsao_rh8', {}) if inea_boletim_data else {}
+        hoje_b = rh8.get('hoje', {})
+        amanha_b = rh8.get('amanha', {})
+        if hoje_b.get('data') == date_br_str:
+            return hoje_b
+        if amanha_b.get('data') == date_br_str:
+            return amanha_b
+        if dia_idx == 0 and not hoje_b.get('data'):
+            return hoje_b
+        if dia_idx == 1 and not amanha_b.get('data'):
+            return amanha_b
+        return {}
+
+    def get_marinha_dia_status(date_iso_str, dia_idx):
+        if not tem_aviso_marinha or not m_data:
+            return 'none'
+        avisos = m_data.get('avisos_ativos') or ([m_data] if m_data.get('aviso_ativo') else [])
+        matched_any_range = False
+        best_status = 'none'
+        for av in avisos:
+            ini_s = av.get('inicio_utc') or m_data.get('inicio_utc')
+            fim_s = av.get('fim_utc') or m_data.get('fim_utc')
+            if ini_s and fim_s:
+                matched_any_range = True
+                try:
+                    dt_ini = datetime.fromisoformat(ini_s.replace('Z', '+00:00')) - timedelta(hours=3)
+                    dt_fim = datetime.fromisoformat(fim_s.replace('Z', '+00:00')) - timedelta(hours=3)
+                    day_start = datetime.strptime(date_iso_str, '%Y-%m-%d').replace(hour=0, minute=0, tzinfo=dt_ini.tzinfo)
+                    day_end = day_start.replace(hour=23, minute=59)
+                    if dt_ini <= day_end and dt_fim >= day_start:
+                        # Se termina já nas primeiras horas da madrugada (ex.: 03h) e começou no dia anterior
+                        if dt_ini < day_start and dt_fim <= day_start.replace(hour=6, minute=0):
+                            if best_status == 'none':
+                                best_status = 'madrugada_fim'
+                        else:
+                            best_status = 'ativa'
+                except Exception:
+                    matched_any_range = False
+        if matched_any_range:
+            return best_status
+        return 'ativa' if dia_idx == 0 else 'none'
+
+    def is_marinha_ativa_no_dia(date_iso_str, dia_idx):
+        return get_marinha_dia_status(date_iso_str, dia_idx) == 'ativa'
+
+    def get_inmet_dia_signals(date_br_str):
+        raw = inmet_forecast.get(date_br_str, {}) if inmet_forecast else {}
+        if not raw:
+            return {'resumos': [], 'dirs': [], 'tende': '', 'resumo_str': ''}
+        if any(k in raw for k in ('manha', 'tarde', 'noite')):
+            subs = [raw[k] for k in ('manha', 'tarde', 'noite') if isinstance(raw.get(k), dict)]
+            resumos = [s.get('resumo', '') for s in subs if s.get('resumo')]
+            dirs = [s.get('dir_vento', '').strip() for s in subs if s.get('dir_vento')]
+            tende = next((s.get('temp_max_tende', '') for s in subs if s.get('temp_max_tende')), '')
+        else:
+            resumos = [raw.get('resumo', '')] if raw.get('resumo') else []
+            dirs = [raw.get('dir_vento', '').strip()] if raw.get('dir_vento') else []
+            tende = raw.get('temp_max_tende', '')
+        return {
+            'resumos': resumos,
+            'dirs': dirs,
+            'tende': tende,
+            'resumo_str': ' '.join(resumos).lower(),
+        }
+
+    def _wind_quadrant(dir_str):
+        if not dir_str:
+            return 'E'
+        u = dir_str.strip().upper()
+        if u in ('W-NE', 'N-NE', 'NE-N'):
+            return 'N'
+        parts = [p.strip() for p in u.replace('/', '-').split('-') if p.strip()]
+        if 'NE' in parts and 'SE' in parts:
+            return 'E'
+        if any(p in ('S', 'SSW', 'SW', 'WSW') for p in parts):
+            return 'S'
+        if any(p in ('SSE', 'SE') for p in parts):
+            return 'SE'
+        if any(p in ('N', 'NNW', 'NNE', 'NW', 'NE') for p in parts):
+            return 'N'
+        return 'E'
+
+    def _format_wind_band(day_turnos, inmet_dirs):
+        # Prioriza transição de Manhã/Tarde (ou início->tarde), que coincide com o tópico de vento e descreve a brisa diurna real
+        if day_turnos:
+            d0_w = (day_turnos[0].get('vento_dir') or '').strip()
+            d_tar = (day_turnos[2].get('vento_dir') if len(day_turnos) > 2 else day_turnos[-1].get('vento_dir') or '').strip()
+            d_noi = (day_turnos[-1].get('vento_dir') or '').strip()
+            end_w = d_tar or d_noi
+            if d0_w and end_w and d0_w != end_w:
+                if d_noi and d_noi != end_w and _wind_quadrant(d_noi) != _wind_quadrant(end_w):
+                    return f"de {d0_w} rondando para {end_w}/{d_noi}"
+                return f"de {d0_w} para {end_w}"
+            if d0_w:
+                return d0_w
+        if inmet_dirs:
+            return inmet_dirs[0]
+        return "E/NE"
+
+    def _describe_wind_sector(day_turnos, inmet_dirs):
+        target_w = (day_turnos[2].get('vento_dir') if len(day_turnos) > 2 else (day_turnos[0].get('vento_dir') if day_turnos else ''))
+        if not target_w and inmet_dirs:
+            target_w = inmet_dirs[0]
+        q = _wind_quadrant(target_w)
+        if q == 'S':
+            return "do quadrante Sul/Sudoeste"
+        if q == 'SE':
+            return "marítimos de Sudeste/Leste"
+        if q == 'N':
+            return "do quadrante Norte/Nordeste"
+        return "de Leste/Nordeste"
+
+    def _describe_rain_window(day_turnos):
+        if not day_turnos:
+            return "ao longo do dia"
+        order = ['Madrugada', 'Manhã', 'Tarde', 'Noite']
+        names_lc = {'Madrugada': 'madrugada', 'Manhã': 'manhã', 'Tarde': 'tarde', 'Noite': 'noite'}
+        tmap = {r['turno']: r for r in day_turnos}
+        wet = [t for t in order if t in tmap and (tmap[t].get('chuva_media', 0) >= 0.8 or (tmap[t].get('chuva_prob', 0) >= 50 and tmap[t].get('chuva_media', 0) >= 0.3))]
+        heavy = [t for t in order if t in tmap and tmap[t].get('chuva_media', 0) >= 1.5]
+        if len(heavy) >= 3:
+            if tmap.get('Manhã', {}).get('chuva_media', 0) >= tmap.get('Madrugada', {}).get('chuva_media', 0) and tmap.get('Tarde', {}).get('chuva_media', 0) >= tmap.get('Noite', {}).get('chuva_media', 0):
+                return "ao longo do dia (com maior intensidade entre a manhã e a tarde)"
+            return "ao longo do dia"
+        if not wet:
+            best = max(day_turnos, key=lambda r: (r.get('chuva_media', 0), r.get('chuva_prob', 0)))
+            wet = [best['turno']]
+        if wet == ['Tarde', 'Noite']:
+            return "entre a tarde e a noite"
+        if wet == ['Madrugada', 'Manhã']:
+            return "entre a madrugada e a manhã"
+        if wet == ['Manhã', 'Tarde']:
+            return "entre a manhã e a tarde"
+        if wet == ['Noite']:
+            return "concentrada no período da noite"
+        if wet == ['Tarde']:
+            return "a partir da tarde"
+        if wet == ['Manhã']:
+            return "principalmente pela manhã"
+        if len(wet) >= 3 and 'Madrugada' not in wet:
+            return "entre a manhã e a noite"
+        return "entre " + " e ".join(names_lc[t] for t in wet[:2])
+
+    def classificar_sistema_dia(dia_idx, prev_codigo=None, next_codigo=None):
+        d = dias_3[dia_idx]
+        day_turnos = [r for r in records_12_turnos if r['data_iso'] == d['date_iso']]
+        inea_d = get_inea_prev_for_date(d['date_br'], dia_idx)
+        inmet_d = get_inmet_dia_signals(d['date_br'])
+        alerts_d = get_day_alerts(d['date_iso'])
+        marinha_status = get_marinha_dia_status(d['date_iso'], dia_idx)
+        marinha_d = (marinha_status == 'ativa')
+
+        dirs_turn = [r.get('vento_dir', '') for r in day_turnos]
+        quads = [_wind_quadrant(wd) for wd in dirs_turn]
+        early_north = any(q == 'N' for q in quads[:2]) or (len(inmet_d['dirs']) >= 2 and _wind_quadrant(inmet_d['dirs'][0]) == 'N')
+        late_south = any(q == 'S' for q in quads[1:]) or (len(inmet_d['dirs']) >= 2 and _wind_quadrant(inmet_d['dirs'][-1]) == 'S')
+        giro_frontal = early_north and late_south
+        sw_count = sum(1 for q in quads if q == 'S')
+        ne_e_count = sum(1 for q in quads if q in ('N', 'E', 'SE'))
+        inmet_has_n = any(_wind_quadrant(wd) == 'N' for wd in inmet_d['dirs'])
+
+        delta_tmax = (d['t_max'] - dias_3[dia_idx - 1]['t_max']) if dia_idx > 0 else 0
+        next_delta_tmax = (dias_3[dia_idx + 1]['t_max'] - d['t_max']) if (dia_idx + 1) < len(dias_3) else 0
+        inea_cond = inea_d.get('condicao', '').lower()
+        inea_faixa = inea_d.get('faixa_chuva_mm', '')
+        inea_tem_chuva = ('10 a 25' in inea_faixa or 'moderada' in inea_cond or 'pancadas' in inea_cond)
+        inmet_tende = inmet_d['tende'].lower()
+        chuva_tot = d['chuva_tot']
+        has_thunder = (len(alerts_d) > 0 or d.get('wmo') in (95, 96, 99) or 'trovoad' in inmet_d['resumo_str'] or 'raios' in inea_cond)
+
+        mar_parts = [str(m_data.get('texto', '')), str(m_data.get('tipo', '')), str(m_data.get('forca', ''))] if m_data else []
+        if m_data:
+            for av in m_data.get('avisos_ativos', []):
+                mar_parts.extend([str(av.get('texto', '')), str(av.get('forca', ''))])
+        mar_text = ' '.join(mar_parts).lower()
+        cyclone_ctx = (dia_idx <= 2) and (
+            ('ciclôn' in mar_text or 'ciclon' in mar_text) and (marinha_d or tem_aviso_marinha)
+            or any('ciclone' in n.get('titulo', '').lower() for n in inmet_noticias_data.get('noticias', []))
+        )
+
+        # Classificação sinótica hierárquica baseada nos campos dinâmicos e boletins oficiais
+        if ('pós-frontal' in inea_cond or 'pos-frontal' in inea_cond) or (
+            ('declínio' in inmet_tende or delta_tmax <= -3) and sw_count >= 2 and (chuva_tot >= 3.0 or marinha_d)
+        ):
+            codigo = 'pos_frontal'
+            rotulo = 'Sistema Pós-Frontal / Transporte de Umidade Oceânica'
+        elif 'frente fria' in inea_cond or (
+            giro_frontal and (chuva_tot >= 3.0 or len(alerts_d) > 0 or next_delta_tmax <= -3)
+        ):
+            codigo = 'frente_fria'
+            rotulo = 'Aproximação / Passagem de Frente Fria'
+        elif (prev_codigo in ('pos_frontal', 'frente_fria') or delta_tmax <= -3) and chuva_tot < 5.0 and len(alerts_d) == 0:
+            codigo = 'alta_migratoria'
+            rotulo = 'Alta Pressão Migratória / Transição Pós-Frontal'
+        elif (next_codigo == 'frente_fria' or next_delta_tmax <= -3) and (inmet_has_n or d['t_max'] >= 31) and chuva_tot < 4.0 and len(alerts_d) == 0:
+            codigo = 'pre_frontal_asas'
+            rotulo = 'Escoamento Pré-Frontal Quente (Borda da ASAS)'
+        elif len(alerts_d) > 0 or chuva_tot >= 5.0 or (has_thunder and chuva_tot >= 2.0):
+            codigo = 'conveccao_cavado'
+            rotulo = 'Cavado em Médios Níveis / Convecção Úmida'
+        elif sw_count <= 1 and ne_e_count >= 3 and chuva_tot < 4.0 and ('elevação' in inmet_tende or delta_tmax >= 1 or d['t_max'] >= 29):
+            codigo = 'asas_estavel'
+            rotulo = 'Alta Subtropical do Atlântico Sul (ASAS)'
+        elif giro_frontal and chuva_tot < 3.0:
+            codigo = 'cavado_frontal_fraco'
+            rotulo = 'Cavado Costeiro / Mudança na Circulação dos Ventos'
+        else:
+            codigo = 'circulacao_maritima'
+            rotulo = 'Circulação Marítima Costeira'
+
+        pron = pron_dia(d['dia_semana'])
+        dia_nome = d['dia_semana'].lower()
+        vento_faixa = _format_wind_band(day_turnos, inmet_d['dirs'])
+        vento_setor = _describe_wind_sector(day_turnos, inmet_d['dirs'])
+        janela_chuva = _describe_rain_window(day_turnos)
+        heavy_turns = sum(1 for r in day_turnos if r.get('chuva_media', 0) >= 1.5)
+        cyclone_clause = " associada a um ciclone extratropical em alto-mar" if cyclone_ctx else ""
+
+        if codigo == 'pos_frontal':
+            if chuva_tot >= 4.0 or len(alerts_d) > 0 or inea_tem_chuva:
+                t1 = f"{pron} {dia_nome}, a atuação do sistema pós-frontal (retaguarda da frente fria{cyclone_clause}) mantém ventos persistentes do quadrante Sul/Sudoeste ({vento_faixa}) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico."
+            else:
+                t1 = f"{pron} {dia_nome}, a massa de ar frio e úmido na retaguarda da frente fria (sistema pós-frontal{cyclone_clause}) direciona ventos marítimos ({vento_faixa}) para o litoral, mantendo grande variação de nuvens, chance de chuvisco isolado e temperaturas mais amenas."
+        elif codigo == 'frente_fria':
+            sistema_front = (
+                "aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul"
+                if (cyclone_ctx or dia_idx <= 1) else
+                "aproximação e atuação de um novo sistema frontal na costa fluminense"
+            )
+            if len(alerts_d) == 0 and chuva_tot < 5.0:
+                t1 = f"{pron} {dia_nome}, a {sistema_front} provoca rotação gradual dos ventos ({vento_faixa}), mantendo calor ao longo do dia antes do aumento da nebulosidade e da chegada de chuva {janela_chuva}."
+            else:
+                t1 = f"{pron} {dia_nome}, a {sistema_front} promove rotação dos ventos ({vento_faixa}) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva{' acompanhadas de raios e trovoadas' if has_thunder else ''}."
+        elif codigo == 'alta_migratoria':
+            if delta_tmax <= -2 or 'declínio' in inmet_tende:
+                t1 = f"{pron} {dia_nome}, o avanço de uma alta pressão costeira na retaguarda do cavado estabelece ventos {vento_setor} ({vento_faixa}), promovendo alívio térmico{' e tendência de tempo mais firme, com nebulosidade variável' if chuva_tot < 0.2 else ', nebulosidade variável e possibilidade de chuva fraca ou garoa isolada'}."
+            else:
+                t1 = f"{pron} {dia_nome}, o afastamento do sistema pós-frontal para o oceano e o ingresso de uma massa de ar mais estável associada à alta pressão migratória favorecem a rotação gradual dos ventos ({vento_faixa}), reduzindo a instabilidade com aberturas de sol e recuperação gradual das temperaturas."
+        elif codigo == 'pre_frontal_asas':
+            inmet_n_txt = f" (fluxo de {inmet_d['dirs'][0]} em mesoescala e giro costeiro {vento_faixa})" if inmet_d['dirs'] else f" ({vento_faixa})"
+            t1 = f"{pron} {dia_nome}, o fortalecimento de crista atmosférica na borda da Alta Subtropical do Atlântico Sul (ASAS), em padrão pré-frontal{inmet_n_txt}, favorece advecção de ar quente, predomínio de sol entre poucas nuvens e calor acentuado."
+        elif codigo == 'asas_estavel':
+            if has_thunder or 'trovoad' in inmet_d['resumo_str']:
+                t1 = f"{pron} {dia_nome}, a atuação da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) mantém circulação {vento_setor} ({vento_faixa}) com períodos de sol e rápida elevação térmica, sem descartar instabilidade isolada pelo aquecimento vespertino."
+            elif chuva_tot < 1.5:
+                t1 = f"{pron} {dia_nome}, o predomínio da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) mantém circulação {vento_setor} ({vento_faixa}) com subsidência atmosférica, garantindo tempo firme, períodos de sol e rápida elevação das temperaturas."
+            else:
+                t1 = f"{pron} {dia_nome}, a atuação da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) sustenta fluxo {vento_setor} ({vento_faixa}) com sol entre nuvens e elevação térmica, permitindo apenas chuvas muito isoladas por efeito local."
+        elif codigo == 'conveccao_cavado':
+            if chuva_tot >= 15.0 and heavy_turns >= 3:
+                t1 = f"{pron} {dia_nome}, a atuação persistente de cavados atmosféricos acoplados a um canal de umidade tropical alimenta áreas de instabilidade contínuas, mantendo céu encoberto e chuva recorrente ao longo do dia."
+            else:
+                t1 = f"{pron} {dia_nome}, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva{' e trovoadas' if has_thunder else ''} {janela_chuva}."
+        elif codigo == 'cavado_frontal_fraco':
+            t1 = f"{pron} {dia_nome}, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste ({vento_faixa}), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado."
+        else:
+            t1 = f"{pron} {dia_nome}, a circulação de umidade vinda do oceano com ventos costeiros ({vento_faixa}) associada a perturbações fracas em superfície mantém alternância entre nuvens, aberturas de sol e chance de chuva fraca e passageira."
+
+        return {
+            'codigo': codigo,
+            'rotulo': rotulo,
+            't1': t1,
+            'janela_chuva': janela_chuva,
+            'has_thunder': has_thunder,
+            'marinha_ativa': marinha_d,
+            'marinha_status': marinha_status,
+            'inmet_tende': inmet_tende,
+            'inmet_resumo_str': inmet_d['resumo_str'],
+            'delta_tmax': delta_tmax,
+            'cyclone_ctx': cyclone_ctx,
+            'vento_faixa': vento_faixa,
+        }
+
+    # Passagem 1 (primária) + Passagem 2 (com contexto de dia anterior/seguinte) para os 8 dias
+    _raw_sys = {idx: classificar_sistema_dia(idx) for idx in range(len(dias_3))}
+    sistemas_8dias = {
+        idx: classificar_sistema_dia(
+            idx,
+            prev_codigo=_raw_sys[idx - 1]['codigo'] if idx > 0 else None,
+            next_codigo=_raw_sys[idx + 1]['codigo'] if (idx + 1) < len(dias_3) else None,
+        )
+        for idx in range(len(dias_3))
+    }
+
     # Gerador Oficial do Modelo de Informe à População (5 Tópicos)
     def gerar_informe_populacao_5_topicos(dia_idx, d, day_turnos, jundia_nivel, jundia_status, tem_marinha, inmet_list):
         dia_nome = d['dia_semana'].lower()
@@ -1973,10 +2272,18 @@ def run_auto_bulletin_pipeline():
 
         dia_date_iso = d.get('date_iso', '')
         day_alerts = get_day_alerts(dia_date_iso)
+        sys_info = sistemas_8dias.get(dia_idx) or classificar_sistema_dia(dia_idx)
+        sys_cod = sys_info['codigo']
+        janela_chuva = sys_info['janela_chuva']
+        has_thunder = sys_info['has_thunder']
+        marinha_dia = sys_info['marinha_ativa']
+        marinha_status = sys_info.get('marinha_status', 'ativa' if marinha_dia else 'none')
 
         avisos_ref = []
-        if tem_marinha and dia_idx == 0:
+        if marinha_dia or (tem_marinha and dia_idx == 0):
             avisos_ref.append("Aviso de Mau Tempo da Marinha do Brasil")
+        elif marinha_status == 'madrugada_fim':
+            avisos_ref.append("Aviso da Marinha do Brasil vigente até a madrugada")
 
         for a in day_alerts:
             avisos_ref.append(f"Alerta {a.get('cor_nome', 'Amarelo')} de {a.get('descricao', 'Tempestade')} nº {a.get('id', '')} do INMET")
@@ -1989,56 +2296,69 @@ def run_auto_bulletin_pipeline():
         else:
             vento_txt = f"Ventos predominantes de {dir_inicio} moderados com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
 
-        pron = pron_dia(d['dia_semana'])
         tem_alerta_dia = len(day_alerts) > 0
-
         ch_pico = d.get('chuva_pico_max', 50.0)
         alerta_id_str = f"sob Alerta {d.get('alerta_cor', 'Amarelo')} de Tempestade nº {d.get('alerta_id')} do INMET" if d.get('tem_alerta_inmet') else "sem alertas severos vigentes"
 
+        t1 = sys_info['t1']
+
         if dia_idx == 0:
-            if tem_alerta_dia:
-                t1 = f"{pron} {dia_nome}, o tempo apresenta variação de nebulosidade com desenvolvimento de convecção diurna a partir da tarde, trazendo pancadas de chuva isoladas com trovoadas."
-                t2 = f"Previsão de volume contínuo de {chuva_tot:.1f} mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até {ch_pico:.0f} mm/dia {alerta_id_str}. Pluviômetro CEMADEN (PCD 18789) registra {cemaden_24h:.1f} mm (24h) e o Rio Jundiá (INEA 224103620) acumula {inea_ch24:.1f} mm com cota em {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e calha desobstruída."
+            if tem_alerta_dia or chuva_tot >= 5.0:
+                tipo_chuva_hoje = "pancadas de chuva com risco de raios" if has_thunder else "chuva moderada a ocasionalmente forte"
+                pico_clause = f", com potencial de pico convectivo de 20 a 30 mm/h e até {ch_pico:.0f} mm/dia {alerta_id_str}" if tem_alerta_dia else f" ({alerta_id_str})"
+                t2 = f"Previsão de {tipo_chuva_hoje} {janela_chuva}, com volume contínuo de {chuva_tot:.1f} mm pelos modelos{pico_clause}. Pluviômetro CEMADEN (PCD 18789) registra {cemaden_24h:.1f} mm (24h) e o Rio Jundiá (INEA 224103620) acumula {inea_ch24:.1f} mm com cota em {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e calha desobstruída."
             else:
-                t1 = f"{pron} {dia_nome}, predomina o tempo ensolarado a parcialmente nublado com rápida elevação de temperatura ao longo do dia e aumento gradual de nuvens à tarde."
                 t2 = f"Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada ({chuva_tot:.1f} mm no dia). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
-            elev_tipo = "gradual"
-        elif dia_idx == 1:
-            if tem_alerta_dia or chuva_tot >= 5.0:
-                t1 = f"{pron} {dia_nome}, o tempo se mantém instável com predomínio de muitas nuvens sob atuação de cavados atmosféricos e circulação de umidade do oceano."
-                t2 = f"Previsão de pancadas de chuva com trovoadas pela manhã e chuva no decorrer da tarde (média de {chuva_tot:.1f} mm com pico de até {ch_pico:.0f} mm/dia {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
-            else:
-                t1 = f"{pron} {dia_nome}, o tempo apresenta períodos de sol entre nuvens com aquecimento térmico gradual."
-                t2 = f"Previsão de chuva fraca ou isolada ({chuva_tot:.1f} mm no dia). O Rio Jundiá permanece seguro com nível de {jundia_nivel} m."
-            elev_tipo = "moderada"
         else:
-            if tem_alerta_dia or chuva_tot >= 5.0:
-                t1 = f"{pron} {dia_nome}, o calor intenso combinado à umidade atmosférica sustenta a formação de instabilidades à tarde e à noite, com aberturas de sol pela manhã."
-                t2 = f"Previsão de pancadas de chuva e trovoadas à tarde (média de {chuva_tot:.1f} mm e teto de alerta de até {ch_pico:.0f} mm/dia {alerta_id_str}). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
+            if sys_cod == 'pos_frontal':
+                if has_thunder and (tem_alerta_dia or chuva_tot >= 8.0):
+                    t2 = f"Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas {janela_chuva} (média de {chuva_tot:.1f} mm com pico de até {ch_pico:.0f} mm/dia {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+                else:
+                    t2 = f"Previsão de chuva pós-frontal fraca a moderada e intermitente {janela_chuva} sustentada pela umidade oceânica (média de {chuva_tot:.1f} mm, {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+            elif tem_alerta_dia or chuva_tot >= 5.0:
+                t2 = f"Previsão de pancadas de chuva {'com trovoadas ' if has_thunder else ''}{janela_chuva} (média de {chuva_tot:.1f} mm e potencial de até {ch_pico:.0f} mm/dia {alerta_id_str}). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
+            elif chuva_tot >= 1.5:
+                t2 = f"Previsão de chuva fraca e passageira {janela_chuva} (acumulado estimado de {chuva_tot:.1f} mm, {alerta_id_str}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+            elif 'pancada' in sys_info['inmet_resumo_str'] or 'trovoad' in sys_info['inmet_resumo_str']:
+                t2 = f"Previsão de baixo volume pluviométrico nos modelos numéricos ({chuva_tot:.1f} mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual ({alerta_id_str}). A Bacia do Rio Jundiá permanece estável e em nível seguro ({jundia_nivel} m)."
+            elif chuva_tot < 0.2:
+                t2 = f"Previsão de tempo seco e estável ao longo do dia, sem expectativa de chuva significativa (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
             else:
-                t1 = f"{pron} {dia_nome}, o tempo começa a estabilizar com aberturas de sol entre muitas nuvens e gradual elevação térmica ao longo do dia."
-                t2 = f"Previsão de chuva fraca ou garoa isolada residual entre a madrugada e manhã, diminuindo à tarde (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro."
-            elev_tipo = "rápida"
+                t2 = f"Previsão de tempo firme com baixíssima probabilidade de garoa ou chuvisco isolado {janela_chuva} (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
 
         sens_vals_day = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos] if day_turnos else []
         s_min_day = min(sens_vals_day) if sens_vals_day else int(round(t_min))
         s_max_day = max(sens_vals_day) if sens_vals_day else int(round(t_max))
         sens_txt = f", com sensação térmica variando entre a menor de {s_min_day:.0f}°C e a maior de {s_max_day:.0f}°C no pico do calor"
-        t3 = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação{sens_txt}. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
+
+        inmet_tende = sys_info['inmet_tende']
+        delta_tmax = sys_info['delta_tmax']
+        amp_t = t_max - t_min
+        if 'declínio' in inmet_tende or delta_tmax <= -3 or (sys_cod == 'pos_frontal' and 'elevação' not in inmet_tende):
+            t3_cab = f"Temperaturas em declínio térmico, variando entre mínima de {t_min:.0f}°C ao amanhecer e máxima contida de {t_max:.0f}°C à tarde"
+        elif 'estável' in inmet_tende or (abs(delta_tmax) <= 1 and amp_t <= 6):
+            t3_cab = f"Temperaturas estáveis ao longo do dia, oscilando entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde"
+        else:
+            elev_tipo = "rápida" if (delta_tmax >= 3 or amp_t >= 9 or 'elevação' in inmet_tende) else ("gradual" if delta_tmax >= 1 else "moderada")
+            t3_cab = f"Temperaturas variam entre mínima de {t_min:.0f}°C ao amanhecer e máxima de {t_max:.0f}°C à tarde em {elev_tipo} elevação"
+
+        t3 = f"{t3_cab}{sens_txt}. Na região rural, oscilam entre {t_min_rural:.0f}°C e {t_max_rural:.0f}°C."
         t4 = f"A umidade relativa do ar oscila entre {u_min:.0f}% nas horas mais quentes da tarde e {u_max:.0f}% na madrugada ({ar_classificacao})."
         t5 = vento_txt
 
         # Tópico 6: Condições do Mar na Orla & Marinha do Brasil
         dia_ondas = day_turnos[1]['mar_ondas'] if len(day_turnos) > 1 else (day_turnos[0]['mar_ondas'] if day_turnos else "1,2 a 1,6 m")
-        if tem_marinha and dia_idx <= 1:
+        if marinha_dia or (tem_marinha and dia_idx == 0):
             mar_aviso_txt = "sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)"
+        elif marinha_status == 'madrugada_fim':
+            mar_aviso_txt = "com Aviso da Marinha válido apenas até a madrugada na Área Delta"
         else:
             mar_aviso_txt = "sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta"
 
         if dia_idx == 0:
             t6 = f"Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E ({mar_aviso_txt})."
         elif dia_idx == 1:
-            t6 = f"Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação à noite ({mar_aviso_txt})."
+            t6 = f"Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação ({mar_aviso_txt})."
         elif dia_idx == 2:
             t6 = f"Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada ({mar_aviso_txt})."
         elif dia_idx == 3:
@@ -2085,9 +2405,20 @@ def run_auto_bulletin_pipeline():
     d3_faixa = d3.get('chuva_faixa_txt') or f"{d3['chuva_tot']:.1f} mm"
 
     # Verificação dinâmica de Frente Fria e Ciclone Extratropical
-    tem_frente_fria = ('frente fria' in inea_prev_dia.get('condicao', '').lower() or
-                       any('frente fria' in n.get('titulo', '').lower() or 'ciclone' in n.get('titulo', '').lower() for n in inmet_noticias_data.get('noticias', [])) or
-                       d0.get('tem_alerta_inmet') or d1.get('tem_alerta_inmet'))
+    inea_rh8_syn = inea_boletim_data.get('previsao_rh8', {}) if inea_boletim_data else {}
+    inea_cond_all = (inea_rh8_syn.get('hoje', {}).get('condicao', '') + ' ' + inea_rh8_syn.get('amanha', {}).get('condicao', '')).lower()
+    sys0 = sistemas_8dias.get(0, {})
+    sys1 = sistemas_8dias.get(1, {})
+    sys2 = sistemas_8dias.get(2, {})
+    sys3 = sistemas_8dias.get(3, sys2)
+    tem_frente_fria = (
+        'frente fria' in inea_cond_all
+        or 'pós-frontal' in inea_cond_all
+        or sys0.get('codigo') in ('frente_fria', 'pos_frontal')
+        or sys1.get('codigo') in ('frente_fria', 'pos_frontal')
+        or any('frente fria' in n.get('titulo', '').lower() or 'ciclone' in n.get('titulo', '').lower() for n in inmet_noticias_data.get('noticias', []))
+        or d0.get('tem_alerta_inmet') or d1.get('tem_alerta_inmet')
+    )
 
     if tem_frente_fria:
         p1 = (
@@ -2107,13 +2438,37 @@ def run_auto_bulletin_pipeline():
             f"Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais "
             f"de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. {jundia_frase_sinopse}"
         )
+        d1_desc_sinopse = (
+            "consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica"
+            if sys1.get('codigo') == 'pos_frontal'
+            else f"atua o regime de {sys1.get('rotulo', 'transição atmosférica').lower()}"
+        )
+        if sys2.get('codigo') in ('alta_migratoria', 'asas_estavel', 'pre_frontal_asas'):
+            d2_d3_desc = (
+                f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}), o ingresso da alta pressão migratória na retaguarda do sistema frontal "
+                f"reduz gradualmente a nebulosidade ({d2_faixa}, {d2_aviso_str}), abrindo caminho para o domínio da Alta Subtropical do Atlântico Sul (ASAS) "
+                f"{prep3} {d3['dia_semana'].lower()} ({d3['date_short']}) com predomínio de sol e rápida elevação térmica ({d3_faixa}, {d3_aviso_str})."
+            )
+        else:
+            d2_d3_desc = (
+                f"{prep2.capitalize()} {d2['dia_semana'].lower()} ({d2['date_short']}) e {prep3} {d3['dia_semana'].lower()} ({d3['date_short']}), "
+                f"o padrão de {sys2.get('rotulo', 'circulação marítima').lower()} mantém variação de nuvens e chuva prevista de {d2_faixa} ({d2_aviso_str}) "
+                f"e {d3_faixa} ({d3_aviso_str})."
+            )
+        mar_aviso_p3 = "e aviso de vento forte vigente" if tem_aviso_marinha else "sem avisos severos de vento costeiro"
+        mar_waves_48h = [r.get('mar_ondas') for r in records_12_turnos if r.get('data_iso') in (d0['date_iso'], d1['date_iso']) and r.get('mar_ondas')]
+        mar_ondas_sinopse = (m_data.get('mar_ondas') if (tem_aviso_marinha and m_data and m_data.get('mar_ondas')) else (mar_waves_48h[1] if len(mar_waves_48h) > 1 else mar_ondas))
+        d1_aviso_p3 = (
+            f"sem alertas severos do INMET, sob Aviso de Mau Tempo nº {m_data.get('numero')} da Marinha"
+            if (tem_aviso_marinha and sys1.get('marinha_ativa') and not d1_alerts)
+            else d1_aviso_str
+        )
         p3 = (
             f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), "
-            f"na sexta-feira ({d1['date_short']}) consolida-se a passagem do eixo frontal com transporte constante de umidade oceânica (pós-frontal), "
-            f"determinando acentuado declínio de temperatura ({d1['t_min']:.0f}°C a {d1['t_max']:.0f}°C) e manutenção de chuva com raios ({d1_faixa}, {d1_aviso_str}). "
-            f"No sábado ({d2['date_short']}) e domingo ({d3['date_short']}), a circulação marítima de umidade e novas perturbações em altitude mantêm o tempo "
-            f"instável sob vigência de novos alertas meteorológicos do INMET ({d2_faixa} e {d3_faixa}). No domínio oceanográfico costeiro (Área Delta - "
-            f"CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de {mar_ondas} e aviso de vento forte, exigindo cautela na navegação e orla. "
+            f"{prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) {d1_desc_sinopse}, "
+            f"determinando contenção/declínio de temperatura ({d1['t_min']:.0f}°C a {d1['t_max']:.0f}°C) e precipitação estimada em {d1_faixa} ({d1_aviso_p3}). "
+            f"{d2_d3_desc} No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de {mar_ondas_sinopse} "
+            f"{mar_aviso_p3}, exigindo atenção na navegação e orla. "
             f"A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem."
         )
         sinopse_geral = f"{p1}\n\n{p2}\n\n{p3}"
