@@ -1,8 +1,8 @@
-const CACHE_NAME = 'meteo-ostras-v256';
+const CACHE_NAME = 'meteo-ostras-v258';
 const STATIC_ASSETS = [
   './index.html',
-  './assets/index-oYzyABxS.js',
-  './assets/index-5rnwjMG-.css',
+  './assets/index-X32luLe8.js',
+  './assets/index-r9BnFvRm.css',
   './img/logo-dark-text.png',
   './img/logo-transparent.png',
   './img/logo.png',
@@ -65,6 +65,9 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   if (event.request.method !== 'GET') return;
+
+  // Nunca interceptar ou cachear requisições cross-origin (APIs em tempo real Weather Underground / CEMADEN / Open-Meteo)
+  if (url.origin !== self.location.origin) return;
 
   // 1. NAVEGAÇÃO / HTML: SEMPRE BUSCA DA REDE PRIMEIRO
   if (event.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/' || url.pathname.endsWith('/tempo-rio-das-ostras/')) {

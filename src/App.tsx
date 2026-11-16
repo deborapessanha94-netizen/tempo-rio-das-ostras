@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Activity,
   AlertTriangle,
@@ -58,6 +58,7 @@ import {
   SITE_BASE,
   TabuaMares,
   degToCompass,
+  enrichAcumuladosWithLiveTelemetry,
   loadAllLiveSiteData,
   wmoToPtBr,
 } from './services/siteData';
@@ -342,30 +343,100 @@ export default function App() {
     setActiveSub((prev) => ({ ...prev, [tab]: subId }));
   };
 
-  const fetchAll = async () => {
-    setSyncing(true);
-    const res = await loadAllLiveSiteData();
-    if (res.acumulados) setAcumulados(res.acumulados);
-    if (res.boletimOficial) {
-      setBoletimOficial(res.boletimOficial);
-      if (res.boletimOficial.length > 0 && !selectedBoletimDate) {
-        setSelectedBoletimDate(res.boletimOficial[0].data_iso);
+  const acumuladosRef = useRef<AcumuladosDataset | null>(null);
+  const lastLiveSyncMsRef = useRef<number>(0);
+
+  useEffect(() => {
+    acumuladosRef.current = acumulados;
+  }, [acumulados]);
+
+  const runLiveStationsRefresh = async (quickOnly = false, forceFullHistory = false) => {
+    try {
+      const live = await enrichAcumuladosWithLiveTelemetry(acumuladosRef.current, {
+        quickOnly,
+        forceFullHistory,
+      });
+      if (live) {
+        acumuladosRef.current = live;
+        setAcumulados(live);
+        lastLiveSyncMsRef.current = Date.now();
       }
+    } catch (e) {
+      console.warn('Falha na sincronizacao ao vivo das estacoes:', e);
     }
-    if (res.boletimMeta) setBoletimMeta(res.boletimMeta);
-    if (res.inmetAvisos) setInmetAvisos(res.inmetAvisos);
-    if (res.marinhaAvisos) setMarinhaAvisos(res.marinhaAvisos);
-    if (res.orla) setOrla(res.orla);
-    if (res.balneabilidade) setBalneabilidade(res.balneabilidade);
-    if (res.tabuaMares) setTabuaMares(res.tabuaMares);
-    if (res.historico) setHistorico(res.historico);
-    if (res.openMeteo) setOpenMeteo(res.openMeteo);
-    setLoading(false);
-    setSyncing(false);
+  };
+
+  const fetchAll = async (forceFullHistory = false) => {
+    setSyncing(true);
+    try {
+      const res = await loadAllLiveSiteData({ forceFullHistory });
+      if (res.acumulados) {
+        acumuladosRef.current = res.acumulados;
+        setAcumulados(res.acumulados);
+        lastLiveSyncMsRef.current = Date.now();
+      }
+      if (res.boletimOficial) {
+        setBoletimOficial(res.boletimOficial);
+        if (res.boletimOficial.length > 0 && !selectedBoletimDate) {
+          setSelectedBoletimDate(res.boletimOficial[0].data_iso);
+        }
+      }
+      if (res.boletimMeta) setBoletimMeta(res.boletimMeta);
+      if (res.inmetAvisos) setInmetAvisos(res.inmetAvisos);
+      if (res.marinhaAvisos) setMarinhaAvisos(res.marinhaAvisos);
+      if (res.orla) setOrla(res.orla);
+      if (res.balneabilidade) setBalneabilidade(res.balneabilidade);
+      if (res.tabuaMares) setTabuaMares(res.tabuaMares);
+      if (res.historico) setHistorico(res.historico);
+      if (res.openMeteo) setOpenMeteo(res.openMeteo);
+    } finally {
+      setLoading(false);
+      setSyncing(false);
+    }
   };
 
   useEffect(() => {
-    fetchAll();
+    fetchAll(false);
+
+    // Pulso rapido de 20s para acompanhar estacoes Weather Underground em tempo real
+    const fastTimer = window.setInterval(() => {
+      if (document.visibilityState !== 'hidden') {
+        runLiveStationsRefresh(true, false);
+      }
+    }, 20_000);
+
+    // Sincronizacao completa das janelas de chuva (WU 5m/7d + CEMADEN 96h) a cada 2 minutos
+    const stationsTimer = window.setInterval(() => {
+      if (document.visibilityState !== 'hidden') {
+        runLiveStationsRefresh(false, false);
+      }
+    }, 120_000);
+
+    // Recarga completa de snapshots oficiais (Rio Jundia, alertas INMET, Marinha, Open-Meteo) a cada 5 minutos
+    const fullTimer = window.setInterval(() => {
+      if (document.visibilityState !== 'hidden') {
+        fetchAll(false);
+      }
+    }, 300_000);
+
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible' && Date.now() - lastLiveSyncMsRef.current > 15_000) {
+        const needFull = Date.now() - lastLiveSyncMsRef.current > 120_000;
+        runLiveStationsRefresh(!needFull, false);
+      }
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    (window as any).syncLiveStationsTelemetry = async (_force = true, quickOnly = false) => {
+      await runLiveStationsRefresh(Boolean(quickOnly), !quickOnly);
+    };
+
+    return () => {
+      window.clearInterval(fastTimer);
+      window.clearInterval(stationsTimer);
+      window.clearInterval(fullTimer);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -964,7 +1035,7 @@ export default function App() {
 
           <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={fetchAll}
+              onClick={() => fetchAll(true)}
               disabled={syncing}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244]/70 transition-colors cursor-pointer whitespace-nowrap"
             >
@@ -2581,7 +2652,8 @@ export default function App() {
                       Resumo Pluviométrico & Telemetria Municipal
                     </h2>
                     <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
-                      Síntese da rede oficial no horizonte de {rainHorizonHours}h · Atualização: {acumulados?.atualizacao || '--'}
+                      <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse mr-1.5 align-middle" aria-hidden="true" />
+                      Síntese da rede oficial no horizonte de {rainHorizonHours}h · Tempo Real: {acumulados?.atualizacao || '--'}
                     </p>
                   </div>
 

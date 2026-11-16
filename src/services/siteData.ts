@@ -1,3 +1,7 @@
+import { enrichAcumuladosWithLiveTelemetry } from './liveTelemetry';
+
+export { enrichAcumuladosWithLiveTelemetry };
+
 export const SITE_BASE = '.';
 
 export interface EstacaoPluvio {
@@ -81,17 +85,40 @@ export interface RioJundiaData {
   historico_recente: RiverHistoryPoint[];
 }
 
+export interface UvTempoReal {
+  estacao_referencia: string;
+  nome_estacao: string;
+  url_estacao: string;
+  uv: number;
+  radiacao_solar: number;
+  hora_leitura: string;
+}
+
 export interface AcumuladosDataset {
   atualizacao: string;
+  total_estacoes?: number;
+  total_pluviometricas?: number;
+  total_hidrologicas?: number;
   resumo: {
-    total_estacoes: number;
-    estacoes_online: number;
+    total_estacoes?: number;
+    estacoes_online?: number;
     maior_acumulado_24h: number;
     maior_estacao_nome: string;
     media_chuva_24h: number;
-    status_rede: string;
+    status_rede?: string;
+    rio_jundia_cota?: string;
+    rio_jundia_status?: string;
+    rio_jundia_pct?: number;
+    rio_jundia_tendencia?: string;
+    uv_atual?: number;
   };
   estacao_rio_jundia: RioJundiaData;
+  estacoes_pluviometricas?: EstacaoPluvio[];
+  uv_tempo_real?: UvTempoReal;
+  portais_oficiais?: {
+    cemaden_mapa?: string;
+    alerta_cheias_portal?: string;
+  };
   estacoes: EstacaoPluvio[];
 }
 
@@ -400,7 +427,7 @@ export interface OpenMeteoData {
 
 async function fetchJsonSafe<T>(url: string): Promise<T | null> {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch (e) {
@@ -409,8 +436,22 @@ async function fetchJsonSafe<T>(url: string): Promise<T | null> {
   }
 }
 
-export async function loadAllLiveSiteData() {
+export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean } = {}) {
   const ts = Date.now();
+  const acumuladosLivePromise = fetchJsonSafe<AcumuladosDataset>(
+    `${SITE_BASE}/data/acumulados_estacoes.json?t=${ts}`
+  ).then(async (base) => {
+    try {
+      const live = await enrichAcumuladosWithLiveTelemetry(base, {
+        quickOnly: false,
+        forceFullHistory: Boolean(options.forceFullHistory),
+      });
+      return live || base;
+    } catch {
+      return base;
+    }
+  });
+
   const [
     acumulados,
     boletimOficial,
@@ -423,7 +464,7 @@ export async function loadAllLiveSiteData() {
     historico,
     openMeteo,
   ] = await Promise.all([
-    fetchJsonSafe<AcumuladosDataset>(`${SITE_BASE}/data/acumulados_estacoes.json?t=${ts}`),
+    acumuladosLivePromise,
     fetchJsonSafe<BoletimTurnoRow[]>(`${SITE_BASE}/data/boletim_oficial.json?t=${ts}`),
     fetchJsonSafe<BoletimMetadata>(`${SITE_BASE}/data/boletim_metadata.json?t=${ts}`),
     fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`),
