@@ -52,6 +52,7 @@ import {
   EstacaoPluvio,
   HistoricoEstacoesDataset,
   InmetAviso,
+  MarinhaAvisoItem,
   MarinhaAvisos,
   OpenMeteoData,
   OrlaDataset,
@@ -59,6 +60,7 @@ import {
   TabuaMares,
   degToCompass,
   enrichAcumuladosWithLiveTelemetry,
+  fetchMarinhaAvisosLive,
   loadAllLiveSiteData,
   wmoToPtBr,
 } from './services/siteData';
@@ -350,6 +352,22 @@ export default function App() {
     acumuladosRef.current = acumulados;
   }, [acumulados]);
 
+  const [syncingMarinha, setSyncingMarinha] = useState(false);
+
+  const refreshMarinhaLive = async () => {
+    setSyncingMarinha(true);
+    try {
+      const mLive = await fetchMarinhaAvisosLive();
+      if (mLive) {
+        setMarinhaAvisos(mLive);
+      }
+    } catch (e) {
+      console.warn('Falha ao atualizar avisos da Marinha:', e);
+    } finally {
+      setSyncingMarinha(false);
+    }
+  };
+
   const runLiveStationsRefresh = async (quickOnly = false, forceFullHistory = false) => {
     try {
       const live = await enrichAcumuladosWithLiveTelemetry(acumuladosRef.current, {
@@ -412,6 +430,13 @@ export default function App() {
       }
     }, 120_000);
 
+    // Verificacao prioritaria a cada 60s dos Avisos Oficiais da Marinha (CHM)
+    const marinhaTimer = window.setInterval(() => {
+      if (document.visibilityState !== 'hidden') {
+        refreshMarinhaLive();
+      }
+    }, 60_000);
+
     // Recarga completa de snapshots oficiais (Rio Jundia, alertas INMET, Marinha, Open-Meteo) a cada 5 minutos
     const fullTimer = window.setInterval(() => {
       if (document.visibilityState !== 'hidden') {
@@ -423,6 +448,7 @@ export default function App() {
       if (document.visibilityState === 'visible' && Date.now() - lastLiveSyncMsRef.current > 15_000) {
         const needFull = Date.now() - lastLiveSyncMsRef.current > 120_000;
         runLiveStationsRefresh(!needFull, false);
+        refreshMarinhaLive();
       }
     };
     document.addEventListener('visibilitychange', onVisibility);
@@ -434,11 +460,19 @@ export default function App() {
     return () => {
       window.clearInterval(fastTimer);
       window.clearInterval(stationsTimer);
+      window.clearInterval(marinhaTimer);
       window.clearInterval(fullTimer);
       document.removeEventListener('visibilitychange', onVisibility);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (activeTab === 'alertas' || activeTab === 'orla') {
+      refreshMarinhaLive();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -968,13 +1002,38 @@ export default function App() {
           : 'Pressão Estável'
       : 'Monitoramento contínuo';
 
+  const marinhaListaAtiva = useMemo<MarinhaAvisoItem[]>(() => {
+    if (!marinhaAvisos) return [];
+    const baseList: MarinhaAvisoItem[] =
+      marinhaAvisos.todos_avisos && marinhaAvisos.todos_avisos.length > 0
+        ? marinhaAvisos.todos_avisos
+        : marinhaAvisos.avisos_ativos || [];
+    const nowMs = Date.now();
+    return baseList.filter((av) => {
+      if (!av.fim_utc) return true;
+      const endMs = Date.parse(av.fim_utc);
+      return Number.isNaN(endMs) || endMs > nowMs;
+    });
+  }, [marinhaAvisos]);
+
+  const marinhaDeltaAtivos = useMemo(
+    () => marinhaListaAtiva.filter((av) => av.eh_area_delta !== false),
+    [marinhaListaAtiva]
+  );
+
+  const hasMarinhaDeltaAtivo = Boolean(
+    marinhaDeltaAtivos.length > 0 || (marinhaAvisos?.aviso_ativo && (!marinhaAvisos.fim_utc || Date.parse(marinhaAvisos.fim_utc) > Date.now()))
+  );
+
   const marHojeOrla = orla?.praias_condicoes?.[0]?.dias?.d0;
   const heroAlertStatus =
-    inmetAvisos.length > 0
-      ? 'Alerta Oficial Vigente Hoje'
-      : marinhaAvisos?.aviso_ativo
-        ? 'Avisos da Marinha Ativos'
-        : 'Normalidade Operacional';
+    inmetAvisos.length > 0 && hasMarinhaDeltaAtivo
+      ? 'Alertas Oficiais (INMET & Marinha)'
+      : inmetAvisos.length > 0
+        ? 'Alerta Oficial Vigente Hoje'
+        : hasMarinhaDeltaAtivo
+          ? 'Avisos da Marinha Ativos'
+          : 'Normalidade Operacional';
 
   const todayDateFull = useMemo(() => {
     const raw = new Intl.DateTimeFormat('pt-BR', {
@@ -1207,6 +1266,17 @@ export default function App() {
                           }`}
                         />
                         <span className="truncate">{item.label}</span>
+                        {item.id === 'alertas' && (inmetAvisos.length + marinhaListaAtiva.length > 0) && (
+                          <span
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold tabular-nums shrink-0 ${
+                              isActive
+                                ? 'bg-white/20 text-white dark:bg-[#000000]/15 dark:text-[#000000]'
+                                : 'bg-[#FF8244]/15 text-[#FF8244]'
+                            }`}
+                          >
+                            {inmetAvisos.length + marinhaListaAtiva.length}
+                          </span>
+                        )}
                       </span>
                       <ChevronDown
                         className={`w-3.5 h-3.5 shrink-0 transition-transform ${
@@ -1276,7 +1346,7 @@ export default function App() {
                       <span className="inline-flex items-center gap-1.5 font-medium text-[#14213D] dark:text-white">
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${
-                            inmetAvisos.length > 0 ? 'bg-[#FF8244]' : 'bg-emerald-500'
+                            inmetAvisos.length > 0 || hasMarinhaDeltaAtivo ? 'bg-[#FF8244]' : 'bg-emerald-500'
                           }`}
                           aria-hidden="true"
                         />
@@ -4906,77 +4976,309 @@ export default function App() {
           <div className="space-y-8">
             {showSub('avisos') && (
               <section className="space-y-5">
-                <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
-                  <h1 className="font-display text-2xl font-semibold text-[#14213D] dark:text-white">
-                    Alertas Meteorológicos Oficiais Vigentes
-                  </h1>
-                  <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
-                    Monitoramento contínuo: Instituto Nacional de Meteorologia (INMET) & Marinha do Brasil (CHM)
-                  </p>
-                </div>
-
-                {/* Banner de Garantia de Sincronia de Horários Oficiais */}
-                <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5] flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
-                    <Info className="w-4 h-4 text-[#FF8244] shrink-0" />
-                    <span>
-                      <strong className="text-[#14213D] dark:text-white">Sincronização Oficial INMET:</strong> Os horários de início e término respeitam rigorosamente os minutos exatos da publicação no portal do INMET (Horário Oficial de Brasília — UTC-3).
-                    </span>
+                <div className="flex flex-wrap items-start justify-between gap-3 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
+                  <div>
+                    <h1 className="font-display text-2xl font-semibold text-[#14213D] dark:text-white">
+                      Alertas Meteorológicos Oficiais Vigentes
+                    </h1>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
+                      Monitoramento contínuo: Marinha do Brasil (CHM / METAREA V) &amp; Instituto Nacional de Meteorologia (INMET)
+                    </p>
                   </div>
-                  <a
-                    href="https://alertas2.inmet.gov.br/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1 font-semibold text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0 text-[11px]"
+                  <button
+                    type="button"
+                    onClick={() => refreshMarinhaLive()}
+                    disabled={syncingMarinha}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white hover:border-[#FF8244] transition-colors cursor-pointer disabled:opacity-60"
                   >
-                    Portal INMET Alertas <ExternalLink className="w-3 h-3" />
-                  </a>
+                    <RefreshCw className={`w-3.5 h-3.5 text-[#FF8244] ${syncingMarinha ? 'animate-spin' : ''}`} />
+                    <span>{syncingMarinha ? 'Verificando CHM...' : 'Atualizar Avisos'}</span>
+                  </button>
                 </div>
 
-                {/* Seletor Rápido de Localidade (Rio das Ostras vs Outras Regiões do RJ) */}
-                {inmetAvisos.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
-                    <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-medium text-[11px]">
-                      Visualizar abrangência:
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setAlertaFiltroLocal('todos')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
-                        alertaFiltroLocal === 'todos'
-                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-black border-[#14213D] dark:border-[#FF8244] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
-                      }`}
-                    >
-                      Todos os Alertas do RJ ({inmetAvisos.length})
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAlertaFiltroLocal('ostras')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
-                        alertaFiltroLocal === 'ostras'
-                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
-                      }`}
-                    >
-                      <MapPin className="w-3.5 h-3.5 text-[#FF8244]" />
-                      Apenas Rio das Ostras ({inmetAvisos.filter((a) => a.eh_direto_ostras !== false).length})
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setAlertaFiltroLocal('outros')}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
-                        alertaFiltroLocal === 'outros'
-                          ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
-                          : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
-                      }`}
-                    >
-                      <AlertTriangle className="w-3.5 h-3.5 text-[#FF8244]" />
-                      Outras Localidades do RJ ({inmetAvisos.filter((a) => a.eh_direto_ostras === false).length})
-                    </button>
+                {/* Banner de Garantia de Sincronia Oficial (INMET & Marinha CHM) */}
+                <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5] flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <Info className="w-4 h-4 text-[#FF8244] shrink-0 mt-0.5" />
+                    <div className="space-y-0.5">
+                      <div>
+                        <strong className="text-[#14213D] dark:text-white">Sincronização Oficial em Tempo Real (INMET &amp; Marinha CHM):</strong>{' '}
+                        Os avisos de mau tempo da Marinha do Brasil e os alertas do INMET seguem rigorosamente os horários originais de vigência (Brasília UTC-3).
+                      </div>
+                      {marinhaAvisos?.atualizacao_brt && (
+                        <div className="font-mono text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">
+                          Última verificação Marinha CHM: <span className="text-[#14213D] dark:text-white font-semibold">{marinhaAvisos.atualizacao_brt}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                )}
+                  <div className="flex flex-wrap items-center gap-3 shrink-0 text-[11px]">
+                    <a
+                      href={marinhaAvisos?.fonte_url || 'https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 font-semibold text-[#14213D] dark:text-[#FF8244] hover:underline"
+                    >
+                      Portal Marinha (CHM) <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <span className="text-slate-300 dark:text-slate-600">|</span>
+                    <a
+                      href="https://alertas2.inmet.gov.br/"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 font-semibold text-[#14213D] dark:text-[#FF8244] hover:underline"
+                    >
+                      Portal INMET Alertas <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
+                </div>
 
+                {/* Seletor Rápido de Localidade (INMET RJ + Marinha CHM) */}
+                {(inmetAvisos.length > 0 || marinhaListaAtiva.length > 0) && (() => {
+                  const inmetOstras = inmetAvisos.filter((a) => a.eh_direto_ostras !== false).length;
+                  const inmetOutros = inmetAvisos.filter((a) => a.eh_direto_ostras === false).length;
+                  const marDelta = marinhaListaAtiva.filter((a) => a.eh_area_delta !== false).length;
+                  const marOutros = marinhaListaAtiva.filter((a) => a.eh_area_delta === false).length;
+                  const totalTodos = inmetAvisos.length + marinhaListaAtiva.length;
+                  const totalOstras = inmetOstras + marDelta;
+                  const totalOutros = inmetOutros + marOutros;
+                  return (
+                    <div className="flex flex-wrap items-center gap-2 text-xs pt-1">
+                      <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-medium text-[11px]">
+                        Visualizar abrangência:
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setAlertaFiltroLocal('todos')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
+                          alertaFiltroLocal === 'todos'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-black border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                        }`}
+                      >
+                        Todos os Alertas ({totalTodos})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAlertaFiltroLocal('ostras')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
+                          alertaFiltroLocal === 'ostras'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                        }`}
+                      >
+                        <MapPin className="w-3.5 h-3.5 text-[#FF8244]" />
+                        Rio das Ostras &amp; Área Delta ({totalOstras})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setAlertaFiltroLocal('outros')}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer border flex items-center gap-1.5 ${
+                          alertaFiltroLocal === 'outros'
+                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-xs'
+                            : 'bg-white dark:bg-[#14213D] text-slate-700 dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                        }`}
+                      >
+                        <AlertTriangle className="w-3.5 h-3.5 text-[#FF8244]" />
+                        Outras Regiões / Áreas ({totalOutros})
+                      </button>
+                    </div>
+                  );
+                })()}
+
+                {/* BLOCO 1: AVISOS OFICIAIS DE MAU TEMPO DA MARINHA DO BRASIL (CHM / SMM) */}
+                {(() => {
+                  const nowUtcMs = Date.now();
+                  const filteredMarinha = marinhaListaAtiva.filter((av) => {
+                    const isDelta = av.eh_area_delta !== false;
+                    if (alertaFiltroLocal === 'ostras') return isDelta;
+                    if (alertaFiltroLocal === 'outros') return !isDelta;
+                    return true;
+                  });
+
+                  return (
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <Waves className="w-4 h-4 text-[#FF8244]" />
+                          <h2 className="font-display text-base sm:text-lg font-semibold text-[#14213D] dark:text-white">
+                            Marinha do Brasil — Avisos de Mau Tempo (CHM / METAREA V)
+                          </h2>
+                        </div>
+                        {marinhaAvisos?.cartas_sinoticas && (
+                          <div className="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
+                            {marinhaAvisos.cartas_sinoticas.map((c) => (
+                              <a
+                                key={c.horario}
+                                href={c.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354] bg-white dark:bg-[#14213D] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
+                              >
+                                Carta {c.horario} <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {filteredMarinha.length > 0 ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          {filteredMarinha.map((av, idx) => {
+                            const isDelta = av.eh_area_delta !== false;
+                            const iniMs = av.inicio_utc ? Date.parse(av.inicio_utc) : NaN;
+                            const isVigenteAgora = Number.isNaN(iniMs) ? av.status_vigencia !== 'Programado' : nowUtcMs >= iniMs;
+                            const marinhaVigenciaLabel = isVigenteAgora
+                              ? 'Vigente Agora'
+                              : av.inicio_br
+                                ? `Programado (${av.inicio_br})`
+                                : 'Programado';
+                            return (
+                              <article
+                                key={`${av.numero || 'chm'}-${idx}`}
+                                className={`bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] ${
+                                  isDelta
+                                    ? 'border-l-4 border-l-emerald-500 shadow-xs'
+                                    : 'border-l-4 border-l-amber-500/80 dark:border-l-amber-500/60 opacity-95'
+                                } rounded-xl p-6 flex flex-col justify-between gap-4`}
+                              >
+                                <div className="space-y-3">
+                                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
+                                    <div className="flex flex-wrap items-center gap-1.5">
+                                      <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#14213D] text-white dark:bg-[#0B1324] border border-[#14213D] dark:border-[#233354]">
+                                        MARINHA · CHM
+                                      </span>
+                                      <span className="font-mono text-xs text-[#FF8244] font-semibold">
+                                        Aviso nº {av.numero || '--'}
+                                      </span>
+                                      {isDelta ? (
+                                        <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                          <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
+                                          Área Delta (Rio das Ostras / Bacia de Campos)
+                                        </span>
+                                      ) : (
+                                        <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-500 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                          <Compass className="w-3 h-3 text-slate-400 shrink-0" />
+                                          {av.area_grupo || 'Outra Área'} (Fora da Área Delta)
+                                        </span>
+                                      )}
+                                      <span
+                                        className={`px-2 py-0.5 rounded font-mono text-[10px] border ${
+                                          isVigenteAgora
+                                            ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold'
+                                            : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium'
+                                        }`}
+                                      >
+                                        {marinhaVigenciaLabel}
+                                      </span>
+                                    </div>
+                                    <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244]">
+                                      {av.tipo}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                                    <h3 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                                      {av.tipo} — {av.forca || 'AVISO CHM'}
+                                    </h3>
+                                    {(av.inicio_br || av.fim_br) && (
+                                      <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354]">
+                                        <Clock className="w-3.5 h-3.5 text-[#FF8244]" />
+                                        <span>{av.inicio_br || '--'}</span>
+                                        <span className="text-slate-400">→</span>
+                                        <span>{av.fim_br || '--'}</span>
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  {isDelta ? (
+                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5]/90 flex items-center gap-2">
+                                      <MapPin className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                      <span>
+                                        <strong className="text-[#14213D] dark:text-white">Abrangência Costeira/Oceânica:</strong> {av.area}
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-500 dark:text-[#E5E5E5]/70 flex items-center gap-2">
+                                      <AlertTriangle className="w-4 h-4 text-slate-400 shrink-0" />
+                                      <span>
+                                        <strong>Outra Área METAREA V:</strong> {av.area} (não atinge diretamente Rio das Ostras).
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  <div className="grid grid-cols-2 gap-2.5 text-xs">
+                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                                      <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/60">Vento / Rajadas</div>
+                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white mt-0.5">{av.rajadas || '--'}</div>
+                                    </div>
+                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                                      <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/60">Mar / Ondas</div>
+                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white mt-0.5">{av.mar_ondas || av.ondas || '--'}</div>
+                                    </div>
+                                  </div>
+
+                                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
+                                    {av.restricao && (
+                                      <div>
+                                        <strong className="text-[#14213D] dark:text-white">Orientação Costeira:</strong> {av.restricao}
+                                      </div>
+                                    )}
+                                    {av.texto && (
+                                      <div>
+                                        <strong className="text-[#14213D] dark:text-white block mb-1">Boletim Oficial Emitido pela Marinha (SMM):</strong>
+                                        <div className="font-mono text-[11px] text-slate-600 dark:text-[#E5E5E5]/80 bg-white dark:bg-[#14213D]/60 p-2.5 rounded border border-[#E5E5E5] dark:border-[#233354]">
+                                          {av.texto}
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                                  <span>{av.emissao ? `Emissão CHM: ${av.emissao}` : av.validade || 'SMM / Marinha do Brasil'}</span>
+                                  <a
+                                    href={av.fonte_url || marinhaAvisos?.fonte_url || 'https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo'}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0"
+                                  >
+                                    Ver aviso oficial na Marinha <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                                  </a>
+                                </div>
+                              </article>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 text-xs sm:text-sm text-slate-600 dark:text-[#E5E5E5]/85 flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            {alertaFiltroLocal === 'outros'
+                              ? 'Sem avisos de mau tempo ativos da Marinha em outras áreas no momento.'
+                              : 'Sem avisos de mau tempo ativos da Marinha para a Área Delta (Rio das Ostras / Bacia de Campos) no momento.'}
+                          </div>
+                          <a
+                            href={marinhaAvisos?.fonte_url || 'https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo'}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 font-mono text-xs text-[#14213D] dark:text-[#FF8244] hover:underline"
+                          >
+                            Consultar Portal CHM <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* BLOCO 2: AVISOS METEOROLÓGICOS OFICIAIS DO INMET */}
+                <div className="space-y-3 pt-2">
+                  <div className="flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 text-[#FF8244]" />
+                    <h2 className="font-display text-base sm:text-lg font-semibold text-[#14213D] dark:text-white">
+                      INMET — Avisos Meteorológicos Vigentes
+                    </h2>
+                  </div>
                 {inmetAvisos.length > 0 ? (() => {
                   // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
                   const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
@@ -5013,7 +5315,7 @@ export default function App() {
                     .sort((a, b) => {
                       const startA = getAlertTimeMs(a.inicio || a.data_inicio, a.hora_inicio);
                       const startB = getAlertTimeMs(b.inicio || b.data_inicio, b.hora_inicio);
-                      if (startA !== startB) return startA - startB; // Ordem cronológica por data de início (mais próximo primeiro)
+                      if (startA !== startB) return startA - startB;
                       const endA = getAlertTimeMs(a.fim || a.data_fim, a.hora_fim);
                       const endB = getAlertTimeMs(b.fim || b.data_fim, b.hora_fim);
                       if (endA !== endB) return endA - endB;
@@ -5027,7 +5329,6 @@ export default function App() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       {sortedAvisos.map((av) => {
                         const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
-                        const endDate = parseAlertDate(av.fim || av.data_fim, av.hora_fim);
 
                         let vigenciaLabel = 'Vigente Agora';
                         let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold';
@@ -5112,12 +5413,12 @@ export default function App() {
                             <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
                               <div>
                                 <strong className="text-[#14213D] dark:text-white">Riscos:</strong>{' '}
-                                {av.riscos.join(' ')}
+                                {(av.riscos || []).join(' ')}
                               </div>
                               <div>
                                 <strong className="text-[#14213D] dark:text-white">Defesa Civil 199:</strong>
                                 <ul className="mt-1 space-y-1 text-slate-500 dark:text-[#E5E5E5]/75">
-                                  {av.instrucoes.map((ins, i) => (
+                                  {(av.instrucoes || []).map((ins, i) => (
                                     <li key={i}>• {ins}</li>
                                   ))}
                                 </ul>
@@ -5145,38 +5446,7 @@ export default function App() {
                     Sem avisos ativos no INMET no momento.
                   </div>
                 )}
-
-                {marinhaAvisos && (
-                  <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 flex flex-wrap items-center justify-between gap-4 text-xs">
-                    <div className="space-y-1">
-                      <div className="font-mono text-[11px] uppercase tracking-wider text-slate-500 dark:text-[#FF8244] font-semibold">
-                        MARINHA DO BRASIL (CHM / SMM) · {marinhaAvisos.tipo}
-                      </div>
-                      <div className="font-semibold text-sm text-[#14213D] dark:text-white">
-                        {marinhaAvisos.area} · {marinhaAvisos.forca} ({marinhaAvisos.rajadas})
-                      </div>
-                      <div className="text-slate-600 dark:text-[#E5E5E5]/80">
-                        {marinhaAvisos.validade} · Ondas: {marinhaAvisos.mar_ondas}
-                        {marinhaAvisos.restricao ? ` · ${marinhaAvisos.restricao}` : ''}
-                      </div>
-                    </div>
-                    {marinhaAvisos.cartas_sinoticas && (
-                      <div className="flex flex-wrap items-center gap-2 font-mono">
-                        {marinhaAvisos.cartas_sinoticas.map((c) => (
-                          <a
-                            key={c.horario}
-                            href={c.url}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] hover:border-[#FF8244] text-[#14213D] dark:text-[#E5E5E5] transition-colors"
-                          >
-                            Carta Sinótica {c.horario} <ExternalLink className="w-3 h-3 text-[#FF8244]" />
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                </div>
 
                 {boletimMeta?.alertas_estruturados && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">

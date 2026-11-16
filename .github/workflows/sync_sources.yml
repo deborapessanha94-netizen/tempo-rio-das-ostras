@@ -37,6 +37,17 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Sincronização Prioritária Imediata - Avisos da Marinha (CHM / METAREA V)
+        run: |
+          python scripts/marinha_service.py || true
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/marinha_avisos.json data/orla_condicoes.json data/tabua_mares.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(marinha): sincronizacao prioritaria de avisos CHM [skip ci]"
+            git push origin main || (git fetch origin main && git merge -X theirs origin/main -m "merge marinha sync [skip ci]" && git push origin main)
+          fi
+
       - name: Instalar Dependências
         run: |
           python -m pip install --upgrade pip

@@ -158,8 +158,116 @@ def get_tides_for_date(date_str):
     except Exception:
         return TABUA_MARES_OFICIAL_IMBETIBA.get("2026-10-19", [])
 
+def _detect_group_area(group_html):
+    """Extrai o rótulo oficial da área CHM (ex.: Área Delta, Área Alfa, Área Charlie) do cabeçalho do grupo."""
+    head_part = re.split(r'class=["\']aviso-texto["\']', group_html, maxsplit=1)[0]
+    head_txt = ' '.join(re.sub(r'<[^>]+>', ' ', head_part).split()).upper()
+    m = re.search(r'(?:ÁREA|AREA)\s+(ALFA|BRAVO|CHARLIE|DELTA|ECHO|FOXTROT|GOLF|HOTEL|SUL\s+OCE[ÂA]NICA|NORTE\s+OCE[ÂA]NICA)', head_txt)
+    if m:
+        return f"Área {m.group(1).title()}"
+    if 'ALFA' in head_txt: return "Área Alfa"
+    if 'BRAVO' in head_txt: return "Área Bravo"
+    if 'CHARLIE' in head_txt: return "Área Charlie"
+    if 'DELTA' in head_txt: return "Área Delta"
+    if 'ECHO' in head_txt: return "Área Echo"
+    if 'FOXTROT' in head_txt: return "Área Foxtrot"
+    if 'GOLF' in head_txt: return "Área Golf"
+    if 'HOTEL' in head_txt: return "Área Hotel"
+    return ""
+
+
+def _parse_marinha_wind_and_waves(clean_text, tipo_aviso):
+    """Interpreta dinamicamente direção, escala Beaufort, rajadas e altura de ondas do texto oficial CHM."""
+    up = clean_text.upper()
+    dir_m = re.search(r'VENTO\s+([A-Z/]+(?:\s+A\s+[A-Z/]+)?)\s+FOR[ÇC]A', up)
+    dir_str = dir_m.group(1).strip() if dir_m else ""
+    dir_prefix = f"{dir_str} " if dir_str else ""
+
+    forca_nums = [int(x) for pair in re.findall(r'FOR[ÇC]A\s*(\d+)(?:\s*/\s*(\d+))?', up) for x in pair if x]
+    max_f = max(forca_nums) if forca_nums else 0
+    min_f = min(forca_nums) if forca_nums else 0
+
+    beaufort_kmh = {
+        6: ("39 a 49 km/h", "FORÇA 6"),
+        7: ("50 a 61 km/h", "FORÇA 7"),
+        8: ("62 a 74 km/h", "FORÇA 8"),
+        9: ("75 a 88 km/h", "FORÇA 9"),
+        10: ("89 a 102 km/h", "FORÇA 10"),
+        11: ("103 a 117 km/h", "FORÇA 11"),
+    }
+
+    has_rajadas = "RAJADAS" in up
+    if max_f >= 6 and max_f in beaufort_kmh:
+        kmh_rng, f_lbl = beaufort_kmh[max_f]
+        if min_f and min_f < max_f and has_rajadas:
+            rajadas_txt = f"{kmh_rng} (Força {min_f}/{max_f})"
+            forca_txt = f"{dir_prefix}FORÇA {min_f} COM RAJADAS FORÇA {max_f}"
+        elif min_f and min_f < max_f:
+            rajadas_txt = f"{kmh_rng} (Força {min_f} a {max_f})"
+            forca_txt = f"{dir_prefix}FORÇA {min_f}/{max_f} BEAUFORT"
+        else:
+            rajadas_txt = f"{kmh_rng} ({f_lbl.title()})"
+            forca_txt = f"{dir_prefix}{f_lbl} BEAUFORT"
+    elif tipo_aviso in ("VENTO FORTE", "VENTO MUITO FORTE", "TEMPORAL"):
+        rajadas_txt = "Até 65 km/h"
+        forca_txt = f"{dir_prefix}VENTO MODERADO A FORTE"
+    else:
+        rajadas_txt = "Até 45 km/h"
+        forca_txt = f"{dir_prefix}FORÇA 4-5 BEAUFORT"
+
+    ondas_txt = ""
+    m_ond = re.search(r'ONDAS DE\s+([A-Z0-9/.,\s]+?)\s*METROS?', up)
+    if m_ond:
+        raw_ond = re.sub(r'(\d+(?:[.,]\d+)?)\s*/\s*(\d+(?:[.,]\d+)?)', r'\1 a \2', m_ond.group(1).strip()).replace('.', ',')
+        if any(tag in tipo_aviso for tag in ("MAR MUITO GROSSO", "MAR GROSSO")):
+            ondas_txt = f"{raw_ond} m ({tipo_aviso.title()})"
+        elif tipo_aviso == "RESSACA":
+            ondas_txt = f"{raw_ond} m (Ressaca)"
+        else:
+            ondas_txt = f"{raw_ond} m"
+    elif tipo_aviso == "MAR MUITO GROSSO":
+        ondas_txt = "4,0 a 6,0 m (Mar Muito Grosso)"
+    elif tipo_aviso == "MAR GROSSO":
+        ondas_txt = "3,0 a 3,5 m (Mar Grosso)"
+    elif tipo_aviso == "RESSACA":
+        ondas_txt = "2,5 a 3,5 m (Ressaca Severa)"
+    else:
+        ondas_txt = "2,0 a 2,5 m (Agitado)"
+
+    return forca_txt, rajadas_txt, ondas_txt
+
+
+def _format_pt_trecho(raw):
+    t = raw.strip().title()
+    t = re.sub(r'/([A-Za-z]{2})\b', lambda m: '/' + m.group(1).upper(), t)
+    t = re.sub(r'\b(E|A|De|Da|Do|Das|Dos)\b', lambda m: m.group(1).lower(), t)
+    return t
+
+
+def _build_area_description(clean_text, group_area):
+    up = clean_text.upper()
+    if "MACAÉ" in up or "MACAE" in up:
+        m_trecho = re.search(r'ENTRE\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ/\s.,0-9-]+?)(?:\s+(?:A PARTIR DE|COM|VENTO|EMITIDO|VALIDO|VÁLIDO)|\.|$)', up)
+        if m_trecho:
+            return f"Área Costeira ({_format_pt_trecho(m_trecho.group(1))})"
+        return "Área Costeira (Macaé/RJ a Caravelas/BA)"
+    if "OCEÂNICA" in up or "OCEANICA" in up:
+        if "DELTA" in group_area.upper():
+            return "Área Oceânica Delta (Bacia de Campos)"
+        return f"{group_area} (Setor Oceânico)" if group_area else "Área Oceânica METAREA V"
+    if "COSTEIRA" in up:
+        m_trecho = re.search(r'ENTRE\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ/\s.,0-9-]+?)(?:\s+(?:ATÉ|ATE|A PARTIR DE|COM|VENTO)|\.|$)', up)
+        if m_trecho:
+            trecho = _format_pt_trecho(m_trecho.group(1))
+            return f"{group_area} — Costeira ({trecho})" if group_area else f"Área Costeira ({trecho})"
+    return group_area or "Área DELTA"
+
+
 def fetch_marinha_avisos():
-    """Busca em tempo real os avisos de mau tempo da Marinha para Área Delta"""
+    """Busca em tempo real todos os avisos oficiais de mau tempo da Marinha (CHM / METAREA V) e filtra os de impacto na Área Delta / Rio das Ostras."""
+    url_portal = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
+    now_utc = datetime.now(timezone.utc)
+    now_brt = now_utc - timedelta(hours=3)
     marinha_info = {
         "aviso_ativo": False,
         "numero": None,
@@ -177,7 +285,12 @@ def fetch_marinha_avisos():
         "validade": "Sem avisos de mau tempo vigentes para a Área Delta",
         "mar_ondas": "1,2 a 1,6 m (Moderado)",
         "restricao": "Condições marítimas regulares na Área Delta.",
+        "atualizacao_brt": now_brt.strftime("%d/%m/%Y às %H:%M") + "h BRT",
+        "atualizacao_utc": now_utc.isoformat(),
+        "fonte_url": url_portal,
+        "total_avisos_brasil": 0,
         "avisos_ativos": [],
+        "todos_avisos": [],
         "cartas_sinoticas": [
             {"horario": "00 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"},
             {"horario": "12 UTC", "url": "https://www.marinha.mil.br/chm/cartassinoticas"}
@@ -188,152 +301,172 @@ def fetch_marinha_avisos():
         ctx = ssl.create_default_context()
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
-        url_marinha = "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
-        req = urllib.request.Request(url_marinha, headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"})
-        with urllib.request.urlopen(req, context=ctx, timeout=15) as res:
+        cb_ts = int(now_utc.timestamp())
+        url_fetch = f"{url_portal}?_cb={cb_ts}"
+        req = urllib.request.Request(
+            url_fetch,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                "Cache-Control": "no-cache, no-store, max-age=0",
+                "Pragma": "no-cache",
+            },
+        )
+        with urllib.request.urlopen(req, context=ctx, timeout=18) as res:
             html = res.read().decode("utf-8", errors="replace")
 
         groups = re.split(r'<div[^>]*class=["\']grupo-area-avisos', html)
-        now_utc = datetime.now(timezone.utc)
-        avisos_encontrados = []
+        avisos_delta = []
+        todos_avisos_raw = []
         numeros_vistos = set()
 
         for g in groups:
-            is_delta_group = bool(re.search(r'REA DELTA', g, re.I))
+            group_area = _detect_group_area(g)
+            is_delta_group = 'DELTA' in group_area.upper() or bool(re.search(r'REA DELTA', g[:500], re.I))
             divs = re.finditer(r'<div[^>]*class=["\']aviso-texto["\'][^>]*>(.*?)</div>', g, re.S)
+
             for m in divs:
                 full_div = m.group(0)
                 body = m.group(1)
-                tag = full_div[:full_div.find('>')+1]
+                tag = full_div[:full_div.find('>') + 1]
                 clean_text = ' '.join(re.sub(r'<[^>]+>', ' ', body).split())
+                up_text = clean_text.upper()
 
-                if clean_text.upper().startswith('WARNING'):
+                if not clean_text or up_text.startswith('WARNING') or 'AREA WARNING' in up_text[:60] or 'ISSUED AT' in up_text[:90]:
                     continue
 
                 num_m = re.search(r'data-numero=["\']([^"\']+)["\']', tag)
-                num = num_m.group(1) if num_m else ""
+                num = num_m.group(1).strip() if num_m else ""
+                if not num:
+                    num_txt_m = re.search(r'AVISO\s+NR\s+(\d+/\d{4})', up_text)
+                    num = num_txt_m.group(1) if num_txt_m else ""
                 ini_m = re.search(r'data-inicio-utc=["\']([^"\']+)["\']', tag)
-                ini_utc = ini_m.group(1) if ini_m else ""
+                ini_utc = ini_m.group(1).strip() if ini_m else ""
                 fim_m = re.search(r'data-fim-utc=["\']([^"\']+)["\']', tag)
-                fim_utc = fim_m.group(1) if fim_m else ""
+                fim_utc = fim_m.group(1).strip() if fim_m else ""
 
-                if num in numeros_vistos:
+                dedup_key = f"{num}|{up_text[:60]}"
+                if dedup_key in numeros_vistos or (num and num in numeros_vistos):
                     continue
 
-                matches_keywords = any(k in clean_text.upper() for k in [
-                    'DELTA', 'MACAÉ', 'MACAE', 'CABO FRIO', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS'
-                ])
+                dt_fim = None
+                dt_ini = None
+                if fim_utc:
+                    try:
+                        dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
+                    except Exception:
+                        pass
+                if ini_utc:
+                    try:
+                        dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
+                    except Exception:
+                        pass
 
-                if is_delta_group or matches_keywords:
-                    dt_fim = None
-                    dt_ini = None
-                    if fim_utc:
-                        try:
-                            dt_fim = datetime.fromisoformat(fim_utc.replace('Z', '+00:00'))
-                        except Exception:
-                            pass
-                    if ini_utc:
-                        try:
-                            dt_ini = datetime.fromisoformat(ini_utc.replace('Z', '+00:00'))
-                        except Exception:
-                            pass
+                if dt_fim is not None and dt_fim <= now_utc:
+                    continue
 
-                    if dt_fim is None or dt_fim > now_utc:
-                        numeros_vistos.add(num)
+                if num:
+                    numeros_vistos.add(num)
+                numeros_vistos.add(dedup_key)
 
-                        if 'RESSACA' in clean_text.upper():
-                            tipo_aviso = "RESSACA"
-                        elif 'GROSSO' in clean_text.upper():
-                            tipo_aviso = "MAR GROSSO"
-                        elif 'VENTO' in clean_text.upper():
-                            tipo_aviso = "VENTO FORTE"
-                        else:
-                            tipo_aviso = "MAU TEMPO"
+                eh_area_delta = bool(is_delta_group or any(k in up_text for k in [
+                    'DELTA', 'MACAÉ', 'MACAE', 'CABO FRIO', 'ARRAIAL DO CABO',
+                    'BÚZIOS', 'BUZIOS', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS',
+                    'BACIA DE CAMPOS', 'SÃO JOÃO DA BARRA', 'SAO JOAO DA BARRA',
+                    'LITORAL FLUMINENSE', 'LITORAL DO RIO DE JANEIRO'
+                ]))
 
-                        rajadas_txt = ""
-                        forca_txt = ""
-                        if "FORÇA 8" in clean_text.upper() or "FORCA 8" in clean_text.upper():
-                            rajadas_txt = "62 a 74 km/h (Força 7/8)"
-                            forca_txt = "NW/SW FORÇA 7 COM RAJADAS FORÇA 8"
-                        elif "FORÇA 7" in clean_text.upper() or "FORCA 7" in clean_text.upper():
-                            rajadas_txt = "50 a 61 km/h (Força 7)"
-                            forca_txt = "FORÇA 7 BEAUFORT"
-                        elif tipo_aviso == "VENTO FORTE":
-                            rajadas_txt = "Até 65 km/h"
-                            forca_txt = "VENTO MODERADO A FORTE"
-                        else:
-                            rajadas_txt = "Até 45 km/h"
-                            forca_txt = "FORÇA 4-5 BEAUFORT"
+                if 'RESSACA' in up_text:
+                    tipo_aviso = "RESSACA"
+                elif 'MAR MUITO GROSSO' in up_text:
+                    tipo_aviso = "MAR MUITO GROSSO"
+                elif 'MAR GROSSO' in up_text or 'GROSSO' in up_text:
+                    tipo_aviso = "MAR GROSSO"
+                elif 'TEMPORAL' in up_text:
+                    tipo_aviso = "TEMPORAL"
+                elif 'VENTO MUITO FORTE' in up_text:
+                    tipo_aviso = "VENTO MUITO FORTE"
+                elif 'VENTO' in up_text:
+                    tipo_aviso = "VENTO FORTE"
+                elif 'NEVOEIRO' in up_text:
+                    tipo_aviso = "NEVOEIRO"
+                else:
+                    tipo_aviso = "MAU TEMPO"
 
-                        ondas_txt = ""
-                        m_ond = re.search(r'ONDAS DE\s+([A-Z0-9/\.\s]+?METROS)', clean_text, re.I)
-                        if m_ond:
-                            raw_ond = m_ond.group(0).strip()
-                            raw_ond = re.sub(r'(?i)ONDAS DE\s*', '', raw_ond)
-                            raw_ond = re.sub(r'(?i)\s*METROS', ' m', raw_ond)
-                            raw_ond = re.sub(r'(\d+(?:\.\d+)?)/(\d+(?:\.\d+)?)', r'\1 a \2', raw_ond)
-                            raw_ond = raw_ond.replace('.', ',')
-                            ondas_txt = f"{raw_ond} (Mar Grosso)" if tipo_aviso == "MAR GROSSO" else f"{raw_ond}"
-                        elif tipo_aviso == "MAR GROSSO":
-                            ondas_txt = "N/NW 3,0 a 3,5 m (Mar Grosso)"
-                        elif tipo_aviso == "RESSACA":
-                            ondas_txt = "2,5 a 3,5 m (Ressaca Severa)"
-                        else:
-                            ondas_txt = "2,0 a 2,5 m (Agitado)"
+                emissao_m = re.search(r'EMITIDO\s+[ÀA]S\s+([A-Z0-9\s/:-]+?)(?=\s+(?:ÁREA|AREA|ENTRE)\b|$)', up_text)
+                emissao_txt = emissao_m.group(1).strip() if emissao_m else None
 
-                        area_aviso = "Área DELTA"
-                        if "MACAÉ" in clean_text.upper() or "MACAE" in clean_text.upper():
-                            area_aviso = "Área Costeira (Macaé/RJ a Caravelas/BA)"
-                        elif "OCEÂNICA" in clean_text.upper() or "OCEANICA" in clean_text.upper():
-                            area_aviso = "Área Oceânica Delta (Bacia de Campos)"
+                forca_txt, rajadas_txt, ondas_txt = _parse_marinha_wind_and_waves(clean_text, tipo_aviso)
+                area_aviso = _build_area_description(clean_text, group_area or ("Área DELTA" if eh_area_delta else "METAREA V"))
 
-                        ini_br = ""
-                        fim_br = ""
-                        if dt_ini:
-                            ini_br = (dt_ini - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
-                        if dt_fim:
-                            fim_br = (dt_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
+                ini_br = (dt_ini - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h" if dt_ini else ""
+                fim_br = (dt_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h" if dt_fim else ""
+                periodo_str = f"De {ini_br} até {fim_br}" if (ini_br and fim_br) else "Em vigor"
+                status_vigencia = "Programado" if (dt_ini and dt_ini > now_utc) else "Em Vigor"
 
-                        periodo_str = f"De {ini_br} até {fim_br}" if (ini_br and fim_br) else "Em vigor"
+                if tipo_aviso in ("MAR GROSSO", "MAR MUITO GROSSO"):
+                    restricao_item = f"Mar agitado com ondas de {ondas_txt} e {forca_txt.lower()}. Evite navegação de pequeno porte."
+                elif tipo_aviso == "RESSACA":
+                    restricao_item = f"Risco de ressaca na faixa litorânea com ondas de {ondas_txt}. Atenção redobrada em molhes, costões e praias."
+                elif "VENTO" in tipo_aviso or tipo_aviso == "TEMPORAL":
+                    restricao_item = f"Atenção a pescadores, navegantes e banhistas: {forca_txt} ({rajadas_txt.split(' (')[0]}) e ondas estimadas em {ondas_txt}."
+                else:
+                    restricao_item = "Condições adversas de tempo no setor marítimo monitorado pelo CHM/Marinha do Brasil."
 
-                        avisos_encontrados.append({
-                            "numero": num,
-                            "tipo": tipo_aviso,
-                            "area": area_aviso,
-                            "forca": forca_txt,
-                            "rajadas": rajadas_txt,
-                            "mar_ondas": ondas_txt,
-                            "ondas": ondas_txt,
-                            "inicio_utc": ini_utc,
-                            "fim_utc": fim_utc,
-                            "inicio_br": ini_br,
-                            "fim_br": fim_br,
-                            "dt_ini": dt_ini,
-                            "dt_fim": dt_fim,
-                            "periodo": periodo_str,
-                            "validade": f"Aviso nº {num} válido até {fim_br}",
-                            "restricao": (
-                                "Atenção a pescadores, navegantes e banhistas na orla costeira." if tipo_aviso == "VENTO FORTE"
-                                else "Mar muito agitado com ondas severas de 3,0 a 3,5 m. Evite a navegação."
-                            ),
-                            "texto": clean_text
-                        })
+                item = {
+                    "numero": num,
+                    "tipo": tipo_aviso,
+                    "area_grupo": group_area or ("Área Delta" if eh_area_delta else "METAREA V"),
+                    "area": area_aviso,
+                    "eh_area_delta": eh_area_delta,
+                    "forca": forca_txt,
+                    "rajadas": rajadas_txt,
+                    "mar_ondas": ondas_txt,
+                    "ondas": ondas_txt,
+                    "emissao": emissao_txt,
+                    "inicio_utc": ini_utc,
+                    "fim_utc": fim_utc,
+                    "inicio_br": ini_br,
+                    "fim_br": fim_br,
+                    "dt_ini": dt_ini,
+                    "dt_fim": dt_fim,
+                    "status_vigencia": status_vigencia,
+                    "periodo": periodo_str,
+                    "validade": f"Aviso nº {num} válido até {fim_br}" if fim_br else f"Aviso nº {num} em vigor",
+                    "restricao": restricao_item,
+                    "texto": clean_text,
+                    "fonte_url": url_portal,
+                }
+                todos_avisos_raw.append(item)
+                if eh_area_delta:
+                    avisos_delta.append(item)
 
-        if avisos_encontrados:
+        def _sort_key(a):
+            return (0 if a["eh_area_delta"] else 1, a["dt_ini"].timestamp() if a["dt_ini"] else 0, a["numero"])
+
+        avisos_delta.sort(key=_sort_key)
+        todos_avisos_raw.sort(key=_sort_key)
+
+        marinha_info["todos_avisos"] = [
+            {k: v for k, v in a.items() if k not in ('dt_ini', 'dt_fim')}
+            for a in todos_avisos_raw
+        ]
+        marinha_info["total_avisos_brasil"] = len(todos_avisos_raw)
+
+        if avisos_delta:
             marinha_info["aviso_ativo"] = True
             marinha_info["avisos_ativos"] = [
                 {k: v for k, v in a.items() if k not in ('dt_ini', 'dt_fim')}
-                for a in avisos_encontrados
+                for a in avisos_delta
             ]
 
-            nums_str = " e ".join(a['numero'] for a in avisos_encontrados)
+            nums_str = " e ".join(a['numero'] for a in avisos_delta if a['numero'])
             marinha_info["numero"] = nums_str
 
-            tipos_unicos = list(dict.fromkeys(a['tipo'] for a in avisos_encontrados))
+            tipos_unicos = list(dict.fromkeys(a['tipo'] for a in avisos_delta))
             marinha_info["tipo"] = " E ".join(tipos_unicos)
 
-            valid_dt_ini = [a['dt_ini'] for a in avisos_encontrados if a['dt_ini']]
-            valid_dt_fim = [a['dt_fim'] for a in avisos_encontrados if a['dt_fim']]
+            valid_dt_ini = [a['dt_ini'] for a in avisos_delta if a['dt_ini']]
+            valid_dt_fim = [a['dt_fim'] for a in avisos_delta if a['dt_fim']]
             min_ini = min(valid_dt_ini) if valid_dt_ini else None
             max_fim = max(valid_dt_fim) if valid_dt_fim else None
 
@@ -346,32 +479,32 @@ def fetch_marinha_avisos():
                 marinha_info["fim_formatado"] = (max_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h"
                 marinha_info["fim"] = marinha_info["fim_formatado"]
 
+            marinha_info["emissao"] = avisos_delta[0].get("emissao")
             marinha_info["validade"] = f"Avisos nº {nums_str} válidos a partir de {marinha_info['inicio_formatado']} até {marinha_info['fim_formatado']}"
 
-            for a in avisos_encontrados:
-                if "7/8" in a.get("rajadas", "") or "74" in a.get("rajadas", ""):
-                    marinha_info["rajadas"] = a["rajadas"]
-                    marinha_info["forca"] = a["forca"]
-                    break
-            else:
-                marinha_info["rajadas"] = avisos_encontrados[0]["rajadas"]
-                marinha_info["forca"] = avisos_encontrados[0]["forca"]
+            best_wind = max(avisos_delta, key=lambda a: (
+                int(re.findall(r'\d+', a.get('rajadas', '0'))[-1]) if re.findall(r'\d+', a.get('rajadas', '0')) else 0
+            ))
+            marinha_info["rajadas"] = best_wind["rajadas"]
+            marinha_info["forca"] = best_wind["forca"]
 
-            if any("3,0" in a.get("ondas", "") or "3.0" in a.get("ondas", "") or a.get("tipo") == "MAR GROSSO" for a in avisos_encontrados):
+            if any(a.get("tipo") == "MAR MUITO GROSSO" for a in avisos_delta):
+                marinha_info["mar_ondas"] = next((a["ondas"] for a in avisos_delta if a.get("tipo") == "MAR MUITO GROSSO"), avisos_delta[0]["ondas"])
+            elif any("3,0" in a.get("ondas", "") or "3.0" in a.get("ondas", "") or a.get("tipo") == "MAR GROSSO" for a in avisos_delta):
                 marinha_info["mar_ondas"] = "3,0 a 3,5 m (Mar Grosso)"
-            elif any(a.get("tipo") == "RESSACA" for a in avisos_encontrados):
+            elif any(a.get("tipo") == "RESSACA" for a in avisos_delta):
                 marinha_info["mar_ondas"] = "2,5 a 3,5 m (Ressaca Severa)"
             else:
-                marinha_info["mar_ondas"] = avisos_encontrados[0]["ondas"]
+                marinha_info["mar_ondas"] = avisos_delta[0]["ondas"]
 
             marinha_info["area"] = "Área DELTA (Macaé a Cabo Frio e Bacia Oceânica)"
             marinha_info["restricao"] = (
-                f"Atenção a pescadores, navegantes e banhistas na Área Delta: vento Força 7 com rajadas Força 8 "
-                f"de até 74 km/h (Força 7/8) e ondas de {marinha_info['mar_ondas']}, válidos a partir de {marinha_info['inicio_formatado']} até {marinha_info['fim_formatado']}."
+                f"Atenção a pescadores, navegantes e banhistas na Área Delta: {marinha_info['forca'].lower()} "
+                f"({marinha_info['rajadas'].split(' (')[0]}) e ondas de {marinha_info['mar_ondas']}, válidos de {marinha_info['inicio_formatado']} até {marinha_info['fim_formatado']}."
             )
-            print(f"[MARINHA CHM] Avisos ativos para Área Delta: {marinha_info['tipo']} (nº {marinha_info['numero']})")
+            print(f"[MARINHA CHM] Avisos ativos para Área Delta: {marinha_info['tipo']} (nº {marinha_info['numero']}) | Total Brasil/CHM: {len(todos_avisos_raw)}")
         else:
-            print("[MARINHA CHM] Nenhum aviso ativo para a Área Delta.")
+            print(f"[MARINHA CHM] Nenhum aviso ativo para a Área Delta (Total Brasil/CHM: {len(todos_avisos_raw)}).")
     except Exception as e:
         print(f"[MARINHA CHM] Consulta de avisos: {e}")
 

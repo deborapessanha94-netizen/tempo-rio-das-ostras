@@ -196,16 +196,61 @@ export interface InmetAviso {
   instrucoes?: string[];
 }
 
-export interface MarinhaAvisos {
-  atualizacao: string;
+export interface MarinhaAvisoItem {
+  numero: string;
+  tipo: string;
+  area_grupo?: string;
   area: string;
-  status: string;
-  avisos_ativos: Array<{
-    tipo: string;
-    numero: string;
-    vigencia: string;
-    descricao: string;
-    severidade: string;
+  eh_area_delta?: boolean;
+  forca?: string;
+  rajadas?: string;
+  mar_ondas?: string;
+  ondas?: string;
+  emissao?: string | null;
+  inicio_utc?: string;
+  fim_utc?: string;
+  inicio_br?: string;
+  fim_br?: string;
+  status_vigencia?: string;
+  periodo?: string;
+  validade?: string;
+  restricao?: string;
+  texto?: string;
+  fonte_url?: string;
+  // Compatibilidade legada
+  vigencia?: string;
+  descricao?: string;
+  severidade?: string;
+}
+
+export interface MarinhaAvisos {
+  aviso_ativo?: boolean;
+  numero?: string | null;
+  tipo?: string;
+  area: string;
+  forca?: string;
+  rajadas?: string;
+  inicio_utc?: string | null;
+  fim_utc?: string | null;
+  inicio?: string | null;
+  fim?: string | null;
+  inicio_formatado?: string | null;
+  fim_formatado?: string | null;
+  emissao?: string | null;
+  validade?: string;
+  mar_ondas?: string;
+  restricao?: string;
+  atualizacao?: string;
+  atualizacao_brt?: string;
+  atualizacao_utc?: string;
+  fonte_url?: string;
+  total_avisos_brasil?: number;
+  status?: string;
+  avisos_ativos: MarinhaAvisoItem[];
+  todos_avisos?: MarinhaAvisoItem[];
+  cartas_sinoticas?: Array<{
+    horario: string;
+    url: string;
   }>;
 }
 
@@ -436,6 +481,31 @@ async function fetchJsonSafe<T>(url: string): Promise<T | null> {
   }
 }
 
+const RAW_MARINHA_AVISOS_URL =
+  'https://raw.githubusercontent.com/deborapessanha94-netizen/tempo-rio-das-ostras/main/data/marinha_avisos.json';
+
+function parseIsoMs(val?: string | null): number {
+  if (!val) return 0;
+  const ms = Date.parse(val);
+  return Number.isNaN(ms) ? 0 : ms;
+}
+
+export async function fetchMarinhaAvisosLive(): Promise<MarinhaAvisos | null> {
+  const ts = Date.now();
+  const [localRes, rawRes] = await Promise.all([
+    fetchJsonSafe<MarinhaAvisos>(`${SITE_BASE}/data/marinha_avisos.json?t=${ts}`),
+    fetchJsonSafe<MarinhaAvisos>(`${RAW_MARINHA_AVISOS_URL}?t=${ts}`),
+  ]);
+  if (localRes && rawRes) {
+    const rawMs = parseIsoMs(rawRes.atualizacao_utc);
+    const localMs = parseIsoMs(localRes.atualizacao_utc);
+    if (rawMs > localMs) return rawRes;
+    if (localMs === 0 && (rawRes.todos_avisos?.length || rawRes.avisos_ativos?.length)) return rawRes;
+    return localRes;
+  }
+  return rawRes || localRes;
+}
+
 export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean } = {}) {
   const ts = Date.now();
   const acumuladosLivePromise = fetchJsonSafe<AcumuladosDataset>(
@@ -468,7 +538,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     fetchJsonSafe<BoletimTurnoRow[]>(`${SITE_BASE}/data/boletim_oficial.json?t=${ts}`),
     fetchJsonSafe<BoletimMetadata>(`${SITE_BASE}/data/boletim_metadata.json?t=${ts}`),
     fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`),
-    fetchJsonSafe<MarinhaAvisos>(`${SITE_BASE}/data/marinha_avisos.json?t=${ts}`),
+    fetchMarinhaAvisosLive(),
     fetchJsonSafe<OrlaDataset>(`${SITE_BASE}/data/orla_condicoes.json?t=${ts}`),
     fetchJsonSafe<BalneabilidadeDataset>(`${SITE_BASE}/data/balneabilidade.json?t=${ts}`),
     fetchJsonSafe<TabuaMares>(`${SITE_BASE}/data/tabua_mares.json?t=${ts}`),
