@@ -597,8 +597,8 @@
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
         "chuva_1h": 0.0,
-        "chuva_24h": 0.2,
-        "chuva_96h": 0.2,
+        "chuva_24h": 1.4,
+        "chuva_96h": 1.4,
         "nivel_m": "1.26",
         "status": "Vigilância"
       }
