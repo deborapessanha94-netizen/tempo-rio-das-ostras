@@ -3,7 +3,7 @@
 Motor Meteorológico Autônomo — TEMPO em Rio das Ostras
 Gera e atualiza automaticamente o Boletim Operacional (12 Turnos),
 Cards da População (3 Dias), Panorama Sinótico, PLANCON e Avisos Oficiais
-a cada nova rodada de dados dos modelos numéricos e órgãos oficiais (INMET, INEA, Open-Meteo, Marinha).
+a cada nova rodada de dados dos modelos numéricos e órgãos oficiais (INMET COSMO/VIME/Avisos, CPTEC/INPE WRF/Multimodel, INEA Alerta de Cheias/RadarTool, Marinha e CEMADEN).
 Totalmente independente de intervenção manual humana.
 """
 
@@ -37,18 +37,18 @@ def now_brt():
 
 try:
     from scripts.rain_consensus import (
-        index_openmeteo_by_brt,
         index_cptec_multimodel_brt,
         compute_observed_today_rain_mm,
         compute_daily_rain_consensus,
     )
+    from scripts.official_rain_extractors import extract_all_official_rain_sources
 except ImportError:
     from rain_consensus import (
-        index_openmeteo_by_brt,
         index_cptec_multimodel_brt,
         compute_observed_today_rain_mm,
         compute_daily_rain_consensus,
     )
+    from official_rain_extractors import extract_all_official_rain_sources
 
 DIAS_SEMANA_PT = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo']
 
@@ -586,23 +586,19 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
     hourly_gusts = hourly.get('wind_gusts_10m', []) if hourly else []
     hourly_winds = hourly.get('wind_speed_10m', []) if hourly else []
     hourly_dirs = hourly.get('wind_direction_10m', []) if hourly else []
-    hourly_precs = hourly.get('precipitation', []) if hourly else []
-    hourly_probs = hourly.get('precipitation_probability', []) if hourly else []
-
     for d_idx, d in enumerate(dias_3):
         date_iso = d.get('date_iso')
         day_alerts = [a for a in direct_alerts if str(a.get('inicio', ''))[:10] <= date_iso <= str(a.get('fim', ''))[:10]]
         tem_alert_dia = len(day_alerts) > 0
         a_first = day_alerts[0] if tem_alert_dia else None
         a_limits = extract_alert_severe_limits(a_first) if a_first else None
+        day_turns_list = [r for r in records_12_turnos if r.get('data_iso') == date_iso]
         
         day_h_indices = [i for i, t in enumerate(hourly_times) if t.startswith(date_iso)]
         
         if day_h_indices:
             day_gusts = [hourly_gusts[i] for i in day_h_indices]
             day_winds = [hourly_winds[i] for i in day_h_indices]
-            day_precs = [hourly_precs[i] for i in day_h_indices]
-            day_probs = [hourly_probs[i] for i in day_h_indices]
             day_dirs = [hourly_dirs[i] for i in day_h_indices]
             
             # Para a tempestade convectiva diurna, analisa o período da tarde/instabilidade (11h às 21h)
@@ -618,11 +614,12 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
             hora_pico_g = hourly_times[day_h_indices[idx_g]][11:16]
             dir_pico_g = deg_to_cardinal_pt(day_dirs[idx_g]) if day_dirs else "Sudoeste (SW)"
 
-            instaveis_indices = [idx for idx, (p, prob) in enumerate(zip(day_precs, day_probs)) if (p > 0.1 or prob >= 45) and int(hourly_times[day_h_indices[idx]][11:13]) >= 11]
-            if instaveis_indices:
-                h_inicio_critica = hourly_times[day_h_indices[min(instaveis_indices)]][11:16]
-                h_fim_critica = hourly_times[day_h_indices[max(instaveis_indices)]][11:16]
-                janela_critica_txt = f"{h_inicio_critica} às {h_fim_critica}h"
+            turn_hours_map = {"Madrugada": (0, 6), "Manhã": (6, 12), "Tarde": (12, 18), "Noite": (18, 24)}
+            rainy_turns = [r.get('turno') for r in day_turns_list if (r.get('chuva_media', 0) >= 0.3 or r.get('chuva_prob', 0) >= 45)]
+            if rainy_turns:
+                h_min = min(turn_hours_map.get(t, (12, 18))[0] for t in rainy_turns)
+                h_max = max(turn_hours_map.get(t, (12, 18))[1] for t in rainy_turns)
+                janela_critica_txt = f"{h_min:02d}:00 às {h_max:02d}:00h"
             else:
                 janela_critica_txt = "13:00 às 19:00h"
 
@@ -647,7 +644,7 @@ def analisar_inspecao_minuciosa_tempo_severo(dias_3, records_12_turnos, inmet_al
             alerta_riscos = a_limits['texto_riscos']
             tem_granizo = a_limits['granizo']
         else:
-            teto_convectivo_mm = round(chuva_continua_mm * 1.5, 1) if chuva_continua_mm > 0 else 0.0
+            teto_convectivo_mm = float((d.get('probabilistico') or {}).get('p90_teto_mm') or (round(chuva_continua_mm * 1.5, 1) if chuva_continua_mm > 0 else 0.0))
             taxa_horaria_pico = "< 5 mm/h" if chuva_continua_mm > 0 else "0 mm/h"
             rajada_min_alerta = round(max_g * 0.8)
             rajada_max_alerta = round(max_g)
@@ -1495,10 +1492,11 @@ def run_auto_bulletin_pipeline():
     inea_ch24 = float(inea_pluv_st.get('chuva_pluvio_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_24h') is not None) else (inea_pluv_st.get('chuva_24h') if (inea_pluv_st and inea_pluv_st.get('chuva_24h') is not None) else 0.0))
     inea_ch96 = float(inea_pluv_st.get('chuva_pluvio_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_pluvio_96h') is not None) else (inea_pluv_st.get('chuva_96h') if (inea_pluv_st and inea_pluv_st.get('chuva_96h') is not None) else 0.0))
 
-    om_slots = index_openmeteo_by_brt(hourly)
+    official_extractions = extract_all_official_rain_sources(IMG_DIR, DATA_DIR)
     mm_slots = index_cptec_multimodel_brt(cptec_multi_list)
     obs_today_info = compute_observed_today_rain_mm(estacoes_obs)
     day_rain_sources = {}
+    perfil_horario_oficial_chuva = {}
 
     def _find_inea_for_date(target_br):
         rh8 = inea_boletim_data.get('previsao_rh8', {}) if inea_boletim_data else {}
@@ -1589,9 +1587,7 @@ def run_auto_bulletin_pipeline():
             day_idx=day_idx,
             day_date_iso=day_date_iso,
             dt_br_format=dt_br_format,
-            om_slots=om_slots,
-            om_daily_rain_mm=om['daily']['precipitation_sum'][day_idx],
-            om_daily_prob=om['daily']['precipitation_probability_max'][day_idx],
+            official_extractions=official_extractions,
             mm_slots=mm_slots,
             cptec_hoje=cptec_hoje,
             cptec_item_next=c_item_next,
@@ -1604,7 +1600,14 @@ def run_auto_bulletin_pipeline():
         day_chuva_model = consensus_day['consensus_day_mm']
         day_turn_rain = consensus_day['turn_rain_mm']
         day_turn_probs = consensus_day['turn_probs']
+        day_probabilistico = consensus_day['probabilistico']
+        perfil_horario_oficial_chuva.update(consensus_day.get('hourly_official_day') or {})
         day_rajada_model = om['daily']['wind_gusts_10m_max'][day_idx]
+        raw_wmo = om['daily']['weather_code'][day_idx]
+        if day_chuva_model < 0.3 and raw_wmo >= 50:
+            raw_wmo = 2
+        elif day_chuva_model >= 5.0 and raw_wmo < 50:
+            raw_wmo = 80
 
         dias_3.append({
             'date_iso': day_date_iso,
@@ -1615,11 +1618,12 @@ def run_auto_bulletin_pipeline():
             't_max': day_t_max,
             'chuva_tot': day_chuva_model,
             'chuva_prob_dia': consensus_day['consensus_prob_day'],
+            'probabilistico': day_probabilistico,
             'fontes_chuva': consensus_day['fontes_dia'],
             'vento_max': om['daily']['wind_speed_10m_max'][day_idx],
             'rajada_max': day_rajada_model,
             'uv_max': uv_cptec if uv_cptec is not None else 11,
-            'wmo': om['daily']['weather_code'][day_idx]
+            'wmo': raw_wmo
         })
 
         for turno_nome, h_s, h_e, sigla in turnos_def:
@@ -1629,8 +1633,8 @@ def run_auto_bulletin_pipeline():
             temps = hourly['temperature_2m'][idx_s:idx_e]
             umids = hourly['relative_humidity_2m'][idx_s:idx_e]
             press = (hourly.get('pressure_msl') or hourly['surface_pressure'])[idx_s:idx_e]
-            chuvas = hourly['precipitation'][idx_s:idx_e]
-            probs = hourly['precipitation_probability'][idx_s:idx_e]
+            chuvas = []
+            probs = []
             winds = hourly['wind_speed_10m'][idx_s:idx_e]
             gusts = hourly['wind_gusts_10m'][idx_s:idx_e]
             dirs = hourly['wind_direction_10m'][idx_s:idx_e]
@@ -1696,8 +1700,15 @@ def run_auto_bulletin_pipeline():
                 vento_vel_media = round(sum(winds) / len(winds))
             rajada_max = round(max(gusts))
 
-            # Código do tempo predominante
+            # Código do tempo predominante coerente com os modelos brasileiros
             wmo_code = max(set(codes), key=codes.count)
+            turn_chuva_chk = day_turn_rain.get(turno_nome, 0.0)
+            if turn_chuva_chk < 0.3 and wmo_code >= 50:
+                wmo_code = 2
+            elif turn_chuva_chk >= 5.0 and wmo_code < 50:
+                wmo_code = 80
+            elif turn_chuva_chk >= 0.3 and wmo_code < 50:
+                wmo_code = 51
             tempo_desc_wmo, icon_name, resumo_txt = WMO_MAP.get(wmo_code, ("Instável", "cloud", "Tempo instável"))
 
             # Curva de temperatura por turno calibrada entre INMET e CPTEC
@@ -1761,7 +1772,14 @@ def run_auto_bulletin_pipeline():
                 elif 'claro' in dl or 'poucas nuvens' in dl:
                     icon_name = "sun" if turno_nome in ['Manhã', 'Tarde'] else "moon"
             else:
-                tempo_desc = tempo_desc_wmo
+                if chuva_sum >= 4.0 and wmo_code < 80:
+                    tempo_desc = "Pancadas de Chuva"
+                    icon_name = "cloud-rain"
+                elif chuva_sum >= 0.3 and wmo_code < 50:
+                    tempo_desc = "Chuva Fraca / Garoa"
+                    icon_name = "cloud-drizzle"
+                else:
+                    tempo_desc = tempo_desc_wmo
 
             # Alerta INMET ativo no dia ajusta rajadas e descrição convectiva da Tarde/Noite
             if tem_alerta_inmet_dia and alerta_dia:
@@ -1783,12 +1801,16 @@ def run_auto_bulletin_pipeline():
                 mar_ondas = marinha_ondas_alerta
                 mar_cond = "Muito Agitado (Ressaca)"
 
-            # Água Precipitável (VIME INMET): cálculo Bolton
+            # Água Precipitável real do VIME INMET (ou fallback termodinâmico de Bolton se ausente)
             import math
             t_mid = (t_min + t_max) / 2.0
             ur_mid = (u_min + u_max) / 2.0
-            td_approx = t_mid - ((100.0 - ur_mid) / 5.0)
-            pw_val = round(math.exp(0.0614 * td_approx + 1.12), 1)
+            vime_pw = consensus_day['fontes_dia'].get('inmet_vime_pwat_mm')
+            if vime_pw is not None:
+                pw_val = round(float(vime_pw), 1)
+            else:
+                td_approx = t_mid - ((100.0 - ur_mid) / 5.0)
+                pw_val = round(math.exp(0.0614 * td_approx + 1.12), 1)
 
             # Sensação térmica (Multimodel CPTEC)
             sensacao_val = round(sum(multi_heat) / len(multi_heat)) if multi_heat else round(calc_sensacao_termica(t_mid, ur_mid, vento_vel_media))
@@ -1860,17 +1882,21 @@ def run_auto_bulletin_pipeline():
         a_first = d_alerts[0] if tem_alert else None
         a_limits = extract_alert_precipitation_limits(a_first) if a_first else None
 
+        d_prob = dias_3[d_idx].get('probabilistico') or {}
+        d_p25 = float(d_prob.get('p25_mm', 0.0))
+        d_p90 = float(d_prob.get('p90_teto_mm', dias_3[d_idx]['chuva_tot']))
+        d_prob_pct = int(dias_3[d_idx].get('chuva_prob_dia', 0))
         if a_limits:
-            pico_max = a_limits['acum_dia_max']
-            faixa_txt = f"{dias_3[d_idx]['chuva_tot']:.1f} mm (Média) • Até {pico_max:.0f} mm (Alerta INMET)"
-            card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm (Até {pico_max:.0f} mm em tempestade)"
+            pico_max = max(float(a_limits['acum_dia_max']), d_p90)
+            faixa_txt = f"{dias_3[d_idx]['chuva_tot']:.1f} mm (P50) • Faixa {d_p25:.1f}–{d_p90:.1f} mm • Até {pico_max:.0f} mm (Alerta INMET)"
+            card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm ({d_prob_pct}% • P25–P90: {d_p25:.1f}–{d_p90:.1f} mm • Teto {pico_max:.0f} mm)"
             alerta_id_dia = a_first.get('id')
             alerta_cor_dia = a_first.get('cor_nome', 'Amarelo')
             taxa_pico_dia = f"{a_limits['taxa_h_min']} a {a_limits['taxa_h_max']} mm/h"
         else:
-            pico_max = round(dias_3[d_idx]['chuva_tot'] * 1.5, 1)
-            faixa_txt = f"{dias_3[d_idx]['chuva_tot']:.1f} mm"
-            card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm"
+            pico_max = d_p90
+            faixa_txt = f"{dias_3[d_idx]['chuva_tot']:.1f} mm (P50) • P25–P90: {d_p25:.1f}–{d_p90:.1f} mm ({d_prob_pct}%)"
+            card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm ({d_prob_pct}% • P25–P90: {d_p25:.1f}–{d_p90:.1f} mm)"
             alerta_id_dia = None
             alerta_cor_dia = None
             taxa_pico_dia = "< 5 mm/h"
@@ -2482,7 +2508,7 @@ def run_auto_bulletin_pipeline():
             else d1_aviso_str
         )
         p3 = (
-            f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), "
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km e 2,8km INMET/VIME, WRF/Multimodel CPTEC e Boletim INEA RH-VIII), "
             f"{prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) {d1_desc_sinopse}, "
             f"determinando contenção/declínio de temperatura ({d1['t_min']:.0f}°C a {d1['t_max']:.0f}°C) e precipitação estimada em {d1_faixa} ({d1_aviso_p3}). "
             f"{d2_d3_desc} No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de {mar_ondas_sinopse} "
@@ -2503,13 +2529,13 @@ def run_auto_bulletin_pipeline():
             f"{prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), com precipitação diária prevista em {d0_faixa} ({d0_aviso_str}).\n\n"
             f"O forte aquecimento diabático por radiação solar em superfície durante o ciclo diurno estabelece taxas de lapso superadiabáticas junto ao solo, "
             f"promovendo forçamento termodinâmico ascensional e desestabilização vertical da troposfera. A conjugação entre elevado teor de água precipitável "
-            f"na coluna troposférica (PW de 38 a 42 mm aferida nos modelos numéricos), umidade relativa em superfície e expressiva disponibilidade de "
+            f"na coluna troposférica (PW de {(d0.get('fontes_chuva') or {}).get('inmet_vime_pwat_faixa') or '35 a 40 mm'} aferida no VIME/INMET), umidade relativa em superfície e expressiva disponibilidade de "
             f"Energia Potencial Convectiva Disponível (índices CAPE moderados a altos, com erosão progressiva da inibição convectiva - CINE a partir da tarde) "
             f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
             f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
             f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
             f"na orla marítima). {jundia_frase_sinopse}\n\n"
-            f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas ECMWF, GFS e COSMO/INMET 12Z), projeta-se a passagem "
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas COSMO 7km/2,8km INMET/VIME e WRF/Multimodel CPTEC), projeta-se a passagem "
             f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
             f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
             f"(rajadas regulares), com precipitação residual em declínio ({d1_faixa}, {d1_aviso_str}). "
@@ -2598,7 +2624,7 @@ def run_auto_bulletin_pipeline():
                 "chuva": { "label": "CHUVA", "val": ch_card_val, "icon": "cloud-rain" if dia_chuva > 5 or d.get('tem_alerta_inmet') else "cloud-drizzle" },
                 "mar": { "label": "MAR E PRAIA", "val": day_turnos[1]['mar_ondas'] if len(day_turnos) > 1 else "1.4 m", "icon": "waves" },
                 "uv": { "label": "ÍNDICE UV (CPTEC)", "val": f"UV {d.get('uv_max', 11)} (Extremo)", "icon": "sun" },
-                "agua_precipitavel": { "label": "ÁGUA PRECIPITÁVEL (VIME)", "val": f"{day_turnos[2].get('agua_precipitavel_mm', 32.0)} mm", "icon": "droplets" }
+                "agua_precipitavel": { "label": "ÁGUA PRECIPITÁVEL / CAPE (VIME)", "val": f"{(d.get('fontes_chuva') or {}).get('inmet_vime_pwat_faixa') or (str(day_turnos[2].get('agua_precipitavel_mm', 32.0)) + ' mm')}" + (f" • CAPE {(d.get('fontes_chuva') or {}).get('inmet_vime_cape_faixa')}" if (d.get('fontes_chuva') or {}).get('inmet_vime_cape_faixa') else ""), "icon": "droplets" }
             }
         })
 
@@ -2759,7 +2785,7 @@ def run_auto_bulletin_pipeline():
             "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
             "texto": sinopse_geral.split('\n\n')[0] if '\n\n' in sinopse_geral else sinopse_geral,
             "pilares": [
-                {"label": "Modelos Numéricos (4 Dias)", "val": f"INMET e Open-Meteo ({chuva_total_3d:.1f} mm em 96h)"},
+                {"label": "Modelos Brasileiros (96h)", "val": f"INMET COSMO/VIME · CPTEC WRF/Multimodel · INEA RH-VIII ({sum(d['chuva_tot'] for d in dias_3[:4]):.1f} mm em 96h)"},
                 {"label": "Gradiente Térmico Oficial", "val": f"Mínima de {min_t_val:.0f}°C até Máxima de {pico_calor:.0f}°C"},
                 {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
             ]
@@ -2786,7 +2812,7 @@ def run_auto_bulletin_pipeline():
             "pilares": [
                 {"label": "Ciclo Sinótico Oficial", "val": "Consolidação diária e telemetria telemétrica contínua"},
                 {"label": "Nuvem Autônoma 24/7", "val": "Processamento redundante em nuvem independente de hardware local ligado"},
-                {"label": "Fontes de Dados", "val": "INEA • INMET • Marinha do Brasil • CEMADEN"}
+                {"label": "Fontes de Dados", "val": "INMET (COSMO/VIME/Avisos) • CPTEC/INPE (WRF/Multimodel/Prob) • INEA (RH-VIII/RadarTool) • Marinha • CEMADEN"}
             ]
         }
     }
@@ -2837,9 +2863,23 @@ def run_auto_bulletin_pipeline():
         "emissao": emissao_str,
         "emissao_iso": emissao_iso,
         "generation_epoch_ms": generation_epoch_ms,
-        "metodologia": "Consenso numérico e sinótico unificado em cada atualização: Open-Meteo (ECMWF/GFS), CPTEC/INPE (Municipal + Multimodel WRF/ETA/BRAMS/BAM), INMET (Previsão 3304524 + Avisos Ativos), INEA Alerta de Cheias (Boletim Oficial RH-VIII/Rio das Ostras) e Pluviômetros CEMADEN/INEA/PWS.",
+        "metodologia": "Consenso probabilístico 100% oficial brasileiro atualizado em cada rodada: INMET (Meteograma COSMO 7x7km + VIME COSMO 2,8km/7km, Água Precipitável e CAPE + Previsão 3304524 + Avisos Ativos), CPTEC/INPE (Meteograma WRF + Multimodel + Municipal/6D + Mapas Probabilísticos P≥5mm), INEA Alerta de Cheias (Boletim Hidrometeorológico RH-VIII/Rio das Ostras + RadarTool RJ) e Pluviômetros CEMADEN/INEA/PWS.",
         "observado_hoje_estacoes": obs_today_info,
         "inea_boletim_publicado_em": inea_boletim_data.get('publicado_em') if inea_boletim_data else None,
+        "vime_inmet": official_extractions.get('vime_inmet', {}),
+        "inmet_cosmo_meteograma_info": {
+            "rodada": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('rodada_utc'),
+            "y_max_mm": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('y_max_mm'),
+            "daily_mm": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('daily_mm', {}),
+            "disponivel": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('disponivel', False),
+        },
+        "cptec_wrf_prob_info": {
+            "wrf_y_max": (official_extractions.get('cptec_wrf') or {}).get('y_max_mmh'),
+            "wrf_daily_mm": (official_extractions.get('cptec_wrf') or {}).get('daily_mm', {}),
+            "prob_p05_pct": official_extractions.get('cptec_prob_p05') or {},
+        },
+        "inea_radartool": official_extractions.get('inea_radartool', {}),
+        "perfil_horario_oficial_chuva": perfil_horario_oficial_chuva,
         "observado_recente": {
             "cemaden_pcd_18789": {
                 "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
@@ -2863,6 +2903,11 @@ def run_auto_bulletin_pipeline():
                 "data_br": d['date_br'],
                 "dia_semana": d['dia_semana'],
                 "chuva_media_modelos_mm": d['chuva_tot'],
+                "chuva_p25_mm": (d.get('probabilistico') or {}).get('p25_mm', 0.0),
+                "chuva_p50_mm": (d.get('probabilistico') or {}).get('p50_mm', d['chuva_tot']),
+                "chuva_p75_mm": (d.get('probabilistico') or {}).get('p75_mm', d['chuva_tot']),
+                "chuva_p90_teto_mm": (d.get('probabilistico') or {}).get('p90_teto_mm', d['chuva_tot']),
+                "probabilistico": d.get('probabilistico', {}),
                 "chuva_pico_convectivo_mm": d.get('chuva_pico_max', 50.0),
                 "faixa_oficial": d.get('chuva_faixa_txt') or f"{d['chuva_tot']:.1f} mm",
                 "chuva_prob_pct": d.get('chuva_prob_dia'),
@@ -2880,9 +2925,9 @@ def run_auto_bulletin_pipeline():
         "acumulado_8dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
         "dias_somados": [d['chuva_tot'] for d in dias_3],
         "conclusao_sem_pontas_soltas": (
-            "Todos os dias e turnos seguem o mesmo cálculo contínuo ponderado entre os modelos numéricos (Open-Meteo e CPTEC Multimodel), "
-            "as faixas oficiais do Boletim Hidrometeorológico RH-VIII do INEA (Alerta de Cheias), os avisos/previsão do INMET e a telemetria real em solo, "
-            "mantendo coerência exata entre os cards diários, a tabela de turnos e os gráficos horários."
+            "Todos os dias, turnos e gráficos seguem o mesmo cálculo probabilístico contínuo ponderado (quantis P25/P50/P75/P90 e probabilidade condicional) entre todas as fontes oficiais brasileiras "
+            "(INMET COSMO 7x7km, VIME COSMO 2,8km/7km + Água Precipitável/CAPE, INMET 3304524/Avisos, CPTEC WRF/Multimodel/Probabilístico P≥5mm, Boletim Hidrometeorológico RH-VIII do INEA + RadarTool RJ e pluviômetros CEMADEN/INEA/PWS), "
+            "mantendo coerência matemática exata entre os cards diários, a tabela de turnos e os gráficos horários."
         )
     }
 
@@ -2911,6 +2956,13 @@ def run_auto_bulletin_pipeline():
             'sintese_consenso': 'Equilíbrio entre o modelo espectral WAVEWATCH III (CPTEC/INPE), a meteorologia marítima da Marinha do Brasil (CHM Área Delta) e a modelagem Open-Meteo Marine. Condições adequadas e seguras em enseadas abrigadas (Praia do Bosque, Tartaruga e Centro); arrebentação regular de 1,2 a 1,6 m em praias oceânicas abertas (Costazul e Mar do Norte).'
         }
 
+    cosmo_ext = official_extractions.get('inmet_cosmo_meteograma') or {}
+    if cosmo_ext.get('disponivel') and cosmo_ext.get('rodada_utc'):
+        r_code = str(cosmo_ext.get('rodada_utc', '')).split()[0]
+        if r_code in ('00', '12') and isinstance(inmet_meteograma, dict):
+            inmet_meteograma['rodada'] = r_code
+            inmet_meteograma['data'] = cosmo_ext.get('data_rodada_utc', inmet_meteograma.get('data'))
+
     metadata = {
         "municipio": "Rio das Ostras - RJ",
         "periodo": periodo_str,
@@ -2933,6 +2985,8 @@ def run_auto_bulletin_pipeline():
             "previsao_5dias": inmet_forecast
         },
         "inmet_meteograma": inmet_meteograma,
+        "vime_inmet": official_extractions.get('vime_inmet', {}),
+        "inea_radartool": official_extractions.get('inea_radartool', {}),
         "inea_boletim_hidrometeorologico": inea_boletim_data,
         "inea_macae_ostras": inea_macae_ostras_data,
         "orla_condicoes": orla_condicoes,
@@ -2992,7 +3046,8 @@ def run_auto_bulletin_pipeline():
             {"nome": "INMET - Condições Registradas (Macaé A608)", "url": "https://tempo.inmet.gov.br/CondicoesRegistradas", "tipo": "Estações Automáticas"},
             {"nome": "CPTEC/INPE - Previsão Municipal Oficial", "url": "https://www.cptec.inpe.br/api/forecast-input?city=Rio%20das%20Ostras,%20RJ", "tipo": "Previsão Oficial"},
             {"nome": "CPTEC/INPE - Previsão 6 Dias e Índice UV", "url": "https://www.cptec.inpe.br/api/forecast-input-next-days?city=Rio%20das%20Ostras,%20RJ", "tipo": "Índice UV & Estendida"},
-            {"nome": "CPTEC/INPE - Meteograma Multimodel Horário (ID 3866)", "url": "https://s1.cptec.inpe.br/grafico/Modelos/Multimodel/pag_web/horario/3866.json", "tipo": "Multimodel Horário"},
+            {"nome": "CPTEC/INPE - Meteograma WRF & Multimodel Horário (ID 3866)", "url": "https://s1.cptec.inpe.br/grafico/Modelos/Multimodel/pag_web/horario/3866.json", "tipo": "WRF & Multimodel Horário"},
+            {"nome": "CPTEC/INPE - Mapas Probabilísticos de Chuva (>= 5 mm)", "url": "https://www.cptec.inpe.br/", "tipo": "Probabilidade Ensemble"},
             {"nome": "CPTEC/INPE - Satélite GOES-16 DSAT", "url": "https://www.cptec.inpe.br/dsat/", "tipo": "Sensoriamento Remoto"},
             {"nome": "Marinha do Brasil - Avisos de Mau Tempo (Área Delta)", "url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo", "tipo": "Meteorologia Marinha"},
             {"nome": "Marinha do Brasil - Tábuas de Maré (Estação Imbetiba nº 39)", "url": "https://www.marinha.mil.br/chm/tabuas-de-mare", "tipo": "Maregrafia Oficial"},

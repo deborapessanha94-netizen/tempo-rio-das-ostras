@@ -3,7 +3,6 @@ import type {
   BoletimMetadata,
   BoletimTurnoRow,
   InmetAviso,
-  OpenMeteoData,
 } from './siteData';
 
 const SHIFTS = [
@@ -14,27 +13,46 @@ const SHIFTS = [
 ] as const;
 
 export interface RainSourceDayBreakdown {
-  open_meteo_mm?: number | null;
-  open_meteo_prob_pct?: number | null;
+  inmet_cosmo_meteograma_mm?: number | null;
+  inmet_cosmo_rodada?: string | null;
+  inmet_vime_cosmo28_mm?: number | null;
+  inmet_vime_cosmo28_faixa?: string | null;
+  inmet_vime_cosmo7_mm?: number | null;
+  inmet_vime_cosmo7_faixa?: string | null;
+  inmet_vime_pwat_mm?: number | null;
+  inmet_vime_pwat_faixa?: string | null;
+  inmet_vime_cape_jkg?: number | null;
+  inmet_vime_cape_faixa?: string | null;
+  cptec_wrf_mm?: number | null;
   cptec_multimodel_mm?: number | null;
   cptec_multimodel_horas?: number | null;
   cptec_municipal_mm?: number | null;
   cptec_municipal_prob_pct?: number | null;
   cptec_municipal_valido_hoje?: boolean | null;
+  cptec_prob_p05_pct?: number | null;
   inmet_resumo?: string | null;
   inmet_aviso_id?: string | number | null;
   inmet_aviso_cor?: string | null;
   inea_faixa_municipio_mm?: string | null;
   inea_faixa_bacia_mm?: string | null;
   inea_referencia_mm?: number | null;
+  inea_radartool_estagio?: string | null;
   observado_hoje_media_mm?: number | null;
   observado_hoje_max_mm?: number | null;
+}
+
+export interface ProbabilisticRainStats {
+  p25_mm: number;
+  p50_mm: number;
+  p75_mm: number;
+  p90_teto_mm: number;
+  probabilidade_pct: number;
+  qtd_fontes_numericas: number;
 }
 
 export interface LiveConsensusInputs {
   boletimMeta: (BoletimMetadata & Record<string, any>) | null;
   boletimOficial: BoletimTurnoRow[] | null;
-  openMeteo: OpenMeteoData | null;
   acumulados: AcumuladosDataset | null;
   inmetAvisosFile: InmetAviso[] | null;
   liveInmetForecast: Record<string, any> | null;
@@ -71,6 +89,42 @@ function classifyInmetLevel(desc?: string | null): number {
 
 function round1(val: number): number {
   return Math.round(val * 10) / 10;
+}
+
+function weightedQuantiles(samples: Array<[number, number]>): {
+  p25: number;
+  p50: number;
+  p75: number;
+  p90: number;
+} {
+  const valid = samples
+    .filter(([v, w]) => Number.isFinite(v) && Number.isFinite(w) && w > 0)
+    .map(([v, w]) => [Math.max(0, v), w] as [number, number])
+    .sort((a, b) => a[0] - b[0]);
+
+  if (valid.length === 0) return { p25: 0, p50: 0, p75: 0, p90: 0 };
+  if (valid.length === 1) {
+    const v = valid[0][0];
+    return { p25: v, p50: v, p75: v, p90: v };
+  }
+
+  const totalW = valid.reduce((acc, [, w]) => acc + w, 0);
+  const qAt = (q: number) => {
+    const target = q * totalW;
+    let cum = 0;
+    for (const [val, w] of valid) {
+      cum += w;
+      if (cum >= target) return val;
+    }
+    return valid[valid.length - 1][0];
+  };
+
+  return {
+    p25: qAt(0.25),
+    p50: qAt(0.5),
+    p75: qAt(0.75),
+    p90: qAt(0.9),
+  };
 }
 
 function normalizeLiveInmetAlerts(raw: { hoje?: any[]; futuro?: any[] } | null): InmetAviso[] | null {
@@ -186,18 +240,47 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     return { boletimMeta: meta, boletimOficial: oficial, inmetAvisos: mergedAlerts };
   }
 
-  const fontesRespondedoras: string[] = [];
-  if (inputs.openMeteo?.hourly) fontesRespondedoras.push('Open-Meteo');
-  if (inputs.liveInmetForecast && Object.keys(inputs.liveInmetForecast).length > 0) fontesRespondedoras.push('INMET Previsão');
-  if (liveAlerts !== null) fontesRespondedoras.push('INMET Avisos');
-  if (inputs.liveCptecHoje) fontesRespondedoras.push('CPTEC Municipal');
-  if (inputs.liveCptecNext && inputs.liveCptecNext.length > 0) fontesRespondedoras.push('CPTEC 6 Dias');
-  if (meta.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje?.extraido_pdf) fontesRespondedoras.push('INEA RH-VIII (PDF)');
-  if (inputs.acumulados?.estacoes?.length) fontesRespondedoras.push('Estações PWS/CEMADEN');
-
   const multi = meta.analise_precipitacao_multifonte;
   const previstoPorDia: any[] = Array.isArray(multi?.previsto_por_dia) ? multi.previsto_por_dia : [];
-  if (previstoPorDia.length === 0 || !inputs.openMeteo?.hourly) {
+
+  const fontesRespondedoras: string[] = [];
+  if (
+    previstoPorDia.some((p) => p?.fontes?.inmet_cosmo_meteograma_mm !== null && p?.fontes?.inmet_cosmo_meteograma_mm !== undefined) ||
+    Object.keys(multi?.inmet_cosmo_meteograma_info?.daily_mm || {}).length > 0
+  ) {
+    fontesRespondedoras.push('INMET COSMO 7km');
+  }
+  if (
+    meta.vime_inmet?.disponivel ||
+    multi?.vime_inmet?.disponivel ||
+    previstoPorDia.some((p) => p?.fontes?.inmet_vime_cosmo28_mm !== undefined || p?.fontes?.inmet_vime_cosmo7_mm !== undefined)
+  ) {
+    fontesRespondedoras.push('INMET VIME 2.8km/7km');
+  }
+  if (inputs.liveInmetForecast && Object.keys(inputs.liveInmetForecast).length > 0) {
+    fontesRespondedoras.push('INMET Previsão (Ao Vivo)');
+  }
+  if (liveAlerts !== null) fontesRespondedoras.push('INMET Avisos (Ao Vivo)');
+  if (
+    previstoPorDia.some((p) => p?.fontes?.cptec_wrf_mm !== null && p?.fontes?.cptec_wrf_mm !== undefined) ||
+    Object.keys(multi?.cptec_wrf_prob_info?.wrf_daily_mm || {}).length > 0
+  ) {
+    fontesRespondedoras.push('CPTEC WRF / Prob.');
+  }
+  if (previstoPorDia.some((p) => Number(p?.fontes?.cptec_multimodel_horas ?? 0) >= 12)) {
+    fontesRespondedoras.push('CPTEC Multimodel');
+  }
+  if (inputs.liveCptecHoje) fontesRespondedoras.push('CPTEC Municipal (Ao Vivo)');
+  if (inputs.liveCptecNext && inputs.liveCptecNext.length > 0) fontesRespondedoras.push('CPTEC 6 Dias (Ao Vivo)');
+  if (meta.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje?.extraido_pdf) {
+    fontesRespondedoras.push('INEA RH-VIII (PDF)');
+  }
+  if (meta.inea_radartool?.disponivel || multi?.inea_radartool?.disponivel) {
+    fontesRespondedoras.push('INEA RadarTool');
+  }
+  if (inputs.acumulados?.estacoes?.length) fontesRespondedoras.push('CEMADEN/INEA/PWS');
+
+  if (previstoPorDia.length === 0) {
     if (multi) {
       multi.fontes_ao_vivo_status = {
         atualizado_em_brt: new Intl.DateTimeFormat('pt-BR', {
@@ -215,22 +298,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     return { boletimMeta: meta, boletimOficial: oficial, inmetAvisos: mergedAlerts };
   }
 
-  // Index Open-Meteo hourly precipitation & probability by (dateIso, shiftName)
-  const omShiftPrec: Record<string, Record<string, number>> = {};
-  const omShiftProb: Record<string, Record<string, number>> = {};
-  const hourly = inputs.openMeteo.hourly;
-  for (let i = 0; i < (hourly.time?.length || 0); i++) {
-    const t = hourly.time[i];
-    if (!t || !t.includes('T')) continue;
-    const [dIso, hPart] = t.split('T');
-    const h = parseInt(hPart.slice(0, 2), 10);
-    const shift = SHIFTS.find((s) => h >= s.startH && h < s.endH)?.name || 'Madrugada';
-    omShiftPrec[dIso] ??= { Madrugada: 0, Manhã: 0, Tarde: 0, Noite: 0 };
-    omShiftProb[dIso] ??= { Madrugada: 0, Manhã: 0, Tarde: 0, Noite: 0 };
-    omShiftPrec[dIso][shift] += Number(hourly.precipitation?.[i] ?? 0);
-    omShiftProb[dIso][shift] = Math.max(omShiftProb[dIso][shift], Number(hourly.precipitation_probability?.[i] ?? 0));
-  }
-
+  const perfilHoraOficial: Record<string, number> = multi?.perfil_horario_oficial_chuva || {};
   const obsHoje = computeObservedHoje(inputs.acumulados);
   const ineaRh8 = meta.inea_boletim_hidrometeorologico?.previsao_rh8;
   const alteracoes: string[] = [];
@@ -241,25 +309,43 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     const dateBr: string = prevDia.data_br || isoToBr(dateIso);
     const prevFontes: RainSourceDayBreakdown = { ...(prevDia.fontes || {}) };
 
-    // 1. Open-Meteo ao vivo
-    const omDailyIdx = inputs.openMeteo.daily?.time?.indexOf(dateIso) ?? -1;
-    const omTurnMap = omShiftPrec[dateIso];
-    const omSum = omTurnMap
-      ? Math.round((omTurnMap.Madrugada + omTurnMap.Manhã + omTurnMap.Tarde + omTurnMap.Noite) * 100) / 100
-      : Number(
-          omDailyIdx >= 0 ? inputs.openMeteo.daily?.precipitation_sum?.[omDailyIdx] ?? prevFontes.open_meteo_mm ?? 0 : prevFontes.open_meteo_mm ?? 0
-        );
-    const omProbDay =
-      omDailyIdx >= 0
-        ? Number(inputs.openMeteo.daily?.precipitation_probability_max?.[omDailyIdx] ?? prevFontes.open_meteo_prob_pct ?? 0)
-        : Number(prevFontes.open_meteo_prob_pct ?? 0);
-
-    // 2. CPTEC Multimodel (snapshot do backend)
-    const mmSum = prevFontes.cptec_multimodel_mm ?? null;
+    // 1. Fontes numéricas brasileiras persistidas do backend (COSMO, VIME, WRF, Multimodel, P>=5mm)
+    const cosmoMm =
+      prevFontes.inmet_cosmo_meteograma_mm !== undefined && prevFontes.inmet_cosmo_meteograma_mm !== null
+        ? Number(prevFontes.inmet_cosmo_meteograma_mm)
+        : null;
+    const vime28Mm =
+      prevFontes.inmet_vime_cosmo28_mm !== undefined && prevFontes.inmet_vime_cosmo28_mm !== null
+        ? Number(prevFontes.inmet_vime_cosmo28_mm)
+        : null;
+    const vime7Mm =
+      prevFontes.inmet_vime_cosmo7_mm !== undefined && prevFontes.inmet_vime_cosmo7_mm !== null
+        ? Number(prevFontes.inmet_vime_cosmo7_mm)
+        : null;
+    const wrfMm =
+      prevFontes.cptec_wrf_mm !== undefined && prevFontes.cptec_wrf_mm !== null
+        ? Number(prevFontes.cptec_wrf_mm)
+        : null;
+    const mmSum =
+      prevFontes.cptec_multimodel_mm !== undefined && prevFontes.cptec_multimodel_mm !== null
+        ? Number(prevFontes.cptec_multimodel_mm)
+        : null;
     const mmHours = Number(prevFontes.cptec_multimodel_horas ?? 0);
     const hasMmDay = mmSum !== null && mmHours >= 12;
+    const p05Pct =
+      prevFontes.cptec_prob_p05_pct !== undefined && prevFontes.cptec_prob_p05_pct !== null
+        ? Number(prevFontes.cptec_prob_p05_pct)
+        : null;
+    const pwatVal =
+      prevFontes.inmet_vime_pwat_mm !== undefined && prevFontes.inmet_vime_pwat_mm !== null
+        ? Number(prevFontes.inmet_vime_pwat_mm)
+        : null;
+    const capeVal =
+      prevFontes.inmet_vime_cape_jkg !== undefined && prevFontes.inmet_vime_cape_jkg !== null
+        ? Number(prevFontes.inmet_vime_cape_jkg)
+        : null;
 
-    // 3. CPTEC Municipal (ao vivo validado)
+    // 2. CPTEC Municipal & 6 Dias ao vivo
     let cptecProb: number | null = prevFontes.cptec_municipal_prob_pct ?? null;
     let cptecMunMm: number | null = prevFontes.cptec_municipal_mm ?? null;
     let cptecValidoHoje = Boolean(prevFontes.cptec_municipal_valido_hoje);
@@ -283,7 +369,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       }
     }
 
-    // 4. INMET Previsão (ao vivo se disponível, senão snapshot)
+    // 3. INMET Previsão (ao vivo se disponível, senão snapshot)
     const liveInmetDia = inputs.liveInmetForecast?.[dateBr];
     const inmetTurnDescs: Record<string, string> = {};
     const inmetTurnLevels: Record<string, number> = {};
@@ -324,7 +410,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     }
     const inmetDayLevel = Math.max(0, ...Object.values(inmetTurnLevels));
 
-    // 5. Alertas INMET diretos (ao vivo)
+    // 4. Alertas INMET diretos (ao vivo)
     const dayAlerts = (mergedAlerts || []).filter((a: any) => {
       if (!a?.eh_direto_ostras) return false;
       const ini = String(a.inicio || '').slice(0, 10);
@@ -333,7 +419,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       return ini === dateIso;
     });
 
-    // 6. INEA Boletim RH-VIII (extração real do PDF do backend)
+    // 5. INEA Boletim RH-VIII (extração real do PDF do backend)
     const ineaPrev =
       ineaRh8?.hoje?.extraido_pdf && ineaRh8.hoje.data === dateBr
         ? ineaRh8.hoje
@@ -341,70 +427,103 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
           ? ineaRh8.amanha
           : null;
 
-    // 7. Recalcula exatamente conforme rain_consensus.py
-    let nwpBase = hasMmDay && mmSum !== null ? 0.55 * omSum + 0.45 * mmSum : omSum;
-    if (cptecValidoHoje && cptecMunMm !== null && cptecMunMm > 0) {
-      nwpBase = 0.75 * nwpBase + 0.25 * cptecMunMm;
-    }
-    const ineaBmax = ineaPrev?.chuva_max_mm ?? null;
-    if (
-      cptecProb !== null &&
-      cptecProb <= 10 &&
-      inmetDayLevel === 0 &&
-      !(ineaPrev && ineaBmax !== null && ineaBmax > 1.0) &&
-      dayAlerts.length === 0
-    ) {
-      nwpBase = Math.min(nwpBase, 1.0);
+    // 6. Amostragem Ponderada Probabilística 100% Fontes Brasileiras
+    const samples: Array<[number, number]> = [];
+    if (cosmoMm !== null) samples.push([cosmoMm, 1.6]);
+    if (vime28Mm !== null) samples.push([vime28Mm, 1.8]);
+    if (vime7Mm !== null) samples.push([vime7Mm, 1.3]);
+    if (wrfMm !== null) samples.push([wrfMm, 1.6]);
+    if (hasMmDay && mmSum !== null) samples.push([mmSum, 1.5]);
+    if (dIdx === 0 && cptecValidoHoje && cptecMunMm !== null) {
+      samples.push([cptecMunMm, cptecMunMm > 0 ? 1.1 : 0.6]);
     }
 
-    let consensusMm = nwpBase;
+    let ineaTargetMm: number | null = prevFontes.inea_referencia_mm ?? null;
     if (ineaPrev && ineaPrev.chuva_min_mm !== null && ineaPrev.chuva_max_mm !== null) {
       const bmin = Number(ineaPrev.chuva_min_mm);
       const bmax = Number(ineaPrev.chuva_max_mm);
       const baciaMax = ineaPrev.chuva_bacia_max_mm !== undefined ? Number(ineaPrev.chuva_bacia_max_mm) : bmax;
-      let ineaTarget: number;
-      let wInea: number;
       if (bmin === 0 && bmax <= 1.0 && baciaMax >= 10.0) {
-        ineaTarget = 0.75;
-        wInea = 0.25;
+        ineaTargetMm = 0.8;
       } else if (bmax <= 10.0) {
-        ineaTarget = bmin + 0.25 * (bmax - bmin);
-        wInea = 0.2;
+        ineaTargetMm = bmin + 0.25 * (bmax - bmin);
       } else {
-        ineaTarget = bmin + 0.35 * (bmax - bmin);
-        wInea = 0.35;
+        ineaTargetMm = bmin + 0.35 * (bmax - bmin);
       }
-      consensusMm = (1 - wInea) * nwpBase + wInea * ineaTarget;
-      if (bmin >= 10.0) {
-        consensusMm = Math.max(consensusMm, 0.65 * bmin);
-      }
+      samples.push([ineaTargetMm, bmax > 10.0 ? 1.5 : 1.2]);
+    } else if (ineaTargetMm !== null) {
+      samples.push([ineaTargetMm, 1.2]);
     }
 
-    if (inmetDayLevel >= 3) consensusMm = Math.max(consensusMm, 2.2);
-    else if (inmetDayLevel === 2) consensusMm = Math.max(consensusMm, 1.5);
-    else if (inmetDayLevel === 1) consensusMm = Math.max(consensusMm, 0.6);
+    if (samples.length === 0) {
+      const fallbackBase = Number(prevDia.chuva_media_modelos_mm ?? 0);
+      samples.push([fallbackBase, 1.0]);
+    }
+
+    const qRaw = weightedQuantiles(samples);
+    let p25 = qRaw.p25;
+    let p50 = qRaw.p50;
+    let p75 = qRaw.p75;
+    let p90 = Math.max(qRaw.p90, p75);
+
+    if (inmetDayLevel >= 3) p50 = Math.max(p50, 2.2);
+    else if (inmetDayLevel === 2) p50 = Math.max(p50, 1.5);
+    else if (inmetDayLevel === 1) p50 = Math.max(p50, 0.6);
 
     const ineaCondLow = String(ineaPrev?.condicao || '').toLowerCase();
-    if ((ineaPrev?.tem_raios_icone || ineaCondLow.includes('raios')) && consensusMm < 2.0) {
-      consensusMm = Math.max(consensusMm, 2.0);
+    if ((ineaPrev?.tem_raios_icone || ineaCondLow.includes('raios')) && p50 < 2.0) {
+      p50 = Math.max(p50, 2.0);
+    }
+
+    if (hasIneaTenMmCeiling(ineaPrev)) {
+      p90 = Math.max(p90, Number(ineaPrev.chuva_max_mm));
     }
 
     if (dayAlerts.length > 0) {
       const sev = String((dayAlerts[0] as any).cor_nome || 'Amarelo');
       const floor = sev === 'Vermelho' ? 30.0 : sev === 'Laranja' ? 15.0 : 5.0;
-      consensusMm = Math.max(consensusMm, floor);
+      p50 = Math.max(p50, floor);
+      p75 = Math.max(p75, p50);
+      const alertLimits = extractAlertMaxRain(dayAlerts[0]);
+      p90 = Math.max(p90, alertLimits.diaMax);
     }
 
     if (dIdx === 0 && obsHoje.mediaMm > 0) {
-      consensusMm = Math.max(consensusMm, obsHoje.mediaMm);
+      p50 = Math.max(p50, obsHoje.mediaMm);
+      p25 = Math.max(p25, obsHoje.mediaMm);
+      p75 = Math.max(p75, p50);
+      p90 = Math.max(p90, obsHoje.maxMm);
     }
 
-    const newDayMm = round1(Math.max(0, consensusMm));
-    const oldDayMm = round1(Number(prevDia.chuva_media_modelos_mm ?? 0));
+    p25 = round1(Math.min(p25, p50));
+    p50 = round1(Math.max(0, p50));
+    p75 = round1(Math.max(p50, p75));
+    p90 = round1(Math.max(p75, p90));
 
-    // Registra alterações significativas detectadas em tempo real
-    if (Math.abs(newDayMm - oldDayMm) >= 0.2) {
-      alteracoes.push(`${dateBr.slice(0, 5)}: ${oldDayMm.toFixed(1)} → ${newDayMm.toFixed(1)} mm`);
+    // Probabilidade condicional combinada
+    const wetWeights = samples.filter(([v]) => v >= 0.3).reduce((acc, [, w]) => acc + w, 0);
+    const totalW = samples.reduce((acc, [, w]) => acc + w, 0) || 1;
+    let probPct = Math.round(100.0 * (wetWeights / totalW));
+    if (p05Pct !== null) {
+      probPct = Math.max(probPct, Math.min(95, Math.round(p05Pct)));
+    }
+    if (cptecProb !== null) {
+      probPct = Math.round(0.65 * probPct + 0.35 * cptecProb);
+    }
+    if (inmetDayLevel >= 3) probPct = Math.max(probPct, 65);
+    else if (inmetDayLevel === 2) probPct = Math.max(probPct, 50);
+    else if (inmetDayLevel === 1) probPct = Math.max(probPct, 25);
+    if (dayAlerts.length > 0) probPct = Math.max(probPct, 80);
+    if (pwatVal !== null && pwatVal >= 35.0 && capeVal !== null && capeVal >= 250.0) {
+      probPct = Math.min(95, probPct + 10);
+    }
+    if (dIdx === 0 && obsHoje.mediaMm >= 0.5) probPct = Math.max(probPct, 85);
+    if (p50 >= 2.0 && probPct < 45) probPct = 45;
+    probPct = Math.max(5, Math.min(95, Math.round(probPct)));
+
+    const oldDayMm = round1(Number(prevDia.chuva_media_modelos_mm ?? 0));
+    if (Math.abs(p50 - oldDayMm) >= 0.2) {
+      alteracoes.push(`${dateBr.slice(0, 5)}: ${oldDayMm.toFixed(1)} → ${p50.toFixed(1)} mm`);
     }
     const oldAlertId = prevDia.alerta_inmet_id ?? null;
     const newAlertId = dayAlerts[0]?.id ?? null;
@@ -412,30 +531,43 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       alteracoes.push(`Novo Aviso INMET nº ${newAlertId} (${dateBr.slice(0, 5)})`);
     }
 
-    // Atualiza breakdown das fontes e totais do dia
     const activeAlert = dayAlerts[0] as any;
     const alertLimits = activeAlert ? extractAlertMaxRain(activeAlert) : null;
-    const newPicoMax = alertLimits ? alertLimits.diaMax : round1(newDayMm * 1.5);
+    const newPicoMax = alertLimits ? Math.max(alertLimits.diaMax, p90) : p90;
     const newFaixaOficial = activeAlert
-      ? `${newDayMm.toFixed(1)} mm (Média) • Até ${newPicoMax.toFixed(0)} mm (Alerta INMET)`
-      : `${newDayMm.toFixed(1)} mm`;
+      ? `${p50.toFixed(1)} mm (P50) • Faixa ${p25.toFixed(1)}–${p90.toFixed(1)} mm • Até ${newPicoMax.toFixed(0)} mm (Alerta INMET)`
+      : `${p50.toFixed(1)} mm (P50) • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm (${probPct}%)`;
 
-    prevDia.chuva_media_modelos_mm = newDayMm;
+    const probStats: ProbabilisticRainStats = {
+      p25_mm: p25,
+      p50_mm: p50,
+      p75_mm: p75,
+      p90_teto_mm: p90,
+      probabilidade_pct: probPct,
+      qtd_fontes_numericas: samples.length,
+    };
+
+    prevDia.chuva_media_modelos_mm = p50;
+    prevDia.chuva_p25_mm = p25;
+    prevDia.chuva_p50_mm = p50;
+    prevDia.chuva_p75_mm = p75;
+    prevDia.chuva_p90_teto_mm = p90;
+    prevDia.probabilistico = probStats;
     prevDia.chuva_pico_convectivo_mm = newPicoMax;
     prevDia.faixa_oficial = newFaixaOficial;
+    prevDia.chuva_prob_pct = probPct;
     prevDia.tem_alerta_inmet = Boolean(activeAlert);
     prevDia.alerta_inmet_id = activeAlert ? activeAlert.id : null;
-    prevDia.taxa_horaria_pico = alertLimits ? `${alertLimits.taxaMin} a ${alertLimits.taxaMax} mm/h` : newDayMm > 0 ? '< 5 mm/h' : '0 mm/h';
+    prevDia.taxa_horaria_pico = alertLimits ? `${alertLimits.taxaMin} a ${alertLimits.taxaMax} mm/h` : p50 > 0 ? '< 5 mm/h' : '0 mm/h';
     prevDia.fontes = {
       ...prevFontes,
-      open_meteo_mm: round1(omSum),
-      open_meteo_prob_pct: Math.round(omProbDay),
       cptec_municipal_mm: cptecValidoHoje ? cptecMunMm : null,
       cptec_municipal_prob_pct: cptecProb !== null ? Math.round(cptecProb) : null,
       cptec_municipal_valido_hoje: dIdx === 0 ? cptecValidoHoje : null,
       inmet_resumo: inmetResumoStr,
       inmet_aviso_id: activeAlert ? activeAlert.id : null,
       inmet_aviso_cor: activeAlert ? activeAlert.cor_nome : null,
+      inea_referencia_mm: ineaTargetMm !== null ? round1(ineaTargetMm) : prevFontes.inea_referencia_mm ?? null,
       observado_hoje_media_mm: dIdx === 0 ? obsHoje.mediaMm : null,
       observado_hoje_max_mm: dIdx === 0 ? obsHoje.maxMm : null,
     };
@@ -444,27 +576,36 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     const card = meta.dias_resumo?.[dIdx];
     if (card?.pilares?.chuva) {
       card.pilares.chuva.val = activeAlert
-        ? `${newDayMm.toFixed(1)} mm (Até ${newPicoMax.toFixed(0)} mm em tempestade)`
-        : `${newDayMm.toFixed(1)} mm`;
+        ? `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm • Teto ${newPicoMax.toFixed(0)} mm)`
+        : `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm)`;
     }
 
-    // Rebalanceia os 4 turnos em boletimOficial para somarem exatamente newDayMm
+    // Rebalanceia os 4 turnos em boletimOficial usando exclusivamente perfil brasileiro oficial + INMET + Alertas
     if (oficial) {
       const dayTurnRows = oficial.filter((r) => r.data_iso === dateIso);
       if (dayTurnRows.length > 0) {
-        const omT = omShiftPrec[dateIso];
+        const shiftHourSum: Record<string, number> = {};
+        for (const s of SHIFTS) {
+          let hSum = 0;
+          for (let h = s.startH; h < s.endH; h++) {
+            const key = `${dateIso}T${String(h).padStart(2, '0')}`;
+            hSum += Number(perfilHoraOficial[key] ?? 0);
+          }
+          shiftHourSum[s.name] = hSum;
+        }
+
         const weights: Record<string, number> = {};
         for (const r of dayTurnRows) {
           const tName = r.turno || r.turno_label || '';
           const oldVal = Number(r.chuva_media ?? 0);
-          const omVal = omT?.[tName] ?? 0;
+          const offHVal = Number(shiftHourSum[tName] ?? 0);
           const inmLvl = inmetTurnLevels[tName] ?? 0;
           const convBoost = inmLvl >= 3 ? (tName === 'Tarde' || tName === 'Noite' ? 0.5 : 0.2) : inmLvl === 2 ? 0.25 : 0.05;
           const alertBoost = activeAlert && tName === 'Tarde' ? 0.8 : activeAlert && tName === 'Noite' ? 0.5 : 0;
-          weights[tName] = Math.max(0.01, oldVal * 0.65 + omVal * 0.35 + convBoost + alertBoost);
+          weights[tName] = Math.max(0.01, oldVal * 0.55 + offHVal * 0.45 + convBoost + alertBoost);
         }
         const wSum = Object.values(weights).reduce((a, b) => a + b, 0);
-        if (newDayMm <= 0) {
+        if (p50 <= 0) {
           for (const r of dayTurnRows) {
             r.chuva_media = 0.0;
             r.chuva_faixa_turno = '0.0 mm';
@@ -480,11 +621,11 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
               maxW = w;
               heaviestRow = r;
             }
-            const alloc = round1(newDayMm * (w / wSum));
+            const alloc = round1(p50 * (w / wSum));
             r.chuva_media = alloc;
             running += alloc;
           }
-          const residual = round1(newDayMm - running);
+          const residual = round1(p50 - running);
           if (Math.abs(residual) > 0) {
             heaviestRow.chuva_media = round1(Math.max(0, Number(heaviestRow.chuva_media ?? 0) + residual));
           }
@@ -513,8 +654,9 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
   multi.acumulado_8dias_media = sum8d;
   multi.dias_somados = vals;
   const formulaStr =
-    previstoPorDia.map((d) => `${Number(d.chuva_media_modelos_mm ?? 0).toFixed(1)} mm (${String(d.dia_semana || '').slice(0, 3)})`).join(' + ') +
-    ` = ${sum8d.toFixed(1)} mm`;
+    previstoPorDia
+      .map((d) => `${Number(d.chuva_media_modelos_mm ?? 0).toFixed(1)} mm (${String(d.dia_semana || '').slice(0, 3)})`)
+      .join(' + ') + ` = ${sum8d.toFixed(1)} mm`;
   multi.acumulado_semana_formula = formulaStr;
   multi.acumulado_8dias_formula = formulaStr;
   multi.observado_hoje_estacoes = {
@@ -541,5 +683,13 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     meta.kpis.chuva_8d = `${sum8d.toFixed(1)} mm`;
   }
 
-  return { boletimMeta: meta, boletimOficial: oficial, inmetAvisos: mergedAlerts };
+  return {
+    boletimMeta: meta,
+    boletimOficial: oficial,
+    inmetAvisos: mergedAlerts,
+  };
+}
+
+function hasIneaTenMmCeiling(ineaPrev: any): boolean {
+  return Boolean(ineaPrev && ineaPrev.chuva_max_mm !== undefined && ineaPrev.chuva_max_mm !== null && Number(ineaPrev.chuva_max_mm) >= 10);
 }

@@ -446,7 +446,7 @@ export interface OpenMeteoData {
     temperature_2m: number;
     relative_humidity_2m: number;
     apparent_temperature: number;
-    precipitation: number;
+    precipitation?: number;
     weather_code: number;
     surface_pressure: number;
     wind_speed_10m: number;
@@ -456,8 +456,8 @@ export interface OpenMeteoData {
   hourly?: {
     time: string[];
     temperature_2m: number[];
-    precipitation_probability: number[];
-    precipitation: number[];
+    precipitation_probability?: number[];
+    precipitation?: number[];
     surface_pressure: number[];
     relative_humidity_2m: number[];
     wind_speed_10m: number[];
@@ -469,8 +469,8 @@ export interface OpenMeteoData {
     time: string[];
     temperature_2m_max: number[];
     temperature_2m_min: number[];
-    precipitation_sum: number[];
-    precipitation_probability_max: number[];
+    precipitation_sum?: number[];
+    precipitation_probability_max?: number[];
     wind_speed_10m_max: number[];
     uv_index_max: number[];
   };
@@ -582,7 +582,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     fetchJsonSafe<TabuaMares>(`${SITE_BASE}/data/tabua_mares.json?t=${ts}`),
     fetchJsonSafe<HistoricoEstacoesDataset>(`${SITE_BASE}/data/historico_estacoes.json?t=${ts}`),
     fetchJsonSafe<OpenMeteoData>(
-      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
+      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),
     fetchJsonSafe<Record<string, any>>('https://apiprevmet3.inmet.gov.br/previsao/3304524', 4500),
     fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>('https://apiprevmet3.inmet.gov.br/avisos/ativos', 4500),
@@ -593,7 +593,6 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
   const reconciled = reconcileLiveRainConsensus({
     boletimMeta: metaOficial.boletimMeta,
     boletimOficial: metaOficial.boletimOficial,
-    openMeteo,
     acumulados,
     inmetAvisosFile,
     liveInmetForecast: liveInmetForecastPayload?.['3304524'] ?? null,

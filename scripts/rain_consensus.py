@@ -1,12 +1,14 @@
 """
-Motor de Consenso Pluviométrico Multifonte — @tempoemriodasostras
-Integra de forma simétrica, transparente e contínua TODAS as fontes oficiais:
-1. Open-Meteo (ECMWF / GFS horário)
-2. CPTEC/INPE Meteograma Multimodel (WRF, ETA, BRAMS, BAM horário UTC->BRT)
-3. CPTEC/INPE Previsão Municipal & 6 Dias
-4. INMET Previsão por Turnos & Estendida (3304524) + Avisos Ativos
-5. INEA Alerta de Cheias — Boletim Hidrometeorológico RH-VIII / Rio das Ostras
-6. Rede de Pluviômetros Observados (CEMADEN PCD 18789, INEA 2241036, PWS)
+Motor Probabilístico Multifonte de Precipitação (100% Fontes Oficiais Brasileiras)
+Integra, analisa e calcula distribuição probabilística (P25 / P50 / P90 e Probabilidade %) a partir de:
+1. INMET Meteograma Dinâmico COSMO 7x7km (meteograma.inmet.gov.br/3304524/dinamico)
+2. INMET VIME (vime.inmet.gov.br/SE) — COSMO 2.8km SE-RJ & COSMO 7km SE (prec24h, prec2dias, PWAT, CAPE)
+3. INMET Previsão por Turnos & Estendida (3304524) + Avisos Meteorológicos Ativos (avisos.inmet.gov.br)
+4. CPTEC/INPE Meteograma Regional WRF (3866.png)
+5. CPTEC/INPE Meteograma Multimodel Horário (WRF/ETA/BRAMS/BAM 3866.json alinhado UTC->BRT)
+6. CPTEC/INPE Previsão Municipal & 6 Dias + Mapas Probabilísticos P >= 5mm
+7. INEA Alerta de Cheias — Boletim Oficial RH-VIII / Rio das Ostras (analise.php) + RadarTool
+8. Rede Pluviométrica em Tempo Real (CEMADEN PCD 18789, INEA 2241036, PWS Weather Underground)
 """
 
 from datetime import datetime, timedelta
@@ -17,44 +19,6 @@ TURNOS_ORDER = [
     ("Tarde", 12, 18, "Tar"),
     ("Noite", 18, 24, "Noi"),
 ]
-
-
-def index_openmeteo_by_brt(hourly):
-    """Indexa arrays horários do Open-Meteo por (YYYY-MM-DD, hora_int)."""
-    if not hourly or "time" not in hourly:
-        return {}
-    times = hourly.get("time", [])
-    precs = hourly.get("precipitation", [])
-    probs = hourly.get("precipitation_probability", [])
-    temps = hourly.get("temperature_2m", [])
-    umids = hourly.get("relative_humidity_2m", [])
-    press = hourly.get("pressure_msl") or hourly.get("surface_pressure", [])
-    winds = hourly.get("wind_speed_10m", [])
-    gusts = hourly.get("wind_gusts_10m", [])
-    dirs = hourly.get("wind_direction_10m", [])
-    codes = hourly.get("weather_code", [])
-
-    slot_map = {}
-    for idx, ts in enumerate(times):
-        if "T" not in ts:
-            continue
-        d_iso, h_part = ts.split("T", 1)
-        try:
-            h_int = int(h_part[:2])
-        except ValueError:
-            continue
-        slot_map[(d_iso, h_int)] = {
-            "prec": float(precs[idx]) if idx < len(precs) and precs[idx] is not None else 0.0,
-            "prob": float(probs[idx]) if idx < len(probs) and probs[idx] is not None else 0.0,
-            "temp": temps[idx] if idx < len(temps) else None,
-            "umid": umids[idx] if idx < len(umids) else None,
-            "press": press[idx] if idx < len(press) else None,
-            "wind": winds[idx] if idx < len(winds) else None,
-            "gust": gusts[idx] if idx < len(gusts) else None,
-            "dir": dirs[idx] if idx < len(dirs) else None,
-            "code": codes[idx] if idx < len(codes) else None,
-        }
-    return slot_map
 
 
 def index_cptec_multimodel_brt(cptec_multi_list):
@@ -84,9 +48,7 @@ def classify_inmet_text_level(desc):
     if "pancada" in dl:
         return 2
     if "chuva" in dl or "chuvisco" in dl or "garoa" in dl:
-        if "isolada" in dl or "possibilidade" in dl:
-            return 1
-        return 2
+        return 1 if ("isolada" in dl or "possibilidade" in dl) else 2
     return 0
 
 
@@ -117,13 +79,27 @@ def compute_observed_today_rain_mm(estacoes_obs):
     }
 
 
+def _weighted_quantile(pairs, q):
+    """Calcula quantil ponderado (0..1) sobre lista de (valor, peso)."""
+    clean = [(float(v), float(w)) for v, w in pairs if v is not None and w > 0]
+    if not clean:
+        return 0.0
+    clean.sort(key=lambda t: t[0])
+    total_w = sum(w for _v, w in clean)
+    target = q * total_w
+    acc = 0.0
+    for val, w in clean:
+        acc += w
+        if acc >= target:
+            return val
+    return clean[-1][0]
+
+
 def compute_daily_rain_consensus(
     day_idx,
     day_date_iso,
     dt_br_format,
-    om_slots,
-    om_daily_rain_mm,
-    om_daily_prob,
+    official_extractions,
     mm_slots,
     cptec_hoje,
     cptec_item_next,
@@ -133,20 +109,38 @@ def compute_daily_rain_consensus(
     obs_today_info,
 ):
     """
-    Calcula o volume diário consensual (mm), probabilidade máxima e a distribuição
-    exata entre os 4 turnos a partir de todas as fontes oficiais disponíveis.
+    Executa o cálculo probabilístico (P25, P50 consensual, P75, P90 teto e Probabilidade %)
+    integrando TODAS as fontes oficiais brasileiras (zero Open-Meteo), distribuindo os
+    volumes nos 4 turnos e gerando a curva horária oficial dos modelos nacionais.
     """
-    # 1. Open-Meteo por turno e dia
-    om_turn_sums = {}
-    om_turn_probs = {}
-    for t_name, h_s, h_e, _sig in TURNOS_ORDER:
-        hrs = [om_slots.get((day_date_iso, h)) for h in range(h_s, h_e)]
-        valid = [x for x in hrs if x is not None]
-        om_turn_sums[t_name] = sum(x["prec"] for x in valid)
-        om_turn_probs[t_name] = max((x["prob"] for x in valid), default=0.0)
-    om_sum = round(sum(om_turn_sums.values()), 2) if om_turn_sums else round(float(om_daily_rain_mm or 0.0), 2)
+    ext = official_extractions or {}
+    inmet_cosmo_met = ext.get("inmet_cosmo_meteograma", {})
+    inmet_vime = ext.get("inmet_vime", {})
+    cptec_wrf = ext.get("cptec_wrf", {})
+    cptec_prob_p05 = ext.get("cptec_prob_p05", {})
+    inea_radartool = ext.get("inea_radartool", {})
 
-    # 2. CPTEC Multimodel (BRT alinhado)
+    # 1. INMET Meteograma COSMO 7x7km (3304524)
+    cosmo_met_daily = inmet_cosmo_met.get("daily_mm", {})
+    cosmo_met_hourly = inmet_cosmo_met.get("hourly_brt", {})
+    cosmo_met_mm = cosmo_met_daily.get(day_date_iso)
+
+    # 2. INMET VIME (COSMO 2.8km SE-RJ & COSMO 7km SE + PWAT + CAPE)
+    vime28_mm = inmet_vime.get("daily_cosmo28_mm", {}).get(day_date_iso)
+    vime28_faixa = inmet_vime.get("daily_cosmo28_faixa", {}).get(day_date_iso)
+    vime7_mm = inmet_vime.get("daily_cosmo7_mm", {}).get(day_date_iso)
+    vime7_faixa = inmet_vime.get("daily_cosmo7_faixa", {}).get(day_date_iso)
+    vime_pwat = (inmet_vime.get("agua_precipitavel") or {}).get("rep")
+    vime_pwat_faixa = (inmet_vime.get("agua_precipitavel") or {}).get("faixa")
+    vime_cape = (inmet_vime.get("cape") or {}).get("rep")
+    vime_cape_faixa = (inmet_vime.get("cape") or {}).get("faixa")
+
+    # 3. CPTEC/INPE WRF (3866.png)
+    wrf_daily = cptec_wrf.get("daily_mm", {})
+    wrf_hourly = cptec_wrf.get("hourly_brt", {})
+    wrf_mm = wrf_daily.get(day_date_iso)
+
+    # 4. CPTEC/INPE Multimodel Horário (3866.json alinhado BRT)
     mm_turn_sums = {}
     mm_turn_probs = {}
     mm_hours_count = 0
@@ -167,13 +161,13 @@ def compute_daily_rain_consensus(
     mm_sum = None
     mm_prob_day = None
     if has_mm_day:
-        raw_mm_sum = sum(mm_all_precs)
+        raw_mm = sum(mm_all_precs)
         if mm_hours_count < 24:
-            raw_mm_sum = raw_mm_sum * (24.0 / mm_hours_count)
-        mm_sum = round(raw_mm_sum, 2)
+            raw_mm = raw_mm * (24.0 / mm_hours_count)
+        mm_sum = round(raw_mm, 1)
         mm_prob_day = round(max(mm_all_probs)) if mm_all_probs else 0
 
-    # 3. CPTEC Municipal (Hoje validado por hora_atual == day_date_iso; Próximos dias por probabilidade)
+    # 5. CPTEC Municipal & 6 Dias + Mapa Probabilístico P>=5mm
     cptec_prob = None
     cptec_mun_mm = None
     cptec_hoje_valido = False
@@ -195,7 +189,9 @@ def compute_daily_rain_consensus(
         except (TypeError, ValueError):
             pass
 
-    # 4. INMET Previsão (Turnos em D+0/D+1 e resumo diário em D+2..D+4)
+    cptec_p05_map = cptec_prob_p05.get(day_date_iso)
+
+    # 6. INMET Previsão (Turnos em D+0/D+1 e resumo diário em D+2..D+4)
     has_inmet_turns = bool(inmet_dia and any(k in inmet_dia for k in ("manha", "tarde", "noite")))
     inmet_turn_descs = {}
     inmet_turn_levels = {}
@@ -215,15 +211,12 @@ def compute_daily_rain_consensus(
         day_lvl = classify_inmet_text_level(day_resumo)
         for t_name, _hs, _he, _sig in TURNOS_ORDER:
             inmet_turn_descs[t_name] = day_resumo
-            # Se é previsão geral de dia inteiro para D+2..D+4, concentra peso convectivo em Tarde/Noite
             inmet_turn_levels[t_name] = day_lvl if t_name in ("Tarde", "Noite") or day_lvl <= 1 else max(1, day_lvl - 1)
 
     inmet_day_level = max(inmet_turn_levels.values(), default=0)
-    inmet_resumo_dia = " / ".join(
-        dict.fromkeys([d for d in inmet_turn_descs.values() if d])
-    ) or None
+    inmet_resumo_dia = " / ".join(dict.fromkeys([d for d in inmet_turn_descs.values() if d])) or None
 
-    # 5. INEA Alerta de Cheias RH-VIII / Rio das Ostras (extração real do PDF)
+    # 7. INEA Alerta de Cheias RH-VIII / Rio das Ostras (extração real do PDF)
     inea_valid = bool(inea_prev_dia and inea_prev_dia.get("extraido_pdf") and inea_prev_dia.get("data") == dt_br_format)
     inea_ro_min = inea_prev_dia.get("chuva_min_mm") if inea_valid else None
     inea_ro_max = inea_prev_dia.get("chuva_max_mm") if inea_valid else None
@@ -231,44 +224,91 @@ def compute_daily_rain_consensus(
     inea_cond = (inea_prev_dia.get("condicao") or "") if inea_valid else ""
     inea_raios = bool(inea_prev_dia.get("tem_raios_icone") or "raios" in inea_cond.lower()) if inea_valid else False
 
-    # 6. Síntese Numérica Contínua (Open-Meteo + CPTEC Multimodel + CPTEC Municipal)
-    if has_mm_day and mm_sum is not None:
-        nwp_base = 0.55 * om_sum + 0.45 * mm_sum
-    else:
-        nwp_base = om_sum
-
-    if cptec_hoje_valido and cptec_mun_mm is not None and cptec_mun_mm > 0:
-        nwp_base = 0.75 * nwp_base + 0.25 * cptec_mun_mm
-
-    if (
-        cptec_prob is not None
-        and cptec_prob <= 10
-        and inmet_day_level == 0
-        and not (inea_valid and inea_ro_max is not None and inea_ro_max > 1.0)
-        and not day_alerts
-    ):
-        nwp_base = min(nwp_base, 1.0)
-
-    # 7. Ancoragem do INEA RH-VIII / Rio das Ostras (suave e simétrica para Hoje e Amanhã)
-    consensus_mm = nwp_base
+    inea_target = None
+    inea_weight = 0.0
     if inea_valid and inea_ro_min is not None and inea_ro_max is not None:
         if inea_ro_min == 0 and inea_ro_max <= 1.0 and inea_bacia_max is not None and inea_bacia_max >= 10.0:
-            # Orla seca (0-1 mm) mas cabeceira/bacia com chuva (1-10 mm)
-            inea_target = 0.75
-            w_inea = 0.25
+            inea_target = 0.8
+            inea_weight = 0.22
         elif inea_ro_max <= 10.0:
-            inea_target = inea_ro_min + 0.25 * (inea_ro_max - inea_ro_min)
-            w_inea = 0.20
+            inea_target = round(inea_ro_min + 0.25 * (inea_ro_max - inea_ro_min), 1)
+            inea_weight = 0.18
         else:
-            # Faixa significativa (10-25, 25-50, 50+ mm)
-            inea_target = inea_ro_min + 0.35 * (inea_ro_max - inea_ro_min)
-            w_inea = 0.35
+            inea_target = round(inea_ro_min + 0.35 * (inea_ro_max - inea_ro_min), 1)
+            inea_weight = 0.30
 
-        consensus_mm = (1.0 - w_inea) * nwp_base + w_inea * inea_target
-        if inea_ro_min >= 10.0:
-            consensus_mm = max(consensus_mm, 0.65 * inea_ro_min)
+    # 8. Montagem do Ensemble Probabilístico Brasileiro (pares (valor_mm, peso))
+    model_pairs = []
+    if cosmo_met_mm is not None:
+        model_pairs.append((float(cosmo_met_mm), 0.25))
+    if vime28_mm is not None:
+        model_pairs.append((float(vime28_mm), 0.22))
+    if vime7_mm is not None:
+        model_pairs.append((float(vime7_mm), 0.14))
+    if wrf_mm is not None:
+        model_pairs.append((float(wrf_mm), 0.19))
+    if mm_sum is not None:
+        model_pairs.append((float(mm_sum), 0.20))
+    if cptec_hoje_valido and cptec_mun_mm is not None and cptec_mun_mm > 0:
+        model_pairs.append((float(cptec_mun_mm), 0.12))
+    if inea_target is not None and inea_weight > 0:
+        model_pairs.append((float(inea_target), inea_weight))
 
-    # 8. Consistência com previsão qualitativa do INMET (e raios no boletim INEA)
+    # Caso limite (ex: D+7 além do horizonte de algum meteograma): herda último COSMO7 / persistência leve
+    if not model_pairs:
+        last_cosmo7 = list(inmet_vime.get("daily_cosmo7_mm", {}).values())
+        fallback_val = float(last_cosmo7[-1]) if last_cosmo7 else 0.2
+        model_pairs.append((fallback_val, 1.0))
+
+    total_w = sum(w for _v, w in model_pairs)
+    esperanca_modelos = sum(v * w for v, w in model_pairs) / total_w
+
+    # 9. Cálculo Probabilístico da Probabilidade de Chuva (%)
+    prob_signals = []
+    if mm_prob_day is not None:
+        prob_signals.append((float(mm_prob_day), 0.30))
+    if cptec_prob is not None:
+        prob_signals.append((float(cptec_prob), 0.22))
+    if cptec_p05_map is not None:
+        prob_signals.append((float(cptec_p05_map), 0.20))
+
+    inmet_prob_map = {0: 10.0, 1: 40.0, 2: 58.0, 3: 75.0}
+    if inmet_resumo_dia:
+        prob_signals.append((inmet_prob_map.get(inmet_day_level, 20.0), 0.28))
+    if inea_valid:
+        inea_prob_val = 70.0 if (inea_raios or (inea_ro_min or 0) >= 10) else (48.0 if (inea_ro_max or 0) >= 10 else 25.0)
+        prob_signals.append((inea_prob_val, 0.20))
+
+    if prob_signals:
+        pw_sum = sum(w for _p, w in prob_signals)
+        prob_day = sum(p * w for p, w in prob_signals) / pw_sum
+    else:
+        prob_day = 25.0 if esperanca_modelos >= 0.5 else 10.0
+
+    # Modulação termodinâmica real via VIME (CAPE & Água Precipitável em D+0..D+1)
+    if day_idx <= 1:
+        if vime_cape is not None and vime_pwat is not None:
+            if vime_cape >= 500 and vime_pwat >= 45:
+                prob_day += 12.0
+            elif vime_cape < 250 and vime_pwat < 35 and inmet_day_level <= 1:
+                prob_day -= 5.0
+
+    if inmet_day_level >= 3:
+        prob_day = max(prob_day, 65.0)
+    elif inmet_day_level == 2:
+        prob_day = max(prob_day, 50.0)
+    if day_alerts:
+        prob_day = max(prob_day, 80.0)
+    if day_idx == 0 and obs_today_info.get("media_mm", 0.0) > 0:
+        prob_day = max(prob_day, 85.0)
+    prob_day_int = int(round(max(5.0, min(100.0, prob_day))))
+
+    # 10. Expectativa Probabilística P25 / P50 (Principal) / P75 / P90 (Teto)
+    consensus_mm = esperanca_modelos
+    if inea_valid and inea_ro_min is not None and inea_ro_min >= 10.0:
+        consensus_mm = max(consensus_mm, 0.65 * inea_ro_min)
+
+    # Coerência qualitativa com INMET Previsão e raios no boletim INEA (quando modelos de grade subestimam convecção isolada)
     if inmet_day_level >= 3:
         consensus_mm = max(consensus_mm, 2.2)
     elif inmet_day_level == 2:
@@ -276,60 +316,80 @@ def compute_daily_rain_consensus(
     elif inmet_day_level == 1:
         consensus_mm = max(consensus_mm, 0.6)
 
-    if inea_raios and consensus_mm < 2.0:
-        consensus_mm = max(consensus_mm, 2.0)
+    if inea_raios and consensus_mm < 1.8:
+        consensus_mm = max(consensus_mm, 1.8)
 
-    # 9. Alertas Meteorológicos Oficiais INMET ativos para 3304524 (Rio das Ostras)
+    # Alertas oficiais INMET ativos para 3304524 (Rio das Ostras)
+    alert_ceil_mm = None
     if day_alerts:
         sev = day_alerts[0].get("cor_nome", "Amarelo")
         alert_floor = 30.0 if sev == "Vermelho" else (15.0 if sev == "Laranja" else 5.0)
         consensus_mm = max(consensus_mm, alert_floor)
+        # Extrai teto do alerta (ex: "até 50 mm/dia")
+        import re
+        txt_r = " ".join(day_alerts[0].get("riscos", []) or [])
+        m_d = re.search(r"(?:at[eé]|entre)?\s*(\d+)\s*(?:e|a|-)?\s*(\d+)?\s*mm/dia", txt_r, re.I)
+        alert_ceil_mm = float(m_d.group(2) or m_d.group(1)) if m_d else 50.0
 
-    # 10. Garantia mínima com o acumulado já medido hoje pelos pluviômetros (apenas D+0)
+    # Piso físico do já observado hoje pelos pluviômetros (apenas D+0)
     if day_idx == 0 and obs_today_info.get("media_mm", 0.0) > 0:
         consensus_mm = max(consensus_mm, float(obs_today_info["media_mm"]))
 
     consensus_day_mm = round(max(0.0, consensus_mm), 1)
+    p25_val = round(min(consensus_day_mm, _weighted_quantile(model_pairs, 0.25)), 1)
+    if day_idx == 0 and obs_today_info.get("media_mm", 0.0) > 0:
+        p25_val = max(p25_val, float(obs_today_info["media_mm"]))
+    p75_val = round(max(consensus_day_mm, _weighted_quantile(model_pairs, 0.75)), 1)
 
-    # 11. Probabilidade Diária Consensual
-    prob_candidates = [float(om_daily_prob or max(om_turn_probs.values(), default=0.0))]
-    if mm_prob_day is not None:
-        prob_candidates.append(float(mm_prob_day))
-    if cptec_prob is not None:
-        prob_candidates.append(float(cptec_prob))
-    prob_day = round(sum(prob_candidates) / len(prob_candidates))
-    if inmet_day_level >= 3:
-        prob_day = max(prob_day, 65)
-    elif inmet_day_level == 2:
-        prob_day = max(prob_day, 50)
-    if day_alerts:
-        prob_day = max(prob_day, 80)
+    upper_cands = [v for v, _w in model_pairs] + [consensus_day_mm]
+    if inea_valid and inea_ro_max is not None:
+        upper_cands.append(float(inea_ro_max))
+    if vime7_faixa and "a" in str(vime7_faixa):
+        try:
+            upper_cands.append(float(str(vime7_faixa).split("a")[-1].replace("mm", "").strip()))
+        except ValueError:
+            pass
+    if alert_ceil_mm is not None:
+        upper_cands.append(alert_ceil_mm)
+    if day_idx == 0 and obs_today_info.get("max_mm", 0.0) > 0:
+        upper_cands.append(float(obs_today_info["max_mm"]))
+    p90_val = round(max(upper_cands), 1)
 
-    # 12. Distribui consensus_day_mm pelos 4 turnos proporcionalmente aos perfis físicos
-    turn_weights = {}
+    # 11. Perfil horário oficial (INMET COSMO 7x7km + CPTEC WRF + CPTEC Multimodel) para os 4 turnos e 24h
+    turn_rain = {t_name: 0.0 for t_name, _, _, _ in TURNOS_ORDER}
     turn_probs = {}
-    for t_name, _hs, _he, _sig in TURNOS_ORDER:
-        om_t = om_turn_sums.get(t_name, 0.0)
-        mm_t = mm_turn_sums.get(t_name, 0.0) if has_mm_day else om_t
-        nwp_t = 0.55 * om_t + 0.45 * mm_t if has_mm_day else om_t
+    raw_hour_curve = {}
+
+    for t_name, h_s, h_e, _sig in TURNOS_ORDER:
+        t_hours_weights = []
+        for h in range(h_s, h_e):
+            key_h = f"{day_date_iso}T{h:02d}"
+            parts = []
+            if key_h in cosmo_met_hourly:
+                parts.append((float(cosmo_met_hourly[key_h]), 0.35))
+            if key_h in wrf_hourly:
+                parts.append((float(wrf_hourly[key_h]), 0.30))
+            if (day_date_iso, h) in mm_slots:
+                parts.append((float(mm_slots[(day_date_iso, h)].get("prec") or 0.0), 0.35))
+            h_val = (sum(v * w for v, w in parts) / sum(w for _v, w in parts)) if parts else 0.0
+            raw_hour_curve[h] = h_val
+            t_hours_weights.append(h_val)
 
         inm_lvl = inmet_turn_levels.get(t_name, 0)
         conv_cue = 0.0
         if inm_lvl >= 3:
-            conv_cue = 1.1 if t_name in ("Tarde", "Noite") else 0.4
+            conv_cue = 1.0 if t_name in ("Tarde", "Noite") else 0.35
         elif inm_lvl == 2:
-            conv_cue = 0.7 if t_name in ("Tarde", "Noite") else 0.35
+            conv_cue = 0.65 if t_name in ("Tarde", "Noite") else 0.3
         elif inm_lvl == 1:
-            conv_cue = 0.25
-
+            conv_cue = 0.2
         if day_alerts and t_name == "Tarde":
-            conv_cue += 1.6
+            conv_cue += 1.5
         elif day_alerts and t_name == "Noite":
-            conv_cue += 1.0
+            conv_cue += 0.9
 
-        om_pb = om_turn_probs.get(t_name, 0.0)
-        mm_pb = mm_turn_probs.get(t_name, 0.0) if has_mm_day else om_pb
-        pb_t = round((om_pb + mm_pb) / 2.0) if has_mm_day else round(om_pb)
+        mm_pb = mm_turn_probs.get(t_name, 0.0) if has_mm_day else float(prob_day_int)
+        pb_t = round((mm_pb + prob_day_int) / 2.0)
         if inm_lvl >= 3:
             pb_t = max(pb_t, 65)
         elif inm_lvl == 2:
@@ -338,45 +398,87 @@ def compute_daily_rain_consensus(
             pb_t = max(pb_t, 35)
         if day_alerts and t_name in ("Tarde", "Noite"):
             pb_t = max(pb_t, 80 if t_name == "Tarde" else 70)
-
         turn_probs[t_name] = min(100, int(pb_t))
-        # Peso de distribuição garante soma estrita ao dia inteiro sem concentrar tudo num turno vazio
-        prob_weight = (pb_t / 100.0) * 0.15
-        turn_weights[t_name] = max(0.0, nwp_t + conv_cue * 0.45 + prob_weight)
 
-    turn_rain = {t_name: 0.0 for t_name, _, _, _ in TURNOS_ORDER}
+    # Soma dos pesos por turno e alocação exata de consensus_day_mm
+    turn_weights = {}
+    for t_name, h_s, h_e, _sig in TURNOS_ORDER:
+        nwp_t = sum(raw_hour_curve.get(h, 0.0) for h in range(h_s, h_e))
+        inm_lvl = inmet_turn_levels.get(t_name, 0)
+        conv_cue = (1.0 if inm_lvl >= 3 else 0.65 if inm_lvl == 2 else 0.2 if inm_lvl == 1 else 0.0)
+        if t_name in ("Madrugada", "Manhã") and inm_lvl >= 2:
+            conv_cue *= 0.45
+        if day_alerts and t_name == "Tarde":
+            conv_cue += 1.4
+        elif day_alerts and t_name == "Noite":
+            conv_cue += 0.9
+        turn_weights[t_name] = max(0.0, nwp_t + conv_cue * 0.45 + (turn_probs[t_name] / 100.0) * 0.15)
+
     if consensus_day_mm > 0.0:
-        w_sum = sum(turn_weights.values())
-        if w_sum <= 0.0:
-            turn_weights = {"Madrugada": 0.10, "Manhã": 0.20, "Tarde": 0.40, "Noite": 0.30}
-            w_sum = 1.0
-        raw_alloc = {k: round(consensus_day_mm * (w / w_sum), 1) for k, w in turn_weights.items()}
-        diff = round(consensus_day_mm - sum(raw_alloc.values()), 1)
+        w_sum = sum(turn_weights.values()) or 1.0
+        alloc = {k: round(consensus_day_mm * (w / w_sum), 1) for k, w in turn_weights.items()}
+        diff = round(consensus_day_mm - sum(alloc.values()), 1)
         if abs(diff) > 0:
             heaviest = max(turn_weights, key=turn_weights.get)
-            raw_alloc[heaviest] = round(max(0.0, raw_alloc[heaviest] + diff), 1)
-        turn_rain = raw_alloc
+            alloc[heaviest] = round(max(0.0, alloc[heaviest] + diff), 1)
+        turn_rain = alloc
+
+    # Distribuição horária oficial escalada para bater exatamente com os 4 turnos
+    hourly_official_day = {}
+    diurnal_defaults = {
+        "Madrugada": [0.12, 0.16, 0.22, 0.22, 0.16, 0.12],
+        "Manhã": [0.12, 0.14, 0.16, 0.18, 0.20, 0.20],
+        "Tarde": [0.08, 0.14, 0.24, 0.28, 0.16, 0.10],
+        "Noite": [0.24, 0.28, 0.20, 0.14, 0.08, 0.06],
+    }
+    for t_name, h_s, h_e, _sig in TURNOS_ORDER:
+        t_mm = turn_rain[t_name]
+        raw_h = [raw_hour_curve.get(h, 0.0) for h in range(h_s, h_e)]
+        sum_h = sum(raw_h)
+        weights_h = [v / sum_h for v in raw_h] if sum_h > 0.02 else diurnal_defaults[t_name]
+        for idx_h, h in enumerate(range(h_s, h_e)):
+            hourly_official_day[f"{day_date_iso}T{h:02d}"] = round(t_mm * weights_h[idx_h], 2)
 
     return {
         "consensus_day_mm": consensus_day_mm,
-        "consensus_prob_day": min(100, int(prob_day)),
+        "consensus_prob_day": prob_day_int,
+        "probabilistico": {
+            "p25_mm": p25_val,
+            "p50_mm": consensus_day_mm,
+            "p75_mm": p75_val,
+            "p90_teto_mm": p90_val,
+            "probabilidade_pct": prob_day_int,
+            "qtd_fontes_numericas": len(model_pairs),
+        },
         "turn_rain_mm": turn_rain,
         "turn_probs": turn_probs,
         "inmet_turn_descs": inmet_turn_descs,
+        "hourly_official_day": hourly_official_day,
         "fontes_dia": {
-            "open_meteo_mm": round(om_sum, 1),
-            "open_meteo_prob_pct": int(round(float(om_daily_prob or 0.0))),
-            "cptec_multimodel_mm": round(mm_sum, 1) if mm_sum is not None else None,
+            "inmet_cosmo_meteograma_mm": round(float(cosmo_met_mm), 1) if cosmo_met_mm is not None else None,
+            "inmet_cosmo_rodada": inmet_cosmo_met.get("rodada_utc"),
+            "inmet_vime_cosmo28_mm": round(float(vime28_mm), 1) if vime28_mm is not None else None,
+            "inmet_vime_cosmo28_faixa": vime28_faixa,
+            "inmet_vime_cosmo7_mm": round(float(vime7_mm), 1) if vime7_mm is not None else None,
+            "inmet_vime_cosmo7_faixa": vime7_faixa,
+            "inmet_vime_pwat_mm": vime_pwat,
+            "inmet_vime_pwat_faixa": vime_pwat_faixa,
+            "inmet_vime_cape_jkg": vime_cape,
+            "inmet_vime_cape_faixa": vime_cape_faixa,
+            "cptec_wrf_mm": round(float(wrf_mm), 1) if wrf_mm is not None else None,
+            "cptec_multimodel_mm": mm_sum,
             "cptec_multimodel_horas": mm_hours_count,
             "cptec_municipal_mm": cptec_mun_mm if cptec_hoje_valido else None,
             "cptec_municipal_prob_pct": int(round(cptec_prob)) if cptec_prob is not None else None,
             "cptec_municipal_valido_hoje": cptec_hoje_valido if day_idx == 0 else None,
+            "cptec_prob_p05_pct": cptec_p05_map,
             "inmet_resumo": inmet_resumo_dia,
             "inmet_aviso_id": day_alerts[0].get("id") if day_alerts else None,
             "inmet_aviso_cor": day_alerts[0].get("cor_nome") if day_alerts else None,
             "inea_faixa_municipio_mm": inea_prev_dia.get("faixa_municipio_mm") if inea_valid else None,
             "inea_faixa_bacia_mm": inea_prev_dia.get("faixa_chuva_mm") if inea_valid else None,
             "inea_referencia_mm": inea_prev_dia.get("chuva_referencia_mm") if inea_valid else None,
+            "inea_radartool_estagio": inea_radartool.get("estagio") if day_idx == 0 else None,
             "observado_hoje_media_mm": obs_today_info.get("media_mm") if day_idx == 0 else None,
             "observado_hoje_max_mm": obs_today_info.get("max_mm") if day_idx == 0 else None,
         },

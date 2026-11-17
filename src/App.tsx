@@ -530,19 +530,24 @@ export default function App() {
       return { hourlyPoints: [] as HourlyPoint[], allHourlyPoints: [] as HourlyPoint[], chartDayOptions: [] as string[] };
     }
 
-    const omShiftSums: Record<string, number> = {};
-    openMeteo.hourly.time.forEach((t, i) => {
+    const officialHourlyMap: Record<string, number> =
+      (boletimMeta as any)?.analise_precipitacao_multifonte?.perfil_horario_oficial_chuva || {};
+
+    const offShiftSums: Record<string, number> = {};
+    openMeteo.hourly.time.forEach((t) => {
       const [datePart, hourPart] = t.split('T');
       const hourNum = parseInt(hourPart?.slice(0, 2) || '0', 10);
       const shiftName =
         hourNum >= 18 ? 'Noite' : hourNum >= 12 ? 'Tarde' : hourNum >= 6 ? 'Manhã' : 'Madrugada';
+      const hhKey = `${datePart}T${String(hourNum).padStart(2, '0')}`;
       const k = `${datePart}|${shiftName}`;
-      omShiftSums[k] = (omShiftSums[k] || 0) + (openMeteo.hourly!.precipitation[i] ?? 0);
+      offShiftSums[k] = (offShiftSums[k] || 0) + Number(officialHourlyMap[hhKey] ?? 0);
     });
 
     const allPts: HourlyPoint[] = openMeteo.hourly.time.map((t, i) => {
       const [datePart, hourPart] = t.split('T');
       const hourNum = parseInt(hourPart?.slice(0, 2) || '0', 10);
+      const hhKey = `${datePart}T${String(hourNum).padStart(2, '0')}`;
 
       let shiftName = 'Madrugada';
       let hourIdxInShift = hourNum;
@@ -560,22 +565,25 @@ export default function App() {
       const shiftRow = boletimOficial?.find(
         (b) => b.data_iso === datePart && (b.turno === shiftName || b.turno_label === shiftName)
       );
+      const prevDia = (boletimMeta as any)?.analise_precipitacao_multifonte?.previsto_por_dia?.find(
+        (p: any) => p.data_iso === datePart
+      );
 
-      let rainVal = openMeteo.hourly.precipitation[i] ?? 0;
-      let rainProbVal = openMeteo.hourly.precipitation_probability[i] ?? 0;
+      let rainVal = Number(officialHourlyMap[hhKey] ?? 0);
+      let rainProbVal = Number(prevDia?.chuva_prob_pct ?? prevDia?.probabilistico?.probabilidade_pct ?? 0);
 
-      // Harmonização proporcional ao consenso multifonte mantendo o perfil horário real do Open-Meteo
+      // Harmonização 100% oficial brasileira (COSMO 7km / CPTEC WRF / Multimodel) escalada ao consenso do turno
       if (shiftRow) {
         if (typeof shiftRow.chuva_media === 'number') {
-          const omShiftSum = omShiftSums[`${datePart}|${shiftName}`] || 0;
+          const offSum = offShiftSums[`${datePart}|${shiftName}`] || 0;
           const weight =
-            omShiftSum > 0.05
-              ? (openMeteo.hourly.precipitation[i] ?? 0) / omShiftSum
+            offSum > 0.05
+              ? Number(officialHourlyMap[hhKey] ?? 0) / offSum
               : (SHIFT_HOURLY_WEIGHTS[shiftName]?.[hourIdxInShift] ?? 1 / 6);
           rainVal = Math.round(shiftRow.chuva_media * weight * 10) / 10;
         }
         if (typeof shiftRow.chuva_prob === 'number') {
-          rainProbVal = Math.max(rainProbVal, shiftRow.chuva_prob);
+          rainProbVal = shiftRow.chuva_prob;
         }
       }
 
@@ -621,7 +629,7 @@ export default function App() {
     const days = Array.from(new Set(allPts.map((p) => p.dayLabel)));
 
     return { hourlyPoints: forwardPts, allHourlyPoints: allPts, chartDayOptions: days };
-  }, [openMeteo, boletimOficial, SHIFT_HOURLY_WEIGHTS]);
+  }, [openMeteo, boletimOficial, boletimMeta, SHIFT_HOURLY_WEIGHTS]);
 
   const displayedChartPoints = useMemo(() => {
     if (chartDayFilter === 'all') return hourlyPoints;
@@ -1526,30 +1534,38 @@ export default function App() {
 
                   {/* Grade Completa das 8 Métricas Essenciais (Exata do Site Oficial) */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-[#E5E5E5] dark:border-[#233354]">
-                    {/* 1. Chuva Prevista */}
-                    <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
-                      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <CloudRain className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
-                        <span>Chuva Prevista</span>
-                      </div>
-                      <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
-                        {hojeDiaResumo?.pilares?.chuva?.val
-                          ? hojeDiaResumo.pilares.chuva.val.split(' (')[0]
-                          : openMeteo?.daily
-                            ? `${openMeteo.daily.precipitation_sum[0].toFixed(1)} mm`
-                            : '--'}
-                      </div>
-                      <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
-                        {hojeInspecao?.alerta_ativo && hojeInspecao.chuva?.taxa_horaria_pico
-                          ? `Pico: ${hojeInspecao.chuva.taxa_horaria_pico}`
-                          : openMeteo?.daily
-                            ? `Prob.: ${openMeteo.daily.precipitation_probability_max[0]}%${boletimMeta?.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje?.extraido_pdf ? ` · INEA: ${boletimMeta.inea_boletim_hidrometeorologico.previsao_rh8.hoje.faixa_municipio_mm || boletimMeta.inea_boletim_hidrometeorologico.previsao_rh8.hoje.faixa_chuva_mm}` : ''}`
-                            : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
-                      </div>
-                      <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55">
-                        Consenso {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || 6} fontes · Tempo real
-                      </div>
-                    </div>
+                    {/* 1. Chuva Prevista (100% Consenso Probabilístico Brasileiro) */}
+                    {(() => {
+                      const prevHoje = (boletimMeta as any)?.analise_precipitacao_multifonte?.previsto_por_dia?.[0];
+                      const probHoje = prevHoje?.probabilistico;
+                      const ineaHoje = boletimMeta?.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje;
+                      return (
+                        <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
+                          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
+                            <CloudRain className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
+                            <span>Chuva Prevista (P50)</span>
+                          </div>
+                          <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
+                            {prevHoje
+                              ? `${Number(prevHoje.chuva_media_modelos_mm ?? 0).toFixed(1)} mm`
+                              : hojeDiaResumo?.pilares?.chuva?.val
+                                ? hojeDiaResumo.pilares.chuva.val.split(' (')[0]
+                                : '--'}
+                          </div>
+                          <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
+                            {probHoje
+                              ? `P25–P90: ${Number(probHoje.p25_mm ?? 0).toFixed(1)}–${Number(probHoje.p90_teto_mm ?? 0).toFixed(1)} mm · Prob. ${probHoje.probabilidade_pct ?? prevHoje?.chuva_prob_pct ?? '--'}%`
+                              : hojeInspecao?.alerta_ativo && hojeInspecao.chuva?.taxa_horaria_pico
+                                ? `Pico: ${hojeInspecao.chuva.taxa_horaria_pico}`
+                                : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
+                          </div>
+                          <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 truncate">
+                            {ineaHoje?.extraido_pdf ? `INEA: ${ineaHoje.faixa_municipio_mm || ineaHoje.faixa_chuva_mm} · ` : ''}
+                            {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || probHoje?.qtd_fontes_numericas || 7} fontes BR
+                          </div>
+                        </div>
+                      );
+                    })()}
 
                     {/* 2. Vento / Rajadas */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
@@ -2250,7 +2266,6 @@ export default function App() {
                     {boletimMeta.dias_resumo.map((d, idx) => {
                       const omMin = openMeteo?.daily?.temperature_2m_min?.[idx];
                       const omMax = openMeteo?.daily?.temperature_2m_max?.[idx];
-                      const omRain = openMeteo?.daily?.precipitation_sum?.[idx];
                       const textoOficial =
                         Array.isArray(d.informe_populacao) && d.informe_populacao.length > 0
                           ? d.informe_populacao.join(' ')
@@ -2308,19 +2323,30 @@ export default function App() {
                                 </div>
                               )}
                               {d.pilares.chuva?.val && (() => {
-                                const fontesDia = boletimMeta?.analise_precipitacao_multifonte?.previsto_por_dia?.[idx]?.fontes;
+                                const prevDiaObj = (boletimMeta as any)?.analise_precipitacao_multifonte?.previsto_por_dia?.[idx];
+                                const fontesDia = prevDiaObj?.fontes;
+                                const probObj = prevDiaObj?.probabilistico;
                                 const srcBits: string[] = [];
-                                if (fontesDia?.open_meteo_mm !== undefined && fontesDia?.open_meteo_mm !== null) srcBits.push(`OM ${Number(fontesDia.open_meteo_mm).toFixed(1)}`);
-                                if (fontesDia?.cptec_multimodel_mm !== undefined && fontesDia?.cptec_multimodel_mm !== null) srcBits.push(`CPTEC ${Number(fontesDia.cptec_multimodel_mm).toFixed(1)}`);
+                                if (fontesDia?.inmet_cosmo_meteograma_mm !== undefined && fontesDia?.inmet_cosmo_meteograma_mm !== null) srcBits.push(`COSMO ${Number(fontesDia.inmet_cosmo_meteograma_mm).toFixed(1)}`);
+                                if (fontesDia?.inmet_vime_cosmo28_mm !== undefined && fontesDia?.inmet_vime_cosmo28_mm !== null) srcBits.push(`VIME2.8 ${Number(fontesDia.inmet_vime_cosmo28_mm).toFixed(1)}`);
+                                if (fontesDia?.cptec_wrf_mm !== undefined && fontesDia?.cptec_wrf_mm !== null) srcBits.push(`WRF ${Number(fontesDia.cptec_wrf_mm).toFixed(1)}`);
+                                if (fontesDia?.cptec_multimodel_mm !== undefined && fontesDia?.cptec_multimodel_mm !== null) srcBits.push(`Multi ${Number(fontesDia.cptec_multimodel_mm).toFixed(1)}`);
                                 if (fontesDia?.inea_faixa_municipio_mm) srcBits.push(`INEA ${fontesDia.inea_faixa_municipio_mm}`);
                                 return (
                                   <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                     <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                      <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" /> Chuva (Consenso)
+                                      <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" /> Chuva Probabilística
                                     </span>
                                     <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
-                                      {d.pilares.chuva.val}
+                                      {prevDiaObj
+                                        ? `${Number(prevDiaObj.chuva_media_modelos_mm ?? 0).toFixed(1)} mm (${probObj?.probabilidade_pct ?? prevDiaObj.chuva_prob_pct ?? '--'}%)`
+                                        : d.pilares.chuva.val}
                                     </span>
+                                    {probObj && (
+                                      <span className="text-[9.5px] font-semibold text-[#FF8244] block mt-0.5">
+                                        P25–P90: {Number(probObj.p25_mm ?? 0).toFixed(1)}–{Number(probObj.p90_teto_mm ?? 0).toFixed(1)} mm
+                                      </span>
+                                    )}
                                     {srcBits.length > 0 && (
                                       <span className="text-[9px] text-slate-400 dark:text-[#E5E5E5]/55 block mt-0.5 truncate" title={srcBits.join(' · ')}>
                                         {srcBits.join(' · ')}
@@ -2371,7 +2397,6 @@ export default function App() {
                           {!d.pilares && omMin !== undefined && omMax !== undefined && (
                             <div className={`pt-2 border-t ${isDark ? 'border-[#233354] text-[#E5E5E5]/75' : 'border-[#E5E5E5] text-slate-500'} flex items-center gap-4 font-mono text-xs`}>
                               <span>Mín {Math.round(omMin)}°C / Máx {Math.round(omMax)}°C</span>
-                              {omRain !== undefined && <span>Chuva: {omRain.toFixed(1)} mm</span>}
                             </div>
                           )}
                         </div>
@@ -2382,7 +2407,7 @@ export default function App() {
                     {openMeteo?.daily?.time?.map((iso, i) => (
                       <div key={iso} className="py-3 flex items-center justify-between text-sm font-mono">
                         <span>{formatDateBr(iso)}</span>
-                        <span>Chuva: {openMeteo.daily.precipitation_sum[i].toFixed(1)} mm ({openMeteo.daily.precipitation_probability_max[i]}%)</span>
+                        <span>Temp. térmica oficial (carregando boletim BR...)</span>
                         <span>
                           {Math.round(openMeteo.daily.temperature_2m_min[i])}° /{' '}
                           <strong className="text-[#FF8244]">{Math.round(openMeteo.daily.temperature_2m_max[i])}°</strong>
@@ -6086,12 +6111,15 @@ export default function App() {
                   const multifonte = (boletimMeta as any)?.analise_precipitacao_multifonte;
                   if (!multifonte) return null;
 
-                  let dias: { label: string; data?: string; val: number }[] = [];
+                  let dias: { label: string; data?: string; val: number; prob?: number; p25?: number; p90?: number }[] = [];
                   if (Array.isArray(multifonte.previsto_por_dia) && multifonte.previsto_por_dia.length > 0) {
                     dias = multifonte.previsto_por_dia.map((p: any, i: number) => ({
                       label: p.dia_semana ? p.dia_semana.slice(0, 3) : `Dia ${i + 1}`,
                       data: p.data_br ? p.data_br.slice(0, 5) : '',
                       val: Number(p.chuva_media_modelos_mm ?? 0),
+                      prob: p.probabilistico?.probabilidade_pct ?? p.chuva_prob_pct,
+                      p25: p.probabilistico?.p25_mm ?? p.chuva_p25_mm,
+                      p90: p.probabilistico?.p90_teto_mm ?? p.chuva_p90_teto_mm,
                     }));
                   } else if (typeof multifonte.acumulado_semana_formula === 'string') {
                     const regex = /(\d+(?:\.\d+)?)\s*mm\s*\(([^)]+)\)/g;
@@ -6118,7 +6146,7 @@ export default function App() {
                               Previsão Diária de Chuva — Hoje + 7 Dias
                             </h3>
                             <p className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
-                              Projeção multimodelo consolidada para Rio das Ostras
+                              Cálculo probabilístico 100% fontes oficiais brasileiras (INMET COSMO/VIME · CPTEC WRF/Prob · INEA RH-VIII)
                             </p>
                           </div>
                         </div>
@@ -6174,17 +6202,27 @@ export default function App() {
                                 </span>
                                 <span className="text-[9px] font-mono text-slate-400 ml-0.5">mm</span>
                               </div>
+                              {d.prob !== undefined && (
+                                <span className="text-[8.5px] font-mono font-semibold text-slate-500 dark:text-[#E5E5E5]/75">
+                                  Prob {d.prob}%
+                                </span>
+                              )}
+                              {d.p25 !== undefined && d.p90 !== undefined && (
+                                <span className="text-[8px] font-mono text-slate-400 dark:text-[#E5E5E5]/60">
+                                  {Number(d.p25).toFixed(1)}–{Number(d.p90).toFixed(1)}
+                                </span>
+                              )}
                               {isChuvaExpressiva ? (
-                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244]">
+                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244] mt-0.5">
                                   Moderada
                                 </span>
                               ) : d.val > 0 ? (
-                                <span className="text-[8px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium">
+                                <span className="text-[8px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium mt-0.5">
                                   Leve
                                 </span>
                               ) : (
-                                <span className="text-[8px] text-slate-400">
-                                  Sem chuva
+                                <span className="text-[8px] text-slate-400 mt-0.5">
+                                  Seco
                                 </span>
                               )}
                             </button>
@@ -6192,17 +6230,24 @@ export default function App() {
                         })}
                       </div>
 
-                      {/* Comparativo transparente por fonte oficial para o dia selecionado */}
+                      {/* Cálculo Probabilístico & Comparativo 100% Fontes Oficiais Brasileiras */}
                       {(() => {
                         const selDia = multifonte.previsto_por_dia?.[selectedRainSourceDayIdx] || multifonte.previsto_por_dia?.[0];
                         if (!selDia?.fontes) return null;
                         const fn = selDia.fontes;
+                        const prob = selDia.probabilistico || {};
                         const liveStatus = multifonte.fontes_ao_vivo_status;
+                        const p25 = Number(prob.p25_mm ?? selDia.chuva_p25_mm ?? 0);
+                        const p50 = Number(prob.p50_mm ?? selDia.chuva_media_modelos_mm ?? 0);
+                        const p75 = Number(prob.p75_mm ?? selDia.chuva_p75_mm ?? p50);
+                        const p90 = Number(prob.p90_teto_mm ?? selDia.chuva_p90_teto_mm ?? selDia.chuva_pico_convectivo_mm ?? p75);
+                        const probPct = prob.probabilidade_pct ?? selDia.chuva_prob_pct ?? '--';
+                        const radarEst = fn.inea_radartool_estagio || multifonte.inea_radartool?.estagio || '--';
                         return (
-                          <div className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-[11px]">
+                          <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3 text-[11px]">
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <span className="font-semibold text-[#14213D] dark:text-white">
-                                Comparativo Multifonte — {selDia.dia_semana} ({selDia.data_br})
+                                Cálculo Probabilístico & Fontes Oficiais BR — {selDia.dia_semana} ({selDia.data_br})
                               </span>
                               <span className="font-mono text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
                                 {liveStatus?.atualizado_em_brt
@@ -6210,43 +6255,91 @@ export default function App() {
                                   : `Emissão: ${boletimMeta?.emissao || '--'}`}
                               </span>
                             </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono">
+
+                            {/* Quantis Probabilísticos */}
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono">
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">Open-Meteo</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white">
-                                  {fn.open_meteo_mm !== null && fn.open_meteo_mm !== undefined ? `${Number(fn.open_meteo_mm).toFixed(1)} mm` : '--'}
-                                  {fn.open_meteo_prob_pct !== null && fn.open_meteo_prob_pct !== undefined ? ` (${fn.open_meteo_prob_pct}%)` : ''}
-                                </div>
-                              </div>
-                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">CPTEC Multimodel</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white">
-                                  {fn.cptec_multimodel_mm !== null && fn.cptec_multimodel_mm !== undefined ? `${Number(fn.cptec_multimodel_mm).toFixed(1)} mm` : '--'}
-                                </div>
-                              </div>
-                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">CPTEC / INPE</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white">
-                                  {fn.cptec_municipal_mm !== null && fn.cptec_municipal_mm !== undefined ? `${fn.cptec_municipal_mm} mm · ` : ''}
-                                  {fn.cptec_municipal_prob_pct !== null && fn.cptec_municipal_prob_pct !== undefined ? `Prob ${fn.cptec_municipal_prob_pct}%` : '--'}
-                                </div>
-                              </div>
-                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">INEA Alerta Cheias</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={fn.inea_faixa_bacia_mm || fn.inea_faixa_municipio_mm || 'Sem faixa'}>
-                                  {fn.inea_faixa_municipio_mm || fn.inea_faixa_bacia_mm || 'D+2..D+7 N/A'}
-                                </div>
-                              </div>
-                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">INMET (3304524)</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={fn.inmet_resumo || 'Sem aviso'}>
-                                  {fn.inmet_aviso_id ? `Aviso nº ${fn.inmet_aviso_id}` : (fn.inmet_resumo ? fn.inmet_resumo : '--')}
-                                </div>
+                                <div className="text-[9px] uppercase text-slate-400">Mín. Provável (P25)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">{p25.toFixed(1)} mm</div>
                               </div>
                               <div className="p-2 rounded bg-[#FF8244]/10 dark:bg-[#FF8244]/15 border border-[#FF8244]/40">
-                                <div className="text-[9px] uppercase text-[#FF8244] font-bold">Consenso Final</div>
+                                <div className="text-[9px] uppercase text-[#FF8244] font-bold">Consenso (P50)</div>
+                                <div className="font-bold text-[#14213D] dark:text-white">{p50.toFixed(1)} mm</div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">Cenário Alto (P75)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">{p75.toFixed(1)} mm</div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">Teto Prob. (P90)</div>
+                                <div className="font-semibold text-[#FF8244]">{p90.toFixed(1)} mm</div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">Prob. Chuva</div>
                                 <div className="font-bold text-[#14213D] dark:text-white">
-                                  {Number(selDia.chuva_media_modelos_mm ?? 0).toFixed(1)} mm
+                                  {probPct}% {prob.qtd_fontes_numericas ? `(${prob.qtd_fontes_numericas} f.)` : ''}
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Detalhamento de Todas as Fontes Brasileiras */}
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INMET COSMO 7×7km</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.inmet_cosmo_meteograma_mm !== null && fn.inmet_cosmo_meteograma_mm !== undefined
+                                    ? `${Number(fn.inmet_cosmo_meteograma_mm).toFixed(1)} mm`
+                                    : '--'}
+                                  {fn.inmet_cosmo_rodada ? ` (${fn.inmet_cosmo_rodada})` : ''}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INMET VIME (2.8 / 7km)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={`2.8km: ${fn.inmet_vime_cosmo28_faixa || 'N/A'} | 7km: ${fn.inmet_vime_cosmo7_faixa || 'N/A'}`}>
+                                  {fn.inmet_vime_cosmo28_faixa ? `2.8: ${fn.inmet_vime_cosmo28_faixa}` : ''}
+                                  {fn.inmet_vime_cosmo28_faixa && fn.inmet_vime_cosmo7_faixa ? ' · ' : ''}
+                                  {fn.inmet_vime_cosmo7_faixa ? `7km: ${fn.inmet_vime_cosmo7_faixa}` : (!fn.inmet_vime_cosmo28_faixa ? '--' : '')}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INMET 3304524 / Avisos</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={fn.inmet_resumo || 'Sem aviso'}>
+                                  {fn.inmet_aviso_id ? `Aviso nº ${fn.inmet_aviso_id}` : (fn.inmet_resumo || '--')}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">CPTEC WRF (3866)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.cptec_wrf_mm !== null && fn.cptec_wrf_mm !== undefined ? `${Number(fn.cptec_wrf_mm).toFixed(1)} mm` : '--'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">CPTEC Multimodel / Mun.</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate">
+                                  {fn.cptec_multimodel_mm !== null && fn.cptec_multimodel_mm !== undefined ? `${Number(fn.cptec_multimodel_mm).toFixed(1)} mm` : '--'}
+                                  {fn.cptec_municipal_prob_pct !== null && fn.cptec_municipal_prob_pct !== undefined ? ` · ${fn.cptec_municipal_prob_pct}%` : ''}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">CPTEC Mapa P≥5mm</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.cptec_prob_p05_pct !== null && fn.cptec_prob_p05_pct !== undefined ? `${fn.cptec_prob_p05_pct}%` : 'D+0..D+2'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INEA Cheias & RadarTool</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={`${fn.inea_faixa_bacia_mm || fn.inea_faixa_municipio_mm || 'D+2..D+7 N/A'} | Radar: ${radarEst}`}>
+                                  {fn.inea_faixa_municipio_mm || fn.inea_faixa_bacia_mm || 'D+2..D+7'} · {radarEst}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">
+                                  {fn.observado_hoje_media_mm !== null && fn.observado_hoje_media_mm !== undefined ? 'Obs. Hoje / VIME PWAT' : 'VIME PWAT / CAPE'}
+                                </div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={`PWAT ${fn.inmet_vime_pwat_faixa || '--'} mm | CAPE ${fn.inmet_vime_cape_faixa || '--'} J/kg`}>
+                                  {fn.observado_hoje_media_mm !== null && fn.observado_hoje_media_mm !== undefined
+                                    ? `${Number(fn.observado_hoje_media_mm).toFixed(1)} mm (máx ${Number(fn.observado_hoje_max_mm ?? 0).toFixed(1)})`
+                                    : `PW ${fn.inmet_vime_pwat_faixa || '--'} · CAPE ${fn.inmet_vime_cape_faixa || '--'}`}
                                 </div>
                               </div>
                             </div>
