@@ -531,13 +531,26 @@ export default function App() {
         }
       }
 
+      const windVal = openMeteo.hourly.wind_speed_10m[i] ?? 0;
+      const gustRaw = openMeteo.hourly.wind_gusts_10m?.[i];
+      const windGustVal =
+        typeof gustRaw === 'number' && Number.isFinite(gustRaw)
+          ? Math.max(windVal, gustRaw)
+          : Math.round(windVal * 1.45);
+      const tempVal = openMeteo.hourly.temperature_2m[i] ?? 0;
+      const apparentRaw = openMeteo.hourly.apparent_temperature?.[i];
+      const apparentVal =
+        typeof apparentRaw === 'number' && Number.isFinite(apparentRaw) ? apparentRaw : tempVal;
+
       return {
         hour: hourPart || t,
         dayLabel: formatDateBr(datePart),
-        temp: openMeteo.hourly.temperature_2m[i] ?? 0,
+        temp: tempVal,
+        apparentTemp: apparentVal,
         rainMm: rainVal,
         rainProb: rainProbVal,
-        windKmh: openMeteo.hourly.wind_speed_10m[i] ?? 0,
+        windKmh: windVal,
+        windGustKmh: windGustVal,
         windDir: degToCompass(openMeteo.hourly.wind_direction_10m[i] ?? 0),
         pressureHpa: openMeteo.hourly.surface_pressure[i] ?? 1015,
         humidity: openMeteo.hourly.relative_humidity_2m[i] ?? 75,
@@ -1866,10 +1879,15 @@ export default function App() {
                       </div>
                       <div className="text-[10px] text-slate-400 dark:text-[#E5E5E5]/50 truncate">
                         {(() => {
-                          const pts = displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : 24);
+                          const pts = displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : displayedChartPoints.length);
                           if (!pts.length) return '';
                           const maxW = pts.reduce((prev, curr) => curr.windKmh > prev.windKmh ? curr : prev, pts[0]);
-                          return `Dir: ${maxW.windDir} às ${maxW.hour.slice(0, 5)}`;
+                          const maxG = pts.reduce(
+                            (prev, curr) => (curr.windGustKmh ?? curr.windKmh) > (prev.windGustKmh ?? prev.windKmh) ? curr : prev,
+                            pts[0]
+                          );
+                          const gustKmh = maxG.windGustKmh ?? maxG.windKmh;
+                          return `Dir: ${maxW.windDir} (${maxW.hour.slice(0, 5)}) · Rajada: ${gustKmh.toFixed(0)} km/h`;
                         })()}
                       </div>
                     </div>

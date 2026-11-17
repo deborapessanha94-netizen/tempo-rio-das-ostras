@@ -6,9 +6,11 @@ export interface HourlyPoint {
   hour: string;
   dayLabel: string;
   temp: number;
+  apparentTemp?: number;
   rainMm: number;
   rainProb: number;
   windKmh: number;
+  windGustKmh?: number;
   windDir: string;
   pressureHpa: number;
   humidity: number;
@@ -45,21 +47,68 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
     }
   }, [dayFilter, horizonCount, points.length]);
 
-  const { totalRain, maxRainPt, maxProb } = useMemo(() => {
+  const {
+    totalRain,
+    maxRainPt,
+    maxProb,
+    minTempInfo,
+    maxTempInfo,
+    minFeelsInfo,
+    maxFeelsInfo,
+    maxWindInfo,
+    maxGustInfo,
+  } = useMemo(() => {
     let tot = 0;
     let maxPt: HourlyPoint | null = points[0] || null;
     let maxP = 0;
-    for (const p of points) {
+
+    let minTIdx = 0;
+    let maxTIdx = 0;
+    let minFIdx = 0;
+    let maxFIdx = 0;
+    let maxWIdx = 0;
+    let maxGIdx = 0;
+
+    points.forEach((p, idx) => {
       const r = p.rainMm || 0;
       tot += r;
-      if (!maxPt || r > (maxPt.rainMm || 0)) {
-        maxPt = p;
-      }
-      if ((p.rainProb || 0) > maxP) {
-        maxP = p.rainProb;
-      }
-    }
-    return { totalRain: tot, maxRainPt: maxPt, maxProb: maxP };
+      if (!maxPt || r > (maxPt.rainMm || 0)) maxPt = p;
+      if ((p.rainProb || 0) > maxP) maxP = p.rainProb;
+
+      if (p.temp < points[minTIdx].temp) minTIdx = idx;
+      if (p.temp > points[maxTIdx].temp) maxTIdx = idx;
+
+      const fCur = p.apparentTemp ?? p.temp;
+      const fMin = points[minFIdx].apparentTemp ?? points[minFIdx].temp;
+      const fMax = points[maxFIdx].apparentTemp ?? points[maxFIdx].temp;
+      if (fCur < fMin) minFIdx = idx;
+      if (fCur > fMax) maxFIdx = idx;
+
+      if (p.windKmh > points[maxWIdx].windKmh) maxWIdx = idx;
+      const gCur = p.windGustKmh ?? p.windKmh;
+      const gMax = points[maxGIdx].windGustKmh ?? points[maxGIdx].windKmh;
+      if (gCur > gMax) maxGIdx = idx;
+    });
+
+    const safePt = (idx: number) => points[idx] || null;
+    const minTP = safePt(minTIdx);
+    const maxTP = safePt(maxTIdx);
+    const minFP = safePt(minFIdx);
+    const maxFP = safePt(maxFIdx);
+    const maxWP = safePt(maxWIdx);
+    const maxGP = safePt(maxGIdx);
+
+    return {
+      totalRain: tot,
+      maxRainPt: maxPt,
+      maxProb: maxP,
+      minTempInfo: minTP ? { idx: minTIdx, val: minTP.temp, hour: minTP.hour.slice(0, 5) } : null,
+      maxTempInfo: maxTP ? { idx: maxTIdx, val: maxTP.temp, hour: maxTP.hour.slice(0, 5) } : null,
+      minFeelsInfo: minFP ? { idx: minFIdx, val: minFP.apparentTemp ?? minFP.temp, hour: minFP.hour.slice(0, 5) } : null,
+      maxFeelsInfo: maxFP ? { idx: maxFIdx, val: maxFP.apparentTemp ?? maxFP.temp, hour: maxFP.hour.slice(0, 5) } : null,
+      maxWindInfo: maxWP ? { idx: maxWIdx, val: maxWP.windKmh, dir: maxWP.windDir, hour: maxWP.hour.slice(0, 5) } : null,
+      maxGustInfo: maxGP ? { idx: maxGIdx, val: maxGP.windGustKmh ?? maxGP.windKmh, hour: maxGP.hour.slice(0, 5) } : null,
+    };
   }, [points]);
 
   if (points.length === 0) {
@@ -87,6 +136,12 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
     }
   };
 
+  const getSecondaryValue = (p: HourlyPoint): number | null => {
+    if (metric === 'temp') return p.apparentTemp ?? p.temp;
+    if (metric === 'wind') return Math.max(p.windKmh, p.windGustKmh ?? p.windKmh);
+    return null;
+  };
+
   const getMetricUnit = (): string => {
     switch (metric) {
       case 'temp':
@@ -105,25 +160,35 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
   };
 
   const values = points.map(getMetricValue);
-  let minVal = Math.min(...values);
-  let maxVal = Math.max(...values);
+  const secondaryValues = points
+    .map(getSecondaryValue)
+    .filter((v): v is number => v !== null);
+  const allScaleValues = secondaryValues.length > 0 ? [...values, ...secondaryValues] : values;
+
+  let minVal = Math.min(...allScaleValues);
+  let maxVal = Math.max(...allScaleValues);
 
   if (metric === 'rain') {
     minVal = 0;
     maxVal = Math.max(2, Math.ceil(maxVal * 1.25 * 10) / 10);
   } else if (metric === 'temp') {
-    minVal = Math.floor(minVal - 2);
-    maxVal = Math.ceil(maxVal + 2);
+    minVal = Math.floor(minVal - 3);
+    maxVal = Math.ceil(maxVal + 4);
+  } else if (metric === 'wind') {
+    minVal = 0;
+    maxVal = Math.max(15, Math.ceil(maxVal * 1.18));
   } else if (minVal === maxVal) {
     minVal -= 1;
     maxVal += 1;
   }
 
-  const chartHeight = metric === 'rain' ? 220 : 210;
+  const chartHeight =
+    metric === 'wind' ? 236 : metric === 'temp' ? 232 : metric === 'rain' ? 220 : 210;
   const colWidth = isSingleDay ? 42 : 54;
   const chartWidth = Math.max(points.length * colWidth, 480);
-  const paddingBottom = metric === 'rain' ? 48 : 42;
-  const paddingTop = 30;
+  const paddingBottom =
+    metric === 'wind' ? 66 : metric === 'temp' ? 58 : metric === 'rain' ? 48 : 42;
+  const paddingTop = metric === 'temp' || metric === 'wind' ? 38 : 30;
   const innerHeight = chartHeight - paddingTop - paddingBottom;
 
   const getY = (val: number) => {
@@ -133,19 +198,41 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
 
   const svgPoints = points.map((p, i) => {
     const x = i * colWidth + colWidth / 2;
-    const y = getY(getMetricValue(p));
-    return { x, y, p, val: getMetricValue(p) };
+    const primaryVal = getMetricValue(p);
+    const secVal = getSecondaryValue(p);
+    return {
+      x,
+      y: getY(primaryVal),
+      secY: secVal !== null ? getY(secVal) : null,
+      p,
+      val: primaryVal,
+      secVal,
+    };
   });
 
-  const pathD = svgPoints.reduce((acc, pt, i) => {
-    return i === 0 ? `M ${pt.x} ${pt.y}` : `${acc} L ${pt.x} ${pt.y}`;
-  }, '');
+  const pathD = svgPoints.reduce(
+    (acc, pt, i) => (i === 0 ? `M ${pt.x} ${pt.y}` : `${acc} L ${pt.x} ${pt.y}`),
+    ''
+  );
 
   const areaD =
     svgPoints.length > 0
       ? `${pathD} L ${svgPoints[svgPoints.length - 1].x} ${chartHeight - paddingBottom} L ${
           svgPoints[0].x
         } ${chartHeight - paddingBottom} Z`
+      : '';
+
+  const secPathD =
+    secondaryValues.length > 0
+      ? svgPoints.reduce(
+          (acc, pt, i) =>
+            pt.secY === null
+              ? acc
+              : i === 0 || !acc
+                ? `M ${pt.x} ${pt.secY}`
+                : `${acc} L ${pt.x} ${pt.secY}`,
+          ''
+        )
       : '';
 
   const getMetricColor = () => {
@@ -169,6 +256,71 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
 
   return (
     <div className="w-full space-y-2">
+      {/* Resumo do Período para Temperatura (Mínima, Máxima e Sensação Térmica) */}
+      {metric === 'temp' && (
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#F7F8FA] dark:bg-[#0B1324] rounded-lg border border-[#E5E5E5] dark:border-[#233354]">
+          <div className="flex flex-wrap items-center gap-2">
+            {minTempInfo && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/10 text-sky-600 dark:text-sky-400 font-mono text-xs font-semibold border border-sky-500/20">
+                Mínima: <strong className="font-bold">{minTempInfo.val.toFixed(1)}°C</strong> ({minTempInfo.hour})
+              </span>
+            )}
+            {maxTempInfo && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FF8244]/15 text-[#FF8244] font-mono text-xs font-semibold border border-[#FF8244]/30">
+                Máxima: <strong className="font-bold">{maxTempInfo.val.toFixed(1)}°C</strong> ({maxTempInfo.hour})
+              </span>
+            )}
+            {minFeelsInfo && maxFeelsInfo && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 font-mono text-xs font-semibold border border-rose-500/20">
+                Sensação Térmica:{' '}
+                <strong className="font-bold">
+                  {Math.round(minFeelsInfo.val)}° a {Math.round(maxFeelsInfo.val)}°C
+                </strong>{' '}
+                (pico {maxFeelsInfo.hour})
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
+            <span className="inline-flex items-center gap-1">
+              <span className="w-3 h-0.5 bg-[#FF8244] inline-block" />
+              Temp (°C)
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="w-3 border-t-2 border-dashed border-rose-500 inline-block" />
+              Sensação (°C)
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Resumo do Período para Vento (Vento Sustentado e Rajadas) */}
+      {metric === 'wind' && (
+        <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#F7F8FA] dark:bg-[#0B1324] rounded-lg border border-[#E5E5E5] dark:border-[#233354]">
+          <div className="flex flex-wrap items-center gap-2">
+            {maxWindInfo && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs font-semibold border border-emerald-500/20">
+                Vento máx: <strong className="font-bold">{maxWindInfo.val.toFixed(0)} km/h</strong> ({maxWindInfo.dir} às {maxWindInfo.hour})
+              </span>
+            )}
+            {maxGustInfo && (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 font-mono text-xs font-semibold border border-amber-500/25">
+                Rajada máx: <strong className="font-bold">{maxGustInfo.val.toFixed(0)} km/h</strong> (às {maxGustInfo.hour})
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
+            <span className="inline-flex items-center gap-1">
+              <span className="w-3 h-0.5 bg-emerald-500 inline-block" />
+              Vento médio
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="w-3 border-t-2 border-dashed border-amber-500 inline-block" />
+              Rajadas
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Resumo do Período para Chuva (Mobile & Desktop) */}
       {metric === 'rain' && (
         <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 bg-[#F7F8FA] dark:bg-[#0B1324] rounded-lg border border-[#E5E5E5] dark:border-[#233354]">
@@ -225,7 +377,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
         <div style={{ minWidth: isSingleDay ? '760px' : `${chartWidth}px` }} className="relative">
           <svg
             viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-            className={isSingleDay ? 'w-full h-auto min-h-[195px] overflow-visible' : 'w-full overflow-visible'}
+            className={isSingleDay ? 'w-full h-auto min-h-[205px] overflow-visible' : 'w-full overflow-visible'}
             style={isSingleDay ? undefined : { height: `${chartHeight}px` }}
           >
             <defs>
@@ -239,7 +391,6 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
               </linearGradient>
             </defs>
 
-            {/* Linhas de grade horizontal e Escala Y */}
             {/* Linha do Topo (Máximo) */}
             <line
               x1="0"
@@ -293,11 +444,11 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
               Mín: {minVal.toFixed(metric === 'rain' ? 1 : 0)}{getMetricUnit()}
             </text>
 
-            {/* Barras de Chuva ou Linha Contínua */}
+            {/* Barras de Chuva ou Linhas */}
             {metric === 'rain' ? (
               svgPoints.map((pt, i) => {
                 if (pt.val > 0) {
-                  const barHeight = Math.max(5, (chartHeight - paddingBottom) - pt.y);
+                  const barHeight = Math.max(5, chartHeight - paddingBottom - pt.y);
                   return (
                     <rect
                       key={i}
@@ -311,7 +462,6 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                     />
                   );
                 }
-                // Hora sem chuva: tick minimalista limpo na linha base (sem rótulo 0.0 mm poluindo a tela)
                 return (
                   <line
                     key={i}
@@ -328,9 +478,9 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
               })
             ) : (
               <>
-                {/* Área preenchida */}
+                {/* Área preenchida da curva principal */}
                 <path d={areaD} fill={`url(#gradient-${metric})`} />
-                {/* Linha */}
+                {/* Curva principal */}
                 <path
                   d={pathD}
                   fill="none"
@@ -339,29 +489,70 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                {/* Pontos */}
-                {svgPoints.map((pt, i) => (
-                  <circle
-                    key={i}
-                    cx={pt.x}
-                    cy={pt.y}
-                    r="3.5"
-                    fill="#ffffff"
-                    stroke={colors.line}
+                {/* Curva secundária tracejada: Sensação Térmica (temp) ou Rajadas (wind) */}
+                {secPathD && (
+                  <path
+                    d={secPathD}
+                    fill="none"
+                    stroke={metric === 'temp' ? '#F43F5E' : '#F59E0B'}
                     strokeWidth="2"
-                    className="transition-transform hover:scale-125"
+                    strokeDasharray="5 4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity={0.9}
                   />
-                ))}
+                )}
+                {/* Pontos secundários (Sensação Térmica / Rajadas) */}
+                {secPathD &&
+                  svgPoints.map((pt, i) =>
+                    pt.secY !== null ? (
+                      <circle
+                        key={`sec-${i}`}
+                        cx={pt.x}
+                        cy={pt.secY}
+                        r="2.4"
+                        fill={metric === 'temp' ? '#F43F5E' : '#F59E0B'}
+                      />
+                    ) : null
+                  )}
+                {/* Pontos principais (Temperatura / Vento / Pressão / Umidade) */}
+                {svgPoints.map((pt, i) => {
+                  const isMinTemp = metric === 'temp' && minTempInfo?.idx === i;
+                  const isMaxTemp = metric === 'temp' && maxTempInfo?.idx === i;
+                  return (
+                    <circle
+                      key={i}
+                      cx={pt.x}
+                      cy={pt.y}
+                      r={isMinTemp || isMaxTemp ? '4.5' : '3.5'}
+                      fill={isMinTemp ? '#38BDF8' : isMaxTemp ? '#FF8244' : '#ffffff'}
+                      stroke={isMinTemp ? '#ffffff' : colors.line}
+                      strokeWidth="2"
+                      className="transition-transform hover:scale-125"
+                    />
+                  );
+                })}
               </>
             )}
 
-            {/* Rótulos e Valores */}
+            {/* Rótulos e Valores sem sobreposição */}
             {svgPoints.map((pt, i) => {
-              const showDayHeader =
-                i === 0 || pt.p.dayLabel !== svgPoints[i - 1].p.dayLabel;
+              const showDayHeader = i === 0 || pt.p.dayLabel !== svgPoints[i - 1].p.dayLabel;
+              const isMinTemp = metric === 'temp' && minTempInfo?.idx === i;
+              const isMaxTemp = metric === 'temp' && maxTempInfo?.idx === i;
+              const isMaxGust = metric === 'wind' && maxGustInfo?.idx === i;
+
+              const tooltipText =
+                metric === 'temp' && pt.secVal !== null
+                  ? `${pt.p.hour.slice(0, 5)} (${pt.p.dayLabel}) — Temp: ${pt.val.toFixed(1)}°C · Sensação: ${pt.secVal.toFixed(1)}°C`
+                  : metric === 'wind' && pt.secVal !== null
+                    ? `${pt.p.hour.slice(0, 5)} (${pt.p.dayLabel}) — Vento: ${pt.val.toFixed(0)} km/h ${pt.p.windDir} · Rajadas: ${pt.secVal.toFixed(0)} km/h`
+                    : `${pt.p.hour.slice(0, 5)} (${pt.p.dayLabel}) — ${pt.val.toFixed(metric === 'rain' ? 1 : 0)} ${getMetricUnit()}`;
 
               return (
                 <g key={i}>
+                  <title>{tooltipText}</title>
+
                   {/* Linha vertical divisora de dia */}
                   {showDayHeader && i > 0 && (
                     <line
@@ -375,7 +566,31 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                     />
                   )}
 
-                  {/* Valor numérico no topo (apenas quando > 0 para chuva, evitando poluição de 0.0mm em telas mobile) */}
+                  {/* Tag destacada apenas no ponto único de MÍN / MÁX (Temperatura) */}
+                  {isMaxTemp && (
+                    <text
+                      x={pt.x}
+                      y={showValues ? pt.y - 20 : pt.y - 10}
+                      textAnchor="middle"
+                      fill="#FF8244"
+                      className="text-[8px] font-mono font-black tracking-wide select-none"
+                    >
+                      MÁX
+                    </text>
+                  )}
+                  {isMinTemp && !isMaxTemp && (
+                    <text
+                      x={pt.x}
+                      y={showValues ? pt.y - 20 : pt.y - 10}
+                      textAnchor="middle"
+                      fill="#38BDF8"
+                      className="text-[8px] font-mono font-black tracking-wide select-none"
+                    >
+                      MÍN
+                    </text>
+                  )}
+
+                  {/* Valores numéricos principais */}
                   {showValues && (
                     <>
                       {metric === 'rain' ? (
@@ -393,6 +608,19 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                             </tspan>
                           </text>
                         ) : null
+                      ) : metric === 'wind' ? (
+                        /* No Vento: Rajadas em âmbar ficam acima da curva superior (zero colisão com vento médio) */
+                        pt.secY !== null && pt.secVal !== null ? (
+                          <text
+                            x={pt.x}
+                            y={pt.secY - 8}
+                            textAnchor="middle"
+                            fill="#F59E0B"
+                            className={`${isMaxGust ? 'text-[10.5px]' : 'text-[9.5px]'} font-mono font-bold select-none`}
+                          >
+                            {Math.round(pt.secVal)}
+                          </text>
+                        ) : null
                       ) : (
                         <text
                           x={pt.x}
@@ -403,7 +631,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                         >
                           {Math.round(pt.val)}
                           <tspan className="text-[8px] opacity-75 font-normal">
-                            {getMetricUnit()}
+                            {metric === 'temp' ? '°' : getMetricUnit()}
                           </tspan>
                         </text>
                       )}
@@ -420,6 +648,43 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                   >
                     {pt.p.hour.slice(0, 5)}
                   </text>
+
+                  {/* Sub-linha alinhada abaixo das horas para Sensação Térmica (Temperatura) */}
+                  {metric === 'temp' && showValues && pt.secVal !== null && (
+                    <text
+                      x={pt.x}
+                      y={chartHeight - paddingBottom + 29}
+                      textAnchor="middle"
+                      fill="#F43F5E"
+                      className="text-[9px] font-mono font-semibold opacity-95 select-none"
+                    >
+                      {Math.round(pt.secVal)}°
+                    </text>
+                  )}
+
+                  {/* Sub-linha alinhada abaixo das horas para Vento Médio + Direção (Vento) */}
+                  {metric === 'wind' && showValues && (
+                    <>
+                      <text
+                        x={pt.x}
+                        y={chartHeight - paddingBottom + 29}
+                        textAnchor="middle"
+                        fill="#10B981"
+                        className="text-[9.5px] font-mono font-bold select-none"
+                      >
+                        {Math.round(pt.val)}
+                      </text>
+                      <text
+                        x={pt.x}
+                        y={chartHeight - paddingBottom + 41}
+                        textAnchor="middle"
+                        fill="currentColor"
+                        className="text-[8px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 select-none"
+                      >
+                        {pt.p.windDir}
+                      </text>
+                    </>
+                  )}
 
                   {/* Probabilidade de Chuva (%) */}
                   {metric === 'rain' && pt.p.rainProb > 0 && (
@@ -438,7 +703,21 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                   {showDayHeader && (
                     <text
                       x={pt.x}
-                      y={chartHeight - paddingBottom + (metric === 'rain' ? 41 : 30)}
+                      y={
+                        chartHeight -
+                        paddingBottom +
+                        (metric === 'wind'
+                          ? showValues
+                            ? 55
+                            : 32
+                          : metric === 'temp'
+                            ? showValues
+                              ? 44
+                              : 31
+                            : metric === 'rain'
+                              ? 41
+                              : 30)
+                      }
                       textAnchor="middle"
                       fill="currentColor"
                       className="text-[9.5px] font-mono font-semibold text-[#FF8244] select-none"
@@ -453,7 +732,40 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
         </div>
       </div>
 
-      {/* Legenda Explicativa Minimalista para Chuva */}
+      {/* Legenda Explicativa Minimalista */}
+      {metric === 'temp' && (
+        <div className="flex flex-wrap items-center justify-center gap-4 mt-1 pt-2 border-t border-[#E5E5E5]/60 dark:border-[#233354]/60 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+          <span className="flex items-center gap-1.5">
+            <span className="w-3.5 h-0.5 bg-[#FF8244] inline-block rounded-full" />
+            Temperatura (°C · topo do ponto)
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3.5 border-t-2 border-dashed border-rose-500 inline-block" />
+            <span className="text-rose-500 font-bold">Sensação Térmica</span> (°C · linha rosa abaixo das horas)
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="text-sky-400 font-bold">● MÍN</span>
+            <span className="text-[#FF8244] font-bold">● MÁX</span>
+          </span>
+        </div>
+      )}
+
+      {metric === 'wind' && (
+        <div className="flex flex-wrap items-center justify-center gap-4 mt-1 pt-2 border-t border-[#E5E5E5]/60 dark:border-[#233354]/60 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+          <span className="flex items-center gap-1.5">
+            <span className="w-3.5 border-t-2 border-dashed border-amber-500 inline-block" />
+            <span className="text-amber-500 font-bold">Rajadas</span> (km/h · linha superior)
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3.5 h-0.5 bg-emerald-500 inline-block rounded-full" />
+            <span className="text-emerald-500 font-bold">Vento médio</span> (km/h · abaixo das horas)
+          </span>
+          <span className="flex items-center gap-1.5 text-slate-400 dark:text-[#E5E5E5]/55">
+            Direção cardeal por hora abaixo do vento
+          </span>
+        </div>
+      )}
+
       {metric === 'rain' && (
         <div className="flex flex-wrap items-center justify-center gap-5 mt-2 pt-2 border-t border-[#E5E5E5]/60 dark:border-[#233354]/60 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
           <span className="flex items-center gap-1.5">

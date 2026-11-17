@@ -458,6 +458,8 @@ export interface OpenMeteoData {
     relative_humidity_2m: number[];
     wind_speed_10m: number[];
     wind_direction_10m: number[];
+    apparent_temperature?: number[];
+    wind_gusts_10m?: number[];
   };
   daily?: {
     time: string[];
@@ -544,7 +546,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     fetchJsonSafe<TabuaMares>(`${SITE_BASE}/data/tabua_mares.json?t=${ts}`),
     fetchJsonSafe<HistoricoEstacoesDataset>(`${SITE_BASE}/data/historico_estacoes.json?t=${ts}`),
     fetchJsonSafe<OpenMeteoData>(
-      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,precipitation_probability,precipitation,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
+      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),
   ]);
 
