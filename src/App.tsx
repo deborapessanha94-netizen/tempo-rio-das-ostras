@@ -5416,7 +5416,7 @@ export default function App() {
                       </div>
 
                       {filteredMarinha.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                           {filteredMarinha.map((av, idx) => {
                             const isDelta = av.eh_area_delta !== false;
                             const iniMs = av.inicio_utc ? Date.parse(av.inicio_utc) : NaN;
@@ -5424,7 +5424,7 @@ export default function App() {
                             const marinhaVigenciaLabel = isVigenteAgora
                               ? 'Vigente Agora'
                               : av.inicio_br
-                                ? `Programado (${av.inicio_br})`
+                                ? `Inicia ${av.inicio_br.replace(' às ', ' ')}`
                                 : 'Programado';
                             return (
                               <article
@@ -5433,102 +5433,97 @@ export default function App() {
                                   isDelta
                                     ? 'border-l-4 border-l-emerald-500 shadow-xs'
                                     : 'border-l-4 border-l-amber-500/80 dark:border-l-amber-500/60 opacity-95'
-                                } rounded-xl p-6 flex flex-col justify-between gap-4`}
+                                } rounded-xl p-4 flex flex-col justify-between gap-2.5`}
                               >
-                                <div className="space-y-3">
-                                  <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="space-y-2">
+                                  <div className="flex flex-wrap items-center justify-between gap-1.5 pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
                                     <div className="flex flex-wrap items-center gap-1.5">
-                                      <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#14213D] text-white dark:bg-[#0B1324] border border-[#14213D] dark:border-[#233354]">
+                                      <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#14213D] text-white dark:bg-[#0B1324] border border-[#14213D] dark:border-[#233354]">
                                         MARINHA · CHM
                                       </span>
                                       <span className="font-mono text-xs text-[#FF8244] font-semibold">
-                                        Aviso nº {av.numero || '--'}
+                                        Nº {av.numero || '--'}
                                       </span>
                                       {isDelta ? (
-                                        <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                        <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
                                           <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
-                                          Área Delta (Rio das Ostras / Bacia de Campos)
+                                          Área Delta · Rio das Ostras
                                         </span>
                                       ) : (
-                                        <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-500 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                        <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-500 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
                                           <Compass className="w-3 h-3 text-slate-400 shrink-0" />
-                                          {av.area_grupo || 'Outra Área'} (Fora da Área Delta)
+                                          {av.area_grupo || 'Outra Área'}
                                         </span>
                                       )}
-                                      <span
-                                        className={`px-2 py-0.5 rounded font-mono text-[10px] border ${
-                                          isVigenteAgora
-                                            ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold'
-                                            : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium'
-                                        }`}
-                                      >
-                                        {marinhaVigenciaLabel}
-                                      </span>
                                     </div>
-                                    <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244]">
-                                      {av.tipo}
+                                    <span
+                                      className={`px-1.5 py-0.5 rounded font-mono text-[10px] border shrink-0 ${
+                                        isVigenteAgora
+                                          ? 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold'
+                                          : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium'
+                                      }`}
+                                    >
+                                      {marinhaVigenciaLabel}
                                     </span>
                                   </div>
 
-                                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                                    <h3 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                                  <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <h3 className="font-display text-base font-semibold leading-snug text-[#14213D] dark:text-white">
                                       {av.tipo} — {av.forca || 'AVISO CHM'}
                                     </h3>
                                     {(av.inicio_br || av.fim_br) && (
-                                      <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354]">
-                                        <Clock className="w-3.5 h-3.5 text-[#FF8244]" />
-                                        <span>{av.inicio_br || '--'}</span>
+                                      <span className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2 py-0.5 rounded border border-[#E5E5E5] dark:border-[#233354] shrink-0">
+                                        <Clock className="w-3 h-3 text-[#FF8244]" />
+                                        <span>{(av.inicio_br || '--').replace(' às ', ' ')}</span>
                                         <span className="text-slate-400">→</span>
-                                        <span>{av.fim_br || '--'}</span>
+                                        <span>{(av.fim_br || '--').replace(' às ', ' ')}</span>
                                       </span>
                                     )}
                                   </div>
 
-                                  {isDelta ? (
-                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5]/90 flex items-center gap-2">
-                                      <MapPin className="w-4 h-4 text-[#FF8244] shrink-0" />
-                                      <span>
-                                        <strong className="text-[#14213D] dark:text-white">Abrangência Costeira/Oceânica:</strong> {av.area}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-500 dark:text-[#E5E5E5]/70 flex items-center gap-2">
-                                      <AlertTriangle className="w-4 h-4 text-slate-400 shrink-0" />
-                                      <span>
-                                        <strong>Outra Área METAREA V:</strong> {av.area} (não atinge diretamente Rio das Ostras).
-                                      </span>
-                                    </div>
-                                  )}
-
-                                  <div className="grid grid-cols-2 gap-2.5 text-xs">
-                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="px-2.5 py-1.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                                       <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/60">Vento / Rajadas</div>
-                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white mt-0.5">{av.rajadas || '--'}</div>
+                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white leading-snug">{av.rajadas || '--'}</div>
                                     </div>
-                                    <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                                    <div className="px-2.5 py-1.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                                       <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/60">Mar / Ondas</div>
-                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white mt-0.5">{av.mar_ondas || av.ondas || '--'}</div>
+                                      <div className="font-mono font-semibold text-[#14213D] dark:text-white leading-snug">{av.mar_ondas || av.ondas || '--'}</div>
                                     </div>
                                   </div>
 
-                                  <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
-                                    {av.restricao && (
-                                      <div>
-                                        <strong className="text-[#14213D] dark:text-white">Orientação Costeira:</strong> {av.restricao}
-                                      </div>
+                                  <div className="flex items-start gap-1.5 text-[11px] text-slate-600 dark:text-[#E5E5E5]/80">
+                                    {isDelta ? (
+                                      <MapPin className="w-3.5 h-3.5 text-[#FF8244] shrink-0 mt-0.5" />
+                                    ) : (
+                                      <AlertTriangle className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
                                     )}
-                                    {av.texto && (
-                                      <div>
-                                        <strong className="text-[#14213D] dark:text-white block mb-1">Boletim Oficial Emitido pela Marinha (SMM):</strong>
-                                        <div className="font-mono text-[11px] text-slate-600 dark:text-[#E5E5E5]/80 bg-white dark:bg-[#14213D]/60 p-2.5 rounded border border-[#E5E5E5] dark:border-[#233354]">
-                                          {av.texto}
-                                        </div>
-                                      </div>
-                                    )}
+                                    <span className="leading-snug">
+                                      <strong className="text-[#14213D] dark:text-white">Área:</strong> {av.area}
+                                      {!isDelta ? ' (fora de Rio das Ostras)' : ''}
+                                    </span>
                                   </div>
+
+                                  {(av.restricao || av.texto) && (
+                                    <details className="group rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] px-2.5 py-1.5 text-[11px] text-slate-600 dark:text-[#E5E5E5]/85">
+                                      <summary className="cursor-pointer select-none flex items-center justify-between gap-2 font-semibold text-[#14213D] dark:text-white list-none [&::-webkit-details-marker]:hidden">
+                                        <span>Orientação &amp; Boletim Oficial (SMM)</span>
+                                        <span className="font-mono text-[10px] text-[#FF8244] group-open:hidden">+ Ver texto</span>
+                                        <span className="font-mono text-[10px] text-slate-400 hidden group-open:inline">− Ocultar</span>
+                                      </summary>
+                                      <div className="mt-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354] space-y-1.5 leading-relaxed">
+                                        {av.restricao && <p>{av.restricao}</p>}
+                                        {av.texto && (
+                                          <div className="font-mono text-[10.5px] text-slate-600 dark:text-[#E5E5E5]/80 bg-white dark:bg-[#14213D]/60 p-2 rounded border border-[#E5E5E5] dark:border-[#233354]">
+                                            {av.texto}
+                                          </div>
+                                        )}
+                                      </div>
+                                    </details>
+                                  )}
                                 </div>
 
-                                <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                                <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
                                   <span>{av.emissao ? `Emissão CHM: ${av.emissao}` : av.validade || 'SMM / Marinha do Brasil'}</span>
                                   <a
                                     href={av.fonte_url || marinhaAvisos?.fonte_url || 'https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo'}
@@ -5536,7 +5531,7 @@ export default function App() {
                                     rel="noreferrer"
                                     className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0"
                                   >
-                                    Ver aviso oficial na Marinha <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                                    Ver na Marinha <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                                   </a>
                                 </div>
                               </article>
@@ -5619,7 +5614,7 @@ export default function App() {
                     });
 
                   return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                       {sortedAvisos.map((av) => {
                         const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
 
@@ -5630,7 +5625,7 @@ export default function App() {
                           const startMs = startDate.getTime();
                           if (nowMs < startMs) {
                             const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
-                            vigenciaLabel = hTxt ? `Programado (${hTxt})` : 'Programado';
+                            vigenciaLabel = hTxt ? `Inicia ${hTxt}` : 'Programado';
                             vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium';
                           }
                         }
@@ -5641,85 +5636,80 @@ export default function App() {
                             av.eh_direto_ostras !== false
                               ? 'border-l-4 border-l-emerald-500 shadow-xs'
                               : 'border-l-4 border-l-amber-500/80 dark:border-l-amber-500/60 opacity-95'
-                          } rounded-xl p-6 flex flex-col justify-between gap-4`}
+                          } rounded-xl p-4 flex flex-col justify-between gap-2.5`}
                         >
-                          <div className="space-y-3">
-                            <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#E5E5E5] dark:border-[#233354]">
+                          <div className="space-y-2">
+                            <div className="flex flex-wrap items-center justify-between gap-1.5 pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
                               <div className="flex flex-wrap items-center gap-1.5">
-                                <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white">
+                                <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white">
                                   INMET
                                 </span>
                                 <span className="font-mono text-xs text-[#FF8244] font-semibold">
-                                  Aviso nº {av.id}
+                                  Nº {av.id}
                                 </span>
                                 {av.eh_direto_ostras !== false ? (
-                                  <span className="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                  <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
                                     <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
-                                    Rio das Ostras (Válido no Município)
+                                    Rio das Ostras
                                   </span>
                                 ) : (
-                                  <span className="px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-500 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] flex items-center gap-1">
+                                  <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-500 dark:text-[#E5E5E5]/70 border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
                                     <AlertTriangle className="w-3 h-3 text-slate-400 shrink-0" />
-                                    Outras Localidades do RJ (Não inclui Rio das Ostras)
+                                    Fora de Rio das Ostras
                                   </span>
                                 )}
                                 <span
-                                  className={`px-2 py-0.5 rounded font-mono text-[10px] border ${vigenciaBadgeClass}`}
+                                  className={`px-1.5 py-0.5 rounded font-mono text-[10px] border ${vigenciaBadgeClass}`}
                                 >
                                   {vigenciaLabel}
                                 </span>
                               </div>
-                              <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244]">
+                              <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244] shrink-0">
                                 {av.cor_badge || 'Alerta Oficial'}
                               </span>
                             </div>
 
-                            <div className="flex flex-wrap items-baseline justify-between gap-2">
-                              <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <h2 className="font-display text-base font-semibold leading-snug text-[#14213D] dark:text-white">
                                 {av.descricao} — {av.severidade}
                               </h2>
-                              <span className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2.5 py-1 rounded-md border border-[#E5E5E5] dark:border-[#233354]">
-                                <Clock className="w-3.5 h-3.5 text-[#FF8244]" />
+                              <span className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2 py-0.5 rounded border border-[#E5E5E5] dark:border-[#233354] shrink-0">
+                                <Clock className="w-3 h-3 text-[#FF8244]" />
                                 <span>{av.inicio_formatado || av.inicio}</span>
                                 <span className="text-slate-400">→</span>
                                 <span>{av.fim_formatado || av.fim}</span>
                               </span>
                             </div>
 
-                            {/* Destaque Explícito de Abrangência Territorial */}
-                            {av.eh_direto_ostras !== false ? (
-                              <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-700 dark:text-[#E5E5E5]/90 flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-[#FF8244] shrink-0" />
-                                <span>
-                                  <strong className="text-[#14213D] dark:text-white">Válido em Rio das Ostras:</strong> O município está incluído diretamente no polígono de risco deste alerta oficial.
-                                </span>
-                              </div>
-                            ) : (
-                              <div className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-xs text-slate-500 dark:text-[#E5E5E5]/70 flex items-center gap-2">
-                                <AlertTriangle className="w-4 h-4 text-slate-400 shrink-0" />
-                                <span>
-                                  <strong>Apenas Outras Regiões do RJ:</strong> Este alerta NÃO abrange o município de Rio das Ostras (válido somente para outras localidades fluminenses).
-                                </span>
-                              </div>
-                            )}
-
-                            <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
-                              <div>
+                            {(av.riscos || []).length > 0 && (
+                              <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-snug">
                                 <strong className="text-[#14213D] dark:text-white">Riscos:</strong>{' '}
                                 {(av.riscos || []).join(' ')}
-                              </div>
-                              <div>
-                                <strong className="text-[#14213D] dark:text-white">Defesa Civil 199:</strong>
-                                <ul className="mt-1 space-y-1 text-slate-500 dark:text-[#E5E5E5]/75">
+                              </p>
+                            )}
+
+                            {(av.instrucoes || []).length > 0 && (
+                              <details className="group rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] px-2.5 py-1.5 text-[11px] text-slate-600 dark:text-[#E5E5E5]/85">
+                                <summary className="cursor-pointer select-none flex items-center justify-between gap-2 font-semibold text-[#14213D] dark:text-white list-none [&::-webkit-details-marker]:hidden">
+                                  <span>Defesa Civil 199 · Orientações ({(av.instrucoes || []).length})</span>
+                                  <span className="font-mono text-[10px] text-[#FF8244] group-open:hidden">+ Ver orientações</span>
+                                  <span className="font-mono text-[10px] text-slate-400 hidden group-open:inline">− Ocultar</span>
+                                </summary>
+                                <ul className="mt-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354] space-y-1 text-slate-500 dark:text-[#E5E5E5]/75 leading-relaxed">
                                   {(av.instrucoes || []).map((ins, i) => (
                                     <li key={i}>• {ins}</li>
                                   ))}
                                 </ul>
-                              </div>
-                            </div>
+                              </details>
+                            )}
                           </div>
 
-                          <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex items-center justify-end text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                          <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                            <span>
+                              {av.eh_direto_ostras !== false
+                                ? 'Polígono oficial abrange Rio das Ostras'
+                                : 'Outras regiões do RJ (não inclui Rio das Ostras)'}
+                            </span>
                             <a
                               href={`https://alertas2.inmet.gov.br/${av.id}`}
                               target="_blank"
