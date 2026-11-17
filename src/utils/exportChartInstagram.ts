@@ -61,55 +61,51 @@ function getMetricMeta(metric: ChartMetric) {
   switch (metric) {
     case 'temp':
       return {
-        title: 'Temperatura & Sensação Térmica',
-        subtitle: 'Mínima, Máxima e Sensação Térmica horária (°C)',
+        title: 'Temperatura & Sensação',
         unit: '°C',
         shortUnit: '°',
         line: '#FF8244',
-        fillTop: 'rgba(255, 130, 68, 0.34)',
-        fillBot: 'rgba(255, 130, 68, 0.02)',
+        fillTop: 'rgba(255, 130, 68, 0.38)',
+        fillBot: 'rgba(255, 130, 68, 0.03)',
         secColor: '#F43F5E',
-        secLabel: 'Sensação Térmica (°C)',
+        secLabel: 'Sensação Térmica',
         primLabel: 'Temperatura (°C)',
-        subRowLabel: 'Sensação (°C)',
+        subRowLabel: 'Sensação',
       };
     case 'wind':
       return {
-        title: 'Vento Médio & Rajadas',
-        subtitle: 'Velocidade sustentada, rajadas máximas e direção (km/h)',
+        title: 'Vento & Rajadas',
         unit: ' km/h',
         shortUnit: ' km/h',
         line: '#10B981',
-        fillTop: 'rgba(16, 185, 129, 0.30)',
-        fillBot: 'rgba(16, 185, 129, 0.02)',
+        fillTop: 'rgba(16, 185, 129, 0.34)',
+        fillBot: 'rgba(16, 185, 129, 0.03)',
         secColor: '#F59E0B',
-        secLabel: 'Rajadas Máximas (km/h)',
+        secLabel: 'Rajadas (km/h)',
         primLabel: 'Vento Médio (km/h)',
-        subRowLabel: 'Vento & Dir.',
+        subRowLabel: 'Vento',
       };
     case 'rain':
       return {
-        title: 'Previsão de Chuva Horária',
-        subtitle: 'Volume horário estimado (mm/h) e probabilidade (%)',
+        title: 'Previsão de Chuva',
         unit: ' mm',
         shortUnit: ' mm',
         line: '#3B82F6',
-        fillTop: 'rgba(59, 130, 246, 0.38)',
+        fillTop: 'rgba(59, 130, 246, 0.40)',
         fillBot: 'rgba(59, 130, 246, 0.04)',
         secColor: '#60A5FA',
         secLabel: '',
         primLabel: 'Chuva (mm/h)',
-        subRowLabel: 'Chance (%)',
+        subRowLabel: 'Chance',
       };
     case 'pressure':
       return {
         title: 'Pressão Atmosférica',
-        subtitle: 'Tendência horária ao nível da superfície (hPa)',
         unit: ' hPa',
         shortUnit: ' hPa',
         line: '#8B5CF6',
-        fillTop: 'rgba(139, 92, 246, 0.32)',
-        fillBot: 'rgba(139, 92, 246, 0.02)',
+        fillTop: 'rgba(139, 92, 246, 0.36)',
+        fillBot: 'rgba(139, 92, 246, 0.03)',
         secColor: '',
         secLabel: '',
         primLabel: 'Pressão (hPa)',
@@ -117,13 +113,12 @@ function getMetricMeta(metric: ChartMetric) {
       };
     case 'humidity':
       return {
-        title: 'Umidade Relativa do Ar',
-        subtitle: 'Oscilação horária da umidade atmosférica (%)',
+        title: 'Umidade do Ar',
         unit: '%',
         shortUnit: '%',
         line: '#06B6D4',
-        fillTop: 'rgba(6, 182, 212, 0.32)',
-        fillBot: 'rgba(6, 182, 212, 0.02)',
+        fillTop: 'rgba(6, 182, 212, 0.36)',
+        fillBot: 'rgba(6, 182, 212, 0.03)',
         secColor: '',
         secLabel: '',
         primLabel: 'Umidade (%)',
@@ -132,9 +127,6 @@ function getMetricMeta(metric: ChartMetric) {
   }
 }
 
-/**
- * Calcula escala limpa com degraus inteiros/decimais legíveis e folga superior para callouts.
- */
 function computeNiceScale(
   rawMin: number,
   rawMax: number,
@@ -145,9 +137,9 @@ function computeNiceScale(
   let maxV = rawMax;
 
   if (metric === 'rain') {
-    maxV = Math.max(2, rawMax * 1.25);
+    maxV = Math.max(2, rawMax * 1.24);
   } else if (metric === 'wind') {
-    maxV = Math.max(18, rawMax * 1.22);
+    maxV = Math.max(18, rawMax * 1.20);
   } else if (metric === 'humidity') {
     minV = Math.max(0, Math.floor((rawMin - 6) / 10) * 10);
     maxV = Math.min(100, Math.ceil((rawMax + 8) / 10) * 10);
@@ -160,13 +152,12 @@ function computeNiceScale(
     minV = Math.floor(rawMin - pad);
     maxV = Math.ceil(rawMax + pad + 1);
   } else {
-    // temp
-    const span = Math.max(4, rawMax - rawMin);
-    minV = Math.floor(rawMin - Math.max(2, span * 0.18));
-    maxV = Math.ceil(rawMax + Math.max(3, span * 0.26));
+    const span = Math.max(4, rawMax - minV);
+    minV = Math.floor(rawMin - Math.max(2, span * 0.16));
+    maxV = Math.ceil(rawMax + Math.max(3, span * 0.24));
   }
 
-  const targetIntervals = 4;
+  const targetIntervals = 5;
   const roughStep = (maxV - minV) / targetIntervals;
   const candidates =
     metric === 'rain'
@@ -188,8 +179,7 @@ function computeNiceScale(
   for (let v = yMin; v <= yMax + step * 0.001; v += step) {
     ticks.push(Math.round(v * 10) / 10);
   }
-  // Garante no máximo 6 linhas de grade para visual arejado
-  if (ticks.length > 6) {
+  if (ticks.length > 7) {
     const altStep = step * 2;
     const altTicks: number[] = [];
     const altYMax = Math.ceil(yMax / altStep) * altStep;
@@ -202,9 +192,6 @@ function computeNiceScale(
   return { yMin, yMax, ticks };
 }
 
-/**
- * Traça uma curva cúbica monótona (Fritsch-Carlson) passando por todos os pontos sem overshooting.
- */
 function traceMonotoneSpline(
   ctx: CanvasRenderingContext2D,
   pts: Array<{ x: number; y: number }>,
@@ -250,7 +237,7 @@ function traceMonotoneSpline(
   }
 }
 
-function rectsOverlap(a: Rect, b: Rect, gapX = 16, gapY = 10): boolean {
+function rectsOverlap(a: Rect, b: Rect, gapX = 18, gapY = 12): boolean {
   return !(
     a.x + a.w + gapX <= b.x ||
     b.x + b.w + gapX <= a.x ||
@@ -259,9 +246,6 @@ function rectsOverlap(a: Rect, b: Rect, gapX = 16, gapY = 10): boolean {
   );
 }
 
-/**
- * Seleciona os índices limpos de hora no eixo X garantindo distância horizontal mínima generosa.
- */
 function pickCleanHourTickIndices(
   points: HourlyPoint[],
   getX: (i: number) => number,
@@ -275,8 +259,6 @@ function pickCleanHourTickIndices(
     return m ? Number(m[1]) : -1;
   };
 
-  // Para horizontes muito longos (> 84h, ex. 5-7 dias), prioriza meio-dia (12h) de cada dia
-  // ou passo de 12h quando couber com folga.
   const stepHoursCandidates =
     n <= 28 ? [3, 4, 6, 12] : n <= 56 ? [6, 12] : n <= 84 ? [6, 12, 24] : [12, 24];
 
@@ -285,10 +267,7 @@ function pickCleanHourTickIndices(
     for (let i = 0; i < n; i++) {
       const hr = getHourNum(points[i].hour);
       if (hr >= 0) {
-        const match =
-          stepH === 24
-            ? hr === 12
-            : hr % stepH === 0;
+        const match = stepH === 24 ? hr === 12 : hr % stepH === 0;
         if (match) {
           if (chosen.length === 0 || getX(i) - getX(chosen[chosen.length - 1]) >= minPxSpacing) {
             chosen.push(i);
@@ -301,7 +280,6 @@ function pickCleanHourTickIndices(
     }
   }
 
-  // Fallback uniforme caso horários sejam irregulares
   const chosen: number[] = [0];
   for (let i = 1; i < n; i++) {
     if (getX(i) - getX(chosen[chosen.length - 1]) >= minPxSpacing) {
@@ -340,7 +318,6 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     : `${siteBase}/img/logo-dark-text.png`;
   const logoImg = await loadImageSafe(logoSrc);
 
-  // Paleta alinhada ao portal
   const bg = darkTheme ? '#05080F' : '#F4F6FA';
   const cardBg = darkTheme ? '#0D1526' : '#FFFFFF';
   const innerBg = darkTheme ? '#070E1C' : '#F8FAFC';
@@ -350,102 +327,95 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   const textSoft = darkTheme ? '#64748B' : '#64748B';
   const meta = getMetricMeta(metric);
 
-  // Fundo principal com brilho atmosférico discreto
+  // Fundo principal limpo
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  const glow = ctx.createRadialGradient(W * 0.82, H * 0.12, 60, W * 0.82, H * 0.12, W * 0.72);
-  glow.addColorStop(0, darkTheme ? 'rgba(255, 130, 68, 0.14)' : 'rgba(255, 130, 68, 0.10)');
+  const glow = ctx.createRadialGradient(W * 0.85, H * 0.10, 60, W * 0.85, H * 0.10, W * 0.72);
+  glow.addColorStop(0, darkTheme ? 'rgba(255, 130, 68, 0.12)' : 'rgba(255, 130, 68, 0.08)');
   glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, W, H);
 
-  const padX = 110;
-  const topSafe = isStory ? 200 : 96;
-  const botSafe = isStory ? 210 : 90;
+  const padX = 96;
+  const topSafe = isStory ? 210 : 88;
+  const botSafe = isStory ? 200 : 72;
   const contentW = W - padX * 2;
 
-  // Cabeçalho Institucional
+  // ============================================================================
+  // CABEÇALHO ULTRA ENXUTO — SÓ O ESSENCIAL PARA DAR DESTAQUE AO GRÁFICO
+  // ============================================================================
   let cursorY = topSafe;
+
+  // Linha superior: Logo + @tempoemriodasostras
   if (logoImg) {
-    const targetH = isStory ? 126 : 102;
+    const targetH = isStory ? 116 : 92;
     const ratio = logoImg.width / Math.max(1, logoImg.height);
     const targetW = targetH * ratio;
     ctx.drawImage(logoImg, padX, cursorY, targetW, targetH);
   } else {
     ctx.fillStyle = textMain;
-    ctx.font = '800 52px Inter, system-ui, sans-serif';
-    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + 58);
+    ctx.font = '800 44px Inter, system-ui, sans-serif';
+    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + 54);
   }
 
-  // Badge @tempoemriodasostras + Local à direita
   const tagText = '@tempoemriodasostras';
-  ctx.font = '700 30px "JetBrains Mono", monospace';
+  ctx.font = '700 28px "JetBrains Mono", monospace';
   const tagMetrics = ctx.measureText(tagText);
-  const tagPadX = 32;
+  const tagPadX = 30;
   const tagW = tagMetrics.width + tagPadX * 2;
-  const tagH = 62;
+  const tagH = 56;
   const tagX = W - padX - tagW;
-  const tagY = cursorY + 6;
-  roundRectPath(ctx, tagX, tagY, tagW, tagH, 31);
-  ctx.fillStyle = 'rgba(255, 130, 68, 0.16)';
+  const tagY = cursorY + 12;
+  roundRectPath(ctx, tagX, tagY, tagW, tagH, 28);
+  ctx.fillStyle = 'rgba(255, 130, 68, 0.14)';
   ctx.fill();
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2.5;
   ctx.strokeStyle = '#FF8244';
   ctx.stroke();
   ctx.fillStyle = '#FF8244';
   ctx.textBaseline = 'middle';
-  ctx.fillText(tagText, tagX + tagPadX, tagY + tagH / 2 + 2);
-
+  ctx.fillText(tagText, tagX + tagPadX, tagY + tagH / 2 + 1);
   ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = textMuted;
-  ctx.font = '600 26px "JetBrains Mono", monospace';
-  ctx.textAlign = 'right';
-  ctx.fillText('RIO DAS OSTRAS · RJ (22.52°S 41.94°W)', W - padX, tagY + tagH + 42);
-  ctx.textAlign = 'left';
 
-  cursorY += isStory ? 185 : 148;
+  cursorY += isStory ? 192 : 158;
 
-  // Pílula de Período Selecionado + Título Principal
-  const pillLbl = `PREVISÃO HORÁRIA · ${periodLabel.toUpperCase()}`;
-  ctx.font = '700 27px "JetBrains Mono", monospace';
-  const pillW = Math.min(contentW, ctx.measureText(pillLbl).width + 56);
-  roundRectPath(ctx, padX, cursorY, pillW, 54, 14);
+  // Título + Pílula de Período na MESMA linha limpa
+  const cleanPeriod = periodLabel.replace(' · 00:00–23:59', '');
+  ctx.fillStyle = textMain;
+  ctx.font = `800 ${isStory ? 66 : 58}px Inter, system-ui, sans-serif`;
+  ctx.fillText(meta.title, padX, cursorY);
+
+  ctx.font = '700 26px "JetBrains Mono", monospace';
+  const perText = cleanPeriod.toUpperCase();
+  const perW = ctx.measureText(perText).width + 44;
+  const perH = 50;
+  const perX = W - padX - perW;
+  const perY = cursorY - 40;
+  roundRectPath(ctx, perX, perY, perW, perH, 14);
   ctx.fillStyle = darkTheme ? '#14213D' : '#E2E8F0';
   ctx.fill();
   ctx.strokeStyle = borderCol;
   ctx.lineWidth = 2;
   ctx.stroke();
   ctx.fillStyle = '#FF8244';
+  ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(pillLbl, padX + 28, cursorY + 28);
-
-  cursorY += isStory ? 124 : 108;
+  ctx.fillText(perText, perX + perW / 2, perY + perH / 2 + 1);
+  ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = textMain;
-  ctx.font = `800 ${isStory ? 72 : 60}px Inter, system-ui, sans-serif`;
-  ctx.fillText(meta.title, padX, cursorY);
 
-  cursorY += isStory ? 52 : 44;
-  ctx.fillStyle = textMuted;
-  ctx.font = `500 ${isStory ? 33 : 29}px Inter, system-ui, sans-serif`;
-  ctx.fillText(meta.subtitle, padX, cursorY);
+  cursorY += isStory ? 52 : 38;
 
-  cursorY += isStory ? 60 : 44;
-
-  // Cálculo dos KPIs do período
+  // Pré-cálculo dos extremos para destacar na curva
   let minTIdx = 0;
   let maxTIdx = 0;
-  let minFIdx = 0;
-  let maxFIdx = 0;
   let maxWIdx = 0;
   let maxGIdx = 0;
   let totalRain = 0;
   let maxRainIdx = 0;
-  let maxProb = 0;
   let minGenIdx = 0;
   let maxGenIdx = 0;
-  let genSum = 0;
 
   const getMainVal = (p: HourlyPoint) => {
     if (metric === 'temp') return p.temp;
@@ -458,163 +428,22 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   points.forEach((p, idx) => {
     if (p.temp < points[minTIdx].temp) minTIdx = idx;
     if (p.temp > points[maxTIdx].temp) maxTIdx = idx;
-
-    const fCur = p.apparentTemp ?? p.temp;
-    const fMin = points[minFIdx].apparentTemp ?? points[minFIdx].temp;
-    const fMax = points[maxFIdx].apparentTemp ?? points[maxFIdx].temp;
-    if (fCur < fMin) minFIdx = idx;
-    if (fCur > fMax) maxFIdx = idx;
-
     if (p.windKmh > points[maxWIdx].windKmh) maxWIdx = idx;
     const gCur = p.windGustKmh ?? p.windKmh;
     const gMax = points[maxGIdx].windGustKmh ?? points[maxGIdx].windKmh;
     if (gCur > gMax) maxGIdx = idx;
-
     totalRain += p.rainMm || 0;
     if ((p.rainMm || 0) > (points[maxRainIdx].rainMm || 0)) maxRainIdx = idx;
-    if ((p.rainProb || 0) > maxProb) maxProb = p.rainProb;
-
     const gv = getMainVal(p);
-    genSum += gv;
     if (gv < getMainVal(points[minGenIdx])) minGenIdx = idx;
     if (gv > getMainVal(points[maxGenIdx])) maxGenIdx = idx;
   });
 
-  type KpiCard = { label: string; value: string; sub: string; accent: string };
-  let kpis: KpiCard[];
-
-  if (metric === 'temp') {
-    const fMinV = points[minFIdx].apparentTemp ?? points[minFIdx].temp;
-    const fMaxV = points[maxFIdx].apparentTemp ?? points[maxFIdx].temp;
-    kpis = [
-      {
-        label: 'TEMPERATURA MÍNIMA',
-        value: `${points[minTIdx].temp.toFixed(1)}°C`,
-        sub: `às ${points[minTIdx].hour.slice(0, 5)} (${points[minTIdx].dayLabel})`,
-        accent: '#38BDF8',
-      },
-      {
-        label: 'TEMPERATURA MÁXIMA',
-        value: `${points[maxTIdx].temp.toFixed(1)}°C`,
-        sub: `às ${points[maxTIdx].hour.slice(0, 5)} (${points[maxTIdx].dayLabel})`,
-        accent: '#FF8244',
-      },
-      {
-        label: 'SENSAÇÃO TÉRMICA',
-        value: `${Math.round(fMinV)}° a ${Math.round(fMaxV)}°C`,
-        sub: `pico às ${points[maxFIdx].hour.slice(0, 5)} (${points[maxFIdx].dayLabel})`,
-        accent: '#F43F5E',
-      },
-    ];
-  } else if (metric === 'wind') {
-    const avgWind = points.reduce((s, p) => s + p.windKmh, 0) / points.length;
-    const maxG = points[maxGIdx].windGustKmh ?? points[maxGIdx].windKmh;
-    kpis = [
-      {
-        label: 'VENTO MÁXIMO',
-        value: `${points[maxWIdx].windKmh.toFixed(0)} km/h`,
-        sub: `Dir. ${points[maxWIdx].windDir} às ${points[maxWIdx].hour.slice(0, 5)}`,
-        accent: '#10B981',
-      },
-      {
-        label: 'RAJADA MÁXIMA',
-        value: `${maxG.toFixed(0)} km/h`,
-        sub: `pico às ${points[maxGIdx].hour.slice(0, 5)} (${points[maxGIdx].dayLabel})`,
-        accent: '#F59E0B',
-      },
-      {
-        label: 'MÉDIA NO PERÍODO',
-        value: `${avgWind.toFixed(0)} km/h`,
-        sub: `${points.length} horas analisadas`,
-        accent: textMain,
-      },
-    ];
-  } else if (metric === 'rain') {
-    kpis = [
-      {
-        label: 'ACUMULADO PREVISTO',
-        value: `${totalRain.toFixed(1)} mm`,
-        sub: `${points.length}h contínuas analisadas`,
-        accent: '#3B82F6',
-      },
-      {
-        label: 'PICO HORÁRIO',
-        value: `${(points[maxRainIdx].rainMm || 0).toFixed(1)} mm/h`,
-        sub:
-          (points[maxRainIdx].rainMm || 0) > 0
-            ? `às ${points[maxRainIdx].hour.slice(0, 5)} (${points[maxRainIdx].dayLabel})`
-            : 'Sem precipitação prevista',
-        accent: '#60A5FA',
-      },
-      {
-        label: 'PROBABILIDADE MÁX.',
-        value: `${maxProb}%`,
-        sub: 'Máxima chance no intervalo',
-        accent: textMain,
-      },
-    ];
-  } else {
-    const u = metric === 'pressure' ? ' hPa' : '%';
-    const avgVal = genSum / points.length;
-    kpis = [
-      {
-        label: metric === 'pressure' ? 'PRESSÃO MÍNIMA' : 'UMIDADE MÍNIMA',
-        value: `${Math.round(getMainVal(points[minGenIdx]))}${u}`,
-        sub: `às ${points[minGenIdx].hour.slice(0, 5)} (${points[minGenIdx].dayLabel})`,
-        accent: meta.line,
-      },
-      {
-        label: metric === 'pressure' ? 'PRESSÃO MÁXIMA' : 'UMIDADE MÁXIMA',
-        value: `${Math.round(getMainVal(points[maxGenIdx]))}${u}`,
-        sub: `às ${points[maxGenIdx].hour.slice(0, 5)} (${points[maxGenIdx].dayLabel})`,
-        accent: '#FF8244',
-      },
-      {
-        label: 'MÉDIA NO PERÍODO',
-        value: `${Math.round(avgVal)}${u}`,
-        sub: `${points.length} horas analisadas`,
-        accent: textMain,
-      },
-    ];
-  }
-
-  // 3 Cards KPI espaçados e limpos
-  const gapKpi = 28;
-  const cardW = (contentW - gapKpi * 2) / 3;
-  const cardH = isStory ? 228 : 192;
-  kpis.forEach((k, idx) => {
-    const cx = padX + idx * (cardW + gapKpi);
-    roundRectPath(ctx, cx, cursorY, cardW, cardH, 26);
-    ctx.fillStyle = cardBg;
-    ctx.fill();
-    ctx.lineWidth = 2.5;
-    ctx.strokeStyle = borderCol;
-    ctx.stroke();
-
-    roundRectPath(ctx, cx + 32, cursorY + 32, 66, 8, 4);
-    ctx.fillStyle = k.accent;
-    ctx.fill();
-
-    ctx.fillStyle = textMuted;
-    ctx.font = '700 24px "JetBrains Mono", monospace';
-    ctx.fillText(k.label, cx + 32, cursorY + 84);
-
-    ctx.fillStyle = k.accent;
-    ctx.font = `800 ${isStory ? 52 : 46}px "JetBrains Mono", monospace`;
-    ctx.fillText(k.value, cx + 32, cursorY + (isStory ? 152 : 138));
-
-    ctx.fillStyle = textSoft;
-    ctx.font = '500 23px Inter, system-ui, sans-serif';
-    ctx.fillText(k.sub, cx + 32, cursorY + cardH - 28, cardW - 64);
-  });
-
-  cursorY += cardH + (isStory ? 54 : 38);
-
   // ============================================================================
-  // CARD DO GRÁFICO — DESIGN EDITORIAL AREJADO & ZERO SOBREPOSIÇÃO
+  // CARD PRINCIPAL DO GRÁFICO (~80% DA IMAGEM DEDICADA AO GRÁFICO!)
   // ============================================================================
-  const footerReserve = isStory ? 200 : 156;
-  const chartCardH = H - botSafe - footerReserve - cursorY;
+  const footerH = 74;
+  const chartCardH = H - botSafe - footerH - cursorY;
   roundRectPath(ctx, padX, cursorY, contentW, chartCardH, 34);
   ctx.fillStyle = cardBg;
   ctx.fill();
@@ -622,43 +451,41 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.strokeStyle = borderCol;
   ctx.stroke();
 
-  const innerPadX = 60;
-  const cardHeaderY = cursorY + 56;
-  ctx.fillStyle = textMain;
-  ctx.font = '700 30px "JetBrains Mono", monospace';
-  ctx.fillText('TENDÊNCIA AO LONGO DO PERÍODO', padX + innerPadX, cardHeaderY + 8);
+  const innerPadX = 56;
+  const legendY = cursorY + 52;
 
-  // Legenda limpa à direita (sem risco de encostar no título à esquerda)
-  let legendRightX = padX + contentW - innerPadX;
-  ctx.textAlign = 'right';
+  // Legenda minimalista no topo esquerdo do gráfico
+  let legX = padX + innerPadX;
+  ctx.strokeStyle = meta.line;
+  ctx.lineWidth = 7;
+  ctx.beginPath();
+  ctx.moveTo(legX, legendY);
+  ctx.lineTo(legX + 42, legendY);
+  ctx.stroke();
+  legX += 56;
+  ctx.fillStyle = textMain;
+  ctx.font = '700 27px "JetBrains Mono", monospace';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(meta.primLabel, legX, legendY + 1);
+  legX += ctx.measureText(meta.primLabel).width + 44;
+
   if (meta.secLabel) {
-    ctx.fillStyle = textMuted;
-    ctx.font = '600 25px "JetBrains Mono", monospace';
-    const secW = ctx.measureText(meta.secLabel).width;
-    ctx.fillText(meta.secLabel, legendRightX, cardHeaderY + 8);
     ctx.strokeStyle = meta.secColor;
     ctx.lineWidth = 6;
     ctx.setLineDash([12, 8]);
     ctx.beginPath();
-    ctx.moveTo(legendRightX - secW - 56, cardHeaderY);
-    ctx.lineTo(legendRightX - secW - 14, cardHeaderY);
+    ctx.moveTo(legX, legendY);
+    ctx.lineTo(legX + 42, legendY);
     ctx.stroke();
     ctx.setLineDash([]);
-    legendRightX = legendRightX - secW - 90;
+    legX += 56;
+    ctx.fillStyle = textMuted;
+    ctx.font = '600 26px "JetBrains Mono", monospace';
+    ctx.fillText(meta.secLabel, legX, legendY + 1);
   }
-  ctx.fillStyle = textMuted;
-  ctx.font = '600 25px "JetBrains Mono", monospace';
-  const primW = ctx.measureText(meta.primLabel).width;
-  ctx.fillText(meta.primLabel, legendRightX, cardHeaderY + 8);
-  ctx.strokeStyle = meta.line;
-  ctx.lineWidth = 7;
-  ctx.beginPath();
-  ctx.moveTo(legendRightX - primW - 56, cardHeaderY);
-  ctx.lineTo(legendRightX - primW - 14, cardHeaderY);
-  ctx.stroke();
-  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
 
-  // Agrupamento de dias (para cabeçalho segmentado limpo no topo quando houver > 1 dia)
+  // Dias (para badges no topo em horizontes multi-dias)
   type DaySeg = { label: string; start: number; end: number };
   const daySegments: DaySeg[] = [];
   points.forEach((p, idx) => {
@@ -670,42 +497,39 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     }
   });
   const isMultiDay = daySegments.length > 1;
-  const dayHeaderH = isMultiDay ? 62 : 14;
+  const dayHeaderH = isMultiDay ? 64 : 16;
 
-  // Dimensões da área de plotagem com calha dedicada do eixo Y à esquerda
-  const yAxisW = metric === 'pressure' ? 128 : 108;
+  // Área de plotagem ampla e arejada
+  const yAxisW = metric === 'pressure' ? 132 : 112;
   const plotFrameX = padX + innerPadX + yAxisW;
-  const plotFrameY = cardHeaderY + 46;
+  const plotFrameY = legendY + 42;
   const plotFrameW = contentW - innerPadX * 2 - yAxisW;
 
   const hasSubRow = Boolean(meta.subRowLabel);
-  const axisBottomH = hasSubRow ? 124 : 84;
-  const plotFrameH = chartCardH - (plotFrameY - cursorY) - axisBottomH - 28;
+  const axisBottomH = hasSubRow ? 104 : 62;
+  const plotFrameH = chartCardH - (plotFrameY - cursorY) - axisBottomH - 22;
 
-  // Fundo interno sutil da área gráfica
-  roundRectPath(ctx, plotFrameX, plotFrameY, plotFrameW, plotFrameH, 22);
+  roundRectPath(ctx, plotFrameX, plotFrameY, plotFrameW, plotFrameH, 24);
   ctx.fillStyle = innerBg;
   ctx.fill();
   ctx.strokeStyle = darkTheme ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.06)';
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Calha interna da área de dados (afasta primeiro e último ponto das bordas!)
-  const plotSideMargin = points.length <= 28 ? 58 : 44;
+  const plotSideMargin = points.length <= 28 ? 62 : 46;
   const dataLeftX = plotFrameX + plotSideMargin;
   const dataRightX = plotFrameX + plotFrameW - plotSideMargin;
   const dataW = Math.max(100, dataRightX - dataLeftX);
 
-  const dataTopY = plotFrameY + dayHeaderH + 46; // espaço livre p/ pílula MÁX no topo
-  const dataBotY = plotFrameY + plotFrameH - 26;
-  const dataH = Math.max(120, dataBotY - dataTopY);
+  const dataTopY = plotFrameY + dayHeaderH + 54;
+  const dataBotY = plotFrameY + plotFrameH - 28;
+  const dataH = Math.max(150, dataBotY - dataTopY);
 
   const getPxX = (i: number) =>
     points.length === 1
       ? dataLeftX + dataW / 2
       : dataLeftX + (i / (points.length - 1)) * dataW;
 
-  // Faixas sutis alternadas por dia e divisores verticais quando multi-dia
   if (isMultiDay) {
     daySegments.forEach((seg, sIdx) => {
       const segLeft =
@@ -718,7 +542,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
       if (sIdx % 2 === 1) {
         ctx.save();
-        roundRectPath(ctx, plotFrameX, plotFrameY, plotFrameW, plotFrameH, 22);
+        roundRectPath(ctx, plotFrameX, plotFrameY, plotFrameW, plotFrameH, 24);
         ctx.clip();
         ctx.fillStyle = darkTheme ? 'rgba(255,255,255,0.022)' : 'rgba(15,23,42,0.022)';
         ctx.fillRect(segLeft, plotFrameY, segW, plotFrameH);
@@ -736,26 +560,24 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
         ctx.setLineDash([]);
       }
 
-      // Badge do Dia centralizada na faixa superior do dia
       const centerSegX = segLeft + segW / 2;
       if (segW >= 95) {
-        ctx.fillStyle = darkTheme ? 'rgba(20, 33, 61, 0.85)' : 'rgba(226, 232, 240, 0.9)';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.fillStyle = darkTheme ? 'rgba(20, 33, 61, 0.88)' : 'rgba(226, 232, 240, 0.92)';
+        ctx.font = '700 24px "JetBrains Mono", monospace';
         const dTxt = seg.label;
-        const dTxtW = Math.min(segW - 18, ctx.measureText(dTxt).width + 28);
-        roundRectPath(ctx, centerSegX - dTxtW / 2, plotFrameY + 14, dTxtW, 38, 12);
+        const dTxtW = Math.min(segW - 18, ctx.measureText(dTxt).width + 32);
+        roundRectPath(ctx, centerSegX - dTxtW / 2, plotFrameY + 14, dTxtW, 40, 12);
         ctx.fill();
         ctx.fillStyle = '#FF8244';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(dTxt, centerSegX, plotFrameY + 34, dTxtW - 14);
+        ctx.fillText(dTxt, centerSegX, plotFrameY + 35, dTxtW - 14);
       }
     });
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
   }
 
-  // Escala Y limpa
   const getSecVal = (p: HourlyPoint): number | null => {
     if (metric === 'temp') return p.apparentTemp ?? p.temp;
     if (metric === 'wind') return Math.max(p.windKmh, p.windGustKmh ?? p.windKmh);
@@ -775,7 +597,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     return dataBotY - r * dataH;
   };
 
-  // Linhas horizontais de grade e rótulos na calha esquerda (zero contato com o gráfico!)
+  // Linhas horizontais de grade e escala Y
   ticks.forEach((tickVal, ti) => {
     const gy = getPxY(tickVal);
     if (gy < plotFrameY + dayHeaderH - 4 || gy > dataBotY + 8) return;
@@ -809,24 +631,22 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
               : `${Math.round(tickVal)}`;
 
     ctx.fillStyle = textMuted;
-    ctx.font = '700 24px "JetBrains Mono", monospace';
+    ctx.font = '700 26px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    ctx.fillText(tickLabel, plotFrameX - 18, gy);
+    ctx.fillText(tickLabel, plotFrameX - 20, gy);
   });
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 
-  // Unidade sutil no topo da calha Y para vento/pressão
   if (metric === 'wind' || metric === 'pressure') {
     ctx.fillStyle = textSoft;
-    ctx.font = '600 20px "JetBrains Mono", monospace';
+    ctx.font = '600 22px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(metric === 'wind' ? 'km/h' : 'hPa', plotFrameX - 18, plotFrameY + 28);
+    ctx.fillText(metric === 'wind' ? 'km/h' : 'hPa', plotFrameX - 20, plotFrameY + 30);
     ctx.textAlign = 'left';
   }
 
-  // Pré-computa pontos plotados
   const plotPts: PlotPt[] = points.map((p, idx) => {
     const val = getMainVal(p);
     const secVal = getSecVal(p);
@@ -841,22 +661,20 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     };
   });
 
-  // Ticks limpos de hora espaçados com no mínimo 155px entre si.
-  // Quando houver 4+ dias (>= 96h), exibimos 1 marcador centralizado por dia em vez de repetir "00h".
   const showDailyAxisMode = daySegments.length >= 4;
   const dailySummaryIndices: number[] = [];
   if (showDailyAxisMode) {
     daySegments.forEach((seg) => {
       let bestIdx = Math.floor((seg.start + seg.end) / 2);
-      if (metric === 'temp' || metric === 'rain' || metric === 'pressure' || metric === 'humidity') {
-        for (let i = seg.start; i <= seg.end; i++) {
-          if (getMainVal(points[i]) > getMainVal(points[bestIdx])) bestIdx = i;
-        }
-      } else if (metric === 'wind') {
+      if (metric === 'wind') {
         for (let i = seg.start; i <= seg.end; i++) {
           const gi = getSecVal(points[i]) ?? getMainVal(points[i]);
           const gb = getSecVal(points[bestIdx]) ?? getMainVal(points[bestIdx]);
           if (gi > gb) bestIdx = i;
+        }
+      } else {
+        for (let i = seg.start; i <= seg.end; i++) {
+          if (getMainVal(points[i]) > getMainVal(points[bestIdx])) bestIdx = i;
         }
       }
       dailySummaryIndices.push(bestIdx);
@@ -868,7 +686,6 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     : pickCleanHourTickIndices(points, getPxX, 155);
   const tickSet = new Set(tickIndices);
 
-  // Linhas verticais guias muito sutis nas horas marcadas
   if (!showDailyAxisMode) {
     tickIndices.forEach((ti) => {
       const tx = plotPts[ti].x;
@@ -881,18 +698,15 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     });
   }
 
-  // ============================================================================
-  // DESENHO DA SÉRIE (BARRAS LIMPAS OU CURVA SUAVE MONÓTONA)
-  // ============================================================================
   const placedBoxes: Rect[] = [];
 
   const overlapsCurve = (rect: Rect): boolean => {
     if (metric === 'rain') return false;
     for (let i = 0; i < plotPts.length; i++) {
       const pt = plotPts[i];
-      if (pt.x >= rect.x - 12 && pt.x <= rect.x + rect.w + 12) {
-        if (pt.y >= rect.y - 8 && pt.y <= rect.y + rect.h + 8) return true;
-        if (pt.secY !== null && pt.secY >= rect.y - 8 && pt.secY <= rect.y + rect.h + 8) {
+      if (pt.x >= rect.x - 14 && pt.x <= rect.x + rect.w + 14) {
+        if (pt.y >= rect.y - 10 && pt.y <= rect.y + rect.h + 10) return true;
+        if (pt.secY !== null && pt.secY >= rect.y - 10 && pt.secY <= rect.y + rect.h + 10) {
           return true;
         }
       }
@@ -900,12 +714,12 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     return false;
   };
 
-  const canPlace = (rect: Rect, checkCurve = true, gapX = 22, gapY = 12): boolean => {
+  const canPlace = (rect: Rect, checkCurve = true, gapX = 24, gapY = 14): boolean => {
     if (
-      rect.x < plotFrameX + 10 ||
-      rect.x + rect.w > plotFrameX + plotFrameW - 10 ||
-      rect.y < plotFrameY + dayHeaderH - 8 ||
-      rect.y + rect.h > dataBotY - 4
+      rect.x < plotFrameX + 12 ||
+      rect.x + rect.w > plotFrameX + plotFrameW - 12 ||
+      rect.y < plotFrameY + dayHeaderH - 6 ||
+      rect.y + rect.h > dataBotY - 6
     ) {
       return false;
     }
@@ -923,12 +737,12 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     accent: string,
     preferBelow = false
   ): boolean => {
-    ctx.font = '800 24px "JetBrains Mono", monospace';
+    ctx.font = '800 27px "JetBrains Mono", monospace';
     const tw = ctx.measureText(text).width;
-    const pw = tw + 34;
-    const ph = 44;
+    const pw = tw + 38;
+    const ph = 48;
 
-    const offsets = preferBelow ? [44, -64, 72, -92] : [-64, 42, -92, 72];
+    const offsets = preferBelow ? [48, -70, 78, -98] : [-70, 46, -98, 78];
     const minLeft = plotFrameX + 14;
     const maxLeft = plotFrameX + plotFrameW - 14 - pw;
     const clampedX = Math.max(minLeft, Math.min(maxLeft, cx - pw / 2));
@@ -936,23 +750,21 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     for (const offY of offsets) {
       const topY = offY < 0 ? anchorY + offY : anchorY + offY - ph / 2;
       const cand: Rect = { x: clampedX, y: topY, w: pw, h: ph };
-      if (canPlace(cand, true, 24, 14)) {
+      if (canPlace(cand, true, 26, 16)) {
         placedBoxes.push(cand);
 
-        // Haste sutil conectando o ponto à pílula
         const stemStartY = topY + ph / 2 < anchorY ? topY + ph : topY;
         ctx.strokeStyle = accent;
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.moveTo(cx, anchorY);
         ctx.lineTo(cx, stemStartY);
         ctx.stroke();
 
-        // Pílula contrastante
-        roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 14);
+        roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 15);
         ctx.fillStyle = darkTheme ? '#0D1526' : '#FFFFFF';
         ctx.fill();
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 3.5;
         ctx.strokeStyle = accent;
         ctx.stroke();
 
@@ -970,14 +782,14 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
   if (metric === 'rain') {
     const slotW = dataW / Math.max(1, points.length);
-    const barW = Math.max(10, Math.min(44, slotW * 0.62));
+    const barW = Math.max(12, Math.min(48, slotW * 0.62));
     plotPts.forEach((pt) => {
       if (pt.val > 0) {
-        const bh = Math.max(10, dataBotY - pt.y);
+        const bh = Math.max(12, dataBotY - pt.y);
         const grad = ctx.createLinearGradient(0, pt.y, 0, dataBotY);
         grad.addColorStop(0, '#60A5FA');
         grad.addColorStop(1, '#2563EB');
-        roundRectPath(ctx, pt.x - barW / 2, pt.y, barW, bh, 8);
+        roundRectPath(ctx, pt.x - barW / 2, pt.y, barW, bh, 9);
         ctx.fillStyle = grad;
         ctx.fill();
       } else {
@@ -992,16 +804,15 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
     if (totalRain <= 0.01) {
       ctx.fillStyle = textSoft;
-      ctx.font = '600 28px Inter, system-ui, sans-serif';
+      ctx.font = '600 32px Inter, system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(
-        'Sem precipitação prevista neste intervalo',
+        'Sem precipitação prevista neste período',
         plotFrameX + plotFrameW / 2,
         dataTopY + dataH * 0.48
       );
       ctx.textAlign = 'left';
     } else {
-      // Ordena barras com chuva da maior para a menor para rotular apenas picos sem colisão
       const rainySorted = plotPts
         .filter((pt) => pt.val >= 0.1)
         .slice()
@@ -1012,17 +823,17 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
         if (rank === 0) {
           drawCalloutPill(pt.x, pt.y, txt, '#60A5FA', false);
         } else {
-          ctx.font = '700 22px "JetBrains Mono", monospace';
+          ctx.font = '700 24px "JetBrains Mono", monospace';
           const tw = ctx.measureText(pt.val.toFixed(1)).width;
-          const pw = tw + 16;
-          const ph = 28;
+          const pw = tw + 18;
+          const ph = 32;
           const cand: Rect = {
             x: Math.max(plotFrameX + 14, Math.min(plotFrameX + plotFrameW - 14 - pw, pt.x - pw / 2)),
-            y: Math.max(plotFrameY + dayHeaderH + 4, pt.y - 38),
+            y: Math.max(plotFrameY + dayHeaderH + 4, pt.y - 42),
             w: pw,
             h: ph,
           };
-          if (canPlace(cand, false, 30, 14)) {
+          if (canPlace(cand, false, 32, 16)) {
             placedBoxes.push(cand);
             ctx.fillStyle = darkTheme ? '#93C5FD' : '#1D4ED8';
             ctx.textAlign = 'center';
@@ -1035,7 +846,6 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       });
     }
   } else {
-    // Área preenchida suave sob a curva principal
     const areaGrad = ctx.createLinearGradient(0, dataTopY, 0, dataBotY);
     areaGrad.addColorStop(0, meta.fillTop);
     areaGrad.addColorStop(1, meta.fillBot);
@@ -1047,30 +857,27 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     ctx.fillStyle = areaGrad;
     ctx.fill();
 
-    // Curva principal suave
     ctx.strokeStyle = meta.line;
-    ctx.lineWidth = 7;
+    ctx.lineWidth = 8;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.beginPath();
     traceMonotoneSpline(ctx, plotPts, true);
     ctx.stroke();
 
-    // Curva secundária tracejada suave (Sensação Térmica ou Rajadas)
     const secCurvePts = plotPts
       .filter((pt): pt is PlotPt & { secY: number } => pt.secY !== null)
       .map((pt) => ({ x: pt.x, y: pt.secY }));
     if (secCurvePts.length > 1) {
       ctx.strokeStyle = meta.secColor;
-      ctx.lineWidth = 5;
-      ctx.setLineDash([14, 10]);
+      ctx.lineWidth = 5.5;
+      ctx.setLineDash([15, 11]);
       ctx.beginPath();
       traceMonotoneSpline(ctx, secCurvePts, true);
       ctx.stroke();
       ctx.setLineDash([]);
     }
 
-    // Marcadores discretos apenas nos ticks limpos (zero amontoado de bolinhas!)
     const keyIndices = new Set<number>();
     if (metric === 'temp') {
       keyIndices.add(minTIdx);
@@ -1089,7 +896,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
       if (pt.secY !== null && (tickSet.has(i) || (metric === 'wind' && i === maxGIdx))) {
         ctx.beginPath();
-        ctx.arc(pt.x, pt.secY, i === maxGIdx && metric === 'wind' ? 10 : 6, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.secY, i === maxGIdx && metric === 'wind' ? 11 : 6.5, 0, Math.PI * 2);
         ctx.fillStyle = meta.secColor;
         ctx.fill();
         if (i === maxGIdx && metric === 'wind') {
@@ -1107,7 +914,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
         (metric !== 'temp' && metric !== 'wind' && i === maxGenIdx);
 
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, isKey ? 10.5 : 6.5, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, isKey ? 11.5 : 7, 0, Math.PI * 2);
       ctx.fillStyle = isMinHighlight
         ? '#38BDF8'
         : isMaxHighlight
@@ -1121,7 +928,6 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       ctx.stroke();
     });
 
-    // 1) Pílulas âncoras prioritárias (MÁX / MÍN / Pico de Rajada)
     if (metric === 'temp') {
       drawCalloutPill(
         plotPts[maxTIdx].x,
@@ -1171,9 +977,8 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       );
     }
 
-    // 2) Rótulos secundários leves nos ticks/picos espaçados (apenas se não houver colisão!)
     const tooCloseToKey = (px: number) => {
-      if (showDailyAxisMode) return false; // Em 4–7 dias, canPlace 2D evita colisão vertical/horizontal com pílulas
+      if (showDailyAxisMode) return false;
       for (const k of keyIndices) {
         if (Math.abs(px - plotPts[k].x) < 145) return true;
       }
@@ -1195,22 +1000,21 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       const anchorY = metric === 'wind' && pt.secY !== null ? pt.secY : pt.y;
       const col = metric === 'wind' ? '#F59E0B' : textMain;
 
-      ctx.font = '700 22px "JetBrains Mono", monospace';
+      ctx.font = '700 25px "JetBrains Mono", monospace';
       const tw = ctx.measureText(labelVal).width;
-      const pw = tw + 18;
-      const ph = 30;
+      const pw = tw + 20;
+      const ph = 34;
       const clampedX = Math.max(
         plotFrameX + 14,
         Math.min(plotFrameX + plotFrameW - 14 - pw, pt.x - pw / 2)
       );
 
-      for (const yOff of [-40, 20, -64]) {
+      for (const yOff of [-44, 22, -70]) {
         const cand: Rect = { x: clampedX, y: anchorY + yOff, w: pw, h: ph };
         if (canPlace(cand, true, 32, 16)) {
           placedBoxes.push(cand);
-          // Fundo discreto translúcido para nunca misturar com a linha de grade
-          roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 8);
-          ctx.fillStyle = darkTheme ? 'rgba(7, 14, 28, 0.85)' : 'rgba(248, 250, 252, 0.90)';
+          roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 9);
+          ctx.fillStyle = darkTheme ? 'rgba(7, 14, 28, 0.86)' : 'rgba(248, 250, 252, 0.92)';
           ctx.fill();
 
           ctx.fillStyle = col;
@@ -1225,17 +1029,15 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     });
   }
 
-  // ============================================================================
-  // EIXO X AREJADO (HORAS + SUB-LINHA ÚNICA LIMPA)
-  // ============================================================================
+  // Eixo X limpo e espaçado
   const axisHourY = plotFrameY + plotFrameH + 42;
   const axisSubY = axisHourY + 38;
 
   if (hasSubRow) {
     ctx.fillStyle = textSoft;
-    ctx.font = '600 20px "JetBrains Mono", monospace';
+    ctx.font = '600 21px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(showDailyAxisMode && metric === 'temp' ? 'Sens. máx' : meta.subRowLabel, plotFrameX - 18, axisSubY);
+    ctx.fillText(showDailyAxisMode && metric === 'temp' ? 'Sens. máx' : meta.subRowLabel, plotFrameX - 20, axisSubY);
     ctx.textAlign = 'left';
   }
 
@@ -1266,21 +1068,21 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       }
 
       ctx.fillStyle = textMain;
-      ctx.font = '700 24px "JetBrains Mono", monospace';
+      ctx.font = '700 26px "JetBrains Mono", monospace';
       if (metric === 'temp') {
         ctx.fillText(`${Math.round(dayMin)}° / ${Math.round(dayMax)}°`, cx, axisHourY);
         ctx.fillStyle = '#F43F5E';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.font = '700 23px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(daySecMax)}°`, cx, axisSubY);
       } else if (metric === 'wind') {
         ctx.fillText(`${Math.round(daySecMax)} km/h`, cx, axisHourY);
         ctx.fillStyle = '#10B981';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.font = '700 23px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(dayMaxWind)} ${dayMaxWindDir}`, cx, axisSubY);
       } else if (metric === 'rain') {
         ctx.fillText(`${dayRain.toFixed(1)} mm`, cx, axisHourY);
         ctx.fillStyle = dayProb > 0 ? '#60A5FA' : textSoft;
-        ctx.font = '700 21px "JetBrains Mono", monospace';
+        ctx.font = '700 22px "JetBrains Mono", monospace';
         ctx.fillText(`${dayProb}%`, cx, axisSubY);
       } else {
         ctx.fillText(`${Math.round(dayMin)}–${Math.round(dayMax)}${meta.shortUnit}`, cx, axisHourY);
@@ -1292,55 +1094,31 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       const hourNumStr = `${pt.p.hour.slice(0, 2)}h`;
 
       ctx.fillStyle = textMain;
-      ctx.font = '700 24px "JetBrains Mono", monospace';
+      ctx.font = '700 26px "JetBrains Mono", monospace';
       ctx.fillText(hourNumStr, pt.x, axisHourY);
 
       if (metric === 'temp' && pt.secVal !== null) {
         ctx.fillStyle = '#F43F5E';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.font = '700 23px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(pt.secVal)}°`, pt.x, axisSubY);
       } else if (metric === 'wind') {
         ctx.fillStyle = '#10B981';
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.font = '700 23px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(pt.val)} ${pt.p.windDir}`, pt.x, axisSubY);
       } else if (metric === 'rain') {
         ctx.fillStyle = pt.p.rainProb > 0 ? '#60A5FA' : textSoft;
-        ctx.font = '700 21px "JetBrains Mono", monospace';
+        ctx.font = '700 22px "JetBrains Mono", monospace';
         ctx.fillText(`${pt.p.rainProb}%`, pt.x, axisSubY);
       }
     });
   }
   ctx.textAlign = 'left';
 
-  // Nota discreta no canto inferior do card apenas explicando unidade/fuso
-  ctx.fillStyle = textSoft;
-  ctx.font = '500 20px "JetBrains Mono", monospace';
-  ctx.fillText(
-    showDailyAxisMode
-      ? `Resumo diário (mín/máx) · Horário de Brasília (BRT)`
-      : isMultiDay
-        ? `Horário de Brasília (BRT) · ${points.length}h divididas por dia`
-        : `Horário de Brasília (BRT) · ${points.length}h contínuas (${points[0].hour.slice(0, 2)}h às ${points[points.length - 1].hour.slice(0, 2)}h59)`,
-    padX + innerPadX,
-    cursorY + chartCardH - 22
-  );
-
-  // Rodapé Institucional
-  const footY = H - botSafe - (isStory ? 90 : 66);
-  ctx.strokeStyle = borderCol;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(padX, footY - 38);
-  ctx.lineTo(W - padX, footY - 38);
-  ctx.stroke();
-
-  ctx.fillStyle = textMain;
-  ctx.font = '700 28px Inter, system-ui, sans-serif';
-  ctx.fillText('Portal Integrado · Tempo em Rio das Ostras', padX, footY + 6);
-
+  // Assinatura discreta de rodapé em 1 linha
+  const footY = H - botSafe - 16;
   ctx.fillStyle = textMuted;
-  ctx.font = '500 23px "JetBrains Mono", monospace';
-  ctx.fillText('Fontes: Open-Meteo · INMET · CPTEC/INPE · Marinha (CHM) · INEA · CEMADEN', padX, footY + 44);
+  ctx.font = '600 24px "JetBrains Mono", monospace';
+  ctx.fillText('Rio das Ostras · RJ  ·  @tempoemriodasostras', padX, footY);
 
   ctx.textAlign = 'right';
   const nowStr = new Intl.DateTimeFormat('pt-BR', {
@@ -1351,9 +1129,9 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     hour: '2-digit',
     minute: '2-digit',
   }).format(new Date());
-  ctx.fillStyle = '#FF8244';
-  ctx.font = '700 25px "JetBrains Mono", monospace';
-  ctx.fillText(`${W}×${H} px · ${nowStr}`, W - padX, footY + 18);
+  ctx.fillStyle = textSoft;
+  ctx.font = '500 24px "JetBrains Mono", monospace';
+  ctx.fillText(nowStr, W - padX, footY);
   ctx.textAlign = 'left';
 
   const blob: Blob = await new Promise((resolve, reject) => {
