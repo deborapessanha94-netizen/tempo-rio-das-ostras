@@ -26,6 +26,7 @@ except ImportError:
 
 BRT = timezone(timedelta(hours=-3))
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+VIME_HEADERS = {**HEADERS, "Origin": "https://vime.inmet.gov.br", "Referer": "https://vime.inmet.gov.br/SE"}
 CPTEC_HEADERS = {**HEADERS, "Referer": "https://www.cptec.inpe.br/"}
 
 SSL_CTX = ssl.create_default_context()
@@ -64,14 +65,11 @@ def _fetch_json(url, headers=None, timeout=14):
 
 
 def _ocr_stitched(crops_list):
-    """Concatena recortes pequenos em faixa larga com borda branca para leitura limpa por OCR."""
+    """Concatena recortes pequenos em faixa larga em escala de cinza para leitura limpa em Windows/Linux."""
     strips = []
     for im in crops_list:
-        arr = np.array(im.convert("RGB"))
-        mask = arr.min(axis=2) < 195
-        bw = np.full_like(arr, 255)
-        bw[mask] = (0, 0, 0)
-        pim = Image.fromarray(bw).resize((im.width * 4, im.height * 4), Image.Resampling.LANCZOS)
+        gray = ImageOps.autocontrast(ImageOps.grayscale(im)).convert("RGB")
+        pim = gray.resize((im.width * 4, im.height * 4), Image.Resampling.BICUBIC)
         strips.append(ImageOps.expand(pim, border=24, fill=(255, 255, 255)))
     total_w = sum(s.width for s in strips) + 40
     max_h = max(s.height for s in strips)
@@ -81,10 +79,12 @@ def _ocr_stitched(crops_list):
         canvas.paste(s, (x, (max_h - s.height) // 2))
         x += s.width + 20
 
-    res = _inea_ocr._ocr_crops_tesseract({"s": (canvas, 7)})
-    if not res.get("s"):
-        res = _inea_ocr._ocr_crops_windows({"s": (canvas, 7)})
-    return res.get("s", "")
+    for psm in (7, 6):
+        res = _inea_ocr._ocr_crops_tesseract({"s": (canvas, psm)})
+        if res.get("s"):
+            return res["s"]
+    res_w = _inea_ocr._ocr_crops_windows({"s": (canvas, 7)})
+    return res_w.get("s", "")
 
 
 def _b64_to_pil(b64_str):
@@ -308,7 +308,7 @@ def extract_inmet_vime_data(data_dir):
 
     # 2.1 COSMO 2.8km SE-RJ (alta resolução RJ)
     try:
-        inits = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO2P8/SE-RJ/prec24h", timeout=10)
+        inits = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO2P8/SE-RJ/prec24h", headers=VIME_HEADERS, timeout=10)
         if inits:
             today_iso = datetime.now(BRT).strftime("%Y-%m-%d")
             # Prefere 12 UTC do dia se existir, caso contrário última inicialização disponível
@@ -317,7 +317,7 @@ def extract_inmet_vime_data(data_dir):
             base_utc = datetime.strptime(init_sig, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc)
 
             # prec24h (Dia 0: i..i+24h)
-            imgs24 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec24h/{init_sig}", timeout=14)
+            imgs24 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec24h/{init_sig}", headers=VIME_HEADERS, timeout=14)
             v24 = None
             if imgs24:
                 s24 = _sample_vime_colorbar(_b64_to_pil(imgs24[0]["base64"]), VIME_PREC_BINS, VIME_SE_RJ_POINTS)
@@ -330,7 +330,7 @@ def extract_inmet_vime_data(data_dir):
 
             # prec2dias (último frame = +48h acumulados) -> Dia 1 = max(0, 48h - 24h)
             try:
-                imgs48 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec2dias/{init_sig}", timeout=15)
+                imgs48 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec2dias/{init_sig}", headers=VIME_HEADERS, timeout=15)
                 if imgs48 and len(imgs48) >= 24:
                     s48 = _sample_vime_colorbar(_b64_to_pil(imgs48[-1]["base64"]), VIME_PREC_BINS, VIME_SE_RJ_POINTS)
                     if s48 and v24:
@@ -343,7 +343,7 @@ def extract_inmet_vime_data(data_dir):
 
             # Água Precipitável (aguaprecT850V850 - pega frame +12h/+15h diurno/atual)
             try:
-                imgs_pw = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/aguaprecT850V850/{init_sig}", timeout=14)
+                imgs_pw = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/aguaprecT850V850/{init_sig}", headers=VIME_HEADERS, timeout=14)
                 if imgs_pw:
                     idx_pw = min(15, len(imgs_pw) - 1)
                     spw = _sample_vime_colorbar(_b64_to_pil(imgs_pw[idx_pw]["base64"]), VIME_PWAT_BINS, VIME_SE_RJ_POINTS)
@@ -354,7 +354,7 @@ def extract_inmet_vime_data(data_dir):
 
             # Índices CAPE & K (Kcape - pico diurno entre +12h e +21h)
             try:
-                imgs_kc = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/Kcape/{init_sig}", timeout=14)
+                imgs_kc = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/Kcape/{init_sig}", headers=VIME_HEADERS, timeout=14)
                 if imgs_kc:
                     cape_samples = []
                     for idx_c in [min(12, len(imgs_kc) - 1), min(18, len(imgs_kc) - 1)]:
@@ -371,12 +371,12 @@ def extract_inmet_vime_data(data_dir):
 
     # 2.2 COSMO 7km SE (cobertura estendida 7 dias)
     try:
-        inits7 = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO7/SE/prec24h", timeout=10)
+        inits7 = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO7/SE/prec24h", headers=VIME_HEADERS, timeout=10)
         if inits7:
             today_iso = datetime.now(BRT).strftime("%Y-%m-%d")
             init7 = next((x["sigla"] for x in inits7 if x["sigla"].startswith(today_iso) and "12:00" in x["sigla"]), inits7[0]["sigla"])
             result["rodada_cosmo7"] = init7
-            imgs7 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO7/SE/prec24h/{init7}", timeout=16)
+            imgs7 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO7/SE/prec24h/{init7}", headers=VIME_HEADERS, timeout=16)
             base7_utc = datetime.strptime(init7, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc)
             if imgs7:
                 # Frames normalmente vêm a cada 3h (+24, +27, +30, ..., +168); escolhe múltiplos de 24h!
@@ -398,10 +398,20 @@ def extract_inmet_vime_data(data_dir):
     except Exception as e:
         print(f"[VIME COSMO 7km SE] Aviso: {e}")
 
-    try:
-        Path(data_dir, "inmet_vime.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
-    except Exception:
-        pass
+    vime_path = Path(data_dir) / "inmet_vime.json"
+    if result["disponivel"]:
+        try:
+            vime_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+    elif vime_path.exists():
+        try:
+            cached = json.loads(vime_path.read_text(encoding="utf-8"))
+            if cached.get("disponivel"):
+                cached["cached_fallback"] = True
+                return cached
+        except Exception:
+            pass
     return result
 
 
@@ -526,22 +536,36 @@ def extract_cptec_wrf_and_prob(img_dir):
 # ==============================================================================
 # 4. INEA RADARTOOL STATUS MUNICIPAL AO VIVO (radartool.inea.rj.gov.br)
 # ==============================================================================
-def extract_inea_radartool_status():
+def extract_inea_radartool_status(data_dir=None):
     """Lê o estágio operacional oficial de Rio das Ostras no RadarTool / Alerta de Cheias do INEA."""
+    cache_p = Path(data_dir) / "radartool_cache.json" if data_dir else None
     try:
         data = _fetch_json("https://radartool.inea.rj.gov.br/radar-tool/status_municipios.php", timeout=10)
         labels = data.get("labels", ["Vigilância", "Atenção", "Alerta", "Alerta Máximo", "Transbordamento"])
         idx = data.get("status", {}).get("RIO DAS OSTRAS")
         label = labels[idx] if (idx is not None and 0 <= int(idx) < len(labels)) else "Vigilância"
-        return {
+        res = {
             "disponivel": True,
             "estagio": label,
             "estagio_indice": idx,
             "atualizado_em": data.get("generated_at"),
             "url": "https://radartool.inea.rj.gov.br/radar-tool/",
         }
+        if cache_p:
+            try:
+                cache_p.write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception:
+                pass
+        return res
     except Exception as e:
         print(f"[INEA RadarTool] Aviso: {e}")
+        if cache_p and cache_p.exists():
+            try:
+                cached = json.loads(cache_p.read_text(encoding="utf-8"))
+                cached["cached_fallback"] = True
+                return cached
+            except Exception:
+                pass
         return {"disponivel": False, "estagio": "Vigilância"}
 
 
@@ -550,7 +574,7 @@ def extract_all_official_rain_sources(img_dir, data_dir):
     inmet_cosmo_met = extract_inmet_cosmo_meteograma(img_dir, data_dir)
     inmet_vime = extract_inmet_vime_data(data_dir)
     cptec_extra = extract_cptec_wrf_and_prob(img_dir)
-    inea_radartool = extract_inea_radartool_status()
+    inea_radartool = extract_inea_radartool_status(data_dir)
     return {
         "inmet_cosmo_meteograma": inmet_cosmo_met,
         "inmet_vime": inmet_vime,

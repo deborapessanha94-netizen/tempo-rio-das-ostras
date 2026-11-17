@@ -820,7 +820,7 @@ def fetch_inmet_meteograma():
             if b64_str and ('data:image' in b64_str or 'iVBORw' in b64_str):
                 raw_b64 = b64_str.split(',', 1)[1] if ',' in b64_str else b64_str
                 img_bytes = base64.b64decode(raw_b64)
-                if len(img_bytes) < 5000:
+                if len(img_bytes) < 135000:
                     print(f'[INMET Meteograma] Rodada {rodada} retornou imagem incompleta ({len(img_bytes)} bytes), tentando próxima...')
                     continue
                 with open(out_img, 'wb') as f:
