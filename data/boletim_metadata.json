@@ -1,14 +1,14 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "16/11 (Segunda-feira) a 23/11 (Segunda-feira)",
-  "emissao": "17/11/2026 às 00:59h",
+  "emissao": "17/11/2026 às 01:09h",
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.30 m. Alerta Amarelo de Tempestade do INMET (nº 56422) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 806/2026) válidos a partir de 17/11 às 03:00h até 18/11 às 03:00h. Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 43.9 mm com temperatura máxima alcançando 33°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA PROGRAMADO (Segunda-feira) • VIGILÂNCIA PREVENTIVA",
     "status_geral_cor": "warning",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": false,
-    "atualizacao_hora": "17/11/2026 às 01:01h",
+    "atualizacao_hora": "17/11/2026 às 01:11h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -590,9 +590,9 @@
       "cemaden_pcd_18789": {
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.0,
-        "chuva_24h": 26.0,
-        "chuva_96h": 26.0,
-        "leitura": "2026-11-16 21:10:00"
+        "chuva_24h": 0.0,
+        "chuva_96h": 0.0,
+        "leitura": "Sem leitura recente"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -751,7 +751,7 @@
         "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 26°C. Precipitação: volume médio contínuo de 23.4 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 53 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Nesta segunda-feira, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (de W-NE para S-SW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-          "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
+          "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 0.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
           "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
           "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos de W-NE rondando para S-SW moderados com rajadas de até 53 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil e Alerta Amarelo de Tempestade nº 56422 do INMET).",
@@ -1167,7 +1167,7 @@
       "sensacao_faixa": "24° a 27°C",
       "informe_populacao": [
         "Nesta segunda-feira, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (de W-NE para S-SW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
+        "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 0.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
         "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos de W-NE rondando para S-SW moderados com rajadas de até 53 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil e Alerta Amarelo de Tempestade nº 56422 do INMET).",
@@ -2354,7 +2354,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-17 01:00:43",
+    "data_coleta": "2026-11-17 01:10:43",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_17-11-2026.pdf",
@@ -2843,7 +2843,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-16 00z",
-    "atualizacao": "16/11/2026 22:00",
+    "atualizacao": "16/11/2026 22:10",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -2929,7 +2929,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "16/11/2026",
-    "atualizacao": "16/11/2026 22:00",
+    "atualizacao": "16/11/2026 22:10",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -3108,7 +3108,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-17T01:01:04.822095",
+    "atualizado_em": "2026-11-17T01:11:05.287565",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "02:35",
@@ -3350,7 +3350,7 @@
       "umidade": 82,
       "temperatura_prev": "24",
       "sensacao_termica": "22",
-      "hora_atual": "2026-11-17T00:00:00.000Z"
+      "hora_atual": "2026-11-17T01:00:00.000Z"
     },
     "proximos_dias": [
       {
