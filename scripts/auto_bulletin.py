@@ -2866,7 +2866,7 @@ def run_auto_bulletin_pipeline():
         "metodologia": "Consenso probabilístico 100% oficial brasileiro atualizado em cada rodada: INMET (Meteograma COSMO 7x7km + VIME COSMO 2,8km/7km, Água Precipitável e CAPE + Previsão 3304524 + Avisos Ativos), CPTEC/INPE (Meteograma WRF + Multimodel + Municipal/6D + Mapas Probabilísticos P≥5mm), INEA Alerta de Cheias (Boletim Hidrometeorológico RH-VIII/Rio das Ostras + RadarTool RJ) e Pluviômetros CEMADEN/INEA/PWS.",
         "observado_hoje_estacoes": obs_today_info,
         "inea_boletim_publicado_em": inea_boletim_data.get('publicado_em') if inea_boletim_data else None,
-        "vime_inmet": official_extractions.get('vime_inmet', {}),
+        "vime_inmet": official_extractions.get('inmet_vime', {}),
         "inmet_cosmo_meteograma_info": {
             "rodada": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('rodada_utc'),
             "y_max_mm": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('y_max_mm'),
@@ -2985,7 +2985,7 @@ def run_auto_bulletin_pipeline():
             "previsao_5dias": inmet_forecast
         },
         "inmet_meteograma": inmet_meteograma,
-        "vime_inmet": official_extractions.get('vime_inmet', {}),
+        "vime_inmet": official_extractions.get('inmet_vime', {}),
         "inea_radartool": official_extractions.get('inea_radartool', {}),
         "inea_boletim_hidrometeorologico": inea_boletim_data,
         "inea_macae_ostras": inea_macae_ostras_data,

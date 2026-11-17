@@ -1,7 +1,7 @@
 {
   "fonte": "INEA - Sistema de Alerta de Cheias",
   "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-  "atualizacao": "17/11/2026 12:26",
+  "atualizacao": "17/11/2026 12:35",
   "bacia": "Rios Macaé e das Ostras",
   "alerta_macae": {
     "tem_elevacao_fora_limite": true,
