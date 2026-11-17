@@ -2514,14 +2514,20 @@ def run_auto_bulletin_pipeline():
         d_alerts = get_day_alerts(d['date_iso'])
         tem_alerta_card = len(d_alerts) > 0
 
-        if dia_chuva >= 30.0 or (tem_alerta_rio and d == dias_3[0]):
+        if dia_chuva > 130.0 or (tem_alerta_rio and d == dias_3[0]):
             badge = "ALERTA MÁXIMO / CHEIAS"
             badge_tipo = "danger"
-        elif tem_alerta_card or dia_chuva >= 10.0 or dia_rajada >= 45.0:
+        elif dia_chuva > 100.0:
+            badge = "ALERTA / CHUVAS INTENSAS"
+            badge_tipo = "danger"
+        elif dia_chuva >= 70.0 or tem_alerta_card or dia_rajada >= 50.0:
             badge = "AVISO / ATENÇÃO"
             badge_tipo = "warning"
-        else:
+        elif dia_chuva >= 30.0 or dia_rajada >= 40.0:
             badge = "OBSERVAÇÃO"
+            badge_tipo = "info"
+        else:
+            badge = "NORMALIDADE"
             badge_tipo = "info"
 
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
@@ -2580,25 +2586,33 @@ def run_auto_bulletin_pipeline():
             }
         })
 
-    # Levantamento PLANCON por Bairros (Adaptativo)
+    # Levantamento PLANCON 5.0 (2026/2027) por Bairros (Tabelas 8 e 9)
     def calc_risco_setor(chuva, dia_idx, setor_tipo):
         if setor_tipo == 'rio':
             if jundia_nivel_float >= 2.20 and dia_idx == 0: return "MÁXIMO"
-            if chuva >= 25.0: return "MÁXIMO"
-            if chuva >= 8.0: return "ATENÇÃO"
-            return "OBS"
+            if chuva > 130.0: return "MÁXIMO"
+            if chuva > 100.0: return "ALERTA"
+            if chuva >= 70.0 or (jundia_nivel_float >= 1.99 and dia_idx == 0): return "ATENÇÃO"
+            if chuva >= 30.0: return "OBS"
+            return "NORMAL"
         elif setor_tipo == 'mar':
-            if max_rajada_geral >= 45.0 and dia_idx <= 1: return "ALERTA"
-            if max_rajada_geral >= 35.0: return "ATENÇÃO"
-            return "OBS"
+            if (tem_aviso_marinha or max_rajada_geral >= 56.0) and dia_idx <= 1: return "ALERTA"
+            if max_rajada_geral >= 40.0: return "ATENÇÃO"
+            if max_rajada_geral >= 30.0: return "OBS"
+            return "NORMAL"
         elif setor_tipo == 'alagamento':
-            if chuva >= 30.0: return "MÁXIMO"
-            if chuva >= 10.0: return "ATENÇÃO"
-            return "OBS"
+            if chuva > 130.0: return "MÁXIMO"
+            if chuva > 100.0: return "ALERTA"
+            if chuva >= 70.0: return "ATENÇÃO"
+            if chuva >= 30.0: return "OBS"
+            return "NORMAL"
         else:
-            if chuva >= 35.0: return "MÁXIMO"
-            if chuva >= 12.0: return "ALERTA"
-            return "OBS"
+            # Limiar Geológico (Tabela 9 PLANCON 5.0)
+            if chuva > 130.0: return "MÁXIMO"
+            if chuva > 100.0: return "ALERTA"
+            if chuva >= 70.0: return "ATENÇÃO"
+            if chuva >= 20.0: return "OBS"
+            return "NORMAL"
 
     c0 = dias_3[0]['chuva_tot']
     c1 = dias_3[1]['chuva_tot']
@@ -2916,7 +2930,13 @@ def run_auto_bulletin_pipeline():
             "chuva_4d": f"{chuva_total_3d:.1f} mm",
             "aviso_marinha": "NORMAL" if not tem_aviso_marinha else "FORÇA 7",
             "pico_calor": f"{pico_calor:.0f}°C",
-            "plancon_status": "ATENÇÃO" if len(today_alerts) > 0 else "OBSERVAÇÃO"
+            "plancon_status": (
+                "ALERTA MÁXIMO" if (c0 > 130.0 or jundia_nivel_float >= 2.20)
+                else "ALERTA" if c0 > 100.0
+                else "ATENÇÃO" if (c0 >= 70.0 or len(today_alerts) > 0)
+                else "OBSERVAÇÃO" if c0 >= 30.0
+                else "NORMALIDADE"
+            )
         },
         "contatos_emergencia": {
             "contato_portal": "@tempoemriodasostras",

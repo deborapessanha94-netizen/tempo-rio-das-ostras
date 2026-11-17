@@ -428,7 +428,7 @@ def build_operational_bulletin_pdf(metadata, turnos, output_path):
     story.append(PageBreak())
 
     # =========================================================================
-    # PÁGINA 2: TABELAS DIA 2 E DIA 3 + PLANCON 2025/2026
+    # PÁGINA 2: TABELAS DIA 2 E DIA 3 + PLANCON 5.0 · 2026/2027
     # =========================================================================
     # Tabela do Dia 2
     if len(dias_grupos) > 1:
@@ -449,7 +449,7 @@ def build_operational_bulletin_pdf(metadata, turnos, output_path):
     story.append(HRFlowable(width="100%", thickness=0.6, color=colors.HexColor("#94a3b8"), spaceBefore=1, spaceAfter=2))
 
     # PLANCON: Levantamento de Impactos por Bairros
-    story.append(Paragraph("Levantamento de Impactos por Bairros — PLANCON 2025/2026", s_h1))
+    story.append(Paragraph("Levantamento de Impactos por Bairros — PLANCON 5.0 · 2026/2027", s_h1))
     impactos = metadata.get('impactos_bairros', [])
 
     d0_rot = dias_grupos[0][0].get('dia_semana', '')[:3] if len(dias_grupos) > 0 else "D0"

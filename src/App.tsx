@@ -71,7 +71,9 @@ import {
   PLANCON_EL_NINO,
   PLANCON_EL_NINO_PDF_URL,
   PLANCON_LIMIARES,
+  PLANCON_META,
   PLANCON_NIVEIS_OPERACIONAIS,
+  PLANCON_NIVEIS_RISCO,
   PLANCON_PDF_URL,
   PLANCON_RESPOSTA_MUNICIPAL,
   REDEC_1_MUNICIPIOS,
@@ -2570,11 +2572,11 @@ export default function App() {
                         Limiares de Chuva & Impactos — PLANCON Rio das Ostras
                       </h2>
                       <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] border border-[#E5E5E5] dark:border-[#233354]">
-                        Plano Oficial 2025/2026
+                        PLANCON {PLANCON_META.versao} · Atualizado {PLANCON_META.atualizacao}
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
-                      Quantidades críticas de precipitação (mm/24h), cenários de risco, áreas vulneráveis e protocolos de resposta
+                      {PLANCON_META.cobrade} · {PLANCON_META.baseLegal} · {PLANCON_META.orgao}
                     </p>
                   </div>
 
@@ -2585,7 +2587,7 @@ export default function App() {
                       rel="noreferrer"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-[#E5E5E5] hover:border-[#FF8244] transition-colors"
                     >
-                      Baixar PLANCON 4.0 (PDF) <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                      Baixar PLANCON 5.0 (PDF Oficial · {PLANCON_META.paginas} pág.) <ExternalLink className="w-3 h-3 text-[#FF8244]" />
                     </a>
                     <a
                       href={PLANCON_EL_NINO_PDF_URL}
@@ -2601,10 +2603,10 @@ export default function App() {
                 <div className="flex flex-wrap items-center gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
                   {(
                     [
-                      { id: 'limiares', label: 'Limiares de Chuva (mm/24h)' },
-                      { id: 'bairros', label: 'Bairros & Áreas Vulneráveis' },
-                      { id: 'niveis', label: 'Níveis Operacionais (R1 a R4)' },
-                      { id: 'resposta', label: 'Como o Município Responde' },
+                      { id: 'limiares', label: 'Limiares Hidrológicos & Geológicos' },
+                      { id: 'bairros', label: 'Bairros & Setorização de Risco' },
+                      { id: 'niveis', label: 'Riscos (R1–R4) & Níveis (I–V)' },
+                      { id: 'resposta', label: 'Protocolos & Estrutura Municipal' },
                       { id: 'elnino', label: 'Riscos El Niño (2026/2027)' },
                     ] as { id: PlanconSubTab; label: string }[]
                   ).map((t) => (
@@ -2638,10 +2640,10 @@ export default function App() {
                     {PLANCON_LIMIARES.map((l) => {
                       const dotColor = {
                         normal: 'bg-emerald-500',
-                        observacao: 'bg-amber-400',
+                        observacao: 'bg-yellow-400',
                         atencao: 'bg-[#FF8244]',
                         alerta: 'bg-rose-500',
-                        maximo: 'bg-rose-600',
+                        maximo: 'bg-fuchsia-500',
                       }[l.tone];
 
                       return (
@@ -2649,20 +2651,24 @@ export default function App() {
                           key={l.nivel}
                           className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between space-y-2.5"
                         >
-                          <div className="space-y-2">
+                          <div className="space-y-2.5">
                             <div className="flex items-center gap-2">
-                              <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
+                              <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dotColor}`} />
                               <span className="text-xs font-semibold text-[#14213D] dark:text-white">{l.nivel}</span>
                             </div>
-                            <div className="font-mono text-sm font-semibold text-[#FF8244]">
-                              {l.volume}
+                            <div className="space-y-1 rounded-md bg-white dark:bg-[#14213D]/60 p-2 border border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-[11px] font-mono">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/65">Hidrológico: </span>
+                                <strong className="text-[#FF8244]">{l.hidrologico}</strong>
+                              </div>
+                              <div className="text-[11px] font-mono">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/65">Geológico: </span>
+                                <strong className="text-[#14213D] dark:text-white">{l.geologico}</strong>
+                              </div>
                             </div>
                             <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">{l.impacto}</p>
-                            <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 pt-0.5">
-                              Geologia: {l.geologia}
-                            </div>
                           </div>
-                          <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                          <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
                             {l.acao}
                           </div>
                         </div>
@@ -2727,27 +2733,78 @@ export default function App() {
                 )}
 
                 {planconTab === 'niveis' && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {PLANCON_NIVEIS_OPERACIONAIS.map((n, idx) => {
-                      const dotColor = ['bg-emerald-500', 'bg-amber-400', 'bg-[#FF8244]', 'bg-rose-500'][idx % 4];
-                      return (
-                        <div
-                          key={n.codigo}
-                          className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5"
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className={`w-2 h-2 rounded-full shrink-0 ${dotColor}`} />
-                            <div className="font-display text-sm font-semibold text-[#14213D] dark:text-white">{n.codigo}</div>
-                          </div>
-                          <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">{n.descricao}</p>
-                        </div>
-                      );
-                    })}
+                  <div className="space-y-6">
+                    <div className="space-y-3">
+                      <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-[#14213D] dark:text-[#FF8244]">
+                        Classificação dos Níveis de Risco das Áreas (R1 a R4 · Seção 6)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {PLANCON_NIVEIS_RISCO.map((r) => {
+                          const dotColor = {
+                            baixo: 'bg-emerald-500',
+                            medio: 'bg-yellow-400',
+                            alto: 'bg-[#FF8244]',
+                            muito_alto: 'bg-rose-500',
+                          }[r.tone];
+                          return (
+                            <div
+                              key={r.codigo}
+                              className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between space-y-2"
+                            >
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dotColor}`} />
+                                  <div className="font-display text-xs sm:text-sm font-semibold text-[#14213D] dark:text-white">{r.codigo}</div>
+                                </div>
+                                <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">{r.descricao}</p>
+                              </div>
+                              <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                                {r.acoes}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
+                      <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-[#14213D] dark:text-[#FF8244]">
+                        Níveis Operacionais da Defesa Civil (I a V · Seção 6.1 &amp; Tabela 7)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                        {PLANCON_NIVEIS_OPERACIONAIS.map((n) => {
+                          const dotColor = {
+                            normal: 'bg-emerald-500',
+                            observacao: 'bg-yellow-400',
+                            atencao: 'bg-[#FF8244]',
+                            alerta: 'bg-rose-500',
+                            maximo: 'bg-fuchsia-500',
+                          }[n.tone];
+                          return (
+                            <div
+                              key={n.codigo}
+                              className="p-4 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col justify-between space-y-2"
+                            >
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-2">
+                                  <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dotColor}`} />
+                                  <div className="font-display text-xs sm:text-sm font-semibold text-[#14213D] dark:text-white">{n.codigo}</div>
+                                </div>
+                                <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">{n.descricao}</p>
+                              </div>
+                              <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] font-mono text-[11px] text-[#FF8244]">
+                                {n.resumoTabela7}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
                 )}
 
                 {planconTab === 'resposta' && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {PLANCON_RESPOSTA_MUNICIPAL.map((r) => (
                       <div
                         key={r.titulo}
