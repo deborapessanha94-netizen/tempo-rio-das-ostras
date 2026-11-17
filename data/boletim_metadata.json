@@ -1,14 +1,14 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "16/11 (Segunda-feira) a 23/11 (Segunda-feira)",
-  "emissao": "17/11/2026 às 02:00h",
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.30 m. Alerta Amarelo de Tempestade do INMET (nº 56422) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 806/2026) válidos a partir de 17/11 às 03:00h até 18/11 às 03:00h. Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 43.9 mm com temperatura máxima alcançando 33°C.",
+  "emissao": "17/11/2026 às 02:23h",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.31 m. Alerta Amarelo de Tempestade do INMET (nº 56422) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 806/2026) válidos a partir de 17/11 às 03:00h até 18/11 às 03:00h. Acumulado total de chuva previsto para o ciclo de 4 dias (Hoje + 3 dias à frente): 43.9 mm com temperatura máxima alcançando 33°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA PROGRAMADO (Segunda-feira) • VIGILÂNCIA PREVENTIVA",
     "status_geral_cor": "warning",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": false,
-    "atualizacao_hora": "17/11/2026 às 02:02h",
+    "atualizacao_hora": "17/11/2026 às 02:24h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -46,9 +46,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -103,9 +103,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -160,9 +160,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -217,9 +217,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -274,9 +274,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -331,9 +331,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -388,9 +388,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -445,9 +445,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -503,9 +503,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.30",
+          "cota_atual_m": "1.31",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.54 m",
+          "margem_segura_m": "1.53 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -560,9 +560,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.30",
+          "cota_atual_m": "1.31",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.54 m",
+          "margem_segura_m": "1.53 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -592,14 +592,14 @@
         "chuva_1h": 0.0,
         "chuva_24h": 26.0,
         "chuva_96h": 26.0,
-        "leitura": "2026-11-16 22:10:00"
+        "leitura": "2026-11-16 23:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_m": "1.30",
+        "nivel_m": "1.31",
         "status": "Vigilância"
       }
     },
@@ -717,7 +717,7 @@
       "titulo": "Rio Jundiá (INEA)",
       "status": "Vigilância",
       "badge": "success",
-      "detalhe": "Cota: 1.30 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.31 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -737,7 +737,7 @@
       "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas à tarde."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 16/11 (Segunda-feira) a 23/11 (Segunda-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 26°C na segunda-feira (16/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em 23.4 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56422 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 53 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,30 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,54 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na terça-feira (17/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (20°C a 28°C) e precipitação estimada em 13.0 mm (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 806/2026 da Marinha). Na quarta-feira (18/11) e na quinta-feira (19/11), o padrão de sistema pós-frontal / transporte de umidade oceânica mantém variação de nuvens e chuva prevista de 0.6 mm (sem avisos meteorológicos vigentes) e 1.1 mm (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 16/11 (Segunda-feira) a 23/11 (Segunda-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 26°C na segunda-feira (16/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em 23.4 mm (Média) • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56422 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 53 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,31 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,53 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos ECMWF, GFS, COSMO/INMET e síntese Windy), na terça-feira (17/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (20°C a 28°C) e precipitação estimada em 13.0 mm (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 806/2026 da Marinha). Na quarta-feira (18/11) e na quinta-feira (19/11), o padrão de sistema pós-frontal / transporte de umidade oceânica mantém variação de nuvens e chuva prevista de 0.6 mm (sem avisos meteorológicos vigentes) e 1.1 mm (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "16/11 (Segunda-feira) a 23/11 (Segunda-feira)",
     "evolucao_3_dias": [
@@ -751,7 +751,7 @@
         "descricao": "Previsão de tempestade severa com trovoadas sobre Rio das Ostras. Temperaturas entre mínima de 22°C e máxima de 26°C. Precipitação: volume médio contínuo de 23.4 mm com potencial de pico convectivo de até 50 mm/dia sob Alerta INMET. Rajadas de vento de até 53 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Nesta segunda-feira, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (de W-NE para S-SW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-          "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
+          "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.31 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
           "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
           "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos de W-NE rondando para S-SW moderados com rajadas de até 53 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil e Alerta Amarelo de Tempestade nº 56422 do INMET).",
@@ -817,7 +817,7 @@
         "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 20°C e máxima de 28°C. Volume pluviométrico diário estimado em 13.0 mm com rajadas de vento de até 46 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Nesta terça-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de S-SW para W-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-          "Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas ao longo do dia (com maior intensidade entre a manhã e a tarde) (média de 13.0 mm com pico de até 20 mm/dia sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.30 m).",
+          "Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas ao longo do dia (com maior intensidade entre a manhã e a tarde) (média de 13.0 mm com pico de até 20 mm/dia sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.31 m).",
           "Temperaturas em declínio térmico, variando entre mínima de 20°C ao amanhecer e máxima contida de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 18°C e 26°C.",
           "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos de S-SW rondando para W-SW moderados com rajadas de até 46 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
@@ -883,7 +883,7 @@
         "descricao": "Previsão de céu nublado a encoberto sobre Rio das Ostras. Temperaturas variando entre mínima de 21°C e máxima de 29°C. Volume pluviométrico diário estimado em 0.6 mm com rajadas de vento de até 36 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (com Aviso da Marinha válido apenas até a madrugada na Área Delta).",
         "informe_populacao": [
           "Nesta quarta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de NW rondando para ESE/NE) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-          "Previsão de chuva pós-frontal fraca a moderada e intermitente concentrada no período da noite sustentada pela umidade oceânica (média de 0.6 mm, sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.30 m).",
+          "Previsão de chuva pós-frontal fraca a moderada e intermitente concentrada no período da noite sustentada pela umidade oceânica (média de 0.6 mm, sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.31 m).",
           "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 29°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 22°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 19°C e 27°C.",
           "A umidade relativa do ar oscila entre 72% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
           "Ventos de NW rondando para ESE moderados com rajadas de até 36 km/h na orla (Aviso da Marinha do Brasil vigente até a madrugada).",
@@ -949,7 +949,7 @@
         "descricao": "Previsão de chuva fina e contínua sobre Rio das Ostras. Temperaturas variando entre mínima de 23°C e máxima de 32°C. Volume pluviométrico diário estimado em 1.1 mm com rajadas de vento de até 34 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta quinta-feira, o afastamento do sistema pós-frontal para o oceano e o ingresso de uma massa de ar mais estável associada à alta pressão migratória favorecem a rotação gradual dos ventos (de NE rondando para SE/ENE), reduzindo a instabilidade com aberturas de sol e recuperação gradual das temperaturas.",
-          "Previsão de baixo volume pluviométrico nos modelos numéricos (1.1 mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual (sem alertas severos vigentes). A Bacia do Rio Jundiá permanece estável e em nível seguro (1.30 m).",
+          "Previsão de baixo volume pluviométrico nos modelos numéricos (1.1 mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual (sem alertas severos vigentes). A Bacia do Rio Jundiá permanece estável e em nível seguro (1.31 m).",
           "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 36°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
           "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
           "Ventos de NE rondando para SE moderados com rajadas de até 34 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1027,15 +1027,15 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,30 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,31 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.30 m",
+      "cota": "1.31 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 53 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,30 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,54 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 53 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,31 m (Status: Vigilância, ocupação de calha em 46% e ampla margem de segurança de 1,53 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1.30 m (0,0 mm 24h)"
+          "valor": "1.31 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital",
@@ -1140,9 +1140,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1167,7 +1167,7 @@
       "sensacao_faixa": "24° a 27°C",
       "informe_populacao": [
         "Nesta segunda-feira, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (de W-NE para S-SW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.30 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
+        "Previsão de pancadas de chuva com risco de raios ao longo do dia (com maior intensidade entre a manhã e a tarde), com volume contínuo de 23.4 mm pelos modelos, com potencial de pico convectivo de 20 a 30 mm/h e até 50 mm/dia sob Alerta Amarelo de Tempestade nº 56422 do INMET. Pluviômetro CEMADEN (PCD 18789) registra 26.0 mm (24h) e o Rio Jundiá (INEA 224103620) acumula 0.0 mm com cota em 1.31 m (Status: Vigilância), em regime de total estabilidade e calha desobstruída.",
         "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos de W-NE rondando para S-SW moderados com rajadas de até 53 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil e Alerta Amarelo de Tempestade nº 56422 do INMET).",
@@ -1264,9 +1264,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1291,7 +1291,7 @@
       "sensacao_faixa": "23° a 27°C",
       "informe_populacao": [
         "Nesta terça-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de S-SW para W-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-        "Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas ao longo do dia (com maior intensidade entre a manhã e a tarde) (média de 13.0 mm com pico de até 20 mm/dia sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.30 m).",
+        "Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas ao longo do dia (com maior intensidade entre a manhã e a tarde) (média de 13.0 mm com pico de até 20 mm/dia sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.31 m).",
         "Temperaturas em declínio térmico, variando entre mínima de 20°C ao amanhecer e máxima contida de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 27°C no pico do calor. Na região rural, oscilam entre 18°C e 26°C.",
         "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos de S-SW rondando para W-SW moderados com rajadas de até 46 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
@@ -1388,9 +1388,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1415,7 +1415,7 @@
       "sensacao_faixa": "22° a 30°C",
       "informe_populacao": [
         "Nesta quarta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de NW rondando para ESE/NE) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-        "Previsão de chuva pós-frontal fraca a moderada e intermitente concentrada no período da noite sustentada pela umidade oceânica (média de 0.6 mm, sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.30 m).",
+        "Previsão de chuva pós-frontal fraca a moderada e intermitente concentrada no período da noite sustentada pela umidade oceânica (média de 0.6 mm, sem alertas severos vigentes). O Rio Jundiá segue em regime estável de vazante (nível de 1.31 m).",
         "Temperaturas variam entre mínima de 21°C ao amanhecer e máxima de 29°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 22°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 19°C e 27°C.",
         "A umidade relativa do ar oscila entre 72% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos de NW rondando para ESE moderados com rajadas de até 36 km/h na orla (Aviso da Marinha do Brasil vigente até a madrugada).",
@@ -1512,9 +1512,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1539,7 +1539,7 @@
       "sensacao_faixa": "25° a 36°C",
       "informe_populacao": [
         "Nesta quinta-feira, o afastamento do sistema pós-frontal para o oceano e o ingresso de uma massa de ar mais estável associada à alta pressão migratória favorecem a rotação gradual dos ventos (de NE rondando para SE/ENE), reduzindo a instabilidade com aberturas de sol e recuperação gradual das temperaturas.",
-        "Previsão de baixo volume pluviométrico nos modelos numéricos (1.1 mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual (sem alertas severos vigentes). A Bacia do Rio Jundiá permanece estável e em nível seguro (1.30 m).",
+        "Previsão de baixo volume pluviométrico nos modelos numéricos (1.1 mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual (sem alertas severos vigentes). A Bacia do Rio Jundiá permanece estável e em nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 36°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
         "A umidade relativa do ar oscila entre 76% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos de NE rondando para SE moderados com rajadas de até 34 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1636,9 +1636,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1663,7 +1663,7 @@
       "sensacao_faixa": "27° a 37°C",
       "informe_populacao": [
         "Nesta sexta-feira, a atuação da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) sustenta fluxo marítimos de Sudeste/Leste (de SW rondando para SE/NW) com sol entre nuvens e elevação térmica, permitindo apenas chuvas muito isoladas por efeito local.",
-        "Previsão de chuva fraca e passageira entre a tarde e a noite (acumulado estimado de 2.0 mm, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.30 m).",
+        "Previsão de chuva fraca e passageira entre a tarde e a noite (acumulado estimado de 2.0 mm, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 33°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 27°C e a maior de 37°C no pico do calor. Na região rural, oscilam entre 22°C e 31°C.",
         "A umidade relativa do ar oscila entre 72% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
         "Ventos de SW rondando para SE moderados com rajadas de até 31 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1760,9 +1760,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1787,7 +1787,7 @@
       "sensacao_faixa": "27° a 36°C",
       "informe_populacao": [
         "Neste sábado, o fortalecimento de crista atmosférica na borda da Alta Subtropical do Atlântico Sul (ASAS), em padrão pré-frontal (SE), favorece advecção de ar quente, predomínio de sol entre poucas nuvens e calor acentuado.",
-        "Previsão de chuva fraca e passageira concentrada no período da noite (acumulado estimado de 2.8 mm, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.30 m).",
+        "Previsão de chuva fraca e passageira concentrada no período da noite (acumulado estimado de 2.8 mm, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 33°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 27°C e a maior de 36°C no pico do calor. Na região rural, oscilam entre 22°C e 31°C.",
         "A umidade relativa do ar oscila entre 61% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos predominantes de SE moderados com rajadas de até 29 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1884,9 +1884,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -1911,7 +1911,7 @@
       "sensacao_faixa": "24° a 31°C",
       "informe_populacao": [
         "Neste domingo, o avanço de uma alta pressão costeira na retaguarda do cavado estabelece ventos de Leste/Nordeste (de WSW rondando para ESE/NE), promovendo alívio térmico e tendência de tempo mais firme, com nebulosidade variável.",
-        "Previsão de tempo seco e estável ao longo do dia, sem expectativa de chuva significativa (acumulado previsto de 0.0 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.30 m).",
+        "Previsão de tempo seco e estável ao longo do dia, sem expectativa de chuva significativa (acumulado previsto de 0.0 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.31 m).",
         "Temperaturas em declínio térmico, variando entre mínima de 22°C ao amanhecer e máxima contida de 29°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 31°C no pico do calor. Na região rural, oscilam entre 20°C e 27°C.",
         "A umidade relativa do ar oscila entre 74% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos de WSW rondando para ESE moderados com rajadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2008,9 +2008,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.30",
+            "cota_atual_m": "1.31",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.54 m",
+            "margem_segura_m": "1.53 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -2035,7 +2035,7 @@
       "sensacao_faixa": "26° a 43°C",
       "informe_populacao": [
         "Nesta segunda-feira, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste (de NNE para S), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado.",
-        "Previsão de tempo firme com baixíssima probabilidade de garoa ou chuvisco isolado entre a tarde e a noite (acumulado previsto de 1.0 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.30 m).",
+        "Previsão de tempo firme com baixíssima probabilidade de garoa ou chuvisco isolado entre a tarde e a noite (acumulado previsto de 1.0 mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.31 m).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 33°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 43°C no pico do calor. Na região rural, oscilam entre 22°C e 31°C.",
         "A umidade relativa do ar oscila entre 75% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
         "Ventos de NNE rondando para S moderados com rajadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2354,7 +2354,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-17 02:02:00",
+    "data_coleta": "2026-11-17 02:24:28",
     "bulletin_info": {
       "disponivel": true,
       "arquivo": "BoletimHidrometeorologico_17-11-2026.pdf",
@@ -2843,7 +2843,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-16 00z",
-    "atualizacao": "16/11/2026 23:01",
+    "atualizacao": "16/11/2026 23:23",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -2929,7 +2929,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "16/11/2026",
-    "atualizacao": "16/11/2026 23:01",
+    "atualizacao": "16/11/2026 23:24",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -3108,7 +3108,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-17T02:02:21.838659",
+    "atualizado_em": "2026-11-17T02:24:50.492678",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "02:35",
@@ -3348,9 +3348,9 @@
       "temperatura_min": "22",
       "vento": "5",
       "umidade": 82,
-      "temperatura_prev": "24",
+      "temperatura_prev": "23",
       "sensacao_termica": "22",
-      "hora_atual": "2026-11-17T01:00:00.000Z"
+      "hora_atual": "2026-11-17T02:00:00.000Z"
     },
     "proximos_dias": [
       {
@@ -3416,7 +3416,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.30 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.31 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
@@ -3466,7 +3466,7 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.30 m",
+    "jundia_nivel": "1.31 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "43.9 mm",
     "chuva_4d": "43.9 mm",
