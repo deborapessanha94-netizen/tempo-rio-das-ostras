@@ -31,6 +31,7 @@ import {
   RefreshCw,
   Search,
   ShieldAlert,
+  Square,
   Sun,
   Sunrise,
   Thermometer,
@@ -76,6 +77,7 @@ import {
   REDEC_1_MUNICIPIOS,
 } from './data/planconStatic';
 import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart';
+import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartInstagram';
 import { RiverChart } from './components/RiverChart';
 import { SocialExportModal } from './components/SocialExportModal';
 import { PwaInstallModal } from './components/PwaInstallModal';
@@ -300,6 +302,30 @@ export default function App() {
     return 'all';
   });
   const [showChartValues, setShowChartValues] = useState<boolean>(true);
+  const [openChartMenu, setOpenChartMenu] = useState<'metric' | 'period' | 'instagram' | null>(null);
+  const [chartExportTheme, setChartExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
+  const [chartExportingFmt, setChartExportingFmt] = useState<InstagramFormat | null>(null);
+  const [chartExportDone, setChartExportDone] = useState<string | null>(null);
+  const chartToolbarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!openChartMenu) return;
+    const onDown = (ev: MouseEvent) => {
+      if (chartToolbarRef.current && !chartToolbarRef.current.contains(ev.target as Node)) {
+        setOpenChartMenu(null);
+      }
+    };
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') setOpenChartMenu(null);
+    };
+    document.addEventListener('mousedown', onDown);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDown);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [openChartMenu]);
+
   const [planconTab, setPlanconTab] = useState<PlanconSubTab>('limiares');
 
   const [networkFilter, setNetworkFilter] = useState<'all' | 'pws' | 'cemaden' | 'inea'>('all');
@@ -1695,94 +1721,335 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Controles de Métrica em Grid Responsivo (Sem cortes) */}
-                <div className="space-y-2.5">
-                  {/* Linha 1: Métricas (5 Colunas 100% Ajustadas) */}
-                  <div className="w-full grid grid-cols-5 gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
-                    {(
-                      [
-                        { id: 'temp', label: 'Temp', full: 'Temperatura' },
-                        { id: 'rain', label: 'Chuva', full: 'Chuva' },
-                        { id: 'wind', label: 'Vento', full: 'Vento' },
-                        { id: 'pressure', label: 'Pressão', full: 'Pressão' },
-                        { id: 'humidity', label: 'Umidade', full: 'Umidade' },
-                      ] as { id: ChartMetric; label: string; full: string }[]
-                    ).map((m) => (
-                      <button
-                        key={m.id}
-                        onClick={() => setChartMetric(m.id)}
-                        className={`py-1.5 px-0.5 sm:px-3 text-[11px] sm:text-xs font-semibold rounded-md transition-all text-center cursor-pointer ${
-                          chartMetric === m.id
-                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] shadow-xs'
-                            : 'text-slate-600 dark:text-[#E5E5E5]/75 hover:text-slate-900 dark:hover:text-white'
-                        }`}
-                      >
-                        <span className="sm:hidden">{m.label}</span>
-                        <span className="hidden sm:inline">{m.full}</span>
-                      </button>
-                    ))}
-                  </div>
+                {/* Barra Compacta de Menus Clicáveis (Variável | Horários | Valores | Salvar Instagram) */}
+                {(() => {
+                  const metricOptions: {
+                    id: ChartMetric;
+                    label: string;
+                    desc: string;
+                    Icon: React.ComponentType<{ className?: string }>;
+                  }[] = [
+                    { id: 'temp', label: 'Temperatura', desc: 'Mínima, Máxima e Sensação Térmica', Icon: Thermometer },
+                    { id: 'rain', label: 'Chuva', desc: 'Volume mm/h e Probabilidade (%)', Icon: CloudRain },
+                    { id: 'wind', label: 'Vento e Rajadas', desc: 'Vento médio, Rajadas e Direção', Icon: Wind },
+                    { id: 'pressure', label: 'Pressão', desc: 'Pressão atmosférica (hPa)', Icon: Gauge },
+                    { id: 'humidity', label: 'Umidade', desc: 'Umidade relativa do ar (%)', Icon: Droplets },
+                  ];
+                  const activeMetricOpt = metricOptions.find((m) => m.id === chartMetric) || metricOptions[0];
+                  const ActiveMetricIcon = activeMetricOpt.Icon;
 
-                  {/* Linha 2: Horizontes de Tempo (Sem cortes) */}
-                  <div className="w-full grid grid-cols-5 gap-1 p-1 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] rounded-lg">
-                    {[
-                      { label: '24h', count: 24 },
-                      { label: '48h', count: 48 },
-                      { label: '72h', count: 72 },
-                      { label: '5 dias', count: 120 },
-                      { label: '7 dias', count: 168 },
-                    ].map((h) => (
-                      <button
-                        key={h.label}
-                        onClick={() => {
-                          setChartDayFilter('all');
-                          setHorizonCount(h.count);
-                        }}
-                        className={`py-1.5 px-1 text-[11px] sm:text-xs font-mono font-medium rounded-md transition-colors text-center cursor-pointer whitespace-nowrap ${
-                          chartDayFilter === 'all' && horizonCount === h.count
-                            ? 'bg-white dark:bg-[#14213D] text-[#14213D] dark:text-[#FF8244] font-bold shadow-xs'
-                            : 'text-slate-500 dark:text-[#E5E5E5]/70 hover:text-slate-900'
-                        }`}
-                      >
-                        {h.label}
-                      </button>
-                    ))}
-                  </div>
+                  const horizonPresets = [
+                    { label: '24h', count: 24 },
+                    { label: '48h', count: 48 },
+                    { label: '72h', count: 72 },
+                    { label: '5 dias', count: 120 },
+                    { label: '7 dias', count: 168 },
+                  ];
 
-                  {/* Linha 3: Filtro de Dia + Botão de Valores */}
-                  <div className="w-full flex items-center justify-between gap-2 pt-0.5">
-                    {chartDayOptions.length > 0 && (
-                      <select
-                        value={chartDayFilter}
-                        onChange={(e) => setChartDayFilter(e.target.value)}
-                        aria-label="Filtrar dia específico no gráfico"
-                        className="flex-1 px-3 py-1.5 text-xs font-mono rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#E5E5E5] focus:outline-none focus:ring-2 focus:ring-[#FF8244]/50 cursor-pointer"
-                      >
-                        <option value="all">Todos os dias ({horizonCount}h)</option>
-                        {chartDayOptions.map((d, idx) => (
-                          <option key={d} value={d}>
-                            {idx === 0
-                              ? `Hoje (${d}) · 00:00–23:59`
-                              : idx === 1
-                                ? `Amanhã (${d}) · 00:00–23:59`
-                                : `${d} · 00:00–23:59`}
-                          </option>
-                        ))}
-                      </select>
-                    )}
+                  const activeDayIdx = chartDayOptions.indexOf(chartDayFilter);
+                  const activePeriodText =
+                    chartDayFilter === 'all'
+                      ? `Próximas ${horizonCount}h`
+                      : activeDayIdx === 0
+                        ? `Hoje (${chartDayFilter}) · 00:00–23:59`
+                        : activeDayIdx === 1
+                          ? `Amanhã (${chartDayFilter}) · 00:00–23:59`
+                          : `${chartDayFilter} · 00:00–23:59`;
 
-                    <button
-                      onClick={() => setShowChartValues((v) => !v)}
-                      className={`px-3 py-1.5 text-xs font-mono font-bold rounded-lg border transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
-                        showChartValues
-                          ? 'bg-[#14213D] dark:bg-[#FF8244] border-[#14213D] dark:border-[#FF8244] text-white dark:text-[#000000]'
-                          : 'border-[#E5E5E5] dark:border-[#233354] text-slate-500 dark:text-[#E5E5E5]/70 hover:border-[#FF8244]'
-                      }`}
-                    >
-                      Valores: {showChartValues ? 'ON' : 'OFF'}
-                    </button>
-                  </div>
-                </div>
+                  const handleExportChart = async (fmt: InstagramFormat) => {
+                    const pts = displayedChartPoints.slice(
+                      0,
+                      chartDayFilter === 'all' ? horizonCount : displayedChartPoints.length
+                    );
+                    if (!pts.length) return;
+                    setChartExportingFmt(fmt);
+                    setChartExportDone(null);
+                    try {
+                      const useDark =
+                        chartExportTheme === 'auto' ? isDark : chartExportTheme === 'dark';
+                      await exportChartToInstagramPng({
+                        points: pts,
+                        metric: chartMetric,
+                        periodLabel: activePeriodText,
+                        format: fmt,
+                        darkTheme: useDark,
+                        showValues: showChartValues,
+                        siteBase: SITE_BASE,
+                      });
+                      setChartExportDone(fmt === 'story' ? 'Stories 9:16 salvo em 2160×3840!' : 'Post 4:5 salvo em 2160×2700!');
+                      window.setTimeout(() => setChartExportDone(null), 3500);
+                    } catch (err) {
+                      console.error('Erro ao exportar gráfico para Instagram:', err);
+                    } finally {
+                      setChartExportingFmt(null);
+                    }
+                  };
+
+                  return (
+                    <div ref={chartToolbarRef} className="relative flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* Aba Clicável 1: Escolher Variável Meteorológica */}
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setOpenChartMenu((v) => (v === 'metric' ? null : 'metric'))}
+                            className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition-colors cursor-pointer ${
+                              openChartMenu === 'metric'
+                                ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244]'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                            }`}
+                          >
+                            <ActiveMetricIcon className={`w-3.5 h-3.5 ${openChartMenu === 'metric' ? 'text-[#FF8244] dark:text-[#000000]' : 'text-[#FF8244]'}`} />
+                            <span className="text-[11px] font-mono opacity-70 hidden sm:inline">Gráfico:</span>
+                            <span>{activeMetricOpt.label}</span>
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openChartMenu === 'metric' ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          {openChartMenu === 'metric' && (
+                            <div className="absolute left-0 top-full mt-1.5 z-30 w-72 rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-1.5 space-y-1">
+                              <div className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-[#E5E5E5]/55">
+                                Variável do Gráfico
+                              </div>
+                              {metricOptions.map((m) => {
+                                const MIcon = m.Icon;
+                                const active = chartMetric === m.id;
+                                return (
+                                  <button
+                                    key={m.id}
+                                    type="button"
+                                    onClick={() => {
+                                      setChartMetric(m.id);
+                                      setOpenChartMenu(null);
+                                    }}
+                                    className={`w-full flex items-center justify-between gap-2.5 px-2.5 py-2 rounded-lg text-left transition-colors cursor-pointer ${
+                                      active
+                                        ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000]'
+                                        : 'text-[#14213D] dark:text-[#E5E5E5] hover:bg-[#F7F8FA] dark:hover:bg-[#14213D]'
+                                    }`}
+                                  >
+                                    <div className="flex items-start gap-2.5 min-w-0">
+                                      <MIcon className={`w-4 h-4 mt-0.5 shrink-0 ${active ? 'text-[#FF8244] dark:text-[#000000]' : 'text-[#FF8244]'}`} />
+                                      <div className="min-w-0">
+                                        <div className="text-xs font-semibold leading-tight">{m.label}</div>
+                                        <div className={`text-[10px] leading-tight mt-0.5 ${active ? 'opacity-80' : 'text-slate-500 dark:text-[#E5E5E5]/65'}`}>
+                                          {m.desc}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {active && <Check className="w-3.5 h-3.5 shrink-0" />}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Aba Clicável 2: Escolher Horários / Dia Completo */}
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setOpenChartMenu((v) => (v === 'period' ? null : 'period'))}
+                            className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-mono font-semibold border transition-colors cursor-pointer ${
+                              openChartMenu === 'period'
+                                ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244]'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                            }`}
+                          >
+                            <Clock className={`w-3.5 h-3.5 ${openChartMenu === 'period' ? 'text-[#FF8244] dark:text-[#000000]' : 'text-[#FF8244]'}`} />
+                            <span>{activePeriodText}</span>
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openChartMenu === 'period' ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          {openChartMenu === 'period' && (
+                            <div className="absolute left-0 top-full mt-1.5 z-30 w-80 max-w-[90vw] rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-3 space-y-3">
+                              {chartDayOptions.length > 0 && (
+                                <div className="space-y-1.5">
+                                  <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-[#E5E5E5]/55">
+                                    Dia Completo (00:00 às 23:59)
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-1.5">
+                                    {chartDayOptions.map((d, idx) => {
+                                      const active = chartDayFilter === d;
+                                      const label = idx === 0 ? `Hoje (${d})` : idx === 1 ? `Amanhã (${d})` : d;
+                                      return (
+                                        <button
+                                          key={d}
+                                          type="button"
+                                          onClick={() => {
+                                            setChartDayFilter(d);
+                                            setOpenChartMenu(null);
+                                          }}
+                                          className={`px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold text-left transition-colors cursor-pointer flex items-center justify-between border ${
+                                            active
+                                              ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244]'
+                                              : 'bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                                          }`}
+                                        >
+                                          <span className="truncate">{label}</span>
+                                          {active && <Check className="w-3 h-3 shrink-0" />}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+
+                              <div className="space-y-1.5 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 dark:text-[#E5E5E5]/55">
+                                  Janelas Contínuas (a partir de agora)
+                                </div>
+                                <div className="grid grid-cols-3 gap-1.5">
+                                  {horizonPresets.map((h) => {
+                                    const active = chartDayFilter === 'all' && horizonCount === h.count;
+                                    return (
+                                      <button
+                                        key={h.label}
+                                        type="button"
+                                        onClick={() => {
+                                          setChartDayFilter('all');
+                                          setHorizonCount(h.count);
+                                          setOpenChartMenu(null);
+                                        }}
+                                        className={`px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold text-center transition-colors cursor-pointer border ${
+                                          active
+                                            ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244]'
+                                            : 'bg-[#F7F8FA] dark:bg-[#14213D] text-[#14213D] dark:text-[#E5E5E5] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                                        }`}
+                                      >
+                                        {h.label}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Ações à direita: Valores ON/OFF + Salvar Gráfico Instagram (Stories / Post) */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowChartValues((v) => !v)}
+                          className={`px-3 py-2 text-xs font-mono font-bold rounded-lg border transition-colors cursor-pointer whitespace-nowrap ${
+                            showChartValues
+                              ? 'bg-[#14213D] dark:bg-[#FF8244] border-[#14213D] dark:border-[#FF8244] text-white dark:text-[#000000]'
+                              : 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]/75 hover:border-[#FF8244]'
+                          }`}
+                        >
+                          Valores: {showChartValues ? 'ON' : 'OFF'}
+                        </button>
+
+                        <div className="relative">
+                          <button
+                            type="button"
+                            onClick={() => setOpenChartMenu((v) => (v === 'instagram' ? null : 'instagram'))}
+                            className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition-colors cursor-pointer whitespace-nowrap ${
+                              openChartMenu === 'instagram'
+                                ? 'bg-[#FF8244] text-[#000000] border-[#FF8244]'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                            }`}
+                          >
+                            <Camera className={`w-3.5 h-3.5 ${openChartMenu === 'instagram' ? 'text-[#000000]' : 'text-[#FF8244]'}`} />
+                            <span>Salvar Instagram</span>
+                            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${openChartMenu === 'instagram' ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          {openChartMenu === 'instagram' && (
+                            <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 z-30 w-80 max-w-[90vw] rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-3 space-y-2.5">
+                              <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
+                                <div>
+                                  <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                    Exportar Gráfico em Ultra HD
+                                  </div>
+                                  <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                    PNG sem perda · 2160px (@tempoemriodasostras)
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/70">Fundo da imagem:</span>
+                                <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                  {(
+                                    [
+                                      { id: 'auto', label: 'Site' },
+                                      { id: 'dark', label: 'Escuro' },
+                                      { id: 'light', label: 'Claro' },
+                                    ] as const
+                                  ).map((t) => (
+                                    <button
+                                      key={t.id}
+                                      type="button"
+                                      onClick={() => setChartExportTheme(t.id)}
+                                      className={`px-2 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                                        chartExportTheme === t.id
+                                          ? 'bg-[#FF8244] text-[#000000]'
+                                          : 'text-slate-600 dark:text-[#E5E5E5]/75'
+                                      }`}
+                                    >
+                                      {t.label}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="space-y-1.5 pt-0.5">
+                                <button
+                                  type="button"
+                                  disabled={chartExportingFmt !== null}
+                                  onClick={() => handleExportChart('story')}
+                                  className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <Smartphone className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                    <div>
+                                      <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                        {chartExportingFmt === 'story' ? 'Gerando Stories...' : 'Stories Instagram (9:16)'}
+                                      </div>
+                                      <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                        2160 × 3840 px · Alta Resolução PNG
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                </button>
+
+                                <button
+                                  type="button"
+                                  disabled={chartExportingFmt !== null}
+                                  onClick={() => handleExportChart('post')}
+                                  className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <Square className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                    <div>
+                                      <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                        {chartExportingFmt === 'post' ? 'Gerando Post...' : 'Post Feed Instagram (4:5)'}
+                                      </div>
+                                      <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                        2160 × 2700 px · Alta Resolução PNG
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                </button>
+                              </div>
+
+                              {chartExportDone && (
+                                <div className="text-[11px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-1">
+                                  <Check className="w-3.5 h-3.5 shrink-0" />
+                                  <span>{chartExportDone}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Gráfico SVG Taller & Proporcional */}
                 <HourlyChart
