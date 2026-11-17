@@ -1,68 +1,20 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-16 22:10:48",
-  "total_noticias": 10,
+  "coleta_iso": "2026-11-17 00:16:12",
+  "total_noticias": 2,
   "noticias": [
     {
-      "titulo": "Previsão para terça-feira (17) e quarta-feira (18)",
-      "data": "16/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-17-e-quarta-feira-18",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET divulga previsão para semana de 16 a 23 de novembro de 2026",
-      "data": "16/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-16-a-23-de-novembro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de encontro internacional sobre calor extremo e saúde na Bolívia",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-encontro-internacional-sobre-calor-extremo-e-saúde-na-bolívia",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "El Niño deve perder força a partir do início de 2027 e chegar ao fim no outono",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/el-niño-deve-atingir-sua-intensidade-máxima-no-trimestre-novembro-dezembro-janeiro-e-deve-persistir-até-o-outono-de-2027",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sábado (14), domingo (15) e segunda-feira (16)",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-14-domingo-15-e-segunda-feira-16",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de simpósio internacional sobre tempestades severas em São Paulo",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-simpósio-internacional-sobre-tempestades-severas-em-são-paulo",
+      "titulo": "Previsão aponta avanço de frente fria e temporais com queda de temperatura no Sudeste",
+      "data": "17/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias",
       "relevancia_sudeste": true
     },
     {
-      "titulo": "INMET participa de capacitação internacional sobre radares meteorológicos na Guatemala",
-      "data": "12/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-radares-meteorológicos-na-guatemala",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de capacitação internacional sobre inteligência artificial aplicada à meteorologia",
-      "data": "12/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-capacitação-internacional-sobre-inteligência-artificial-aplicada-à-meteorologia",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sexta-feira (13) e sábado (14)",
-      "data": "12/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-13-e-sábado-14",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Semeadura do feijão de 1ª safra avança em ritmos diferentes nas principais regiões produtoras",
-      "data": "12/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/semeadura-do-feijão-de-1ª-safra-avança-em-ritmos-diferentes-nas-principais-regiões-produtoras",
-      "relevancia_sudeste": false
+      "titulo": "Informativo Meteorológico Semanal: Ciclone e frente fria organizam canal de umidade",
+      "data": "17/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias",
+      "relevancia_sudeste": true
     }
   ]
 }
