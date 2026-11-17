@@ -4,36 +4,60 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-11-17 08:08:35",
+  "data_coleta": "2026-11-17 10:37:51 BRT",
+  "publicado_em": "17/11/2026 às 06h30",
+  "fonte_pdf_sha256": "77fae7d84f9ed65e",
+  "pdf_bytes": 615402,
   "bulletin_info": {
     "disponivel": true,
     "arquivo": "BoletimHidrometeorologico_17-11-2026.pdf",
     "data_boletim": "17/11/2026",
     "label": "Boletim Hidrometeorológico 17/11/2026",
-    "url_pdf": "http://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_17-11-2026.pdf"
+    "url_pdf": "https://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_17-11-2026.pdf",
+    "fonte_pagina": "https://alertadecheias.inea.rj.gov.br/analise.php"
   },
   "previsao_rh8": {
     "hoje": {
       "data": "17/11/2026",
-      "intensidade": "Moderada a Forte com Raios",
-      "faixa_chuva_mm": "10 a 25 mm",
-      "temp_max": 36,
+      "intensidade": "Chuva Fraca, Pontualmente Moderada",
+      "faixa_chuva_mm": "1 a 10 mm",
+      "faixa_municipio_mm": "1 a 10 mm",
+      "faixa_bacia_mm": "1 a 10 mm",
+      "chuva_min_mm": 1.0,
+      "chuva_max_mm": 10.0,
+      "chuva_bacia_min_mm": 1.0,
+      "chuva_bacia_max_mm": 10.0,
+      "chuva_referencia_mm": 3.2,
+      "tem_raios_icone": false,
+      "tem_chuva_icone": true,
+      "temp_max": 32,
       "temp_min": 21,
-      "condicao": "Aproximação e passagem de frente fria influenciará o tempo. Céu parcialmente nublado a nublado com previsão de pancadas de chuva moderada a forte acompanhadas por raios à tarde e à noite.",
-      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia (Rio Jundiá em regime de vigilância contínua).",
-      "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
+      "condicao": "Nesta terça-feira, o transporte de umidade do oceano em direção ao continente influenciará o tempo no estado do Rio de Janeiro. Durante a madrugada, em decorrência das chuvas do dia anterior, o rio Itabapoana (Bom Jesus do Itabapoana) entrou em estágio de ALERTA MÁXIMO. No restante do dia, o céu varia de parcialmente nublado a nublado e há previsão de chuva fraca, pontualmente moderada, para todas as regiões hidrográficas do estado. Em decorrência das chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão estáveis.",
+      "comportamento_rios": "Durante a madrugada, em decorrência das chuvas do dia anterior, o rio Itabapoana (Bom Jesus do Itabapoana) entrou em estágio de ALERTA MÁXIMO.",
+      "modelo_meteorologico": "COSMO / INMET adaptado pela Sala de Situação INEA",
+      "extraido_pdf": true
     },
     "amanha": {
       "data": "18/11/2026",
-      "intensidade": "Pancadas de Chuva com Raios & Declínio Térmico",
-      "faixa_chuva_mm": "10 a 25 mm",
-      "temp_max": 28,
-      "temp_min": 22,
-      "condicao": "Transporte de umidade do oceano pós-frontal. Céu nublado a encoberto com pancadas de chuva com raios e acentuado declínio de temperatura.",
-      "comportamento_rios": "Previsão de elevações pontuais nos rios monitorados da bacia.",
-      "modelo_meteorologico": "COSMO 7x7km (INMET) & ECMWF / Sala de Situação INEA"
+      "intensidade": "Pancadas Isoladas (Baixo Acumulado na Orla) com Raios",
+      "faixa_chuva_mm": "0 a 1 mm (Orla) / 1 a 10 mm (Bacia RH-VIII)",
+      "faixa_municipio_mm": "0 a 1 mm",
+      "faixa_bacia_mm": "1 a 10 mm",
+      "chuva_min_mm": 0.0,
+      "chuva_max_mm": 1.0,
+      "chuva_bacia_min_mm": 0.0,
+      "chuva_bacia_max_mm": 10.0,
+      "chuva_referencia_mm": 0.2,
+      "tem_raios_icone": true,
+      "tem_chuva_icone": true,
+      "temp_max": 35,
+      "temp_min": 20,
+      "condicao": "Na quarta-feira, as condições do tempo no estado do Rio de Janeiro estarão instáveis, influenciadas por áreas de instabilidade devido à disponibilidade de calor e umidade. Ao longo do dia, o céu varia de parcialmente nublado a nublado, com previsão de pancadas de chuva, isoladas, podendo vir acompanhadas de raios, para todas as regiões hidrográficas do estado. Em decorrência das chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão em elevação.",
+      "comportamento_rios": "Em decorrência das chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados.",
+      "modelo_meteorologico": "COSMO / INMET adaptado pela Sala de Situação INEA",
+      "extraido_pdf": true
     }
   },
   "contato_sala_situacao": "(21) 2334-9307",
-  "url_oficial": "http://alertadecheias.inea.rj.gov.br"
+  "url_oficial": "https://alertadecheias.inea.rj.gov.br/analise.php"
 }

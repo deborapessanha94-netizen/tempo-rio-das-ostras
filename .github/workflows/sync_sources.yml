@@ -48,10 +48,11 @@ jobs:
             git push origin main || (git fetch origin main && git merge -X theirs origin/main -m "merge marinha sync [skip ci]" && git push origin main)
           fi
 
-      - name: Instalar Dependências
+      - name: Instalar Dependências e OCR (Tesseract PT-BR)
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-por || true
           python -m pip install --upgrade pip
-          pip install pandas openpyxl reportlab matplotlib || true
+          pip install pandas openpyxl reportlab matplotlib pypdfium2 pillow numpy || true
 
       - name: Executar Coleta e Síntese Completa de Todas as Fontes Oficiais
         run: |
@@ -62,7 +63,7 @@ jobs:
           python scripts/inea_cheias_service.py || true
           python scripts/inmet_noticias_service.py || true
           python scripts/sync_inmet_luas.py || true
-          python scripts/collector.py || true
+          python scripts/collector.py --skip-auto-bulletin || true
           python scripts/auto_bulletin.py || true
 
       - name: Salvar Dados e Boletins Atualizados no Repositório

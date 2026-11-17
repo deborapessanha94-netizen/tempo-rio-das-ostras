@@ -1,4 +1,5 @@
 import { enrichAcumuladosWithLiveTelemetry } from './liveTelemetry';
+import { reconcileLiveRainConsensus } from './liveRainConsensus';
 
 export { enrichAcumuladosWithLiveTelemetry };
 
@@ -167,6 +168,8 @@ export interface BoletimTurnoRow {
 
 export interface BoletimMetadata {
   emissao: string;
+  emissao_iso?: string;
+  generation_epoch_ms?: number;
   periodo: string;
   autor: string;
   turno_vigente_indice: number;
@@ -181,6 +184,7 @@ export interface BoletimMetadata {
     hoje_inspecao?: any;
     dias_inspecionados?: any[];
   };
+  [key: string]: any;
 }
 
 export interface InmetAviso {
@@ -472,19 +476,23 @@ export interface OpenMeteoData {
   };
 }
 
-async function fetchJsonSafe<T>(url: string): Promise<T | null> {
+async function fetchJsonSafe<T>(url: string, timeoutMs = 8000): Promise<T | null> {
+  const controller = new AbortController();
+  const timer = window.setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch (e) {
     console.warn(`Falha ao carregar ${url}:`, e);
     return null;
+  } finally {
+    window.clearTimeout(timer);
   }
 }
 
-const RAW_MARINHA_AVISOS_URL =
-  'https://raw.githubusercontent.com/deborapessanha94-netizen/tempo-rio-das-ostras/main/data/marinha_avisos.json';
+const RAW_REPO_DATA_BASE =
+  'https://raw.githubusercontent.com/deborapessanha94-netizen/tempo-rio-das-ostras/main';
 
 function parseIsoMs(val?: string | null): number {
   if (!val) return 0;
@@ -492,26 +500,34 @@ function parseIsoMs(val?: string | null): number {
   return Number.isNaN(ms) ? 0 : ms;
 }
 
-export async function fetchMarinhaAvisosLive(): Promise<MarinhaAvisos | null> {
+async function fetchLatestRepoJson<T>(
+  relPath: string,
+  getFreshnessMs: (item: T) => number
+): Promise<T | null> {
   const ts = Date.now();
   const [localRes, rawRes] = await Promise.all([
-    fetchJsonSafe<MarinhaAvisos>(`${SITE_BASE}/data/marinha_avisos.json?t=${ts}`),
-    fetchJsonSafe<MarinhaAvisos>(`${RAW_MARINHA_AVISOS_URL}?t=${ts}`),
+    fetchJsonSafe<T>(`${SITE_BASE}/${relPath}?t=${ts}`),
+    fetchJsonSafe<T>(`${RAW_REPO_DATA_BASE}/${relPath}?t=${ts}`),
   ]);
   if (localRes && rawRes) {
-    const rawMs = parseIsoMs(rawRes.atualizacao_utc);
-    const localMs = parseIsoMs(localRes.atualizacao_utc);
-    if (rawMs > localMs) return rawRes;
-    if (localMs === 0 && (rawRes.todos_avisos?.length || rawRes.avisos_ativos?.length)) return rawRes;
-    return localRes;
+    return getFreshnessMs(rawRes) > getFreshnessMs(localRes) ? rawRes : localRes;
   }
   return rawRes || localRes;
 }
 
+export async function fetchMarinhaAvisosLive(): Promise<MarinhaAvisos | null> {
+  return fetchLatestRepoJson<MarinhaAvisos>('data/marinha_avisos.json', (item) => {
+    const ms = parseIsoMs(item.atualizacao_utc);
+    if (ms > 0) return ms;
+    return item.todos_avisos?.length || item.avisos_ativos?.length ? 1 : 0;
+  });
+}
+
 export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean } = {}) {
   const ts = Date.now();
-  const acumuladosLivePromise = fetchJsonSafe<AcumuladosDataset>(
-    `${SITE_BASE}/data/acumulados_estacoes.json?t=${ts}`
+  const acumuladosLivePromise = fetchLatestRepoJson<AcumuladosDataset>(
+    'data/acumulados_estacoes.json',
+    (item) => parseIsoMs(item.atualizacao)
   ).then(async (base) => {
     try {
       const live = await enrichAcumuladosWithLiveTelemetry(base, {
@@ -524,22 +540,42 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     }
   });
 
+  const metaAndOficialPromise = (async () => {
+    const [localMeta, rawMeta, localOficial, rawOficial] = await Promise.all([
+      fetchJsonSafe<BoletimMetadata>(`${SITE_BASE}/data/boletim_metadata.json?t=${ts}`),
+      fetchJsonSafe<BoletimMetadata>(`${RAW_REPO_DATA_BASE}/data/boletim_metadata.json?t=${ts}`),
+      fetchJsonSafe<BoletimTurnoRow[]>(`${SITE_BASE}/data/boletim_oficial.json?t=${ts}`),
+      fetchJsonSafe<BoletimTurnoRow[]>(`${RAW_REPO_DATA_BASE}/data/boletim_oficial.json?t=${ts}`),
+    ]);
+    const getMetaMs = (m: BoletimMetadata | null) =>
+      m ? Number(m.generation_epoch_ms || parseIsoMs(m.emissao_iso) || 0) : 0;
+    const useRaw = rawMeta !== null && (localMeta === null || getMetaMs(rawMeta) > getMetaMs(localMeta));
+    return {
+      boletimMeta: useRaw ? rawMeta : localMeta,
+      boletimOficial: useRaw ? (rawOficial || localOficial) : (localOficial || rawOficial),
+    };
+  })();
+
   const [
     acumulados,
-    boletimOficial,
-    boletimMeta,
-    inmetAvisos,
+    metaOficial,
+    inmetAvisosFile,
     marinhaAvisos,
     orla,
     balneabilidade,
     tabuaMares,
     historico,
     openMeteo,
+    liveInmetForecastPayload,
+    liveInmetAvisosRaw,
+    liveCptecHoje,
+    liveCptecNext,
   ] = await Promise.all([
     acumuladosLivePromise,
-    fetchJsonSafe<BoletimTurnoRow[]>(`${SITE_BASE}/data/boletim_oficial.json?t=${ts}`),
-    fetchJsonSafe<BoletimMetadata>(`${SITE_BASE}/data/boletim_metadata.json?t=${ts}`),
-    fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`),
+    metaAndOficialPromise,
+    fetchJsonSafe<InmetAviso[]>(`${RAW_REPO_DATA_BASE}/data/inmet_avisos.json?t=${ts}`).then(
+      (raw) => raw || fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`)
+    ),
     fetchMarinhaAvisosLive(),
     fetchJsonSafe<OrlaDataset>(`${SITE_BASE}/data/orla_condicoes.json?t=${ts}`),
     fetchJsonSafe<BalneabilidadeDataset>(`${SITE_BASE}/data/balneabilidade.json?t=${ts}`),
@@ -548,13 +584,29 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     fetchJsonSafe<OpenMeteoData>(
       'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),
+    fetchJsonSafe<Record<string, any>>('https://apiprevmet3.inmet.gov.br/previsao/3304524', 4500),
+    fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>('https://apiprevmet3.inmet.gov.br/avisos/ativos', 4500),
+    fetchJsonSafe<Record<string, any>>('https://www.cptec.inpe.br/api/forecast-input?city=Rio%20das%20Ostras,%20RJ', 4500),
+    fetchJsonSafe<Array<Record<string, any>>>('https://www.cptec.inpe.br/api/forecast-input-next-days?city=Rio%20das%20Ostras,%20RJ', 4500),
   ]);
+
+  const reconciled = reconcileLiveRainConsensus({
+    boletimMeta: metaOficial.boletimMeta,
+    boletimOficial: metaOficial.boletimOficial,
+    openMeteo,
+    acumulados,
+    inmetAvisosFile,
+    liveInmetForecast: liveInmetForecastPayload?.['3304524'] ?? null,
+    liveInmetAvisosRaw,
+    liveCptecHoje,
+    liveCptecNext,
+  });
 
   return {
     acumulados,
-    boletimOficial,
-    boletimMeta,
-    inmetAvisos,
+    boletimOficial: reconciled.boletimOficial,
+    boletimMeta: reconciled.boletimMeta,
+    inmetAvisos: reconciled.inmetAvisos,
     marinhaAvisos,
     orla,
     balneabilidade,

@@ -304,6 +304,7 @@ export default function App() {
     return 'all';
   });
   const [showChartValues, setShowChartValues] = useState<boolean>(true);
+  const [selectedRainSourceDayIdx, setSelectedRainSourceDayIdx] = useState<number>(0);
   const [openChartMenu, setOpenChartMenu] = useState<'metric' | 'period' | 'instagram' | null>(null);
   const [chartExportTheme, setChartExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
   const [chartExportingFmt, setChartExportingFmt] = useState<InstagramFormat | null>(null);
@@ -465,18 +466,22 @@ export default function App() {
       }
     }, 60_000);
 
-    // Recarga completa de snapshots oficiais (Rio Jundia, alertas INMET, Marinha, Open-Meteo) a cada 5 minutos
+    // Recarga completa e reanálise multifonte ao vivo (Open-Meteo, INMET, CPTEC, INEA, Marinha) a cada 3 minutos
     const fullTimer = window.setInterval(() => {
       if (document.visibilityState !== 'hidden') {
         fetchAll(false);
       }
-    }, 300_000);
+    }, 180_000);
 
     const onVisibility = () => {
       if (document.visibilityState === 'visible' && Date.now() - lastLiveSyncMsRef.current > 15_000) {
-        const needFull = Date.now() - lastLiveSyncMsRef.current > 120_000;
+        const elapsed = Date.now() - lastLiveSyncMsRef.current;
+        const needFull = elapsed > 120_000;
         runLiveStationsRefresh(!needFull, false);
         refreshMarinhaLive();
+        if (elapsed > 180_000) {
+          fetchAll(false);
+        }
       }
     };
     document.addEventListener('visibilitychange', onVisibility);
@@ -524,6 +529,17 @@ export default function App() {
     if (!openMeteo?.hourly) {
       return { hourlyPoints: [] as HourlyPoint[], allHourlyPoints: [] as HourlyPoint[], chartDayOptions: [] as string[] };
     }
+
+    const omShiftSums: Record<string, number> = {};
+    openMeteo.hourly.time.forEach((t, i) => {
+      const [datePart, hourPart] = t.split('T');
+      const hourNum = parseInt(hourPart?.slice(0, 2) || '0', 10);
+      const shiftName =
+        hourNum >= 18 ? 'Noite' : hourNum >= 12 ? 'Tarde' : hourNum >= 6 ? 'Manhã' : 'Madrugada';
+      const k = `${datePart}|${shiftName}`;
+      omShiftSums[k] = (omShiftSums[k] || 0) + (openMeteo.hourly!.precipitation[i] ?? 0);
+    });
+
     const allPts: HourlyPoint[] = openMeteo.hourly.time.map((t, i) => {
       const [datePart, hourPart] = t.split('T');
       const hourNum = parseInt(hourPart?.slice(0, 2) || '0', 10);
@@ -548,11 +564,15 @@ export default function App() {
       let rainVal = openMeteo.hourly.precipitation[i] ?? 0;
       let rainProbVal = openMeteo.hourly.precipitation_probability[i] ?? 0;
 
-      // Harmonização precisa com o Boletim Oficial Municipal e Alertas INMET
+      // Harmonização proporcional ao consenso multifonte mantendo o perfil horário real do Open-Meteo
       if (shiftRow) {
         if (typeof shiftRow.chuva_media === 'number') {
-          const w = SHIFT_HOURLY_WEIGHTS[shiftName]?.[hourIdxInShift] ?? (1 / 6);
-          rainVal = Math.round(shiftRow.chuva_media * w * 10) / 10;
+          const omShiftSum = omShiftSums[`${datePart}|${shiftName}`] || 0;
+          const weight =
+            omShiftSum > 0.05
+              ? (openMeteo.hourly.precipitation[i] ?? 0) / omShiftSum
+              : (SHIFT_HOURLY_WEIGHTS[shiftName]?.[hourIdxInShift] ?? 1 / 6);
+          rainVal = Math.round(shiftRow.chuva_media * weight * 10) / 10;
         }
         if (typeof shiftRow.chuva_prob === 'number') {
           rainProbVal = Math.max(rainProbVal, shiftRow.chuva_prob);
@@ -1523,8 +1543,11 @@ export default function App() {
                         {hojeInspecao?.alerta_ativo && hojeInspecao.chuva?.taxa_horaria_pico
                           ? `Pico: ${hojeInspecao.chuva.taxa_horaria_pico}`
                           : openMeteo?.daily
-                            ? `Probab.: ${openMeteo.daily.precipitation_probability_max[0]}%`
+                            ? `Prob.: ${openMeteo.daily.precipitation_probability_max[0]}%${boletimMeta?.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje?.extraido_pdf ? ` · INEA: ${boletimMeta.inea_boletim_hidrometeorologico.previsao_rh8.hoje.faixa_municipio_mm || boletimMeta.inea_boletim_hidrometeorologico.previsao_rh8.hoje.faixa_chuva_mm}` : ''}`
                             : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
+                      </div>
+                      <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55">
+                        Consenso {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || 6} fontes · Tempo real
                       </div>
                     </div>
 
@@ -2284,16 +2307,28 @@ export default function App() {
                                   </span>
                                 </div>
                               )}
-                              {d.pilares.chuva?.val && (
-                                <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
-                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
-                                    <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" /> Chuva
-                                  </span>
-                                  <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
-                                    {d.pilares.chuva.val.split(' (')[0]}
-                                  </span>
-                                </div>
-                              )}
+                              {d.pilares.chuva?.val && (() => {
+                                const fontesDia = boletimMeta?.analise_precipitacao_multifonte?.previsto_por_dia?.[idx]?.fontes;
+                                const srcBits: string[] = [];
+                                if (fontesDia?.open_meteo_mm !== undefined && fontesDia?.open_meteo_mm !== null) srcBits.push(`OM ${Number(fontesDia.open_meteo_mm).toFixed(1)}`);
+                                if (fontesDia?.cptec_multimodel_mm !== undefined && fontesDia?.cptec_multimodel_mm !== null) srcBits.push(`CPTEC ${Number(fontesDia.cptec_multimodel_mm).toFixed(1)}`);
+                                if (fontesDia?.inea_faixa_municipio_mm) srcBits.push(`INEA ${fontesDia.inea_faixa_municipio_mm}`);
+                                return (
+                                  <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
+                                    <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
+                                      <CloudRain className="w-3.5 h-3.5 text-[#FF8244]" /> Chuva (Consenso)
+                                    </span>
+                                    <span className="font-bold text-[#14213D] dark:text-white text-xs leading-snug block mt-0.5">
+                                      {d.pilares.chuva.val}
+                                    </span>
+                                    {srcBits.length > 0 && (
+                                      <span className="text-[9px] text-slate-400 dark:text-[#E5E5E5]/55 block mt-0.5 truncate" title={srcBits.join(' · ')}>
+                                        {srcBits.join(' · ')}
+                                      </span>
+                                    )}
+                                  </div>
+                                );
+                              })()}
                               {d.pilares.vento?.val && (
                                 <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
                                   <span className="text-slate-500 dark:text-[#E5E5E5]/70 font-bold uppercase text-[9.5px] flex items-center gap-1">
@@ -4700,6 +4735,9 @@ export default function App() {
                           {boletimMeta.inea_boletim_hidrometeorologico.titulo}
                         </h3>
                         <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-0.5 font-mono">
+                          {boletimMeta.inea_boletim_hidrometeorologico.publicado_em
+                            ? `Publicado INEA: ${boletimMeta.inea_boletim_hidrometeorologico.publicado_em} · `
+                            : ''}
                           Coleta: {boletimMeta.inea_boletim_hidrometeorologico.data_coleta}
                           {boletimMeta.inea_boletim_hidrometeorologico.contato_sala_situacao
                             ? ` · Tel: ${boletimMeta.inea_boletim_hidrometeorologico.contato_sala_situacao}`
@@ -4734,7 +4772,10 @@ export default function App() {
                                   {key} ({item.data}) — {item.intensidade}
                                 </span>
                                 <span className="font-mono text-[#14213D] dark:text-[#FF8244] font-semibold tabular-nums">
-                                  {item.faixa_chuva_mm} · {item.temp_min}°/{item.temp_max}°C
+                                  {item.faixa_chuva_mm}
+                                  {item.temp_min !== null && item.temp_min !== undefined && item.temp_max !== null && item.temp_max !== undefined
+                                    ? ` · ${item.temp_min}°/${item.temp_max}°C`
+                                    : ''}
                                 </span>
                               </div>
                               <p className="text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">{item.condicao}</p>
@@ -6093,17 +6134,22 @@ export default function App() {
                         </div>
                       </div>
 
-                      {/* Grade dos 8 dias totalmente desembolada */}
+                      {/* Grade dos 8 dias clicável para inspeção das fontes */}
                       <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                         {dias.map((d, idx) => {
                           const isChuvaExpressiva = d.val >= 10;
+                          const isSelected = selectedRainSourceDayIdx === idx;
                           return (
-                            <div
+                            <button
+                              type="button"
                               key={idx}
-                              className={`p-2 rounded-lg border text-center flex flex-col justify-between items-center transition-all bg-[#F7F8FA] dark:bg-[#0B1324] ${
-                                isChuvaExpressiva
-                                  ? 'border-[#FF8244]/50 text-[#14213D] dark:text-white shadow-2xs'
-                                  : 'border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5]'
+                              onClick={() => setSelectedRainSourceDayIdx(idx)}
+                              className={`p-2 rounded-lg border text-center flex flex-col justify-between items-center transition-all cursor-pointer bg-[#F7F8FA] dark:bg-[#0B1324] ${
+                                isSelected
+                                  ? 'ring-2 ring-[#FF8244] border-[#FF8244] text-[#14213D] dark:text-white shadow-sm'
+                                  : isChuvaExpressiva
+                                  ? 'border-[#FF8244]/50 text-[#14213D] dark:text-white shadow-2xs hover:border-[#FF8244]'
+                                  : 'border-[#E5E5E5] dark:border-[#233354] text-slate-600 dark:text-[#E5E5E5] hover:border-[#FF8244]/60'
                               }`}
                             >
                               <span className="text-[11px] font-semibold text-slate-600 dark:text-[#E5E5E5]/80">
@@ -6141,10 +6187,72 @@ export default function App() {
                                   Sem chuva
                                 </span>
                               )}
-                            </div>
+                            </button>
                           );
                         })}
                       </div>
+
+                      {/* Comparativo transparente por fonte oficial para o dia selecionado */}
+                      {(() => {
+                        const selDia = multifonte.previsto_por_dia?.[selectedRainSourceDayIdx] || multifonte.previsto_por_dia?.[0];
+                        if (!selDia?.fontes) return null;
+                        const fn = selDia.fontes;
+                        const liveStatus = multifonte.fontes_ao_vivo_status;
+                        return (
+                          <div className="p-3 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2 text-[11px]">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <span className="font-semibold text-[#14213D] dark:text-white">
+                                Comparativo Multifonte — {selDia.dia_semana} ({selDia.data_br})
+                              </span>
+                              <span className="font-mono text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
+                                {liveStatus?.atualizado_em_brt
+                                  ? `Reanálise ao vivo: ${liveStatus.atualizado_em_brt} (${liveStatus.fontes_respondedoras?.length || 0} fontes ativas)`
+                                  : `Emissão: ${boletimMeta?.emissao || '--'}`}
+                              </span>
+                            </div>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono">
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">Open-Meteo</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.open_meteo_mm !== null && fn.open_meteo_mm !== undefined ? `${Number(fn.open_meteo_mm).toFixed(1)} mm` : '--'}
+                                  {fn.open_meteo_prob_pct !== null && fn.open_meteo_prob_pct !== undefined ? ` (${fn.open_meteo_prob_pct}%)` : ''}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">CPTEC Multimodel</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.cptec_multimodel_mm !== null && fn.cptec_multimodel_mm !== undefined ? `${Number(fn.cptec_multimodel_mm).toFixed(1)} mm` : '--'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">CPTEC / INPE</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {fn.cptec_municipal_mm !== null && fn.cptec_municipal_mm !== undefined ? `${fn.cptec_municipal_mm} mm · ` : ''}
+                                  {fn.cptec_municipal_prob_pct !== null && fn.cptec_municipal_prob_pct !== undefined ? `Prob ${fn.cptec_municipal_prob_pct}%` : '--'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INEA Alerta Cheias</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={fn.inea_faixa_bacia_mm || fn.inea_faixa_municipio_mm || 'Sem faixa'}>
+                                  {fn.inea_faixa_municipio_mm || fn.inea_faixa_bacia_mm || 'D+2..D+7 N/A'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">INMET (3304524)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={fn.inmet_resumo || 'Sem aviso'}>
+                                  {fn.inmet_aviso_id ? `Aviso nº ${fn.inmet_aviso_id}` : (fn.inmet_resumo ? fn.inmet_resumo : '--')}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-[#FF8244]/10 dark:bg-[#FF8244]/15 border border-[#FF8244]/40">
+                                <div className="text-[9px] uppercase text-[#FF8244] font-bold">Consenso Final</div>
+                                <div className="font-bold text-[#14213D] dark:text-white">
+                                  {Number(selDia.chuva_media_modelos_mm ?? 0).toFixed(1)} mm
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })()}

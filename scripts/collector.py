@@ -1086,15 +1086,16 @@ def run_daily_collection():
     except Exception as e:
         print(f"   [AVISO] Falha ao coletar Notícias INMET: {e}")
 
-    # Gera a previsão e o boletim oficial para os 3 dias a partir de hoje
-    try:
+    # Gera a previsão e o boletim oficial (pula se --skip-auto-bulletin já que auto_bulletin.py roda logo em seguida no CI)
+    if "--skip-auto-bulletin" not in sys.argv:
         try:
-            from scripts.auto_bulletin import run_auto_bulletin_pipeline
-        except ImportError:
-            from auto_bulletin import run_auto_bulletin_pipeline
-        run_auto_bulletin_pipeline()
-    except Exception as e:
-        print(f"   [AVISO] Falha ao rodar auto_bulletin: {e}")
+            try:
+                from scripts.auto_bulletin import run_auto_bulletin_pipeline
+            except ImportError:
+                from auto_bulletin import run_auto_bulletin_pipeline
+            run_auto_bulletin_pipeline()
+        except Exception as e:
+            print(f"   [AVISO] Falha ao rodar auto_bulletin: {e}")
 
     print("====================================================================")
     print(">> COLETA DIÁRIA DAS 17:00 FINALIZADA COM SUCESSO!")

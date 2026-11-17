@@ -392,10 +392,10 @@
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
     "data": "2026-11-17",
     "proxima_mare": {
-      "tipo": "PREAMAR",
-      "hora": "08:48",
-      "altura": 0.97,
-      "rotulo": "Preia-mar (1.0 m)"
+      "tipo": "BAIXA-MAR",
+      "hora": "15:00",
+      "altura": 0.38,
+      "rotulo": "Baixa-mar (0.4 m)"
     },
     "mares_do_dia": [
       {
