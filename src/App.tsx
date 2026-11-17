@@ -1534,18 +1534,21 @@ export default function App() {
                       </div>
                       <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
                         {currentWindVal !== undefined && currentWindVal !== null
-                          ? `${Math.round(currentWindVal)} km/h ${
+                          ? `Vento: ${Math.round(currentWindVal)} km/h ${
                               openMeteo?.current ? degToCompass(openMeteo.current.wind_direction_10m) : ''
                             }`
                           : '--'}
                       </div>
-                      <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
-                        {hojeInspecao?.alerta_ativo && hojeInspecao.vento?.rajada_faixa
-                          ? `Pico: ${hojeInspecao.vento.rajada_faixa}`
-                          : currentGustVal !== undefined && currentGustVal !== null
-                            ? `Rajadas ${Math.round(currentGustVal)} km/h`
-                            : hojeDiaResumo?.pilares?.vento?.val || 'Rajadas na orla'}
+                      <div className="font-mono text-xs sm:text-sm font-semibold text-[#FF8244] tabular-nums leading-snug">
+                        {currentGustVal !== undefined && currentGustVal !== null
+                          ? `Rajadas: ${Math.round(Math.max(currentGustVal, currentWindVal ?? 0))} km/h`
+                          : hojeDiaResumo?.pilares?.vento?.val || 'Rajadas: --'}
                       </div>
+                      {hojeInspecao?.alerta_ativo && hojeInspecao.vento?.rajada_faixa && (
+                        <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
+                          Pico prev.: {hojeInspecao.vento.rajada_faixa}
+                        </div>
+                      )}
                     </div>
 
                     {/* 3. Umidade do Ar */}
