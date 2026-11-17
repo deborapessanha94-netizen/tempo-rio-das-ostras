@@ -1748,7 +1748,11 @@ export default function App() {
                         <option value="all">Todos os dias ({horizonCount}h)</option>
                         {chartDayOptions.map((d, idx) => (
                           <option key={d} value={d}>
-                            {idx === 0 ? `Hoje (${d})` : d}
+                            {idx === 0
+                              ? `Hoje (${d}) · 00:00–23:59`
+                              : idx === 1
+                                ? `Amanhã (${d}) · 00:00–23:59`
+                                : `${d} · 00:00–23:59`}
                           </option>
                         ))}
                       </select>
@@ -1771,18 +1775,19 @@ export default function App() {
                 <HourlyChart
                   data={displayedChartPoints}
                   metric={chartMetric}
-                  horizonCount={chartDayFilter === 'all' ? horizonCount : 24}
+                  horizonCount={chartDayFilter === 'all' ? horizonCount : Math.max(displayedChartPoints.length, 24)}
                   showValues={showChartValues}
+                  dayFilter={chartDayFilter}
                 />
 
                 {/* Resumo Estatístico do Período (Preenche a tela com proporção e dados úteis) */}
                 <div className="pt-4 border-t border-[#E5E5E5] dark:border-[#233354] space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/60 font-bold">
-                      Resumo Estatístico ({chartDayFilter === 'all' ? `${horizonCount}h Projetadas` : chartDayFilter})
+                      Resumo Estatístico ({chartDayFilter === 'all' ? `${horizonCount}h Projetadas` : `${chartDayFilter} · 00:00–23:59`})
                     </h3>
                     <span className="text-[11px] font-mono text-[#FF8244]">
-                      {displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : 24).length} pontos horários
+                      {displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : displayedChartPoints.length).length} pontos horários
                     </span>
                   </div>
 
@@ -1792,7 +1797,7 @@ export default function App() {
                       <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium">Temp. Máxima</div>
                       <div className="text-lg font-bold font-mono text-[#FF8244]">
                         {(() => {
-                          const pts = displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : 24);
+                          const pts = displayedChartPoints.slice(0, chartDayFilter === 'all' ? horizonCount : displayedChartPoints.length);
                           if (!pts.length) return '--';
                           const maxP = pts.reduce((prev, curr) => curr.temp > prev.temp ? curr : prev, pts[0]);
                           return `${maxP.temp.toFixed(1)}°C`;

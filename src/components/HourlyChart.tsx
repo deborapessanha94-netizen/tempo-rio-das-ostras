@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 
 export type ChartMetric = 'temp' | 'rain' | 'wind' | 'pressure' | 'humidity';
 
@@ -19,6 +19,7 @@ interface HourlyChartProps {
   metric: ChartMetric;
   horizonCount: number;
   showValues: boolean;
+  dayFilter?: string;
 }
 
 export const HourlyChart: React.FC<HourlyChartProps> = ({
@@ -26,8 +27,23 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
   metric,
   horizonCount,
   showValues,
+  dayFilter = 'all',
 }) => {
-  const points = data.slice(0, Math.max(1, horizonCount));
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const isSingleDay =
+    dayFilter !== 'all' ||
+    (data.length > 0 &&
+      data.length <= 24 &&
+      horizonCount <= 24 &&
+      data.every((p) => p.dayLabel === data[0].dayLabel));
+  const effectiveCount = isSingleDay ? data.length : Math.max(1, horizonCount);
+  const points = data.slice(0, Math.max(1, effectiveCount));
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+    }
+  }, [dayFilter, horizonCount, points.length]);
 
   const { totalRain, maxRainPt, maxProb } = useMemo(() => {
     let tot = 0;
@@ -104,7 +120,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
   }
 
   const chartHeight = metric === 'rain' ? 220 : 210;
-  const colWidth = 54;
+  const colWidth = isSingleDay ? 42 : 54;
   const chartWidth = Math.max(points.length * colWidth, 480);
   const paddingBottom = metric === 'rain' ? 48 : 42;
   const paddingTop = 30;
@@ -178,27 +194,39 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
         </div>
       )}
 
-      {/* Indicador de Deslizar para Ver Todas as Horas */}
-      <div className="flex items-center justify-between px-3 py-1.5 rounded-lg bg-[#FF8244]/10 border border-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] text-xs font-semibold">
+      {/* Indicador de Ciclo Diário Completo ou Rolagem Multi-Dias */}
+      <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-[#FF8244]/10 border border-[#FF8244]/25 text-[#14213D] dark:text-[#FF8244] text-xs font-semibold">
         <span className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-[#FF8244] animate-pulse" />
-          <span>Deslize o gráfico para os lados para ver as {points.length} horas →</span>
+          <span className="w-2 h-2 rounded-full bg-[#FF8244] animate-pulse shrink-0" />
+          {isSingleDay ? (
+            <>
+              <span className="hidden md:inline">
+                Dia completo ({points[0]?.dayLabel}): 00:00 às 23:59 ({points.length}h contínuas)
+              </span>
+              <span className="md:hidden">
+                Dia {points[0]?.dayLabel}: 00:00 às 23:59 — deslize p/ os lados →
+              </span>
+            </>
+          ) : (
+            <span>Deslize o gráfico para os lados para ver as {points.length} horas →</span>
+          )}
         </span>
-        <span className="font-mono text-[10px] bg-[#FF8244] text-[#000000] px-2 py-0.5 rounded font-black uppercase">
-          {horizonCount}h
+        <span className="font-mono text-[10px] bg-[#FF8244] text-[#000000] px-2 py-0.5 rounded font-black uppercase shrink-0">
+          {isSingleDay ? '00:00–23:59' : `${horizonCount}h`}
         </span>
       </div>
 
-      {/* Gráfico SVG com Rolagem Horizontal Suave */}
+      {/* Gráfico SVG (Dia completo 00:00–23:59 encaixado em tela ampla e rolável no mobile) */}
       <div
+        ref={scrollContainerRef}
         className="w-full overflow-x-auto pb-2 scrollbar-thin touch-pan-x rounded-lg"
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
-        <div style={{ minWidth: `${chartWidth}px` }} className="relative">
+        <div style={{ minWidth: isSingleDay ? '760px' : `${chartWidth}px` }} className="relative">
           <svg
             viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-            className="w-full overflow-visible"
-            style={{ height: `${chartHeight}px` }}
+            className={isSingleDay ? 'w-full h-auto min-h-[195px] overflow-visible' : 'w-full overflow-visible'}
+            style={isSingleDay ? undefined : { height: `${chartHeight}px` }}
           >
             <defs>
               <linearGradient id="gradient-rain-bar" x1="0" y1="0" x2="0" y2="1">
@@ -371,7 +399,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                           y={pt.y - 8}
                           textAnchor="middle"
                           fill="currentColor"
-                          className="text-[10px] font-mono font-bold select-none text-slate-700 dark:text-slate-200"
+                          className={`${isSingleDay && metric === 'pressure' ? 'text-[8.5px]' : 'text-[10px]'} font-mono font-bold select-none text-slate-700 dark:text-slate-200`}
                         >
                           {Math.round(pt.val)}
                           <tspan className="text-[8px] opacity-75 font-normal">
@@ -388,7 +416,7 @@ export const HourlyChart: React.FC<HourlyChartProps> = ({
                     y={chartHeight - paddingBottom + 16}
                     textAnchor="middle"
                     fill="currentColor"
-                    className="text-[10.5px] font-mono font-medium text-slate-500 dark:text-[#E5E5E5]/70 select-none"
+                    className={`${isSingleDay ? 'text-[9.5px]' : 'text-[10.5px]'} font-mono font-medium text-slate-500 dark:text-[#E5E5E5]/70 select-none`}
                   >
                     {pt.p.hour.slice(0, 5)}
                   </text>
