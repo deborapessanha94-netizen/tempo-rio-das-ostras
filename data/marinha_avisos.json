@@ -15,10 +15,10 @@
   "validade": "Avisos nº 807/2026 válidos a partir de None até None",
   "mar_ondas": "2,0 a 2,5 m (Agitado)",
   "restricao": "Atenção a pescadores, navegantes e banhistas na Área Delta: ne/n força 7 com rajadas força 8 (62 a 74 km/h) e ondas de 2,0 a 2,5 m (Agitado), válidos de None até None.",
-  "atualizacao_brt": "17/11/2026 às 20:56h BRT",
-  "atualizacao_utc": "2026-11-17T23:56:45.017017+00:00",
+  "atualizacao_brt": "17/11/2026 às 21:03h BRT",
+  "atualizacao_utc": "2026-11-18T00:03:29.923485+00:00",
   "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "total_avisos_brasil": 2,
+  "total_avisos_brasil": 1,
   "avisos_ativos": [
     {
       "numero": "807/2026",
@@ -64,28 +64,6 @@
       "validade": "Aviso nº 807/2026 em vigor",
       "restricao": "Atenção a pescadores, navegantes e banhistas: NE/N FORÇA 7 COM RAJADAS FORÇA 8 (62 a 74 km/h) e ondas estimadas em 2,0 a 2,5 m (Agitado).",
       "texto": "AVISO NR 807/2026 AVISO DE VENTO FORTE EMITIDO ÀS 161700 UTC NOV 2026 ÁREA OCEÂNICA ENTRE 18.5S037.9W, 14S038.5W, 21S033W E 24.9S036.9W. VENTO NE/N FORÇA 7 COM RAJADAS FORÇA 8. VÁLIDO ATÉ 180600Z. ESTE AVISO SUBSTITUI O AVISO NR 806/2026.",
-      "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
-    },
-    {
-      "numero": "805/2026",
-      "tipo": "VENTO FORTE",
-      "area_grupo": "Área Alfa",
-      "area": "Área Alfa — Costeira (Rio Grande/RS e Laguna/SC)",
-      "eh_area_delta": false,
-      "forca": "NE/N FORÇA 7 COM RAJADAS FORÇA 8",
-      "rajadas": "62 a 74 km/h (Força 7/8)",
-      "mar_ondas": "2,0 a 2,5 m (Agitado)",
-      "ondas": "2,0 a 2,5 m (Agitado)",
-      "emissao": "1300Z - DOM - 15/NOV/2026",
-      "inicio_utc": "2026-11-16T18:00:00Z",
-      "fim_utc": "2026-11-18T00:00:00Z",
-      "inicio_br": "16/11 às 15:00h",
-      "fim_br": "17/11 às 21:00h",
-      "status_vigencia": "Em Vigor",
-      "periodo": "De 16/11 às 15:00h até 17/11 às 21:00h",
-      "validade": "Aviso nº 805/2026 válido até 17/11 às 21:00h",
-      "restricao": "Atenção a pescadores, navegantes e banhistas: NE/N FORÇA 7 COM RAJADAS FORÇA 8 (62 a 74 km/h) e ondas estimadas em 2,0 a 2,5 m (Agitado).",
-      "texto": "AVISO NR 805/2026 AVISO DE VENTO FORTE EMITIDO ÀS 1300Z - DOM - 15/NOV/2026 ÁREA COSTEIRA ENTRE RIO GRANDE/RS E LAGUNA/SC ATÉ 200MN DA COSTA A PARTIR DE 161800Z. VENTO NE/N FORÇA 7 COM RAJADAS FORÇA 8. VÁLIDO ATÉ 180000Z.",
       "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
     }
   ],
