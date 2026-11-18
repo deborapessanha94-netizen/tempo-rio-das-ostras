@@ -1,6 +1,6 @@
 """
-Motor Probabilístico Multifonte de Precipitação (100% Fontes Oficiais Brasileiras)
-Integra, analisa e calcula distribuição probabilística (P25 / P50 / P90 e Probabilidade %) a partir de:
+Motor Probabilístico Multifonte de Precipitação (Fontes Oficiais Brasileiras + Modelos Globais ECMWF/GFS/ICON)
+Integra, analisa e calcula distribuição probabilística (P25 / P50 / P75 / P90 e Probabilidade %) a partir de:
 1. INMET Meteograma Dinâmico COSMO 7x7km (meteograma.inmet.gov.br/3304524/dinamico)
 2. INMET VIME (vime.inmet.gov.br/SE) — COSMO 2.8km SE-RJ & COSMO 7km SE (prec24h, prec2dias, PWAT, CAPE)
 3. INMET Previsão por Turnos & Estendida (3304524) + Avisos Meteorológicos Ativos (avisos.inmet.gov.br)
@@ -8,7 +8,8 @@ Integra, analisa e calcula distribuição probabilística (P25 / P50 / P90 e Pro
 5. CPTEC/INPE Meteograma Multimodel Horário (WRF/ETA/BRAMS/BAM 3866.json alinhado UTC->BRT)
 6. CPTEC/INPE Previsão Municipal & 6 Dias + Mapas Probabilísticos P >= 5mm
 7. INEA Alerta de Cheias — Boletim Oficial RH-VIII / Rio das Ostras (analise.php) + RadarTool
-8. Rede Pluviométrica em Tempo Real (CEMADEN PCD 18789, INEA 2241036, PWS Weather Underground)
+8. Modelos Globais (base Windy): ECMWF IFS 9km, NOAA GFS e DWD ICON 13km
+9. Rede Pluviométrica em Tempo Real (CEMADEN PCD 18789, INEA 2241036, PWS Weather Underground)
 """
 
 from datetime import datetime, timedelta
@@ -110,8 +111,8 @@ def compute_daily_rain_consensus(
 ):
     """
     Executa o cálculo probabilístico (P25, P50 consensual, P75, P90 teto e Probabilidade %)
-    integrando TODAS as fontes oficiais brasileiras (zero Open-Meteo), distribuindo os
-    volumes nos 4 turnos e gerando a curva horária oficial dos modelos nacionais.
+    integrando fontes oficiais brasileiras (peso principal) e modelos globais (ECMWF IFS 9km, NOAA GFS, DWD ICON),
+    distribuindo os volumes nos 4 turnos e gerando a curva horária oficial unificada.
     """
     ext = official_extractions or {}
     inmet_cosmo_met = ext.get("inmet_cosmo_meteograma", {})
@@ -119,6 +120,19 @@ def compute_daily_rain_consensus(
     cptec_wrf = ext.get("cptec_wrf", {})
     cptec_prob_p05 = ext.get("cptec_prob_p05", {})
     inea_radartool = ext.get("inea_radartool", {})
+    global_models = (ext.get("global_nwp") or {}).get("models", {})
+    ecmwf_mod = global_models.get("ecmwf_ifs", {})
+    gfs_mod = global_models.get("gfs_seamless", {})
+    icon_mod = global_models.get("icon_global", {})
+    ecmwf_mm = ecmwf_mod.get("daily_mm", {}).get(day_date_iso)
+    ecmwf_prob = ecmwf_mod.get("daily_prob_pct", {}).get(day_date_iso)
+    ecmwf_hourly = ecmwf_mod.get("hourly_brt", {})
+    gfs_mm = gfs_mod.get("daily_mm", {}).get(day_date_iso)
+    gfs_prob = gfs_mod.get("daily_prob_pct", {}).get(day_date_iso)
+    gfs_hourly = gfs_mod.get("hourly_brt", {})
+    icon_mm = icon_mod.get("daily_mm", {}).get(day_date_iso)
+    icon_prob = icon_mod.get("daily_prob_pct", {}).get(day_date_iso)
+    icon_hourly = icon_mod.get("hourly_brt", {})
 
     # 1. INMET Meteograma COSMO 7x7km (3304524)
     cosmo_met_daily = inmet_cosmo_met.get("daily_mm", {})
@@ -237,14 +251,14 @@ def compute_daily_rain_consensus(
             inea_target = round(inea_ro_min + 0.35 * (inea_ro_max - inea_ro_min), 1)
             inea_weight = 0.30
 
-    # 8. Montagem do Ensemble Probabilístico Brasileiro (pares (valor_mm, peso))
+    # 8. Montagem do Ensemble Probabilístico (Fontes Oficiais BR + Globais ECMWF/GFS/ICON)
     model_pairs = []
     if cosmo_met_mm is not None:
         model_pairs.append((float(cosmo_met_mm), 0.25))
     if vime28_mm is not None:
         model_pairs.append((float(vime28_mm), 0.22))
     if vime7_mm is not None:
-        model_pairs.append((float(vime7_mm), 0.14))
+        model_pairs.append((float(vime7_mm), 0.12))
     if wrf_mm is not None:
         model_pairs.append((float(wrf_mm), 0.19))
     if mm_sum is not None:
@@ -253,8 +267,14 @@ def compute_daily_rain_consensus(
         model_pairs.append((float(cptec_mun_mm), 0.12))
     if inea_target is not None and inea_weight > 0:
         model_pairs.append((float(inea_target), inea_weight))
+    if ecmwf_mm is not None:
+        model_pairs.append((float(ecmwf_mm), 0.18))
+    if gfs_mm is not None:
+        model_pairs.append((float(gfs_mm), 0.12))
+    if icon_mm is not None:
+        model_pairs.append((float(icon_mm), 0.14))
 
-    # Caso limite (ex: D+7 além do horizonte de algum meteograma): herda último COSMO7 / persistência leve
+    # Caso limite: herda último COSMO7 / persistência leve se nenhuma grade respondeu
     if not model_pairs:
         last_cosmo7 = list(inmet_vime.get("daily_cosmo7_mm", {}).values())
         fallback_val = float(last_cosmo7[-1]) if last_cosmo7 else 0.2
@@ -266,18 +286,24 @@ def compute_daily_rain_consensus(
     # 9. Cálculo Probabilístico da Probabilidade de Chuva (%)
     prob_signals = []
     if mm_prob_day is not None:
-        prob_signals.append((float(mm_prob_day), 0.30))
+        prob_signals.append((float(mm_prob_day), 0.26))
     if cptec_prob is not None:
-        prob_signals.append((float(cptec_prob), 0.22))
+        prob_signals.append((float(cptec_prob), 0.20))
     if cptec_p05_map is not None:
         prob_signals.append((float(cptec_p05_map), 0.20))
+    if ecmwf_prob is not None:
+        prob_signals.append((float(ecmwf_prob), 0.14))
+    if gfs_prob is not None:
+        prob_signals.append((float(gfs_prob), 0.12))
+    if icon_prob is not None:
+        prob_signals.append((float(icon_prob), 0.10))
 
     inmet_prob_map = {0: 10.0, 1: 40.0, 2: 58.0, 3: 75.0}
     if inmet_resumo_dia:
-        prob_signals.append((inmet_prob_map.get(inmet_day_level, 20.0), 0.28))
+        prob_signals.append((inmet_prob_map.get(inmet_day_level, 20.0), 0.24))
     if inea_valid:
         inea_prob_val = 70.0 if (inea_raios or (inea_ro_min or 0) >= 10) else (48.0 if (inea_ro_max or 0) >= 10 else 25.0)
-        prob_signals.append((inea_prob_val, 0.20))
+        prob_signals.append((inea_prob_val, 0.18))
 
     if prob_signals:
         pw_sum = sum(w for _p, w in prob_signals)
@@ -371,6 +397,12 @@ def compute_daily_rain_consensus(
                 parts.append((float(wrf_hourly[key_h]), 0.30))
             if (day_date_iso, h) in mm_slots:
                 parts.append((float(mm_slots[(day_date_iso, h)].get("prec") or 0.0), 0.35))
+            if key_h in ecmwf_hourly:
+                parts.append((float(ecmwf_hourly[key_h]), 0.22))
+            if key_h in gfs_hourly:
+                parts.append((float(gfs_hourly[key_h]), 0.12))
+            if key_h in icon_hourly:
+                parts.append((float(icon_hourly[key_h]), 0.14))
             h_val = (sum(v * w for v, w in parts) / sum(w for _v, w in parts)) if parts else 0.0
             raw_hour_curve[h] = h_val
             t_hours_weights.append(h_val)
@@ -479,6 +511,12 @@ def compute_daily_rain_consensus(
             "inea_faixa_bacia_mm": inea_prev_dia.get("faixa_chuva_mm") if inea_valid else None,
             "inea_referencia_mm": inea_prev_dia.get("chuva_referencia_mm") if inea_valid else None,
             "inea_radartool_estagio": inea_radartool.get("estagio") if day_idx == 0 else None,
+            "ecmwf_ifs_mm": round(float(ecmwf_mm), 1) if ecmwf_mm is not None else None,
+            "ecmwf_ifs_prob_pct": int(round(ecmwf_prob)) if ecmwf_prob is not None else None,
+            "gfs_mm": round(float(gfs_mm), 1) if gfs_mm is not None else None,
+            "gfs_prob_pct": int(round(gfs_prob)) if gfs_prob is not None else None,
+            "icon_mm": round(float(icon_mm), 1) if icon_mm is not None else None,
+            "icon_prob_pct": int(round(icon_prob)) if icon_prob is not None else None,
             "observado_hoje_media_mm": obs_today_info.get("media_mm") if day_idx == 0 else None,
             "observado_hoje_max_mm": obs_today_info.get("max_mm") if day_idx == 0 else None,
         },

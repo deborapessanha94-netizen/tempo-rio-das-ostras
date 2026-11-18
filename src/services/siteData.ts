@@ -440,6 +440,24 @@ export interface HistoricoEstacoesDataset {
   registros_horarios?: any[];
 }
 
+export interface GlobalNwpDataset {
+  daily?: {
+    time?: string[];
+    precipitation_sum_ecmwf_ifs?: Array<number | null>;
+    precipitation_probability_max_ecmwf_ifs?: Array<number | null>;
+    precipitation_sum_gfs_seamless?: Array<number | null>;
+    precipitation_probability_max_gfs_seamless?: Array<number | null>;
+    precipitation_sum_icon_global?: Array<number | null>;
+    precipitation_probability_max_icon_global?: Array<number | null>;
+  };
+  hourly?: {
+    time?: string[];
+    precipitation_ecmwf_ifs?: Array<number | null>;
+    precipitation_gfs_seamless?: Array<number | null>;
+    precipitation_icon_global?: Array<number | null>;
+  };
+}
+
 export interface OpenMeteoData {
   current?: {
     time: string;
@@ -566,6 +584,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     tabuaMares,
     historico,
     openMeteo,
+    liveGlobalNwp,
     liveInmetForecastPayload,
     liveInmetAvisosRaw,
     liveCptecHoje,
@@ -584,6 +603,10 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     fetchJsonSafe<OpenMeteoData>(
       'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),
+    fetchJsonSafe<GlobalNwpDataset>(
+      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&hourly=precipitation,precipitation_probability&daily=precipitation_sum,precipitation_probability_max&forecast_days=8&timezone=America%2FSao_Paulo&models=ecmwf_ifs,gfs_seamless,icon_global',
+      5000
+    ),
     fetchJsonSafe<Record<string, any>>('https://apiprevmet3.inmet.gov.br/previsao/3304524', 4500),
     fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>('https://apiprevmet3.inmet.gov.br/avisos/ativos', 4500),
     fetchJsonSafe<Record<string, any>>('https://www.cptec.inpe.br/api/forecast-input?city=Rio%20das%20Ostras,%20RJ', 4500),
@@ -599,6 +622,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     liveInmetAvisosRaw,
     liveCptecHoje,
     liveCptecNext,
+    liveGlobalNwp,
   });
 
   return {

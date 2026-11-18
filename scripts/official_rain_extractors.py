@@ -569,16 +569,92 @@ def extract_inea_radartool_status(data_dir=None):
         return {"disponivel": False, "estagio": "Vigilância"}
 
 
+# ==============================================================================
+# 5. MODELOS GLOBAIS (BASE WINDY: ECMWF IFS 9km, NOAA GFS, DWD ICON 13km)
+# ==============================================================================
+def extract_global_nwp_models(data_dir=None):
+    """Coleta previsões horárias e diárias individuais de ECMWF IFS (9km), NOAA GFS e DWD ICON (13km)."""
+    cache_p = Path(data_dir) / "global_nwp_models.json" if data_dir else None
+    url = (
+        "https://api.open-meteo.com/v1/forecast?"
+        "latitude=-22.5269&longitude=-41.9450"
+        "&hourly=precipitation,precipitation_probability"
+        "&daily=precipitation_sum,precipitation_probability_max"
+        "&forecast_days=8&timezone=America%2FSao_Paulo"
+        "&models=ecmwf_ifs,gfs_seamless,icon_global"
+    )
+    model_defs = {
+        "ecmwf_ifs": "ECMWF IFS (9 km)",
+        "gfs_seamless": "NOAA GFS (13-25 km)",
+        "icon_global": "DWD ICON (13 km)",
+    }
+    try:
+        raw = _fetch_json(url, timeout=14)
+        daily = raw.get("daily", {})
+        hourly = raw.get("hourly", {})
+        d_times = daily.get("time", [])
+        h_times = hourly.get("time", [])
+
+        models_out = {}
+        for m_key, m_label in model_defs.items():
+            d_mm = {}
+            d_prob = {}
+            p_arr = daily.get(f"precipitation_sum_{m_key}", [])
+            pb_arr = daily.get(f"precipitation_probability_max_{m_key}", [])
+            for idx, d_iso in enumerate(d_times):
+                if idx < len(p_arr) and p_arr[idx] is not None:
+                    d_mm[d_iso] = round(float(p_arr[idx]), 1)
+                if idx < len(pb_arr) and pb_arr[idx] is not None:
+                    d_prob[d_iso] = int(round(float(pb_arr[idx])))
+
+            h_brt = {}
+            hp_arr = hourly.get(f"precipitation_{m_key}", [])
+            for idx, t_str in enumerate(h_times):
+                if idx < len(hp_arr) and hp_arr[idx] is not None and "T" in t_str:
+                    h_brt[t_str[:13]] = round(float(hp_arr[idx]), 3)
+
+            models_out[m_key] = {
+                "nome": m_label,
+                "daily_mm": d_mm,
+                "daily_prob_pct": d_prob,
+                "hourly_brt": h_brt,
+            }
+
+        res = {
+            "disponivel": any(bool(v["daily_mm"]) for v in models_out.values()),
+            "atualizado_em": datetime.now(BRT).isoformat(timespec="seconds"),
+            "models": models_out,
+        }
+        if cache_p and res["disponivel"]:
+            try:
+                cache_p.write_text(json.dumps(res, ensure_ascii=False, indent=2), encoding="utf-8")
+            except Exception:
+                pass
+        return res
+    except Exception as e:
+        print(f"[Global NWP ECMWF/GFS/ICON] Aviso: {e}")
+        if cache_p and cache_p.exists():
+            try:
+                cached = json.loads(cache_p.read_text(encoding="utf-8"))
+                cached["cached_fallback"] = True
+                return cached
+            except Exception:
+                pass
+        return {"disponivel": False, "models": {}}
+
+
 def extract_all_official_rain_sources(img_dir, data_dir):
-    """Executa todos os extratores oficiais brasileiros e consolida num pacote estruturado."""
+    """Executa todos os extratores oficiais brasileiros e modelos globais (ECMWF/GFS/ICON) e consolida."""
     inmet_cosmo_met = extract_inmet_cosmo_meteograma(img_dir, data_dir)
     inmet_vime = extract_inmet_vime_data(data_dir)
     cptec_extra = extract_cptec_wrf_and_prob(img_dir)
     inea_radartool = extract_inea_radartool_status(data_dir)
+    global_nwp = extract_global_nwp_models(data_dir)
     return {
         "inmet_cosmo_meteograma": inmet_cosmo_met,
         "inmet_vime": inmet_vime,
         "cptec_wrf": cptec_extra["wrf"],
         "cptec_prob_p05": cptec_extra["prob_p05_by_day"],
         "inea_radartool": inea_radartool,
+        "global_nwp": global_nwp,
     }

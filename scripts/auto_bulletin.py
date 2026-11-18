@@ -2508,7 +2508,7 @@ def run_auto_bulletin_pipeline():
             else d1_aviso_str
         )
         p3 = (
-            f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km e 2,8km INMET/VIME, WRF/Multimodel CPTEC e Boletim INEA RH-VIII), "
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), "
             f"{prep1} {d1['dia_semana'].lower()} ({d1['date_short']}) {d1_desc_sinopse}, "
             f"determinando contenção/declínio de temperatura ({d1['t_min']:.0f}°C a {d1['t_max']:.0f}°C) e precipitação estimada em {d1_faixa} ({d1_aviso_p3}). "
             f"{d2_d3_desc} No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de {mar_ondas_sinopse} "
@@ -2535,7 +2535,7 @@ def run_auto_bulletin_pipeline():
             f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
             f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
             f"na orla marítima). {jundia_frase_sinopse}\n\n"
-            f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas sinóticas COSMO 7km/2,8km INMET/VIME e WRF/Multimodel CPTEC), projeta-se a passagem "
+            f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC e modelos globais ECMWF/GFS/ICON), projeta-se a passagem "
             f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
             f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
             f"(rajadas regulares), com precipitação residual em declínio ({d1_faixa}, {d1_aviso_str}). "
@@ -2785,7 +2785,7 @@ def run_auto_bulletin_pipeline():
             "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
             "texto": sinopse_geral.split('\n\n')[0] if '\n\n' in sinopse_geral else sinopse_geral,
             "pilares": [
-                {"label": "Modelos Brasileiros (96h)", "val": f"INMET COSMO/VIME · CPTEC WRF/Multimodel · INEA RH-VIII ({sum(d['chuva_tot'] for d in dias_3[:4]):.1f} mm em 96h)"},
+                {"label": "Modelos BR + Globais (96h)", "val": f"INMET COSMO/VIME · CPTEC WRF/Multi · INEA RH-VIII · ECMWF/GFS/ICON ({sum(d['chuva_tot'] for d in dias_3[:4]):.1f} mm em 96h)"},
                 {"label": "Gradiente Térmico Oficial", "val": f"Mínima de {min_t_val:.0f}°C até Máxima de {pico_calor:.0f}°C"},
                 {"label": "Evolução Sinótica Oficial", "val": evol_3d_str}
             ]
@@ -2863,10 +2863,18 @@ def run_auto_bulletin_pipeline():
         "emissao": emissao_str,
         "emissao_iso": emissao_iso,
         "generation_epoch_ms": generation_epoch_ms,
-        "metodologia": "Consenso probabilístico 100% oficial brasileiro atualizado em cada rodada: INMET (Meteograma COSMO 7x7km + VIME COSMO 2,8km/7km, Água Precipitável e CAPE + Previsão 3304524 + Avisos Ativos), CPTEC/INPE (Meteograma WRF + Multimodel + Municipal/6D + Mapas Probabilísticos P≥5mm), INEA Alerta de Cheias (Boletim Hidrometeorológico RH-VIII/Rio das Ostras + RadarTool RJ) e Pluviômetros CEMADEN/INEA/PWS.",
+        "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
         "observado_hoje_estacoes": obs_today_info,
         "inea_boletim_publicado_em": inea_boletim_data.get('publicado_em') if inea_boletim_data else None,
         "vime_inmet": official_extractions.get('inmet_vime', {}),
+        "global_nwp_info": {
+            "disponivel": (official_extractions.get('global_nwp') or {}).get('disponivel', False),
+            "atualizado_em": (official_extractions.get('global_nwp') or {}).get('atualizado_em'),
+            "modelos": {
+                k: {"nome": v.get("nome"), "daily_mm": v.get("daily_mm", {})}
+                for k, v in ((official_extractions.get('global_nwp') or {}).get('models') or {}).items()
+            },
+        },
         "inmet_cosmo_meteograma_info": {
             "rodada": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('rodada_utc'),
             "y_max_mm": (official_extractions.get('inmet_cosmo_meteograma') or {}).get('y_max_mm'),
@@ -2925,9 +2933,9 @@ def run_auto_bulletin_pipeline():
         "acumulado_8dias_media": round(sum(d['chuva_tot'] for d in dias_3), 1),
         "dias_somados": [d['chuva_tot'] for d in dias_3],
         "conclusao_sem_pontas_soltas": (
-            "Todos os dias, turnos e gráficos seguem o mesmo cálculo probabilístico contínuo ponderado (quantis P25/P50/P75/P90 e probabilidade condicional) entre todas as fontes oficiais brasileiras "
-            "(INMET COSMO 7x7km, VIME COSMO 2,8km/7km + Água Precipitável/CAPE, INMET 3304524/Avisos, CPTEC WRF/Multimodel/Probabilístico P≥5mm, Boletim Hidrometeorológico RH-VIII do INEA + RadarTool RJ e pluviômetros CEMADEN/INEA/PWS), "
-            "mantendo coerência matemática exata entre os cards diários, a tabela de turnos e os gráficos horários."
+            "Todos os dias, turnos e gráficos seguem o mesmo cálculo probabilístico contínuo ponderado (quantis P25/P50/P75/P90 e probabilidade condicional) integrando as fontes oficiais brasileiras "
+            "(INMET COSMO 7x7km, VIME COSMO 2,8km/7km + Água Precipitável/CAPE, INMET 3304524/Avisos, CPTEC WRF/Multimodel/Probabilístico P≥5mm, Boletim RH-VIII do INEA + RadarTool RJ e pluviômetros locais) "
+            "com os modelos numéricos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km), mantendo coerência matemática exata entre os cards diários, a tabela de turnos e os gráficos horários."
         )
     }
 

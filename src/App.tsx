@@ -1561,7 +1561,7 @@ export default function App() {
                           </div>
                           <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 truncate">
                             {ineaHoje?.extraido_pdf ? `INEA: ${ineaHoje.faixa_municipio_mm || ineaHoje.faixa_chuva_mm} · ` : ''}
-                            {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || probHoje?.qtd_fontes_numericas || 7} fontes BR
+                            {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || probHoje?.qtd_fontes_numericas || 9} fontes (BR + ECMWF/GFS/ICON)
                           </div>
                         </div>
                       );
@@ -2331,6 +2331,8 @@ export default function App() {
                                 if (fontesDia?.inmet_vime_cosmo28_mm !== undefined && fontesDia?.inmet_vime_cosmo28_mm !== null) srcBits.push(`VIME2.8 ${Number(fontesDia.inmet_vime_cosmo28_mm).toFixed(1)}`);
                                 if (fontesDia?.cptec_wrf_mm !== undefined && fontesDia?.cptec_wrf_mm !== null) srcBits.push(`WRF ${Number(fontesDia.cptec_wrf_mm).toFixed(1)}`);
                                 if (fontesDia?.cptec_multimodel_mm !== undefined && fontesDia?.cptec_multimodel_mm !== null) srcBits.push(`Multi ${Number(fontesDia.cptec_multimodel_mm).toFixed(1)}`);
+                                if (fontesDia?.ecmwf_ifs_mm !== undefined && fontesDia?.ecmwf_ifs_mm !== null) srcBits.push(`ECMWF ${Number(fontesDia.ecmwf_ifs_mm).toFixed(1)}`);
+                                if (fontesDia?.gfs_mm !== undefined && fontesDia?.gfs_mm !== null) srcBits.push(`GFS ${Number(fontesDia.gfs_mm).toFixed(1)}`);
                                 if (fontesDia?.inea_faixa_municipio_mm) srcBits.push(`INEA ${fontesDia.inea_faixa_municipio_mm}`);
                                 return (
                                   <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
@@ -6146,7 +6148,7 @@ export default function App() {
                               Previsão Diária de Chuva — Hoje + 7 Dias
                             </h3>
                             <p className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
-                              Cálculo probabilístico 100% fontes oficiais brasileiras (INMET COSMO/VIME · CPTEC WRF/Prob · INEA RH-VIII)
+                              Cálculo probabilístico híbrido: fontes oficiais brasileiras (INMET COSMO/VIME · CPTEC WRF/Prob · INEA RH-VIII) + Globais (ECMWF 9km · GFS · ICON)
                             </p>
                           </div>
                         </div>
@@ -6247,7 +6249,7 @@ export default function App() {
                           <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3 text-[11px]">
                             <div className="flex flex-wrap items-center justify-between gap-2">
                               <span className="font-semibold text-[#14213D] dark:text-white">
-                                Cálculo Probabilístico & Fontes Oficiais BR — {selDia.dia_semana} ({selDia.data_br})
+                                Cálculo Probabilístico (Oficiais BR + ECMWF / GFS / ICON) — {selDia.dia_semana} ({selDia.data_br})
                               </span>
                               <span className="font-mono text-[10px] text-slate-500 dark:text-[#E5E5E5]/70">
                                 {liveStatus?.atualizado_em_brt
@@ -6282,11 +6284,11 @@ export default function App() {
                               </div>
                             </div>
 
-                            {/* Detalhamento de Todas as Fontes Brasileiras */}
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 font-mono">
+                            {/* Detalhamento Completo: 12 Blocos (Fontes Brasileiras + Globais ECMWF/GFS/ICON) */}
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 font-mono">
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
                                 <div className="text-[9px] uppercase text-slate-400">INMET COSMO 7×7km</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate">
                                   {fn.inmet_cosmo_meteograma_mm !== null && fn.inmet_cosmo_meteograma_mm !== undefined
                                     ? `${Number(fn.inmet_cosmo_meteograma_mm).toFixed(1)} mm`
                                     : '--'}
@@ -6333,13 +6335,38 @@ export default function App() {
                                 </div>
                               </div>
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
-                                <div className="text-[9px] uppercase text-slate-400">
-                                  {fn.observado_hoje_media_mm !== null && fn.observado_hoje_media_mm !== undefined ? 'Obs. Hoje / VIME PWAT' : 'VIME PWAT / CAPE'}
+                                <div className="text-[9px] uppercase text-slate-400">ECMWF IFS (9 km)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title="Modelo europeu ECMWF IFS (base Windy)">
+                                  {fn.ecmwf_ifs_mm !== null && fn.ecmwf_ifs_mm !== undefined ? `${Number(fn.ecmwf_ifs_mm).toFixed(1)} mm` : '--'}
+                                  {fn.ecmwf_ifs_prob_pct !== null && fn.ecmwf_ifs_prob_pct !== undefined ? ` (${fn.ecmwf_ifs_prob_pct}%)` : ''}
                                 </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">NOAA GFS (Global)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title="Modelo norte-americano NOAA GFS (base Windy)">
+                                  {fn.gfs_mm !== null && fn.gfs_mm !== undefined ? `${Number(fn.gfs_mm).toFixed(1)} mm` : '--'}
+                                  {fn.gfs_prob_pct !== null && fn.gfs_prob_pct !== undefined ? ` (${fn.gfs_prob_pct}%)` : ''}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">DWD ICON (13 km)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title="Modelo alemão DWD ICON (base Windy)">
+                                  {fn.icon_mm !== null && fn.icon_mm !== undefined ? `${Number(fn.icon_mm).toFixed(1)} mm` : '--'}
+                                  {fn.icon_prob_pct !== null && fn.icon_prob_pct !== undefined ? ` (${fn.icon_prob_pct}%)` : ''}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">VIME PWAT / CAPE</div>
                                 <div className="font-semibold text-[#14213D] dark:text-white truncate" title={`PWAT ${fn.inmet_vime_pwat_faixa || '--'} mm | CAPE ${fn.inmet_vime_cape_faixa || '--'} J/kg`}>
+                                  PW {fn.inmet_vime_pwat_faixa || '--'} · CAPE {fn.inmet_vime_cape_faixa || '--'}
+                                </div>
+                              </div>
+                              <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="text-[9px] uppercase text-slate-400">Obs. Hoje (Estações)</div>
+                                <div className="font-semibold text-[#14213D] dark:text-white truncate">
                                   {fn.observado_hoje_media_mm !== null && fn.observado_hoje_media_mm !== undefined
                                     ? `${Number(fn.observado_hoje_media_mm).toFixed(1)} mm (máx ${Number(fn.observado_hoje_max_mm ?? 0).toFixed(1)})`
-                                    : `PW ${fn.inmet_vime_pwat_faixa || '--'} · CAPE ${fn.inmet_vime_cape_faixa || '--'}`}
+                                    : 'Dia futuro'}
                                 </div>
                               </div>
                             </div>

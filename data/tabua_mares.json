@@ -9,10 +9,10 @@
   "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
   "atualizado_em": "2026-11-18T23:04:19.058356",
   "proxima_mare": {
-    "tipo": "BAIXA-MAR",
-    "hora": "04:16",
-    "altura": 0.28,
-    "rotulo": "Baixa-mar (0.3 m)"
+    "tipo": "PREAMAR",
+    "hora": "22:03",
+    "altura": 1.15,
+    "rotulo": "Preia-mar (1.1 m)"
   },
   "dias": [
     {
