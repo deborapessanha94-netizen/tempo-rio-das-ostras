@@ -3,7 +3,7 @@
   "status_geral_cor": "warning",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": false,
-  "atualizacao_hora": "18/11/2026 às 20:04h",
+  "atualizacao_hora": "18/11/2026 às 20:22h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -18,25 +18,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 1.8,
-        "teto_tempestade_alerta_mm": 5.5,
-        "faixa_completa_txt": "1.8 mm",
+        "media_continua_modelos_mm": 1.5,
+        "teto_tempestade_alerta_mm": 10.0,
+        "faixa_completa_txt": "1.5 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "12:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "1.4 a 2.0 mm",
+            "volume_estimado": "1.1 a 1.7 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "1.8 a 5.5 mm",
+            "volume_estimado": "1.5 a 10.0 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "2.2 a 2.7 mm",
+            "volume_estimado": "1.9 a 2.2 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -75,25 +75,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 2.5,
+        "media_continua_modelos_mm": 2.4,
         "teto_tempestade_alerta_mm": 12.4,
-        "faixa_completa_txt": "2.5 mm",
+        "faixa_completa_txt": "2.4 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "12:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "1.9 a 2.8 mm",
+            "volume_estimado": "1.8 a 2.6 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "2.5 a 12.4 mm",
+            "volume_estimado": "2.4 a 12.4 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "3.1 a 3.8 mm",
+            "volume_estimado": "3.0 a 3.6 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -132,25 +132,25 @@
       "granizo": true,
       "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
       "chuva": {
-        "media_continua_modelos_mm": 9.7,
+        "media_continua_modelos_mm": 9.5,
         "teto_tempestade_alerta_mm": 50.0,
-        "faixa_completa_txt": "9.7 mm (Média) • Até 50 mm (Teto Alerta)",
+        "faixa_completa_txt": "9.5 mm (Média) • Até 50 mm (Teto Alerta)",
         "taxa_horaria_pico": "20 a 30 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "7.3 a 42.5 mm",
+            "volume_estimado": "7.1 a 42.5 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "9.7 a 50.0 mm",
+            "volume_estimado": "9.5 a 50.0 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "12.1 a 67.5 mm",
+            "volume_estimado": "11.9 a 67.5 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -189,25 +189,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 5.2,
-        "teto_tempestade_alerta_mm": 18.3,
-        "faixa_completa_txt": "5.2 mm",
+        "media_continua_modelos_mm": 3.7,
+        "teto_tempestade_alerta_mm": 9.2,
+        "faixa_completa_txt": "3.7 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "12:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "3.9 a 5.7 mm",
+            "volume_estimado": "2.8 a 4.1 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "5.2 a 18.3 mm",
-            "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
+            "volume_estimado": "3.7 a 9.2 mm",
+            "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "6.5 a 7.8 mm",
+            "volume_estimado": "4.6 a 5.6 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -247,7 +247,7 @@
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
         "media_continua_modelos_mm": 2.2,
-        "teto_tempestade_alerta_mm": 3.4,
+        "teto_tempestade_alerta_mm": 3.0,
         "faixa_completa_txt": "2.2 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
@@ -259,7 +259,7 @@
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "2.2 a 3.4 mm",
+            "volume_estimado": "2.2 a 3.0 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
@@ -475,25 +475,25 @@
     "granizo": false,
     "granizo_detalhe": "Sem previsão de granizo.",
     "chuva": {
-      "media_continua_modelos_mm": 1.8,
-      "teto_tempestade_alerta_mm": 5.5,
-      "faixa_completa_txt": "1.8 mm",
+      "media_continua_modelos_mm": 1.5,
+      "teto_tempestade_alerta_mm": 10.0,
+      "faixa_completa_txt": "1.5 mm",
       "taxa_horaria_pico": "< 5 mm/h",
       "janela_critica_horaria": "12:00 às 24:00h",
       "distribuicao_geografica": {
         "orla_costeira": {
           "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-          "volume_estimado": "1.4 a 2.0 mm",
+          "volume_estimado": "1.1 a 1.7 mm",
           "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
         },
         "centro_urbano": {
           "regiao": "Centro Urbano & Baixadas",
-          "volume_estimado": "1.8 a 5.5 mm",
+          "volume_estimado": "1.5 a 10.0 mm",
           "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
         },
         "regiao_rural": {
           "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-          "volume_estimado": "2.2 a 2.7 mm",
+          "volume_estimado": "1.9 a 2.2 mm",
           "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
         }
       },
@@ -532,25 +532,25 @@
     "granizo": false,
     "granizo_detalhe": "Sem previsão de granizo.",
     "chuva": {
-      "media_continua_modelos_mm": 2.5,
+      "media_continua_modelos_mm": 2.4,
       "teto_tempestade_alerta_mm": 12.4,
-      "faixa_completa_txt": "2.5 mm",
+      "faixa_completa_txt": "2.4 mm",
       "taxa_horaria_pico": "< 5 mm/h",
       "janela_critica_horaria": "12:00 às 24:00h",
       "distribuicao_geografica": {
         "orla_costeira": {
           "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-          "volume_estimado": "1.9 a 2.8 mm",
+          "volume_estimado": "1.8 a 2.6 mm",
           "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
         },
         "centro_urbano": {
           "regiao": "Centro Urbano & Baixadas",
-          "volume_estimado": "2.5 a 12.4 mm",
+          "volume_estimado": "2.4 a 12.4 mm",
           "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
         },
         "regiao_rural": {
           "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-          "volume_estimado": "3.1 a 3.8 mm",
+          "volume_estimado": "3.0 a 3.6 mm",
           "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
         }
       },
@@ -577,5 +577,5 @@
       "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
     ]
   },
-  "sintese_tecnica_precisao": "Hoje em condição regular (1.8 mm estimados e rajadas Até 37 km/h). Vigilância preventiva ativada para Sexta-feira devido a aviso meteorológico programado."
+  "sintese_tecnica_precisao": "Hoje em condição regular (1.5 mm estimados e rajadas Até 37 km/h). Vigilância preventiva ativada para Sexta-feira devido a aviso meteorológico programado."
 }
