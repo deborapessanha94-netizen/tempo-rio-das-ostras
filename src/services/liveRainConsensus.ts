@@ -417,7 +417,14 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     let cptecValidoHoje = Boolean(prevFontes.cptec_municipal_valido_hoje);
     if (dIdx === 0 && inputs.liveCptecHoje) {
       const horaAtual = String(inputs.liveCptecHoje.hora_atual || '');
-      if (horaAtual.slice(0, 10) === dateIso) {
+      let horaAtualBrtIso = horaAtual.slice(0, 10);
+      if (horaAtual.length >= 13 && horaAtual.includes('T')) {
+        const parsedMs = Date.parse(horaAtual);
+        if (Number.isFinite(parsedMs)) {
+          horaAtualBrtIso = new Date(parsedMs - 3 * 3600_000).toISOString().slice(0, 10);
+        }
+      }
+      if (horaAtualBrtIso === dateIso) {
         cptecValidoHoje = true;
         const pLive = Number(inputs.liveCptecHoje.probabilidade_chuva);
         const mLive = Number(inputs.liveCptecHoje.precipitacao_acumulada);

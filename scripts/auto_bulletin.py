@@ -105,8 +105,93 @@ def calc_sensacao_termica(temp_c, ur_pct, wind_kmh=0.0):
 
 def deg_to_compass(d):
     val = int((d / 22.5) + 0.5)
-    arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WSW', 'NW', 'NNW']
+    arr = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW']
     return arr[(val % 16)]
+
+def deg_to_compass_circular(degs_or_pairs):
+    import math
+    sx = 0.0
+    cx = 0.0
+    count = 0
+    for item in degs_or_pairs:
+        deg, w = item if isinstance(item, tuple) else (item, 1.0)
+        if deg is None or w <= 0:
+            continue
+        rad = math.radians(float(deg))
+        sx += math.sin(rad) * w
+        cx += math.cos(rad) * w
+        count += 1
+    if count == 0:
+        return 'NE'
+    ang = math.degrees(math.atan2(sx, cx)) % 360.0
+    return deg_to_compass(ang)
+
+def build_ensemble_wind_hourly(om_hourly, global_nwp_models, mm_slots):
+    """Consolida série horária de vento, rajadas e direção circular integrando ECMWF, ICON, GFS e CPTEC Multimodel.""" 
+    import math
+    times = list(om_hourly.get('time', []) or [])
+    om_w = list(om_hourly.get('wind_speed_10m', []) or [])
+    om_g = list(om_hourly.get('wind_gusts_10m', []) or [])
+    om_d = list(om_hourly.get('wind_direction_10m', []) or [])
+    ec_mod = (global_nwp_models or {}).get('ecmwf_ifs', {})
+    ic_mod = (global_nwp_models or {}).get('icon_global', {})
+    gf_mod = (global_nwp_models or {}).get('gfs_seamless', {})
+    w_out, g_out, d_out = [], [], []
+    perfil_vento = {}
+    for i, t_str in enumerate(times):
+        hk = t_str[:13]
+        d_iso = t_str[:10]
+        hr = int(t_str[11:13]) if len(t_str) >= 13 else 0
+        w_parts, g_parts, d_parts = [], [], []
+        ec_w = ec_mod.get('hourly_wind_brt', {}).get(hk)
+        ic_w = ic_mod.get('hourly_wind_brt', {}).get(hk)
+        gf_w = gf_mod.get('hourly_wind_brt', {}).get(hk)
+        if ec_w is not None: w_parts.append((float(ec_w), 0.28))
+        elif i < len(om_w) and om_w[i] is not None: w_parts.append((float(om_w[i]), 0.28))
+        if ic_w is not None: w_parts.append((float(ic_w), 0.24))
+        if gf_w is not None: w_parts.append((float(gf_w), 0.22))
+        mm_row = mm_slots.get((d_iso, hr))
+        if mm_row and mm_row.get('vent') is not None:
+            w_parts.append((float(mm_row['vent']) * 3.6, 0.26))
+        w_val = sum(v * wt for v, wt in w_parts) / sum(wt for _, wt in w_parts) if w_parts else 10.0
+
+        ec_g = ec_mod.get('hourly_gust_brt', {}).get(hk)
+        ic_g = ic_mod.get('hourly_gust_brt', {}).get(hk)
+        gf_g = gf_mod.get('hourly_gust_brt', {}).get(hk)
+        if ec_g is not None: g_parts.append((float(ec_g), 0.45))
+        elif i < len(om_g) and om_g[i] is not None: g_parts.append((float(om_g[i]), 0.45))
+        if ic_g is not None: g_parts.append((float(ic_g), 0.35))
+        if gf_g is not None: g_parts.append((float(gf_g), 0.20))
+        g_raw = sum(v * wt for v, wt in g_parts) / sum(wt for _, wt in g_parts) if g_parts else (w_val * 1.45)
+        g_val = max(g_raw, w_val * 1.2)
+
+        ec_d = ec_mod.get('hourly_dir_brt', {}).get(hk)
+        ic_d = ic_mod.get('hourly_dir_brt', {}).get(hk)
+        gf_d = gf_mod.get('hourly_dir_brt', {}).get(hk)
+        if ec_d is not None: d_parts.append((float(ec_d), 0.40))
+        elif i < len(om_d) and om_d[i] is not None: d_parts.append((float(om_d[i]), 0.40))
+        if ic_d is not None: d_parts.append((float(ic_d), 0.35))
+        if gf_d is not None: d_parts.append((float(gf_d), 0.25))
+        if d_parts:
+            sx = sum(math.sin(math.radians(dg)) * wt for dg, wt in d_parts)
+            cx = sum(math.cos(math.radians(dg)) * wt for dg, wt in d_parts)
+            d_val = round(math.degrees(math.atan2(sx, cx)) % 360.0, 1)
+        else:
+            d_val = 45.0
+        w_out.append(round(w_val, 1))
+        g_out.append(round(g_val, 1))
+        d_out.append(d_val)
+        perfil_vento[hk] = {
+            'vel_kmh': round(w_val, 1),
+            'rajada_kmh': round(g_val, 1),
+            'dir_graus': d_val,
+            'dir': deg_to_compass(d_val),
+        }
+    ens_hourly = dict(om_hourly)
+    ens_hourly['wind_speed_10m'] = w_out
+    ens_hourly['wind_gusts_10m'] = g_out
+    ens_hourly['wind_direction_10m'] = d_out
+    return ens_hourly, perfil_vento
 
 def fetch_json(url, timeout=12, retries=3):
     headers = {'User-Agent': 'MeteoRioDasOstras/2.0 (@tempoemriodasostras; contato@tempo-riodasostras.com.br)'}
@@ -1495,6 +1580,8 @@ def run_auto_bulletin_pipeline():
     official_extractions = extract_all_official_rain_sources(IMG_DIR, DATA_DIR)
     mm_slots = index_cptec_multimodel_brt(cptec_multi_list)
     obs_today_info = compute_observed_today_rain_mm(estacoes_obs)
+    global_nwp_models = (official_extractions.get('global_nwp') or {}).get('models') or {}
+    ens_hourly, perfil_horario_oficial_vento = build_ensemble_wind_hourly(hourly, global_nwp_models, mm_slots)
     day_rain_sources = {}
     perfil_horario_oficial_chuva = {}
 
@@ -1635,9 +1722,9 @@ def run_auto_bulletin_pipeline():
             press = (hourly.get('pressure_msl') or hourly['surface_pressure'])[idx_s:idx_e]
             chuvas = []
             probs = []
-            winds = hourly['wind_speed_10m'][idx_s:idx_e]
-            gusts = hourly['wind_gusts_10m'][idx_s:idx_e]
-            dirs = hourly['wind_direction_10m'][idx_s:idx_e]
+            winds = ens_hourly['wind_speed_10m'][idx_s:idx_e]
+            gusts = ens_hourly['wind_gusts_10m'][idx_s:idx_e]
+            dirs = ens_hourly['wind_direction_10m'][idx_s:idx_e]
             codes = hourly['weather_code'][idx_s:idx_e]
 
             # CPTEC Multimodel (WRF, ETA, BRAMS, BAM) alinhado exatamente em BRT:
@@ -1681,24 +1768,20 @@ def run_auto_bulletin_pipeline():
 
             inmet_desc = inmet_sub.get('resumo') if inmet_sub else None
 
-            # Direção do vento com prioridade oficial ao INMET
-            inmet_dir = inmet_sub.get('dir_vento')
-            if inmet_dir and inmet_dir.strip():
-                vento_dir_sigla = inmet_dir.strip()
+            # Direção do vento consensual circular multi-modelo; usa INMET somente por turno válido (D+0/D+1), sem congelar frentes em D+2..D+4
+            dir_ensemble = deg_to_compass_circular(dirs)
+            inmet_dir_raw = (inmet_sub.get('dir_vento') or '').strip() if has_inmet_turns else ''
+            bad_inmet_pair = inmet_dir_raw.upper() in ('NE-W', 'N-S', 'S-N', 'E-W', 'W-E', 'NW-SE', 'SE-NW', 'SW-NE', 'NE-SW')
+            if inmet_dir_raw and not bad_inmet_pair:
+                vento_dir_sigla = inmet_dir_raw
             else:
-                avg_dir = sum(dirs) / len(dirs)
-                vento_dir_sigla = deg_to_compass(avg_dir)
+                vento_dir_sigla = dir_ensemble
 
-            # Velocidade do vento integrando Multimodel e modelo
-            if multi_vents:
-                vento_vel_media = round((sum(winds) / len(winds) + sum(multi_vents) / len(multi_vents)) / 2)
-                vento_vel_min = round(min(winds + multi_vents))
-                vento_vel_max = round(max(winds + multi_vents))
-            else:
-                vento_vel_min = round(min(winds))
-                vento_vel_max = round(max(winds))
-                vento_vel_media = round(sum(winds) / len(winds))
-            rajada_max = round(max(gusts))
+            # Velocidade e rajadas de vento por consenso multi-modelo (ECMWF + ICON + GFS + CPTEC Multimodel)
+            vento_vel_min = round(min(winds)) if winds else 5
+            vento_vel_max = round(max(winds)) if winds else 12
+            vento_vel_media = round(sum(winds) / len(winds)) if winds else 8
+            rajada_max = round(max(gusts)) if gusts else 20
 
             # Código do tempo predominante coerente com os modelos brasileiros
             wmo_code = max(set(codes), key=codes.count)
@@ -1873,6 +1956,7 @@ def run_auto_bulletin_pipeline():
         d_turnos = [r for r in records_12_turnos if r['data_iso'] == dias_3[d_idx]['date_iso']]
         if d_turnos:
             dias_3[d_idx]['chuva_tot'] = round(sum(r['chuva_media'] for r in d_turnos), 1)
+            dias_3[d_idx]['vento_max'] = max(r['vento_vel_max'] for r in d_turnos)
             dias_3[d_idx]['rajada_max'] = max(r['rajada_max'] for r in d_turnos)
             dias_3[d_idx]['t_min'] = min(r['temp_min'] for r in d_turnos)
             dias_3[d_idx]['t_max'] = max(r['temp_max'] for r in d_turnos)
@@ -1949,7 +2033,7 @@ def run_auto_bulletin_pipeline():
         dias_3=dias_3,
         records_12_turnos=records_12_turnos,
         inmet_alerts=inmet_alerts,
-        hourly=hourly,
+        hourly=ens_hourly,
         tem_aviso_marinha=tem_aviso_marinha,
         m_data=m_data,
         inea_stations=inea_stations,
@@ -2128,30 +2212,47 @@ def run_auto_bulletin_pipeline():
         order = ['Madrugada', 'Manhã', 'Tarde', 'Noite']
         names_lc = {'Madrugada': 'madrugada', 'Manhã': 'manhã', 'Tarde': 'tarde', 'Noite': 'noite'}
         tmap = {r['turno']: r for r in day_turnos}
-        wet = [t for t in order if t in tmap and (tmap[t].get('chuva_media', 0) >= 0.8 or (tmap[t].get('chuva_prob', 0) >= 50 and tmap[t].get('chuva_media', 0) >= 0.3))]
-        heavy = [t for t in order if t in tmap and tmap[t].get('chuva_media', 0) >= 1.5]
-        if len(heavy) >= 3:
-            if tmap.get('Manhã', {}).get('chuva_media', 0) >= tmap.get('Madrugada', {}).get('chuva_media', 0) and tmap.get('Tarde', {}).get('chuva_media', 0) >= tmap.get('Noite', {}).get('chuva_media', 0):
-                return "ao longo do dia (com maior intensidade entre a manhã e a tarde)"
-            return "ao longo do dia"
-        if not wet:
+        vals = {t: float(tmap[t].get('chuva_media', 0) or 0.0) for t in order if t in tmap}
+        tot_v = sum(vals.values())
+        peak_v = max(vals.values(), default=0.0)
+        sig = [
+            t for t in order
+            if t in tmap and (
+                vals[t] >= max(0.7, peak_v * 0.30)
+                or (tot_v > 0 and vals[t] >= 0.3 and vals[t] >= tot_v * 0.16)
+            )
+        ]
+        if not sig:
             best = max(day_turnos, key=lambda r: (r.get('chuva_media', 0), r.get('chuva_prob', 0)))
-            wet = [best['turno']]
-        if wet == ['Tarde', 'Noite']:
+            sig = [best['turno']]
+        heavy = [t for t in sig if vals.get(t, 0.0) >= max(1.5, tot_v * 0.22)]
+        if len(heavy) >= 3:
+            top2 = sorted(order, key=lambda t: vals.get(t, 0.0), reverse=True)[:2]
+            top2_ord = [t for t in order if t in top2]
+            return f"ao longo do dia (com maior intensidade entre {names_lc[top2_ord[0]]} e {names_lc[top2_ord[1]]})"
+        if len(sig) >= 3:
+            if sig == ['Manhã', 'Tarde', 'Noite']:
+                return "entre a manhã e a noite"
+            if sig == ['Madrugada', 'Manhã', 'Tarde']:
+                return "entre a madrugada e a tarde"
+            # Escolhe os 2 turnos principais (preservando ordem cronológica) que concentram o pico
+            top2 = sorted(sig, key=lambda t: vals.get(t, 0.0), reverse=True)[:2]
+            sig = [t for t in order if t in top2]
+        if sig == ['Tarde', 'Noite']:
             return "entre a tarde e a noite"
-        if wet == ['Madrugada', 'Manhã']:
+        if sig == ['Madrugada', 'Manhã']:
             return "entre a madrugada e a manhã"
-        if wet == ['Manhã', 'Tarde']:
+        if sig == ['Manhã', 'Tarde']:
             return "entre a manhã e a tarde"
-        if wet == ['Noite']:
+        if sig == ['Noite']:
             return "concentrada no período da noite"
-        if wet == ['Tarde']:
+        if sig == ['Tarde']:
             return "a partir da tarde"
-        if wet == ['Manhã']:
+        if sig == ['Manhã']:
             return "principalmente pela manhã"
-        if len(wet) >= 3 and 'Madrugada' not in wet:
-            return "entre a manhã e a noite"
-        return "entre " + " e ".join(names_lc[t] for t in wet[:2])
+        if sig == ['Madrugada']:
+            return "durante a madrugada"
+        return "entre " + " e ".join(names_lc[t] for t in sig[:2])
 
     def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False):
         sev = str(alert_color or '').lower()
@@ -2319,7 +2420,7 @@ def run_auto_bulletin_pipeline():
             if chuva_tot >= 15.0 and heavy_turns >= 3:
                 t1 = f"{pron} {dia_nome}, a atuação persistente de cavados atmosféricos acoplados a um canal de umidade tropical alimenta áreas de instabilidade contínuas, mantendo céu encoberto e chuva recorrente ao longo do dia."
             else:
-                t1 = f"{pron} {dia_nome}, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva{' e trovoadas' if has_thunder else ''} {janela_chuva}."
+                t1 = f"{pron} {dia_nome}, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva{' e trovoadas' if has_thunder else ''} {janela_chuva.replace('concentrada ', 'concentradas ')}."
         elif codigo == 'cavado_frontal_fraco':
             t1 = f"{pron} {dia_nome}, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste ({vento_faixa}), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado."
         else:
@@ -2662,7 +2763,13 @@ def run_auto_bulletin_pipeline():
         if informe_pop and len(informe_pop) >= 6:
             desc_card = f"{desc_card} {informe_pop[-1]}"
 
-        sub_desc = day_turnos[2]['tempo_desc'] if len(day_turnos) > 2 else res_txt
+        wet_peak_turn = max(day_turnos, key=lambda r: r.get('chuva_media', 0)) if day_turnos else None
+        if wet_peak_turn and wet_peak_turn.get('chuva_media', 0) >= max(2.0, (day_turnos[2].get('chuva_media', 0) if len(day_turnos) > 2 else 0) * 2.0):
+            sub_desc = wet_peak_turn['tempo_desc']
+        else:
+            sub_desc = day_turnos[2]['tempo_desc'] if len(day_turnos) > 2 else res_txt
+        if d.get('wmo') in (95, 96, 99) and 'trovoad' not in sub_desc.lower() and not tem_alerta_card and not inmet_forecast.get(d['date_br']):
+            sub_desc = "Pancadas de Chuva com Trovoadas Isoladas"
 
         sens_vals = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos]
         sens_min = min(sens_vals) if sens_vals else int(round(d['t_min']))
@@ -2955,6 +3062,7 @@ def run_auto_bulletin_pipeline():
         },
         "inea_radartool": official_extractions.get('inea_radartool', {}),
         "perfil_horario_oficial_chuva": perfil_horario_oficial_chuva,
+        "perfil_horario_oficial_vento": perfil_horario_oficial_vento,
         "observado_recente": {
             "cemaden_pcd_18789": {
                 "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",

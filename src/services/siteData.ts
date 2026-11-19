@@ -449,12 +449,27 @@ export interface GlobalNwpDataset {
     precipitation_probability_max_gfs_seamless?: Array<number | null>;
     precipitation_sum_icon_global?: Array<number | null>;
     precipitation_probability_max_icon_global?: Array<number | null>;
+    wind_speed_10m_max_ecmwf_ifs?: Array<number | null>;
+    wind_gusts_10m_max_ecmwf_ifs?: Array<number | null>;
+    wind_speed_10m_max_gfs_seamless?: Array<number | null>;
+    wind_gusts_10m_max_gfs_seamless?: Array<number | null>;
+    wind_speed_10m_max_icon_global?: Array<number | null>;
+    wind_gusts_10m_max_icon_global?: Array<number | null>;
   };
   hourly?: {
     time?: string[];
     precipitation_ecmwf_ifs?: Array<number | null>;
     precipitation_gfs_seamless?: Array<number | null>;
     precipitation_icon_global?: Array<number | null>;
+    wind_speed_10m_ecmwf_ifs?: Array<number | null>;
+    wind_gusts_10m_ecmwf_ifs?: Array<number | null>;
+    wind_direction_10m_ecmwf_ifs?: Array<number | null>;
+    wind_speed_10m_gfs_seamless?: Array<number | null>;
+    wind_gusts_10m_gfs_seamless?: Array<number | null>;
+    wind_direction_10m_gfs_seamless?: Array<number | null>;
+    wind_speed_10m_icon_global?: Array<number | null>;
+    wind_gusts_10m_icon_global?: Array<number | null>;
+    wind_direction_10m_icon_global?: Array<number | null>;
   };
 }
 
@@ -604,7 +619,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
       'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),
     fetchJsonSafe<GlobalNwpDataset>(
-      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&hourly=precipitation,precipitation_probability&daily=precipitation_sum,precipitation_probability_max&forecast_days=8&timezone=America%2FSao_Paulo&models=ecmwf_ifs,gfs_seamless,icon_global',
+      'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&hourly=precipitation,precipitation_probability,wind_speed_10m,wind_gusts_10m,wind_direction_10m&daily=precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max&forecast_days=8&timezone=America%2FSao_Paulo&models=ecmwf_ifs,gfs_seamless,icon_global',
       5000
     ),
     fetchJsonSafe<Record<string, any>>('https://apiprevmet3.inmet.gov.br/previsao/3304524', 4500),
@@ -625,6 +640,89 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     liveGlobalNwp,
   });
 
+  // Harmoniza ventos/rajadas horários multi-modelo (ECMWF + ICON + GFS + CPTEC) mantendo openMeteo.current intacto
+  let harmonizedOpenMeteo = openMeteo;
+  if (openMeteo?.hourly?.time?.length) {
+    const hTimes = openMeteo.hourly.time;
+    const gH = liveGlobalNwp?.hourly;
+    const gIdxMap = new Map<string, number>();
+    (gH?.time || []).forEach((tk, gi) => gIdxMap.set(tk.slice(0, 13), gi));
+    const backendVentoMap: Record<string, { vel_kmh?: number; rajada_kmh?: number; dir_graus?: number }> =
+      (reconciled.boletimMeta as any)?.analise_precipitacao_multifonte?.perfil_horario_oficial_vento || {};
+
+    const newW = [...openMeteo.hourly.wind_speed_10m];
+    const newG = [...(openMeteo.hourly.wind_gusts_10m || [])];
+    const newD = [...openMeteo.hourly.wind_direction_10m];
+
+    for (let i = 0; i < hTimes.length; i++) {
+      const hk = hTimes[i].slice(0, 13);
+      const gi = gIdxMap.get(hk);
+      const bv = backendVentoMap[hk];
+      const wCand: Array<[number, number]> = [];
+      const gCand: Array<[number, number]> = [];
+      const dCand: Array<[number, number]> = [];
+
+      if (gi !== undefined && gH) {
+        const ecW = gH.wind_speed_10m_ecmwf_ifs?.[gi];
+        const icW = gH.wind_speed_10m_icon_global?.[gi];
+        const gfW = gH.wind_speed_10m_gfs_seamless?.[gi];
+        if (ecW != null && Number.isFinite(ecW)) wCand.push([Number(ecW), 0.28]);
+        else if (newW[i] != null) wCand.push([Number(newW[i]), 0.28]);
+        if (icW != null && Number.isFinite(icW)) wCand.push([Number(icW), 0.24]);
+        if (gfW != null && Number.isFinite(gfW)) wCand.push([Number(gfW), 0.22]);
+
+        const ecG = gH.wind_gusts_10m_ecmwf_ifs?.[gi];
+        const icG = gH.wind_gusts_10m_icon_global?.[gi];
+        const gfG = gH.wind_gusts_10m_gfs_seamless?.[gi];
+        if (ecG != null && Number.isFinite(ecG)) gCand.push([Number(ecG), 0.45]);
+        else if (newG[i] != null) gCand.push([Number(newG[i]), 0.45]);
+        if (icG != null && Number.isFinite(icG)) gCand.push([Number(icG), 0.35]);
+        if (gfG != null && Number.isFinite(gfG)) gCand.push([Number(gfG), 0.20]);
+
+        const ecD = gH.wind_direction_10m_ecmwf_ifs?.[gi];
+        const icD = gH.wind_direction_10m_icon_global?.[gi];
+        const gfD = gH.wind_direction_10m_gfs_seamless?.[gi];
+        if (ecD != null && Number.isFinite(ecD)) dCand.push([Number(ecD), 0.40]);
+        else if (newD[i] != null) dCand.push([Number(newD[i]), 0.40]);
+        if (icD != null && Number.isFinite(icD)) dCand.push([Number(icD), 0.35]);
+        if (gfD != null && Number.isFinite(gfD)) dCand.push([Number(gfD), 0.25]);
+      }
+
+      if (bv?.vel_kmh != null && Number.isFinite(bv.vel_kmh)) {
+        wCand.push([Number(bv.vel_kmh), 0.30]);
+      }
+      if (wCand.length) {
+        const wDen = wCand.reduce((s, p) => s + p[1], 0);
+        newW[i] = Math.round((wCand.reduce((s, p) => s + p[0] * p[1], 0) / wDen) * 10) / 10;
+      }
+      if (gCand.length) {
+        const gDen = gCand.reduce((s, p) => s + p[1], 0);
+        const gAvg = gCand.reduce((s, p) => s + p[0] * p[1], 0) / gDen;
+        newG[i] = Math.round(Math.max(gAvg, (newW[i] || 0) * 1.2) * 10) / 10;
+      }
+      if (dCand.length) {
+        let sx = 0;
+        let cx = 0;
+        for (const [deg, wt] of dCand) {
+          const rad = (deg * Math.PI) / 180;
+          sx += Math.sin(rad) * wt;
+          cx += Math.cos(rad) * wt;
+        }
+        newD[i] = Math.round((((Math.atan2(sx, cx) * 180) / Math.PI) + 360) % 360);
+      }
+    }
+
+    harmonizedOpenMeteo = {
+      ...openMeteo,
+      hourly: {
+        ...openMeteo.hourly,
+        wind_speed_10m: newW,
+        wind_gusts_10m: newG.length ? newG : openMeteo.hourly.wind_gusts_10m,
+        wind_direction_10m: newD,
+      },
+    };
+  }
+
   return {
     acumulados,
     boletimOficial: reconciled.boletimOficial,
@@ -635,7 +733,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     balneabilidade,
     tabuaMares,
     historico,
-    openMeteo,
+    openMeteo: harmonizedOpenMeteo,
   };
 }
 

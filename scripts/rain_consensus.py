@@ -187,7 +187,16 @@ def compute_daily_rain_consensus(
     cptec_hoje_valido = False
     if day_idx == 0 and cptec_hoje:
         hora_atual = str(cptec_hoje.get("hora_atual", ""))
-        if hora_atual[:10] == day_date_iso:
+        hora_atual_brt_date = hora_atual[:10]
+        if len(hora_atual) >= 13 and "T" in hora_atual:
+            try:
+                dt_h = datetime.strptime(hora_atual[:19], "%Y-%m-%dT%H:%M:%S")
+                if hora_atual.endswith("Z"):
+                    dt_h = dt_h - timedelta(hours=3)
+                hora_atual_brt_date = dt_h.strftime("%Y-%m-%d")
+            except ValueError:
+                pass
+        if hora_atual_brt_date == day_date_iso:
             cptec_hoje_valido = True
             try:
                 cptec_prob = float(cptec_hoje.get("probabilidade_chuva"))

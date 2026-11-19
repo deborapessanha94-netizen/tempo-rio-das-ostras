@@ -36,10 +36,10 @@ SSL_CTX.verify_mode = ssl.CERT_NONE
 # Coordenadas pixel de Rio das Ostras (-22.5269, -41.9450) calibradas por imagem:
 # VIME COSMO2P8 SE-RJ (683x680): 44W=166, 42W=498, 22S=312, Búzios=(518,442), Macaé=(532,376)
 VIME_SE_RJ_POINTS = [(507, 404), (504, 404), (506, 401), (502, 406)]
-# VIME COSMO7 SE (700x700): contorno Macaé-Rio das Ostras-Búzios em (533, 443)
-VIME_SE_COSMO7_POINTS = [(533, 443), (531, 443), (535, 440), (530, 446)]
-# CPTEC Mapa P>=5mm Brasil (1238x1602): costa leste RJ logo ao norte do Cabo Frio
-CPTEC_P05_POINTS = [(827, 1037), (824, 1037), (830, 1035), (820, 1040)]
+# VIME COSMO7 SE (700x700): pixels continentais limpos de Rio das Ostras (entre a costa e a divisa interna)
+VIME_SE_COSMO7_POINTS = [(517, 443), (519, 442), (518, 441), (520, 441)]
+# CPTEC Mapa P>=5mm Brasil (1238x1602): costa leste RJ (Rio das Ostras, entre Búzios e Macaé, sem borda)
+CPTEC_P05_POINTS = [(969, 1045), (968, 1046), (970, 1043), (967, 1047)]
 
 VIME_PREC_BINS = [
     (0, 1), (1, 3), (3, 5), (5, 7), (7, 9), (9, 12), (12, 16), (16, 20),
@@ -96,11 +96,18 @@ def _b64_to_pil(b64_str):
 def _sample_vime_colorbar(pil_img, bins, sample_points, max_dist=55.0):
     arr = np.array(pil_img.convert("RGB"))
     h, w, _ = arr.shape
-    bar_y = h - 16
-    for ry in range(max(0, h - 24), h - 6):
-        if len(set(tuple(arr[ry, x]) for x in range(20, w - 20, max(10, w // 18)))) >= max(5, len(bins) // 2):
-            bar_y = ry
-            break
+    min_req = max(5, len(bins) // 2)
+    bar_candidates = []
+    for ry in range(max(0, h - 28), h - 4):
+        uniq = len(set(tuple(arr[ry, x]) for x in range(20, w - 20, max(10, w // 18))))
+        if uniq >= min_req:
+            bar_candidates.append((uniq, ry))
+    if bar_candidates:
+        max_uniq = max(u for u, _ in bar_candidates)
+        best_rows = [ry for u, ry in bar_candidates if u >= max_uniq - 1]
+        bar_y = best_rows[len(best_rows) // 2]
+    else:
+        bar_y = h - 16
 
     step = w / float(len(bins))
     palette = []
@@ -114,6 +121,9 @@ def _sample_vime_colorbar(pil_img, bins, sample_points, max_dist=55.0):
         if not (0 <= px < w and 0 <= py < h):
             continue
         rgb = arr[py, px].astype(float)
+        # Ignora linhas pretas de contorno/divisa para não confundir com a faixa extrema da barra
+        if float(rgb.max()) < 30.0:
+            continue
         # Branco puro / quase branco no mapa de precipitação representa sempre a faixa mínima (0 a 1 mm)
         if bins[0][0] == 0 and bins[0][1] <= 1 and float(rgb.min()) >= 245.0:
             votes.append((bins[0][0], bins[0][1]))
@@ -136,6 +146,94 @@ def _sample_vime_colorbar(pil_img, bins, sample_points, max_dist=55.0):
     return {"min": b0, "max": b1, "rep": rep, "faixa": f"{b0} a {b1}"}
 
 
+_INMET_GLYPHS_7X5 = {
+    "0": ["01110", "10010", "10001", "10001", "10001", "10010", "01110"],
+    "1": ["01100", "10100", "00100", "00100", "00100", "00100", "11111"],
+    "2": ["01110", "10011", "00010", "00110", "01100", "11000", "11111"],
+    "3": ["01110", "10010", "00010", "00110", "00011", "10011", "11110"],
+    "4": ["00010", "00110", "01010", "11010", "10010", "11110", "00010"],
+    "5": ["11110", "10000", "10000", "11110", "00001", "10011", "11110"],
+    "6": ["01110", "10000", "10100", "11010", "10001", "10011", "01110"],
+    "7": ["11111", "00010", "00010", "00100", "00100", "01100", "01000"],
+    "8": ["01110", "10010", "10010", "01110", "10010", "10010", "01111"],
+    "9": ["01110", "01001", "11001", "01001", "00101", "00001", "01110"],
+}
+
+
+def _read_inmet_y_max_bitmap(pil_img, y_top, x_left):
+    """Lê o número inteiro no topo do eixo Y do meteograma INMET pelos glifos bitmap 5x7."""
+    gray = np.array(pil_img.convert("L"))
+    y0 = max(0, y_top - 8)
+    y1 = min(gray.shape[0], y_top + 10)
+    x0 = max(0, x_left - 28)
+    x1 = max(x0 + 6, x_left - 1)
+    mask = gray[y0:y1, x0:x1] < 160
+    r_idx = np.where(mask.any(axis=1))[0]
+    if len(r_idx) == 0:
+        return None
+    bands = []
+    s = int(r_idx[0])
+    p = s
+    for r in r_idx[1:]:
+        ri = int(r)
+        if ri > p + 2:
+            bands.append((s, p))
+            s = ri
+        p = ri
+    bands.append((s, p))
+    target_r = y_top - y0
+    b0, b1 = min(bands, key=lambda b: abs(((b[0] + b[1]) / 2.0) - target_r))
+    if (b1 - b0 + 1) < 5:
+        return None
+    band_m = mask[b0:b1 + 1, :]
+    c_active = np.where(band_m.any(axis=0))[0]
+    if len(c_active) == 0:
+        return None
+
+    col_segs = []
+    cs = int(c_active[0])
+    cp = cs
+    for c in c_active[1:]:
+        ci = int(c)
+        if ci > cp + 1:
+            col_segs.append((cs, cp))
+            cs = ci
+        cp = ci
+    col_segs.append((cs, cp))
+
+    digits = []
+    for cx0, cx1 in col_segs:
+        sub_segs = [(cx0, min(cx0 + 4, cx1)), (cx0 + 5, cx1)] if (cx1 - cx0 + 1) >= 9 else [(cx0, cx1)]
+        for sx0, sx1 in sub_segs:
+            g = band_m[:, sx0:sx1 + 1]
+            gh, gw = g.shape
+            norm = np.zeros((7, 5), dtype=float)
+            for rr in range(7):
+                src_r = min(gh - 1, int(round(rr * (gh - 1) / 6.0))) if gh > 1 else 0
+                for cc in range(5):
+                    src_c = min(gw - 1, int(round(cc * (gw - 1) / 4.0))) if gw > 1 else 0
+                    norm[rr, cc] = 1.0 if g[src_r, src_c] else 0.0
+            best_d, best_score = None, -1e9
+            for dig, rows_t in _INMET_GLYPHS_7X5.items():
+                tmpl = np.array([[1.0 if ch == "1" else 0.0 for ch in r_s] for r_s in rows_t])
+                inter = float((norm * tmpl).sum())
+                union = float(np.maximum(norm, tmpl).sum()) or 1.0
+                score = inter / union
+                if score > best_score:
+                    best_score = score
+                    best_d = dig
+            if best_d is not None and best_score >= 0.45:
+                digits.append(best_d)
+    if digits:
+        try:
+            val = float(int("".join(digits)))
+            if 1.0 <= val <= 500.0:
+                return val
+        except ValueError:
+            pass
+    return None
+
+
 # ==============================================================================
 # 1. INMET METEOGRAMA COSMO 7x7 KM (meteograma.inmet.gov.br/3304524/dinamico)
 # ==============================================================================
@@ -155,15 +253,19 @@ def _parse_cosmo_meteograma_img(pil_img, data_rodada_utc, rodada_utc):
         return None
     x_left, x_right = int(v_cols[0]), int(v_cols[-1])
 
-    # Lê y_max real e validade do cabeçalho em recortes separados ampliados para máxima precisão OCR
+    # Lê y_max real (priorizando leitor bitmap 5x7 determinístico + fallback OCR) e validade do cabeçalho
     ymin_crop = pil_img.crop((max(0, x_left - 24), max(0, y_top - 8), max(20, x_left - 1), min(arr.shape[0], y_top + 10)))
     hdr_crop = pil_img.crop((180, 34, 580, 62))
-    ymax_txt = _ocr_stitched([ymin_crop])
+    y_bmp = _read_inmet_y_max_bitmap(pil_img, y_top, x_left)
     hdr_txt = _ocr_stitched([hdr_crop])
-    m_ymax = re.search(r"\b(\d{1,3})\b", ymax_txt)
-    y_max = float(int(m_ymax.group(1))) if m_ymax else 9.0
+    if y_bmp is not None:
+        y_max = y_bmp
+    else:
+        ymax_txt = _ocr_stitched([ymin_crop])
+        m_ymax = re.search(r"\b(\d{1,3})\b", ymax_txt)
+        y_max = float(int(m_ymax.group(1))) if m_ymax else 7.0
     if y_max <= 0 or y_max > 500:
-        y_max = 9.0
+        y_max = 7.0
 
     # Validade completa obrigatória: exige início e fim separados por >= 4 dias (descarta rodadas parciais recém-iniciadas)
     dates_all = re.findall(r"(\d{2})\D+(\d{2})\D+(20\d{2})", hdr_txt)
@@ -517,6 +619,8 @@ def extract_cptec_wrf_and_prob(img_dir):
             samples = []
             for px, py in CPTEC_P05_POINTS:
                 rgb = p5[py, px]
+                if rgb.max() < 45:
+                    continue  # Ignora contorno preto de divisa/costa
                 if rgb.min() >= 246:
                     samples.append(5)  # Região branca (< 10%)
                 else:
@@ -573,13 +677,13 @@ def extract_inea_radartool_status(data_dir=None):
 # 5. MODELOS GLOBAIS (BASE WINDY: ECMWF IFS 9km, NOAA GFS, DWD ICON 13km)
 # ==============================================================================
 def extract_global_nwp_models(data_dir=None):
-    """Coleta previsões horárias e diárias individuais de ECMWF IFS (9km), NOAA GFS e DWD ICON (13km)."""
+    """Coleta previsões horárias e diárias individuais (chuva e ventos) de ECMWF IFS (9km), NOAA GFS e DWD ICON (13km)."""
     cache_p = Path(data_dir) / "global_nwp_models.json" if data_dir else None
     url = (
         "https://api.open-meteo.com/v1/forecast?"
         "latitude=-22.5269&longitude=-41.9450"
-        "&hourly=precipitation,precipitation_probability"
-        "&daily=precipitation_sum,precipitation_probability_max"
+        "&hourly=precipitation,precipitation_probability,wind_speed_10m,wind_gusts_10m,wind_direction_10m"
+        "&daily=precipitation_sum,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max"
         "&forecast_days=8&timezone=America%2FSao_Paulo"
         "&models=ecmwf_ifs,gfs_seamless,icon_global"
     )
@@ -599,25 +703,53 @@ def extract_global_nwp_models(data_dir=None):
         for m_key, m_label in model_defs.items():
             d_mm = {}
             d_prob = {}
+            d_wind_max = {}
+            d_gust_max = {}
             p_arr = daily.get(f"precipitation_sum_{m_key}", [])
             pb_arr = daily.get(f"precipitation_probability_max_{m_key}", [])
+            dw_arr = daily.get(f"wind_speed_10m_max_{m_key}", [])
+            dg_arr = daily.get(f"wind_gusts_10m_max_{m_key}", [])
             for idx, d_iso in enumerate(d_times):
                 if idx < len(p_arr) and p_arr[idx] is not None:
                     d_mm[d_iso] = round(float(p_arr[idx]), 1)
                 if idx < len(pb_arr) and pb_arr[idx] is not None:
                     d_prob[d_iso] = int(round(float(pb_arr[idx])))
+                if idx < len(dw_arr) and dw_arr[idx] is not None:
+                    d_wind_max[d_iso] = round(float(dw_arr[idx]), 1)
+                if idx < len(dg_arr) and dg_arr[idx] is not None:
+                    d_gust_max[d_iso] = round(float(dg_arr[idx]), 1)
 
             h_brt = {}
+            h_wind_brt = {}
+            h_gust_brt = {}
+            h_dir_brt = {}
             hp_arr = hourly.get(f"precipitation_{m_key}", [])
+            hw_arr = hourly.get(f"wind_speed_10m_{m_key}", [])
+            hg_arr = hourly.get(f"wind_gusts_10m_{m_key}", [])
+            hd_arr = hourly.get(f"wind_direction_10m_{m_key}", [])
             for idx, t_str in enumerate(h_times):
-                if idx < len(hp_arr) and hp_arr[idx] is not None and "T" in t_str:
-                    h_brt[t_str[:13]] = round(float(hp_arr[idx]), 3)
+                if "T" not in t_str:
+                    continue
+                tk = t_str[:13]
+                if idx < len(hp_arr) and hp_arr[idx] is not None:
+                    h_brt[tk] = round(float(hp_arr[idx]), 3)
+                if idx < len(hw_arr) and hw_arr[idx] is not None:
+                    h_wind_brt[tk] = round(float(hw_arr[idx]), 1)
+                if idx < len(hg_arr) and hg_arr[idx] is not None:
+                    h_gust_brt[tk] = round(float(hg_arr[idx]), 1)
+                if idx < len(hd_arr) and hd_arr[idx] is not None:
+                    h_dir_brt[tk] = int(round(float(hd_arr[idx]))) % 360
 
             models_out[m_key] = {
                 "nome": m_label,
                 "daily_mm": d_mm,
                 "daily_prob_pct": d_prob,
+                "daily_wind_max_kmh": d_wind_max,
+                "daily_gust_max_kmh": d_gust_max,
                 "hourly_brt": h_brt,
+                "hourly_wind_brt": h_wind_brt,
+                "hourly_gust_brt": h_gust_brt,
+                "hourly_dir_brt": h_dir_brt,
             }
 
         res = {
