@@ -2420,25 +2420,25 @@ def run_auto_bulletin_pipeline():
         if dia_idx == 0:
             if tem_alerta_dia or chuva_tot >= 5.0:
                 pico_clause = f", com potencial de pico convectivo de 20 a 30 mm/h e até {ch_pico:.0f} mm/dia {alerta_id_str}" if tem_alerta_dia else f" ({alerta_id_str})"
-                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause}){pico_clause}. Pluviômetro CEMADEN (PCD 18789) registra {cemaden_24h:.1f} mm (24h) e o Rio Jundiá (INEA 224103620) acumula {inea_ch24:.1f} mm com cota em {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e calha desobstruída."
+                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause}){pico_clause}. Pluviômetro CEMADEN (PCD 18789) acumula {cemaden_24h:.1f} mm nas últimas 24h."
             elif chuva_tot >= 0.2:
-                t2 = f"Previsão de {rain_info['frase']} e isolada {janela_chuva} ({prob_clause}). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
+                t2 = f"Previsão de {rain_info['frase']} e isolada {janela_chuva} ({prob_clause}). Pluviômetro CEMADEN (PCD 18789) acumula {cemaden_24h:.1f} mm nas últimas 24h."
             else:
-                t2 = f"Previsão de tempo firme e {rain_info['frase']} ({prob_clause}). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
+                t2 = f"Previsão de tempo firme e {rain_info['frase']} ({prob_clause}). Pluviômetro CEMADEN (PCD 18789) acumula {cemaden_24h:.1f} mm nas últimas 24h."
         else:
             if sys_cod == 'pos_frontal':
                 if has_thunder and (tem_alerta_dia or chuva_tot >= 8.0):
-                    t2 = f"Previsão de chuva pós-frontal ({rain_info['frase']}) e pancadas isoladas {janela_chuva} ({prob_clause}, com teto de até {ch_pico:.0f} mm/dia {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+                    t2 = f"Previsão de chuva pós-frontal ({rain_info['frase']}) e pancadas isoladas {janela_chuva} ({prob_clause}, com teto de até {ch_pico:.0f} mm/dia {alerta_id_str})."
                 else:
-                    t2 = f"Previsão de chuva pós-frontal {rain_info['curto']} e intermitente {janela_chuva} sustentada pela umidade oceânica ({prob_clause}, {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+                    t2 = f"Previsão de chuva pós-frontal {rain_info['curto']} e intermitente {janela_chuva} sustentada pela umidade oceânica ({prob_clause}, {alerta_id_str})."
             elif tem_alerta_dia or chuva_tot >= 5.0:
-                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause} e potencial de até {ch_pico:.0f} mm/dia {alerta_id_str}). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause} e potencial de até {ch_pico:.0f} mm/dia {alerta_id_str})."
             elif chuva_tot >= 0.2:
-                t2 = f"Previsão de {rain_info['frase']} e passageira {janela_chuva} ({prob_clause}, {alerta_id_str}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de {rain_info['frase']} e passageira {janela_chuva} ({prob_clause}, {alerta_id_str})."
             elif 'pancada' in sys_info['inmet_resumo_str'] or 'trovoad' in sys_info['inmet_resumo_str']:
-                t2 = f"Previsão de volume muito baixo nos modelos numéricos ({prob_clause}), com chance residual de chuva fraca e isolada apontada pelo INMET ({alerta_id_str}). A Bacia do Rio Jundiá permanece estável e em nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de volume muito baixo nos modelos numéricos ({prob_clause}), com chance residual de chuva fraca e isolada apontada pelo INMET ({alerta_id_str})."
             else:
-                t2 = f"Previsão de tempo seco e estável ao longo do dia, {rain_info['frase']} ({prob_clause}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de tempo seco e estável ao longo do dia, {rain_info['frase']} ({prob_clause})."
 
         sens_vals_day = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos] if day_turnos else []
         s_min_day = min(sens_vals_day) if sens_vals_day else int(round(t_min))

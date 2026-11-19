@@ -10,7 +10,7 @@
     "status_geral_cor": "warning",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": false,
-    "atualizacao_hora": "18/11/2026 às 22:32h",
+    "atualizacao_hora": "18/11/2026 às 22:39h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -587,9 +587,9 @@
     "sintese_tecnica_precisao": "Hoje em condição regular (1.8 mm estimados e rajadas Até 37 km/h). Vigilância preventiva ativada para Sexta-feira devido a aviso meteorológico programado."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "18/11/2026 às 22:31h",
-    "emissao_iso": "2026-11-18T22:31:18-03:00",
-    "generation_epoch_ms": 1795051878563,
+    "emissao": "18/11/2026 às 22:38h",
+    "emissao_iso": "2026-11-18T22:38:14-03:00",
+    "generation_epoch_ms": 1795052294560,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
       "media_mm": 0.2,
@@ -646,7 +646,7 @@
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-18T22:32:33-03:00",
+      "atualizado_em": "2026-11-18T22:39:22-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -724,7 +724,7 @@
       "disponivel": true,
       "estagio": "Vigilância",
       "estagio_indice": 0,
-      "atualizado_em": "2026-11-18T22:32:32-03:00",
+      "atualizado_em": "2026-11-18T22:39:23-03:00",
       "url": "https://radartool.inea.rj.gov.br/radar-tool/"
     },
     "perfil_horario_oficial_chuva": {
@@ -1470,7 +1470,7 @@
         "descricao": "Previsão de chuva fraca sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 21°C e máxima de 28°C. Consenso P50 de 1.8 mm (P25–P90: 0.2–3.6 mm) e ventos fracos com rajadas moderadas de até 37 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta quarta-feira, a circulação de umidade vinda do oceano com ventos costeiros fracos (de NE-E para E-NE) associada a perturbações em superfície mantém alternância entre nuvens, aberturas de sol e condição para chuva fraca (com possibilidade de trovoadas isoladas) e passageira.",
-          "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e isolada entre a tarde e a noite (consenso de 1.8 mm no dia; faixa probabilística P25–P90 de 0.2 a 3.6 mm, prob. 85%). Pluviômetro CEMADEN registra 0.0 mm e o Rio Jundiá (INEA) cota de 1.35 m (Status: Vigilância), em regime seguro de vazante contínua.",
+          "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e isolada entre a tarde e a noite (consenso de 1.8 mm no dia; faixa probabilística P25–P90 de 0.2 a 3.6 mm, prob. 85%). Pluviômetro CEMADEN (PCD 18789) acumula 0.0 mm nas últimas 24h.",
           "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 21°C ao amanhecer e máxima de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 19°C e 26°C.",
           "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos fracos de NE-E rondando para E-NE (5 a 14 km/h), com rajadas moderadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1536,7 +1536,7 @@
         "descricao": "Previsão de chuva fraca sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 24°C e máxima de 34°C. Consenso P50 de 2.2 mm (P25–P90: 0.7–4.7 mm) e ventos fracos com rajadas moderadas de até 35 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta quinta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-          "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre a tarde e a noite (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 0.7 a 4.7 mm, prob. 65%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+          "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre a tarde e a noite (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 0.7 a 4.7 mm, prob. 65%, sem alertas severos vigentes).",
           "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 34°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 37°C no pico do calor. Na região rural, oscilam entre 22°C e 32°C.",
           "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos fracos predominantes de NE-N (8 a 12 km/h), com rajadas moderadas de até 35 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1602,7 +1602,7 @@
         "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas entre mínima de 23°C e máxima de 32°C. Precipitação: consenso P50 de 9.7 mm (P25–P90: 1.2–90.0 mm) com potencial de pico convectivo de até 90 mm/dia sob Alerta INMET. Ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta sexta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre madrugada e manhã.",
-          "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e manhã (consenso de 9.7 mm no dia; faixa probabilística P25–P90 de 1.2 a 90.0 mm, prob. 80% e potencial de até 90 mm/dia sob Alerta Amarelo de Tempestade nº 56447 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.35 m).",
+          "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e manhã (consenso de 9.7 mm no dia; faixa probabilística P25–P90 de 1.2 a 90.0 mm, prob. 80% e potencial de até 90 mm/dia sob Alerta Amarelo de Tempestade nº 56447 do INMET).",
           "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
           "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos fracos predominantes de NE-E (4 a 9 km/h), com rajadas moderadas de até 40 km/h na orla (Alerta Amarelo de Tempestade nº 56447 do INMET).",
@@ -1668,7 +1668,7 @@
         "descricao": "Previsão de chuva fraca sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 24°C e máxima de 34°C. Consenso P50 de 4.9 mm (P25–P90: 0.2–18.3 mm) e ventos fracos com rajadas fracas a moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Neste sábado, a circulação de umidade vinda do oceano com ventos costeiros fracos (N-NW) associada a perturbações em superfície mantém alternância entre nuvens, aberturas de sol e condição para chuva fraca e passageira.",
-          "Previsão de chuva fraca e passageira entre a tarde e a noite (consenso de 4.9 mm no dia; faixa probabilística P25–P90 de 0.2 a 18.3 mm, prob. 50%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+          "Previsão de chuva fraca e passageira entre a tarde e a noite (consenso de 4.9 mm no dia; faixa probabilística P25–P90 de 0.2 a 18.3 mm, prob. 50%, sem alertas severos vigentes).",
           "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 34°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 38°C no pico do calor. Na região rural, oscilam entre 22°C e 32°C.",
           "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos fracos predominantes de N-NW (8 a 10 km/h), com rajadas fracas a moderadas de até 29 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -1888,7 +1888,7 @@
       "sensacao_faixa": "23° a 30°C",
       "informe_populacao": [
         "Nesta quarta-feira, a circulação de umidade vinda do oceano com ventos costeiros fracos (de NE-E para E-NE) associada a perturbações em superfície mantém alternância entre nuvens, aberturas de sol e condição para chuva fraca (com possibilidade de trovoadas isoladas) e passageira.",
-        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e isolada entre a tarde e a noite (consenso de 1.8 mm no dia; faixa probabilística P25–P90 de 0.2 a 3.6 mm, prob. 85%). Pluviômetro CEMADEN registra 0.0 mm e o Rio Jundiá (INEA) cota de 1.35 m (Status: Vigilância), em regime seguro de vazante contínua.",
+        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e isolada entre a tarde e a noite (consenso de 1.8 mm no dia; faixa probabilística P25–P90 de 0.2 a 3.6 mm, prob. 85%). Pluviômetro CEMADEN (PCD 18789) acumula 0.0 mm nas últimas 24h.",
         "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 21°C ao amanhecer e máxima de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 19°C e 26°C.",
         "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos fracos de NE-E rondando para E-NE (5 a 14 km/h), com rajadas moderadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2014,7 +2014,7 @@
       "sensacao_faixa": "24° a 37°C",
       "informe_populacao": [
         "Nesta quinta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre a tarde e a noite (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 0.7 a 4.7 mm, prob. 65%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre a tarde e a noite (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 0.7 a 4.7 mm, prob. 65%, sem alertas severos vigentes).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 34°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 37°C no pico do calor. Na região rural, oscilam entre 22°C e 32°C.",
         "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos predominantes de NE-N (8 a 12 km/h), com rajadas moderadas de até 35 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2140,7 +2140,7 @@
       "sensacao_faixa": "26° a 35°C",
       "informe_populacao": [
         "Nesta sexta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre madrugada e manhã.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e manhã (consenso de 9.7 mm no dia; faixa probabilística P25–P90 de 1.2 a 90.0 mm, prob. 80% e potencial de até 90 mm/dia sob Alerta Amarelo de Tempestade nº 56447 do INMET). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.35 m).",
+        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e manhã (consenso de 9.7 mm no dia; faixa probabilística P25–P90 de 1.2 a 90.0 mm, prob. 80% e potencial de até 90 mm/dia sob Alerta Amarelo de Tempestade nº 56447 do INMET).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
         "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos predominantes de NE-E (4 a 9 km/h), com rajadas moderadas de até 40 km/h na orla (Alerta Amarelo de Tempestade nº 56447 do INMET).",
@@ -2266,7 +2266,7 @@
       "sensacao_faixa": "26° a 38°C",
       "informe_populacao": [
         "Neste sábado, a circulação de umidade vinda do oceano com ventos costeiros fracos (N-NW) associada a perturbações em superfície mantém alternância entre nuvens, aberturas de sol e condição para chuva fraca e passageira.",
-        "Previsão de chuva fraca e passageira entre a tarde e a noite (consenso de 4.9 mm no dia; faixa probabilística P25–P90 de 0.2 a 18.3 mm, prob. 50%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+        "Previsão de chuva fraca e passageira entre a tarde e a noite (consenso de 4.9 mm no dia; faixa probabilística P25–P90 de 0.2 a 18.3 mm, prob. 50%, sem alertas severos vigentes).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 34°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 38°C no pico do calor. Na região rural, oscilam entre 22°C e 32°C.",
         "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos fracos predominantes de N-NW (8 a 10 km/h), com rajadas fracas a moderadas de até 29 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2392,7 +2392,7 @@
       "sensacao_faixa": "25° a 33°C",
       "informe_populacao": [
         "Neste domingo, o fortalecimento de crista atmosférica na borda da Alta Subtropical do Atlântico Sul (ASAS), em padrão pré-frontal (fluxo de S-SW em mesoescala e giro costeiro S-SW), favorece advecção de ar quente, predomínio de sol entre poucas nuvens e calor acentuado.",
-        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre madrugada e tarde (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 1.1 a 3.4 mm, prob. 65%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre madrugada e tarde (consenso de 2.2 mm no dia; faixa probabilística P25–P90 de 1.1 a 3.4 mm, prob. 65%, sem alertas severos vigentes).",
         "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 32°C à tarde, com sensação térmica variando entre a menor de 25°C e a maior de 33°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
         "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos predominantes de S-SW (4 a 11 km/h), com rajadas moderadas de até 36 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2518,7 +2518,7 @@
       "sensacao_faixa": "24° a 35°C",
       "informe_populacao": [
         "Nesta segunda-feira, o avanço de uma alta pressão costeira na retaguarda do cavado estabelece ventos do quadrante Sul/Sudoeste (de S para SW), promovendo alívio térmico, nebulosidade variável e possibilidade de chuva fraca ou garoa isolada.",
-        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre madrugada e tarde (consenso de 2.8 mm no dia; faixa probabilística P25–P90 de 0.0 a 10.8 mm, prob. 45%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre madrugada e tarde (consenso de 2.8 mm no dia; faixa probabilística P25–P90 de 0.0 a 10.8 mm, prob. 45%, sem alertas severos vigentes).",
         "Temperaturas em declínio térmico, variando entre mínima de 22°C ao amanhecer e máxima contida de 29°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 20°C e 27°C.",
         "A umidade relativa do ar oscila entre 77% nas horas mais quentes da tarde e 94% na madrugada (Ar Úmido).",
         "Ventos fracos a moderados de S rondando para SW (5 a 15 km/h), com rajadas moderadas de até 42 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2644,7 +2644,7 @@
       "sensacao_faixa": "25° a 35°C",
       "informe_populacao": [
         "Nesta terça-feira, o predomínio da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) mantém circulação de Leste/Nordeste (de WSW rondando para E/NE) com subsidência atmosférica, garantindo tempo firme, períodos de sol e rápida elevação das temperaturas.",
-        "Previsão de chuva fraca e passageira concentrada no período da noite (consenso de 1.3 mm no dia; faixa probabilística P25–P90 de 0.0 a 3.6 mm, prob. 30%, sem alertas severos vigentes). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro (1.35 m).",
+        "Previsão de chuva fraca e passageira concentrada no período da noite (consenso de 1.3 mm no dia; faixa probabilística P25–P90 de 0.0 a 3.6 mm, prob. 30%, sem alertas severos vigentes).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 30°C à tarde em gradual elevação, com sensação térmica variando entre a menor de 25°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 28°C.",
         "A umidade relativa do ar oscila entre 79% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos fracos a moderados de WSW rondando para E (7 a 18 km/h), com rajadas moderadas de até 37 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -2770,7 +2770,7 @@
       "sensacao_faixa": "27° a 49°C",
       "informe_populacao": [
         "Nesta quarta-feira, a aproximação e atuação de um novo sistema frontal na costa fluminense promove rotação dos ventos (de NNE rondando para SE/SSW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e tarde (consenso de 6.5 mm no dia; faixa probabilística P25–P90 de 0.2 a 12.0 mm, prob. 84% e potencial de até 12 mm/dia sem alertas severos vigentes). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro (1.35 m).",
+        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre madrugada e tarde (consenso de 6.5 mm no dia; faixa probabilística P25–P90 de 0.2 a 12.0 mm, prob. 84% e potencial de até 12 mm/dia sem alertas severos vigentes).",
         "Temperaturas variam entre mínima de 24°C ao amanhecer e máxima de 35°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 27°C e a maior de 49°C no pico do calor. Na região rural, oscilam entre 22°C e 33°C.",
         "A umidade relativa do ar oscila entre 72% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de NNE rondando para SE (6 a 9 km/h), com rajadas fracas a moderadas de até 33 km/h na orla (Sem avisos meteorológicos vigentes).",
@@ -3081,7 +3081,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-18T22:31:33.556320"
+    "atualizado_em": "2026-11-18T22:38:31.256468"
   },
   "vime_inmet": {
     "disponivel": true,
@@ -3134,7 +3134,7 @@
     "disponivel": true,
     "estagio": "Vigilância",
     "estagio_indice": 0,
-    "atualizado_em": "2026-11-18T22:32:32-03:00",
+    "atualizado_em": "2026-11-18T22:39:23-03:00",
     "url": "https://radartool.inea.rj.gov.br/radar-tool/"
   },
   "inea_boletim_hidrometeorologico": {
@@ -3143,7 +3143,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-18 22:31:37 BRT",
+    "data_coleta": "2026-11-18 22:38:35 BRT",
     "publicado_em": "17/11/2026 às 06h30",
     "fonte_pdf_sha256": "77fae7d84f9ed65e",
     "pdf_bytes": 615402,
@@ -3203,7 +3203,7 @@
   "inea_macae_ostras": {
     "fonte": "INEA - Sistema de Alerta de Cheias",
     "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-    "atualizacao": "18/11/2026 22:31",
+    "atualizacao": "18/11/2026 22:38",
     "bacia": "Rios Macaé e das Ostras",
     "alerta_macae": {
       "tem_elevacao_fora_limite": true,
@@ -3215,7 +3215,7 @@
           "curso_agua": "rio São Pedro",
           "estacao": "São Pedro",
           "tendencia": "Estavel",
-          "leitura": "18/11/2026 22:15",
+          "leitura": "18/11/2026 22:30",
           "status_bruto": "ATENÇÃO",
           "status": "ATENÇÃO",
           "cor_badge": "warning",
@@ -3330,7 +3330,7 @@
         "curso_agua": "rio São Pedro",
         "estacao": "São Pedro",
         "tendencia": "Estavel",
-        "leitura": "18/11/2026 22:15",
+        "leitura": "18/11/2026 22:30",
         "status_bruto": "ATENÇÃO",
         "status": "ATENÇÃO",
         "cor_badge": "warning",
@@ -3917,7 +3917,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-18 00z",
-    "atualizacao": "18/11/2026 22:31",
+    "atualizacao": "18/11/2026 22:38",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -4003,7 +4003,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "18/11/2026",
-    "atualizacao": "18/11/2026 22:31",
+    "atualizacao": "18/11/2026 22:38",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -4183,7 +4183,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-18T22:31:53.246833",
+    "atualizado_em": "2026-11-18T22:38:48.970187",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "04:16",

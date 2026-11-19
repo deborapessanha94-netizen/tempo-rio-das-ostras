@@ -1,7 +1,7 @@
 {
   "fonte": "INEA - Sistema de Alerta de Cheias",
   "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-  "atualizacao": "18/11/2026 22:31",
+  "atualizacao": "18/11/2026 22:38",
   "bacia": "Rios Macaé e das Ostras",
   "alerta_macae": {
     "tem_elevacao_fora_limite": true,
@@ -13,7 +13,7 @@
         "curso_agua": "rio São Pedro",
         "estacao": "São Pedro",
         "tendencia": "Estavel",
-        "leitura": "18/11/2026 22:15",
+        "leitura": "18/11/2026 22:30",
         "status_bruto": "ATENÇÃO",
         "status": "ATENÇÃO",
         "cor_badge": "warning",
@@ -128,7 +128,7 @@
       "curso_agua": "rio São Pedro",
       "estacao": "São Pedro",
       "tendencia": "Estavel",
-      "leitura": "18/11/2026 22:15",
+      "leitura": "18/11/2026 22:30",
       "status_bruto": "ATENÇÃO",
       "status": "ATENÇÃO",
       "cor_badge": "warning",

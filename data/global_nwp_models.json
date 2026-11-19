@@ -1,6 +1,6 @@
 {
   "disponivel": true,
-  "atualizado_em": "2026-11-18T22:32:33-03:00",
+  "atualizado_em": "2026-11-18T22:39:22-03:00",
   "models": {
     "ecmwf_ifs": {
       "nome": "ECMWF IFS (9 km)",
