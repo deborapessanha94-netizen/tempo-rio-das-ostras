@@ -1603,34 +1603,43 @@ export default function App() {
                       const prevHoje = (boletimMeta as any)?.analise_precipitacao_multifonte?.previsto_por_dia?.[0];
                       const probHoje = prevHoje?.probabilistico;
                       const ineaHoje = boletimMeta?.inea_boletim_hidrometeorologico?.previsao_rh8?.hoje;
+                      const ineaHojeValido = Boolean(
+                        ineaHoje?.extraido_pdf && (!prevHoje?.data_br || ineaHoje.data === prevHoje.data_br)
+                      );
+                      const qtdFontes =
+                        boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length ||
+                        probHoje?.qtd_fontes_numericas ||
+                        9;
                       return (
                         <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                           <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                             <CloudRain className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
-                            <span>Chuva Prevista (P50)</span>
+                            <span>Chuva Prevista (Consenso)</span>
                           </div>
-                          <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
-                            {prevHoje
-                              ? `${Number(prevHoje.chuva_media_modelos_mm ?? 0).toFixed(1)} mm`
-                              : hojeDiaResumo?.pilares?.chuva?.val
-                                ? hojeDiaResumo.pilares.chuva.val.split(' (')[0]
-                                : '--'}
+                          <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 leading-tight">
+                            <span className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums">
+                              {prevHoje
+                                ? `${Number(prevHoje.chuva_media_modelos_mm ?? 0).toFixed(1)} mm`
+                                : hojeDiaResumo?.pilares?.chuva?.val
+                                  ? hojeDiaResumo.pilares.chuva.val.split(' (')[0]
+                                  : '--'}
+                            </span>
                             {(prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva) && (
-                              <span className="ml-1.5 text-[10px] font-sans font-semibold text-[#FF8244]">
+                              <span className="text-[11px] font-sans font-semibold text-[#FF8244] whitespace-nowrap">
                                 ({prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva})
                               </span>
                             )}
                           </div>
                           <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
                             {probHoje
-                              ? `P25–P90: ${Number(probHoje.p25_mm ?? 0).toFixed(1)}–${Number(probHoje.p90_teto_mm ?? 0).toFixed(1)} mm · Prob. ${probHoje.probabilidade_pct ?? prevHoje?.chuva_prob_pct ?? '--'}%`
+                              ? `Probabilidade: ${probHoje.probabilidade_pct ?? prevHoje?.chuva_prob_pct ?? '--'}%`
                               : hojeInspecao?.alerta_ativo && hojeInspecao.chuva?.taxa_horaria_pico
                                 ? `Pico: ${hojeInspecao.chuva.taxa_horaria_pico}`
                                 : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
                           </div>
-                          <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 truncate">
-                            {ineaHoje?.extraido_pdf ? `INEA: ${ineaHoje.faixa_municipio_mm || ineaHoje.faixa_chuva_mm} · ` : ''}
-                            {boletimMeta?.analise_precipitacao_multifonte?.fontes_ao_vivo_status?.fontes_respondedoras?.length || probHoje?.qtd_fontes_numericas || 9} fontes (BR + ECMWF/GFS/ICON)
+                          <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 leading-snug break-words">
+                            {ineaHojeValido ? `INEA: ${ineaHoje.faixa_municipio_mm || ineaHoje.faixa_chuva_mm} · ` : ''}
+                            {qtdFontes} fontes integradas (BR + ECMWF/GFS/ICON)
                           </div>
                         </div>
                       );
@@ -2418,13 +2427,8 @@ export default function App() {
                                         {prevDiaObj?.intensidade_chuva || (d as any)?.intensidade_chuva}
                                       </span>
                                     )}
-                                    {probObj && (
-                                      <span className="text-[9.5px] font-semibold text-[#FF8244] block mt-0.5">
-                                        P25–P90: {Number(probObj.p25_mm ?? 0).toFixed(1)}–{Number(probObj.p90_teto_mm ?? 0).toFixed(1)} mm
-                                      </span>
-                                    )}
                                     {srcBits.length > 0 && (
-                                      <span className="text-[9px] text-slate-400 dark:text-[#E5E5E5]/55 block mt-0.5 truncate" title={srcBits.join(' · ')}>
+                                      <span className="text-[9px] text-slate-400 dark:text-[#E5E5E5]/55 block mt-0.5 leading-snug">
                                         {srcBits.join(' · ')}
                                       </span>
                                     )}
