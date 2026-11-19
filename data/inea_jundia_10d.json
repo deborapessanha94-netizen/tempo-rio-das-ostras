@@ -43,18 +43,6 @@
   },
   "dados": [
     {
-      "chuva": 0.2,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.2,
-      "chuva_24h": 0.2,
-      "chuva_30d": 61.2,
-      "chuva_4h": 0.2,
-      "chuva_96h": 0.2,
-      "datai": 202611090230,
-      "datetime_brt": "2026-11-08T23:30:00-03:00",
-      "nivel": 1.56
-    },
-    {
       "chuva": 0.0,
       "chuva_15min": 0.0,
       "chuva_1h": 0.0,
