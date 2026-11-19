@@ -1520,30 +1520,16 @@ export default function App() {
                         <span className="font-mono text-2xl text-[#FF8244]">C</span>
                       </div>
 
-                      <div className="space-y-1.5">
-                        <div className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-[#E5E5E5]/85">
-                          <Flame className="w-4 h-4 text-[#FF8244] shrink-0" />
-                          <span>
-                            Sensação agora:{' '}
-                            <strong className="font-mono text-[#14213D] dark:text-white tabular-nums">
-                              {currentSensacaoVal !== undefined && currentSensacaoVal !== null
-                                ? `${Math.round(currentSensacaoVal)}°C`
-                                : '--'}
-                            </strong>
-                          </span>
-                        </div>
-                        <div className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/70 space-y-0.5">
-                          <div>
-                            {hojeDiaResumo?.pilares?.temp?.val
-                              ? `Faixa hoje: ${hojeDiaResumo.pilares.temp.val}`
-                              : openMeteo?.daily
-                                ? `Mín ${Math.round(openMeteo.daily.temperature_2m_min[0])}°C · Máx ${Math.round(openMeteo.daily.temperature_2m_max[0])}°C`
-                                : ''}
-                          </div>
-                          {hojeDiaResumo?.sensacao_faixa && (
-                            <div>Sensação prevista: {hojeDiaResumo.sensacao_faixa}</div>
-                          )}
-                        </div>
+                      <div className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 dark:text-[#E5E5E5]/85">
+                        <Flame className="w-4 h-4 text-[#FF8244] shrink-0" />
+                        <span>
+                          Sensação agora:{' '}
+                          <strong className="font-mono text-[#14213D] dark:text-white tabular-nums">
+                            {currentSensacaoVal !== undefined && currentSensacaoVal !== null
+                              ? `${Math.round(currentSensacaoVal)}°C`
+                              : '--'}
+                          </strong>
+                        </span>
                       </div>
                     </div>
 
