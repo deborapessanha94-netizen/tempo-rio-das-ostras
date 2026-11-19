@@ -1546,11 +1546,6 @@ export default function App() {
                               (openMeteo?.current ? wmoToPtBr(openMeteo.current.weather_code) : 'Monitoramento ativo')}
                           </span>
                         </span>
-                        {hojeDiaResumo?.pilares?.agua_precipitavel?.val && (
-                          <span className="font-mono text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">
-                            VIME: {hojeDiaResumo.pilares.agua_precipitavel.val}
-                          </span>
-                        )}
                       </div>
 
                       {(() => {
