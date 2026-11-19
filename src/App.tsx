@@ -1551,6 +1551,11 @@ export default function App() {
                               : hojeDiaResumo?.pilares?.chuva?.val
                                 ? hojeDiaResumo.pilares.chuva.val.split(' (')[0]
                                 : '--'}
+                            {(prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva) && (
+                              <span className="ml-1.5 text-[10px] font-sans font-semibold text-[#FF8244]">
+                                ({prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva})
+                              </span>
+                            )}
                           </div>
                           <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
                             {probHoje
@@ -2344,6 +2349,11 @@ export default function App() {
                                         ? `${Number(prevDiaObj.chuva_media_modelos_mm ?? 0).toFixed(1)} mm (${probObj?.probabilidade_pct ?? prevDiaObj.chuva_prob_pct ?? '--'}%)`
                                         : d.pilares.chuva.val}
                                     </span>
+                                    {(prevDiaObj?.intensidade_chuva || (d as any)?.intensidade_chuva) && (
+                                      <span className="text-[9.5px] font-semibold text-[#14213D]/80 dark:text-[#E5E5E5]/85 block mt-0.5">
+                                        {prevDiaObj?.intensidade_chuva || (d as any)?.intensidade_chuva}
+                                      </span>
+                                    )}
                                     {probObj && (
                                       <span className="text-[9.5px] font-semibold text-[#FF8244] block mt-0.5">
                                         P25–P90: {Number(probObj.p25_mm ?? 0).toFixed(1)}–{Number(probObj.p90_teto_mm ?? 0).toFixed(1)} mm
@@ -6214,13 +6224,17 @@ export default function App() {
                                   {Number(d.p25).toFixed(1)}–{Number(d.p90).toFixed(1)}
                                 </span>
                               )}
-                              {isChuvaExpressiva ? (
+                              {d.val >= 25 ? (
+                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-red-500/15 text-red-500 mt-0.5">
+                                  Forte
+                                </span>
+                              ) : d.val >= 5 ? (
                                 <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244] mt-0.5">
                                   Moderada
                                 </span>
-                              ) : d.val > 0 ? (
+                              ) : d.val >= 0.2 ? (
                                 <span className="text-[8px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium mt-0.5">
-                                  Leve
+                                  Fraca
                                 </span>
                               ) : (
                                 <span className="text-[8px] text-slate-400 mt-0.5">

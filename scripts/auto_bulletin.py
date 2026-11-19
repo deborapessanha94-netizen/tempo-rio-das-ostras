@@ -2153,6 +2153,62 @@ def run_auto_bulletin_pipeline():
             return "entre a manhã e a noite"
         return "entre " + " e ".join(names_lc[t] for t in wet[:2])
 
+    def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False):
+        sev = str(alert_color or '').lower()
+        if chuva_mm >= 50.0 or sev == 'vermelho':
+            return {"titulo": "Chuva muito forte", "frase": "chuva forte a muito forte", "curto": "muito forte"}
+        if chuva_mm >= 25.0 or sev == 'laranja':
+            f_txt = "chuva moderada a forte" if chuva_mm < 35.0 else "chuva forte"
+            return {"titulo": "Chuva forte", "frase": f_txt, "curto": "forte"}
+        if chuva_mm >= 5.0 or has_alert:
+            extra = " (com risco de pancadas fortes e trovoadas)" if (has_thunder or has_alert) else ""
+            return {"titulo": "Chuva moderada", "frase": f"chuva moderada{extra}", "curto": "moderada"}
+        if chuva_mm >= 1.0:
+            extra = " (com possibilidade de trovoadas isoladas)" if has_thunder else ""
+            return {"titulo": "Chuva fraca", "frase": f"chuva fraca{extra}", "curto": "fraca"}
+        if chuva_mm >= 0.2:
+            return {"titulo": "Chuva muito fraca", "frase": "chuva muito fraca ou chuvisco", "curto": "muito fraca"}
+        return {"titulo": "Sem chuva significativa", "frase": "sem chuva significativa", "curto": "sem chuva significativa"}
+
+    def _classify_wind_nomenclature(day_turnos, rajada_max):
+        sust_vals = [float(r.get('vento_vel_media', 10.0)) for r in (day_turnos or [])]
+        v_min_med = min(sust_vals) if sust_vals else 5.0
+        v_max_med = max(sust_vals) if sust_vals else 12.0
+        if v_max_med < 6.0:
+            w_adj, w_lbl = "calmos a muito fracos", "Calmo a Fraco"
+        elif v_max_med < 15.0:
+            w_adj, w_lbl = "fracos", "Fraco"
+        elif v_max_med < 20.0:
+            w_adj, w_lbl = "fracos a moderados", "Fraco a Moderado"
+        elif v_max_med < 35.0:
+            w_adj, w_lbl = "moderados", "Moderado"
+        elif v_max_med < 50.0:
+            w_adj, w_lbl = "moderados a fortes", "Moderado a Forte"
+        else:
+            w_adj, w_lbl = "fortes a muito fortes", "Forte"
+
+        if rajada_max < 25.0:
+            r_adj, r_lbl = "rajadas fracas", "Fracas"
+        elif rajada_max < 35.0:
+            r_adj, r_lbl = "rajadas fracas a moderadas", "Fracas a moderadas"
+        elif rajada_max < 50.0:
+            r_adj, r_lbl = "rajadas moderadas", "Moderadas"
+        elif rajada_max < 62.0:
+            r_adj, r_lbl = "rajadas moderadas a fortes", "Moderadas a fortes"
+        elif rajada_max < 75.0:
+            r_adj, r_lbl = "rajadas fortes", "Fortes"
+        else:
+            r_adj, r_lbl = "rajadas muito fortes (vendaval)", "Muito fortes"
+
+        return {
+            "v_min_med": v_min_med,
+            "v_max_med": v_max_med,
+            "wind_adj": w_adj,
+            "wind_lbl": w_lbl,
+            "raj_adj": r_adj,
+            "raj_lbl": r_lbl,
+        }
+
     def classificar_sistema_dia(dia_idx, prev_codigo=None, next_codigo=None):
         d = dias_3[dia_idx]
         day_turnos = [r for r in records_12_turnos if r['data_iso'] == d['date_iso']]
@@ -2267,7 +2323,13 @@ def run_auto_bulletin_pipeline():
         elif codigo == 'cavado_frontal_fraco':
             t1 = f"{pron} {dia_nome}, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste ({vento_faixa}), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado."
         else:
-            t1 = f"{pron} {dia_nome}, a circulação de umidade vinda do oceano com ventos costeiros ({vento_faixa}) associada a perturbações fracas em superfície mantém alternância entre nuvens, aberturas de sol e chance de chuva fraca e passageira."
+            r_t1 = _classify_rain_nomenclature(chuva_tot, len(alerts_d) > 0, (alerts_d[0].get('cor_nome') if alerts_d else None), has_thunder)
+            w_t1 = _classify_wind_nomenclature(day_turnos, d.get('rajada_max', 25.0))
+            if chuva_tot < 0.2 and len(alerts_d) == 0:
+                chuva_t1_clause = "predomínio de sol entre poucas nuvens, sem chuva significativa"
+            else:
+                chuva_t1_clause = f"alternância entre nuvens, aberturas de sol e condição para {r_t1['frase']} e passageira"
+            t1 = f"{pron} {dia_nome}, a circulação de umidade vinda do oceano com ventos costeiros {w_t1['wind_adj']} ({vento_faixa}) associada a perturbações em superfície mantém {chuva_t1_clause}."
 
         return {
             'codigo': codigo,
@@ -2335,40 +2397,48 @@ def run_auto_bulletin_pipeline():
         avisos_str = " e ".join(avisos_ref) if avisos_ref else "Sem avisos meteorológicos vigentes"
         dir_inicio = day_turnos[0]['vento_dir'] if day_turnos else "NE"
         dir_fim = day_turnos[2]['vento_dir'] if len(day_turnos) > 2 else "SE"
+        wind_info = _classify_wind_nomenclature(day_turnos, rajada_max)
+        v_band = f"{wind_info['v_min_med']:.0f} a {wind_info['v_max_med']:.0f} km/h" if round(wind_info['v_min_med']) != round(wind_info['v_max_med']) else f"em torno de {wind_info['v_max_med']:.0f} km/h"
         if dir_inicio != dir_fim:
-            vento_txt = f"Ventos de {dir_inicio} rondando para {dir_fim} moderados com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
+            vento_txt = f"Ventos {wind_info['wind_adj']} de {dir_inicio} rondando para {dir_fim} ({v_band}), com {wind_info['raj_adj']} de até {rajada_max:.0f} km/h na orla ({avisos_str})."
         else:
-            vento_txt = f"Ventos predominantes de {dir_inicio} moderados com rajadas de até {rajada_max:.0f} km/h na orla ({avisos_str})."
+            vento_txt = f"Ventos {wind_info['wind_adj']} predominantes de {dir_inicio} ({v_band}), com {wind_info['raj_adj']} de até {rajada_max:.0f} km/h na orla ({avisos_str})."
 
         tem_alerta_dia = len(day_alerts) > 0
         ch_pico = d.get('chuva_pico_max', 50.0)
-        alerta_id_str = f"sob Alerta {d.get('alerta_cor', 'Amarelo')} de Tempestade nº {d.get('alerta_id')} do INMET" if d.get('tem_alerta_inmet') else "sem alertas severos vigentes"
+        alerta_cor_dia = d.get('alerta_cor', 'Amarelo')
+        alerta_id_str = f"sob Alerta {alerta_cor_dia} de Tempestade nº {d.get('alerta_id')} do INMET" if d.get('tem_alerta_inmet') else "sem alertas severos vigentes"
+        rain_info = _classify_rain_nomenclature(chuva_tot, tem_alerta_dia, alerta_cor_dia, has_thunder)
+        d_prob = d.get('probabilistico') or {}
+        p25_d = float(d_prob.get('p25_mm', 0.0))
+        p90_d = float(d_prob.get('p90_teto_mm', ch_pico))
+        prob_d = int(d.get('chuva_prob_dia', 25))
+        prob_clause = f"consenso de {chuva_tot:.1f} mm no dia; faixa probabilística P25–P90 de {p25_d:.1f} a {p90_d:.1f} mm, prob. {prob_d}%"
 
         t1 = sys_info['t1']
 
         if dia_idx == 0:
             if tem_alerta_dia or chuva_tot >= 5.0:
-                tipo_chuva_hoje = "pancadas de chuva com risco de raios" if has_thunder else "chuva moderada a ocasionalmente forte"
                 pico_clause = f", com potencial de pico convectivo de 20 a 30 mm/h e até {ch_pico:.0f} mm/dia {alerta_id_str}" if tem_alerta_dia else f" ({alerta_id_str})"
-                t2 = f"Previsão de {tipo_chuva_hoje} {janela_chuva}, com volume contínuo de {chuva_tot:.1f} mm pelos modelos{pico_clause}. Pluviômetro CEMADEN (PCD 18789) registra {cemaden_24h:.1f} mm (24h) e o Rio Jundiá (INEA 224103620) acumula {inea_ch24:.1f} mm com cota em {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e calha desobstruída."
+                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause}){pico_clause}. Pluviômetro CEMADEN (PCD 18789) registra {cemaden_24h:.1f} mm (24h) e o Rio Jundiá (INEA 224103620) acumula {inea_ch24:.1f} mm com cota em {jundia_nivel} m (Status: {jundia_status}), em regime de total estabilidade e calha desobstruída."
+            elif chuva_tot >= 0.2:
+                t2 = f"Previsão de {rain_info['frase']} e isolada {janela_chuva} ({prob_clause}). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
             else:
-                t2 = f"Previsão de tempo predominantemente estável com baixa possibilidade de chuva isolada ({chuva_tot:.1f} mm no dia). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
+                t2 = f"Previsão de tempo firme e {rain_info['frase']} ({prob_clause}). Pluviômetro CEMADEN registra {cemaden_24h:.1f} mm e o Rio Jundiá (INEA) cota de {jundia_nivel} m (Status: {jundia_status}), em regime seguro de vazante contínua."
         else:
             if sys_cod == 'pos_frontal':
                 if has_thunder and (tem_alerta_dia or chuva_tot >= 8.0):
-                    t2 = f"Previsão de chuva pós-frontal e pancadas isoladas com risco de descargas elétricas {janela_chuva} (média de {chuva_tot:.1f} mm com pico de até {ch_pico:.0f} mm/dia {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+                    t2 = f"Previsão de chuva pós-frontal ({rain_info['frase']}) e pancadas isoladas {janela_chuva} ({prob_clause}, com teto de até {ch_pico:.0f} mm/dia {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
                 else:
-                    t2 = f"Previsão de chuva pós-frontal fraca a moderada e intermitente {janela_chuva} sustentada pela umidade oceânica (média de {chuva_tot:.1f} mm, {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
+                    t2 = f"Previsão de chuva pós-frontal {rain_info['curto']} e intermitente {janela_chuva} sustentada pela umidade oceânica ({prob_clause}, {alerta_id_str}). O Rio Jundiá segue em regime estável de vazante (nível de {jundia_nivel} m)."
             elif tem_alerta_dia or chuva_tot >= 5.0:
-                t2 = f"Previsão de pancadas de chuva {'com trovoadas ' if has_thunder else ''}{janela_chuva} (média de {chuva_tot:.1f} mm e potencial de até {ch_pico:.0f} mm/dia {alerta_id_str}). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
-            elif chuva_tot >= 1.5:
-                t2 = f"Previsão de chuva fraca e passageira {janela_chuva} (acumulado estimado de {chuva_tot:.1f} mm, {alerta_id_str}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause} e potencial de até {ch_pico:.0f} mm/dia {alerta_id_str}). A Bacia do Rio Jundiá opera com drenagem livre e nível seguro ({jundia_nivel} m)."
+            elif chuva_tot >= 0.2:
+                t2 = f"Previsão de {rain_info['frase']} e passageira {janela_chuva} ({prob_clause}, {alerta_id_str}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
             elif 'pancada' in sys_info['inmet_resumo_str'] or 'trovoad' in sys_info['inmet_resumo_str']:
-                t2 = f"Previsão de baixo volume pluviométrico nos modelos numéricos ({chuva_tot:.1f} mm), embora com possibilidade de pancada muito isolada indicada pelo INMET devido à umidade residual ({alerta_id_str}). A Bacia do Rio Jundiá permanece estável e em nível seguro ({jundia_nivel} m)."
-            elif chuva_tot < 0.2:
-                t2 = f"Previsão de tempo seco e estável ao longo do dia, sem expectativa de chuva significativa (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de volume muito baixo nos modelos numéricos ({prob_clause}), com chance residual de chuva fraca e isolada apontada pelo INMET ({alerta_id_str}). A Bacia do Rio Jundiá permanece estável e em nível seguro ({jundia_nivel} m)."
             else:
-                t2 = f"Previsão de tempo firme com baixíssima probabilidade de garoa ou chuvisco isolado {janela_chuva} (acumulado previsto de {chuva_tot:.1f} mm). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
+                t2 = f"Previsão de tempo seco e estável ao longo do dia, {rain_info['frase']} ({prob_clause}). A Bacia do Rio Jundiá permanece em condição de total estabilidade e nível seguro ({jundia_nivel} m)."
 
         sens_vals_day = [r.get('sensacao_termica', round((r['temp_min'] + r['temp_max']) / 2)) for r in day_turnos] if day_turnos else []
         s_min_day = min(sens_vals_day) if sens_vals_day else int(round(t_min))
@@ -2443,8 +2513,12 @@ def run_auto_bulletin_pipeline():
     prep2 = prep_dia(d2['dia_semana'])
     prep3 = prep_dia(d3['dia_semana'])
 
-    d0_faixa = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
-    d1_faixa = d1.get('chuva_faixa_txt') or f"{d1['chuva_tot']:.1f} mm"
+    d0_r_info = _classify_rain_nomenclature(d0['chuva_tot'], d0.get('tem_alerta_inmet', False), d0.get('alerta_cor'))
+    d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'))
+    d0_turnos_syn = [r for r in records_12_turnos if r['data_iso'] == d0['date_iso']]
+    d0_w_info = _classify_wind_nomenclature(d0_turnos_syn, d0.get('rajada_max', 25.0))
+    d0_faixa = f"{d0_r_info['frase']} ({d0.get('chuva_faixa_txt') or f'{d0["chuva_tot"]:.1f} mm'})"
+    d1_faixa = f"{d1_r_info['frase']} ({d1.get('chuva_faixa_txt') or f'{d1["chuva_tot"]:.1f} mm'})"
     d2_faixa = d2.get('chuva_faixa_txt') or f"{d2['chuva_tot']:.1f} mm"
     d3_faixa = d3.get('chuva_faixa_txt') or f"{d3['chuva_tot']:.1f} mm"
 
@@ -2532,9 +2606,8 @@ def run_auto_bulletin_pipeline():
             f"na coluna troposférica (PW de {(d0.get('fontes_chuva') or {}).get('inmet_vime_pwat_faixa') or '35 a 40 mm'} aferida no VIME/INMET), umidade relativa em superfície e expressiva disponibilidade de "
             f"Energia Potencial Convectiva Disponível (índices CAPE moderados a altos, com erosão progressiva da inibição convectiva - CINE a partir da tarde) "
             f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
-            f"Esse regime potencializa a formação de pancadas de chuva convectivas de intensidade moderada a forte, com risco de descargas elétricas "
-            f"atmosféricas (raios nuvem-solo) e rajadas de vento descendentes convectivas (downbursts / frentes de rajada de até {max_rajada_geral:.0f} km/h "
-            f"na orla marítima). {jundia_frase_sinopse}\n\n"
+            f"Esse padrão determina ocorrência de {d0_r_info['frase']} sobre a região, sob ventos {d0_w_info['wind_adj']} em superfície e {d0_w_info['raj_adj']} de até {max_rajada_geral:.0f} km/h "
+            f"na orla marítima. {jundia_frase_sinopse}\n\n"
             f"Na evolução do prognóstico numérico de mesoescala para o horizonte de 72 horas (rodadas COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC e modelos globais ECMWF/GFS/ICON), projeta-se a passagem "
             f"gradual da instabilidade pré-frontal e o restabelecimento progressivo de subsidência atmosférica com elevação bárica na retaguarda. "
             f"Para {prep1} {d1['dia_semana'].lower()} ({d1['date_short']}), o escoamento de superfície passa por rotação gradativa dos ventos para Sudeste/Leste "
@@ -2576,19 +2649,24 @@ def run_auto_bulletin_pipeline():
 
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
         faixa_sub = d.get('chuva_faixa_txt') or f"{dia_chuva:.1f} mm"
+        card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'))
+        card_wind_info = _classify_wind_nomenclature(day_turnos, dia_rajada)
+        card_prob_obj = d.get('probabilistico') or {}
+        d_p25_c = float(card_prob_obj.get('p25_mm', 0.0))
+        d_p90_c = float(card_prob_obj.get('p90_teto_mm', dia_chuva))
 
         if d.get('tem_alerta_inmet'):
             desc_card = (
-                f"Previsão de {res_txt.lower()} sobre Rio das Ostras. "
+                f"Previsão de {card_rain_info['frase']} sobre Rio das Ostras ({res_txt.lower()}). "
                 f"Temperaturas entre mínima de {d['t_min']:.0f}°C e máxima de {d['t_max']:.0f}°C. "
-                f"Precipitação: volume médio contínuo de {dia_chuva:.1f} mm com potencial de pico convectivo de até {d.get('chuva_pico_max', 50):.0f} mm/dia sob Alerta INMET. "
-                f"Rajadas de vento de até {dia_rajada:.0f} km/h na faixa litorânea."
+                f"Precipitação: consenso P50 de {dia_chuva:.1f} mm (P25–P90: {d_p25_c:.1f}–{d_p90_c:.1f} mm) com potencial de pico convectivo de até {d.get('chuva_pico_max', 50):.0f} mm/dia sob Alerta INMET. "
+                f"Ventos {card_wind_info['wind_adj']} com {card_wind_info['raj_adj']} de até {dia_rajada:.0f} km/h na faixa litorânea."
             )
         else:
             desc_card = (
-                f"Previsão de {res_txt.lower()} sobre Rio das Ostras. "
+                f"Previsão de {card_rain_info['frase']} sobre Rio das Ostras ({res_txt.lower()}). "
                 f"Temperaturas variando entre mínima de {d['t_min']:.0f}°C e máxima de {d['t_max']:.0f}°C. "
-                f"Volume pluviométrico diário estimado em {dia_chuva:.1f} mm com rajadas de vento de até {dia_rajada:.0f} km/h na faixa litorânea."
+                f"Consenso P50 de {dia_chuva:.1f} mm (P25–P90: {d_p25_c:.1f}–{d_p90_c:.1f} mm) e ventos {card_wind_info['wind_adj']} com {card_wind_info['raj_adj']} de até {dia_rajada:.0f} km/h na faixa litorânea."
             )
 
         informe_pop = gerar_informe_populacao_5_topicos(
@@ -2609,6 +2687,8 @@ def run_auto_bulletin_pipeline():
             "subtitulo": sub_desc,
             "badge": badge,
             "badge_tipo": badge_tipo,
+            "intensidade_chuva": card_rain_info['titulo'],
+            "intensidade_vento": f"{card_wind_info['wind_lbl']} ({card_wind_info['raj_lbl']})",
             "descricao": desc_card,
             "inspecao_tempo_severo": d_inspecao,
             "sensacao_min": sens_min,
@@ -2620,7 +2700,7 @@ def run_auto_bulletin_pipeline():
                 "temp": { "label": "TEMPERATURA", "val": f"{d['t_min']:.0f}° a {d['t_max']:.0f}°C", "icon": "thermometer" },
                 "sensacao": { "label": "SENSAÇÃO TÉRMICA", "val": f"Menor: {sens_min}°C • Maior: {sens_max}°C", "sensacao_min": sens_min, "sensacao_max": sens_max, "icon": "flame" },
                 "umid": { "label": "UMIDADE", "val": f"{min([r['umid_min'] for r in day_turnos])}% a {max([r['umid_max'] for r in day_turnos])}%", "icon": "droplets" },
-                "vento": { "label": "VENTO & RAJADAS", "val": f"Rajadas {dia_rajada:.0f} km/h", "icon": "wind" },
+                "vento": { "label": "VENTO & RAJADAS", "val": f"{card_wind_info['wind_lbl']} • Rajadas {dia_rajada:.0f} km/h ({card_wind_info['raj_lbl']})", "icon": "wind" },
                 "chuva": { "label": "CHUVA", "val": ch_card_val, "icon": "cloud-rain" if dia_chuva > 5 or d.get('tem_alerta_inmet') else "cloud-drizzle" },
                 "mar": { "label": "MAR E PRAIA", "val": day_turnos[1]['mar_ondas'] if len(day_turnos) > 1 else "1.4 m", "icon": "waves" },
                 "uv": { "label": "ÍNDICE UV (CPTEC)", "val": f"UV {d.get('uv_max', 11)} (Extremo)", "icon": "sun" },
@@ -2910,6 +2990,7 @@ def run_auto_bulletin_pipeline():
                 "data_iso": d['date_iso'],
                 "data_br": d['date_br'],
                 "dia_semana": d['dia_semana'],
+                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'))['titulo'],
                 "chuva_media_modelos_mm": d['chuva_tot'],
                 "chuva_p25_mm": (d.get('probabilistico') or {}).get('p25_mm', 0.0),
                 "chuva_p50_mm": (d.get('probabilistico') or {}).get('p50_mm', d['chuva_tot']),

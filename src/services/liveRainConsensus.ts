@@ -99,6 +99,16 @@ function round1(val: number): number {
   return Math.round(val * 10) / 10;
 }
 
+function classifyRainIntensityLabel(chuvaMm: number, hasAlert: boolean, alertColor?: string | null): string {
+  const sev = String(alertColor || '').toLowerCase();
+  if (chuvaMm >= 50 || sev === 'vermelho') return 'Chuva muito forte';
+  if (chuvaMm >= 25 || sev === 'laranja') return 'Chuva forte';
+  if (chuvaMm >= 5 || hasAlert) return 'Chuva moderada';
+  if (chuvaMm >= 1.0) return 'Chuva fraca';
+  if (chuvaMm >= 0.2) return 'Chuva muito fraca';
+  return 'Sem chuva significativa';
+}
+
 function weightedQuantiles(samples: Array<[number, number]>): {
   p25: number;
   p50: number;
@@ -631,6 +641,8 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       qtd_fontes_numericas: samples.length,
     };
 
+    const rainIntensityLabel = classifyRainIntensityLabel(p50, Boolean(activeAlert), activeAlert?.cor_nome);
+    prevDia.intensidade_chuva = rainIntensityLabel;
     prevDia.chuva_media_modelos_mm = p50;
     prevDia.chuva_p25_mm = p25;
     prevDia.chuva_p50_mm = p50;
@@ -663,10 +675,22 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     };
 
     const card = meta.dias_resumo?.[dIdx];
+    if (card) {
+      card.intensidade_chuva = rainIntensityLabel;
+    }
     if (card?.pilares?.chuva) {
       card.pilares.chuva.val = activeAlert
         ? `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm • Teto ${newPicoMax.toFixed(0)} mm)`
         : `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm)`;
+    }
+    if (card && Array.isArray(card.informe_populacao) && card.informe_populacao.length >= 2 && Math.abs(p50 - oldDayMm) >= 0.2) {
+      const oldP2 = String(card.informe_populacao[1] || '');
+      const updatedP2 = oldP2
+        .replace(
+          /\((?:consenso(?: P50)? de|m[eé]dia de|acumulado (?:estimado|previsto) de)\s+\d+(?:[.,]\d+)?\s*mm(?:[^)]*)\)/i,
+          `(consenso de ${p50.toFixed(1)} mm no dia; faixa P25–P90 de ${p25.toFixed(1)} a ${p90.toFixed(1)} mm, prob. ${probPct}%)`
+        );
+      card.informe_populacao[1] = updatedP2;
     }
 
     // Rebalanceia os 4 turnos em boletimOficial combinando perfil oficial + globais ao vivo
