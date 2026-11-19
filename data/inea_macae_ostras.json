@@ -1,7 +1,7 @@
 {
   "fonte": "INEA - Sistema de Alerta de Cheias",
   "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-  "atualizacao": "18/11/2026 22:38",
+  "atualizacao": "18/11/2026 22:47",
   "bacia": "Rios Macaé e das Ostras",
   "alerta_macae": {
     "tem_elevacao_fora_limite": true,
@@ -96,7 +96,7 @@
       "curso_agua": "rio Jundiá",
       "estacao": "Jundiá",
       "tendencia": "Estável",
-      "leitura": "18/11/2026 19:00",
+      "leitura": "18/11/2026 19:30",
       "status_bruto": "VIGILÂNCIA",
       "status": "VIGILÂNCIA",
       "cor_badge": "success",
@@ -113,7 +113,7 @@
       "curso_agua": "rio Jundiá",
       "estacao": "Jundiá",
       "tendencia": "Estável",
-      "leitura": "18/11/2026 19:00",
+      "leitura": "18/11/2026 19:30",
       "status_bruto": "VIGILÂNCIA",
       "status": "VIGILÂNCIA",
       "cor_badge": "success",

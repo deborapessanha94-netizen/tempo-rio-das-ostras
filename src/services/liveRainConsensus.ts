@@ -688,7 +688,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       const updatedP2 = oldP2
         .replace(
           /\((?:consenso(?: P50)? de|m[eé]dia de|acumulado (?:estimado|previsto) de)\s+\d+(?:[.,]\d+)?\s*mm(?:[^)]*)\)/i,
-          `(consenso de ${p50.toFixed(1)} mm no dia; faixa P25–P90 de ${p25.toFixed(1)} a ${p90.toFixed(1)} mm, prob. ${probPct}%)`
+          `(consenso de ${p50.toFixed(1)} mm no dia; probabilidade de ${probPct}%)`
         );
       card.informe_populacao[1] = updatedP2;
     }
