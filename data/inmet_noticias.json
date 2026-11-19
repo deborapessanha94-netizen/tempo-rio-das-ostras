@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-19 19:01:42",
+  "coleta_iso": "2026-11-19 19:58:57",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para sexta-feira (20), sábado (21), domingo (22) e segunda-feira (23)",
+      "data": "19/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-20-sábado-21-domingo-22-e-segunda-feira-23",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "INMET celebra 117 anos em cerimônia na sede do Instituto, em Brasília",
       "data": "18/11/2026",
@@ -57,12 +63,6 @@
       "data": "13/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-14-domingo-15-e-segunda-feira-16",
       "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de simpósio internacional sobre tempestades severas em São Paulo",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-simpósio-internacional-sobre-tempestades-severas-em-são-paulo",
-      "relevancia_sudeste": true
     }
   ]
 }
