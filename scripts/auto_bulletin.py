@@ -1646,23 +1646,42 @@ def run_auto_bulletin_pipeline():
                 try: uv_cptec = float(c_item.get('indice_uv'))
                 except: pass
 
-        # 3. Consenso Térmico Oficial (INMET + CPTEC/INPE)
+        # Variáveis completas do dia extraídas dos mapas VIME/INMET (COSMO 2.8km & 7km)
+        vime_day = ((official_extractions.get('inmet_vime') or {}).get('daily_vime_vars') or {}).get(day_date_iso) or {}
+        vt_min = vime_day.get('temp_min_c')
+        vt_max = vime_day.get('temp_max_c')
+        v_umin = vime_day.get('ur_min_pct')
+        v_umax = vime_day.get('ur_max_pct')
+        v_rj_kmh = vime_day.get('rajada_max_kmh')
+
+        # 3. Consenso Térmico Oficial (INMET + CPTEC/INPE + VIME COSMO 2.8km/7km)
         t_mins = []
         if t_min_inmet is not None: t_mins.append(float(t_min_inmet))
         if t_min_cptec is not None: t_mins.append(float(t_min_cptec))
-        if not t_mins: t_mins.append(float(om['daily']['temperature_2m_min'][day_idx]))
-        day_t_min = round(min(t_mins))
+        if not t_mins:
+            t_mins.append(float(om['daily']['temperature_2m_min'][day_idx]))
+        # Célula costeira VIME tende a ser ligeiramente mais quente à noite; integra se alinhada ou em dias estendidos
+        if vt_min is not None:
+            if len(t_mins) == 1 and t_min_inmet is None and t_min_cptec is None:
+                day_t_min = round(0.70 * t_mins[0] + 0.30 * float(vt_min))
+            else:
+                if float(vt_min) <= min(t_mins) + 1.5:
+                    t_mins.append(float(vt_min))
+                day_t_min = round(min(t_mins))
+        else:
+            day_t_min = round(min(t_mins))
 
         t_maxs = []
         if t_max_inmet is not None: t_maxs.append(float(t_max_inmet))
         if t_max_cptec is not None: t_maxs.append(float(t_max_cptec))
         if not t_maxs: t_maxs.append(float(om['daily']['temperature_2m_max'][day_idx]))
         
-        # Média consensual das máximas entre INMET e CPTEC
+        # Média consensual das máximas entre INMET, CPTEC e VIME COSMO
         if len(t_maxs) >= 2:
-            day_t_max = round(sum(t_maxs) / len(t_maxs))
+            base_max = sum(t_maxs) / len(t_maxs)
+            day_t_max = round(0.78 * base_max + 0.22 * float(vt_max)) if vt_max is not None else round(base_max)
         else:
-            day_t_max = round(t_maxs[0])
+            day_t_max = round(0.75 * t_maxs[0] + 0.25 * float(vt_max)) if vt_max is not None else round(t_maxs[0])
 
         day_alerts = get_day_alerts(day_date_iso)
         tem_alerta_inmet_dia = len(day_alerts) > 0
@@ -1782,6 +1801,10 @@ def run_auto_bulletin_pipeline():
             vento_vel_max = round(max(winds)) if winds else 12
             vento_vel_media = round(sum(winds) / len(winds)) if winds else 8
             rajada_max = round(max(gusts)) if gusts else 20
+            if v_rj_kmh is not None and float(v_rj_kmh) >= 50.4:
+                turn_chk = day_turn_rain.get(turno_nome, 0.0)
+                if turno_nome in ('Tarde', 'Noite') and (turn_chk >= 0.5 or (vime_day.get('cape_max_jkg') or 0) >= 750):
+                    rajada_max = max(rajada_max, round(float(v_rj_kmh)))
 
             # Código do tempo predominante coerente com os modelos brasileiros
             wmo_code = max(set(codes), key=codes.count)
@@ -1825,6 +1848,10 @@ def run_auto_bulletin_pipeline():
 
             if umid_cptec is not None and turno_nome == 'Tarde':
                 u_min = min(u_min, round(umid_cptec))
+            if v_umin is not None and turno_nome == 'Tarde':
+                u_min = round(0.75 * u_min + 0.25 * float(v_umin))
+            if v_umax is not None and turno_nome in ('Madrugada', 'Manhã', 'Noite'):
+                u_max = min(99, max(u_min + 2, round(0.75 * u_max + 0.25 * float(v_umax))))
 
             # Pressão atmosférica (PNM calibrada para faixa sinótica costeira de Rio das Ostras)
             if multi_press:
@@ -2336,7 +2363,14 @@ def run_auto_bulletin_pipeline():
         inea_tem_chuva = (inea_min_val >= 10.0 or '10 a 25' in inea_faixa or '25 a 50' in inea_faixa or '50 a ' in inea_faixa)
         inmet_tende = inmet_d['tende'].lower()
         chuva_tot = d['chuva_tot']
-        has_thunder = (len(alerts_d) > 0 or d.get('wmo') in (95, 96, 99) or 'trovoad' in inmet_d['resumo_str'] or 'raios' in inea_cond)
+        vime_d = (d.get('fontes_chuva') or {}).get('vime_dia') or {}
+        vime_conv_thunder = (
+            (vime_d.get('cape_max_jkg') or 0) >= 1200
+            and vime_d.get('showalter_min') is not None and float(vime_d['showalter_min']) <= -2.0
+            and (vime_d.get('pwat_max_mm') or 0) >= 45
+            and chuva_tot >= 2.0
+        )
+        has_thunder = (len(alerts_d) > 0 or d.get('wmo') in (95, 96, 99) or 'trovoad' in inmet_d['resumo_str'] or 'raios' in inea_cond or vime_conv_thunder)
 
         mar_parts = [str(m_data.get('texto', '')), str(m_data.get('tipo', '')), str(m_data.get('forca', ''))] if m_data else []
         if m_data:
@@ -2699,8 +2733,11 @@ def run_auto_bulletin_pipeline():
             f"{prep0} {d0['dia_semana'].lower()} ({d0['date_short']}), com precipitação diária prevista em {d0_faixa} ({d0_aviso_str}).\n\n"
             f"O forte aquecimento diabático por radiação solar em superfície durante o ciclo diurno estabelece taxas de lapso superadiabáticas junto ao solo, "
             f"promovendo forçamento termodinâmico ascensional e desestabilização vertical da troposfera. A conjugação entre elevado teor de água precipitável "
-            f"na coluna troposférica (PW de {(d0.get('fontes_chuva') or {}).get('inmet_vime_pwat_faixa') or '35 a 40 mm'} aferida no VIME/INMET), umidade relativa em superfície e expressiva disponibilidade de "
-            f"Energia Potencial Convectiva Disponível (índices CAPE moderados a altos, com erosão progressiva da inibição convectiva - CINE a partir da tarde) "
+            f"na coluna troposférica (PW de {(d0.get('fontes_chuva') or {}).get('inmet_vime_pwat_faixa') or '35 a 40 mm'} aferida no VIME/INMET), umidade relativa em superfície e disponibilidade de "
+            f"Energia Potencial Convectiva Disponível (CAPE de {(d0.get('fontes_chuva') or {}).get('inmet_vime_cape_faixa') or '100 a 500 J/kg'}"
+            + (f", Showalter mínimo de {((d0.get('fontes_chuva') or {}).get('vime_dia') or {}).get('showalter_min'):+.1f}°C" if ((d0.get('fontes_chuva') or {}).get('vime_dia') or {}).get('showalter_min') is not None else "")
+            + (f" e nebulosidade média de {((d0.get('fontes_chuva') or {}).get('vime_dia') or {}).get('nuvem_total_media_pct')}%" if ((d0.get('fontes_chuva') or {}).get('vime_dia') or {}).get('nuvem_total_media_pct') is not None else "")
+            + f", com erosão da inibição convectiva - CINE ao longo do aquecimento diurno) "
             f"sustenta o desenvolvimento de nuvens cumuliformes de grande desenvolvimento vertical (Cumulus congestus e núcleos convectivos de Cumulonimbus - Cb). "
             f"Esse padrão determina ocorrência de {d0_r_info['frase']} sobre a região, sob ventos {d0_w_info['wind_adj']} em superfície e {d0_w_info['raj_adj']} de até {max_rajada_geral:.0f} km/h "
             f"na orla marítima. {jundia_frase_sinopse}\n\n"

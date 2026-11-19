@@ -6425,19 +6425,62 @@ export default function App() {
                               </div>
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
                                 <div className="text-[9px] uppercase text-slate-400">VIME PWAT / CAPE</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white truncate" title={`PWAT ${fn.inmet_vime_pwat_faixa || '--'} mm | CAPE ${fn.inmet_vime_cape_faixa || '--'} J/kg`}>
-                                  PW {fn.inmet_vime_pwat_faixa || '--'} · CAPE {fn.inmet_vime_cape_faixa || '--'}
+                                <div className="font-semibold text-[#14213D] dark:text-white" title={`PWAT ${fn.vime_dia?.pwat_faixa || fn.inmet_vime_pwat_faixa || '--'} | CAPE ${fn.vime_dia?.cape_faixa || fn.inmet_vime_cape_faixa || '--'}`}>
+                                  PW {fn.vime_dia?.pwat_faixa || fn.inmet_vime_pwat_faixa || '--'} · CAPE {fn.vime_dia?.cape_faixa || fn.inmet_vime_cape_faixa || '--'}
                                 </div>
                               </div>
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
                                 <div className="text-[9px] uppercase text-slate-400">Obs. Hoje (Estações)</div>
-                                <div className="font-semibold text-[#14213D] dark:text-white truncate">
+                                <div className="font-semibold text-[#14213D] dark:text-white">
                                   {fn.observado_hoje_media_mm !== null && fn.observado_hoje_media_mm !== undefined
                                     ? `${Number(fn.observado_hoje_media_mm).toFixed(1)} mm (máx ${Number(fn.observado_hoje_max_mm ?? 0).toFixed(1)})`
                                     : 'Dia futuro'}
                                 </div>
                               </div>
                             </div>
+                            {(() => {
+                              const vd: Record<string, any> | null = fn.vime_dia || (boletimMeta as any)?.vime_inmet?.daily_vime_vars?.[selDia.data_iso] || null;
+                              if (!vd) return null;
+                              const ur850Txt = vd.ur850_max_pct !== undefined && vd.ur850_max_pct !== null
+                                ? (Number(vd.ur850_max_pct) <= 35 ? '< 50%' : `${vd.ur850_max_pct}%`)
+                                : '--';
+                              const rajVimeTxt = vd.rajada_max_kmh && Number(vd.rajada_max_kmh) >= 50.4
+                                ? `${Number(vd.rajada_max_kmh).toFixed(0)} km/h`
+                                : '< 50 km/h (<14 m/s)';
+                              return (
+                                <div className="mt-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
+                                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">
+                                    Variáveis Atmosféricas Extraídas do INMET VIME ({vd.fonte_termica || 'COSMO'})
+                                  </div>
+                                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-[10px]">
+                                    <div className="p-1.5 rounded bg-white/70 dark:bg-[#14213D]/70 border border-[#E5E5E5] dark:border-[#233354]">
+                                      <span className="text-slate-400 block text-[9px]">Temp. 2m / UR 2m (VIME)</span>
+                                      <span className="font-semibold text-[#14213D] dark:text-white">
+                                        {vd.temp_min_c ?? '--'}–{vd.temp_max_c ?? '--'}°C · {vd.ur_min_pct ?? '--'}–{vd.ur_max_pct ?? '--'}%
+                                      </span>
+                                    </div>
+                                    <div className="p-1.5 rounded bg-white/70 dark:bg-[#14213D]/70 border border-[#E5E5E5] dark:border-[#233354]">
+                                      <span className="text-slate-400 block text-[9px]">Chuva 1h / 6h & Rajada VIME</span>
+                                      <span className="font-semibold text-[#14213D] dark:text-white">
+                                        {vd.prec1h_sum_mm !== undefined ? `1h: ${vd.prec1h_sum_mm}mm · ` : ''}{vd.prec6h_sum_mm !== undefined ? `6h: ${vd.prec6h_sum_mm}mm · ` : ''}{rajVimeTxt}
+                                      </span>
+                                    </div>
+                                    <div className="p-1.5 rounded bg-white/70 dark:bg-[#14213D]/70 border border-[#E5E5E5] dark:border-[#233354]">
+                                      <span className="text-slate-400 block text-[9px]">CAPE / Showalter / Total Totals</span>
+                                      <span className="font-semibold text-[#14213D] dark:text-white">
+                                        {vd.cape_max_jkg ?? '--'} J/kg · Kshow {vd.showalter_min ?? '--'} · TT {vd.total_totals_max ?? '--'}
+                                      </span>
+                                    </div>
+                                    <div className="p-1.5 rounded bg-white/70 dark:bg-[#14213D]/70 border border-[#E5E5E5] dark:border-[#233354]">
+                                      <span className="text-slate-400 block text-[9px]">Nuvens / Ômega 850 / UR 850</span>
+                                      <span className="font-semibold text-[#14213D] dark:text-white">
+                                        Nuv {vd.nuvem_total_media_pct ?? '--'}% · Ω {vd.omega850_min_pas ?? '--'} · UR850 {ur850Txt}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         );
                       })()}

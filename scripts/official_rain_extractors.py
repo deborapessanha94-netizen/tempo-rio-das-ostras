@@ -13,7 +13,9 @@ import json
 import os
 from pathlib import Path
 import re
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import ssl
+import time
 import urllib.request
 
 import numpy as np
@@ -35,9 +37,15 @@ SSL_CTX.verify_mode = ssl.CERT_NONE
 
 # Coordenadas pixel de Rio das Ostras (-22.5269, -41.9450) calibradas por imagem:
 # VIME COSMO2P8 SE-RJ (683x680): 44W=166, 42W=498, 22S=312, Búzios=(518,442), Macaé=(532,376)
-VIME_SE_RJ_POINTS = [(507, 404), (504, 404), (506, 401), (502, 406)]
+VIME_SE_RJ_POINTS = [
+    (507, 404), (504, 404), (506, 401), (502, 406),
+    (505, 403), (503, 402), (508, 402), (501, 404), (504, 406),
+]
 # VIME COSMO7 SE (700x700): pixels continentais limpos de Rio das Ostras (entre a costa e a divisa interna)
-VIME_SE_COSMO7_POINTS = [(517, 443), (519, 442), (518, 441), (520, 441)]
+VIME_SE_COSMO7_POINTS = [
+    (517, 443), (519, 442), (518, 441), (520, 441),
+    (516, 442), (515, 443), (516, 440), (518, 443), (514, 442),
+]
 # CPTEC Mapa P>=5mm Brasil (1238x1602): costa leste RJ (Rio das Ostras, entre Búzios e Macaé, sem borda)
 CPTEC_P05_POINTS = [(969, 1045), (968, 1046), (970, 1043), (967, 1047)]
 
@@ -393,127 +401,595 @@ def extract_inmet_cosmo_meteograma(img_dir, data_dir):
 # ==============================================================================
 # 2. INMET VIME (vime.inmet.gov.br/SE e SE-RJ) — COSMO 2.8km & 7km, PWAT, CAPE
 # ==============================================================================
+# ==============================================================================
+# 2. INMET VIME (COSMO 2.8km SE-RJ + COSMO 7km SE — EXTRAÇÃO INTEGRAL)
+# ==============================================================================
+_VIME_BINS = {
+    "prec24h":     [(0,1),(1,3),(3,5),(5,7),(7,9),(9,12),(12,16),(16,20),(20,30),(30,40),(40,50),(50,60),(60,70),(70,90),(90,125),(125,200),(200,300)],
+    "prec1h":      [(0,1),(1,3),(3,5),(5,7),(7,9),(9,11),(11,13),(13,15),(15,17),(17,19),(19,21),(21,23),(23,25),(25,35),(35,50),(50,70)],
+    "prevento10m": [(0,0.5),(0.5,1),(1,2),(2,3),(3,4),(4,5),(5,6),(6,7),(7,8),(8,9),(9,10),(10,12),(12,15),(15,20),(20,25),(25,30),(30,40),(40,50)],
+    "prec3h6h":    [(0,1),(1,3),(3,5),(5,7),(7,9),(9,12),(12,16),(16,20),(20,30),(30,40),(40,50),(50,60),(60,70),(70,80),(80,100),(100,150),(150,250)],
+    "prec7dias":   [(0,1),(1,3),(3,7),(7,10),(10,20),(20,30),(30,40),(40,50),(50,60),(60,70),(70,80),(80,100),(100,150),(150,200),(200,300),(300,400),(400,600)],
+    "rajada":      [(14,17),(17,20),(20,24),(24,28),(28,32),(32,36),(36,40),(40,44),(44,50)],
+    "tmax_c28":    [(4,6)] + [(x,x+2) for x in range(6,42,2)] + [(42,46)],
+    "tmin_c28":    [(-4,-2)] + [(x,x+2) for x in range(-2,36,2)] + [(36,40)],
+    "t2m_c28":     [(-8,-6)] + [(x,x+2) for x in range(-6,40,2)] + [(40,44)],
+    "tmax_c7":     [(-10,-6),(-6,-2),(-2,2),(2,6),(6,10)] + [(x,x+2) for x in range(10,44,2)] + [(44,48)],
+    "tmin_c7":     [(-10,-6)] + [(x,x+2) for x in range(-6,42,2)] + [(42,46)],
+    "ur":          [(0,10)] + [(x,x+5) for x in range(10,95,5)] + [(95,100)],
+    "kcape":       [(0,100),(100,250),(250,500),(500,750),(750,1000),(1000,1500),(1500,2000),(2000,3500)],
+    "kshow":       [(-6,-5),(-5,-4),(-4,-3),(-3,-2),(-2,-1),(-1,0),(0,5)],
+    "totals":      [(30,44),(44,50),(50,53),(53,56),(56,60),(60,68)],
+    "pwat":        [(0,4),(4,6),(6,8),(8,10),(10,12),(12,14),(14,16),(16,18),(18,20),(20,25),(25,30),(30,35),(35,40),(40,45),(45,50),(50,55),(55,60),(60,80)],
+    "nuvem_tot":   [(0,55),(55,60),(60,70),(70,80),(80,90),(90,100)],
+    "nuvem_lvl":   [(-1,0),(0,55),(55,60),(60,70),(70,80),(80,90),(90,100)],
+    "cisal_lo":    [(-5,0),(0,5),(5,10),(10,15),(15,20),(20,25),(25,30),(30,40)],
+    "cisal_hi":    [(0,20),(20,25),(25,30),(30,35),(35,40),(40,45),(45,50),(50,55),(55,60),(60,75)],
+    "jato200":     [(-1,0),(0,30),(30,40),(40,50),(50,60),(60,70),(70,80),(80,90),(90,120)],
+    "omega":       [(-3.0,-2.0),(-2.0,-1.2),(-1.2,-1.0),(-1.0,-0.8),(-0.8,-0.6),(-0.6,-0.4),(-0.4,0.3),(0.3,0.5),(0.5,0.7),(0.7,1.0),(1.0,2.0)],
+    "ur_lvl_c28":  [(0,70),(70,80),(80,90),(90,95),(95,100)],
+    "ur_lvl_c7":   [(-1,0),(0,50),(50,70),(70,80),(80,90),(90,100)],
+    "tend_press":  [(-45,-35),(-35,-25),(-25,-16),(-16,-10),(-10,-6),(-6,-2),(-2,2),(2,4),(4,6),(6,8),(8,12),(12,16),(16,24)],
+    "tend_tsup":   [(-20,-16),(-16,-14),(-14,-12),(-12,-10),(-10,-8),(-8,-6),(-6,-4),(-4,-2),(-2,2),(2,4),(4,6),(6,8),(8,10),(10,12),(12,14),(14,16),(16,20)],
+    "tend_t850":   [(-16,-12),(-12,-10),(-10,-8),(-8,-6),(-6,-4),(-4,-2),(-2,2),(2,4),(4,6),(6,8),(8,10),(10,12),(12,16),(16,20)],
+    "tend_geop":   [(-330,-240),(-240,-210),(-210,-180),(-180,-150),(-150,-120),(-120,-90),(-90,-60),(-60,-30),(-30,30),(30,60),(60,90),(90,120),(120,150),(150,180),(180,210),(210,240),(240,330)],
+    "vort500":     [(-14,-11),(-11,-8),(-8,-5),(-5,-2),(-2,2),(2,5),(5,8),(8,11),(11,14),(14,20)],
+    "vort850":     [(-18,-14),(-14,-10),(-10,-6),(-6,-2),(-2,2),(2,6),(6,10),(10,14),(14,18),(18,24)],
+}
+
+
+def _fetch_vime_json_retry(url, timeout=16, retries=3):
+    last_err = None
+    for att in range(retries):
+        try:
+            return _fetch_json(url, headers=VIME_HEADERS, timeout=timeout)
+        except Exception as exc:
+            last_err = exc
+            if att < retries - 1:
+                time.sleep(0.9 + 0.8 * att)
+    raise last_err
+
+
+def _sample_vime_var_bar(
+    img_rgb,
+    bins,
+    base_points,
+    white_min_bin=False,
+    allow_white_bin=False,
+    max_dist=44.0,
+    bar_x1_override=None,
+    base_size=(700, 700),
+    skip_neutral_grey=True,
+    grey_patch_check=False,
+):
+    """Lê a barra de cores inferior dos mapas VIME com filtragem de barbelas cinzas/linhas costeiras."""
+    arr = np.array(img_rgb.convert("RGB"))
+    h, w, _ = arr.shape
+    ymid = 514 if h == 530 else max(4, h - 16)
+    bx1 = bar_x1_override if bar_x1_override else w
+    step = float(bx1) / float(len(bins))
+    palette = []
+    for i, (b0, b1) in enumerate(bins):
+        cx = min(w - 3, max(2, int(round((i + 0.5) * step))))
+        patch = np.median(arr[max(0, ymid - 2):min(h, ymid + 3), max(0, cx - 2):min(w, cx + 3)], axis=(0, 1))
+        palette.append((b0, b1, patch.astype(float)))
+
+    sx = w / float(base_size[0])
+    sy = h / float(base_size[1])
+    pts = [(int(round(px * sx)), int(round(py * sy))) for px, py in base_points]
+
+    votes = []
+    for px, py in pts:
+        if not (0 <= px < w and 0 <= py < h):
+            continue
+        if grey_patch_check:
+            # Em escalas de cinza (Nebulosidade), usa mediana 3x3 filtrando traços escuros de contorno/barbelas
+            block = arr[max(0, py - 1):min(h, py + 2), max(0, px - 1):min(w, px + 2)].reshape(-1, 3)
+            clean_px = [p for p in block if int(p.max()) >= 55]
+            if len(clean_px) < 4:
+                continue
+            rgb = np.median(np.array(clean_px, dtype=float), axis=0)
+        else:
+            rgb = arr[py, px].astype(float)
+
+        if float(rgb.max()) < 45.0:
+            continue
+        if float(rgb.min()) >= 244.0:
+            if isinstance(white_min_bin, tuple):
+                votes.append(white_min_bin)
+            elif white_min_bin:
+                votes.append(bins[0])
+            elif allow_white_bin:
+                best = min(palette, key=lambda p: float(np.linalg.norm(rgb - p[2])))
+                if float(np.linalg.norm(rgb - best[2])) <= max_dist:
+                    votes.append((best[0], best[1]))
+            continue
+        if skip_neutral_grey and (float(rgb.max()) - float(rgb.min())) < 18.0 and float(rgb.mean()) < 165.0:
+            continue
+
+        best = min(palette, key=lambda p: float(np.linalg.norm(rgb - p[2])))
+        if float(np.linalg.norm(rgb - best[2])) <= max_dist:
+            votes.append((best[0], best[1]))
+
+    if not votes:
+        return None
+    votes.sort(key=lambda t: (t[0] + t[1]) / 2.0)
+    b0, b1 = votes[len(votes) // 2]
+    if isinstance(white_min_bin, tuple) and (b0, b1) == white_min_bin:
+        rep = 0.0 if b1 <= 30 else round((b0 + b1) / 2.0, 2)
+    elif white_min_bin == "zero" and (b0, b1) == bins[0]:
+        rep = 0.0
+    elif white_min_bin is True and (b0, b1) == bins[0]:
+        rep = 0.2 if (b1 <= 1.0 and bins[0][0] == 0) else round((b0 + b1) / 2.0, 2)
+    else:
+        rep = round((b0 + b1) / 2.0, 2)
+    return {"min": b0, "max": b1, "rep": rep, "faixa": f"{b0} a {b1}"}
+
+
+def _assign_vime_day_brt(base_utc, off_h, is_interval_h=0):
+    dt_valid = base_utc + timedelta(hours=off_h)
+    if is_interval_h > 0:
+        dt_ref = dt_valid - timedelta(hours=is_interval_h / 2.0)
+    else:
+        dt_ref = dt_valid
+    dt_brt = dt_ref.astimezone(BRT)
+    return dt_brt.strftime("%Y-%m-%d"), dt_brt.hour, dt_brt.strftime("%Y-%m-%dT%H:00")
+
+
+def _brt_turn_key(hour_brt):
+    if 0 <= hour_brt < 6:
+        return "madrugada"
+    if 6 <= hour_brt < 12:
+        return "manha"
+    if 12 <= hour_brt < 18:
+        return "tarde"
+    return "noite"
+
+
 def extract_inmet_vime_data(data_dir):
-    """Consulta apivime.inmet.gov.br e extrai prec24h/prec2dias, água precipitável e CAPE para Rio das Ostras."""
+    """Consulta apivime.inmet.gov.br (COSMO 2.8km SE-RJ + COSMO 7km SE) e extrai TODAS as variáveis dos mapas para Rio das Ostras."""
+    vime_path = Path(data_dir) / "inmet_vime.json"
+    cached = None
+    if vime_path.exists():
+        try:
+            cached = json.loads(vime_path.read_text(encoding="utf-8"))
+        except Exception:
+            cached = None
+
+    init_c28 = None
+    init_c7 = None
+    try:
+        inits28 = _fetch_vime_json_retry("https://apivime.inmet.gov.br/inicializacao/COSMO2P8/SE-RJ/prec24h", timeout=10, retries=2)
+        if inits28:
+            init_c28 = max(inits28, key=lambda x: str(x.get("sigla", "")))["sigla"]
+    except Exception:
+        pass
+    try:
+        inits7 = _fetch_vime_json_retry("https://apivime.inmet.gov.br/inicializacao/COSMO7/SE/prec24h", timeout=10, retries=2)
+        if inits7:
+            init_c7 = max(inits7, key=lambda x: str(x.get("sigla", "")))["sigla"]
+    except Exception:
+        pass
+
+    if (
+        isinstance(cached, dict)
+        and cached.get("disponivel")
+        and cached.get("vime_schema_version") == 3
+        and isinstance(cached.get("daily_vime_vars"), dict)
+        and len(cached["daily_vime_vars"]) >= 5
+        and (not init_c28 or cached.get("rodada_cosmo28") == init_c28)
+        and (not init_c7 or cached.get("rodada_cosmo7") == init_c7)
+    ):
+        return cached
+
     result = {
+        "vime_schema_version": 3,
         "disponivel": False,
         "url": "https://vime.inmet.gov.br/SE",
-        "rodada_cosmo28": None,
-        "rodada_cosmo7": None,
+        "atualizado_em_brt": datetime.now(BRT).strftime("%Y-%m-%d %H:%M"),
+        "rodada_cosmo28": init_c28,
+        "rodada_cosmo7": init_c7,
         "daily_cosmo28_mm": {},
         "daily_cosmo28_faixa": {},
+        "daily_cosmo28_prec1h_mm": {},
+        "hourly_cosmo28_mm": {},
+        "hourly_cosmo28_vars": {},
         "daily_cosmo7_mm": {},
         "daily_cosmo7_faixa": {},
+        "daily_cosmo7_prec6h_mm": {},
+        "daily_cosmo7_prec3h_mm": {},
+        "turn_cosmo7_prec_mm": {},
         "agua_precipitavel": None,
         "cape": None,
+        "daily_vime_vars": {},
+        "resumo_variaveis_extraidas": {},
     }
 
-    # 2.1 COSMO 2.8km SE-RJ (alta resolução RJ)
-    try:
-        inits = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO2P8/SE-RJ/prec24h", headers=VIME_HEADERS, timeout=10)
-        if inits:
-            today_iso = datetime.now(BRT).strftime("%Y-%m-%d")
-            # Prefere 12 UTC do dia se existir, caso contrário última inicialização disponível
-            init_sig = next((x["sigla"] for x in inits if x["sigla"].startswith(today_iso) and "12:00" in x["sigla"]), inits[0]["sigla"])
-            result["rodada_cosmo28"] = init_sig
-            base_utc = datetime.strptime(init_sig, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc)
+    # Especificações completas de todos os parâmetros escalares sombreados do VIME:
+    # (model, area, param, bins_key, wmin, allow_white, interval_h, skip_grey, grey_patch)
+    specs = []
+    if init_c28:
+        specs.extend([
+            ("COSMO2P8", "SE-RJ", "prec24h",          "prec24h",     "zero",   False, 24, False, False),
+            ("COSMO2P8", "SE-RJ", "prec2dias",        "prec24h",     "zero",   False, 48, False, False),
+            ("COSMO2P8", "SE-RJ", "prec1h",           "prec1h",      "zero",   False, 1,  False, False),
+            ("COSMO2P8", "SE-RJ", "prevento10m",      "prevento10m", "zero",   False, 1,  True,  False),
+            ("COSMO2P8", "SE-RJ", "Rajada10m",        "rajada",      (0, 14),  False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "T2m",              "t2m_c28",     False,    True,  0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "TempMaxima",       "tmax_c28",    False,    True,  1,  True,  False),
+            ("COSMO2P8", "SE-RJ", "TempMinima",       "tmin_c28",    False,    True,  1,  True,  False),
+            ("COSMO2P8", "SE-RJ", "UR2m",             "ur",          False,    True,  0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "Kcape",            "kcape",       True,     False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "Kshow",            "kshow",       False,    True,  0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "TotalsLifted",     "totals",      True,     False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "aguaprecT850V850", "pwat",        False,    True,  0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "VTUR850",          "ur_lvl_c28",  (0, 70),  False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "VTUR700",          "ur_lvl_c28",  (0, 70),  False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "VTUR500",          "ur_lvl_c28",  (0, 70),  False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "VTUR925",          "ur_lvl_c28",  (0, 70),  False, 0,  True,  False),
+            ("COSMO2P8", "SE-RJ", "V200Cisal250500",  "cisal_hi",    (0, 20),  True,  0,  True,  False),
+        ])
+    if init_c7:
+        specs.extend([
+            ("COSMO7", "SE", "prec24h",               "prec24h",    "zero",   False, 24, False, False),
+            ("COSMO7", "SE", "prec7dias",             "prec7dias",  "zero",   False, 0,  False, False),
+            ("COSMO7", "SE", "Prec6hPressV10m",       "prec3h6h",   "zero",   False, 6,  True,  False),
+            ("COSMO7", "SE", "Prec3hPressV10m",       "prec3h6h",   "zero",   False, 3,  True,  False),
+            ("COSMO7", "SE", "Rajada10m",             "rajada",     (0, 14),  False, 0,  True,  False),
+            ("COSMO7", "SE", "T2mPress",              "tmax_c7",    False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "TempMaximaV10m",        "tmax_c7",    False,    True,  3,  True,  False),
+            ("COSMO7", "SE", "TempMinimaV10m",        "tmin_c7",    False,    True,  3,  True,  False),
+            ("COSMO7", "SE", "UR2mV10m",              "ur",         False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "Kcape",                 "kcape",      True,     False, 0,  True,  False),
+            ("COSMO7", "SE", "Kshow",                 "kshow",      False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "TotalsLifted",          "totals",     True,     False, 0,  True,  False),
+            ("COSMO7", "SE", "aguaprecT850V850",      "pwat",       False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "NuvemTotalOmegaGeo700", "nuvem_tot",  True,     False, 0,  False, True),
+            ("COSMO7", "SE", "NuvemBaixaGeoTemp850",  "nuvem_lvl",  (0, 55),  False, 0,  False, True),
+            ("COSMO7", "SE", "NuvemMediaGeoTemp500",  "nuvem_lvl",  (0, 55),  False, 0,  False, True),
+            ("COSMO7", "SE", "NuvemAltaV200j",        "nuvem_lvl",  (0, 55),  False, 0,  False, True),
+            ("COSMO7", "SE", "O850Geo500",            "omega",      False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "V500Cisal700950",       "cisal_lo",   False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "V200Cisal250500",       "cisal_hi",   (0, 20),  True,  0,  True,  False),
+            ("COSMO7", "SE", "V200j",                 "jato200",    (0, 30),  False, 0,  True,  False),
+            ("COSMO7", "SE", "VTUR850",               "ur_lvl_c7",  (0, 50),  False, 0,  True,  False),
+            ("COSMO7", "SE", "VTUR700",               "ur_lvl_c7",  (0, 50),  False, 0,  True,  False),
+            ("COSMO7", "SE", "VTUR500",               "ur_lvl_c7",  (0, 50),  False, 0,  True,  False),
+            ("COSMO7", "SE", "VTUR925",               "ur_lvl_c7",  (0, 50),  False, 0,  True,  False),
+            ("COSMO7", "SE", "tendpress",             "tend_press", False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "tendTsup",              "tend_tsup",  False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "tendT850",              "tend_t850",  False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "tendgeop",              "tend_geop",  False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "VortGeo500",            "vort500",    False,    True,  0,  True,  False),
+            ("COSMO7", "SE", "VortGeo850",            "vort850",    False,    True,  0,  True,  False),
+        ])
 
-            # prec24h (Dia 0: i..i+24h)
-            imgs24 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec24h/{init_sig}", headers=VIME_HEADERS, timeout=14)
-            v24 = None
-            if imgs24:
-                s24 = _sample_vime_colorbar(_b64_to_pil(imgs24[0]["base64"]), VIME_PREC_BINS, VIME_SE_RJ_POINTS)
-                if s24:
-                    v24 = s24
-                    d0_iso = (base_utc + timedelta(hours=12)).astimezone(BRT).strftime("%Y-%m-%d")
-                    result["daily_cosmo28_mm"][d0_iso] = s24["rep"]
-                    result["daily_cosmo28_faixa"][d0_iso] = f"{s24['faixa']} mm"
-                    result["disponivel"] = True
+    def _run_param(spec):
+        mod, area, par, bkey, wmin, awhite, int_h, skip_g, g_patch = spec
+        sig = init_c28 if mod == "COSMO2P8" else init_c7
+        base_u = datetime.strptime(sig, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc)
+        pts = VIME_SE_RJ_POINTS if mod == "COSMO2P8" else VIME_SE_COSMO7_POINTS
+        b_sz = (683, 680) if mod == "COSMO2P8" else (700, 700)
+        x1_ovr = 621 if (mod == "COSMO7" and par == "Rajada10m") else None
+        bins = _VIME_BINS[bkey]
+        frames = _fetch_vime_json_retry(f"https://apivime.inmet.gov.br/{mod}/{area}/{par}/{sig}", timeout=16, retries=3)
+        rows = []
+        for f in (frames or []):
+            nome = str(f.get("nome", ""))
+            m = re.search(r"\+(\d+)", nome)
+            if not m or not f.get("base64"):
+                continue
+            off_h = int(m.group(1))
+            if par == "prec24h" and mod == "COSMO7" and off_h % 24 != 0:
+                continue
+            if par == "prec2dias" and mod == "COSMO2P8" and off_h not in (24, 48):
+                continue
+            sample = _sample_vime_var_bar(
+                _b64_to_pil(f["base64"]),
+                bins,
+                pts,
+                white_min_bin=wmin,
+                allow_white_bin=awhite,
+                bar_x1_override=x1_ovr,
+                base_size=b_sz,
+                skip_neutral_grey=skip_g,
+                grey_patch_check=g_patch,
+            )
+            if not sample:
+                continue
+            day_iso, hr_brt, iso_hr = _assign_vime_day_brt(base_u, off_h, is_interval_h=int_h)
+            rows.append({
+                "off_h": off_h,
+                "day_iso": day_iso,
+                "hr_brt": hr_brt,
+                "iso_hr": iso_hr,
+                "validade": f.get("validade_extenso"),
+                **sample,
+            })
+        return mod, par, rows
 
-            # prec2dias (último frame = +48h acumulados) -> Dia 1 = max(0, 48h - 24h)
-            try:
-                imgs48 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/prec2dias/{init_sig}", headers=VIME_HEADERS, timeout=15)
-                if imgs48 and len(imgs48) >= 24:
-                    s48 = _sample_vime_colorbar(_b64_to_pil(imgs48[-1]["base64"]), VIME_PREC_BINS, VIME_SE_RJ_POINTS)
-                    if s48 and v24:
-                        d1_iso = (base_utc + timedelta(hours=36)).astimezone(BRT).strftime("%Y-%m-%d")
-                        d1_val = round(max(0.0, s48["rep"] - v24["rep"]), 1)
-                        result["daily_cosmo28_mm"][d1_iso] = d1_val
-                        result["daily_cosmo28_faixa"][d1_iso] = f"{max(0, s48['min'] - v24['max'])} a {max(1, s48['max'] - v24['min'])} mm"
-            except Exception:
-                pass
-
-            # Água Precipitável (aguaprecT850V850 - pega frame +12h/+15h diurno/atual)
-            try:
-                imgs_pw = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/aguaprecT850V850/{init_sig}", headers=VIME_HEADERS, timeout=14)
-                if imgs_pw:
-                    idx_pw = min(15, len(imgs_pw) - 1)
-                    spw = _sample_vime_colorbar(_b64_to_pil(imgs_pw[idx_pw]["base64"]), VIME_PWAT_BINS, VIME_SE_RJ_POINTS)
-                    if spw:
-                        result["agua_precipitavel"] = {**spw, "unidade": "mm", "validade": imgs_pw[idx_pw].get("validade_extenso")}
-            except Exception:
-                pass
-
-            # Índices CAPE & K (Kcape - pico diurno entre +12h e +21h)
-            try:
-                imgs_kc = _fetch_json(f"https://apivime.inmet.gov.br/COSMO2P8/SE-RJ/Kcape/{init_sig}", headers=VIME_HEADERS, timeout=14)
-                if imgs_kc:
-                    cape_samples = []
-                    for idx_c in [min(12, len(imgs_kc) - 1), min(18, len(imgs_kc) - 1)]:
-                        sc = _sample_vime_colorbar(_b64_to_pil(imgs_kc[idx_c]["base64"]), VIME_CAPE_BINS, VIME_SE_RJ_POINTS)
-                        if sc:
-                            cape_samples.append(sc)
-                    if cape_samples:
-                        best_c = max(cape_samples, key=lambda x: x["rep"])
-                        result["cape"] = {**best_c, "unidade": "J/kg"}
-            except Exception:
-                pass
-    except Exception as e:
-        print(f"[VIME COSMO 2.8km SE-RJ] Aviso: {e}")
-
-    # 2.2 COSMO 7km SE (cobertura estendida 7 dias)
-    try:
-        inits7 = _fetch_json("https://apivime.inmet.gov.br/inicializacao/COSMO7/SE/prec24h", headers=VIME_HEADERS, timeout=10)
-        if inits7:
-            today_iso = datetime.now(BRT).strftime("%Y-%m-%d")
-            init7 = next((x["sigla"] for x in inits7 if x["sigla"].startswith(today_iso) and "12:00" in x["sigla"]), inits7[0]["sigla"])
-            result["rodada_cosmo7"] = init7
-            imgs7 = _fetch_json(f"https://apivime.inmet.gov.br/COSMO7/SE/prec24h/{init7}", headers=VIME_HEADERS, timeout=16)
-            base7_utc = datetime.strptime(init7, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc)
-            if imgs7:
-                # Frames normalmente vêm a cada 3h (+24, +27, +30, ..., +168); escolhe múltiplos de 24h!
-                for frame in imgs7:
-                    nome = str(frame.get("nome", ""))
-                    m_off = re.search(r"\+(\d+)", nome)
-                    if not m_off:
-                        continue
-                    off_h = int(m_off.group(1))
-                    if off_h % 24 != 0:
-                        continue
-                    s7 = _sample_vime_colorbar(_b64_to_pil(frame["base64"]), VIME_PREC_BINS, VIME_SE_COSMO7_POINTS)
-                    if s7:
-                        # validade +24h = acumulado das 24h anteriores terminando em validade - 12h centro
-                        day_iso = (base7_utc + timedelta(hours=off_h - 12)).astimezone(BRT).strftime("%Y-%m-%d")
-                        result["daily_cosmo7_mm"][day_iso] = s7["rep"]
-                        result["daily_cosmo7_faixa"][day_iso] = f"{s7['faixa']} mm"
+    raw_by_mod_par = {}
+    if specs:
+        with ThreadPoolExecutor(max_workers=3) as ex:
+            futs = {ex.submit(_run_param, s): (s[0], s[2]) for s in specs}
+            for fut in as_completed(futs):
+                mod, par = futs[fut]
+                try:
+                    m, p, rows = fut.result()
+                    if rows:
+                        raw_by_mod_par[(m, p)] = rows
                         result["disponivel"] = True
-    except Exception as e:
-        print(f"[VIME COSMO 7km SE] Aviso: {e}")
+                except Exception as exc:
+                    print(f"[VIME {mod}/{par}] Aviso: {exc}")
 
-    vime_path = Path(data_dir) / "inmet_vime.json"
+    # Consolida COSMO2P8 precip24h / prec2dias / hourly prec1h
+    c28_p24 = raw_by_mod_par.get(("COSMO2P8", "prec24h"), [])
+    v24_rep = c28_p24[0] if c28_p24 else None
+    if v24_rep:
+        result["daily_cosmo28_mm"][v24_rep["day_iso"]] = v24_rep["rep"]
+        result["daily_cosmo28_faixa"][v24_rep["day_iso"]] = f"{v24_rep['faixa']} mm"
+    c28_p48 = raw_by_mod_par.get(("COSMO2P8", "prec2dias"), [])
+    if c28_p48 and v24_rep:
+        last48 = max(c28_p48, key=lambda x: x["off_h"])
+        if last48["off_h"] >= 36:
+            d1_iso = (datetime.strptime(init_c28, "%Y-%m-%dH%H:%M").replace(tzinfo=timezone.utc) + timedelta(hours=36)).astimezone(BRT).strftime("%Y-%m-%d")
+            d1_val = round(max(0.0, last48["rep"] - v24_rep["rep"]), 1)
+            result["daily_cosmo28_mm"][d1_iso] = d1_val
+            result["daily_cosmo28_faixa"][d1_iso] = f"{max(0, last48['min'] - v24_rep['max'])} a {max(1, last48['max'] - v24_rep['min'])} mm"
+
+    p1h_map = {r["iso_hr"]: r for r in raw_by_mod_par.get(("COSMO2P8", "prec1h"), [])}
+    pv10_map = {r["iso_hr"]: r for r in raw_by_mod_par.get(("COSMO2P8", "prevento10m"), [])}
+    day_1h_counts = {}
+    for iso_hr, r1 in sorted(p1h_map.items()):
+        v = r1["rep"]
+        if v == 0.0:
+            rp = pv10_map.get(iso_hr)
+            if rp and 0.4 <= rp["rep"] <= 1.0:
+                v = 0.6
+        d_iso = r1["day_iso"]
+        result["hourly_cosmo28_mm"][iso_hr] = round(v, 2)
+        result["daily_cosmo28_prec1h_mm"][d_iso] = round(result["daily_cosmo28_prec1h_mm"].get(d_iso, 0.0) + v, 1)
+        day_1h_counts[d_iso] = day_1h_counts.get(d_iso, 0) + 1
+    # Mantém apenas dias completos (>=12h) no acumulado horário COSMO2P8 se menor que 12h pode complementar
+    for d_iso in list(result["daily_cosmo28_prec1h_mm"].keys()):
+        if day_1h_counts.get(d_iso, 0) < 10 and d_iso not in result["daily_cosmo28_mm"]:
+            del result["daily_cosmo28_prec1h_mm"][d_iso]
+
+    # Séries horárias auxiliares COSMO2P8 para enriquecimento de boletim/tooltip
+    for par_name, fld in [("T2m", "temp_c"), ("UR2m", "ur_pct"), ("Rajada10m", "rajada_ms")]:
+        for r in raw_by_mod_par.get(("COSMO2P8", par_name), []):
+            result["hourly_cosmo28_vars"].setdefault(r["iso_hr"], {})[fld] = r["rep"]
+
+    # Consolida COSMO7 prec24h / prec6h (turnos e dia civil BRT) / prec3h
+    for r in raw_by_mod_par.get(("COSMO7", "prec24h"), []):
+        result["daily_cosmo7_mm"][r["day_iso"]] = r["rep"]
+        result["daily_cosmo7_faixa"][r["day_iso"]] = f"{r['faixa']} mm"
+
+    for r in raw_by_mod_par.get(("COSMO7", "Prec6hPressV10m"), []):
+        d_iso = r["day_iso"]
+        tk = _brt_turn_key(r["hr_brt"])
+        result["daily_cosmo7_prec6h_mm"][d_iso] = round(result["daily_cosmo7_prec6h_mm"].get(d_iso, 0.0) + r["rep"], 1)
+        t_dict = result["turn_cosmo7_prec_mm"].setdefault(d_iso, {"madrugada": 0.0, "manha": 0.0, "tarde": 0.0, "noite": 0.0})
+        t_dict[tk] = round(t_dict.get(tk, 0.0) + r["rep"], 1)
+
+    for r in raw_by_mod_par.get(("COSMO7", "Prec3hPressV10m"), []):
+        d_iso = r["day_iso"]
+        result["daily_cosmo7_prec3h_mm"][d_iso] = round(result["daily_cosmo7_prec3h_mm"].get(d_iso, 0.0) + r["rep"], 1)
+
+    # Retrocompatibilidade raiz: agua_precipitavel & cape
+    pw_src = raw_by_mod_par.get(("COSMO2P8", "aguaprecT850V850")) or raw_by_mod_par.get(("COSMO7", "aguaprecT850V850")) or []
+    if pw_src:
+        best_pw = min(pw_src, key=lambda x: abs(x["off_h"] - 15))
+        result["agua_precipitavel"] = {
+            "min": best_pw["min"], "max": best_pw["max"], "rep": best_pw["rep"],
+            "faixa": best_pw["faixa"], "unidade": "mm", "validade": best_pw.get("validade"),
+        }
+    kc_src = raw_by_mod_par.get(("COSMO2P8", "Kcape")) or raw_by_mod_par.get(("COSMO7", "Kcape")) or []
+    if kc_src:
+        day0_kc = sorted({r["day_iso"] for r in kc_src})[0]
+        kc_today = [r for r in kc_src if r["day_iso"] == day0_kc] or kc_src[:4]
+        best_c = max(kc_today, key=lambda x: x["rep"])
+        result["cape"] = {"min": best_c["min"], "max": best_c["max"], "rep": best_c["rep"], "faixa": best_c["faixa"], "unidade": "J/kg"}
+
+    # Agrega TODAS as variáveis por dia civil BRT em daily_vime_vars[day_iso]
+    by_day = {}
+    for (mod, par), rows in raw_by_mod_par.items():
+        for r in rows:
+            by_day.setdefault(r["day_iso"], {}).setdefault((mod, par), []).append(r)
+
+    def _agg(bucket, mod, par, mode):
+        rows = bucket.get((mod, par), [])
+        if not rows:
+            return None
+        vals = [x["rep"] for x in rows]
+        if mode == "min":
+            return round(min(vals), 2)
+        if mode == "max":
+            return round(max(vals), 2)
+        if mode == "mean":
+            return round(sum(vals) / len(vals), 2)
+        if mode == "sum":
+            return round(sum(vals), 1)
+        if mode == "peak_row":
+            return max(rows, key=lambda x: x["rep"])
+        return None
+
+    for d_iso in sorted(by_day.keys()):
+        b = by_day[d_iso]
+        dv = {}
+        # 1. Temperatura (prioriza T2m 2.8km em D+0/D+1 quando tiver >=12 frames; caso contrário T2mPress COSMO7)
+        t2_c28 = b.get(("COSMO2P8", "T2m"), [])
+        t2_c7 = b.get(("COSMO7", "T2mPress"), [])
+        if len(t2_c28) >= 12:
+            dv["fonte_termica"] = "COSMO2P8"
+            dv["temp_min_c"] = round(min(x["rep"] for x in t2_c28), 1)
+            dv["temp_max_c"] = round(max(x["rep"] for x in t2_c28), 1)
+            dv["t2m_media_c"] = round(sum(x["rep"] for x in t2_c28) / len(t2_c28), 1)
+        elif t2_c7:
+            dv["fonte_termica"] = "COSMO7"
+            dv["temp_min_c"] = round(min(x["rep"] for x in t2_c7), 1)
+            dv["temp_max_c"] = round(max(x["rep"] for x in t2_c7), 1)
+            dv["t2m_media_c"] = round(sum(x["rep"] for x in t2_c7) / len(t2_c7), 1)
+
+        tmax_map = _agg(b, "COSMO2P8", "TempMaxima", "max")
+        if tmax_map is None:
+            tmax_map = _agg(b, "COSMO7", "TempMaximaV10m", "max")
+        tmin_map = _agg(b, "COSMO2P8", "TempMinima", "min")
+        if tmin_map is None:
+            tmin_map = _agg(b, "COSMO7", "TempMinimaV10m", "min")
+        if tmax_map is not None:
+            dv["tmax_mapa_c"] = round(tmax_map, 1)
+            dv.setdefault("temp_max_c", round(tmax_map, 1))
+        if tmin_map is not None:
+            dv["tmin_mapa_c"] = round(tmin_map, 1)
+            dv.setdefault("temp_min_c", round(tmin_map, 1))
+
+        # 2. Umidade 2m + níveis (925, 850, 700, 500 hPa)
+        ur_c28 = b.get(("COSMO2P8", "UR2m"), [])
+        ur_c7 = b.get(("COSMO7", "UR2mV10m"), [])
+        ur_rows = ur_c28 if len(ur_c28) >= 12 else ur_c7
+        if ur_rows:
+            dv["ur_min_pct"] = int(round(min(x["rep"] for x in ur_rows)))
+            dv["ur_max_pct"] = int(round(max(x["rep"] for x in ur_rows)))
+            dv["ur_media_pct"] = int(round(sum(x["rep"] for x in ur_rows) / len(ur_rows)))
+        for lvl, k in [("VTUR925", "ur925_max_pct"), ("VTUR850", "ur850_max_pct"), ("VTUR700", "ur700_max_pct"), ("VTUR500", "ur500_max_pct")]:
+            v = _agg(b, "COSMO2P8", lvl, "max")
+            if v is None:
+                v = _agg(b, "COSMO7", lvl, "max")
+            if v is not None:
+                dv[k] = int(round(v))
+
+        # 3. Rajada máxima em 10m (0..13 m/s = sem rajada severa >=50.4 km/h; >=14 m/s = valor real da barra)
+        rj28 = _agg(b, "COSMO2P8", "Rajada10m", "max")
+        rj7 = _agg(b, "COSMO7", "Rajada10m", "max")
+        rj_vals = [v for v in (rj28, rj7) if v is not None]
+        if rj_vals:
+            rj_ms = round(max(rj_vals), 1)
+            dv["rajada_max_ms"] = rj_ms
+            dv["rajada_max_kmh"] = round(rj_ms * 3.6, 1) if rj_ms >= 14.0 else 0.0
+
+        # 4. Precipitações (1h, 3h, 6h, 24h) + turnos COSMO7
+        if d_iso in result["daily_cosmo28_prec1h_mm"]:
+            dv["prec1h_sum_mm"] = result["daily_cosmo28_prec1h_mm"][d_iso]
+        p1h_max = _agg(b, "COSMO2P8", "prec1h", "max")
+        if p1h_max is not None:
+            dv["prec1h_max_mm"] = round(p1h_max, 1)
+        if d_iso in result["daily_cosmo7_prec3h_mm"]:
+            dv["prec3h_sum_mm"] = result["daily_cosmo7_prec3h_mm"][d_iso]
+        if d_iso in result["daily_cosmo7_prec6h_mm"]:
+            dv["prec6h_sum_mm"] = result["daily_cosmo7_prec6h_mm"][d_iso]
+        if d_iso in result["daily_cosmo28_mm"]:
+            dv["prec24h_cosmo28_mm"] = result["daily_cosmo28_mm"][d_iso]
+        if d_iso in result["daily_cosmo7_mm"]:
+            dv["prec24h_cosmo7_mm"] = result["daily_cosmo7_mm"][d_iso]
+        if d_iso in result["turn_cosmo7_prec_mm"]:
+            dv["turnos_prec_mm"] = result["turn_cosmo7_prec_mm"][d_iso]
+
+        # 5. Instabilidade e Água Precipitável
+        pw_rows = b.get(("COSMO2P8", "aguaprecT850V850"), []) or b.get(("COSMO7", "aguaprecT850V850"), [])
+        if pw_rows:
+            pk_pw = max(pw_rows, key=lambda x: x["rep"])
+            dv["pwat_min_mm"] = round(min(x["rep"] for x in pw_rows), 1)
+            dv["pwat_max_mm"] = round(pk_pw["rep"], 1)
+            dv["pwat_media_mm"] = round(sum(x["rep"] for x in pw_rows) / len(pw_rows), 1)
+            dv["pwat_faixa"] = f"{pk_pw['min']} a {pk_pw['max']} mm"
+
+        kc_rows = b.get(("COSMO2P8", "Kcape"), []) or b.get(("COSMO7", "Kcape"), [])
+        if kc_rows:
+            pk_kc = max(kc_rows, key=lambda x: x["rep"])
+            dv["cape_max_jkg"] = int(round(pk_kc["rep"]))
+            dv["cape_faixa"] = f"{pk_kc['min']} a {pk_kc['max']} J/kg"
+
+        ks = _agg(b, "COSMO2P8", "Kshow", "min")
+        if ks is None:
+            ks = _agg(b, "COSMO7", "Kshow", "min")
+        if ks is not None:
+            dv["showalter_min"] = round(ks, 1)
+
+        tt = _agg(b, "COSMO2P8", "TotalsLifted", "max")
+        if tt is None:
+            tt = _agg(b, "COSMO7", "TotalsLifted", "max")
+        if tt is not None:
+            dv["total_totals_max"] = round(tt, 1)
+
+        # 6. Nebulosidade, Movimento Vertical (Ômega), Cisalhamento, Jato 200 e Tendências Sinóticas (COSMO7)
+        nt_mean = _agg(b, "COSMO7", "NuvemTotalOmegaGeo700", "mean")
+        nt_max = _agg(b, "COSMO7", "NuvemTotalOmegaGeo700", "max")
+        if nt_mean is not None:
+            dv["nuvem_total_media_pct"] = int(round(nt_mean))
+            dv["nuvem_total_max_pct"] = int(round(nt_max))
+        for pcol, key in [("NuvemBaixaGeoTemp850", "nuvem_baixa_max_pct"), ("NuvemMediaGeoTemp500", "nuvem_media_max_pct"), ("NuvemAltaV200j", "nuvem_alta_max_pct")]:
+            nv = _agg(b, "COSMO7", pcol, "max")
+            if nv is not None:
+                dv[key] = int(round(nv))
+
+        om_min = _agg(b, "COSMO7", "O850Geo500", "min")
+        om_max = _agg(b, "COSMO7", "O850Geo500", "max")
+        if om_min is not None:
+            dv["omega850_min_pas"] = round(om_min, 2)
+            dv["omega850_max_pas"] = round(om_max, 2)
+
+        c79 = _agg(b, "COSMO7", "V500Cisal700950", "max")
+        if c79 is not None:
+            dv["cisal_700_950_max_ms"] = round(c79, 1)
+
+        c25 = _agg(b, "COSMO2P8", "V200Cisal250500", "max")
+        c25_7 = _agg(b, "COSMO7", "V200Cisal250500", "max")
+        c25_vals = [x for x in (c25, c25_7) if x is not None]
+        if c25_vals:
+            dv["cisal_250_500_max_ms"] = round(max(c25_vals), 1)
+
+        j200 = _agg(b, "COSMO7", "V200j", "max")
+        if j200 is not None:
+            dv["jato200_max_ms"] = round(j200, 1)
+
+        tp_min = _agg(b, "COSMO7", "tendpress", "min")
+        tp_max = _agg(b, "COSMO7", "tendpress", "max")
+        if tp_min is not None:
+            dv["tend_press_min_hpa"] = round(tp_min, 1)
+            dv["tend_press_max_hpa"] = round(tp_max, 1)
+
+        tts_min = _agg(b, "COSMO7", "tendTsup", "min")
+        tts_max = _agg(b, "COSMO7", "tendTsup", "max")
+        if tts_min is not None:
+            dv["tend_t2m_min_c"] = round(tts_min, 1)
+            dv["tend_t2m_max_c"] = round(tts_max, 1)
+
+        tt8_min = _agg(b, "COSMO7", "tendT850", "min")
+        tt8_max = _agg(b, "COSMO7", "tendT850", "max")
+        if tt8_min is not None:
+            dv["tend_t850_min_c"] = round(tt8_min, 1)
+            dv["tend_t850_max_c"] = round(tt8_max, 1)
+
+        tg_min = _agg(b, "COSMO7", "tendgeop", "min")
+        if tg_min is not None:
+            dv["tend_geop500_min_mgp"] = round(tg_min, 1)
+
+        v5_min = _agg(b, "COSMO7", "VortGeo500", "min")
+        if v5_min is not None:
+            dv["vort500_min"] = round(v5_min, 1)
+        v8_min = _agg(b, "COSMO7", "VortGeo850", "min")
+        if v8_min is not None:
+            dv["vort850_min"] = round(v8_min, 1)
+
+        dv["parametros_lidos"] = len(b)
+        result["daily_vime_vars"][d_iso] = dv
+
+    result["resumo_variaveis_extraidas"] = {
+        "cosmo2p8_parametros": sorted([p for (m, p) in raw_by_mod_par.keys() if m == "COSMO2P8"]),
+        "cosmo7_parametros": sorted([p for (m, p) in raw_by_mod_par.keys() if m == "COSMO7"]),
+        "total_endpoints_lidos": len(raw_by_mod_par),
+        "dias_cobertos": sorted(result["daily_vime_vars"].keys()),
+    }
+
     if result["disponivel"]:
         try:
             vime_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         except Exception:
             pass
-    elif vime_path.exists():
-        try:
-            cached = json.loads(vime_path.read_text(encoding="utf-8"))
-            if cached.get("disponivel"):
-                cached["cached_fallback"] = True
-                return cached
-        except Exception:
-            pass
+    elif cached and cached.get("disponivel"):
+        cached["cached_fallback"] = True
+        return cached
     return result
 
 

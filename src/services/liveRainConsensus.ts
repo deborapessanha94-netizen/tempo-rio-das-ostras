@@ -17,13 +17,16 @@ export interface RainSourceDayBreakdown {
   inmet_cosmo_meteograma_mm?: number | null;
   inmet_cosmo_rodada?: string | null;
   inmet_vime_cosmo28_mm?: number | null;
+  inmet_vime_cosmo28_1h_mm?: number | null;
   inmet_vime_cosmo28_faixa?: string | null;
   inmet_vime_cosmo7_mm?: number | null;
+  inmet_vime_cosmo7_6h_mm?: number | null;
   inmet_vime_cosmo7_faixa?: string | null;
   inmet_vime_pwat_mm?: number | null;
   inmet_vime_pwat_faixa?: string | null;
   inmet_vime_cape_jkg?: number | null;
   inmet_vime_cape_faixa?: string | null;
+  vime_dia?: Record<string, any> | null;
   cptec_wrf_mm?: number | null;
   cptec_multimodel_mm?: number | null;
   cptec_multimodel_horas?: number | null;
@@ -387,14 +390,24 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       prevFontes.cptec_prob_p05_pct !== undefined && prevFontes.cptec_prob_p05_pct !== null
         ? Number(prevFontes.cptec_prob_p05_pct)
         : null;
+    const vimeDia: Record<string, any> | null =
+      meta.vime_inmet?.daily_vime_vars?.[dateIso] ?? prevFontes.vime_dia ?? null;
     const pwatVal =
-      prevFontes.inmet_vime_pwat_mm !== undefined && prevFontes.inmet_vime_pwat_mm !== null
-        ? Number(prevFontes.inmet_vime_pwat_mm)
-        : null;
+      vimeDia?.pwat_max_mm !== undefined && vimeDia?.pwat_max_mm !== null
+        ? Number(vimeDia.pwat_max_mm)
+        : prevFontes.inmet_vime_pwat_mm !== undefined && prevFontes.inmet_vime_pwat_mm !== null
+          ? Number(prevFontes.inmet_vime_pwat_mm)
+          : null;
     const capeVal =
-      prevFontes.inmet_vime_cape_jkg !== undefined && prevFontes.inmet_vime_cape_jkg !== null
-        ? Number(prevFontes.inmet_vime_cape_jkg)
-        : null;
+      vimeDia?.cape_max_jkg !== undefined && vimeDia?.cape_max_jkg !== null
+        ? Number(vimeDia.cape_max_jkg)
+        : prevFontes.inmet_vime_cape_jkg !== undefined && prevFontes.inmet_vime_cape_jkg !== null
+          ? Number(prevFontes.inmet_vime_cape_jkg)
+          : null;
+    const vimeShowalter =
+      vimeDia?.showalter_min !== undefined && vimeDia?.showalter_min !== null ? Number(vimeDia.showalter_min) : null;
+    const vimeOmega =
+      vimeDia?.omega850_min_pas !== undefined && vimeDia?.omega850_min_pas !== null ? Number(vimeDia.omega850_min_pas) : null;
 
     // 2. Modelos Globais (base Windy): ECMWF IFS 9km, NOAA GFS, DWD ICON 13km (ao vivo se disponível, senão backend)
     const gIdx = liveGlobalDaily?.time?.indexOf(dateIso) ?? -1;
@@ -504,7 +517,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     const samples: Array<[number, number]> = [];
     if (cosmoMm !== null) samples.push([cosmoMm, 0.25]);
     if (vime28Mm !== null) samples.push([vime28Mm, 0.22]);
-    if (vime7Mm !== null) samples.push([vime7Mm, 0.12]);
+    if (vime7Mm !== null) samples.push([vime7Mm, 0.14]);
     if (wrfMm !== null) samples.push([wrfMm, 0.19]);
     if (hasMmDay && mmSum !== null) samples.push([mmSum, 0.2]);
     if (dIdx === 0 && cptecValidoHoje && cptecMunMm !== null && cptecMunMm > 0) {
@@ -612,9 +625,17 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
         ? probSignals.reduce((acc, [v, w]) => acc + v * w, 0) / probSignals.reduce((acc, [, w]) => acc + w, 0)
         : Math.round(100 * (samples.filter(([v]) => v >= 0.3).reduce((acc, [, w]) => acc + w, 0) / totalW));
 
-    if (dIdx <= 1 && pwatVal !== null && capeVal !== null) {
-      if (capeVal >= 500 && pwatVal >= 45) probPct += 12;
-      else if (capeVal < 250 && pwatVal < 35 && inmetDayLevel <= 1) probPct -= 5;
+    if (pwatVal !== null && capeVal !== null) {
+      if ((capeVal >= 1500 || (capeVal >= 750 && vimeShowalter !== null && vimeShowalter <= -2.5)) && pwatVal >= 45) {
+        probPct += esperancaModelos >= 0.4 || (vimeOmega !== null && vimeOmega <= -0.5) ? 14 : 8;
+      } else if (capeVal >= 500 && pwatVal >= 45) {
+        probPct += 10;
+      } else if (capeVal < 250 && pwatVal < 35 && (vimeShowalter === null || vimeShowalter >= 0) && inmetDayLevel <= 1) {
+        probPct -= 5;
+      }
+    }
+    if (vimeOmega !== null && vimeOmega <= -0.6 && (pwatVal ?? 0) >= 45) {
+      probPct += 5;
     }
     if (inmetDayLevel >= 3) probPct = Math.max(probPct, 65);
     else if (inmetDayLevel === 2) probPct = Math.max(probPct, 50);
@@ -664,6 +685,11 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     prevDia.taxa_horaria_pico = alertLimits ? `${alertLimits.taxaMin} a ${alertLimits.taxaMax} mm/h` : p50 > 0 ? '< 5 mm/h' : '0 mm/h';
     prevDia.fontes = {
       ...prevFontes,
+      vime_dia: vimeDia,
+      inmet_vime_pwat_mm: pwatVal,
+      inmet_vime_pwat_faixa: vimeDia?.pwat_faixa ?? prevFontes.inmet_vime_pwat_faixa ?? null,
+      inmet_vime_cape_jkg: capeVal,
+      inmet_vime_cape_faixa: vimeDia?.cape_faixa ?? prevFontes.inmet_vime_cape_faixa ?? null,
       ecmwf_ifs_mm: ecmwfMm !== null ? round1(ecmwfMm) : null,
       ecmwf_ifs_prob_pct: ecmwfProb !== null ? Math.round(ecmwfProb) : null,
       gfs_mm: gfsMm !== null ? round1(gfsMm) : null,

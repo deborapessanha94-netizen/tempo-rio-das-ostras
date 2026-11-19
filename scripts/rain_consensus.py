@@ -139,15 +139,29 @@ def compute_daily_rain_consensus(
     cosmo_met_hourly = inmet_cosmo_met.get("hourly_brt", {})
     cosmo_met_mm = cosmo_met_daily.get(day_date_iso)
 
-    # 2. INMET VIME (COSMO 2.8km SE-RJ & COSMO 7km SE + PWAT + CAPE)
+    # 2. INMET VIME (COSMO 2.8km SE-RJ & COSMO 7km SE — todas as variáveis por dia)
+    vime_day = (inmet_vime.get("daily_vime_vars") or {}).get(day_date_iso) or {}
     vime28_mm = inmet_vime.get("daily_cosmo28_mm", {}).get(day_date_iso)
     vime28_faixa = inmet_vime.get("daily_cosmo28_faixa", {}).get(day_date_iso)
+    vime28_1h_mm = inmet_vime.get("daily_cosmo28_prec1h_mm", {}).get(day_date_iso)
+    vime28_hourly = inmet_vime.get("hourly_cosmo28_mm", {})
     vime7_mm = inmet_vime.get("daily_cosmo7_mm", {}).get(day_date_iso)
     vime7_faixa = inmet_vime.get("daily_cosmo7_faixa", {}).get(day_date_iso)
-    vime_pwat = (inmet_vime.get("agua_precipitavel") or {}).get("rep")
-    vime_pwat_faixa = (inmet_vime.get("agua_precipitavel") or {}).get("faixa")
-    vime_cape = (inmet_vime.get("cape") or {}).get("rep")
-    vime_cape_faixa = (inmet_vime.get("cape") or {}).get("faixa")
+    vime7_6h_mm = inmet_vime.get("daily_cosmo7_prec6h_mm", {}).get(day_date_iso)
+    vime7_turn_mm = (inmet_vime.get("turn_cosmo7_prec_mm") or {}).get(day_date_iso) or {}
+
+    vime_pwat = vime_day.get("pwat_max_mm")
+    if vime_pwat is None and day_idx == 0:
+        vime_pwat = (inmet_vime.get("agua_precipitavel") or {}).get("rep")
+    vime_pwat_faixa = vime_day.get("pwat_faixa") or ((inmet_vime.get("agua_precipitavel") or {}).get("faixa") if day_idx == 0 else None)
+
+    vime_cape = vime_day.get("cape_max_jkg")
+    if vime_cape is None and day_idx == 0:
+        vime_cape = (inmet_vime.get("cape") or {}).get("rep")
+    vime_cape_faixa = vime_day.get("cape_faixa") or ((inmet_vime.get("cape") or {}).get("faixa") if day_idx == 0 else None)
+
+    vime_showalter = vime_day.get("showalter_min")
+    vime_omega = vime_day.get("omega850_min_pas")
 
     # 3. CPTEC/INPE WRF (3866.png)
     wrf_daily = cptec_wrf.get("daily_mm", {})
@@ -264,10 +278,25 @@ def compute_daily_rain_consensus(
     model_pairs = []
     if cosmo_met_mm is not None:
         model_pairs.append((float(cosmo_met_mm), 0.25))
-    if vime28_mm is not None:
-        model_pairs.append((float(vime28_mm), 0.22))
-    if vime7_mm is not None:
-        model_pairs.append((float(vime7_mm), 0.12))
+    vime28_eff = None
+    if vime28_mm is not None and vime28_1h_mm is not None:
+        vime28_eff = round(0.5 * float(vime28_mm) + 0.5 * float(vime28_1h_mm), 1)
+    elif vime28_mm is not None:
+        vime28_eff = float(vime28_mm)
+    elif vime28_1h_mm is not None:
+        vime28_eff = float(vime28_1h_mm)
+    if vime28_eff is not None:
+        model_pairs.append((vime28_eff, 0.22))
+
+    vime7_eff = None
+    if vime7_mm is not None and vime7_6h_mm is not None:
+        vime7_eff = round(0.5 * float(vime7_mm) + 0.5 * float(vime7_6h_mm), 1)
+    elif vime7_mm is not None:
+        vime7_eff = float(vime7_mm)
+    elif vime7_6h_mm is not None:
+        vime7_eff = float(vime7_6h_mm)
+    if vime7_eff is not None:
+        model_pairs.append((vime7_eff, 0.14))
     if wrf_mm is not None:
         model_pairs.append((float(wrf_mm), 0.19))
     if mm_sum is not None:
@@ -320,13 +349,16 @@ def compute_daily_rain_consensus(
     else:
         prob_day = 25.0 if esperanca_modelos >= 0.5 else 10.0
 
-    # Modulação termodinâmica real via VIME (CAPE & Água Precipitável em D+0..D+1)
-    if day_idx <= 1:
-        if vime_cape is not None and vime_pwat is not None:
-            if vime_cape >= 500 and vime_pwat >= 45:
-                prob_day += 12.0
-            elif vime_cape < 250 and vime_pwat < 35 and inmet_day_level <= 1:
-                prob_day -= 5.0
+    # Modulação termodinâmica e dinâmica real via VIME em TODOS os dias (CAPE, Showalter, PWAT, Ômega 850)
+    if vime_cape is not None and vime_pwat is not None:
+        if (vime_cape >= 1500 or (vime_cape >= 750 and vime_showalter is not None and vime_showalter <= -2.5)) and vime_pwat >= 45:
+            prob_day += 14.0 if (esperanca_modelos >= 0.4 or (vime_omega is not None and vime_omega <= -0.5)) else 8.0
+        elif vime_cape >= 500 and vime_pwat >= 45:
+            prob_day += 10.0
+        elif vime_cape < 250 and vime_pwat < 35 and (vime_showalter is None or vime_showalter >= 0) and inmet_day_level <= 1:
+            prob_day -= 5.0
+    if vime_omega is not None and vime_omega <= -0.6 and (vime_pwat or 0) >= 45:
+        prob_day += 5.0
 
     if inmet_day_level >= 3:
         prob_day = max(prob_day, 65.0)
@@ -400,8 +432,13 @@ def compute_daily_rain_consensus(
         for h in range(h_s, h_e):
             key_h = f"{day_date_iso}T{h:02d}"
             parts = []
+            v28_h = vime28_hourly.get(f"{key_h}:00")
+            if v28_h is None:
+                v28_h = vime28_hourly.get(key_h)
             if key_h in cosmo_met_hourly:
-                parts.append((float(cosmo_met_hourly[key_h]), 0.35))
+                parts.append((float(cosmo_met_hourly[key_h]), 0.33))
+            if v28_h is not None:
+                parts.append((float(v28_h), 0.20))
             if key_h in wrf_hourly:
                 parts.append((float(wrf_hourly[key_h]), 0.30))
             if (day_date_iso, h) in mm_slots:
@@ -445,6 +482,10 @@ def compute_daily_rain_consensus(
     turn_weights = {}
     for t_name, h_s, h_e, _sig in TURNOS_ORDER:
         nwp_t = sum(raw_hour_curve.get(h, 0.0) for h in range(h_s, h_e))
+        v7_t_key = {"Madrugada": "madrugada", "Manhã": "manha", "Tarde": "tarde", "Noite": "noite"}[t_name]
+        v7_t = float(vime7_turn_mm.get(v7_t_key, 0.0))
+        if v7_t > 0:
+            nwp_t = (0.78 * nwp_t + 0.22 * v7_t) if nwp_t > 0 else (0.25 * v7_t)
         inm_lvl = inmet_turn_levels.get(t_name, 0)
         conv_cue = (1.0 if inm_lvl >= 3 else 0.65 if inm_lvl == 2 else 0.2 if inm_lvl == 1 else 0.0)
         if t_name in ("Madrugada", "Manhã") and inm_lvl >= 2:
@@ -498,14 +539,17 @@ def compute_daily_rain_consensus(
         "fontes_dia": {
             "inmet_cosmo_meteograma_mm": round(float(cosmo_met_mm), 1) if cosmo_met_mm is not None else None,
             "inmet_cosmo_rodada": inmet_cosmo_met.get("rodada_utc"),
-            "inmet_vime_cosmo28_mm": round(float(vime28_mm), 1) if vime28_mm is not None else None,
+            "inmet_vime_cosmo28_mm": round(float(vime28_eff), 1) if vime28_eff is not None else None,
+            "inmet_vime_cosmo28_1h_mm": round(float(vime28_1h_mm), 1) if vime28_1h_mm is not None else None,
             "inmet_vime_cosmo28_faixa": vime28_faixa,
-            "inmet_vime_cosmo7_mm": round(float(vime7_mm), 1) if vime7_mm is not None else None,
+            "inmet_vime_cosmo7_mm": round(float(vime7_eff), 1) if vime7_eff is not None else None,
+            "inmet_vime_cosmo7_6h_mm": round(float(vime7_6h_mm), 1) if vime7_6h_mm is not None else None,
             "inmet_vime_cosmo7_faixa": vime7_faixa,
             "inmet_vime_pwat_mm": vime_pwat,
             "inmet_vime_pwat_faixa": vime_pwat_faixa,
             "inmet_vime_cape_jkg": vime_cape,
             "inmet_vime_cape_faixa": vime_cape_faixa,
+            "vime_dia": vime_day if vime_day else None,
             "cptec_wrf_mm": round(float(wrf_mm), 1) if wrf_mm is not None else None,
             "cptec_multimodel_mm": mm_sum,
             "cptec_multimodel_horas": mm_hours_count,
