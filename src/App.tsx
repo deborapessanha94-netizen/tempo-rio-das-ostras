@@ -1573,26 +1573,56 @@ export default function App() {
                         );
                       })()}
 
-                      {(hojeInspecao?.chuva?.janela_critica_horaria || hojeInspecao?.vento?.horario_pico) && (
-                        <div className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 space-y-0.5 pt-1">
-                          {hojeInspecao?.chuva?.janela_critica_horaria && (
-                            <div>
-                              Janela de maior atenção:{' '}
-                              <span className="font-mono font-semibold text-[#14213D] dark:text-white">
-                                {hojeInspecao.chuva.janela_critica_horaria}
-                              </span>
-                            </div>
-                          )}
-                          {hojeInspecao?.vento?.horario_pico && (
-                            <div>
-                              Pico de rajadas:{' '}
-                              <span className="font-mono font-semibold text-[#14213D] dark:text-white">
-                                {hojeInspecao.vento.horario_pico}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                      {(() => {
+                        const raiosObs = (boletimMeta as any)?.atividade_raios;
+                        const raiosFresh = raiosObs?.captura_utc
+                          ? Date.now() - Date.parse(raiosObs.captura_utc) <= 45 * 60_000
+                          : false;
+                        const liveWmoThunder = [95, 96, 99].includes(Number(openMeteo?.current?.weather_code ?? -1));
+                        const temRaiosAgora = Boolean((raiosObs?.atividade_ativa && raiosFresh) || liveWmoThunder);
+                        if (!hojeInspecao?.chuva?.janela_critica_horaria && !hojeInspecao?.vento?.horario_pico && !temRaiosAgora) {
+                          return null;
+                        }
+                        let raiosTexto = 'Trovoadas com atividade elétrica na região';
+                        if (raiosObs?.atividade_ativa && raiosFresh) {
+                          const cnt = Number(raiosObs.raios_25km || 0) > 0 ? Number(raiosObs.raios_25km) : Number(raiosObs.raios_50km || 0);
+                          const alc = Number(raiosObs.raios_25km || 0) > 0 ? 'perto do município' : 'em raio de 50 km';
+                          const distStr =
+                            raiosObs.dist_min_km !== null && raiosObs.dist_min_km !== undefined
+                              ? ` (mais próximo a ${Number(raiosObs.dist_min_km).toFixed(0)} km ${raiosObs.dir_min || ''}`.trimEnd() +
+                                (raiosObs.ultimo_raio_brt ? `, ${raiosObs.ultimo_raio_brt})` : ')')
+                              : '';
+                          raiosTexto = `${cnt} descarga${cnt === 1 ? '' : 's'} ${alc}${distStr} · Satélite GOES-19`;
+                        }
+                        return (
+                          <div className="text-xs text-slate-600 dark:text-[#E5E5E5]/80 space-y-0.5 pt-1">
+                            {hojeInspecao?.chuva?.janela_critica_horaria && (
+                              <div>
+                                Janela de maior atenção:{' '}
+                                <span className="font-mono font-semibold text-[#14213D] dark:text-white">
+                                  {hojeInspecao.chuva.janela_critica_horaria}
+                                </span>
+                              </div>
+                            )}
+                            {hojeInspecao?.vento?.horario_pico && (
+                              <div>
+                                Pico de rajadas:{' '}
+                                <span className="font-mono font-semibold text-[#14213D] dark:text-white">
+                                  {hojeInspecao.vento.horario_pico}
+                                </span>
+                              </div>
+                            )}
+                            {temRaiosAgora && (
+                              <div className="text-amber-700 dark:text-amber-300 font-medium">
+                                Atividade de raios:{' '}
+                                <span className="font-mono font-semibold">
+                                  {raiosTexto}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
 

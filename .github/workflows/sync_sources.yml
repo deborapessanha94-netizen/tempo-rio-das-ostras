@@ -52,7 +52,7 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-por || true
           python -m pip install --upgrade pip
-          pip install pandas openpyxl reportlab matplotlib pypdfium2 pillow numpy || true
+          pip install pandas openpyxl reportlab matplotlib pypdfium2 pillow numpy h5py || true
 
       - name: Executar Coleta e Síntese Completa de Todas as Fontes Oficiais
         run: |

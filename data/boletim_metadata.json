@@ -10,7 +10,7 @@
     "status_geral_cor": "warning",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": false,
-    "atualizacao_hora": "19/11/2026 às 00:30h",
+    "atualizacao_hora": "19/11/2026 às 00:49h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -26,7 +26,7 @@
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
           "media_continua_modelos_mm": 2.3,
-          "teto_tempestade_alerta_mm": 7.0,
+          "teto_tempestade_alerta_mm": 7.1,
           "faixa_completa_txt": "2.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
@@ -38,7 +38,7 @@
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "2.3 a 7.0 mm",
+              "volume_estimado": "2.3 a 7.1 mm",
               "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
             },
             "regiao_rural": {
@@ -48,9 +48,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -105,9 +105,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -162,9 +162,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -219,9 +219,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -276,9 +276,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -333,9 +333,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -390,9 +390,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -447,9 +447,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -483,7 +483,7 @@
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
         "media_continua_modelos_mm": 2.3,
-        "teto_tempestade_alerta_mm": 7.0,
+        "teto_tempestade_alerta_mm": 7.1,
         "faixa_completa_txt": "2.3 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
@@ -495,7 +495,7 @@
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "2.3 a 7.0 mm",
+            "volume_estimado": "2.3 a 7.1 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
@@ -505,9 +505,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -562,9 +562,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -587,13 +587,13 @@
     "sintese_tecnica_precisao": "Hoje em condição regular (2.3 mm estimados e rajadas Até 26 km/h). Vigilância preventiva ativada para Sexta-feira devido a aviso meteorológico programado."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "19/11/2026 às 00:27h",
-    "emissao_iso": "2026-11-19T00:27:50-03:00",
-    "generation_epoch_ms": 1795058870280,
+    "emissao": "19/11/2026 às 00:49h",
+    "emissao_iso": "2026-11-19T00:49:03-03:00",
+    "generation_epoch_ms": 1795060143514,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
-      "media_mm": 0.2,
-      "max_mm": 0.5,
+      "media_mm": 1.6,
+      "max_mm": 7.1,
       "estacoes_ativas": 5
     },
     "inea_boletim_publicado_em": "17/11/2026 às 06h30",
@@ -1516,9 +1516,24 @@
         ]
       }
     },
+    "atividade_raios": {
+      "disponivel": true,
+      "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
+      "captura_utc": "2026-11-19T03:49:42Z",
+      "captura_brt": "2026-11-19 00:49",
+      "janela_minutos": 20,
+      "raio_busca_km": 50,
+      "raios_25km": 17,
+      "raios_50km": 32,
+      "dist_min_km": 3.4,
+      "dir_min": "NE",
+      "ultimo_raio_brt": "00:49",
+      "ultimo_raio_iso": "2026-11-19T00:49:00-03:00",
+      "atividade_ativa": true
+    },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-19T00:30:43-03:00",
+      "atualizado_em": "2026-11-19T00:49:42-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -1595,7 +1610,7 @@
       "disponivel": true,
       "estagio": "Atenção",
       "estagio_indice": 1,
-      "atualizado_em": "2026-11-19T00:30:42-03:00",
+      "atualizado_em": "2026-11-19T00:49:43-03:00",
       "url": "https://radartool.inea.rj.gov.br/radar-tool/"
     },
     "perfil_horario_oficial_chuva": {
@@ -2970,20 +2985,20 @@
         "dia_semana": "Quinta-feira",
         "intensidade_chuva": "Chuva fraca",
         "chuva_media_modelos_mm": 2.3,
-        "chuva_p25_mm": 1.0,
+        "chuva_p25_mm": 1.6,
         "chuva_p50_mm": 2.3,
         "chuva_p75_mm": 3.0,
-        "chuva_p90_teto_mm": 7.0,
+        "chuva_p90_teto_mm": 7.1,
         "probabilistico": {
-          "p25_mm": 1.0,
+          "p25_mm": 1.6,
           "p50_mm": 2.3,
           "p75_mm": 3.0,
-          "p90_teto_mm": 7.0,
+          "p90_teto_mm": 7.1,
           "probabilidade_pct": 85,
           "qtd_fontes_numericas": 8
         },
-        "chuva_pico_convectivo_mm": 7.0,
-        "faixa_oficial": "2.3 mm (P50) • P25–P90: 1.0–7.0 mm (85%)",
+        "chuva_pico_convectivo_mm": 7.1,
+        "faixa_oficial": "2.3 mm (P50) • P25–P90: 1.6–7.1 mm (85%)",
         "chuva_prob_pct": 85,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
@@ -3078,8 +3093,8 @@
           "gfs_prob_pct": 94,
           "icon_mm": 0.7,
           "icon_prob_pct": 38,
-          "observado_hoje_media_mm": 0.2,
-          "observado_hoje_max_mm": 0.5
+          "observado_hoje_media_mm": 1.6,
+          "observado_hoje_max_mm": 7.1
         }
       },
       {
@@ -3879,7 +3894,7 @@
       "impacto": "Aviso Amarelo (Tempestade) programado para 20/11. Hoje a previsão consensual é de 2.3 mm."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.0–7.0 mm (85%)) (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,35 m (Status: Vigilância, ocupação de calha em 48% e ampla margem de segurança de 1,49 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (20/11) atua o regime de cavado em médios níveis / convecção úmida, determinando contenção/declínio de temperatura (24°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 1.2–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56447 do INMET). No sábado (21/11) e no domingo (22/11), o padrão de aproximação / passagem de frente fria mantém variação de nuvens e chuva prevista de 4.7 mm (P50) • P25–P90: 0.2–18.3 mm (65%) (sem avisos meteorológicos vigentes) e 2.6 mm (P50) • P25–P90: 1.1–12.0 mm (65%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.9 a 0.9 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.6–7.1 mm (85%)) (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,38 m (Status: Vigilância, ocupação de calha em 49% e ampla margem de segurança de 1,46 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (20/11) atua o regime de cavado em médios níveis / convecção úmida, determinando contenção/declínio de temperatura (24°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 1.2–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56447 do INMET). No sábado (21/11) e no domingo (22/11), o padrão de aproximação / passagem de frente fria mantém variação de nuvens e chuva prevista de 4.7 mm (P50) • P25–P90: 0.2–18.3 mm (65%) (sem avisos meteorológicos vigentes) e 2.6 mm (P50) • P25–P90: 1.1–12.0 mm (65%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.9 a 0.9 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "19/11 (Quinta-feira) a 26/11 (Quinta-feira)",
     "evolucao_3_dias": [
@@ -3929,7 +3944,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "2.3 mm (85% • P25–P90: 1.0–7.0 mm)",
+            "val": "2.3 mm (85% • P25–P90: 1.6–7.1 mm)",
             "icon": "cloud-drizzle"
           },
           "mar": {
@@ -4151,7 +4166,7 @@
     "ordem_1_atmosfera": {
       "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
       "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
-      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.0–7.0 mm (85%)) (sem avisos meteorológicos vigentes).",
+      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.6–7.1 mm (85%)) (sem avisos meteorológicos vigentes).",
       "pilares": [
         {
           "label": "Modelos BR + Globais (96h)",
@@ -4169,11 +4184,11 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,35 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,38 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.35 m",
+      "cota": "1.38 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,35 m (Status: Vigilância, ocupação de calha em 48% e ampla margem de segurança de 1,49 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,38 m (Status: Vigilância, ocupação de calha em 49% e ampla margem de segurança de 1,46 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
@@ -4185,7 +4200,7 @@
         },
         {
           "nome": "Rocha Leão / REBIO",
-          "valor": "0,3 mm (24h)"
+          "valor": "0,5 mm (24h)"
         },
         {
           "nome": "Tartaruga / Orla",
@@ -4262,7 +4277,7 @@
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
           "media_continua_modelos_mm": 2.3,
-          "teto_tempestade_alerta_mm": 7.0,
+          "teto_tempestade_alerta_mm": 7.1,
           "faixa_completa_txt": "2.3 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
@@ -4274,7 +4289,7 @@
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "2.3 a 7.0 mm",
+              "volume_estimado": "2.3 a 7.1 mm",
               "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
             },
             "regiao_rural": {
@@ -4284,9 +4299,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4347,7 +4362,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "2.3 mm (85% • P25–P90: 1.0–7.0 mm)",
+          "val": "2.3 mm (85% • P25–P90: 1.6–7.1 mm)",
           "icon": "cloud-drizzle"
         },
         "mar": {
@@ -4410,9 +4425,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4536,9 +4551,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4662,9 +4677,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4788,9 +4803,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4914,9 +4929,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5040,9 +5055,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5166,9 +5181,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.35",
+            "cota_atual_m": "1.38",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.49 m",
+            "margem_segura_m": "1.46 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -6425,11 +6440,26 @@
       ]
     }
   },
+  "atividade_raios": {
+    "disponivel": true,
+    "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
+    "captura_utc": "2026-11-19T03:49:42Z",
+    "captura_brt": "2026-11-19 00:49",
+    "janela_minutos": 20,
+    "raio_busca_km": 50,
+    "raios_25km": 17,
+    "raios_50km": 32,
+    "dist_min_km": 3.4,
+    "dir_min": "NE",
+    "ultimo_raio_brt": "00:49",
+    "ultimo_raio_iso": "2026-11-19T00:49:00-03:00",
+    "atividade_ativa": true
+  },
   "inea_radartool": {
     "disponivel": true,
     "estagio": "Atenção",
     "estagio_indice": 1,
-    "atualizado_em": "2026-11-19T00:30:42-03:00",
+    "atualizado_em": "2026-11-19T00:49:43-03:00",
     "url": "https://radartool.inea.rj.gov.br/radar-tool/"
   },
   "inea_boletim_hidrometeorologico": {
@@ -6438,7 +6468,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-19 00:28:07 BRT",
+    "data_coleta": "2026-11-19 00:49:20 BRT",
     "publicado_em": "17/11/2026 às 06h30",
     "fonte_pdf_sha256": "77fae7d84f9ed65e",
     "pdf_bytes": 615402,
@@ -6498,7 +6528,7 @@
   "inea_macae_ostras": {
     "fonte": "INEA - Sistema de Alerta de Cheias",
     "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
-    "atualizacao": "19/11/2026 00:28",
+    "atualizacao": "19/11/2026 00:49",
     "bacia": "Rios Macaé e das Ostras",
     "alerta_macae": {
       "tem_elevacao_fora_limite": true,
@@ -6510,13 +6540,13 @@
           "curso_agua": "rio São Pedro",
           "estacao": "São Pedro",
           "tendencia": "Subindo",
-          "leitura": "19/11/2026 00:15",
+          "leitura": "19/11/2026 00:45",
           "status_bruto": "ATENÇÃO",
           "status": "ATENÇÃO",
           "cor_badge": "warning",
           "fora_limite_seguranca": true,
-          "nivel_atual_m": "0.59",
-          "nivel_15min_m": "0.58",
+          "nivel_atual_m": "0.62",
+          "nivel_15min_m": "0.59",
           "chuva_24h_mm": "0.2",
           "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
         },
@@ -6581,7 +6611,7 @@
           "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71501220.html"
         }
       ],
-      "resumo_texto": "5 estação(ões) em Macaé fora da cota de segurança (ALERTA): São Pedro (ATENÇÃO: 0.59 m), Glicério (ATENÇÃO), Barra do Sana (ATENÇÃO: 1.34 m), Lagoa de Imboassica (ALERTA: 1.31 m), Ponte do Baião (ATENÇÃO: 1.85 m)"
+      "resumo_texto": "5 estação(ões) em Macaé fora da cota de segurança (ALERTA): São Pedro (ATENÇÃO: 0.62 m), Glicério (ATENÇÃO), Barra do Sana (ATENÇÃO: 1.34 m), Lagoa de Imboassica (ALERTA: 1.31 m), Ponte do Baião (ATENÇÃO: 1.85 m)"
     },
     "alerta_friburgo_cabeceiras": {
       "tem_elevacao": true,
@@ -6654,13 +6684,13 @@
         "curso_agua": "rio Jundiá",
         "estacao": "Jundiá",
         "tendencia": "Estável",
-        "leitura": "18/11/2026 21:00",
+        "leitura": "18/11/2026 21:30",
         "status_bruto": "VIGILÂNCIA",
         "status": "VIGILÂNCIA",
         "cor_badge": "success",
         "fora_limite_seguranca": false,
-        "nivel_atual_m": "1.35",
-        "nivel_15min_m": "1.35",
+        "nivel_atual_m": "1.38",
+        "nivel_15min_m": "1.38",
         "chuva_24h_mm": "7.0",
         "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
       }
@@ -6671,13 +6701,13 @@
         "curso_agua": "rio Jundiá",
         "estacao": "Jundiá",
         "tendencia": "Estável",
-        "leitura": "18/11/2026 21:00",
+        "leitura": "18/11/2026 21:30",
         "status_bruto": "VIGILÂNCIA",
         "status": "VIGILÂNCIA",
         "cor_badge": "success",
         "fora_limite_seguranca": false,
-        "nivel_atual_m": "1.35",
-        "nivel_15min_m": "1.35",
+        "nivel_atual_m": "1.38",
+        "nivel_15min_m": "1.38",
         "chuva_24h_mm": "7.0",
         "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
       },
@@ -6686,13 +6716,13 @@
         "curso_agua": "rio São Pedro",
         "estacao": "São Pedro",
         "tendencia": "Subindo",
-        "leitura": "19/11/2026 00:15",
+        "leitura": "19/11/2026 00:45",
         "status_bruto": "ATENÇÃO",
         "status": "ATENÇÃO",
         "cor_badge": "warning",
         "fora_limite_seguranca": true,
-        "nivel_atual_m": "0.59",
-        "nivel_15min_m": "0.58",
+        "nivel_atual_m": "0.62",
+        "nivel_15min_m": "0.59",
         "chuva_24h_mm": "0.2",
         "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
       },
@@ -7273,7 +7303,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-18 00z",
-    "atualizacao": "19/11/2026 00:28",
+    "atualizacao": "19/11/2026 00:49",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -7359,7 +7389,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "19/11/2026",
-    "atualizacao": "19/11/2026 00:28",
+    "atualizacao": "19/11/2026 00:49",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -7539,7 +7569,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-19T00:28:17.123031",
+    "atualizado_em": "2026-11-19T00:49:28.597980",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "04:16",
@@ -7897,7 +7927,7 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.35 m",
+    "jundia_nivel": "1.38 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "12.0 mm",
     "chuva_4d": "14.6 mm",

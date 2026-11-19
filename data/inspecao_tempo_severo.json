@@ -3,7 +3,7 @@
   "status_geral_cor": "warning",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": false,
-  "atualizacao_hora": "19/11/2026 às 00:30h",
+  "atualizacao_hora": "19/11/2026 às 00:49h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -19,7 +19,7 @@
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
         "media_continua_modelos_mm": 2.3,
-        "teto_tempestade_alerta_mm": 7.0,
+        "teto_tempestade_alerta_mm": 7.1,
         "faixa_completa_txt": "2.3 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
@@ -31,7 +31,7 @@
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "2.3 a 7.0 mm",
+            "volume_estimado": "2.3 a 7.1 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
@@ -41,9 +41,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -98,9 +98,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -155,9 +155,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -212,9 +212,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -269,9 +269,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -326,9 +326,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -383,9 +383,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -440,9 +440,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.35",
+          "cota_atual_m": "1.38",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.49 m",
+          "margem_segura_m": "1.46 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -476,7 +476,7 @@
     "granizo_detalhe": "Sem previsão de granizo.",
     "chuva": {
       "media_continua_modelos_mm": 2.3,
-      "teto_tempestade_alerta_mm": 7.0,
+      "teto_tempestade_alerta_mm": 7.1,
       "faixa_completa_txt": "2.3 mm",
       "taxa_horaria_pico": "< 5 mm/h",
       "janela_critica_horaria": "00:00 às 24:00h",
@@ -488,7 +488,7 @@
         },
         "centro_urbano": {
           "regiao": "Centro Urbano & Baixadas",
-          "volume_estimado": "2.3 a 7.0 mm",
+          "volume_estimado": "2.3 a 7.1 mm",
           "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
         },
         "regiao_rural": {
@@ -498,9 +498,9 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.35",
+        "cota_atual_m": "1.38",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.49 m",
+        "margem_segura_m": "1.46 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }
@@ -555,9 +555,9 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.35",
+        "cota_atual_m": "1.38",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.49 m",
+        "margem_segura_m": "1.46 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }

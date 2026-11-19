@@ -1251,6 +1251,154 @@ def extract_global_nwp_models(data_dir=None):
         return {"disponivel": False, "models": {}}
 
 
+
+# ==============================================================================
+# 6. DETECÇÃO DE RAIOS EM TEMPO REAL VIA SATÉLITE (NOAA GOES-19 GLM-L2-LCFA)
+# ==============================================================================
+def _azimuth_cardinal_br(dlat, dlon):
+    import math
+    ang = (math.degrees(math.atan2(dlon * math.cos(math.radians(-22.5269)), dlat)) + 360.0) % 360.0
+    dirs = ["N", "NE", "L", "SE", "S", "SO", "O", "NO"]
+    return dirs[int((ang + 22.5) // 45) % 8]
+
+
+def extract_goes_glm_lightning(data_dir=None, window_minutes=20, radius_km=50.0):
+    """Lê descargas elétricas reais detectadas pelo sensor GLM do satélite GOES-19 (NOAA S3)."""
+    import io
+    import math
+    import xml.etree.ElementTree as ET
+
+    now_u = datetime.now(timezone.utc)
+    now_b = now_u.astimezone(BRT)
+    res = {
+        "disponivel": False,
+        "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
+        "captura_utc": now_u.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "captura_brt": now_b.strftime("%Y-%m-%d %H:%M"),
+        "janela_minutos": int(window_minutes),
+        "raio_busca_km": int(radius_km),
+        "raios_25km": 0,
+        "raios_50km": 0,
+        "dist_min_km": None,
+        "dir_min": None,
+        "ultimo_raio_brt": None,
+        "ultimo_raio_iso": None,
+        "atividade_ativa": False,
+    }
+    try:
+        import h5py
+    except ImportError:
+        return res
+
+    target_lat, target_lon = -22.5269, -41.9450
+    max_granules = max(15, int(window_minutes * 3))
+    cache_p = Path(data_dir) / "glm_granules_cache.json" if data_dir else None
+    gran_cache = {}
+    if cache_p and cache_p.exists():
+        try:
+            gran_cache = json.loads(cache_p.read_text(encoding="utf-8"))
+        except Exception:
+            gran_cache = {}
+
+    try:
+        keys = []
+        hours_check = sorted({
+            (now_u.replace(minute=0, second=0, microsecond=0) - timedelta(hours=h))
+            for h in (1, 0)
+        })
+        for dt_h in hours_check:
+            y, j, hh = dt_h.strftime("%Y"), dt_h.strftime("%j"), dt_h.strftime("%H")
+            list_url = f"https://noaa-goes19.s3.amazonaws.com/?list-type=2&prefix=GLM-L2-LCFA/{y}/{j}/{hh}/"
+            req = urllib.request.Request(list_url, headers=HEADERS)
+            with urllib.request.urlopen(req, timeout=10, context=SSL_CTX) as resp:
+                root = ET.fromstring(resp.read())
+            for el in root.findall(".//{http://s3.amazonaws.com/doc/2006-03-01/}Key"):
+                if el.text and el.text.endswith(".nc"):
+                    keys.append(el.text)
+        keys = sorted(keys)[-max_granules:]
+        if not keys:
+            return res
+
+        # Atualiza cache somente dos grânulos novos (20s cada)
+        missing = [k for k in keys if k not in gran_cache]
+
+        def _fetch_gran(k):
+            g_url = f"https://noaa-goes19.s3.amazonaws.com/{k}"
+            req_g = urllib.request.Request(g_url, headers=HEADERS)
+            with urllib.request.urlopen(req_g, timeout=12, context=SSL_CTX) as rg:
+                raw = rg.read()
+            fname = k.split("/")[-1]
+            t_str = fname.split("_s")[1][:13]
+            dt_g_u = datetime.strptime(t_str, "%Y%j%H%M%S").replace(tzinfo=timezone.utc)
+            pts = []
+            with h5py.File(io.BytesIO(raw), "r") as ds:
+                if "flash_lat" not in ds:
+                    return k, []
+                lats = np.array(ds["flash_lat"][:])
+                lons = np.array(ds["flash_lon"][:])
+                qflags = np.array(ds["flash_quality_flag"][:]) if "flash_quality_flag" in ds else np.zeros(len(lats))
+                for la, lo, qf in zip(lats, lons, qflags):
+                    if int(qf) != 0:
+                        continue
+                    fla, flo = float(la), float(lo)
+                    if abs(fla - target_lat) > 1.2 or abs(flo - target_lon) > 1.2:
+                        continue
+                    p1, p2 = math.radians(fla), math.radians(target_lat)
+                    dp, dl = math.radians(target_lat - fla), math.radians(target_lon - flo)
+                    a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+                    dist_km = round(2.0 * 6371.0 * math.asin(min(1.0, math.sqrt(a))), 1)
+                    if dist_km <= max(60.0, float(radius_km)):
+                        pts.append([
+                            dt_g_u.isoformat(),
+                            round(fla, 4),
+                            round(flo, 4),
+                            dist_km,
+                            _azimuth_cardinal_br(fla - target_lat, flo - target_lon),
+                        ])
+            return k, pts
+
+        if missing:
+            with ThreadPoolExecutor(max_workers=6) as ex:
+                for fut in [ex.submit(_fetch_gran, mk) for mk in missing]:
+                    try:
+                        k_res, pts_res = fut.result()
+                        gran_cache[k_res] = pts_res
+                    except Exception:
+                        pass
+
+        # Prune cache para manter no máximo últimos 90 grânulos
+        trimmed = {k: gran_cache[k] for k in sorted(gran_cache.keys())[-90:] if k in gran_cache}
+        if cache_p:
+            try:
+                cache_p.write_text(json.dumps(trimmed, ensure_ascii=False), encoding="utf-8")
+            except Exception:
+                pass
+
+        flashes = []
+        for k in keys:
+            for item in trimmed.get(k, []):
+                if item[3] <= radius_km:
+                    flashes.append(item)
+
+        res["disponivel"] = True
+        cnt_50 = len(flashes)
+        cnt_25 = sum(1 for f in flashes if f[3] <= 25.0)
+        res["raios_25km"] = cnt_25
+        res["raios_50km"] = cnt_50
+        if flashes:
+            closest = min(flashes, key=lambda x: x[3])
+            latest = max(flashes, key=lambda x: x[0])
+            dt_lat_brt = datetime.fromisoformat(latest[0]).astimezone(BRT)
+            res["dist_min_km"] = closest[3]
+            res["dir_min"] = closest[4]
+            res["ultimo_raio_iso"] = dt_lat_brt.isoformat()
+            res["ultimo_raio_brt"] = dt_lat_brt.strftime("%H:%M")
+        res["atividade_ativa"] = bool(cnt_25 >= 1 or cnt_50 >= 2)
+    except Exception as exc:
+        print(f"[GOES-19 GLM Raios] Aviso: {exc}")
+    return res
+
+
 def extract_all_official_rain_sources(img_dir, data_dir):
     """Executa todos os extratores oficiais brasileiros e modelos globais (ECMWF/GFS/ICON) e consolida."""
     inmet_cosmo_met = extract_inmet_cosmo_meteograma(img_dir, data_dir)
@@ -1258,6 +1406,7 @@ def extract_all_official_rain_sources(img_dir, data_dir):
     cptec_extra = extract_cptec_wrf_and_prob(img_dir)
     inea_radartool = extract_inea_radartool_status(data_dir)
     global_nwp = extract_global_nwp_models(data_dir)
+    goes_glm_raios = extract_goes_glm_lightning(data_dir)
     return {
         "inmet_cosmo_meteograma": inmet_cosmo_met,
         "inmet_vime": inmet_vime,
@@ -1265,4 +1414,5 @@ def extract_all_official_rain_sources(img_dir, data_dir):
         "cptec_prob_p05": cptec_extra["prob_p05_by_day"],
         "inea_radartool": inea_radartool,
         "global_nwp": global_nwp,
+        "atividade_raios": goes_glm_raios,
     }

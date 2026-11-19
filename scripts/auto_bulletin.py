@@ -3078,6 +3078,7 @@ def run_auto_bulletin_pipeline():
         "observado_hoje_estacoes": obs_today_info,
         "inea_boletim_publicado_em": inea_boletim_data.get('publicado_em') if inea_boletim_data else None,
         "vime_inmet": official_extractions.get('inmet_vime', {}),
+        "atividade_raios": official_extractions.get('atividade_raios', {}),
         "global_nwp_info": {
             "disponivel": (official_extractions.get('global_nwp') or {}).get('disponivel', False),
             "atualizado_em": (official_extractions.get('global_nwp') or {}).get('atualizado_em'),
@@ -3207,6 +3208,7 @@ def run_auto_bulletin_pipeline():
         },
         "inmet_meteograma": inmet_meteograma,
         "vime_inmet": official_extractions.get('inmet_vime', {}),
+        "atividade_raios": official_extractions.get('atividade_raios', {}),
         "inea_radartool": official_extractions.get('inea_radartool', {}),
         "inea_boletim_hidrometeorologico": inea_boletim_data,
         "inea_macae_ostras": inea_macae_ostras_data,
