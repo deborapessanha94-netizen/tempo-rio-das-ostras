@@ -1071,6 +1071,70 @@ export default function App() {
           : 'Pressão Estável'
       : 'Monitoramento contínuo';
 
+  const parseInmetAvisoRangeBrt = (av: InmetAviso & Record<string, any>) => {
+    const normalizeIso = (dStr?: string) => {
+      if (!dStr) return '';
+      const raw = String(dStr).split('T')[0].split(' ')[0].trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(raw)) {
+        const [dd, mm, yy] = raw.split('/');
+        return `${yy}-${mm}-${dd}`;
+      }
+      return '';
+    };
+    const extractHm = (rawFull?: string, hOnly?: string, fallback = '00:00') => {
+      const cand = String(hOnly || (rawFull && String(rawFull).includes(' ') ? String(rawFull).split(' ')[1] : '') || fallback)
+        .replace('h', '')
+        .trim();
+      const m = cand.match(/^(\d{1,2}):(\d{2})/);
+      if (!m) return fallback;
+      return `${m[1].padStart(2, '0')}:${m[2]}`;
+    };
+    const iniIso = normalizeIso(av.inicio || av.data_inicio);
+    const fimIso = normalizeIso(av.fim || av.data_fim) || iniIso;
+    const iniHm = extractHm(av.inicio, av.hora_inicio, '00:00');
+    const fimHm = extractHm(av.fim, av.hora_fim, '23:59');
+    const startMs = iniIso ? Date.parse(`${iniIso}T${iniHm}:00-03:00`) : Number.NaN;
+    const endMs = fimIso ? Date.parse(`${fimIso}T${fimHm}:59-03:00`) : Number.NaN;
+    return { iniIso, fimIso, iniHm, fimHm, startMs, endMs };
+  };
+
+  const todayBrtIso = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+
+  const inmetAvisosNaoExpirados = useMemo(() => {
+    const nowMs = Date.now();
+    return inmetAvisos.filter((av) => {
+      const { endMs } = parseInmetAvisoRangeBrt(av as any);
+      return Number.isNaN(endMs) || endMs >= nowMs;
+    });
+  }, [inmetAvisos]);
+
+  const inmetOstrasVigentesHoje = useMemo(() => {
+    const nowMs = Date.now();
+    return inmetAvisosNaoExpirados.filter((av) => {
+      if (av.eh_direto_ostras !== true) return false;
+      const { iniIso, startMs, endMs } = parseInmetAvisoRangeBrt(av as any);
+      if (!Number.isNaN(endMs) && endMs < nowMs) return false;
+      if (!Number.isNaN(startMs)) {
+        return startMs <= nowMs || iniIso === todayBrtIso;
+      }
+      return iniIso === todayBrtIso;
+    });
+  }, [inmetAvisosNaoExpirados, todayBrtIso]);
+
+  const inmetOstrasAtivoAgora = useMemo(() => {
+    const nowMs = Date.now();
+    return inmetOstrasVigentesHoje.some((av) => {
+      const { startMs } = parseInmetAvisoRangeBrt(av as any);
+      return Number.isNaN(startMs) || startMs <= nowMs;
+    });
+  }, [inmetOstrasVigentesHoje]);
+
   const marinhaListaAtiva = useMemo<MarinhaAvisoItem[]>(() => {
     if (!marinhaAvisos) return [];
     const baseList: MarinhaAvisoItem[] =
@@ -1090,19 +1154,38 @@ export default function App() {
     [marinhaListaAtiva]
   );
 
+  const marinhaDeltaVigentesAgora = useMemo(() => {
+    const nowMs = Date.now();
+    return marinhaDeltaAtivos.filter((av) => {
+      if (!av.inicio_utc) return av.status_vigencia !== 'Programado';
+      const iniMs = Date.parse(av.inicio_utc);
+      return Number.isNaN(iniMs) || nowMs >= iniMs;
+    });
+  }, [marinhaDeltaAtivos]);
+
   const hasMarinhaDeltaAtivo = Boolean(
-    marinhaDeltaAtivos.length > 0 || (marinhaAvisos?.aviso_ativo && (!marinhaAvisos.fim_utc || Date.parse(marinhaAvisos.fim_utc) > Date.now()))
+    marinhaDeltaVigentesAgora.length > 0 ||
+      (marinhaAvisos?.aviso_ativo &&
+        (!marinhaAvisos.inicio_utc || Date.parse(marinhaAvisos.inicio_utc) <= Date.now()) &&
+        (!marinhaAvisos.fim_utc || Date.parse(marinhaAvisos.fim_utc) > Date.now()))
   );
 
   const marHojeOrla = orla?.praias_condicoes?.[0]?.dias?.d0;
-  const heroAlertStatus =
-    inmetAvisos.length > 0 && hasMarinhaDeltaAtivo
-      ? 'Alertas Oficiais (INMET & Marinha)'
-      : inmetAvisos.length > 0
-        ? 'Alerta Oficial Vigente Hoje'
-        : hasMarinhaDeltaAtivo
-          ? 'Avisos da Marinha Ativos'
-          : 'Normalidade Operacional';
+  const hasAlertaVigenteHoje = inmetOstrasVigentesHoje.length > 0 || hasMarinhaDeltaAtivo;
+  const heroAlertStatus = (() => {
+    if (inmetOstrasVigentesHoje.length > 0 && hasMarinhaDeltaAtivo) {
+      return 'Alertas Oficiais (INMET & Marinha)';
+    }
+    if (inmetOstrasVigentesHoje.length > 0) {
+      if (inmetOstrasAtivoAgora) return 'Alerta Oficial Vigente Hoje';
+      const firstHm = parseInmetAvisoRangeBrt(inmetOstrasVigentesHoje[0] as any).iniHm;
+      return `Alerta Hoje a partir das ${firstHm}h`;
+    }
+    if (hasMarinhaDeltaAtivo) {
+      return 'Avisos da Marinha Ativos';
+    }
+    return 'Normalidade Operacional';
+  })();
 
   const todayDateFull = useMemo(() => {
     const raw = new Intl.DateTimeFormat('pt-BR', {
@@ -1335,7 +1418,7 @@ export default function App() {
                           }`}
                         />
                         <span className="truncate">{item.label}</span>
-                        {item.id === 'alertas' && (inmetAvisos.length + marinhaListaAtiva.length > 0) && (
+                        {item.id === 'alertas' && (inmetOstrasVigentesHoje.length + marinhaDeltaVigentesAgora.length > 0) && (
                           <span
                             className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold tabular-nums shrink-0 ${
                               isActive
@@ -1343,7 +1426,7 @@ export default function App() {
                                 : 'bg-[#FF8244]/15 text-[#FF8244]'
                             }`}
                           >
-                            {inmetAvisos.length + marinhaListaAtiva.length}
+                            {inmetOstrasVigentesHoje.length + marinhaDeltaVigentesAgora.length}
                           </span>
                         )}
                       </span>
@@ -1415,7 +1498,7 @@ export default function App() {
                       <span className="inline-flex items-center gap-1.5 font-medium text-[#14213D] dark:text-white">
                         <span
                           className={`w-1.5 h-1.5 rounded-full ${
-                            inmetAvisos.length > 0 || hasMarinhaDeltaAtivo ? 'bg-[#FF8244]' : 'bg-emerald-500'
+                            hasAlertaVigenteHoje ? 'bg-[#FF8244]' : 'bg-emerald-500'
                           }`}
                           aria-hidden="true"
                         />
@@ -5462,12 +5545,12 @@ export default function App() {
                 </div>
 
                 {/* Seletor Rápido de Localidade (INMET RJ + Marinha CHM) */}
-                {(inmetAvisos.length > 0 || marinhaListaAtiva.length > 0) && (() => {
-                  const inmetOstras = inmetAvisos.filter((a) => a.eh_direto_ostras !== false).length;
-                  const inmetOutros = inmetAvisos.filter((a) => a.eh_direto_ostras === false).length;
+                {(inmetAvisosNaoExpirados.length > 0 || marinhaListaAtiva.length > 0) && (() => {
+                  const inmetOstras = inmetAvisosNaoExpirados.filter((a) => a.eh_direto_ostras === true).length;
+                  const inmetOutros = inmetAvisosNaoExpirados.filter((a) => a.eh_direto_ostras !== true).length;
                   const marDelta = marinhaListaAtiva.filter((a) => a.eh_area_delta !== false).length;
                   const marOutros = marinhaListaAtiva.filter((a) => a.eh_area_delta === false).length;
-                  const totalTodos = inmetAvisos.length + marinhaListaAtiva.length;
+                  const totalTodos = inmetAvisosNaoExpirados.length + marinhaListaAtiva.length;
                   const totalOstras = inmetOstras + marDelta;
                   const totalOutros = inmetOutros + marOutros;
                   return (
@@ -5702,73 +5785,59 @@ export default function App() {
                       INMET — Avisos Meteorológicos Vigentes
                     </h2>
                   </div>
-                {inmetAvisos.length > 0 ? (() => {
-                  // Cálculo exato no fuso horário de Rio das Ostras / Brasília (UTC-3)
-                  const nowBrt = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
-                  const nowMs = nowBrt.getTime();
-
-                  const parseAlertDate = (dStr?: string, hStr?: string) => {
-                    if (!dStr) return null;
-                    const cleanD = dStr.split('T')[0].split(' ')[0].trim();
-                    let cleanH = (hStr || (dStr.includes(' ') ? dStr.split(' ')[1] : '00:00')).replace('h', '').trim();
-                    if (cleanD.includes('/')) {
-                      const [dia, mes, ano] = cleanD.split('/').map(Number);
-                      const [hh, mm] = cleanH.split(':').map(Number);
-                      return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
-                    } else if (cleanD.includes('-')) {
-                      const [ano, mes, dia] = cleanD.split('-').map(Number);
-                      const [hh, mm] = cleanH.split(':').map(Number);
-                      return new Date(ano, mes - 1, dia, hh || 0, mm || 0, 0);
-                    }
-                    return null;
-                  };
-
-                  const getAlertTimeMs = (dStr?: string, hStr?: string) => {
-                    const d = parseAlertDate(dStr, hStr);
-                    return d ? d.getTime() : 0;
-                  };
-
-                  const sortedAvisos = inmetAvisos
+                {inmetAvisosNaoExpirados.length > 0 ? (() => {
+                  const nowMs = Date.now();
+                  const sortedAvisos = inmetAvisosNaoExpirados
                     .filter((av) => {
-                      if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras !== false;
-                      if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras === false;
+                      if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras === true;
+                      if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras !== true;
                       return true;
                     })
                     .slice()
                     .sort((a, b) => {
-                      const startA = getAlertTimeMs(a.inicio || a.data_inicio, a.hora_inicio);
-                      const startB = getAlertTimeMs(b.inicio || b.data_inicio, b.hora_inicio);
+                      const rA = parseInmetAvisoRangeBrt(a as any);
+                      const rB = parseInmetAvisoRangeBrt(b as any);
+                      const startA = Number.isNaN(rA.startMs) ? 0 : rA.startMs;
+                      const startB = Number.isNaN(rB.startMs) ? 0 : rB.startMs;
                       if (startA !== startB) return startA - startB;
-                      const endA = getAlertTimeMs(a.fim || a.data_fim, a.hora_fim);
-                      const endB = getAlertTimeMs(b.fim || b.data_fim, b.hora_fim);
+                      const endA = Number.isNaN(rA.endMs) ? 0 : rA.endMs;
+                      const endB = Number.isNaN(rB.endMs) ? 0 : rB.endMs;
                       if (endA !== endB) return endA - endB;
-                      const ostrasA = a.eh_direto_ostras !== false ? 1 : 0;
-                      const ostrasB = b.eh_direto_ostras !== false ? 1 : 0;
+                      const ostrasA = a.eh_direto_ostras === true ? 1 : 0;
+                      const ostrasB = b.eh_direto_ostras === true ? 1 : 0;
                       if (ostrasA !== ostrasB) return ostrasB - ostrasA;
                       return (Number(a.id) || 0) - (Number(b.id) || 0);
                     });
 
+                  if (sortedAvisos.length === 0) {
+                    return (
+                      <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 text-sm text-slate-600 dark:text-[#E5E5E5]/80">
+                        Sem avisos do INMET para o filtro selecionado.
+                      </div>
+                    );
+                  }
+
                   return (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                       {sortedAvisos.map((av) => {
-                        const startDate = parseAlertDate(av.inicio || av.data_inicio, av.hora_inicio);
+                        const { iniIso, iniHm, startMs } = parseInmetAvisoRangeBrt(av as any);
 
                         let vigenciaLabel = 'Vigente Agora';
                         let vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#FF8244] border-[#FF8244]/50 font-bold';
 
-                        if (startDate) {
-                          const startMs = startDate.getTime();
-                          if (nowMs < startMs) {
-                            const hTxt = av.hora_inicio ? `${av.hora_inicio}h` : '';
-                            vigenciaLabel = hTxt ? `Inicia ${hTxt}` : 'Programado';
-                            vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium';
-                          }
+                        if (!Number.isNaN(startMs) && nowMs < startMs) {
+                          const dataCurta = iniIso ? `${iniIso.slice(8, 10)}/${iniIso.slice(5, 7)}` : '';
+                          vigenciaLabel =
+                            iniIso && iniIso !== todayBrtIso
+                              ? `Programado p/ ${dataCurta} · ${iniHm}h`
+                              : `Inicia hoje · ${iniHm}h`;
+                          vigenciaBadgeClass = 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium';
                         }
                       return (
                         <article
                           key={av.id}
                           className={`bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] ${
-                            av.eh_direto_ostras !== false
+                            av.eh_direto_ostras === true
                               ? 'border-l-4 border-l-emerald-500 shadow-xs'
                               : 'border-l-4 border-l-amber-500/80 dark:border-l-amber-500/60 opacity-95'
                           } rounded-xl p-4 flex flex-col justify-between gap-2.5`}
@@ -5782,7 +5851,7 @@ export default function App() {
                                 <span className="font-mono text-xs text-[#FF8244] font-semibold">
                                   Nº {av.id}
                                 </span>
-                                {av.eh_direto_ostras !== false ? (
+                                {av.eh_direto_ostras === true ? (
                                   <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
                                     <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
                                     Rio das Ostras
@@ -5841,7 +5910,7 @@ export default function App() {
 
                           <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
                             <span>
-                              {av.eh_direto_ostras !== false
+                              {av.eh_direto_ostras === true
                                 ? 'Polígono oficial abrange Rio das Ostras'
                                 : 'Outras regiões do RJ (não inclui Rio das Ostras)'}
                             </span>
