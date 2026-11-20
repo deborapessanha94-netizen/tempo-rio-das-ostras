@@ -4,7 +4,7 @@
   "emissao": "19/11/2026 às 00:27h",
   "emissao_iso": "2026-11-19T00:27:50-03:00",
   "generation_epoch_ms": 1795058870280,
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.70 m (Status: Vigilância). Tempo sem alertas severos para hoje; atenção prevista para Sexta-feira (20/11), sob Alerta Amarelo de Tempestade do INMET (nº 56447). Acumulado total de chuva previsto para os próximos 4 dias: 14.6 mm (e 76.1 mm nos 8 dias), com máxima alcançando 34°C.",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.65 m (Status: Vigilância). Tempo sem alertas severos para hoje; atenção prevista para Sexta-feira (20/11), sob Alerta Amarelo de Tempestade do INMET (nº 56447). Acumulado total de chuva previsto para os próximos 4 dias: 14.6 mm (e 76.1 mm nos 8 dias), com máxima alcançando 34°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA PROGRAMADO (Sexta-feira) • VIGILÂNCIA PREVENTIVA",
     "status_geral_cor": "warning",
@@ -2974,7 +2974,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_m": "1.70",
+        "nivel_m": "1.65",
         "status": "Vigilância"
       }
     },
@@ -3874,8 +3874,8 @@
       "titulo": "Rio Jundiá (INEA)",
       "status": "VIGILÂNCIA",
       "badge": "success",
-      "detalhe": "Cota: 1,70 m (60% da calha • Transbordo: 2,84 m)",
-      "impacto": "Calha em regime seguro (estável), com margem de 1,14 m abaixo do transbordo. Escoamento normalizado."
+      "detalhe": "Cota: 1,65 m (58% da calha • Transbordo: 2,84 m)",
+      "impacto": "Calha em regime seguro (estável), com margem de 1,19 m abaixo do transbordo. Escoamento normalizado."
     },
     {
       "tipo": "maritimo",
@@ -3894,7 +3894,7 @@
       "impacto": "Aviso Amarelo (Tempestade) programado para 20/11. Hoje a previsão consensual é de 2.3 mm."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.6–7.1 mm (85%)) (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,70 m (Status: Vigilância, ocupação de calha em 60% e ampla margem de segurança de 1,14 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (20/11) atua o regime de cavado em médios níveis / convecção úmida, determinando contenção/declínio de temperatura (24°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 1.2–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56447 do INMET). No sábado (21/11) e no domingo (22/11), o padrão de aproximação / passagem de frente fria mantém variação de nuvens e chuva prevista de 4.7 mm (P50) • P25–P90: 0.2–18.3 mm (65%) (sem avisos meteorológicos vigentes) e 2.6 mm (P50) • P25–P90: 1.1–12.0 mm (65%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.9 a 0.9 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 19/11 (Quinta-feira) a 26/11 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na quinta-feira (19/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (2.3 mm (P50) • P25–P90: 1.6–7.1 mm (85%)) (sem avisos meteorológicos vigentes).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,65 m (Status: Vigilância, ocupação de calha em 58% e ampla margem de segurança de 1,19 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (20/11) atua o regime de cavado em médios níveis / convecção úmida, determinando contenção/declínio de temperatura (24°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 1.2–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56447 do INMET). No sábado (21/11) e no domingo (22/11), o padrão de aproximação / passagem de frente fria mantém variação de nuvens e chuva prevista de 4.7 mm (P50) • P25–P90: 0.2–18.3 mm (65%) (sem avisos meteorológicos vigentes) e 2.6 mm (P50) • P25–P90: 1.1–12.0 mm (65%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.9 a 0.9 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "19/11 (Quinta-feira) a 26/11 (Quinta-feira)",
     "evolucao_3_dias": [
@@ -4184,15 +4184,15 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,70 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,65 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.70 m",
+      "cota": "1.65 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,70 m (Status: Vigilância, ocupação de calha em 60% e ampla margem de segurança de 1,14 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 67 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,65 m (Status: Vigilância, ocupação de calha em 58% e ampla margem de segurança de 1,19 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1,70 m (0,0 mm 24h)"
+          "valor": "1,65 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital (CEMADEN)",
@@ -7877,7 +7877,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1,70 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1,65 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
@@ -7927,7 +7927,7 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.70 m",
+    "jundia_nivel": "1.65 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "12.0 mm",
     "chuva_4d": "14.6 mm",
