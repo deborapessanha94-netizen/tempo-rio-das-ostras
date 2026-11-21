@@ -1111,24 +1111,43 @@ export default function App() {
 
   const inmetAvisosNaoExpirados = useMemo(() => {
     const nowMs = Date.now();
-    return inmetAvisos.filter((av) => {
-      const { endMs } = parseInmetAvisoRangeBrt(av as any);
-      return Number.isNaN(endMs) || endMs >= nowMs;
-    });
+    const dedup = new Map<string, InmetAviso>();
+    for (const av of inmetAvisos) {
+      const { fimIso, endMs } = parseInmetAvisoRangeBrt(av as any);
+      if (!Number.isNaN(endMs) && endMs < nowMs) continue;
+      const key = [
+        (av as any).eh_direto_ostras === true ? '1' : '0',
+        String(av.descricao || '').trim().toLowerCase(),
+        String(av.severidade || '').trim().toLowerCase(),
+        fimIso || '',
+      ].join('|');
+      const prev = dedup.get(key);
+      if (!prev || (Number(av.id) || 0) > (Number(prev.id) || 0)) {
+        dedup.set(key, av);
+      }
+    }
+    return Array.from(dedup.values());
   }, [inmetAvisos]);
 
-  const inmetOstrasVigentesHoje = useMemo(() => {
+  // Aba de Alertas exibe exclusivamente alertas emitidos/vigentes para o dia atual (sem repetir avisos futuros ou reedições)
+  const inmetAvisosDoDia = useMemo(() => {
     const nowMs = Date.now();
     return inmetAvisosNaoExpirados.filter((av) => {
-      if (av.eh_direto_ostras !== true) return false;
-      const { iniIso, startMs, endMs } = parseInmetAvisoRangeBrt(av as any);
+      const { iniIso, fimIso, startMs, endMs } = parseInmetAvisoRangeBrt(av as any);
       if (!Number.isNaN(endMs) && endMs < nowMs) return false;
+      if (iniIso && iniIso > todayBrtIso) return false;
+      if (fimIso && fimIso < todayBrtIso) return false;
       if (!Number.isNaN(startMs)) {
         return startMs <= nowMs || iniIso === todayBrtIso;
       }
-      return iniIso === todayBrtIso;
+      return !iniIso || iniIso === todayBrtIso;
     });
   }, [inmetAvisosNaoExpirados, todayBrtIso]);
+
+  const inmetOstrasVigentesHoje = useMemo(
+    () => inmetAvisosDoDia.filter((av) => (av as any).eh_direto_ostras === true),
+    [inmetAvisosDoDia]
+  );
 
   const inmetOstrasAtivoAgora = useMemo(() => {
     const nowMs = Date.now();
@@ -1145,12 +1164,30 @@ export default function App() {
         ? marinhaAvisos.todos_avisos
         : marinhaAvisos.avisos_ativos || [];
     const nowMs = Date.now();
-    return baseList.filter((av) => {
-      if (!av.fim_utc) return true;
-      const endMs = Date.parse(av.fim_utc);
-      return Number.isNaN(endMs) || endMs > nowMs;
+    const fmtIso = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Sao_Paulo',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     });
-  }, [marinhaAvisos]);
+    const dedup = new Map<string, MarinhaAvisoItem>();
+    for (const av of baseList) {
+      if (av.fim_utc) {
+        const endMs = Date.parse(av.fim_utc);
+        if (!Number.isNaN(endMs) && endMs <= nowMs) continue;
+      }
+      if (av.inicio_utc) {
+        const iniMs = Date.parse(av.inicio_utc);
+        if (!Number.isNaN(iniMs) && iniMs > nowMs) {
+          const iniBrt = fmtIso.format(new Date(iniMs));
+          if (iniBrt > todayBrtIso) continue;
+        }
+      }
+      const key = `${av.numero || ''}|${av.tipo || ''}|${av.eh_area_delta === false ? '0' : '1'}`;
+      if (!dedup.has(key)) dedup.set(key, av);
+    }
+    return Array.from(dedup.values());
+  }, [marinhaAvisos, todayBrtIso]);
 
   const marinhaDeltaAtivos = useMemo(
     () => marinhaListaAtiva.filter((av) => av.eh_area_delta !== false),
@@ -5511,7 +5548,7 @@ export default function App() {
                       Alertas Meteorológicos Oficiais Vigentes
                     </h1>
                     <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
-                      Monitoramento contínuo: Marinha do Brasil (CHM / METAREA V) &amp; Instituto Nacional de Meteorologia (INMET)
+                      Alertas oficiais emitidos/vigentes para hoje (Brasília UTC-3): Marinha do Brasil (CHM / METAREA V) &amp; INMET
                     </p>
                   </div>
                   <button
@@ -5562,13 +5599,13 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Seletor Rápido de Localidade (INMET RJ + Marinha CHM) */}
-                {(inmetAvisosNaoExpirados.length > 0 || marinhaListaAtiva.length > 0) && (() => {
-                  const inmetOstras = inmetAvisosNaoExpirados.filter((a) => a.eh_direto_ostras === true).length;
-                  const inmetOutros = inmetAvisosNaoExpirados.filter((a) => a.eh_direto_ostras !== true).length;
+                {/* Seletor Rápido de Localidade (INMET RJ + Marinha CHM — somente avisos do dia) */}
+                {(inmetAvisosDoDia.length > 0 || marinhaListaAtiva.length > 0) && (() => {
+                  const inmetOstras = inmetAvisosDoDia.filter((a) => a.eh_direto_ostras === true).length;
+                  const inmetOutros = inmetAvisosDoDia.filter((a) => a.eh_direto_ostras !== true).length;
                   const marDelta = marinhaListaAtiva.filter((a) => a.eh_area_delta !== false).length;
                   const marOutros = marinhaListaAtiva.filter((a) => a.eh_area_delta === false).length;
-                  const totalTodos = inmetAvisosNaoExpirados.length + marinhaListaAtiva.length;
+                  const totalTodos = inmetAvisosDoDia.length + marinhaListaAtiva.length;
                   const totalOstras = inmetOstras + marDelta;
                   const totalOutros = inmetOutros + marOutros;
                   return (
@@ -5803,9 +5840,9 @@ export default function App() {
                       INMET — Avisos Meteorológicos Vigentes
                     </h2>
                   </div>
-                {inmetAvisosNaoExpirados.length > 0 ? (() => {
+                {inmetAvisosDoDia.length > 0 ? (() => {
                   const nowMs = Date.now();
-                  const sortedAvisos = inmetAvisosNaoExpirados
+                  const sortedAvisos = inmetAvisosDoDia
                     .filter((av) => {
                       if (alertaFiltroLocal === 'ostras') return av.eh_direto_ostras === true;
                       if (alertaFiltroLocal === 'outros') return av.eh_direto_ostras !== true;

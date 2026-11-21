@@ -599,8 +599,21 @@ def fetch_inmet_alerts():
                         'instrucoes': a.get('instrucoes', []),
                         'estados': estados
                     })
-        unique.sort(key=lambda x: (not x['eh_direto_ostras'], 0 if x['cor_nome'] == 'Vermelho' else 1 if x['cor_nome'] == 'Laranja' else 2))
-        return unique
+        dedup_map = {}
+        for it in unique:
+            d_fim = str(it.get('fim', '')).split('T')[0].split(' ')[0].strip()
+            d_key = (
+                bool(it.get('eh_direto_ostras')),
+                str(it.get('descricao', '')).strip().lower(),
+                str(it.get('severidade', '')).strip().lower(),
+                d_fim,
+            )
+            cur = dedup_map.get(d_key)
+            if cur is None or (str(it.get('inicio', '')), int(it.get('id', 0) or 0)) > (str(cur.get('inicio', '')), int(cur.get('id', 0) or 0)):
+                dedup_map[d_key] = it
+        dedup_list = list(dedup_map.values())
+        dedup_list.sort(key=lambda x: (not x['eh_direto_ostras'], 0 if x['cor_nome'] == 'Vermelho' else 1 if x['cor_nome'] == 'Laranja' else 2, -(int(x.get('id', 0) or 0))))
+        return dedup_list
     except Exception as e:
         print(f"[INMET] Erro avisos: {e}")
         return []

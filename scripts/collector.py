@@ -394,11 +394,24 @@ def collect_inmet_data():
         for a_new in avisos_data:
             all_map[a_new['id']] = a_new
             
-        all_list = list(all_map.values())
+        dedup_map = {}
+        for it in all_map.values():
+            d_fim = str(it.get('fim', '') or it.get('data_fim', '')).split('T')[0].split(' ')[0].strip()
+            d_key = (
+                bool(it.get('eh_direto_ostras')),
+                str(it.get('descricao', '')).strip().lower(),
+                str(it.get('severidade', '')).strip().lower(),
+                d_fim,
+            )
+            cur = dedup_map.get(d_key)
+            if cur is None or (str(it.get('inicio', '')), int(it.get('id', 0) or 0)) > (str(cur.get('inicio', '')), int(cur.get('id', 0) or 0)):
+                dedup_map[d_key] = it
+
+        all_list = list(dedup_map.values())
         def alert_sort_key(it):
             ini = str(it.get('inicio', '') or it.get('data_inicio', ''))
             fim = str(it.get('fim', '') or it.get('data_fim', ''))
-            return (ini, fim, it.get('id', 0))
+            return (ini, fim, int(it.get('id', 0) or 0))
         all_list.sort(key=alert_sort_key, reverse=True)
         final_avisos = all_list[:8]
 

@@ -206,14 +206,32 @@ function normalizeLiveInmetAlerts(raw: { hoje?: any[]; futuro?: any[] } | null):
       list.push(avisoItem);
     }
   }
+  const dedupMap = new Map<string, InmetAviso & Record<string, any>>();
+  for (const item of list as Array<InmetAviso & Record<string, any>>) {
+    const dFim = String(item.fim || item.data_fim || '').split('T')[0].split(' ')[0].trim();
+    const dKey = [
+      item.eh_direto_ostras ? '1' : '0',
+      String(item.descricao || '').trim().toLowerCase(),
+      String(item.severidade || '').trim().toLowerCase(),
+      dFim,
+    ].join('|');
+    const prev = dedupMap.get(dKey);
+    if (!prev || (Number(item.id) || 0) > (Number(prev.id) || 0)) {
+      dedupMap.set(dKey, item);
+    }
+  }
+  const deduped = Array.from(dedupMap.values());
   const rankColor = (c?: string) => (c === 'Vermelho' ? 0 : c === 'Laranja' ? 1 : 2);
-  list.sort((a: any, b: any) => {
+  deduped.sort((a: any, b: any) => {
     if (Boolean(a.eh_direto_ostras) !== Boolean(b.eh_direto_ostras)) {
       return a.eh_direto_ostras ? -1 : 1;
     }
-    return rankColor(a.cor_nome) - rankColor(b.cor_nome);
+    if (rankColor(a.cor_nome) !== rankColor(b.cor_nome)) {
+      return rankColor(a.cor_nome) - rankColor(b.cor_nome);
+    }
+    return (Number(b.id) || 0) - (Number(a.id) || 0);
   });
-  return list;
+  return deduped;
 }
 
 function extractAlertMaxRain(alert: any): { taxaMin: number; taxaMax: number; diaMax: number } {
