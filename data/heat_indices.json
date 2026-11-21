@@ -1,13 +1,13 @@
 {
-  "atualizacao_brt": "20/11/2026 22:49",
-  "atualizacao_iso": "2026-11-20T22:49:54.098612-03:00",
+  "atualizacao_brt": "20/11/2026 23:07",
+  "atualizacao_iso": "2026-11-20T23:07:04.538308-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 28.0,
+    "ic_rede_c": 27.9,
     "faixa_instantanea": {
       "faixa": "Atenção / Cuidado (27–32°C)",
       "cor": "#0EA5E9"
@@ -26,42 +26,42 @@
       {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 25.4,
+        "temp_c": 25.5,
         "ur_pct": 94,
-        "ic_c": 26.5,
+        "ic_c": 26.6,
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-20 22:45:09"
+        "ultima_leitura": "2026-11-20 23:02:17"
       },
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
-        "temp_c": 25.9,
+        "temp_c": 25.8,
         "ur_pct": 93,
-        "ic_c": 27.0,
-        "faixa": "Atenção / Cuidado (27–32°C)",
-        "cor_hex": "#0EA5E9",
-        "ultima_leitura": "2026-11-20 22:45:14"
+        "ic_c": 26.9,
+        "faixa": "Conforto Térmico (< 27°C)",
+        "cor_hex": "#10B981",
+        "ultima_leitura": "2026-11-20 23:02:18"
       },
       {
         "codigo": "IRIODA17",
         "nome": "Praia da Tartaruga",
-        "temp_c": 26.6,
-        "ur_pct": 87,
-        "ic_c": 29.4,
+        "temp_c": 26.5,
+        "ur_pct": 88,
+        "ic_c": 29.2,
         "faixa": "Atenção / Cuidado (27–32°C)",
         "cor_hex": "#0EA5E9",
-        "ultima_leitura": "2026-11-20 22:45:13"
+        "ultima_leitura": "2026-11-20 23:02:13"
       },
       {
         "codigo": "ICASIM5",
         "nome": "Barra de São João / Praiamar",
-        "temp_c": 26.4,
+        "temp_c": 26.3,
         "ur_pct": 92,
-        "ic_c": 29.2,
+        "ic_c": 28.9,
         "faixa": "Atenção / Cuidado (27–32°C)",
         "cor_hex": "#0EA5E9",
-        "ultima_leitura": "2026-11-20 22:44:50"
+        "ultima_leitura": "2026-11-20 23:02:09"
       }
     ]
   },
@@ -739,7 +739,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-20 22:49"
+    "captura_brt": "2026-11-20 23:07"
   },
   "previsao_8dias_calor": [
     {
