@@ -424,7 +424,10 @@ export default function App() {
       }
       if (res.boletimOficial) {
         setBoletimOficial(res.boletimOficial);
-        if (res.boletimOficial.length > 0 && !selectedBoletimDate) {
+        if (
+          res.boletimOficial.length > 0 &&
+          (!selectedBoletimDate || !res.boletimOficial.some((r) => r.data_iso === selectedBoletimDate))
+        ) {
           setSelectedBoletimDate(res.boletimOficial[0].data_iso);
         }
       }

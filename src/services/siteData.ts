@@ -611,10 +611,18 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
       (raw) => raw || fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`)
     ),
     fetchMarinhaAvisosLive(),
-    fetchJsonSafe<OrlaDataset>(`${SITE_BASE}/data/orla_condicoes.json?t=${ts}`),
-    fetchJsonSafe<BalneabilidadeDataset>(`${SITE_BASE}/data/balneabilidade.json?t=${ts}`),
-    fetchJsonSafe<TabuaMares>(`${SITE_BASE}/data/tabua_mares.json?t=${ts}`),
-    fetchJsonSafe<HistoricoEstacoesDataset>(`${SITE_BASE}/data/historico_estacoes.json?t=${ts}`),
+    fetchLatestRepoJson<OrlaDataset>('data/orla_condicoes.json', (item) =>
+      parseIsoMs(item.atualizacao)
+    ),
+    fetchLatestRepoJson<BalneabilidadeDataset>('data/balneabilidade.json', (item) =>
+      parseIsoMs(item.data_coleta_iso || item.data_boletim)
+    ),
+    fetchLatestRepoJson<TabuaMares>('data/tabua_mares.json', (item) =>
+      parseIsoMs(item.atualizado_em || item.data)
+    ),
+    fetchLatestRepoJson<HistoricoEstacoesDataset>('data/historico_estacoes.json', (item) =>
+      parseIsoMs(item.atualizacao_iso || item.atualizacao)
+    ),
     fetchJsonSafe<OpenMeteoData>(
       'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
     ),

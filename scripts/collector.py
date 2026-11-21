@@ -399,7 +399,7 @@ def collect_inmet_data():
             ini = str(it.get('inicio', '') or it.get('data_inicio', ''))
             fim = str(it.get('fim', '') or it.get('data_fim', ''))
             return (ini, fim, it.get('id', 0))
-        all_list.sort(key=alert_sort_key)
+        all_list.sort(key=alert_sort_key, reverse=True)
         final_avisos = all_list[:8]
 
         with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:

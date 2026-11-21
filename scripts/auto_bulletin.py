@@ -2647,8 +2647,10 @@ def run_auto_bulletin_pipeline():
     d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'))
     d0_turnos_syn = [r for r in records_12_turnos if r['data_iso'] == d0['date_iso']]
     d0_w_info = _classify_wind_nomenclature(d0_turnos_syn, d0.get('rajada_max', 25.0))
-    d0_faixa = f"{d0_r_info['frase']} ({d0.get('chuva_faixa_txt') or f'{d0["chuva_tot"]:.1f} mm'})"
-    d1_faixa = f"{d1_r_info['frase']} ({d1.get('chuva_faixa_txt') or f'{d1["chuva_tot"]:.1f} mm'})"
+    d0_vol_txt = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
+    d1_vol_txt = d1.get('chuva_faixa_txt') or f"{d1['chuva_tot']:.1f} mm"
+    d0_faixa = f"{d0_r_info['frase']} ({d0_vol_txt})"
+    d1_faixa = f"{d1_r_info['frase']} ({d1_vol_txt})"
     d2_faixa = d2.get('chuva_faixa_txt') or f"{d2['chuva_tot']:.1f} mm"
     d3_faixa = d3.get('chuva_faixa_txt') or f"{d3['chuva_tot']:.1f} mm"
 

@@ -35,7 +35,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
       - name: Sincronização Prioritária Imediata - Avisos da Marinha (CHM / METAREA V)
         run: |
@@ -55,6 +55,8 @@ jobs:
           pip install pandas openpyxl reportlab matplotlib pypdfium2 pillow numpy h5py || true
 
       - name: Executar Coleta e Síntese Completa de Todas as Fontes Oficiais
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           python scripts/sync_jundia_10d.py || true
           python scripts/stations_service.py || true
@@ -64,7 +66,7 @@ jobs:
           python scripts/inmet_noticias_service.py || true
           python scripts/sync_inmet_luas.py || true
           python scripts/collector.py --skip-auto-bulletin || true
-          python scripts/auto_bulletin.py || true
+          python scripts/auto_bulletin.py
 
       - name: Salvar Dados e Boletins Atualizados no Repositório
         run: |
