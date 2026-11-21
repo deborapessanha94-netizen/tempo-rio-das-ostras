@@ -1,4 +1,5 @@
 import type { AcumuladosDataset, EstacaoPluvio } from './siteData';
+import { computeRothfuszHeatIndexC } from './heatIndex';
 
 const KNOWN_WU_KEYS = [
   'ff90f212a6984a7390f212a698ea73cc',
@@ -219,6 +220,12 @@ interface WuStationCache {
   horaRajadaMaxHoje: string | null;
   ventoMax24h: number | null;
   rajadaMax24h: number | null;
+  tempMaxHoje: number | null;
+  horaTempMaxHoje: string | null;
+  icMaxHoje: number | null;
+  horaIcMaxHoje: string | null;
+  tempPicoIcHoje: number | null;
+  urPicoIcHoje: number | null;
   last5mMs: number;
   wAvg5m: number;
   wHi5m: number;
@@ -398,6 +405,12 @@ async function fetchWuStationLive(
       pressao_atual: null,
       uv_atual: null,
       radiacao_solar: null,
+      temp_max_hoje: null,
+      hora_temp_max_hoje: null,
+      ic_max_hoje: null,
+      hora_ic_max_hoje: null,
+      temp_pico_ic_hoje: null,
+      ur_pico_ic_hoje: null,
       vento_max_hoje: null,
       hora_vento_max_hoje: null,
       rajada_max_hoje: null,
@@ -465,6 +478,12 @@ async function fetchWuStationLive(
   }
 
   let inicioChuvaHoje: string | null = canUseQuickWindow ? prev.inicioChuvaHoje : null;
+  let tempMaxHoje: number | null = canUseQuickWindow ? prev.tempMaxHoje : null;
+  let horaTempMaxHoje: string | null = canUseQuickWindow ? prev.horaTempMaxHoje : null;
+  let icMaxHoje: number | null = canUseQuickWindow ? prev.icMaxHoje : null;
+  let horaIcMaxHoje: string | null = canUseQuickWindow ? prev.horaIcMaxHoje : null;
+  let tempPicoIcHoje: number | null = canUseQuickWindow ? prev.tempPicoIcHoje : null;
+  let urPicoIcHoje: number | null = canUseQuickWindow ? prev.urPicoIcHoje : null;
   let ventoMaxHoje: number | null = canUseQuickWindow ? prev.ventoMaxHoje : null;
   let horaVentoMaxHoje: string | null = canUseQuickWindow ? prev.horaVentoMaxHoje : null;
   let rajadaMaxHoje: number | null = canUseQuickWindow ? prev.rajadaMaxHoje : null;
@@ -554,6 +573,27 @@ async function fetchWuStationLive(
         if (gHi !== null && (rajadaMaxHoje === null || gHi > rajadaMaxHoje)) {
           rajadaMaxHoje = gHi;
           horaRajadaMaxHoje = tStr.length >= 16 ? tStr.slice(11, 16) : null;
+        }
+
+        const t5Hi = round1(mr.tempHigh ?? mr.tempAvg ?? mr.temp);
+        if (t5Hi !== null && (tempMaxHoje === null || t5Hi > tempMaxHoje)) {
+          tempMaxHoje = t5Hi;
+          horaTempMaxHoje = tStr.length >= 16 ? tStr.slice(11, 16) : null;
+        }
+
+        const t5Pair = round1(mr.tempAvg ?? mr.temp ?? mr.tempHigh);
+        const ur5PairRaw = rec?.humidityAvg ?? rec?.humidity ?? rec?.humidityHigh;
+        const ur5Pair = ur5PairRaw !== undefined && ur5PairRaw !== null && Number.isFinite(Number(ur5PairRaw))
+          ? Math.round(Number(ur5PairRaw))
+          : null;
+        if (t5Pair !== null && ur5Pair !== null) {
+          const ic5 = computeRothfuszHeatIndexC(t5Pair, ur5Pair);
+          if (ic5 !== null && (icMaxHoje === null || ic5 > icMaxHoje)) {
+            icMaxHoje = ic5;
+            horaIcMaxHoje = tStr.length >= 16 ? tStr.slice(11, 16) : null;
+            tempPicoIcHoje = t5Pair;
+            urPicoIcHoje = ur5Pair;
+          }
         }
       }
 
@@ -676,6 +716,22 @@ async function fetchWuStationLive(
   const rajadaAtual = round1(Math.max(rawGust, active5mGust, recent90sGust, ventoAtual), ventoAtual);
 
   const currHhmm = obsLocal.length >= 16 ? obsLocal.slice(11, 16) : null;
+  const currHumNum = obs.humidity !== undefined && obs.humidity !== null && Number.isFinite(Number(obs.humidity))
+    ? Math.round(Number(obs.humidity))
+    : null;
+  if (tempAtual !== null && (tempMaxHoje === null || tempAtual > tempMaxHoje)) {
+    tempMaxHoje = tempAtual;
+    horaTempMaxHoje = currHhmm;
+  }
+  if (tempAtual !== null && currHumNum !== null) {
+    const icNow = computeRothfuszHeatIndexC(tempAtual, currHumNum);
+    if (icNow !== null && (icMaxHoje === null || icNow > icMaxHoje)) {
+      icMaxHoje = icNow;
+      horaIcMaxHoje = currHhmm;
+      tempPicoIcHoje = tempAtual;
+      urPicoIcHoje = currHumNum;
+    }
+  }
   if (ventoAtual !== null && (ventoMaxHoje === null || ventoAtual > ventoMaxHoje)) {
     ventoMaxHoje = ventoAtual;
     horaVentoMaxHoje = currHhmm;
@@ -704,6 +760,12 @@ async function fetchWuStationLive(
     horaRajadaMaxHoje,
     ventoMax24h,
     rajadaMax24h,
+    tempMaxHoje,
+    horaTempMaxHoje,
+    icMaxHoje,
+    horaIcMaxHoje,
+    tempPicoIcHoje,
+    urPicoIcHoje,
     last5mMs,
     wAvg5m,
     wHi5m,
@@ -737,6 +799,12 @@ async function fetchWuStationLive(
       : obs.solarRadiationHigh !== undefined && obs.solarRadiationHigh !== null
         ? round1(obs.solarRadiationHigh, 0)
         : null,
+    temp_max_hoje: tempMaxHoje,
+    hora_temp_max_hoje: horaTempMaxHoje,
+    ic_max_hoje: icMaxHoje,
+    hora_ic_max_hoje: horaIcMaxHoje,
+    temp_pico_ic_hoje: tempPicoIcHoje,
+    ur_pico_ic_hoje: urPicoIcHoje,
     chuva_hoje: round1(chuvaHoje, 0),
     chuva_taxa_atual: chuvaTaxaAtual,
     inicio_chuva_hoje: inicioChuvaHoje,
@@ -883,6 +951,12 @@ function buildStationSkeleton(meta: StationSeedMeta): EstacaoPluvio {
     temp_atual: null,
     sensacao_atual: null,
     umidade_atual: null,
+    temp_max_hoje: null,
+    hora_temp_max_hoje: null,
+    ic_max_hoje: null,
+    hora_ic_max_hoje: null,
+    temp_pico_ic_hoje: null,
+    ur_pico_ic_hoje: null,
     pressao_atual: null,
     uv_atual: null,
     radiacao_solar: null,

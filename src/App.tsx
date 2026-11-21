@@ -6370,6 +6370,15 @@ export default function App() {
                         >
                           {liveHeat.agora.faixa_instantanea.faixa}
                         </div>
+                        {liveHeat.agora.maior_pico_hoje && (
+                          <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/75 mt-2 pt-1.5 border-t border-[#E5E5E5]/70 dark:border-[#233354]">
+                            Pico hoje:{' '}
+                            <strong style={{ color: liveHeat.agora.maior_pico_hoje.cor_hex }}>
+                              {liveHeat.agora.maior_pico_hoje.ic_max_c.toFixed(1)}°C
+                            </strong>{' '}
+                            ({liveHeat.agora.maior_pico_hoje.hora})
+                          </div>
+                        )}
                       </div>
 
                       <div className="min-w-0 p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2.5">
@@ -6427,6 +6436,57 @@ export default function App() {
                       </span>
                     </div>
 
+                    {liveHeat.agora.maior_pico_hoje && (
+                      <div
+                        className="rounded-xl p-4 sm:px-5 sm:py-4 bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        style={{ borderLeftWidth: '5px', borderLeftColor: liveHeat.agora.maior_pico_hoje.cor_hex }}
+                      >
+                        <div className="min-w-0 space-y-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span
+                              className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase text-white"
+                              style={{ backgroundColor: liveHeat.agora.maior_pico_hoje.cor_hex }}
+                            >
+                              Maior Pico do Dia (Tempo Real)
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+                              ● Atualização 20s · Zera às 00h
+                            </span>
+                          </div>
+                          <div className="text-sm sm:text-base font-display font-bold text-[#14213D] dark:text-white truncate">
+                            {liveHeat.agora.maior_pico_hoje.nome}{' '}
+                            <span className="text-xs font-mono font-normal text-slate-500 dark:text-[#E5E5E5]/65">
+                              ({liveHeat.agora.maior_pico_hoje.codigo})
+                            </span>
+                          </div>
+                          <div className="text-xs font-mono text-slate-600 dark:text-[#E5E5E5]/80">
+                            Registrado às <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.maior_pico_hoje.hora}</strong>
+                            {liveHeat.agora.maior_pico_hoje.temp_c !== null && (
+                              <> · Temp no pico: <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.maior_pico_hoje.temp_c.toFixed(1)}°C</strong></>
+                            )}
+                            {liveHeat.agora.maior_pico_hoje.ur_pct !== null && (
+                              <> · Umidade: <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.maior_pico_hoje.ur_pct}%</strong></>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="sm:text-right shrink-0 flex sm:flex-col items-baseline sm:items-end justify-between gap-2">
+                          <div
+                            className="text-3xl sm:text-4xl font-mono font-extrabold tabular-nums leading-none"
+                            style={{ color: liveHeat.agora.maior_pico_hoje.cor_hex }}
+                          >
+                            {liveHeat.agora.maior_pico_hoje.ic_max_c.toFixed(1)}°C
+                          </div>
+                          <span
+                            className="text-[11px] font-semibold"
+                            style={{ color: liveHeat.agora.maior_pico_hoje.cor_hex }}
+                          >
+                            {liveHeat.agora.maior_pico_hoje.faixa}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
                     <HeatStationsMap stations={liveHeat.agora.estacoes_tempo_real} isDark={isDark} />
 
                     {liveHeat.agora.estacoes_tempo_real.length > 0 ? (
@@ -6470,6 +6530,26 @@ export default function App() {
                                   {st.ic_c !== null ? `${st.ic_c.toFixed(1)}°C` : '--'}
                                 </span>
                               </div>
+                              <div className="flex items-center justify-between gap-3 pt-1.5 border-t border-dashed border-[#E5E5E5] dark:border-[#233354] text-[11px]">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/70">Maior pico hoje:</span>
+                                <span className="font-bold tabular-nums" style={{ color: st.cor_pico_hoje || st.cor_hex }}>
+                                  {st.ic_max_hoje !== null && st.ic_max_hoje !== undefined
+                                    ? `${st.ic_max_hoje.toFixed(1)}°C`
+                                    : st.ic_c !== null
+                                      ? `${st.ic_c.toFixed(1)}°C`
+                                      : '--'}
+                                  {st.hora_ic_max_hoje && st.hora_ic_max_hoje !== '--' ? ` (${st.hora_ic_max_hoje})` : ''}
+                                </span>
+                              </div>
+                              {st.temp_max_hoje !== null && st.temp_max_hoje !== undefined && (
+                                <div className="flex items-center justify-between gap-3 text-[11px]">
+                                  <span className="text-slate-500 dark:text-[#E5E5E5]/70">Temp. máx. hoje:</span>
+                                  <span className="font-semibold text-[#14213D] dark:text-white tabular-nums">
+                                    {st.temp_max_hoje.toFixed(1)}°C
+                                    {st.hora_temp_max_hoje && st.hora_temp_max_hoje !== '--' ? ` (${st.hora_temp_max_hoje})` : ''}
+                                  </span>
+                                </div>
+                              )}
                             </div>
 
                             <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 px-0.5">

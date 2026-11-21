@@ -12,6 +12,11 @@ import ssl
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+try:
+    from scripts.heat_indices_service import compute_heat_index_c
+except ImportError:
+    from heat_indices_service import compute_heat_index_c
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
@@ -265,6 +270,12 @@ def collect_stations_network():
             "lon": p.get("lon"),
             "temp_atual": None,
             "sensacao_atual": None,
+            "temp_max_hoje": None,
+            "hora_temp_max_hoje": None,
+            "ic_max_hoje": None,
+            "hora_ic_max_hoje": None,
+            "temp_pico_ic_hoje": None,
+            "ur_pico_ic_hoje": None,
             "vento_atual": None,
             "rajada_atual": None,
             "vento_dir_graus": None,
@@ -404,6 +415,12 @@ def collect_stations_network():
                 max_w_hhmm = None
                 max_g_val = None
                 max_g_hhmm = None
+                max_t_val = None
+                max_t_hhmm = None
+                max_ic_val = None
+                max_ic_hhmm = None
+                temp_at_max_ic = None
+                ur_at_max_ic = None
 
                 for o in today_records:
                     t_str = o.get("obsTimeLocal", "")
@@ -435,6 +452,23 @@ def collect_stations_network():
                     if g_hi is not None and (max_g_val is None or g_hi > max_g_val):
                         max_g_val = round(g_hi, 1)
                         max_g_hhmm = t_str[11:16]
+
+                    # Pico diário de temperatura e Índice de Calor (Rothfusz) hoje (00:00 até agora)
+                    t5_hi = safe_float(m_o.get("tempHigh") if m_o.get("tempHigh") is not None else (m_o.get("tempAvg") if m_o.get("tempAvg") is not None else m_o.get("temp")), None)
+                    if t5_hi is not None and (max_t_val is None or t5_hi > max_t_val):
+                        max_t_val = round(t5_hi, 1)
+                        max_t_hhmm = t_str[11:16]
+
+                    t5_pair = safe_float(m_o.get("tempAvg") if m_o.get("tempAvg") is not None else (m_o.get("temp") if m_o.get("temp") is not None else m_o.get("tempHigh")), None)
+                    ur5_raw = o.get("humidityAvg") if o.get("humidityAvg") is not None else (o.get("humidity") if o.get("humidity") is not None else o.get("humidityHigh"))
+                    ur5_pair = int(round(safe_float(ur5_raw))) if ur5_raw is not None else None
+                    if t5_pair is not None and ur5_pair is not None:
+                        ic5 = compute_heat_index_c(t5_pair, ur5_pair)
+                        if ic5 is not None and (max_ic_val is None or ic5 > max_ic_val):
+                            max_ic_val = ic5
+                            max_ic_hhmm = t_str[11:16]
+                            temp_at_max_ic = round(t5_pair, 1)
+                            ur_at_max_ic = ur5_pair
 
                 # Se a observação em tempo real já acumulou mais chuva após o último bloco de 5 min
                 if curr_obs_dt is not None and curr_precip_today > prev_tot_5m:
@@ -478,11 +512,30 @@ def collect_stations_network():
                 if max_g_val is not None:
                     entry["rajada_max_hoje"] = max_g_val
                     entry["hora_rajada_max_hoje"] = max_g_hhmm
+                if max_t_val is not None:
+                    entry["temp_max_hoje"] = max_t_val
+                    entry["hora_temp_max_hoje"] = max_t_hhmm
+                if max_ic_val is not None:
+                    entry["ic_max_hoje"] = max_ic_val
+                    entry["hora_ic_max_hoje"] = max_ic_hhmm
+                    entry["temp_pico_ic_hoje"] = temp_at_max_ic
+                    entry["ur_pico_ic_hoje"] = ur_at_max_ic
         except Exception:
             pass
 
         # Garante consistência com leitura instantânea caso um pico esteja ocorrendo neste exato segundo
         curr_hhmm = curr_obs_dt.strftime("%H:%M") if curr_obs_dt else None
+        if entry["temp_atual"] is not None:
+            if entry["temp_max_hoje"] is None or entry["temp_atual"] > entry["temp_max_hoje"]:
+                entry["temp_max_hoje"] = entry["temp_atual"]
+                entry["hora_temp_max_hoje"] = curr_hhmm
+        if entry["temp_atual"] is not None and entry["umidade_atual"] is not None:
+            curr_ic_now = compute_heat_index_c(entry["temp_atual"], entry["umidade_atual"])
+            if curr_ic_now is not None and (entry["ic_max_hoje"] is None or curr_ic_now > entry["ic_max_hoje"]):
+                entry["ic_max_hoje"] = curr_ic_now
+                entry["hora_ic_max_hoje"] = curr_hhmm
+                entry["temp_pico_ic_hoje"] = entry["temp_atual"]
+                entry["ur_pico_ic_hoje"] = int(round(float(entry["umidade_atual"])))
         if entry["vento_atual"] is not None:
             if entry["vento_max_hoje"] is None or entry["vento_atual"] > entry["vento_max_hoje"]:
                 entry["vento_max_hoje"] = entry["vento_atual"]

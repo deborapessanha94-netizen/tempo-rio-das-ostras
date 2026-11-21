@@ -23,6 +23,12 @@ export interface EstacaoPluvio {
   temp_atual?: number | null;
   sensacao_atual?: number | null;
   umidade_atual?: number | null;
+  temp_max_hoje?: number | null;
+  hora_temp_max_hoje?: string | null;
+  ic_max_hoje?: number | null;
+  hora_ic_max_hoje?: string | null;
+  temp_pico_ic_hoje?: number | null;
+  ur_pico_ic_hoje?: number | null;
   pressao_atual?: number | null;
   uv_atual?: number | null;
   radiacao_solar?: number | null;

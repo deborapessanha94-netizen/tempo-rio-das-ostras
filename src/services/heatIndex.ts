@@ -82,11 +82,31 @@ export interface HeatStationReading {
   temp_c: number;
   ur_pct: number;
   ic_c: number | null;
+  ic_max_hoje?: number | null;
+  hora_ic_max_hoje?: string | null;
+  temp_max_hoje?: number | null;
+  hora_temp_max_hoje?: string | null;
+  temp_pico_ic_hoje?: number | null;
+  ur_pico_ic_hoje?: number | null;
+  faixa_pico_hoje?: string;
+  cor_pico_hoje?: string;
   faixa: string;
   cor_hex: string;
   ultima_leitura?: string;
   lat?: number | null;
   lon?: number | null;
+}
+
+export interface HeatPeakTodaySummary {
+  ic_max_c: number;
+  hora: string;
+  codigo: string;
+  nome: string;
+  temp_c: number | null;
+  ur_pct: number | null;
+  temp_max_c: number | null;
+  faixa: string;
+  cor_hex: string;
 }
 
 const KNOWN_HEAT_STATION_COORDS: Record<string, { lat: number; lon: number }> = {
@@ -118,6 +138,7 @@ export interface HeatIndicesDataset {
     cor_acao: string;
     ic_pico_hoje_c: number | null;
     hora_pico_hoje: string;
+    maior_pico_hoje?: HeatPeakTodaySummary | null;
     horas_ge_36_hoje: number;
     dias_consecutivos_36: number;
     estacoes_tempo_real: HeatStationReading[];
@@ -216,6 +237,14 @@ export function recomputeLiveHeatIndices(params: {
   const base: HeatIndicesDataset | null =
     params.baseHeat || (params.boletimMeta?.indices_calor as HeatIndicesDataset | undefined) || null;
 
+  // Data corrente BRT para garantir que o pico diário reinicie todo dia às 00:00 BRT
+  const todayBrtIso = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+
   // 1. Estações em tempo real (Weather Underground / CEMADEN 20s)
   const estRows: HeatStationReading[] = [];
   for (const st of params.acumulados?.estacoes || []) {
@@ -228,12 +257,46 @@ export function recomputeLiveHeatIndices(params: {
     const coords = KNOWN_HEAT_STATION_COORDS[st.codigo];
     const latNum = st.lat !== null && st.lat !== undefined && Number.isFinite(Number(st.lat)) ? Number(st.lat) : coords?.lat ?? null;
     const lonNum = st.lon !== null && st.lon !== undefined && Number.isFinite(Number(st.lon)) ? Number(st.lon) : coords?.lon ?? null;
+
+    const obsDateIso = typeof st.ultima_leitura === 'string' && /^\d{4}-\d{2}-\d{2}/.test(st.ultima_leitura)
+      ? st.ultima_leitura.slice(0, 10)
+      : null;
+    const isSameDay = !obsDateIso || obsDateIso === todayBrtIso;
+    const currHhmm = typeof st.ultima_leitura === 'string' && st.ultima_leitura.length >= 16
+      ? st.ultima_leitura.slice(11, 16)
+      : '--';
+
+    const storedIcMax = isSameDay && st.ic_max_hoje != null && Number.isFinite(Number(st.ic_max_hoje))
+      ? Number(st.ic_max_hoje)
+      : null;
+    const useStoredIcPeak = storedIcMax !== null && (ic === null || storedIcMax > ic);
+    const icMaxHoje = useStoredIcPeak ? Math.round(storedIcMax * 10) / 10 : ic;
+    const horaIcMaxHoje = useStoredIcPeak ? (st.hora_ic_max_hoje || currHhmm) : currHhmm;
+    const tempPicoIcHoje = useStoredIcPeak ? (st.temp_pico_ic_hoje ?? Math.round(tc * 10) / 10) : Math.round(tc * 10) / 10;
+    const urPicoIcHoje = useStoredIcPeak ? (st.ur_pico_ic_hoje ?? ur) : ur;
+
+    const storedTempMax = isSameDay && st.temp_max_hoje != null && Number.isFinite(Number(st.temp_max_hoje))
+      ? Number(st.temp_max_hoje)
+      : null;
+    const useStoredTempMax = storedTempMax !== null && storedTempMax > tc;
+    const tempMaxHoje = useStoredTempMax ? Math.round(storedTempMax * 10) / 10 : Math.round(tc * 10) / 10;
+    const horaTempMaxHoje = useStoredTempMax ? (st.hora_temp_max_hoje || currHhmm) : currHhmm;
+    const peakBand = classifyInstantHeatBand(icMaxHoje);
+
     estRows.push({
       codigo: st.codigo,
       nome: st.nome_curto || st.nome,
       temp_c: Math.round(tc * 10) / 10,
       ur_pct: ur,
       ic_c: ic,
+      ic_max_hoje: icMaxHoje,
+      hora_ic_max_hoje: horaIcMaxHoje,
+      temp_max_hoje: tempMaxHoje,
+      hora_temp_max_hoje: horaTempMaxHoje,
+      temp_pico_ic_hoje: tempPicoIcHoje,
+      ur_pico_ic_hoje: urPicoIcHoje,
+      faixa_pico_hoje: peakBand.faixa,
+      cor_pico_hoje: peakBand.cor,
       faixa: band.faixa,
       cor_hex: band.cor,
       ultima_leitura: st.ultima_leitura,
@@ -322,7 +385,39 @@ export function recomputeLiveHeatIndices(params: {
     }
   }
 
-  // Reaplica classificação oficial do COR (NC1..NC5) sobre o horizonte atualizado
+  const validStations = estRows.filter((s) => s.ic_c !== null);
+
+  let maiorPicoHoje: HeatPeakTodaySummary | null = null;
+  for (const s of estRows) {
+    const pkVal = s.ic_max_hoje ?? s.ic_c;
+    if (pkVal === null || pkVal === undefined || !Number.isFinite(pkVal)) continue;
+    if (!maiorPicoHoje || pkVal > maiorPicoHoje.ic_max_c) {
+      const pkBand = classifyInstantHeatBand(pkVal);
+      maiorPicoHoje = {
+        ic_max_c: Math.round(pkVal * 10) / 10,
+        hora: s.hora_ic_max_hoje || (s.ultima_leitura && s.ultima_leitura.length >= 16 ? s.ultima_leitura.slice(11, 16) : '--'),
+        codigo: s.codigo,
+        nome: s.nome,
+        temp_c: s.temp_pico_ic_hoje ?? s.temp_c,
+        ur_pct: s.ur_pico_ic_hoje ?? s.ur_pct,
+        temp_max_c: s.temp_max_hoje ?? s.temp_c,
+        faixa: pkBand.faixa,
+        cor_hex: pkBand.cor,
+      };
+    }
+  }
+
+  // Reaplica classificação oficial do COR (NC1..NC5) considerando também registro medido hoje nas estações
+  if (baseDays.length > 0 && maiorPicoHoje) {
+    const prevTodayIc = baseDays[0].ic_max_c;
+    if (prevTodayIc === null || maiorPicoHoje.ic_max_c > prevTodayIc) {
+      baseDays[0].ic_max_c = maiorPicoHoje.ic_max_c;
+      baseDays[0].hora_pico_ic = maiorPicoHoje.hora;
+      baseDays[0].faixa_pico = maiorPicoHoje.faixa;
+      baseDays[0].faixa_pico_cor = maiorPicoHoje.cor_hex;
+    }
+  }
+
   const r36 = runLengths(baseDays.map((d) => (d.ic_max_c ?? 0) >= 36));
   const r40 = runLengths(baseDays.map((d) => (d.ic_max_c ?? 0) >= 40));
   const r44 = runLengths(baseDays.map((d) => (d.ic_max_c ?? 0) > 44));
@@ -337,8 +432,6 @@ export function recomputeLiveHeatIndices(params: {
     baseDays[i].dias_consecutivos_40 = r40[i];
     baseDays[i].dias_consecutivos_44 = r44[i];
   }
-
-  const validStations = estRows.filter((s) => s.ic_c !== null);
   const icRede = validStations.length
     ? Math.round((validStations.reduce((acc, s) => acc + (s.ic_c || 0), 0) / validStations.length) * 10) / 10
     : omIcNow ?? base?.agora?.ic_rede_c ?? null;
@@ -384,6 +477,7 @@ export function recomputeLiveHeatIndices(params: {
       cor_acao: specHoje.acao,
       ic_pico_hoje_c: hojeRow?.ic_max_c ?? base?.agora?.ic_pico_hoje_c ?? null,
       hora_pico_hoje: hojeRow?.hora_pico_ic ?? base?.agora?.hora_pico_hoje ?? '--',
+      maior_pico_hoje: maiorPicoHoje ?? base?.agora?.maior_pico_hoje ?? null,
       horas_ge_36_hoje: hojeRow?.horas_ge_36 ?? 0,
       dias_consecutivos_36: hojeRow?.dias_consecutivos_36 ?? 0,
       estacoes_tempo_real: estRows.length ? estRows : base?.agora?.estacoes_tempo_real || [],

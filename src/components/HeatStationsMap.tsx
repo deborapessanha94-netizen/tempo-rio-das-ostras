@@ -124,6 +124,10 @@ export const HeatStationsMap: React.FC<HeatStationsMapProps> = ({ stations, isDa
       latLngs.push([lat, lon]);
 
       const icText = st.ic_c !== null && Number.isFinite(st.ic_c) ? `${st.ic_c.toFixed(1)}°C` : '--';
+      const peakVal = st.ic_max_hoje ?? st.ic_c;
+      const peakText = peakVal !== null && peakVal !== undefined && Number.isFinite(peakVal)
+        ? `${Number(peakVal).toFixed(1)}°C${st.hora_ic_max_hoje ? ` (${st.hora_ic_max_hoje})` : ''}`
+        : '--';
       const popupHtml = `
         <div style="min-width:190px;font-family:Inter,system-ui,sans-serif;color:#14213D;">
           <div style="font-weight:700;font-size:13px;text-align:center;margin-bottom:6px;">${escapeHtml(st.nome)}</div>
@@ -142,6 +146,10 @@ export const HeatStationsMap: React.FC<HeatStationsMapProps> = ({ stations, isDa
             <div style="display:flex;justify-content:space-between;gap:12px;">
               <span style="color:#475569;">Índice de Calor:</span>
               <strong style="color:${escapeHtml(st.cor_hex)};">${escapeHtml(icText)}</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:12px;margin-top:4px;padding-top:4px;border-top:1px dashed #CBD5E1;">
+              <span style="color:#475569;">Maior pico hoje:</span>
+              <strong style="color:${escapeHtml(st.cor_pico_hoje || st.cor_hex)};">${escapeHtml(peakText)}</strong>
             </div>
           </div>
           <div style="margin-top:6px;padding-top:4px;border-top:1px solid #E2E8F0;font-size:10px;color:#64748B;display:flex;justify-content:space-between;">

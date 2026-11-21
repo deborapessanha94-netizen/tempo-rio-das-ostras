@@ -402,9 +402,9 @@ def compute_and_save_heat_indices(
         daily_rows[i]["ehf_classificacao"] = ehf_cls
         daily_rows[i]["ses_rj_alerta"] = ses_alerta
 
-    classify_cor_daily_horizon(daily_rows)
+    today_brt_iso = datetime.now(BRT).strftime("%Y-%m-%d")
 
-    # Leitura instantânea das estações de Rio das Ostras para compor o quadro "Agora"
+    # Leitura instantânea + pico diário observado das estações de Rio das Ostras
     est_rows = []
     if acumulados and isinstance(acumulados.get("estacoes"), list):
         for st in acumulados["estacoes"]:
@@ -417,18 +417,71 @@ def compute_and_save_heat_indices(
             fb_coords = KNOWN_HEAT_STATION_COORDS.get(st.get("codigo"))
             st_lat = st.get("lat") if st.get("lat") is not None else (fb_coords[0] if fb_coords else None)
             st_lon = st.get("lon") if st.get("lon") is not None else (fb_coords[1] if fb_coords else None)
+            ul_str = str(st.get("ultima_leitura") or "")
+            same_day = (not ul_str[:10]) or ul_str.startswith(today_brt_iso)
+            curr_hhmm = ul_str[11:16] if len(ul_str) >= 16 else "--"
+
+            st_ic_max = st.get("ic_max_hoje") if same_day else None
+            use_stored_ic = st_ic_max is not None and (ic_now is None or float(st_ic_max) > ic_now)
+            ic_max_hoje = round(float(st_ic_max), 1) if use_stored_ic else ic_now
+            hora_ic_max = (st.get("hora_ic_max_hoje") or curr_hhmm) if use_stored_ic else curr_hhmm
+            temp_pico_ic = st.get("temp_pico_ic_hoje") if use_stored_ic else round(float(tc), 1)
+            ur_pico_ic = st.get("ur_pico_ic_hoje") if use_stored_ic else int(round(float(ur)))
+
+            st_t_max = st.get("temp_max_hoje") if same_day else None
+            use_stored_t = st_t_max is not None and float(st_t_max) > float(tc)
+            t_max_hoje = round(float(st_t_max), 1) if use_stored_t else round(float(tc), 1)
+            hora_t_max = (st.get("hora_temp_max_hoje") or curr_hhmm) if use_stored_t else curr_hhmm
+            pk_band = classify_instant_heat_band(ic_max_hoje)
+
             est_rows.append({
                 "codigo": st.get("codigo"),
                 "nome": st.get("nome_curto") or st.get("nome"),
                 "temp_c": round(float(tc), 1),
                 "ur_pct": int(round(float(ur))),
                 "ic_c": ic_now,
+                "ic_max_hoje": ic_max_hoje,
+                "hora_ic_max_hoje": hora_ic_max,
+                "temp_max_hoje": t_max_hoje,
+                "hora_temp_max_hoje": hora_t_max,
+                "temp_pico_ic_hoje": temp_pico_ic,
+                "ur_pico_ic_hoje": ur_pico_ic,
+                "faixa_pico_hoje": pk_band["faixa"],
+                "cor_pico_hoje": pk_band["cor"],
                 "faixa": band["faixa"],
                 "cor_hex": band["cor"],
                 "ultima_leitura": st.get("ultima_leitura"),
                 "lat": st_lat,
                 "lon": st_lon,
             })
+
+    maior_pico_hoje = None
+    for e in est_rows:
+        pk_val = e.get("ic_max_hoje") if e.get("ic_max_hoje") is not None else e.get("ic_c")
+        if pk_val is None:
+            continue
+        if maior_pico_hoje is None or pk_val > maior_pico_hoje["ic_max_c"]:
+            pk_b = classify_instant_heat_band(pk_val)
+            maior_pico_hoje = {
+                "ic_max_c": round(float(pk_val), 1),
+                "hora": e.get("hora_ic_max_hoje") or "--",
+                "codigo": e.get("codigo"),
+                "nome": e.get("nome"),
+                "temp_c": e.get("temp_pico_ic_hoje") if e.get("temp_pico_ic_hoje") is not None else e.get("temp_c"),
+                "ur_pct": e.get("ur_pico_ic_hoje") if e.get("ur_pico_ic_hoje") is not None else e.get("ur_pct"),
+                "temp_max_c": e.get("temp_max_hoje") if e.get("temp_max_hoje") is not None else e.get("temp_c"),
+                "faixa": pk_b["faixa"],
+                "cor_hex": pk_b["cor"],
+            }
+
+    if daily_rows and maior_pico_hoje is not None:
+        if daily_rows[0].get("ic_max_c") is None or maior_pico_hoje["ic_max_c"] > daily_rows[0]["ic_max_c"]:
+            daily_rows[0]["ic_max_c"] = maior_pico_hoje["ic_max_c"]
+            daily_rows[0]["hora_pico_ic"] = maior_pico_hoje["hora"]
+            daily_rows[0]["faixa_pico"] = maior_pico_hoje["faixa"]
+            daily_rows[0]["faixa_pico_cor"] = maior_pico_hoje["cor_hex"]
+
+    classify_cor_daily_horizon(daily_rows)
 
     ic_rede_agora = round(sum(e["ic_c"] for e in est_rows if e["ic_c"] is not None) / len(est_rows), 1) if est_rows else (daily_rows[0]["ic_max_c"] if daily_rows else None)
     temp_rede_agora = round(sum(e["temp_c"] for e in est_rows) / len(est_rows), 1) if est_rows else None
@@ -457,6 +510,7 @@ def compute_and_save_heat_indices(
             "cor_acao": COR_HEAT_LEVELS.get(cor_hoje.get("cor_nivel_num", 1), COR_HEAT_LEVELS[1])["acao"],
             "ic_pico_hoje_c": cor_hoje.get("ic_max_c"),
             "hora_pico_hoje": cor_hoje.get("hora_pico_ic"),
+            "maior_pico_hoje": maior_pico_hoje,
             "horas_ge_36_hoje": cor_hoje.get("horas_ge_36", 0),
             "dias_consecutivos_36": cor_hoje.get("dias_consecutivos_36", 0),
             "estacoes_tempo_real": est_rows,
