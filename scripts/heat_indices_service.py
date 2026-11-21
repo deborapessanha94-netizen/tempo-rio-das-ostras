@@ -81,7 +81,7 @@ def compute_heat_index_c(temp_c, rh_pct):
     tf = tc * 9.0 / 5.0 + 32.0
     hi_simple = 0.5 * (tf + 61.0 + (tf - 68.0) * 1.2 + rh * 0.094)
 
-    if (hi_simple + tf) / 2.0 < 80.0:
+    if hi_simple <= 79.0:
         hi_f = hi_simple
     else:
         hi_f = (
@@ -95,7 +95,7 @@ def compute_heat_index_c(temp_c, rh_pct):
             + 0.00085282 * tf * (rh ** 2)
             - 0.00000199 * (tf ** 2) * (rh ** 2)
         )
-        if rh < 13.0 and 80.0 <= tf <= 112.0:
+        if rh <= 13.0 and 80.0 <= tf <= 112.0:
             hi_f -= ((13.0 - rh) / 4.0) * math.sqrt(max(0.0, (17.0 - abs(tf - 95.0)) / 17.0))
         elif rh > 85.0 and 80.0 <= tf <= 87.0:
             hi_f += ((rh - 85.0) / 10.0) * ((87.0 - tf) / 5.0)

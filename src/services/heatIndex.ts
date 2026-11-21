@@ -180,7 +180,7 @@ export function computeRothfuszHeatIndexC(tempC?: number | null, rhPct?: number 
   const hiSimple = 0.5 * (tf + 61 + (tf - 68) * 1.2 + rh * 0.094);
   let hiF: number;
 
-  if ((hiSimple + tf) / 2 < 80) {
+  if (hiSimple <= 79) {
     hiF = hiSimple;
   } else {
     hiF =
@@ -194,7 +194,7 @@ export function computeRothfuszHeatIndexC(tempC?: number | null, rhPct?: number 
       0.00085282 * tf * rh * rh -
       0.00000199 * tf * tf * rh * rh;
 
-    if (rh < 13 && tf >= 80 && tf <= 112) {
+    if (rh <= 13 && tf >= 80 && tf <= 112) {
       hiF -= ((13 - rh) / 4) * Math.sqrt(Math.max(0, (17 - Math.abs(tf - 95)) / 17));
     } else if (rh > 85 && tf >= 80 && tf <= 87) {
       hiF += ((rh - 85) / 10) * ((87 - tf) / 5);
