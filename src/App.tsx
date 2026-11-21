@@ -81,6 +81,7 @@ import {
 } from './data/planconStatic';
 import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart';
 import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartInstagram';
+import { exportHeatIndicesToInstagramPng } from './utils/exportHeatInstagram';
 import { RiverChart } from './components/RiverChart';
 import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex';
 import { classifyRainPlancon, classifyWindPlancon } from './services/liveRainConsensus';
@@ -325,15 +326,28 @@ export default function App() {
   const [chartExportDone, setChartExportDone] = useState<string | null>(null);
   const chartToolbarRef = useRef<HTMLDivElement | null>(null);
 
+  const [heatExportMenuOpen, setHeatExportMenuOpen] = useState(false);
+  const [heatExportTheme, setHeatExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
+  const [heatExportingFmt, setHeatExportingFmt] = useState<InstagramFormat | null>(null);
+  const [heatExportDone, setHeatExportDone] = useState<string | null>(null);
+  const heatExportMenuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (!openChartMenu) return;
+    if (!openChartMenu && !heatExportMenuOpen) return;
     const onDown = (ev: MouseEvent) => {
-      if (chartToolbarRef.current && !chartToolbarRef.current.contains(ev.target as Node)) {
+      const target = ev.target as Node;
+      if (openChartMenu && chartToolbarRef.current && !chartToolbarRef.current.contains(target)) {
         setOpenChartMenu(null);
+      }
+      if (heatExportMenuOpen && heatExportMenuRef.current && !heatExportMenuRef.current.contains(target)) {
+        setHeatExportMenuOpen(false);
       }
     };
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === 'Escape') setOpenChartMenu(null);
+      if (ev.key === 'Escape') {
+        setOpenChartMenu(null);
+        setHeatExportMenuOpen(false);
+      }
     };
     document.addEventListener('mousedown', onDown);
     window.addEventListener('keydown', onKey);
@@ -341,7 +355,7 @@ export default function App() {
       document.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
     };
-  }, [openChartMenu]);
+  }, [openChartMenu, heatExportMenuOpen]);
 
   const [planconTab, setPlanconTab] = useState<PlanconSubTab>('limiares');
 
@@ -6285,6 +6299,140 @@ export default function App() {
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                  {liveHeat && (
+                    <div ref={heatExportMenuRef} className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setHeatExportMenuOpen((v) => !v)}
+                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer whitespace-nowrap ${
+                          heatExportMenuOpen
+                            ? 'bg-[#FF8244] text-[#000000] border-[#FF8244]'
+                            : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                        }`}
+                      >
+                        <Camera className={`w-3.5 h-3.5 ${heatExportMenuOpen ? 'text-[#000000]' : 'text-[#FF8244]'}`} />
+                        <span>Salvar Instagram</span>
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform ${heatExportMenuOpen ? 'rotate-180' : ''}`} />
+                      </button>
+
+                      {heatExportMenuOpen && (
+                        <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 z-30 w-80 max-w-[90vw] rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-3 space-y-2.5">
+                          <div className="pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
+                            <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                              Exportar Índices de Calor em Ultra HD
+                            </div>
+                            <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                              PNG sem perda · 2160px (@tempoemriodasostras)
+                            </div>
+                          </div>
+
+                          <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
+                            <span className="text-slate-500 dark:text-[#E5E5E5]/70">Fundo da imagem:</span>
+                            <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                              {(
+                                [
+                                  { id: 'auto', label: 'Site' },
+                                  { id: 'dark', label: 'Escuro' },
+                                  { id: 'light', label: 'Claro' },
+                                ] as const
+                              ).map((t) => (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  onClick={() => setHeatExportTheme(t.id)}
+                                  className={`px-2 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                                    heatExportTheme === t.id
+                                      ? 'bg-[#FF8244] text-[#000000]'
+                                      : 'text-slate-600 dark:text-[#E5E5E5]/75'
+                                  }`}
+                                >
+                                  {t.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {(() => {
+                            const runHeatExport = async (fmt: InstagramFormat) => {
+                              setHeatExportingFmt(fmt);
+                              setHeatExportDone(null);
+                              try {
+                                const useDark =
+                                  heatExportTheme === 'auto' ? isDark : heatExportTheme === 'dark';
+                                await exportHeatIndicesToInstagramPng({
+                                  heat: liveHeat,
+                                  format: fmt,
+                                  darkTheme: useDark,
+                                  siteBase: SITE_BASE,
+                                });
+                                setHeatExportDone(
+                                  fmt === 'story'
+                                    ? 'Stories 9:16 salvo em 2160×3840!'
+                                    : 'Post 4:5 salvo em 2160×2700!'
+                                );
+                                window.setTimeout(() => setHeatExportDone(null), 3500);
+                              } catch (err) {
+                                console.error('Erro ao exportar índices de calor:', err);
+                              } finally {
+                                setHeatExportingFmt(null);
+                              }
+                            };
+                            return (
+                              <div className="space-y-1.5 pt-0.5">
+                                <button
+                                  type="button"
+                                  disabled={heatExportingFmt !== null}
+                                  onClick={() => runHeatExport('story')}
+                                  className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <Smartphone className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                    <div>
+                                      <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                        {heatExportingFmt === 'story' ? 'Gerando Stories...' : 'Stories Instagram (9:16)'}
+                                      </div>
+                                      <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                        2160 × 3840 px · Alta Resolução PNG
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                </button>
+
+                                <button
+                                  type="button"
+                                  disabled={heatExportingFmt !== null}
+                                  onClick={() => runHeatExport('post')}
+                                  className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <Square className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                    <div>
+                                      <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                        {heatExportingFmt === 'post' ? 'Gerando Post...' : 'Post Feed Instagram (4:5)'}
+                                      </div>
+                                      <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                        2160 × 2700 px · Alta Resolução PNG
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                </button>
+                              </div>
+                            );
+                          })()}
+
+                          {heatExportDone && (
+                            <div className="text-[11px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 pt-1">
+                              <Check className="w-3.5 h-3.5 shrink-0" />
+                              <span>{heatExportDone}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <a
                     href="https://cor.rio/niveis-de-calor/"
                     target="_blank"

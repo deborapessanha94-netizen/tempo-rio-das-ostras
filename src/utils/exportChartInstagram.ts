@@ -1,6 +1,13 @@
 import type { ChartMetric, HourlyPoint } from '../components/HourlyChart';
+import {
+  exportCanvasToPngDownload,
+  formatNowBrt,
+  loadImageSafe,
+  roundRectPath,
+  type InstagramFormat,
+} from './instagramCanvasShared';
 
-export type InstagramFormat = 'story' | 'post';
+export type { InstagramFormat };
 
 export interface ExportChartOptions {
   points: HourlyPoint[];
@@ -27,34 +34,6 @@ interface Rect {
   y: number;
   w: number;
   h: number;
-}
-
-function loadImageSafe(src: string): Promise<HTMLImageElement | null> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => resolve(img);
-    img.onerror = () => resolve(null);
-    img.src = src;
-  });
-}
-
-function roundRectPath(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number
-) {
-  const radius = Math.min(r, w / 2, h / 2);
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.arcTo(x + w, y, x + w, y + h, radius);
-  ctx.arcTo(x + w, y + h, x, y + h, radius);
-  ctx.arcTo(x, y + h, x, y, radius);
-  ctx.arcTo(x, y, x + w, y, radius);
-  ctx.closePath();
 }
 
 function getMetricMeta(metric: ChartMetric) {
@@ -1167,26 +1146,11 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.fillText('Rio das Ostras · RJ  ·  @tempoemriodasostras', padX, footY);
 
   ctx.textAlign = 'right';
-  const nowStr = new Intl.DateTimeFormat('pt-BR', {
-    timeZone: 'America/Sao_Paulo',
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  }).format(new Date());
+  const nowStr = formatNowBrt();
   ctx.fillStyle = textSoft;
   ctx.font = '500 36px "JetBrains Mono", monospace';
   ctx.fillText(nowStr, W - padX, footY);
   ctx.textAlign = 'left';
-
-  const blob: Blob = await new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (b) => (b ? resolve(b) : reject(new Error('Falha ao gerar PNG.'))),
-      'image/png',
-      1.0
-    );
-  });
 
   const safeSlug = periodLabel
     .toLowerCase()
@@ -1194,14 +1158,5 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     .replace(/^-|-$/g, '');
   const filename = `grafico-${metric}-${format === 'story' ? 'stories-9x16' : 'post-4x5'}-${safeSlug || 'ro'}.png`;
 
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  window.setTimeout(() => URL.revokeObjectURL(url), 4000);
-
-  return filename;
+  return exportCanvasToPngDownload(canvas, filename);
 }
