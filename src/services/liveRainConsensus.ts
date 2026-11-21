@@ -102,14 +102,138 @@ function round1(val: number): number {
   return Math.round(val * 10) / 10;
 }
 
-function classifyRainIntensityLabel(chuvaMm: number, hasAlert: boolean, alertColor?: string | null): string {
-  const sev = String(alertColor || '').toLowerCase();
-  if (chuvaMm >= 50 || sev === 'vermelho') return 'Chuva muito forte';
-  if (chuvaMm >= 25 || sev === 'laranja') return 'Chuva forte';
-  if (chuvaMm >= 5 || hasAlert) return 'Chuva moderada';
-  if (chuvaMm >= 1.0) return 'Chuva fraca';
-  if (chuvaMm >= 0.2) return 'Chuva muito fraca';
-  return 'Sem chuva significativa';
+export interface PlanconRainClassification {
+  titulo: string;
+  curto: string;
+  nivel: string;
+  tone: 'normal' | 'observacao' | 'atencao' | 'alerta' | 'maximo';
+  regra: string;
+}
+
+/**
+ * Classifica o volume diário (mm/24h) estritamente pelos limiares oficiais do PLANCON
+ * de Rio das Ostras (Tabelas 8 e 9, págs. 22–23; PLANCON El Niño Tabelas 4 e 5, págs. 32–38):
+ * - Até 20 mm (Geo) / 30 mm (Hidro): Nível I • Normalidade (Chuva fraca / muito fraca / sem chuva)
+ * - 20 a < 70 mm (Geo 20–70 / Hidro 30–70): Nível II • Observação (Volume moderado -> Chuva moderada)
+ * - 70 a < 100 mm: Nível III • Atenção (Chuva significativa / intensa -> Chuva forte)
+ * - 100 a 130 mm: Nível IV • Alerta (Chuva muito forte)
+ * - > 130 mm: Nível V • Alerta Máximo (Chuva muito forte / extrema)
+ */
+export function classifyRainPlancon(chuvaMm: number): PlanconRainClassification {
+  const mm = Number.isFinite(chuvaMm) ? Math.max(0, chuvaMm) : 0;
+  if (mm > 130) {
+    return {
+      titulo: 'Chuva muito forte',
+      curto: 'Extrema',
+      nivel: 'Nível V — Alerta Máximo',
+      tone: 'maximo',
+      regra: '> 130 mm/24h (PLANCON)',
+    };
+  }
+  if (mm >= 100) {
+    return {
+      titulo: 'Chuva muito forte',
+      curto: 'Muito Forte',
+      nivel: 'Nível IV — Alerta',
+      tone: 'alerta',
+      regra: '100 a 130 mm/24h (PLANCON)',
+    };
+  }
+  if (mm >= 70) {
+    return {
+      titulo: 'Chuva forte',
+      curto: 'Forte',
+      nivel: 'Nível III — Atenção',
+      tone: 'atencao',
+      regra: '70 a 100 mm/24h (PLANCON)',
+    };
+  }
+  if (mm >= 20) {
+    return {
+      titulo: 'Chuva moderada',
+      curto: 'Moderada',
+      nivel: 'Nível II — Observação',
+      tone: 'observacao',
+      regra: mm >= 30 ? '30 a 70 mm/24h (PLANCON Hidro/Geo)' : '20 a 30 mm/24h (PLANCON Geo)',
+    };
+  }
+  if (mm >= 1.0) {
+    return {
+      titulo: 'Chuva fraca',
+      curto: 'Fraca',
+      nivel: 'Nível I — Normalidade',
+      tone: 'normal',
+      regra: 'Até 20/30 mm/24h (PLANCON)',
+    };
+  }
+  if (mm >= 0.2) {
+    return {
+      titulo: 'Chuva muito fraca',
+      curto: 'Muito Fraca',
+      nivel: 'Nível I — Normalidade',
+      tone: 'normal',
+      regra: 'Até 20/30 mm/24h (PLANCON)',
+    };
+  }
+  return {
+    titulo: 'Sem chuva significativa',
+    curto: 'Seco',
+    nivel: 'Nível I — Normalidade',
+    tone: 'normal',
+    regra: 'Até 20/30 mm/24h (PLANCON)',
+  };
+}
+
+export interface PlanconWindClassification {
+  windTitulo: string;
+  gustTitulo: string;
+  riscoLabel: string;
+  beaufort: string;
+  tone: 'baixo' | 'moderado' | 'alto' | 'muito_alto';
+}
+
+/**
+ * Classifica vento sustentado e rajadas (km/h) pelos limiares oficiais do PLANCON
+ * Tabela 7 — Limiares de Risco para Vendaval (adaptado da Escala de Beaufort, págs. 43–53):
+ * - Até 40 km/h (Beaufort 0–5): Risco Baixo / Nível Verde
+ * - 41 a 55 km/h (Beaufort 6–7): Risco Moderado / Nível Amarelo (ventos moderados a fortes)
+ * - 56 a 75 km/h (Beaufort 7–8): Risco Alto / Nível Vermelho (ventos muito fortes a tempestuosos)
+ * - > 75 km/h (Beaufort >= 9): Risco Muito Alto / Nível Roxo (ventos tempestuosos a destrutivos / vendaval)
+ */
+export function classifyWindPlancon(windKmh?: number | null, gustKmh?: number | null): PlanconWindClassification {
+  const v = Number.isFinite(windKmh as number) ? Math.max(0, Number(windKmh)) : 0;
+  const g = Number.isFinite(gustKmh as number) ? Math.max(v, Number(gustKmh)) : v;
+
+  let windTitulo = 'Fraco';
+  if (v > 75) windTitulo = 'Vendaval / Tempestuoso';
+  else if (v >= 56) windTitulo = 'Muito Forte';
+  else if (v >= 41) windTitulo = 'Moderado a Forte';
+  else if (v >= 29) windTitulo = 'Moderado';
+  else if (v >= 20) windTitulo = 'Fraco a Moderado';
+  else if (v >= 6) windTitulo = 'Fraco';
+  else windTitulo = 'Calmo a Fraco';
+
+  let gustTitulo = 'Fracas';
+  if (g > 75) gustTitulo = 'Tempestuosas (Vendaval)';
+  else if (g >= 56) gustTitulo = 'Muito fortes';
+  else if (g >= 41) gustTitulo = 'Moderadas a fortes';
+  else if (g >= 29) gustTitulo = 'Moderadas';
+  else if (g >= 20) gustTitulo = 'Fracas a moderadas';
+
+  if (g > 75) {
+    return { windTitulo, gustTitulo, riscoLabel: 'Risco Muito Alto (PLANCON)', beaufort: 'Beaufort ≥ 9', tone: 'muito_alto' };
+  }
+  if (g >= 56) {
+    return { windTitulo, gustTitulo, riscoLabel: 'Risco Alto (PLANCON)', beaufort: 'Beaufort 7–8', tone: 'alto' };
+  }
+  if (g >= 41) {
+    return { windTitulo, gustTitulo, riscoLabel: 'Risco Moderado (PLANCON)', beaufort: 'Beaufort 6–7', tone: 'moderado' };
+  }
+  return { windTitulo, gustTitulo, riscoLabel: 'Risco Baixo (PLANCON)', beaufort: 'Beaufort 0–5', tone: 'baixo' };
+}
+
+function classifyRainIntensityLabel(chuvaMm: number, _hasAlert?: boolean, _alertColor?: string | null): string {
+  return classifyRainPlancon(chuvaMm).titulo;
 }
 
 function weightedQuantiles(samples: Array<[number, number]>): {

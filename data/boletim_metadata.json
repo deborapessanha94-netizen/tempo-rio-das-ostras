@@ -2982,7 +2982,7 @@
         "data_iso": "2026-11-20",
         "data_br": "20/11/2026",
         "dia_semana": "Sexta-feira",
-        "intensidade_chuva": "Chuva moderada",
+        "intensidade_chuva": "Chuva fraca",
         "chuva_media_modelos_mm": 5.0,
         "chuva_p25_mm": 0.5,
         "chuva_p50_mm": 5.0,
@@ -3093,7 +3093,7 @@
         "data_iso": "2026-11-21",
         "data_br": "21/11/2026",
         "dia_semana": "Sábado",
-        "intensidade_chuva": "Chuva moderada",
+        "intensidade_chuva": "Chuva fraca",
         "chuva_media_modelos_mm": 5.0,
         "chuva_p25_mm": 0.6,
         "chuva_p50_mm": 5.0,
@@ -3211,7 +3211,7 @@
         "data_iso": "2026-11-22",
         "data_br": "22/11/2026",
         "dia_semana": "Domingo",
-        "intensidade_chuva": "Chuva moderada",
+        "intensidade_chuva": "Chuva fraca",
         "chuva_media_modelos_mm": 5.0,
         "chuva_p25_mm": 0.0,
         "chuva_p50_mm": 5.0,
@@ -3950,15 +3950,15 @@
         "dia_ordem": 1,
         "dia_rotulo": "SEXTA-FEIRA – 20/11/2026",
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56469)",
-        "badge": "AVISO / ATENÇÃO",
-        "badge_tipo": "warning",
-        "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 5.0 mm no dia (probabilidade de 85%) e ventos fracos com rajadas moderadas a fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+        "badge": "ALERTA / VENTO ALTO",
+        "badge_tipo": "danger",
+        "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 5.0 mm no dia (probabilidade de 85%) e ventos fracos com rajadas muito fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Nesta sexta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-          "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 85%).",
+          "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 85%).",
           "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 31°C à tarde, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 29°C.",
           "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
-          "Ventos fracos de NE-SE rondando para NE-E (4 a 12 km/h), com rajadas moderadas a fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
+          "Ventos fracos de NE-SE rondando para NE-E (4 a 12 km/h), com rajadas muito fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
           "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
         ],
         "pilares": {
@@ -3986,7 +3986,7 @@
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Fraco • Rajadas 56 km/h (Moderadas a fortes)",
+            "val": "Fraco • Rajadas 56 km/h (Muito fortes)",
             "icon": "wind"
           },
           "chuva": {
@@ -4016,15 +4016,15 @@
         "dia_ordem": 2,
         "dia_rotulo": "SÁBADO – 21/11/2026",
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56462)",
-        "badge": "AVISO / ATENÇÃO",
-        "badge_tipo": "warning",
-        "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas a fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+        "badge": "ALERTA / VENTO ALTO",
+        "badge_tipo": "danger",
+        "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas muito fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Neste sábado, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (N-W) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-          "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
+          "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
           "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 33°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 38°C no pico do calor. Na região rural, oscilam entre 21°C e 31°C.",
           "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
-          "Ventos fracos predominantes de N-W (5 a 10 km/h), com rajadas moderadas a fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
+          "Ventos fracos predominantes de N-W (5 a 10 km/h), com rajadas muito fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
           "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
         ],
         "pilares": {
@@ -4052,7 +4052,7 @@
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Fraco • Rajadas 56 km/h (Moderadas a fortes)",
+            "val": "Fraco • Rajadas 56 km/h (Muito fortes)",
             "icon": "wind"
           },
           "chuva": {
@@ -4084,10 +4084,10 @@
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56466)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 30°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (com Aviso da Marinha válido apenas até a madrugada na Área Delta).",
+        "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 30°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (com Aviso da Marinha válido apenas até a madrugada na Área Delta).",
         "informe_populacao": [
           "Neste domingo, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-          "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
+          "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
           "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 30°C à tarde, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 28°C.",
           "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
           "Ventos fracos de WSW rondando para ESE (5 a 10 km/h), com rajadas moderadas de até 40 km/h na orla (Aviso da Marinha do Brasil vigente até a madrugada).",
@@ -4213,7 +4213,7 @@
     "ordem_1_atmosfera": {
       "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
       "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
-      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 20/11 (Sexta-feira) a 27/11 (Sexta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na sexta-feira (20/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.5–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56469 do INMET).",
+      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 20/11 (Sexta-feira) a 27/11 (Sexta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na sexta-feira (20/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 0.5–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56469 do INMET).",
       "pilares": [
         {
           "label": "Modelos BR + Globais (96h)",
@@ -4306,11 +4306,11 @@
     {
       "dia": "SEXTA-FEIRA – 20/11/2026",
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56469)",
-      "badge": "AVISO / ATENÇÃO",
-      "badge_tipo": "warning",
-      "intensidade_chuva": "Chuva moderada",
-      "intensidade_vento": "Fraco (Moderadas a fortes)",
-      "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 5.0 mm no dia (probabilidade de 85%) e ventos fracos com rajadas moderadas a fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+      "badge": "ALERTA / VENTO ALTO",
+      "badge_tipo": "danger",
+      "intensidade_chuva": "Chuva fraca",
+      "intensidade_vento": "Fraco (Muito fortes)",
+      "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 5.0 mm no dia (probabilidade de 85%) e ventos fracos com rajadas muito fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-20",
         "data_br": "20/11/2026",
@@ -4373,10 +4373,10 @@
       "sensacao_faixa": "26° a 35°C",
       "informe_populacao": [
         "Nesta sexta-feira, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 85%).",
+        "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 85%).",
         "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 31°C à tarde, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 29°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de NE-SE rondando para NE-E (4 a 12 km/h), com rajadas moderadas a fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
+        "Ventos fracos de NE-SE rondando para NE-E (4 a 12 km/h), com rajadas muito fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
         "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
       ],
       "pilares": {
@@ -4404,7 +4404,7 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 56 km/h (Moderadas a fortes)",
+          "val": "Fraco • Rajadas 56 km/h (Muito fortes)",
           "icon": "wind"
         },
         "chuva": {
@@ -4432,11 +4432,11 @@
     {
       "dia": "SÁBADO – 21/11/2026",
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56462)",
-      "badge": "AVISO / ATENÇÃO",
-      "badge_tipo": "warning",
-      "intensidade_chuva": "Chuva moderada",
-      "intensidade_vento": "Fraco (Moderadas a fortes)",
-      "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas a fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+      "badge": "ALERTA / VENTO ALTO",
+      "badge_tipo": "danger",
+      "intensidade_chuva": "Chuva fraca",
+      "intensidade_vento": "Fraco (Muito fortes)",
+      "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas muito fortes de até 56 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-21",
         "data_br": "21/11/2026",
@@ -4499,10 +4499,10 @@
       "sensacao_faixa": "26° a 38°C",
       "informe_populacao": [
         "Neste sábado, a aproximação e passagem de uma frente fria associada a ciclone extratropical no Atlântico Sul promove rotação dos ventos (N-W) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
+        "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 33°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 26°C e a maior de 38°C no pico do calor. Na região rural, oscilam entre 21°C e 31°C.",
         "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos predominantes de N-W (5 a 10 km/h), com rajadas moderadas a fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
+        "Ventos fracos predominantes de N-W (5 a 10 km/h), com rajadas muito fortes de até 56 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
         "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
       ],
       "pilares": {
@@ -4530,7 +4530,7 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 56 km/h (Moderadas a fortes)",
+          "val": "Fraco • Rajadas 56 km/h (Muito fortes)",
           "icon": "wind"
         },
         "chuva": {
@@ -4560,9 +4560,9 @@
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56466)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "intensidade_chuva": "Chuva moderada",
+      "intensidade_chuva": "Chuva fraca",
       "intensidade_vento": "Fraco (Moderadas)",
-      "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 30°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (com Aviso da Marinha válido apenas até a madrugada na Área Delta).",
+      "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas isoladas de chuva). Temperaturas variando entre mínima de 23°C e máxima de 30°C. Consenso de 5.0 mm no dia (probabilidade de 80%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (com Aviso da Marinha válido apenas até a madrugada na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-22",
         "data_br": "22/11/2026",
@@ -4625,7 +4625,7 @@
       "sensacao_faixa": "26° a 35°C",
       "informe_populacao": [
         "Neste domingo, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a tarde e a noite.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
+        "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 5.0 mm no dia; probabilidade de 80%).",
         "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 30°C à tarde, com sensação térmica variando entre a menor de 26°C e a maior de 35°C no pico do calor. Na região rural, oscilam entre 21°C e 28°C.",
         "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de WSW rondando para ESE (5 a 10 km/h), com rajadas moderadas de até 40 km/h na orla (Aviso da Marinha do Brasil vigente até a madrugada).",
@@ -4686,7 +4686,7 @@
       "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56466)",
       "badge": "AVISO / ATENÇÃO",
       "badge_tipo": "warning",
-      "intensidade_chuva": "Chuva moderada",
+      "intensidade_chuva": "Chuva fraca",
       "intensidade_vento": "Fraco (Moderadas)",
       "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.3 mm no dia (probabilidade de 93%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
@@ -4813,8 +4813,8 @@
       "badge": "NORMALIDADE",
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva fraca",
-      "intensidade_vento": "Fraco (Fracas a moderadas)",
-      "descricao": "Previsão de chuva fraca sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 2.2 mm no dia (probabilidade de 65%) e ventos fracos com rajadas fracas a moderadas de até 31 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "intensidade_vento": "Fraco (Moderadas)",
+      "descricao": "Previsão de chuva fraca sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 23°C e máxima de 31°C. Consenso de 2.2 mm no dia (probabilidade de 65%) e ventos fracos com rajadas moderadas de até 31 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-24",
         "data_br": "24/11/2026",
@@ -4877,10 +4877,10 @@
       "sensacao_faixa": "26° a 29°C",
       "informe_populacao": [
         "Nesta terça-feira, o avanço de uma alta pressão costeira na retaguarda do cavado estabelece ventos de Leste/Nordeste (de WSW para E), promovendo alívio térmico, nebulosidade variável e possibilidade de chuva fraca ou garoa isolada.",
-        "Previsão de chuva fraca (com possibilidade de trovoadas isoladas) e passageira entre a tarde e a noite (consenso de 2.2 mm no dia; probabilidade de 65%).",
+        "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 2.2 mm no dia; probabilidade de 65%).",
         "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 31°C à tarde, com sensação térmica variando entre a menor de 26°C e a maior de 29°C no pico do calor. Na região rural, oscilam entre 21°C e 29°C.",
         "A umidade relativa do ar oscila entre 70% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de WSW rondando para E (6 a 12 km/h), com rajadas fracas a moderadas de até 31 km/h na orla.",
+        "Ventos fracos de WSW rondando para E (6 a 12 km/h), com rajadas moderadas de até 31 km/h na orla.",
         "Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
       ],
       "pilares": {
@@ -4908,7 +4908,7 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 31 km/h (Fracas a moderadas)",
+          "val": "Fraco • Rajadas 31 km/h (Moderadas)",
           "icon": "wind"
         },
         "chuva": {
@@ -4936,7 +4936,7 @@
     {
       "dia": "QUARTA-FEIRA – 25/11/2026",
       "subtitulo": "Trovoada",
-      "badge": "NORMALIDADE",
+      "badge": "OBSERVAÇÃO",
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Fracas)",
@@ -5006,7 +5006,7 @@
         "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) concentrada no período da noite (consenso de 17.4 mm no dia; probabilidade de 82%).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 32°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
         "A umidade relativa do ar oscila entre 78% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de NE rondando para S (6 a 8 km/h), com rajadas fracas de até 24 km/h na orla.",
+        "Ventos fracos de NE rondando para S (6 a 8 km/h), com rajadas fracas a moderadas de até 24 km/h na orla.",
         "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,7 a 1,1 m em mar aberto com mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
       ],
       "pilares": {
@@ -5034,7 +5034,7 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 24 km/h (Fracas)",
+          "val": "Fraco • Rajadas 24 km/h (Fracas a moderadas)",
           "icon": "wind"
         },
         "chuva": {
@@ -5132,7 +5132,7 @@
         "Previsão de chuva pós-frontal (chuva forte) e pancadas isoladas ao longo do dia (com maior intensidade entre madrugada e tarde) (consenso de 35.3 mm no dia; probabilidade de 89%).",
         "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 28°C no pico do calor. Na região rural, oscilam entre 19°C e 26°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 97% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de WSW rondando para SSW (8 a 12 km/h), com rajadas fracas a moderadas de até 29 km/h na orla.",
+        "Ventos fracos de WSW rondando para SSW (8 a 12 km/h), com rajadas moderadas de até 29 km/h na orla.",
         "Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
       ],
       "pilares": {
@@ -5160,7 +5160,7 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 29 km/h (Fracas a moderadas)",
+          "val": "Fraco • Rajadas 29 km/h (Moderadas)",
           "icon": "wind"
         },
         "chuva": {
@@ -5255,7 +5255,7 @@
       "sensacao_faixa": "22° a 24°C",
       "informe_populacao": [
         "Nesta sexta-feira, o avanço de uma alta pressão costeira na retaguarda do cavado estabelece ventos de Leste/Nordeste (de SW rondando para ESE/SE), promovendo alívio térmico, nebulosidade variável e possibilidade de chuva fraca ou garoa isolada.",
-        "Previsão de chuva fraca e passageira entre madrugada e noite (consenso de 4.6 mm no dia; probabilidade de 76%).",
+        "Previsão de chuva fraca entre madrugada e noite (consenso de 4.6 mm no dia; probabilidade de 76%).",
         "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 24°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 24°C no pico do calor. Na região rural, oscilam entre 19°C e 22°C.",
         "A umidade relativa do ar oscila entre 72% nas horas mais quentes da tarde e 95% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de SW rondando para ESE (6 a 12 km/h), com rajadas fracas a moderadas de até 28 km/h na orla.",
@@ -7543,7 +7543,7 @@
     "previsao_rh8": {
       "hoje": {
         "data": "20/11/2026",
-        "intensidade": "Pancadas de Chuva Isoladas com Raios",
+        "intensidade": "Chuva Fraca com Pancadas Isoladas com Raios",
         "faixa_chuva_mm": "1 a 10 mm",
         "faixa_municipio_mm": "1 a 10 mm",
         "faixa_bacia_mm": "1 a 10 mm",
@@ -7563,7 +7563,7 @@
       },
       "amanha": {
         "data": "21/11/2026",
-        "intensidade": "Pancadas de Chuva Isoladas com Raios",
+        "intensidade": "Chuva Fraca com Pancadas Isoladas com Raios",
         "faixa_chuva_mm": "1 a 10 mm",
         "faixa_municipio_mm": "1 a 10 mm",
         "faixa_bacia_mm": "1 a 10 mm",
@@ -8614,7 +8614,7 @@
       "setor": "Costazul, Tartaruga, Remanso e Mar do Norte (Orla)",
       "risco_sab": "ALERTA",
       "risco_dom": "ALERTA",
-      "risco_seg": "ATENÇÃO",
+      "risco_seg": "NORMAL",
       "impactos": "Ventos costeiros com rajadas de até 56 km/h e mar com ondas de 1,2 a 1,6 m; condições regulares de navegação.",
       "acoes": "Bandeiramento nos postos de salvamento e fiscalização das condições de navegação e orla."
     },

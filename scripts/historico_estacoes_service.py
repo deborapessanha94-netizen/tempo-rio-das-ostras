@@ -408,34 +408,42 @@ def classify_day_synoptic_and_characteristics(day_summary, prev_day_summary=None
         sistema_dia = "Alta Subtropical do Atlântico Sul (ASAS) — Escoamento Predominante de N/NE e Tempo Firme"
         categoria_sistema = "Alta Subtropical do Atlântico Sul (ASAS)"
 
-    # Classificação das Características Meteorológicas Registradas naquele Dia
+    # Classificação das Características Meteorológicas Registradas no Dia (Limiar Oficial PLANCON Rio das Ostras)
     partes_carac = []
-    if rain_max_st >= 25.0 or rain_mean >= 15.0:
+    if rain_max_st >= 100.0:
         partes_carac.append(
-            f"Dia de chuva volumosa nas estações: média municipal de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}), "
+            f"Chuva muito forte registrada (PLANCON Nível IV/V Alerta): média municipal de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}), "
             f"distribuída em {rain_hours}h do dia (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
-    elif rain_max_st >= 5.0 or rain_mean >= 2.0:
+    elif rain_max_st >= 70.0:
         partes_carac.append(
-            f"Chuva fraca a moderada registrada: média na rede de {rain_mean:.1f} mm e acumulado máximo de {rain_max_st:.1f} mm ({rain_max_st_name}) "
-            f"em {rain_hours}h com registro (pico de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+            f"Chuva forte/significativa registrada (PLANCON Nível III Atenção): média municipal de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}), "
+            f"distribuída em {rain_hours}h do dia (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+        )
+    elif rain_max_st >= 20.0:
+        partes_carac.append(
+            f"Chuva moderada registrada (PLANCON Nível II Observação): média na rede de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}) "
+            f"em {rain_hours}h com registro (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
     elif rain_max_st > 0.0:
         partes_carac.append(
-            f"Chuva fraca/isolada: média de {rain_mean:.1f} mm (máx de {rain_max_st:.1f} mm em {rain_max_st_name} às {peak_hr_time})"
+            f"Chuva fraca/isolada (PLANCON Normalidade): média de {rain_mean:.1f} mm e máx de {rain_max_st:.1f} mm em {rain_max_st_name} "
+            f"(pico horário de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
     else:
         partes_carac.append("Ausência de chuva (0.0 mm em todas as estações monitoradas)")
 
-    # Vento
-    if gust_max >= 50.0:
-        nivel_vento = "ventos fortes a muito fortes com rajadas severas"
-    elif gust_max >= 38.0:
-        nivel_vento = "ventos moderados a fortes na faixa costeira"
-    elif gust_max >= 25.0:
-        nivel_vento = "ventos fracos a moderados com rajadas costeiras"
+    # Vento (Tabela 7 PLANCON El Niño / Escala Beaufort)
+    if gust_max > 75.0:
+        nivel_vento = "rajadas tempestuosas / vendaval (PLANCON Risco Muito Alto >75 km/h)"
+    elif gust_max >= 56.0:
+        nivel_vento = "ventos e rajadas muito fortes (PLANCON Risco Alto 56–75 km/h)"
+    elif gust_max >= 41.0:
+        nivel_vento = "ventos moderados a fortes na faixa costeira (PLANCON Risco Moderado 41–55 km/h)"
+    elif gust_max >= 20.0:
+        nivel_vento = "ventos fracos a moderados (PLANCON Risco Baixo ≤40 km/h)"
     else:
-        nivel_vento = "ventos fracos a moderados"
+        nivel_vento = "ventos fracos (PLANCON Risco Baixo ≤40 km/h)"
 
     partes_carac.append(
         f"{nivel_vento} (velocidade média de {wind_avg:.1f} km/h, sustentado máx de {wind_max:.1f} km/h, "

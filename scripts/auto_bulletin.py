@@ -2296,51 +2296,58 @@ def run_auto_bulletin_pipeline():
         return "entre " + " e ".join(names_lc[t] for t in sig[:2])
 
     def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False):
-        sev = str(alert_color or '').lower()
-        if chuva_mm >= 50.0 or sev == 'vermelho':
-            return {"titulo": "Chuva muito forte", "frase": "chuva forte a muito forte", "curto": "muito forte"}
-        if chuva_mm >= 25.0 or sev == 'laranja':
-            f_txt = "chuva moderada a forte" if chuva_mm < 35.0 else "chuva forte"
-            return {"titulo": "Chuva forte", "frase": f_txt, "curto": "forte"}
-        if chuva_mm >= 5.0 or has_alert:
-            extra = " (com risco de pancadas fortes e trovoadas)" if (has_thunder or has_alert) else ""
+        """Classifica precipitação diária (mm/24h) estritamente conforme PLANCON Rio das Ostras (Tabelas 8 e 9 / El Niño Tabelas 4 e 5)."""
+        mm = float(chuva_mm or 0.0)
+        extra = " (com possibilidade de pancadas pontuais e trovoadas)" if (has_thunder or has_alert) else ""
+        if mm > 130.0:
+            return {"titulo": "Chuva muito forte", "frase": f"chuva extrema / muito forte{extra}", "curto": "muito forte"}
+        if mm >= 100.0:
+            return {"titulo": "Chuva muito forte", "frase": f"chuva muito forte{extra}", "curto": "muito forte"}
+        if mm >= 70.0:
+            return {"titulo": "Chuva forte", "frase": f"chuva significativa a forte{extra}", "curto": "forte"}
+        if mm >= 20.0:
             return {"titulo": "Chuva moderada", "frase": f"chuva moderada{extra}", "curto": "moderada"}
-        if chuva_mm >= 1.0:
-            extra = " (com possibilidade de trovoadas isoladas)" if has_thunder else ""
+        if mm >= 1.0:
             return {"titulo": "Chuva fraca", "frase": f"chuva fraca{extra}", "curto": "fraca"}
-        if chuva_mm >= 0.2:
-            return {"titulo": "Chuva muito fraca", "frase": "chuva muito fraca ou chuvisco", "curto": "muito fraca"}
+        if mm >= 0.2:
+            return {"titulo": "Chuva muito fraca", "frase": f"chuva muito fraca ou chuvisco{extra}", "curto": "muito fraca"}
         return {"titulo": "Sem chuva significativa", "frase": "sem chuva significativa", "curto": "sem chuva significativa"}
 
     def _classify_wind_nomenclature(day_turnos, rajada_max):
+        """Classifica ventos e rajadas conforme PLANCON El Niño Tabela 7 (Escala de Beaufort para Rio das Ostras):
+        <= 40 km/h (Beaufort 0-5): Risco Baixo | 41-55 km/h (6-7): Risco Moderado (moderados a fortes)
+        56-75 km/h (7-8): Risco Alto (muito fortes a tempestuosos) | > 75 km/h (>=9): Risco Muito Alto (vendaval)."""
         sust_vals = [float(r.get('vento_vel_media', 10.0)) for r in (day_turnos or [])]
         v_min_med = min(sust_vals) if sust_vals else 5.0
         v_max_med = max(sust_vals) if sust_vals else 12.0
+        rj = float(rajada_max or 0.0)
         if v_max_med < 6.0:
             w_adj, w_lbl = "calmos a muito fracos", "Calmo a Fraco"
-        elif v_max_med < 15.0:
-            w_adj, w_lbl = "fracos", "Fraco"
         elif v_max_med < 20.0:
+            w_adj, w_lbl = "fracos", "Fraco"
+        elif v_max_med < 29.0:
             w_adj, w_lbl = "fracos a moderados", "Fraco a Moderado"
-        elif v_max_med < 35.0:
+        elif v_max_med <= 40.0:
             w_adj, w_lbl = "moderados", "Moderado"
-        elif v_max_med < 50.0:
+        elif v_max_med <= 55.0:
             w_adj, w_lbl = "moderados a fortes", "Moderado a Forte"
+        elif v_max_med <= 75.0:
+            w_adj, w_lbl = "muito fortes", "Muito Forte"
         else:
-            w_adj, w_lbl = "fortes a muito fortes", "Forte"
+            w_adj, w_lbl = "tempestuosos (vendaval)", "Vendaval / Tempestuoso"
 
-        if rajada_max < 25.0:
+        if rj < 20.0:
             r_adj, r_lbl = "rajadas fracas", "Fracas"
-        elif rajada_max < 35.0:
+        elif rj < 29.0:
             r_adj, r_lbl = "rajadas fracas a moderadas", "Fracas a moderadas"
-        elif rajada_max < 50.0:
+        elif rj <= 40.0:
             r_adj, r_lbl = "rajadas moderadas", "Moderadas"
-        elif rajada_max < 62.0:
+        elif rj <= 55.0:
             r_adj, r_lbl = "rajadas moderadas a fortes", "Moderadas a fortes"
-        elif rajada_max < 75.0:
-            r_adj, r_lbl = "rajadas fortes", "Fortes"
+        elif rj <= 75.0:
+            r_adj, r_lbl = "rajadas muito fortes", "Muito fortes"
         else:
-            r_adj, r_lbl = "rajadas muito fortes (vendaval)", "Muito fortes"
+            r_adj, r_lbl = "rajadas tempestuosas (vendaval)", "Tempestuosas (Vendaval)"
 
         return {
             "v_min_med": v_min_med,
@@ -2563,7 +2570,7 @@ def run_auto_bulletin_pipeline():
         t1 = sys_info['t1']
 
         if dia_idx == 0:
-            if tem_alerta_dia or chuva_tot >= 5.0:
+            if tem_alerta_dia or chuva_tot >= 1.0:
                 t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause})."
             elif chuva_tot >= 0.2:
                 t2 = f"Previsão de {rain_info['frase']} e isolada {janela_chuva} ({prob_clause})."
@@ -2571,11 +2578,11 @@ def run_auto_bulletin_pipeline():
                 t2 = f"Previsão de tempo firme e {rain_info['frase']} ({prob_clause})."
         else:
             if sys_cod == 'pos_frontal':
-                if has_thunder and (tem_alerta_dia or chuva_tot >= 8.0):
-                    t2 = f"Previsão de chuva pós-frontal ({rain_info['frase']}) e pancadas isoladas {janela_chuva} ({prob_clause})."
+                if has_thunder and (tem_alerta_dia or chuva_tot >= 20.0):
+                    t2 = f"Previsão de chuva pós-frontal, com {rain_info['frase']} {janela_chuva} ({prob_clause})."
                 else:
                     t2 = f"Previsão de chuva pós-frontal {rain_info['curto']} e intermitente {janela_chuva} sustentada pela umidade oceânica ({prob_clause})."
-            elif tem_alerta_dia or chuva_tot >= 5.0:
+            elif tem_alerta_dia or chuva_tot >= 1.0:
                 t2 = f"Previsão de {rain_info['frase']} {janela_chuva} ({prob_clause})."
             elif chuva_tot >= 0.2:
                 t2 = f"Previsão de {rain_info['frase']} e passageira {janela_chuva} ({prob_clause})."
@@ -2780,16 +2787,19 @@ def run_auto_bulletin_pipeline():
         d_alerts = get_day_alerts(d['date_iso'])
         tem_alerta_card = len(d_alerts) > 0
 
-        if dia_chuva > 130.0 or (tem_alerta_rio and d == dias_3[0]):
+        if dia_chuva > 130.0 or dia_rajada > 75.0 or (tem_alerta_rio and d == dias_3[0]):
             badge = "ALERTA MÁXIMO / CHEIAS"
             badge_tipo = "danger"
-        elif dia_chuva > 100.0:
+        elif dia_chuva >= 100.0:
             badge = "ALERTA / CHUVAS INTENSAS"
             badge_tipo = "danger"
-        elif dia_chuva >= 70.0 or tem_alerta_card or dia_rajada >= 50.0:
+        elif dia_rajada >= 56.0:
+            badge = "ALERTA / VENTO ALTO"
+            badge_tipo = "danger"
+        elif dia_chuva >= 70.0 or tem_alerta_card or dia_rajada >= 41.0:
             badge = "AVISO / ATENÇÃO"
             badge_tipo = "warning"
-        elif dia_chuva >= 30.0 or dia_rajada >= 40.0:
+        elif dia_chuva >= 20.0:
             badge = "OBSERVAÇÃO"
             badge_tipo = "info"
         else:
@@ -2855,30 +2865,30 @@ def run_auto_bulletin_pipeline():
             }
         })
 
-    # Levantamento PLANCON 5.0 (2026/2027) por Bairros (Tabelas 8 e 9)
-    def calc_risco_setor(chuva, dia_idx, setor_tipo):
+    # Levantamento PLANCON 5.0 (2026/2027) por Bairros (Tabelas 8 e 9 + Tabela 7 Vendaval)
+    def calc_risco_setor(chuva, dia_idx, setor_tipo, rajada_dia=0.0):
         if setor_tipo == 'rio':
             if jundia_nivel_float >= 2.20 and dia_idx == 0: return "MÁXIMO"
             if chuva > 130.0: return "MÁXIMO"
-            if chuva > 100.0: return "ALERTA"
+            if chuva >= 100.0: return "ALERTA"
             if chuva >= 70.0 or (jundia_nivel_float >= 1.99 and dia_idx == 0): return "ATENÇÃO"
             if chuva >= 30.0: return "OBS"
             return "NORMAL"
         elif setor_tipo == 'mar':
-            if (tem_aviso_marinha or max_rajada_geral >= 56.0) and dia_idx <= 1: return "ALERTA"
-            if max_rajada_geral >= 40.0: return "ATENÇÃO"
-            if max_rajada_geral >= 30.0: return "OBS"
+            if rajada_dia > 75.0: return "MÁXIMO"
+            if (tem_aviso_marinha and dia_idx <= 1) or rajada_dia >= 56.0: return "ALERTA"
+            if rajada_dia >= 41.0: return "ATENÇÃO"
             return "NORMAL"
         elif setor_tipo == 'alagamento':
             if chuva > 130.0: return "MÁXIMO"
-            if chuva > 100.0: return "ALERTA"
+            if chuva >= 100.0: return "ALERTA"
             if chuva >= 70.0: return "ATENÇÃO"
             if chuva >= 30.0: return "OBS"
             return "NORMAL"
         else:
             # Limiar Geológico (Tabela 9 PLANCON 5.0)
             if chuva > 130.0: return "MÁXIMO"
-            if chuva > 100.0: return "ALERTA"
+            if chuva >= 100.0: return "ALERTA"
             if chuva >= 70.0: return "ATENÇÃO"
             if chuva >= 20.0: return "OBS"
             return "NORMAL"
@@ -2886,22 +2896,25 @@ def run_auto_bulletin_pipeline():
     c0 = dias_3[0]['chuva_tot']
     c1 = dias_3[1]['chuva_tot']
     c2 = dias_3[2]['chuva_tot']
+    r0 = dias_3[0].get('rajada_max', max_rajada_geral)
+    r1 = dias_3[1].get('rajada_max', max_rajada_geral)
+    r2 = dias_3[2].get('rajada_max', max_rajada_geral)
     c3 = dias_3[3]['chuva_tot'] if len(dias_3) > 3 else dias_3[2]['chuva_tot']
 
     impactos_bairros = [
         {
             "setor": "Âncora, Cláudio Ribeiro, Nova Esperança e Ilha",
-            "risco_sab": calc_risco_setor(c0, 0, 'rio'),
-            "risco_dom": calc_risco_setor(c1, 1, 'rio'),
-            "risco_seg": calc_risco_setor(c2, 2, 'rio'),
+            "risco_sab": calc_risco_setor(c0, 0, 'rio', r0),
+            "risco_dom": calc_risco_setor(c1, 1, 'rio', r1),
+            "risco_seg": calc_risco_setor(c2, 2, 'rio', r2),
             "impactos": f"Monitoramento da calha do Rio Jundiá ({jundia_nivel_txt} m); calha em regime seguro de vazante contínua com escoamento livre.",
             "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
         },
         {
             "setor": "Costazul, Tartaruga, Remanso e Mar do Norte (Orla)",
-            "risco_sab": calc_risco_setor(c0, 0, 'mar'),
-            "risco_dom": calc_risco_setor(c1, 1, 'mar'),
-            "risco_seg": calc_risco_setor(c2, 2, 'mar'),
+            "risco_sab": calc_risco_setor(c0, 0, 'mar', r0),
+            "risco_dom": calc_risco_setor(c1, 1, 'mar', r1),
+            "risco_seg": calc_risco_setor(c2, 2, 'mar', r2),
             "impactos": f"Ventos costeiros com rajadas de até {max_rajada_geral:.0f} km/h e mar com ondas de 1,2 a 1,6 m; condições regulares de navegação.",
             "acoes": "Bandeiramento nos postos de salvamento e fiscalização das condições de navegação e orla."
         },

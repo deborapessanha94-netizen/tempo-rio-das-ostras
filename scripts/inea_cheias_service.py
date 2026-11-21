@@ -300,21 +300,19 @@ def _extract_river_sentence(body_txt):
 
 def _classify_intensity_label(bmin, body_txt, has_lightning):
     bl = (body_txt or "").lower()
-    if bmin >= 50:
-        base = "Chuva Forte a Muito Forte"
-    elif bmin >= 25:
-        base = "Chuva Moderada a Forte"
-    elif bmin >= 10:
-        base = "Pancadas de Chuva Moderada" if "pancada" in bl else "Chuva Moderada"
+    if bmin >= 100:
+        base = "Chuva Muito Forte (Alerta PLANCON)"
+    elif bmin >= 70:
+        base = "Chuva Forte / Significativa (PLANCON)"
+    elif bmin >= 20:
+        base = "Pancadas de Chuva Moderada (PLANCON)" if "pancada" in bl else "Chuva Moderada (PLANCON)"
     elif bmin >= 1:
         if "pancada" in bl:
-            base = "Pancadas de Chuva Isoladas"
-        elif "fraca" in bl and "moderada" in bl:
-            base = "Chuva Fraca, Pontualmente Moderada"
+            base = "Chuva Fraca com Pancadas Isoladas"
         else:
-            base = "Chuva Fraca a Pontualmente Moderada"
+            base = "Chuva Fraca (Normalidade PLANCON)"
     else:
-        base = "Pancadas Isoladas (Baixo Acumulado na Orla)" if "pancada" in bl else "Chuva Fraca / Chuvisco Isolado"
+        base = "Chuva Muito Fraca / Isolada" if "pancada" in bl else "Sem Chuva Significativa / Chuvisco"
 
     if (has_lightning or "raios" in bl or "descarga" in bl) and "raio" not in base.lower():
         base += " com Raios"

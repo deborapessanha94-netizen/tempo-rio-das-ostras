@@ -694,14 +694,20 @@ def generate_autonomous_bulletin(stations, avisos, prev_turnos, marinha_info):
         max_raj_dia = max(t['rajada_max'] for t in day_turnos)
         mar_range = day_turnos[1]['mar_ondas']
 
-        if d_idx == 0 and ch_tot_dia > 25:
+        if d_idx == 0 and (ch_tot_dia > 130 or max_raj_dia > 75):
             badge_nome = "ALERTA MÁXIMO / CHEIAS"
             badge_t = "danger"
-        elif ch_tot_dia > 10 or tem_aviso_mar:
+        elif ch_tot_dia >= 100 or max_raj_dia >= 56:
+            badge_nome = "ALERTA / PLANCON"
+            badge_t = "danger"
+        elif ch_tot_dia >= 70 or max_raj_dia >= 41 or tem_aviso_mar:
             badge_nome = "AVISO / ATENÇÃO"
             badge_t = "warning"
-        else:
+        elif ch_tot_dia >= 20:
             badge_nome = "OBSERVAÇÃO"
+            badge_t = "info"
+        else:
+            badge_nome = "NORMALIDADE"
             badge_t = "info"
 
         def formatar_ceu_pilar(desc):

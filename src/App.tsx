@@ -83,6 +83,7 @@ import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart'
 import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartInstagram';
 import { RiverChart } from './components/RiverChart';
 import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex';
+import { classifyRainPlancon, classifyWindPlancon } from './services/liveRainConsensus';
 import { SocialExportModal } from './components/SocialExportModal';
 import { PwaInstallModal } from './components/PwaInstallModal';
 
@@ -1730,7 +1731,10 @@ export default function App() {
                                   : '--'}
                             </span>
                             {(prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva) && (
-                              <span className="text-[11px] font-sans font-semibold text-[#FF8244] whitespace-nowrap">
+                              <span
+                                className="text-[11px] font-sans font-semibold text-[#FF8244] whitespace-nowrap"
+                                title="Classificação oficial PLANCON Rio das Ostras: Normalidade ≤ 20/30 mm · Moderada 20–70 mm · Forte 70–100 mm · Muito forte > 100 mm"
+                              >
                                 ({prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva})
                               </span>
                             )}
@@ -1751,29 +1755,47 @@ export default function App() {
                     })()}
 
                     {/* 2. Vento / Rajadas */}
-                    <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
-                      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
-                        <Wind className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
-                        <span>Vento / Rajadas</span>
-                      </div>
-                      <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
-                        {currentWindVal !== undefined && currentWindVal !== null
-                          ? `Vento: ${Math.round(currentWindVal)} km/h ${
-                              openMeteo?.current ? degToCompass(openMeteo.current.wind_direction_10m) : ''
-                            }`
-                          : '--'}
-                      </div>
-                      <div className="font-mono text-xs sm:text-sm font-semibold text-[#FF8244] tabular-nums leading-snug">
-                        {currentGustVal !== undefined && currentGustVal !== null
-                          ? `Rajadas: ${Math.round(Math.max(currentGustVal, currentWindVal ?? 0))} km/h`
-                          : hojeDiaResumo?.pilares?.vento?.val || 'Rajadas: --'}
-                      </div>
-                      {hojeInspecao?.alerta_ativo && hojeInspecao.vento?.rajada_faixa && (
-                        <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
-                          Pico prev.: {hojeInspecao.vento.rajada_faixa}
+                    {(() => {
+                      const liveWindPlancon = classifyWindPlancon(
+                        currentWindVal,
+                        currentGustVal !== undefined && currentGustVal !== null
+                          ? Math.max(currentGustVal, currentWindVal ?? 0)
+                          : currentWindVal
+                      );
+                      return (
+                        <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
+                          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
+                            <Wind className="w-3.5 h-3.5 text-slate-400 dark:text-[#FF8244]/80 shrink-0" />
+                            <span>Vento / Rajadas</span>
+                          </div>
+                          <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
+                            {currentWindVal !== undefined && currentWindVal !== null
+                              ? `Vento: ${Math.round(currentWindVal)} km/h ${
+                                  openMeteo?.current ? degToCompass(openMeteo.current.wind_direction_10m) : ''
+                                }`
+                              : '--'}
+                          </div>
+                          <div className="font-mono text-xs sm:text-sm font-semibold text-[#FF8244] tabular-nums leading-snug">
+                            {currentGustVal !== undefined && currentGustVal !== null
+                              ? `Rajadas: ${Math.round(Math.max(currentGustVal, currentWindVal ?? 0))} km/h`
+                              : hojeDiaResumo?.pilares?.vento?.val || 'Rajadas: --'}
+                          </div>
+                          {currentWindVal !== undefined && currentWindVal !== null && (
+                            <div
+                              className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug"
+                              title="Escala PLANCON / Beaufort (Tabela 7): Baixo ≤40 · Moderado 41–55 · Alto 56–75 · Muito Alto >75 km/h"
+                            >
+                              {liveWindPlancon.windTitulo} · Rajadas {liveWindPlancon.gustTitulo.toLowerCase()} ({liveWindPlancon.riscoLabel})
+                            </div>
+                          )}
+                          {hojeInspecao?.alerta_ativo && hojeInspecao.vento?.rajada_faixa && (
+                            <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
+                              Pico prev.: {hojeInspecao.vento.rajada_faixa}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
+                      );
+                    })()}
 
                     {/* 3. Umidade do Ar */}
                     <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
@@ -2456,7 +2478,10 @@ export default function App() {
                       const hasAlert =
                         d.badge?.toUpperCase().includes('AVISO') ||
                         d.badge?.toUpperCase().includes('ATENÇÃO') ||
-                        d.badge_tipo === 'warning';
+                        d.badge?.toUpperCase().includes('ALERTA') ||
+                        d.badge?.toUpperCase().includes('MÁXIMO') ||
+                        d.badge_tipo === 'warning' ||
+                        d.badge_tipo === 'danger';
 
                       const cardBgClass = 'bg-white dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] shadow-xs';
                       const leftBorderClass = hasAlert
@@ -6693,7 +6718,8 @@ export default function App() {
                       {/* Grade dos 8 dias clicável para inspeção das fontes */}
                       <div className="grid grid-cols-4 sm:grid-cols-8 gap-2">
                         {dias.map((d, idx) => {
-                          const isChuvaExpressiva = d.val >= 10;
+                          const rcPlancon = classifyRainPlancon(d.val);
+                          const isChuvaExpressiva = d.val >= 20;
                           const isSelected = selectedRainSourceDayIdx === idx;
                           return (
                             <button
@@ -6740,20 +6766,29 @@ export default function App() {
                                   {Number(d.p25).toFixed(1)}–{Number(d.p90).toFixed(1)}
                                 </span>
                               )}
-                              {d.val >= 25 ? (
-                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-red-500/15 text-red-500 mt-0.5">
-                                  Forte
+                              {d.val >= 70 ? (
+                                <span
+                                  className="px-1 py-0.5 rounded text-[8px] font-bold bg-red-500/15 text-red-500 mt-0.5"
+                                  title={rcPlancon.regra}
+                                >
+                                  {rcPlancon.curto}
                                 </span>
-                              ) : d.val >= 5 ? (
-                                <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244] mt-0.5">
-                                  Moderada
+                              ) : d.val >= 20 ? (
+                                <span
+                                  className="px-1 py-0.5 rounded text-[8px] font-bold bg-[#FF8244]/15 text-[#FF8244] mt-0.5"
+                                  title={rcPlancon.regra}
+                                >
+                                  {rcPlancon.curto}
                                 </span>
                               ) : d.val >= 0.2 ? (
-                                <span className="text-[8px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium mt-0.5">
-                                  Fraca
+                                <span
+                                  className="text-[8px] text-slate-500 dark:text-[#E5E5E5]/70 font-medium mt-0.5"
+                                  title={rcPlancon.regra}
+                                >
+                                  {rcPlancon.curto}
                                 </span>
                               ) : (
-                                <span className="text-[8px] text-slate-400 mt-0.5">
+                                <span className="text-[8px] text-slate-400 mt-0.5" title={rcPlancon.regra}>
                                   Seco
                                 </span>
                               )}
@@ -7514,10 +7549,13 @@ export default function App() {
                   <div>
                     <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/65">Rajada Máx & Térmica</div>
                     <div className="font-mono text-xl sm:text-2xl font-semibold text-[#14213D] dark:text-white mt-2 tabular-nums">
-                      {panoramaData && panoramaData.maxGust > 0 ? `${panoramaData.maxGust} km/h` : 'Mod. a Fraco'}
+                      {panoramaData && panoramaData.maxGust > 0 ? `${panoramaData.maxGust} km/h` : 'Risco Baixo'}
                     </div>
                   </div>
                   <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 mt-2 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    {panoramaData && panoramaData.maxGust > 0
+                      ? `${classifyWindPlancon(null, panoramaData.maxGust).gustTitulo} (${classifyWindPlancon(null, panoramaData.maxGust).riscoLabel}) · `
+                      : ''}
                     {panoramaData && panoramaData.minTemp !== null
                       ? `${panoramaData.minTemp}°C a ${panoramaData.maxTemp}°C`
                       : 'Amplitude térmica normal'}
