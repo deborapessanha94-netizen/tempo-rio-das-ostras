@@ -51,42 +51,6 @@
       "chuva_30d": 64.6,
       "chuva_4h": 0.0,
       "chuva_96h": 0.0,
-      "datai": 202611111730,
-      "datetime_brt": "2026-11-11T14:30:00-03:00",
-      "nivel": 1.48
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 64.6,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611111800,
-      "datetime_brt": "2026-11-11T15:00:00-03:00",
-      "nivel": 1.48
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 64.6,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611111830,
-      "datetime_brt": "2026-11-11T15:30:00-03:00",
-      "nivel": 1.48
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 64.6,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
       "datai": 202611111900,
       "datetime_brt": "2026-11-11T16:00:00-03:00",
       "nivel": 1.48
@@ -5729,6 +5693,42 @@
       "chuva_96h": 0.0,
       "datai": 202611211400,
       "datetime_brt": "2026-11-21T11:00:00-03:00",
+      "nivel": 1.55
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 55.0,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611211430,
+      "datetime_brt": "2026-11-21T11:30:00-03:00",
+      "nivel": 1.55
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 55.0,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611211500,
+      "datetime_brt": "2026-11-21T12:00:00-03:00",
+      "nivel": 1.55
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 55.0,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611211530,
+      "datetime_brt": "2026-11-21T12:30:00-03:00",
       "nivel": 1.55
     }
   ],
