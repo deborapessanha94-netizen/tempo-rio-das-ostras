@@ -199,7 +199,9 @@ def collect_stations_network():
             "nome_curto": "Praia da Tartaruga",
             "bairro": "Praia da Tartaruga",
             "categoria": "Weather Underground",
-            "url": "https://www.wunderground.com/dashboard/pws/IRIODA17"
+            "url": "https://www.wunderground.com/dashboard/pws/IRIODA17",
+            "lat": -22.531291,
+            "lon": -41.957444,
         },
         {
             "id": "IRIODA16",
@@ -207,7 +209,9 @@ def collect_stations_network():
             "nome_curto": "Cantagalo / Extensão do Bosque",
             "bairro": "Cantagalo / Extensão do Bosque",
             "categoria": "Weather Underground",
-            "url": "https://www.wunderground.com/dashboard/pws/IRIODA16"
+            "url": "https://www.wunderground.com/dashboard/pws/IRIODA16",
+            "lat": -22.440357,
+            "lon": -41.953913,
         },
         {
             "id": "IRIODA15",
@@ -215,7 +219,9 @@ def collect_stations_network():
             "nome_curto": "Rocha Leão / REBIO União",
             "bairro": "Rocha Leão / Reserva União",
             "categoria": "Weather Underground",
-            "url": "https://www.wunderground.com/dashboard/pws/IRIODA15"
+            "url": "https://www.wunderground.com/dashboard/pws/IRIODA15",
+            "lat": -22.426845,
+            "lon": -42.020862,
         },
         {
             "id": "ICASIM5",
@@ -223,7 +229,9 @@ def collect_stations_network():
             "nome_curto": "Barra de São João / Praiamar",
             "bairro": "Praiamar / Divisa Casimiro",
             "categoria": "Weather Underground",
-            "url": "https://www.wunderground.com/dashboard/pws/ICASIM5"
+            "url": "https://www.wunderground.com/dashboard/pws/ICASIM5",
+            "lat": -22.573707,
+            "lon": -41.985545,
         },
         {
             "id": "IRIODA6",
@@ -253,6 +261,8 @@ def collect_stations_network():
             "rede": "PWS Weather Underground",
             "categoria": "pws",
             "url": p["url"],
+            "lat": p.get("lat"),
+            "lon": p.get("lon"),
             "temp_atual": None,
             "sensacao_atual": None,
             "vento_atual": None,
@@ -311,6 +321,9 @@ def collect_stations_network():
 
                 if is_recent:
                     entry["online"] = True
+                    if obs.get("lat") is not None and obs.get("lon") is not None:
+                        entry["lat"] = safe_float(obs.get("lat"), entry.get("lat"))
+                        entry["lon"] = safe_float(obs.get("lon"), entry.get("lon"))
                     if m.get("temp") is not None:
                         entry["temp_atual"] = round(safe_float(m.get("temp")), 1)
                     heat_idx = safe_float(m.get("heatIndex")) if m.get("heatIndex") is not None else None

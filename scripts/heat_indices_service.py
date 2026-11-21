@@ -104,20 +104,28 @@ def compute_heat_index_c(temp_c, rh_pct):
     return round(hi_c, 1)
 
 
+KNOWN_HEAT_STATION_COORDS = {
+    "IRIODA17": (-22.531291, -41.957444),
+    "IRIODA16": (-22.440357, -41.953913),
+    "IRIODA15": (-22.426845, -42.020862),
+    "ICASIM5": (-22.573707, -41.985545),
+}
+
+
 def classify_instant_heat_band(ic_c):
     """Faixa instantânea do Índice de Calor (apoio visual ao patamar horário atual)."""
     if ic_c is None:
         return {"faixa": "Indisponível", "cor": "#64748B"}
     if ic_c > 44.0:
-        return {"faixa": "Extremo (> 44°C)", "cor": "#DC2626"}
+        return {"faixa": "Extremo · COR (> 44°C)", "cor": "#991B1B"}
     if ic_c >= 40.0:
-        return {"faixa": "Muito Alto (40–44°C)", "cor": "#EA580C"}
+        return {"faixa": "Muito Alto · COR (40–44°C)", "cor": "#DC2626"}
     if ic_c >= 36.0:
-        return {"faixa": "Alto — Patamar COR (36–40°C)", "cor": "#F97316"}
+        return {"faixa": "Alto · COR (36–40°C)", "cor": "#EA580C"}
     if ic_c >= 32.0:
-        return {"faixa": "Extrema Precaução (32–36°C)", "cor": "#EAB308"}
+        return {"faixa": "Cuidado Extremo (32–36°C)", "cor": "#F97316"}
     if ic_c >= 27.0:
-        return {"faixa": "Atenção / Cuidado (27–32°C)", "cor": "#0EA5E9"}
+        return {"faixa": "Cuidado (27–32°C)", "cor": "#CA8A04"}
     return {"faixa": "Conforto Térmico (< 27°C)", "cor": "#10B981"}
 
 
@@ -406,6 +414,9 @@ def compute_and_save_heat_indices(
                 continue
             ic_now = compute_heat_index_c(tc, ur)
             band = classify_instant_heat_band(ic_now)
+            fb_coords = KNOWN_HEAT_STATION_COORDS.get(st.get("codigo"))
+            st_lat = st.get("lat") if st.get("lat") is not None else (fb_coords[0] if fb_coords else None)
+            st_lon = st.get("lon") if st.get("lon") is not None else (fb_coords[1] if fb_coords else None)
             est_rows.append({
                 "codigo": st.get("codigo"),
                 "nome": st.get("nome_curto") or st.get("nome"),
@@ -415,9 +426,13 @@ def compute_and_save_heat_indices(
                 "faixa": band["faixa"],
                 "cor_hex": band["cor"],
                 "ultima_leitura": st.get("ultima_leitura"),
+                "lat": st_lat,
+                "lon": st_lon,
             })
 
     ic_rede_agora = round(sum(e["ic_c"] for e in est_rows if e["ic_c"] is not None) / len(est_rows), 1) if est_rows else (daily_rows[0]["ic_max_c"] if daily_rows else None)
+    temp_rede_agora = round(sum(e["temp_c"] for e in est_rows) / len(est_rows), 1) if est_rows else None
+    ur_rede_agora = int(round(sum(e["ur_pct"] for e in est_rows) / len(est_rows))) if est_rows else None
     cor_hoje = daily_rows[0] if daily_rows else {}
 
     now_b = datetime.now(BRT)
@@ -431,6 +446,8 @@ def compute_and_save_heat_indices(
         },
         "agora": {
             "ic_rede_c": ic_rede_agora,
+            "temp_rede_c": temp_rede_agora,
+            "ur_rede_pct": ur_rede_agora,
             "faixa_instantanea": classify_instant_heat_band(ic_rede_agora),
             "cor_nivel": cor_hoje.get("cor_nivel", "NC1"),
             "cor_nivel_num": cor_hoje.get("cor_nivel_num", 1),

@@ -86,6 +86,7 @@ import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex'
 import { classifyRainPlancon, classifyWindPlancon } from './services/liveRainConsensus';
 import { SocialExportModal } from './components/SocialExportModal';
 import { PwaInstallModal } from './components/PwaInstallModal';
+import { HeatStationsMap } from './components/HeatStationsMap';
 
 type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'calor' | 'boletim' | 'panorama';
 type PlanconSubTab = 'limiares' | 'bairros' | 'niveis' | 'resposta' | 'elnino';
@@ -6271,10 +6272,10 @@ export default function App() {
 
         {/* ================= ABA 5.5: ÍNDICES DE CALOR (COR-RIO + CLIMA SAÚDE MS + SES-RJ) ================= */}
         {activeTab === 'calor' && (
-          <div className="space-y-8">
-            <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-5">
+          <div className="min-w-0 space-y-8">
+            <section className="min-w-0 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-4 sm:p-8 space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
-                <div>
+                <div className="min-w-0">
                   <h1 className="font-display text-2xl font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
                     <Flame className="w-6 h-6 text-[#FF8244]" />
                     Índices de Calor &amp; Protocolo COR — Rio das Ostras
@@ -6315,7 +6316,7 @@ export default function App() {
                 <div className="space-y-5">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                     <div
-                      className="lg:col-span-5 rounded-xl p-5 border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] flex flex-col justify-between gap-3"
+                      className="min-w-0 lg:col-span-5 rounded-xl p-4 sm:p-5 border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] flex flex-col justify-between gap-3"
                       style={{ borderLeftWidth: '5px', borderLeftColor: liveHeat.agora.cor_hex }}
                     >
                       <div className="space-y-2">
@@ -6355,8 +6356,8 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                    <div className="min-w-0 lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="min-w-0 p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                         <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
                           Índice de Calor Agora
                         </div>
@@ -6371,21 +6372,35 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                      <div className="min-w-0 p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2.5">
                         <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
-                          Temp. / UR Média Rede
+                          Média Rede Municipal
                         </div>
-                        <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white mt-1 tabular-nums">
-                          {liveHeat.agora.temp_rede_c !== null && liveHeat.agora.temp_rede_c !== undefined
-                            ? `${Number(liveHeat.agora.temp_rede_c).toFixed(1)}°C`
-                            : '--'}
-                        </div>
-                        <div className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
-                          Umidade: {liveHeat.agora.ur_rede_pct ?? '--'}%
+                        <div className="space-y-1.5 text-[10.5px] font-mono">
+                          <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                            <span className="text-slate-500 dark:text-[#E5E5E5]/70">Temperatura:</span>
+                            <strong className="text-[#14213D] dark:text-white tabular-nums">
+                              {liveHeat.agora.temp_rede_c !== null && liveHeat.agora.temp_rede_c !== undefined
+                                ? `${Number(liveHeat.agora.temp_rede_c).toFixed(1)}°C`
+                                : '--'}
+                            </strong>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                            <span className="text-slate-500 dark:text-[#E5E5E5]/70">Umidade:</span>
+                            <strong className="text-[#14213D] dark:text-white tabular-nums">
+                              {liveHeat.agora.ur_rede_pct ?? '--'}%
+                            </strong>
+                          </div>
+                          <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#E5E5E5]/70 dark:border-[#233354] whitespace-nowrap">
+                            <span className="font-semibold text-slate-600 dark:text-[#E5E5E5]/85">Índice de Calor:</span>
+                            <strong className="tabular-nums" style={{ color: liveHeat.agora.faixa_instantanea.cor }}>
+                              {liveHeat.agora.ic_rede_c !== null ? `${liveHeat.agora.ic_rede_c.toFixed(1)}°C` : '--'}
+                            </strong>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="col-span-2 sm:col-span-1 p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                      <div className="min-w-0 p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
                         <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
                           EHF Oficial (Clima Saúde MS)
                         </div>
@@ -6401,38 +6416,69 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Estações de Rio das Ostras em Tempo Real (atualização a cada 20s) */}
-                  <div className="space-y-2">
+                  {/* Mapa + Estações de Rio das Ostras em Tempo Real (atualização a cada 20s) */}
+                  <div className="space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-sm font-display font-semibold text-[#14213D] dark:text-white">
-                        Índice de Calor Instantâneo por Estação (Tempo Real · 20s)
+                        Índice de Calor por Estação — Temperatura, Umidade e IC (Tempo Real · 20s)
                       </h3>
                       <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
                         Open-Meteo Atual: {liveHeat.agora.ic_openmeteo_c !== null && liveHeat.agora.ic_openmeteo_c !== undefined ? `${liveHeat.agora.ic_openmeteo_c.toFixed(1)}°C` : '--'}
                       </span>
                     </div>
+
+                    <HeatStationsMap stations={liveHeat.agora.estacoes_tempo_real} isDark={isDark} />
+
                     {liveHeat.agora.estacoes_tempo_real.length > 0 ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
                         {liveHeat.agora.estacoes_tempo_real.map((st) => (
                           <div
                             key={st.codigo}
-                            className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5"
-                            style={{ borderTopWidth: '3px', borderTopColor: st.cor_hex }}
+                            className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-2xs space-y-2.5"
                           >
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs font-semibold text-[#14213D] dark:text-white truncate">{st.nome}</span>
-                              <span className="text-[10px] font-mono text-slate-400">{st.codigo}</span>
+                            <div className="space-y-1.5">
+                              <h4
+                                className="font-display text-sm font-bold text-[#14213D] dark:text-white text-center truncate"
+                                title={`${st.nome} (${st.codigo})`}
+                              >
+                                {st.nome}
+                              </h4>
+                              <div
+                                className="w-full py-1 px-2.5 rounded-lg text-[11px] font-bold text-white text-center tracking-wide shadow-2xs"
+                                style={{ backgroundColor: st.cor_hex }}
+                              >
+                                {st.faixa}
+                              </div>
                             </div>
-                            <div className="flex items-baseline justify-between">
-                              <span className="text-xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums">
-                                {st.ic_c !== null ? `${st.ic_c.toFixed(1)}°C` : '--'}
-                              </span>
-                              <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
-                                {st.temp_c}°C · {st.ur_pct}%
-                              </span>
+
+                            <div className="rounded-lg bg-white dark:bg-[#0D1526] border border-[#E5E5E5] dark:border-[#233354] px-3.5 py-2.5 space-y-1.5 text-xs font-mono">
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/70">Temperatura:</span>
+                                <span className="font-semibold text-[#14213D] dark:text-white tabular-nums">
+                                  {st.temp_c.toFixed(1)}°C
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/70">Umidade:</span>
+                                <span className="font-semibold text-[#14213D] dark:text-white tabular-nums">
+                                  {st.ur_pct}%
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between gap-3 pt-1 border-t border-[#E5E5E5]/70 dark:border-[#233354]">
+                                <span className="font-semibold text-slate-600 dark:text-[#E5E5E5]/85">Índice de Calor:</span>
+                                <span className="font-bold text-sm tabular-nums" style={{ color: st.cor_hex }}>
+                                  {st.ic_c !== null ? `${st.ic_c.toFixed(1)}°C` : '--'}
+                                </span>
+                              </div>
                             </div>
-                            <div className="text-[10px] font-semibold" style={{ color: st.cor_hex }}>
-                              {st.faixa}
+
+                            <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 px-0.5">
+                              <span>{st.codigo}</span>
+                              <span>
+                                {st.ultima_leitura && st.ultima_leitura.length >= 16
+                                  ? st.ultima_leitura.slice(11, 16)
+                                  : st.ultima_leitura || '--'}
+                              </span>
                             </div>
                           </div>
                         ))}

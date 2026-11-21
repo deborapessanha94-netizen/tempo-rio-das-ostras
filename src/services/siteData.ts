@@ -18,6 +18,8 @@ export interface EstacaoPluvio {
   tipo_label?: string;
   url?: string;
   url_portal?: string;
+  lat?: number | null;
+  lon?: number | null;
   temp_atual?: number | null;
   sensacao_atual?: number | null;
   umidade_atual?: number | null;

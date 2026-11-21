@@ -16,6 +16,8 @@ interface StationSeedMeta {
   categoria: 'pws' | 'cemaden';
   url: string;
   url_portal?: string;
+  lat?: number;
+  lon?: number;
 }
 
 const PWS_CATALOG: StationSeedMeta[] = [
@@ -27,6 +29,8 @@ const PWS_CATALOG: StationSeedMeta[] = [
     rede: 'PWS Weather Underground',
     categoria: 'pws',
     url: 'https://www.wunderground.com/dashboard/pws/IRIODA17',
+    lat: -22.531291,
+    lon: -41.957444,
   },
   {
     codigo: 'IRIODA16',
@@ -36,6 +40,8 @@ const PWS_CATALOG: StationSeedMeta[] = [
     rede: 'PWS Weather Underground',
     categoria: 'pws',
     url: 'https://www.wunderground.com/dashboard/pws/IRIODA16',
+    lat: -22.440357,
+    lon: -41.953913,
   },
   {
     codigo: 'IRIODA15',
@@ -45,6 +51,8 @@ const PWS_CATALOG: StationSeedMeta[] = [
     rede: 'PWS Weather Underground',
     categoria: 'pws',
     url: 'https://www.wunderground.com/dashboard/pws/IRIODA15',
+    lat: -22.426845,
+    lon: -42.020862,
   },
   {
     codigo: 'ICASIM5',
@@ -54,6 +62,8 @@ const PWS_CATALOG: StationSeedMeta[] = [
     rede: 'PWS Weather Underground',
     categoria: 'pws',
     url: 'https://www.wunderground.com/dashboard/pws/ICASIM5',
+    lat: -22.573707,
+    lon: -41.985545,
   },
   {
     codigo: 'IRIODA6',
@@ -703,9 +713,12 @@ async function fetchWuStationLive(
     lastNonZeroMs,
   };
 
+  const obsLat = Number(obs?.lat);
+  const obsLon = Number(obs?.lon);
   return {
     online: true,
     ultima_leitura: obsLocal,
+    ...(Number.isFinite(obsLat) && Number.isFinite(obsLon) ? { lat: obsLat, lon: obsLon } : {}),
     temp_atual: tempAtual,
     sensacao_atual: sensacaoAtual,
     vento_atual: ventoAtual,
@@ -865,6 +878,8 @@ function buildStationSkeleton(meta: StationSeedMeta): EstacaoPluvio {
     categoria: meta.categoria,
     url: meta.url,
     url_portal: meta.url_portal,
+    lat: meta.lat ?? null,
+    lon: meta.lon ?? null,
     temp_atual: null,
     sensacao_atual: null,
     umidade_atual: null,
@@ -945,7 +960,12 @@ export async function enrichAcumuladosWithLiveTelemetry(
       const seed = byCode.get(meta.codigo) || buildStationSkeleton(meta);
       if (patch) {
         updatedCount++;
-        byCode.set(meta.codigo, { ...seed, ...patch });
+        byCode.set(meta.codigo, {
+          ...seed,
+          lat: seed.lat ?? meta.lat ?? null,
+          lon: seed.lon ?? meta.lon ?? null,
+          ...patch,
+        });
       } else if (!byCode.has(meta.codigo)) {
         byCode.set(meta.codigo, seed);
       }

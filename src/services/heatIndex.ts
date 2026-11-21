@@ -85,7 +85,16 @@ export interface HeatStationReading {
   faixa: string;
   cor_hex: string;
   ultima_leitura?: string;
+  lat?: number | null;
+  lon?: number | null;
 }
+
+const KNOWN_HEAT_STATION_COORDS: Record<string, { lat: number; lon: number }> = {
+  IRIODA17: { lat: -22.531291, lon: -41.957444 },
+  IRIODA16: { lat: -22.440357, lon: -41.953913 },
+  IRIODA15: { lat: -22.426845, lon: -42.020862 },
+  ICASIM5: { lat: -22.573707, lon: -41.985545 },
+};
 
 export interface HeatIndicesDataset {
   atualizacao_brt: string;
@@ -176,11 +185,11 @@ export function classifyInstantHeatBand(icC?: number | null): { faixa: string; c
   if (icC === null || icC === undefined || !Number.isFinite(icC)) {
     return { faixa: 'Indisponível', cor: '#64748B' };
   }
-  if (icC > 44) return { faixa: 'Extremo (> 44°C)', cor: '#DC2626' };
-  if (icC >= 40) return { faixa: 'Muito Alto (40–44°C)', cor: '#EA580C' };
-  if (icC >= 36) return { faixa: 'Alto — Patamar COR (36–40°C)', cor: '#F97316' };
-  if (icC >= 32) return { faixa: 'Extrema Precaução (32–36°C)', cor: '#EAB308' };
-  if (icC >= 27) return { faixa: 'Atenção / Cuidado (27–32°C)', cor: '#0EA5E9' };
+  if (icC > 44) return { faixa: 'Extremo · COR (> 44°C)', cor: '#991B1B' };
+  if (icC >= 40) return { faixa: 'Muito Alto · COR (40–44°C)', cor: '#DC2626' };
+  if (icC >= 36) return { faixa: 'Alto · COR (36–40°C)', cor: '#EA580C' };
+  if (icC >= 32) return { faixa: 'Cuidado Extremo (32–36°C)', cor: '#F97316' };
+  if (icC >= 27) return { faixa: 'Cuidado (27–32°C)', cor: '#CA8A04' };
   return { faixa: 'Conforto Térmico (< 27°C)', cor: '#10B981' };
 }
 
@@ -216,6 +225,9 @@ export function recomputeLiveHeatIndices(params: {
     if (!Number.isFinite(tc) || !Number.isFinite(ur)) continue;
     const ic = computeRothfuszHeatIndexC(tc, ur);
     const band = classifyInstantHeatBand(ic);
+    const coords = KNOWN_HEAT_STATION_COORDS[st.codigo];
+    const latNum = st.lat !== null && st.lat !== undefined && Number.isFinite(Number(st.lat)) ? Number(st.lat) : coords?.lat ?? null;
+    const lonNum = st.lon !== null && st.lon !== undefined && Number.isFinite(Number(st.lon)) ? Number(st.lon) : coords?.lon ?? null;
     estRows.push({
       codigo: st.codigo,
       nome: st.nome_curto || st.nome,
@@ -225,6 +237,8 @@ export function recomputeLiveHeatIndices(params: {
       faixa: band.faixa,
       cor_hex: band.cor,
       ultima_leitura: st.ultima_leitura,
+      lat: latNum,
+      lon: lonNum,
     });
   }
 
