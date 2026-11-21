@@ -48,9 +48,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -105,9 +105,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -162,9 +162,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -196,32 +196,32 @@
         "granizo": true,
         "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
         "chuva": {
-          "media_continua_modelos_mm": 5.3,
+          "media_continua_modelos_mm": 8.1,
           "teto_tempestade_alerta_mm": 50.0,
-          "faixa_completa_txt": "5.3 mm (Média) • Até 50 mm (Teto Alerta)",
+          "faixa_completa_txt": "8.1 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "4.0 a 42.5 mm",
+              "volume_estimado": "6.1 a 42.5 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "5.3 a 50.0 mm",
+              "volume_estimado": "8.1 a 50.0 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "6.6 a 67.5 mm",
+              "volume_estimado": "10.1 a 67.5 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -276,9 +276,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -310,32 +310,32 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 17.4,
-          "teto_tempestade_alerta_mm": 40.0,
-          "faixa_completa_txt": "17.4 mm",
+          "media_continua_modelos_mm": 22.8,
+          "teto_tempestade_alerta_mm": 41.1,
+          "faixa_completa_txt": "22.8 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "13.0 a 19.1 mm",
+              "volume_estimado": "17.1 a 25.1 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "17.4 a 40.0 mm",
+              "volume_estimado": "22.8 a 41.1 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "21.8 a 26.1 mm",
+              "volume_estimado": "28.5 a 34.2 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -367,32 +367,32 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 35.3,
-          "teto_tempestade_alerta_mm": 78.9,
-          "faixa_completa_txt": "35.3 mm",
+          "media_continua_modelos_mm": 47.6,
+          "teto_tempestade_alerta_mm": 93.2,
+          "faixa_completa_txt": "47.6 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "26.5 a 38.8 mm",
+              "volume_estimado": "35.7 a 52.4 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "35.3 a 78.9 mm",
+              "volume_estimado": "47.6 a 93.2 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "44.1 a 52.9 mm",
+              "volume_estimado": "59.5 a 71.4 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -447,9 +447,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -505,9 +505,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.62",
+          "cota_atual_m": "1.61",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.22 m",
+          "margem_segura_m": "1.23 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -562,9 +562,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.62",
+          "cota_atual_m": "1.61",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.22 m",
+          "margem_segura_m": "1.23 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -1588,15 +1588,15 @@
       "disponivel": true
     },
     "cptec_wrf_prob_info": {
-      "wrf_y_max": 3.0,
+      "wrf_y_max": 20.0,
       "wrf_daily_mm": {
-        "2026-11-20": 0.3,
+        "2026-11-20": 1.8,
         "2026-11-21": 0.0,
         "2026-11-22": 0.0,
-        "2026-11-23": 3.2,
-        "2026-11-24": 0.3,
-        "2026-11-25": 6.2,
-        "2026-11-26": 14.0
+        "2026-11-23": 21.6,
+        "2026-11-24": 2.0,
+        "2026-11-25": 41.1,
+        "2026-11-26": 93.2
       },
       "prob_p05_pct": {
         "2026-11-20": 6,
@@ -1608,9 +1608,8 @@
       "disponivel": true,
       "estagio": "Vigilância",
       "estagio_indice": 0,
-      "atualizado_em": "2026-11-20T22:02:11-03:00",
-      "url": "https://radartool.inea.rj.gov.br/radar-tool/",
-      "cached_fallback": true
+      "atualizado_em": "2026-11-20T22:39:43-03:00",
+      "url": "https://radartool.inea.rj.gov.br/radar-tool/"
     },
     "perfil_horario_oficial_chuva": {
       "2026-11-20T00": 0.0,
@@ -1625,16 +1624,16 @@
       "2026-11-20T09": 0.0,
       "2026-11-20T10": 0.45,
       "2026-11-20T11": 0.01,
-      "2026-11-20T12": 0.59,
+      "2026-11-20T12": 0.57,
       "2026-11-20T13": 0.08,
       "2026-11-20T14": 0.03,
-      "2026-11-20T15": 1.27,
-      "2026-11-20T16": 0.8,
-      "2026-11-20T17": 0.43,
-      "2026-11-20T18": 0.52,
-      "2026-11-20T19": 0.54,
-      "2026-11-20T20": 0.02,
-      "2026-11-20T21": 0.02,
+      "2026-11-20T15": 1.23,
+      "2026-11-20T16": 0.78,
+      "2026-11-20T17": 0.41,
+      "2026-11-20T18": 0.51,
+      "2026-11-20T19": 0.53,
+      "2026-11-20T20": 0.08,
+      "2026-11-20T21": 0.08,
       "2026-11-20T22": 0.0,
       "2026-11-20T23": 0.0,
       "2026-11-21T00": 0.07,
@@ -1685,11 +1684,11 @@
       "2026-11-22T21": 0.35,
       "2026-11-22T22": 0.76,
       "2026-11-22T23": 0.75,
-      "2026-11-23T00": 0.1,
-      "2026-11-23T01": 0.22,
-      "2026-11-23T02": 0.22,
-      "2026-11-23T03": 0.32,
-      "2026-11-23T04": 0.24,
+      "2026-11-23T00": 0.11,
+      "2026-11-23T01": 0.24,
+      "2026-11-23T02": 0.24,
+      "2026-11-23T03": 0.35,
+      "2026-11-23T04": 0.26,
       "2026-11-23T05": 0.01,
       "2026-11-23T06": 0.04,
       "2026-11-23T07": 0.04,
@@ -1697,15 +1696,15 @@
       "2026-11-23T09": 0.0,
       "2026-11-23T10": 0.0,
       "2026-11-23T11": 0.08,
-      "2026-11-23T12": 0.11,
-      "2026-11-23T13": 0.25,
-      "2026-11-23T14": 0.52,
-      "2026-11-23T15": 0.19,
-      "2026-11-23T16": 0.59,
-      "2026-11-23T17": 0.74,
-      "2026-11-23T18": 1.02,
-      "2026-11-23T19": 0.24,
-      "2026-11-23T20": 0.34,
+      "2026-11-23T12": 0.1,
+      "2026-11-23T13": 0.24,
+      "2026-11-23T14": 0.51,
+      "2026-11-23T15": 0.18,
+      "2026-11-23T16": 0.58,
+      "2026-11-23T17": 1.88,
+      "2026-11-23T18": 2.36,
+      "2026-11-23T19": 0.6,
+      "2026-11-23T20": 0.24,
       "2026-11-23T21": 0.0,
       "2026-11-23T22": 0.0,
       "2026-11-23T23": 0.0,
@@ -1719,26 +1718,26 @@
       "2026-11-24T07": 0.0,
       "2026-11-24T08": 0.0,
       "2026-11-24T09": 0.0,
-      "2026-11-24T10": 0.1,
-      "2026-11-24T11": 0.1,
+      "2026-11-24T10": 0.05,
+      "2026-11-24T11": 0.05,
       "2026-11-24T12": 0.02,
       "2026-11-24T13": 0.02,
       "2026-11-24T14": 0.03,
       "2026-11-24T15": 0.02,
-      "2026-11-24T16": 0.4,
-      "2026-11-24T17": 0.4,
-      "2026-11-24T18": 0.34,
-      "2026-11-24T19": 0.02,
-      "2026-11-24T20": 0.02,
-      "2026-11-24T21": 0.06,
-      "2026-11-24T22": 0.12,
-      "2026-11-24T23": 0.14,
-      "2026-11-25T00": 0.51,
-      "2026-11-25T01": 0.25,
+      "2026-11-24T16": 0.36,
+      "2026-11-24T17": 0.36,
+      "2026-11-24T18": 0.27,
+      "2026-11-24T19": 0.01,
+      "2026-11-24T20": 0.01,
+      "2026-11-24T21": 0.05,
+      "2026-11-24T22": 0.25,
+      "2026-11-24T23": 0.31,
+      "2026-11-25T00": 0.75,
+      "2026-11-25T01": 0.52,
       "2026-11-25T02": 0.0,
       "2026-11-25T03": 0.0,
       "2026-11-25T04": 0.0,
-      "2026-11-25T05": 0.64,
+      "2026-11-25T05": 0.33,
       "2026-11-25T06": 0.35,
       "2026-11-25T07": 0.0,
       "2026-11-25T08": 0.86,
@@ -1746,35 +1745,35 @@
       "2026-11-25T10": 0.35,
       "2026-11-25T11": 0.0,
       "2026-11-25T12": 0.0,
-      "2026-11-25T13": 0.22,
-      "2026-11-25T14": 0.36,
-      "2026-11-25T15": 0.72,
-      "2026-11-25T16": 0.45,
-      "2026-11-25T17": 0.64,
-      "2026-11-25T18": 0.92,
-      "2026-11-25T19": 1.07,
-      "2026-11-25T20": 1.74,
-      "2026-11-25T21": 3.04,
-      "2026-11-25T22": 3.04,
-      "2026-11-25T23": 1.89,
+      "2026-11-25T13": 0.19,
+      "2026-11-25T14": 0.49,
+      "2026-11-25T15": 0.84,
+      "2026-11-25T16": 0.61,
+      "2026-11-25T17": 0.98,
+      "2026-11-25T18": 2.15,
+      "2026-11-25T19": 2.29,
+      "2026-11-25T20": 2.34,
+      "2026-11-25T21": 3.54,
+      "2026-11-25T22": 3.47,
+      "2026-11-25T23": 2.41,
       "2026-11-26T00": 2.6,
       "2026-11-26T01": 1.57,
       "2026-11-26T02": 1.57,
       "2026-11-26T03": 1.62,
       "2026-11-26T04": 1.37,
       "2026-11-26T05": 1.36,
-      "2026-11-26T06": 0.86,
-      "2026-11-26T07": 0.14,
-      "2026-11-26T08": 0.34,
-      "2026-11-26T09": 1.35,
-      "2026-11-26T10": 1.7,
-      "2026-11-26T11": 2.0,
-      "2026-11-26T12": 1.41,
-      "2026-11-26T13": 2.38,
-      "2026-11-26T14": 1.25,
-      "2026-11-26T15": 1.42,
-      "2026-11-26T16": 1.39,
-      "2026-11-26T17": 1.75,
+      "2026-11-26T06": 0.88,
+      "2026-11-26T07": 0.25,
+      "2026-11-26T08": 0.86,
+      "2026-11-26T09": 3.8,
+      "2026-11-26T10": 4.11,
+      "2026-11-26T11": 4.2,
+      "2026-11-26T12": 3.8,
+      "2026-11-26T13": 3.62,
+      "2026-11-26T14": 2.32,
+      "2026-11-26T15": 1.48,
+      "2026-11-26T16": 1.32,
+      "2026-11-26T17": 1.66,
       "2026-11-26T18": 1.81,
       "2026-11-26T19": 1.61,
       "2026-11-26T20": 1.76,
@@ -2973,7 +2972,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_m": "1.62",
+        "nivel_m": "1.61",
         "status": "Vigilância"
       }
     },
@@ -3065,7 +3064,7 @@
             "vort850_min": -4.0,
             "parametros_lidos": 45
           },
-          "cptec_wrf_mm": 0.3,
+          "cptec_wrf_mm": 1.8,
           "cptec_multimodel_mm": 0.8,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": 0.0,
@@ -3328,21 +3327,21 @@
         "data_br": "23/11/2026",
         "dia_semana": "Segunda-feira",
         "intensidade_chuva": "Chuva moderada",
-        "chuva_media_modelos_mm": 5.3,
+        "chuva_media_modelos_mm": 8.1,
         "chuva_p25_mm": 2.0,
-        "chuva_p50_mm": 5.3,
-        "chuva_p75_mm": 9.0,
+        "chuva_p50_mm": 8.1,
+        "chuva_p75_mm": 14.7,
         "chuva_p90_teto_mm": 50.0,
         "probabilistico": {
           "p25_mm": 2.0,
-          "p50_mm": 5.3,
-          "p75_mm": 9.0,
+          "p50_mm": 8.1,
+          "p75_mm": 14.7,
           "p90_teto_mm": 50.0,
           "probabilidade_pct": 93,
           "qtd_fontes_numericas": 7
         },
         "chuva_pico_convectivo_mm": 50.0,
-        "faixa_oficial": "5.3 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET)",
+        "faixa_oficial": "8.1 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET)",
         "chuva_prob_pct": 93,
         "tem_alerta_inmet": true,
         "alerta_inmet_id": 56466,
@@ -3414,7 +3413,7 @@
             "vort850_min": -8.0,
             "parametros_lidos": 31
           },
-          "cptec_wrf_mm": 3.2,
+          "cptec_wrf_mm": 21.6,
           "cptec_multimodel_mm": 9.0,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": null,
@@ -3529,7 +3528,7 @@
             "vort850_min": -4.0,
             "parametros_lidos": 31
           },
-          "cptec_wrf_mm": 0.3,
+          "cptec_wrf_mm": 2.0,
           "cptec_multimodel_mm": 0.7,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": null,
@@ -3558,21 +3557,21 @@
         "data_br": "25/11/2026",
         "dia_semana": "Quarta-feira",
         "intensidade_chuva": "Chuva moderada",
-        "chuva_media_modelos_mm": 17.4,
-        "chuva_p25_mm": 6.2,
-        "chuva_p50_mm": 17.4,
-        "chuva_p75_mm": 22.5,
-        "chuva_p90_teto_mm": 40.0,
+        "chuva_media_modelos_mm": 22.8,
+        "chuva_p25_mm": 10.4,
+        "chuva_p50_mm": 22.8,
+        "chuva_p75_mm": 37.4,
+        "chuva_p90_teto_mm": 41.1,
         "probabilistico": {
-          "p25_mm": 6.2,
-          "p50_mm": 17.4,
-          "p75_mm": 22.5,
-          "p90_teto_mm": 40.0,
+          "p25_mm": 10.4,
+          "p50_mm": 22.8,
+          "p75_mm": 37.4,
+          "p90_teto_mm": 41.1,
           "probabilidade_pct": 82,
           "qtd_fontes_numericas": 7
         },
-        "chuva_pico_convectivo_mm": 40.0,
-        "faixa_oficial": "17.4 mm (P50) • P25–P90: 6.2–40.0 mm (82%)",
+        "chuva_pico_convectivo_mm": 41.1,
+        "faixa_oficial": "22.8 mm (P50) • P25–P90: 10.4–41.1 mm (82%)",
         "chuva_prob_pct": 82,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
@@ -3644,7 +3643,7 @@
             "vort850_min": -8.0,
             "parametros_lidos": 31
           },
-          "cptec_wrf_mm": 6.2,
+          "cptec_wrf_mm": 41.1,
           "cptec_multimodel_mm": 5.0,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": null,
@@ -3673,21 +3672,21 @@
         "data_br": "26/11/2026",
         "dia_semana": "Quinta-feira",
         "intensidade_chuva": "Chuva forte",
-        "chuva_media_modelos_mm": 35.3,
-        "chuva_p25_mm": 19.0,
-        "chuva_p50_mm": 35.3,
-        "chuva_p75_mm": 47.5,
-        "chuva_p90_teto_mm": 78.9,
+        "chuva_media_modelos_mm": 47.6,
+        "chuva_p25_mm": 24.9,
+        "chuva_p50_mm": 47.6,
+        "chuva_p75_mm": 78.9,
+        "chuva_p90_teto_mm": 93.2,
         "probabilistico": {
-          "p25_mm": 19.0,
-          "p50_mm": 35.3,
-          "p75_mm": 47.5,
-          "p90_teto_mm": 78.9,
+          "p25_mm": 24.9,
+          "p50_mm": 47.6,
+          "p75_mm": 78.9,
+          "p90_teto_mm": 93.2,
           "probabilidade_pct": 89,
           "qtd_fontes_numericas": 7
         },
-        "chuva_pico_convectivo_mm": 78.9,
-        "faixa_oficial": "35.3 mm (P50) • P25–P90: 19.0–78.9 mm (89%)",
+        "chuva_pico_convectivo_mm": 93.2,
+        "faixa_oficial": "47.6 mm (P50) • P25–P90: 24.9–93.2 mm (89%)",
         "chuva_prob_pct": 89,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
@@ -3758,7 +3757,7 @@
             "vort850_min": 0.0,
             "parametros_lidos": 30
           },
-          "cptec_wrf_mm": 14.0,
+          "cptec_wrf_mm": 93.2,
           "cptec_multimodel_mm": 19.0,
           "cptec_multimodel_horas": 21,
           "cptec_municipal_mm": null,
@@ -3898,19 +3897,19 @@
       }
     ],
     "acumulado_3dias_media": 15.0,
-    "acumulado_4dias_media": 20.3,
-    "acumulado_semana_media": 79.8,
-    "acumulado_semana_formula": "5.0 mm (Sex) + 5.0 mm (Sáb) + 5.0 mm (Dom) + 5.3 mm (Seg) + 2.2 mm (Ter) + 17.4 mm (Qua) + 35.3 mm (Qui) + 4.6 mm (Sex) = 79.8 mm",
-    "acumulado_8dias_formula": "5.0 mm (Sex) + 5.0 mm (Sáb) + 5.0 mm (Dom) + 5.3 mm (Seg) + 2.2 mm (Ter) + 17.4 mm (Qua) + 35.3 mm (Qui) + 4.6 mm (Sex) = 79.8 mm",
-    "acumulado_8dias_media": 79.8,
+    "acumulado_4dias_media": 23.1,
+    "acumulado_semana_media": 100.3,
+    "acumulado_semana_formula": "5.0 mm (Sex) + 5.0 mm (Sáb) + 5.0 mm (Dom) + 8.1 mm (Seg) + 2.2 mm (Ter) + 22.8 mm (Qua) + 47.6 mm (Qui) + 4.6 mm (Sex) = 100.3 mm",
+    "acumulado_8dias_formula": "5.0 mm (Sex) + 5.0 mm (Sáb) + 5.0 mm (Dom) + 8.1 mm (Seg) + 2.2 mm (Ter) + 22.8 mm (Qua) + 47.6 mm (Qui) + 4.6 mm (Sex) = 100.3 mm",
+    "acumulado_8dias_media": 100.3,
     "dias_somados": [
       5.0,
       5.0,
       5.0,
-      5.3,
+      8.1,
       2.2,
-      17.4,
-      35.3,
+      22.8,
+      47.6,
       4.6
     ],
     "conclusao_sem_pontas_soltas": "Todos os dias, turnos e gráficos seguem o mesmo cálculo probabilístico contínuo ponderado (quantis P25/P50/P75/P90 e probabilidade condicional) integrando as fontes oficiais brasileiras (INMET COSMO 7x7km, VIME COSMO 2,8km/7km + Água Precipitável/CAPE, INMET 3304524/Avisos, CPTEC WRF/Multimodel/Probabilístico P≥5mm, Boletim RH-VIII do INEA + RadarTool RJ e pluviômetros locais) com os modelos numéricos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km), mantendo coerência matemática exata entre os cards diários, a tabela de turnos e os gráficos horários."
@@ -3921,7 +3920,7 @@
       "titulo": "Rio Jundiá (INEA)",
       "status": "Vigilância",
       "badge": "success",
-      "detalhe": "Cota: 1.62 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.61 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -3941,7 +3940,7 @@
       "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas com acompanhamento contínuo."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 20/11 (Sexta-feira) a 27/11 (Sexta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na sexta-feira (20/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.5–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56469 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 56 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,62 m (Status: Vigilância, ocupação de calha em 57% e ampla margem de segurança de 1,22 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), no sábado (21/11) atua o regime de aproximação / passagem de frente fria, determinando contenção/declínio de temperatura (23°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.6–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56462 do INMET). No domingo (22/11) e na segunda-feira (23/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET) e 5.3 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 20/11 (Sexta-feira) a 27/11 (Sexta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C na sexta-feira (20/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.5–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56469 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 56 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,61 m (Status: Vigilância, ocupação de calha em 57% e ampla margem de segurança de 1,23 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), no sábado (21/11) atua o regime de aproximação / passagem de frente fria, determinando contenção/declínio de temperatura (23°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.6–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56462 do INMET). No domingo (22/11) e na segunda-feira (23/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET) e 8.1 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "20/11 (Sexta-feira) a 27/11 (Sexta-feira)",
     "evolucao_3_dias": [
@@ -4150,10 +4149,10 @@
         "subtitulo": "Pancadas de Chuva com Raios e Trovoada (Alerta INMET nº 56466)",
         "badge": "AVISO / ATENÇÃO",
         "badge_tipo": "warning",
-        "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.3 mm no dia (probabilidade de 93%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+        "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 8.1 mm no dia (probabilidade de 93%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Nesta segunda-feira, a atuação do sistema pós-frontal (retaguarda da frente fria) mantém ventos persistentes do quadrante Sul/Sudoeste (de NNE para S) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-          "Previsão de chuva pós-frontal (chuva moderada (com risco de pancadas fortes e trovoadas)) e pancadas isoladas entre a tarde e a noite (consenso de 5.3 mm no dia; probabilidade de 93%).",
+          "Previsão de chuva pós-frontal (chuva moderada (com risco de pancadas fortes e trovoadas)) e pancadas isoladas entre a tarde e a noite (consenso de 8.1 mm no dia; probabilidade de 93%).",
           "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 33°C à tarde, com sensação térmica variando entre a menor de 25°C e a maior de 33°C no pico do calor. Na região rural, oscilam entre 21°C e 31°C.",
           "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos fracos de NNE rondando para S (7 a 10 km/h), com rajadas moderadas de até 40 km/h na orla.",
@@ -4189,7 +4188,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "5.3 mm (93% • P25–P90: 2.0–50.0 mm • Teto 50 mm)",
+            "val": "8.1 mm (93% • P25–P90: 2.0–50.0 mm • Teto 50 mm)",
             "icon": "cloud-rain"
           },
           "mar": {
@@ -4217,7 +4216,7 @@
       "pilares": [
         {
           "label": "Modelos BR + Globais (96h)",
-          "val": "INMET COSMO/VIME · CPTEC WRF/Multi · INEA RH-VIII · ECMWF/GFS/ICON (20.3 mm em 96h)"
+          "val": "INMET COSMO/VIME · CPTEC WRF/Multi · INEA RH-VIII · ECMWF/GFS/ICON (23.1 mm em 96h)"
         },
         {
           "label": "Gradiente Térmico Oficial",
@@ -4231,15 +4230,15 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,62 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,61 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.62 m",
+      "cota": "1.61 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 56 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,62 m (Status: Vigilância, ocupação de calha em 57% e ampla margem de segurança de 1,22 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 56 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,61 m (Status: Vigilância, ocupação de calha em 57% e ampla margem de segurança de 1,23 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1,62 m (0,0 mm 24h)"
+          "valor": "1,61 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital (CEMADEN)",
@@ -4259,7 +4258,7 @@
       "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Telemetria 24/7",
       "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
       "badge_emergencia": "OPERAÇÃO 24/7",
-      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), no sábado (21/11) atua o regime de aproximação / passagem de frente fria, determinando contenção/declínio de temperatura (23°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.6–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56462 do INMET). No domingo (22/11) e na segunda-feira (23/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET) e 5.3 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), no sábado (21/11) atua o regime de aproximação / passagem de frente fria, determinando contenção/declínio de temperatura (23°C a 33°C) e precipitação estimada em chuva moderada (com risco de pancadas fortes e trovoadas) (5.0 mm (P50) • Faixa 0.6–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56462 do INMET). No domingo (22/11) e na segunda-feira (23/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET) e 8.1 mm (P50) • Faixa 2.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56466 do INMET). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 2,0 a 2,5 m (Agitado) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
       "pilares": [
         {
           "label": "Ciclo Sinótico Oficial",
@@ -4346,9 +4345,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4472,9 +4471,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4598,9 +4597,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4688,7 +4687,7 @@
       "badge_tipo": "warning",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Moderadas)",
-      "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 5.3 mm no dia (probabilidade de 93%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 23°C e máxima de 33°C. Consenso de 8.1 mm no dia (probabilidade de 93%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-23",
         "data_br": "23/11/2026",
@@ -4701,32 +4700,32 @@
         "granizo": true,
         "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
         "chuva": {
-          "media_continua_modelos_mm": 5.3,
+          "media_continua_modelos_mm": 8.1,
           "teto_tempestade_alerta_mm": 50.0,
-          "faixa_completa_txt": "5.3 mm (Média) • Até 50 mm (Teto Alerta)",
+          "faixa_completa_txt": "8.1 mm (Média) • Até 50 mm (Teto Alerta)",
           "taxa_horaria_pico": "20 a 30 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "4.0 a 42.5 mm",
+              "volume_estimado": "6.1 a 42.5 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "5.3 a 50.0 mm",
+              "volume_estimado": "8.1 a 50.0 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "6.6 a 67.5 mm",
+              "volume_estimado": "10.1 a 67.5 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4751,7 +4750,7 @@
       "sensacao_faixa": "25° a 33°C",
       "informe_populacao": [
         "Nesta segunda-feira, a atuação do sistema pós-frontal (retaguarda da frente fria) mantém ventos persistentes do quadrante Sul/Sudoeste (de NNE para S) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-        "Previsão de chuva pós-frontal (chuva moderada (com risco de pancadas fortes e trovoadas)) e pancadas isoladas entre a tarde e a noite (consenso de 5.3 mm no dia; probabilidade de 93%).",
+        "Previsão de chuva pós-frontal (chuva moderada (com risco de pancadas fortes e trovoadas)) e pancadas isoladas entre a tarde e a noite (consenso de 8.1 mm no dia; probabilidade de 93%).",
         "Temperaturas em declínio térmico, variando entre mínima de 23°C ao amanhecer e máxima contida de 33°C à tarde, com sensação térmica variando entre a menor de 25°C e a maior de 33°C no pico do calor. Na região rural, oscilam entre 21°C e 31°C.",
         "A umidade relativa do ar oscila entre 50% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de NNE rondando para S (7 a 10 km/h), com rajadas moderadas de até 40 km/h na orla.",
@@ -4787,7 +4786,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "5.3 mm (93% • P25–P90: 2.0–50.0 mm • Teto 50 mm)",
+          "val": "8.1 mm (93% • P25–P90: 2.0–50.0 mm • Teto 50 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -4850,9 +4849,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4940,7 +4939,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Fracas)",
-      "descricao": "Previsão de chuva moderada sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 23°C e máxima de 32°C. Consenso de 17.4 mm no dia (probabilidade de 82%) e ventos fracos com rajadas fracas de até 24 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,7 a 1,1 m em mar aberto com mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva moderada sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 23°C e máxima de 32°C. Consenso de 22.8 mm no dia (probabilidade de 82%) e ventos fracos com rajadas fracas de até 24 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,7 a 1,1 m em mar aberto com mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-25",
         "data_br": "25/11/2026",
@@ -4953,32 +4952,32 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 17.4,
-          "teto_tempestade_alerta_mm": 40.0,
-          "faixa_completa_txt": "17.4 mm",
+          "media_continua_modelos_mm": 22.8,
+          "teto_tempestade_alerta_mm": 41.1,
+          "faixa_completa_txt": "22.8 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "13.0 a 19.1 mm",
+              "volume_estimado": "17.1 a 25.1 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "17.4 a 40.0 mm",
+              "volume_estimado": "22.8 a 41.1 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "21.8 a 26.1 mm",
+              "volume_estimado": "28.5 a 34.2 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5003,7 +5002,7 @@
       "sensacao_faixa": "25° a 32°C",
       "informe_populacao": [
         "Nesta quarta-feira, a aproximação e atuação de um novo sistema frontal na costa fluminense promove rotação dos ventos (de NE para S) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) concentrada no período da noite (consenso de 17.4 mm no dia; probabilidade de 82%).",
+        "Previsão de chuva moderada (com risco de pancadas fortes e trovoadas) concentrada no período da noite (consenso de 22.8 mm no dia; probabilidade de 82%).",
         "Temperaturas variam entre mínima de 23°C ao amanhecer e máxima de 32°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 25°C e a maior de 32°C no pico do calor. Na região rural, oscilam entre 21°C e 30°C.",
         "A umidade relativa do ar oscila entre 78% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de NE rondando para S (6 a 8 km/h), com rajadas fracas de até 24 km/h na orla.",
@@ -5039,7 +5038,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "17.4 mm (82% • P25–P90: 6.2–40.0 mm)",
+          "val": "22.8 mm (82% • P25–P90: 10.4–41.1 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -5066,7 +5065,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva forte",
       "intensidade_vento": "Fraco (Fracas a moderadas)",
-      "descricao": "Previsão de chuva forte sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 21°C e máxima de 28°C. Consenso de 35.3 mm no dia (probabilidade de 89%) e ventos fracos com rajadas fracas a moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva forte sobre Rio das Ostras (tempestade severa com trovoadas). Temperaturas variando entre mínima de 21°C e máxima de 28°C. Consenso de 47.6 mm no dia (probabilidade de 89%) e ventos fracos com rajadas fracas a moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-26",
         "data_br": "26/11/2026",
@@ -5079,32 +5078,32 @@
         "granizo": false,
         "granizo_detalhe": "Sem previsão de granizo.",
         "chuva": {
-          "media_continua_modelos_mm": 35.3,
-          "teto_tempestade_alerta_mm": 78.9,
-          "faixa_completa_txt": "35.3 mm",
+          "media_continua_modelos_mm": 47.6,
+          "teto_tempestade_alerta_mm": 93.2,
+          "faixa_completa_txt": "47.6 mm",
           "taxa_horaria_pico": "< 5 mm/h",
           "janela_critica_horaria": "00:00 às 24:00h",
           "distribuicao_geografica": {
             "orla_costeira": {
               "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-              "volume_estimado": "26.5 a 38.8 mm",
+              "volume_estimado": "35.7 a 52.4 mm",
               "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
             },
             "centro_urbano": {
               "regiao": "Centro Urbano & Baixadas",
-              "volume_estimado": "35.3 a 78.9 mm",
+              "volume_estimado": "47.6 a 93.2 mm",
               "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
             },
             "regiao_rural": {
               "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-              "volume_estimado": "44.1 a 52.9 mm",
+              "volume_estimado": "59.5 a 71.4 mm",
               "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5129,7 +5128,7 @@
       "sensacao_faixa": "23° a 28°C",
       "informe_populacao": [
         "Nesta quinta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria) mantém ventos persistentes do quadrante Sul/Sudoeste (de WSW para SSW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
-        "Previsão de chuva pós-frontal (chuva forte) e pancadas isoladas ao longo do dia (com maior intensidade entre madrugada e tarde) (consenso de 35.3 mm no dia; probabilidade de 89%).",
+        "Previsão de chuva pós-frontal (chuva forte) e pancadas isoladas entre a manhã e a tarde (consenso de 47.6 mm no dia; probabilidade de 89%).",
         "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 28°C à tarde, com sensação térmica variando entre a menor de 23°C e a maior de 28°C no pico do calor. Na região rural, oscilam entre 19°C e 26°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 97% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de WSW rondando para SSW (8 a 12 km/h), com rajadas fracas a moderadas de até 29 km/h na orla.",
@@ -5165,7 +5164,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "35.3 mm (89% • P25–P90: 19.0–78.9 mm)",
+          "val": "47.6 mm (89% • P25–P90: 24.9–93.2 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -5228,9 +5227,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.62",
+            "cota_atual_m": "1.61",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.22 m",
+            "margem_segura_m": "1.23 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -6499,13 +6498,1027 @@
     "ultimo_raio_iso": null,
     "atividade_ativa": false
   },
+  "indices_calor": {
+    "atualizacao_brt": "20/11/2026 22:39",
+    "atualizacao_iso": "2026-11-20T22:39:49.438024-03:00",
+    "fontes_oficiais": {
+      "cor_rio": "https://cor.rio/niveis-de-calor/",
+      "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
+      "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
+    },
+    "agora": {
+      "ic_rede_c": 28.4,
+      "faixa_instantanea": {
+        "faixa": "Atenção / Cuidado (27–32°C)",
+        "cor": "#0EA5E9"
+      },
+      "cor_nivel": "NC2",
+      "cor_nivel_num": 2,
+      "cor_nome": "Calor 2 — Atenção Térmica",
+      "cor_hex": "#EAB308",
+      "cor_criterio": "Índices de calor altos (36°C a 40°C) por 1 ou 2 dias consecutivos.",
+      "cor_acao": "Coordenação e disseminação de informações sobre sintomas de exposição ao calor e hidratação; rotina sem alterações.",
+      "ic_pico_hoje_c": 37.1,
+      "hora_pico_hoje": "14:00",
+      "horas_ge_36_hoje": 5,
+      "dias_consecutivos_36": 2,
+      "estacoes_tempo_real": [
+        {
+          "codigo": "IRIODA15",
+          "nome": "Rocha Leão / REBIO União",
+          "temp_c": 25.3,
+          "ur_pct": 93,
+          "ic_c": 26.3,
+          "faixa": "Conforto Térmico (< 27°C)",
+          "cor_hex": "#10B981",
+          "ultima_leitura": "2026-11-20 22:07:48"
+        },
+        {
+          "codigo": "IRIODA16",
+          "nome": "Cantagalo / Extensão do Bosque",
+          "temp_c": 26.0,
+          "ur_pct": 93,
+          "ic_c": 27.1,
+          "faixa": "Atenção / Cuidado (27–32°C)",
+          "cor_hex": "#0EA5E9",
+          "ultima_leitura": "2026-11-20 22:07:41"
+        },
+        {
+          "codigo": "IRIODA17",
+          "nome": "Praia da Tartaruga",
+          "temp_c": 27.0,
+          "ur_pct": 86,
+          "ic_c": 30.4,
+          "faixa": "Atenção / Cuidado (27–32°C)",
+          "cor_hex": "#0EA5E9",
+          "ultima_leitura": "2026-11-20 22:07:49"
+        },
+        {
+          "codigo": "ICASIM5",
+          "nome": "Barra de São João / Praiamar",
+          "temp_c": 26.6,
+          "ur_pct": 92,
+          "ic_c": 29.8,
+          "faixa": "Atenção / Cuidado (27–32°C)",
+          "cor_hex": "#0EA5E9",
+          "ultima_leitura": "2026-11-20 22:07:33"
+        }
+      ]
+    },
+    "ses_rj_ehf_local": {
+      "t_p95_climatologico": 28.79,
+      "ehf99_referencia": 9.34,
+      "tmax_p75_referencia": 31.05,
+      "t30d_estacoes_media_c": 23.8,
+      "dias_observados_base": 30,
+      "hoje": {
+        "data_iso": "2026-11-20",
+        "data_br": "20/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 31.0,
+        "t_mean_c": 27.0,
+        "ic_max_c": 37.1,
+        "ic_min_c": 24.8,
+        "hora_pico_ic": "14:00",
+        "horas_ge_36": 5,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 27.17,
+        "tmax_3d_media_c": 31.3,
+        "ehi_sig": -1.62,
+        "ehi_accl": 3.37,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 2,
+        "cor_nivel": "NC2",
+        "cor_nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "faixa_pico": "Alto — Patamar COR (36–40°C)",
+        "faixa_pico_cor": "#F97316",
+        "dias_consecutivos_36": 2,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      }
+    },
+    "clima_saude_ms": {
+      "disponivel": true,
+      "url_ehf": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
+      "url_risco": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=risco",
+      "cd_mun": "3304524",
+      "municipio": "Rio das Ostras - RJ",
+      "profile": {
+        "cd_mun": "3304524",
+        "nm_mun": "Rio das Ostras",
+        "sigla_uf": "RJ",
+        "nm_regiao": "Sudeste",
+        "lat": -21.844,
+        "lon": -45.408,
+        "geoses": 0.190138251870134,
+        "tmean_p95": 28.78807947019867,
+        "tmean_p99": 29.78068788720358,
+        "ehf99": 9.338525981132218,
+        "tmean_30d": null,
+        "tmax_pico_p75": 31.05,
+        "tmax": 28.8,
+        "tmean": 23.450000000000003,
+        "tmin": 18.1,
+        "ehf": 0,
+        "classification": "Normal",
+        "diarioAvailable": true,
+        "dataDate": "2026-11-21"
+      },
+      "risco": {
+        "cd_mun": "3304524",
+        "nm_mun": "Rio das Ostras",
+        "sigla_uf": "RJ",
+        "data": "2026-11-21",
+        "classification": "Normal",
+        "h_norm": 0,
+        "vulnerabilidade": 0.404930874064933,
+        "risco_combinado": 0.2024654370324665,
+        "risco_classe": "Normal"
+      },
+      "weekly": [
+        {
+          "date": "2026-11-15",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": false,
+          "tmax": 27.1,
+          "tmean": 21.75,
+          "tmin": 16.4
+        },
+        {
+          "date": "2026-11-16",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": false,
+          "tmax": 24,
+          "tmean": 20.4,
+          "tmin": 16.8
+        },
+        {
+          "date": "2026-11-17",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": false,
+          "tmax": 27.4,
+          "tmean": 21.799999999999997,
+          "tmin": 16.2
+        },
+        {
+          "date": "2026-11-18",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": false,
+          "tmax": 28.6,
+          "tmean": 22.950000000000003,
+          "tmin": 17.3
+        },
+        {
+          "date": "2026-11-19",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": false,
+          "tmax": 28.4,
+          "tmean": 23.45,
+          "tmin": 18.5
+        },
+        {
+          "date": "2026-11-20",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": true,
+          "tmax": 29.8,
+          "tmean": 24.05,
+          "tmin": 18.3
+        },
+        {
+          "date": "2026-11-21",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": true,
+          "isForecast": true,
+          "tmax": 28.8,
+          "tmean": 23.450000000000003,
+          "tmin": 18.1
+        },
+        {
+          "date": "2026-11-22",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": true,
+          "tmax": 28.9,
+          "tmean": 24,
+          "tmin": 19.1
+        },
+        {
+          "date": "2026-11-23",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": true,
+          "tmax": 28.3,
+          "tmean": 23.9,
+          "tmin": 19.5
+        },
+        {
+          "date": "2026-11-24",
+          "ehf": 0,
+          "classification": "Normal",
+          "isToday": false,
+          "isForecast": true,
+          "tmax": 27.6,
+          "tmean": 23.1,
+          "tmin": 18.6
+        }
+      ],
+      "series_30d": [
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-22",
+          "tmean": 20.15,
+          "tmin": 16.2,
+          "tmax": 24.1,
+          "t3d_prev": 19.349999999999998,
+          "ehi_sig": -9.438079470198673,
+          "ehi_accl": -1.6850000000000023,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-23",
+          "tmean": 17.95,
+          "tmin": 16.4,
+          "tmax": 19.5,
+          "t3d_prev": 19.766666666666666,
+          "ehi_sig": -9.021412803532005,
+          "ehi_accl": -1.2616666666666667,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-24",
+          "tmean": 21.200000000000003,
+          "tmin": 16.3,
+          "tmax": 26.1,
+          "t3d_prev": 19.7,
+          "ehi_sig": -9.088079470198672,
+          "ehi_accl": -1.4383333333333326,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-25",
+          "tmean": 19.95,
+          "tmin": 17.7,
+          "tmax": 22.2,
+          "t3d_prev": 19.700000000000003,
+          "ehi_sig": -9.088079470198668,
+          "ehi_accl": -1.43333333333333,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-26",
+          "tmean": 19.6,
+          "tmin": 13.9,
+          "tmax": 25.3,
+          "t3d_prev": 19.4,
+          "ehi_sig": -9.388079470198672,
+          "ehi_accl": -1.6350000000000051,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-27",
+          "tmean": 18.65,
+          "tmin": 12.4,
+          "tmax": 24.9,
+          "t3d_prev": 18.816666666666666,
+          "ehi_sig": -9.971412803532004,
+          "ehi_accl": -2.0533333333333346,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-28",
+          "tmean": 18.2,
+          "tmin": 14.9,
+          "tmax": 21.5,
+          "t3d_prev": 18.766666666666666,
+          "ehi_sig": -10.021412803532005,
+          "ehi_accl": -1.9150000000000027,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-29",
+          "tmean": 19.45,
+          "tmin": 17.4,
+          "tmax": 21.5,
+          "t3d_prev": 19.633333333333333,
+          "ehi_sig": -9.154746136865338,
+          "ehi_accl": -0.9116666666666688,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-30",
+          "tmean": 21.25,
+          "tmin": 16.8,
+          "tmax": 25.7,
+          "t3d_prev": 20.75,
+          "ehi_sig": -8.03807947019867,
+          "ehi_accl": 0.30333333333333456,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-10-31",
+          "tmean": 21.55,
+          "tmin": 16.5,
+          "tmax": 26.6,
+          "t3d_prev": 21.266666666666666,
+          "ehi_sig": -7.521412803532005,
+          "ehi_accl": 0.856666666666662,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-01",
+          "tmean": 21,
+          "tmin": 16.8,
+          "tmax": 25.2,
+          "t3d_prev": 21.266666666666666,
+          "ehi_sig": -7.521412803532005,
+          "ehi_accl": 0.7833333333333314,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-02",
+          "tmean": 21.85,
+          "tmin": 17.8,
+          "tmax": 25.9,
+          "t3d_prev": 21.8,
+          "ehi_sig": -6.98807947019867,
+          "ehi_accl": 1.1783333333333346,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-03",
+          "tmean": 22.55,
+          "tmin": 17,
+          "tmax": 28.1,
+          "t3d_prev": 22.733333333333334,
+          "ehi_sig": -6.054746136865337,
+          "ehi_accl": 2.015000000000004,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-04",
+          "tmean": 23.8,
+          "tmin": 17.6,
+          "tmax": 30,
+          "t3d_prev": 23.25,
+          "ehi_sig": -5.538079470198671,
+          "ehi_accl": 2.423333333333332,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-05",
+          "tmean": 23.4,
+          "tmin": 18.2,
+          "tmax": 28.6,
+          "t3d_prev": 23.516666666666666,
+          "ehi_sig": -5.271412803532005,
+          "ehi_accl": 2.611666666666668,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-06",
+          "tmean": 23.35,
+          "tmin": 17.4,
+          "tmax": 29.3,
+          "t3d_prev": 23.666666666666668,
+          "ehi_sig": -5.121412803532003,
+          "ehi_accl": 2.678333333333331,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-07",
+          "tmean": 24.25,
+          "tmin": 18.8,
+          "tmax": 29.7,
+          "t3d_prev": 22.5,
+          "ehi_sig": -6.288079470198671,
+          "ehi_accl": 1.4449999999999967,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-08",
+          "tmean": 19.9,
+          "tmin": 15.5,
+          "tmax": 24.3,
+          "t3d_prev": 22.5,
+          "ehi_sig": -6.288079470198671,
+          "ehi_accl": 1.5849999999999973,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-archive"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-09",
+          "tmean": 17.15,
+          "tmin": 14.3,
+          "tmax": 20,
+          "t3d_prev": 18.483333333333334,
+          "ehi_sig": -10.304746136865337,
+          "ehi_accl": -2.2699999999999996,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-10",
+          "tmean": 16.3,
+          "tmin": 13,
+          "tmax": 19.6,
+          "t3d_prev": 17.5,
+          "ehi_sig": -11.28807947019867,
+          "ehi_accl": -3.0766666666666644,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-11",
+          "tmean": 19.3,
+          "tmin": 14.3,
+          "tmax": 24.3,
+          "t3d_prev": 18.733333333333334,
+          "ehi_sig": -10.054746136865337,
+          "ehi_accl": -1.836666666666666,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-12",
+          "tmean": 20.5,
+          "tmin": 15.6,
+          "tmax": 25.4,
+          "t3d_prev": 20.333333333333332,
+          "ehi_sig": -8.454746136865339,
+          "ehi_accl": -0.2083333333333357,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-13",
+          "tmean": 20.65,
+          "tmin": 16.2,
+          "tmax": 25.1,
+          "t3d_prev": 20.849999999999998,
+          "ehi_sig": -7.938079470198673,
+          "ehi_accl": 0.34999999999999787,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-14",
+          "tmean": 21.6,
+          "tmin": 15.8,
+          "tmax": 27.4,
+          "t3d_prev": 21.333333333333332,
+          "ehi_sig": -7.454746136865339,
+          "ehi_accl": 0.8449999999999989,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-15",
+          "tmean": 21.75,
+          "tmin": 16.4,
+          "tmax": 27.1,
+          "t3d_prev": 21.400000000000002,
+          "ehi_sig": -7.388079470198669,
+          "ehi_accl": 0.951666666666668,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-16",
+          "tmean": 20.4,
+          "tmin": 16.8,
+          "tmax": 24,
+          "t3d_prev": 21.266666666666666,
+          "ehi_sig": -7.521412803532005,
+          "ehi_accl": 0.8133333333333326,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-17",
+          "tmean": 21.799999999999997,
+          "tmin": 16.2,
+          "tmax": 27.4,
+          "t3d_prev": 21.5,
+          "ehi_sig": -7.288079470198671,
+          "ehi_accl": 0.9866666666666681,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-18",
+          "tmean": 22.950000000000003,
+          "tmin": 17.3,
+          "tmax": 28.6,
+          "t3d_prev": 22.53333333333333,
+          "ehi_sig": -6.254746136865339,
+          "ehi_accl": 1.8749999999999964,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-19",
+          "tmean": 23.45,
+          "tmin": 18.5,
+          "tmax": 28.4,
+          "t3d_prev": 23.400000000000002,
+          "ehi_sig": -5.388079470198669,
+          "ehi_accl": 2.6050000000000004,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-20",
+          "tmean": 24.05,
+          "tmin": 18.3,
+          "tmax": 29.8,
+          "t3d_prev": 23.650000000000002,
+          "ehi_sig": -5.138079470198669,
+          "ehi_accl": 2.7183333333333373,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-21",
+          "tmean": 23.450000000000003,
+          "tmin": 18.1,
+          "tmax": 28.8,
+          "t3d_prev": 23.833333333333332,
+          "ehi_sig": -4.954746136865339,
+          "ehi_accl": 2.7916666666666643,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
+        }
+      ],
+      "captura_brt": "2026-11-20 22:39"
+    },
+    "previsao_8dias_calor": [
+      {
+        "data_iso": "2026-11-20",
+        "data_br": "20/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 31.0,
+        "t_mean_c": 27.0,
+        "ic_max_c": 37.1,
+        "ic_min_c": 24.8,
+        "hora_pico_ic": "14:00",
+        "horas_ge_36": 5,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 27.17,
+        "tmax_3d_media_c": 31.3,
+        "ehi_sig": -1.62,
+        "ehi_accl": 3.37,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 2,
+        "cor_nivel": "NC2",
+        "cor_nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "faixa_pico": "Alto — Patamar COR (36–40°C)",
+        "faixa_pico_cor": "#F97316",
+        "dias_consecutivos_36": 2,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-21",
+        "data_br": "21/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 33.0,
+        "t_mean_c": 28.0,
+        "ic_max_c": 36.8,
+        "ic_min_c": 24.6,
+        "hora_pico_ic": "10:00",
+        "horas_ge_36": 4,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 27.5,
+        "tmax_3d_media_c": 32.0,
+        "ehi_sig": -1.29,
+        "ehi_accl": 3.7,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 2,
+        "cor_nivel": "NC2",
+        "cor_nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "faixa_pico": "Alto — Patamar COR (36–40°C)",
+        "faixa_pico_cor": "#F97316",
+        "dias_consecutivos_36": 2,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-22",
+        "data_br": "22/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 30.0,
+        "t_mean_c": 26.5,
+        "ic_max_c": 35.8,
+        "ic_min_c": 24.8,
+        "hora_pico_ic": "10:00",
+        "horas_ge_36": 0,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 27.17,
+        "tmax_3d_media_c": 31.3,
+        "ehi_sig": -1.62,
+        "ehi_accl": 3.37,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 1,
+        "cor_nivel": "NC1",
+        "cor_nome": "Calor 1 — Normalidade",
+        "cor_hex": "#10B981",
+        "faixa_pico": "Extrema Precaução (32–36°C)",
+        "faixa_pico_cor": "#EAB308",
+        "dias_consecutivos_36": 0,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-23",
+        "data_br": "23/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 33.0,
+        "t_mean_c": 28.0,
+        "ic_max_c": 47.6,
+        "ic_min_c": 26.0,
+        "hora_pico_ic": "13:00",
+        "horas_ge_36": 9,
+        "horas_ge_40": 5,
+        "horas_ge_44": 2,
+        "t3d_media_c": 27.5,
+        "tmax_3d_media_c": 32.0,
+        "ehi_sig": -1.29,
+        "ehi_accl": 3.7,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 2,
+        "cor_nivel": "NC2",
+        "cor_nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "faixa_pico": "Extremo (> 44°C)",
+        "faixa_pico_cor": "#DC2626",
+        "dias_consecutivos_36": 1,
+        "dias_consecutivos_40": 1,
+        "dias_consecutivos_44": 1
+      },
+      {
+        "data_iso": "2026-11-24",
+        "data_br": "24/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 31.0,
+        "t_mean_c": 27.0,
+        "ic_max_c": 34.9,
+        "ic_min_c": 25.5,
+        "hora_pico_ic": "10:00",
+        "horas_ge_36": 0,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 26.33,
+        "tmax_3d_media_c": 30.3,
+        "ehi_sig": -2.45,
+        "ehi_accl": 2.53,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 1,
+        "cor_nivel": "NC1",
+        "cor_nome": "Calor 1 — Normalidade",
+        "cor_hex": "#10B981",
+        "faixa_pico": "Extrema Precaução (32–36°C)",
+        "faixa_pico_cor": "#EAB308",
+        "dias_consecutivos_36": 0,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-25",
+        "data_br": "25/11/2026",
+        "t_min_c": 23.0,
+        "t_max_c": 32.0,
+        "t_mean_c": 27.5,
+        "ic_max_c": 42.6,
+        "ic_min_c": 25.2,
+        "hora_pico_ic": "13:00",
+        "horas_ge_36": 10,
+        "horas_ge_40": 6,
+        "horas_ge_44": 0,
+        "t3d_media_c": 24.83,
+        "tmax_3d_media_c": 28.0,
+        "ehi_sig": -3.95,
+        "ehi_accl": 1.03,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 2,
+        "cor_nivel": "NC2",
+        "cor_nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "faixa_pico": "Muito Alto (40–44°C)",
+        "faixa_pico_cor": "#EA580C",
+        "dias_consecutivos_36": 1,
+        "dias_consecutivos_40": 1,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-26",
+        "data_br": "26/11/2026",
+        "t_min_c": 21.0,
+        "t_max_c": 28.0,
+        "t_mean_c": 24.5,
+        "ic_max_c": 32.8,
+        "ic_min_c": 23.7,
+        "hora_pico_ic": "11:00",
+        "horas_ge_36": 0,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 23.5,
+        "tmax_3d_media_c": 26.0,
+        "ehi_sig": -5.29,
+        "ehi_accl": -0.3,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 1,
+        "cor_nivel": "NC1",
+        "cor_nome": "Calor 1 — Normalidade",
+        "cor_hex": "#10B981",
+        "faixa_pico": "Extrema Precaução (32–36°C)",
+        "faixa_pico_cor": "#EAB308",
+        "dias_consecutivos_36": 0,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      },
+      {
+        "data_iso": "2026-11-27",
+        "data_br": "27/11/2026",
+        "t_min_c": 21.0,
+        "t_max_c": 24.0,
+        "t_mean_c": 22.5,
+        "ic_max_c": 23.2,
+        "ic_min_c": 21.2,
+        "hora_pico_ic": "00:00",
+        "horas_ge_36": 0,
+        "horas_ge_40": 0,
+        "horas_ge_44": 0,
+        "t3d_media_c": 22.5,
+        "tmax_3d_media_c": 24.0,
+        "ehi_sig": -6.29,
+        "ehi_accl": -1.3,
+        "ehf_local": 0.0,
+        "ehf_classificacao": "Sem excesso (Normal)",
+        "ses_rj_alerta": "Verde — Sem excesso de calor",
+        "cor_nivel_num": 1,
+        "cor_nivel": "NC1",
+        "cor_nome": "Calor 1 — Normalidade",
+        "cor_hex": "#10B981",
+        "faixa_pico": "Conforto Térmico (< 27°C)",
+        "faixa_pico_cor": "#10B981",
+        "dias_consecutivos_36": 0,
+        "dias_consecutivos_40": 0,
+        "dias_consecutivos_44": 0
+      }
+    ],
+    "cor_niveis_referencia": [
+      {
+        "nivel": "NC1",
+        "nome": "Calor 1 — Normalidade",
+        "cor_hex": "#10B981",
+        "criterio": "Sem previsão ou registro de índices de calor altos (>= 36°C).",
+        "acao": "Sem impactos na rotina da cidade."
+      },
+      {
+        "nivel": "NC2",
+        "nome": "Calor 2 — Atenção Térmica",
+        "cor_hex": "#EAB308",
+        "criterio": "Índices de calor altos (36°C a 40°C) por 1 ou 2 dias consecutivos.",
+        "acao": "Coordenação e disseminação de informações sobre sintomas de exposição ao calor e hidratação; rotina sem alterações."
+      },
+      {
+        "nivel": "NC3",
+        "nome": "Calor 3 — Persistência de Calor",
+        "cor_hex": "#F97316",
+        "criterio": "Índices de calor altos (36°C a 40°C) com permanência ou aumento por ao menos 3 dias consecutivos.",
+        "acao": "Reforço intensivo da comunicação preventiva e alerta da Saúde para grupos vulneráveis (idosos, crianças e trabalhadores externos)."
+      },
+      {
+        "nivel": "NC4",
+        "nome": "Calor 4 — Calor Muito Alto",
+        "cor_hex": "#EA580C",
+        "criterio": "Índices de calor muito altos (40°C a 44°C) com permanência ou aumento por ao menos 3 dias consecutivos.",
+        "acao": "Adaptação de rotinas expostas ao sol, indicação de pontos de resfriamento/climatização e sombreamento adequado."
+      },
+      {
+        "nivel": "NC5",
+        "nome": "Calor 5 — Calor Extremo",
+        "cor_hex": "#DC2626",
+        "criterio": "Índices de calor extremos (acima de 44°C) com permanência ou aumento por ao menos 3 dias consecutivos.",
+        "acao": "Abertura de pontos de resfriamento, possível suspensão de atividades externas de risco/eventos e boletins meteorológicos de 6h em 6h."
+      }
+    ]
+  },
   "inea_radartool": {
     "disponivel": true,
     "estagio": "Vigilância",
     "estagio_indice": 0,
-    "atualizado_em": "2026-11-20T22:02:11-03:00",
-    "url": "https://radartool.inea.rj.gov.br/radar-tool/",
-    "cached_fallback": true
+    "atualizado_em": "2026-11-20T22:39:43-03:00",
+    "url": "https://radartool.inea.rj.gov.br/radar-tool/"
   },
   "inea_boletim_hidrometeorologico": {
     "orgao": "Instituto Estadual do Ambiente - INEA",
@@ -6561,8 +7574,8 @@
         "tem_chuva_icone": true,
         "temp_max": 34,
         "temp_min": 23,
-        "condicao": "No sábado, áreas de instabilidade devido à disponibilidade de calor e umidade seguem influenciando o tempo no estado do Rio de Janeiro. O céu varia de parcialmente nublado a nublado e, a partir da tarde, há previsão de pancadas de chuva com raios para todas as regiões hidrográficas do estado. Devido ás chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão estáveis no estado.",
-        "comportamento_rios": "Devido ás chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados.",
+        "condicao": "No sábado, áreas de instabilidade devido à disponibilidade de calor e umidade seguem influenciando o tempo no estado do Rio de Janeiro. O céu varia de parcialmente nublado a nublado e, a partir da tarde, há previsão de pancadas de chuva com raios para todas as regiões hidrográficas do estado. Devido às chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão estáveis no estado.",
+        "comportamento_rios": "Devido às chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados.",
         "modelo_meteorologico": "COSMO / INMET adaptado pela Sala de Situação INEA",
         "extraido_pdf": true
       }
@@ -6570,7 +7583,329 @@
     "contato_sala_situacao": "(21) 2334-9307",
     "url_oficial": "https://alertadecheias.inea.rj.gov.br/analise.php"
   },
-  "inea_macae_ostras": null,
+  "inea_macae_ostras": {
+    "fonte": "INEA - Sistema de Alerta de Cheias",
+    "url_oficial": "https://alertadecheias.inea.rj.gov.br/dados/macae_e_das_ostras.php",
+    "atualizacao": "20/11/2026 22:39",
+    "bacia": "Rios Macaé e das Ostras",
+    "alerta_macae": {
+      "tem_elevacao_fora_limite": true,
+      "maior_nivel": "ALERTA",
+      "qtd_estacoes_elevadas": 5,
+      "estacoes_afetadas": [
+        {
+          "municipio": "Macaé",
+          "curso_agua": "rio São Pedro",
+          "estacao": "São Pedro",
+          "tendencia": "Subindo",
+          "leitura": "20/11/2026 22:30",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "0.84",
+          "nivel_15min_m": "0.82",
+          "chuva_24h_mm": "0",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
+        },
+        {
+          "municipio": "Macaé",
+          "curso_agua": "rio São Pedro",
+          "estacao": "Glicério",
+          "tendencia": "Estavel",
+          "leitura": "13/11/2026 07:15",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "-",
+          "nivel_15min_m": "-",
+          "chuva_24h_mm": "0",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/22134203020.html"
+        },
+        {
+          "municipio": "Macaé",
+          "curso_agua": "rio Sana",
+          "estacao": "Barra do Sana",
+          "tendencia": "Descendo",
+          "leitura": "20/11/2026 21:00",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.79",
+          "nivel_15min_m": "1.82",
+          "chuva_24h_mm": "1.8",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70848020.html"
+        },
+        {
+          "municipio": "Macaé",
+          "curso_agua": "Lagoa Imboassica",
+          "estacao": "Lagoa de Imboassica",
+          "tendencia": "Estavel",
+          "leitura": "20/11/2026 21:15",
+          "status_bruto": "ALERTA",
+          "status": "ALERTA",
+          "cor_badge": "danger",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.35",
+          "nivel_15min_m": "1.35",
+          "chuva_24h_mm": "0",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71131820.html"
+        },
+        {
+          "municipio": "Macaé",
+          "curso_agua": "rio Macaé",
+          "estacao": "Ponte do Baião",
+          "tendencia": "Subindo",
+          "leitura": "20/11/2026 21:00",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.93",
+          "nivel_15min_m": "1.9",
+          "chuva_24h_mm": "0.2",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71501220.html"
+        }
+      ],
+      "resumo_texto": "5 estação(ões) em Macaé fora da cota de segurança (ALERTA): São Pedro (ATENÇÃO: 0.84 m), Glicério (ATENÇÃO), Barra do Sana (ATENÇÃO: 1.79 m), Lagoa de Imboassica (ALERTA: 1.35 m), Ponte do Baião (ATENÇÃO: 1.93 m)"
+    },
+    "alerta_friburgo_cabeceiras": {
+      "tem_elevacao": true,
+      "estacoes_afetadas": [
+        {
+          "municipio": "Nova Friburgo",
+          "curso_agua": "rio Macaé",
+          "estacao": "Macaé de Cima",
+          "tendencia": "Descendo",
+          "leitura": "20/11/2026 21:15",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.05",
+          "nivel_15min_m": "1.07",
+          "chuva_24h_mm": "34",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70677220.html"
+        },
+        {
+          "municipio": "Nova Friburgo",
+          "curso_agua": "rio Bonito",
+          "estacao": "Piller",
+          "tendencia": "Subindo",
+          "leitura": "20/11/2026 21:15",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.22",
+          "nivel_15min_m": "1.16",
+          "chuva_24h_mm": "2.4",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70740420.html"
+        },
+        {
+          "municipio": "Nova Friburgo",
+          "curso_agua": "rio Macaé",
+          "estacao": "São Romão",
+          "tendencia": "Estavel",
+          "leitura": "20/11/2026 21:00",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "0.82",
+          "nivel_15min_m": "0.82",
+          "chuva_24h_mm": "37.6",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71268220.html"
+        },
+        {
+          "municipio": "Nova Friburgo",
+          "curso_agua": "rio Macaé",
+          "estacao": "Galdinópolis",
+          "tendencia": "Descendo",
+          "leitura": "20/11/2026 21:00",
+          "status_bruto": "ATENÇÃO",
+          "status": "ATENÇÃO",
+          "cor_badge": "warning",
+          "fora_limite_seguranca": true,
+          "nivel_atual_m": "1.08",
+          "nivel_15min_m": "1.11",
+          "chuva_24h_mm": "20.4",
+          "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE7135F420.html"
+        }
+      ]
+    },
+    "estacoes_rio_das_ostras": [
+      {
+        "municipio": "Rio das Ostras",
+        "curso_agua": "rio Jundiá",
+        "estacao": "Jundiá",
+        "tendencia": "Estável",
+        "leitura": "20/11/2026 19:30",
+        "status_bruto": "VIGILÂNCIA",
+        "status": "VIGILÂNCIA",
+        "cor_badge": "success",
+        "fora_limite_seguranca": false,
+        "nivel_atual_m": "1.61",
+        "nivel_15min_m": "1.61",
+        "chuva_24h_mm": "0.0",
+        "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
+      }
+    ],
+    "todas_estacoes": [
+      {
+        "municipio": "Rio das Ostras",
+        "curso_agua": "rio Jundiá",
+        "estacao": "Jundiá",
+        "tendencia": "Estável",
+        "leitura": "20/11/2026 19:30",
+        "status_bruto": "VIGILÂNCIA",
+        "status": "VIGILÂNCIA",
+        "cor_badge": "success",
+        "fora_limite_seguranca": false,
+        "nivel_atual_m": "1.61",
+        "nivel_15min_m": "1.61",
+        "chuva_24h_mm": "0.0",
+        "link": "https://alertadecheias.com.br/#/stations-info?station=2241036"
+      },
+      {
+        "municipio": "Macaé",
+        "curso_agua": "rio São Pedro",
+        "estacao": "São Pedro",
+        "tendencia": "Subindo",
+        "leitura": "20/11/2026 22:30",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "0.84",
+        "nivel_15min_m": "0.82",
+        "chuva_24h_mm": "0",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/224103120.html"
+      },
+      {
+        "municipio": "Macaé",
+        "curso_agua": "rio São Pedro",
+        "estacao": "Glicério",
+        "tendencia": "Estavel",
+        "leitura": "13/11/2026 07:15",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "-",
+        "nivel_15min_m": "-",
+        "chuva_24h_mm": "0",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/22134203020.html"
+      },
+      {
+        "municipio": "Nova Friburgo",
+        "curso_agua": "rio Macaé",
+        "estacao": "Macaé de Cima",
+        "tendencia": "Descendo",
+        "leitura": "20/11/2026 21:15",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.05",
+        "nivel_15min_m": "1.07",
+        "chuva_24h_mm": "34",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70677220.html"
+      },
+      {
+        "municipio": "Nova Friburgo",
+        "curso_agua": "rio Bonito",
+        "estacao": "Piller",
+        "tendencia": "Subindo",
+        "leitura": "20/11/2026 21:15",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.22",
+        "nivel_15min_m": "1.16",
+        "chuva_24h_mm": "2.4",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70740420.html"
+      },
+      {
+        "municipio": "Macaé",
+        "curso_agua": "rio Sana",
+        "estacao": "Barra do Sana",
+        "tendencia": "Descendo",
+        "leitura": "20/11/2026 21:00",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.79",
+        "nivel_15min_m": "1.82",
+        "chuva_24h_mm": "1.8",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE70848020.html"
+      },
+      {
+        "municipio": "Macaé",
+        "curso_agua": "Lagoa Imboassica",
+        "estacao": "Lagoa de Imboassica",
+        "tendencia": "Estavel",
+        "leitura": "20/11/2026 21:15",
+        "status_bruto": "ALERTA",
+        "status": "ALERTA",
+        "cor_badge": "danger",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.35",
+        "nivel_15min_m": "1.35",
+        "chuva_24h_mm": "0",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71131820.html"
+      },
+      {
+        "municipio": "Nova Friburgo",
+        "curso_agua": "rio Macaé",
+        "estacao": "São Romão",
+        "tendencia": "Estavel",
+        "leitura": "20/11/2026 21:00",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "0.82",
+        "nivel_15min_m": "0.82",
+        "chuva_24h_mm": "37.6",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71268220.html"
+      },
+      {
+        "municipio": "Nova Friburgo",
+        "curso_agua": "rio Macaé",
+        "estacao": "Galdinópolis",
+        "tendencia": "Descendo",
+        "leitura": "20/11/2026 21:00",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.08",
+        "nivel_15min_m": "1.11",
+        "chuva_24h_mm": "20.4",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE7135F420.html"
+      },
+      {
+        "municipio": "Macaé",
+        "curso_agua": "rio Macaé",
+        "estacao": "Ponte do Baião",
+        "tendencia": "Subindo",
+        "leitura": "20/11/2026 21:00",
+        "status_bruto": "ATENÇÃO",
+        "status": "ATENÇÃO",
+        "cor_badge": "warning",
+        "fora_limite_seguranca": true,
+        "nivel_atual_m": "1.93",
+        "nivel_15min_m": "1.9",
+        "chuva_24h_mm": "0.2",
+        "link": "https://alertadecheias.inea.rj.gov.br/dados/../alertadecheias/BE71501220.html"
+      }
+    ]
+  },
   "orla_condicoes": {
     "status_geral": "Aviso de Vento Forte Vigente da Marinha (nº 808/2026)",
     "badge": "VENTO FORTE",
@@ -6586,23 +7921,23 @@
       {
         "key": "d0",
         "rotulo": "Hoje",
+        "data_iso": "2026-11-20",
+        "data_br": "20/11",
+        "dia_semana": "Sexta"
+      },
+      {
+        "key": "d1",
+        "rotulo": "Amanhã",
         "data_iso": "2026-11-21",
         "data_br": "21/11",
         "dia_semana": "Sábado"
       },
       {
-        "key": "d1",
-        "rotulo": "Amanhã",
+        "key": "d2",
+        "rotulo": "Depois de amanhã",
         "data_iso": "2026-11-22",
         "data_br": "22/11",
         "dia_semana": "Domingo"
-      },
-      {
-        "key": "d2",
-        "rotulo": "Depois de amanhã",
-        "data_iso": "2026-11-23",
-        "data_br": "23/11",
-        "dia_semana": "Segunda"
       }
     ],
     "praias_condicoes": [
@@ -6963,31 +8298,37 @@
     ],
     "tabua_resumo": {
       "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-      "data": "2026-11-21",
+      "data": "2026-11-20",
       "proxima_mare": {
-        "tipo": "BAIXA-MAR",
-        "hora": "05:57",
-        "altura": 0.17,
-        "rotulo": "Baixa-mar (0.2 m)"
+        "tipo": "PREAMAR",
+        "hora": "23:44",
+        "altura": 1.38,
+        "rotulo": "Preia-mar (1.4 m)"
       },
       "mares_do_dia": [
         {
           "tipo": "BAIXA-MAR",
-          "hora": "05:57",
-          "altura": 0.17,
+          "hora": "05:06",
+          "altura": 0.22,
           "rotulo": "Baixa-mar (0.2 m)"
         },
         {
           "tipo": "PREAMAR",
-          "hora": "12:09",
-          "altura": 1.42,
-          "rotulo": "Preia-mar (1.4 m)"
+          "hora": "11:19",
+          "altura": 1.34,
+          "rotulo": "Preia-mar (1.3 m)"
         },
         {
           "tipo": "BAIXA-MAR",
-          "hora": "18:22",
-          "altura": 0.16,
+          "hora": "17:32",
+          "altura": 0.19,
           "rotulo": "Baixa-mar (0.2 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "23:44",
+          "altura": 1.38,
+          "rotulo": "Preia-mar (1.4 m)"
         }
       ]
     },
@@ -7286,12 +8627,43 @@
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
     "atualizado_em": "2026-11-21T01:30:09.563385",
     "proxima_mare": {
-      "tipo": "BAIXA-MAR",
-      "hora": "05:57",
-      "altura": 0.17,
-      "rotulo": "Baixa-mar (0.2 m)"
+      "tipo": "PREAMAR",
+      "hora": "23:44",
+      "altura": 1.38,
+      "rotulo": "Preia-mar (1.4 m)"
     },
     "dias": [
+      {
+        "data_iso": "2026-11-20",
+        "data_br": "20/11/2026",
+        "dia_semana": "Sexta",
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "05:06",
+            "altura": 0.22,
+            "rotulo": "Baixa-mar (0.2 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "11:19",
+            "altura": 1.34,
+            "rotulo": "Preia-mar (1.3 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "17:32",
+            "altura": 0.19,
+            "rotulo": "Baixa-mar (0.2 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "23:44",
+            "altura": 1.38,
+            "rotulo": "Preia-mar (1.4 m)"
+          }
+        ]
+      },
       {
         "data_iso": "2026-11-21",
         "data_br": "21/11/2026",
@@ -7471,37 +8843,6 @@
             "rotulo": "Baixa-mar (0.3 m)"
           }
         ]
-      },
-      {
-        "data_iso": "2026-11-27",
-        "data_br": "27/11/2026",
-        "dia_semana": "Sexta",
-        "eventos": [
-          {
-            "tipo": "PREAMAR",
-            "hora": "04:47",
-            "altura": 1.03,
-            "rotulo": "Preia-mar (1.0 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "11:00",
-            "altura": 0.37,
-            "rotulo": "Baixa-mar (0.4 m)"
-          },
-          {
-            "tipo": "PREAMAR",
-            "hora": "17:12",
-            "altura": 0.98,
-            "rotulo": "Preia-mar (1.0 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "23:25",
-            "altura": 0.4,
-            "rotulo": "Baixa-mar (0.4 m)"
-          }
-        ]
       }
     ]
   },
@@ -7592,7 +8933,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.62 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.61 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
@@ -7642,11 +8983,11 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.62 m",
+    "jundia_nivel": "1.61 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "15.0 mm",
-    "chuva_4d": "20.3 mm",
-    "chuva_8d": "79.8 mm",
+    "chuva_4d": "23.1 mm",
+    "chuva_8d": "100.3 mm",
     "aviso_marinha": "FORÇA 7",
     "pico_calor": "33°C",
     "plancon_status": "ATENÇÃO"

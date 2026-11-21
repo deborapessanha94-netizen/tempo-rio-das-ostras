@@ -55,6 +55,7 @@ import {
   InmetAviso,
   MarinhaAvisoItem,
   MarinhaAvisos,
+  HeatIndicesDataset,
   OpenMeteoData,
   OrlaDataset,
   SITE_BASE,
@@ -81,10 +82,11 @@ import {
 import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart';
 import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartInstagram';
 import { RiverChart } from './components/RiverChart';
+import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex';
 import { SocialExportModal } from './components/SocialExportModal';
 import { PwaInstallModal } from './components/PwaInstallModal';
 
-type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'boletim' | 'panorama';
+type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'calor' | 'boletim' | 'panorama';
 type PlanconSubTab = 'limiares' | 'bairros' | 'niveis' | 'resposta' | 'elnino';
 
 const NAV_ITEMS: { id: SectionTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
@@ -93,6 +95,7 @@ const NAV_ITEMS: { id: SectionTab; label: string; icon: React.ComponentType<{ cl
   { id: 'rio', label: 'Nível do Rio', icon: Waves },
   { id: 'orla', label: 'Orla & Praias', icon: Umbrella },
   { id: 'alertas', label: 'Alertas & Sinótico', icon: ShieldAlert },
+  { id: 'calor', label: 'Índices de Calor', icon: Flame },
   { id: 'boletim', label: 'Boletim 16 Turnos', icon: CalendarClock },
   { id: 'panorama', label: 'Panorama Mensal', icon: Film },
 ];
@@ -128,6 +131,13 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string; shortLabe
   alertas: [
     { id: 'avisos', label: 'Alertas Meteorológicos Vigentes', shortLabel: 'Alertas' },
     { id: 'cemaden', label: 'Riscos Geo-Hidrológicos (CEMADEN)', shortLabel: 'CEMADEN' },
+    { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
+  ],
+  calor: [
+    { id: 'agora', label: 'Nível COR & Estações Agora (Tempo Real)', shortLabel: 'Agora' },
+    { id: 'previsao', label: 'Projeção 8 Dias (COR-Rio NC1–NC5)', shortLabel: '8 Dias COR' },
+    { id: 'oficiais', label: 'Painel Oficial EHF (Clima & Saúde / SES-RJ)', shortLabel: 'EHF MS/RJ' },
+    { id: 'protocolo', label: 'Critérios Oficiais COR-Rio (NC1–NC5)', shortLabel: 'Protocolo' },
     { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
   ],
   boletim: [
@@ -204,7 +214,7 @@ export default function App() {
     try {
       const p = new URLSearchParams(window.location.search);
       const t = p.get('tab') as SectionTab;
-      if (t && ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'boletim', 'panorama'].includes(t)) return t;
+      if (t && ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'calor', 'boletim', 'panorama'].includes(t)) return t;
     } catch {}
     return 'previsao';
   });
@@ -215,6 +225,7 @@ export default function App() {
       rio: 'cota',
       orla: 'mar',
       alertas: 'avisos',
+      calor: 'agora',
       boletim: 'turnos',
       panorama: 'video',
     };
@@ -279,6 +290,7 @@ export default function App() {
   const [balneabilidade, setBalneabilidade] = useState<BalneabilidadeDataset | null>(null);
   const [tabuaMares, setTabuaMares] = useState<TabuaMares | null>(null);
   const [historico, setHistorico] = useState<HistoricoEstacoesDataset | null>(null);
+  const [heatIndices, setHeatIndices] = useState<HeatIndicesDataset | null>(null);
   const [openMeteo, setOpenMeteo] = useState<OpenMeteoData | null>(null);
 
   // Inner controls
@@ -438,6 +450,7 @@ export default function App() {
       if (res.balneabilidade) setBalneabilidade(res.balneabilidade);
       if (res.tabuaMares) setTabuaMares(res.tabuaMares);
       if (res.historico) setHistorico(res.historico);
+      if (res.heatIndices) setHeatIndices(res.heatIndices);
       if (res.openMeteo) setOpenMeteo(res.openMeteo);
     } finally {
       setLoading(false);
@@ -1227,6 +1240,17 @@ export default function App() {
     return 'Normalidade Operacional';
   })();
 
+  const liveHeat = useMemo(
+    () =>
+      recomputeLiveHeatIndices({
+        baseHeat: heatIndices,
+        acumulados,
+        openMeteo,
+        boletimMeta,
+      }),
+    [heatIndices, acumulados, openMeteo, boletimMeta]
+  );
+
   const todayDateFull = useMemo(() => {
     const raw = new Intl.DateTimeFormat('pt-BR', {
       weekday: 'long',
@@ -1467,6 +1491,17 @@ export default function App() {
                             }`}
                           >
                             {inmetOstrasVigentesHoje.length + marinhaDeltaVigentesAgora.length}
+                          </span>
+                        )}
+                        {item.id === 'calor' && (liveHeat?.agora?.cor_nivel_num || 1) >= 2 && (
+                          <span
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold tabular-nums shrink-0 ${
+                              isActive
+                                ? 'bg-white/20 text-white dark:bg-[#000000]/15 dark:text-[#000000]'
+                                : 'bg-amber-500/15 text-amber-600 dark:text-amber-300'
+                            }`}
+                          >
+                            {liveHeat?.agora?.cor_nivel}
                           </span>
                         )}
                       </span>
@@ -6204,6 +6239,363 @@ export default function App() {
                 )}
               </section>
             )}
+          </div>
+        )}
+
+        {/* ================= ABA 5.5: ÍNDICES DE CALOR (COR-RIO + CLIMA SAÚDE MS + SES-RJ) ================= */}
+        {activeTab === 'calor' && (
+          <div className="space-y-8">
+            <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 sm:p-8 space-y-5">
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
+                <div>
+                  <h1 className="font-display text-2xl font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
+                    <Flame className="w-6 h-6 text-[#FF8244]" />
+                    Índices de Calor &amp; Protocolo COR — Rio das Ostras
+                  </h1>
+                  <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
+                    Cálculo em tempo real (Estações Locais 20s + Rothfusz/NOAA), Níveis COR-Rio (NC1–NC5) e Excesso de Calor (EHF — Clima e Saúde MS / SES-RJ).
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                  <a
+                    href="https://cor.rio/niveis-de-calor/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] font-semibold text-[#14213D] dark:text-[#FF8244] hover:border-[#FF8244]"
+                  >
+                    COR-Rio NC1–NC5 <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a
+                    href="https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] font-semibold text-[#14213D] dark:text-[#FF8244] hover:border-[#FF8244]"
+                  >
+                    Clima e Saúde (MS) <ExternalLink className="w-3 h-3" />
+                  </a>
+                  <a
+                    href="https://cisshiny.saude.rj.gov.br/excesso_calor/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] font-semibold text-[#14213D] dark:text-[#FF8244] hover:border-[#FF8244]"
+                  >
+                    SES-RJ (CIS) <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+
+              {showSub('agora') && liveHeat && (
+                <div className="space-y-5">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                    <div
+                      className="lg:col-span-5 rounded-xl p-5 border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] flex flex-col justify-between gap-3"
+                      style={{ borderLeftWidth: '5px', borderLeftColor: liveHeat.agora.cor_hex }}
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/70">
+                            Protocolo Oficial COR-Rio (Hoje)
+                          </span>
+                          <span
+                            className="px-2.5 py-0.5 rounded-full font-mono text-xs font-bold text-white"
+                            style={{ backgroundColor: liveHeat.agora.cor_hex }}
+                          >
+                            {liveHeat.agora.cor_nivel}
+                          </span>
+                        </div>
+                        <h2 className="font-display text-xl font-bold text-[#14213D] dark:text-white">
+                          {liveHeat.agora.cor_nome}
+                        </h2>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
+                          <strong className="text-[#14213D] dark:text-white">Critério:</strong> {liveHeat.agora.cor_criterio}
+                        </p>
+                        <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-relaxed">
+                          <strong className="text-[#14213D] dark:text-white">Ação COR:</strong> {liveHeat.agora.cor_acao}
+                        </p>
+                      </div>
+                      <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap gap-3 text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80">
+                        <span>
+                          Pico hoje: <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.ic_pico_hoje_c ?? '--'}°C</strong> ({liveHeat.agora.hora_pico_hoje})
+                        </span>
+                        <span>·</span>
+                        <span>
+                          Horas ≥36°C: <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.horas_ge_36_hoje}h</strong>
+                        </span>
+                        <span>·</span>
+                        <span>
+                          Sequência ≥36°C: <strong className="text-[#14213D] dark:text-white">{liveHeat.agora.dias_consecutivos_36}d</strong>
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                        <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
+                          Índice de Calor Agora
+                        </div>
+                        <div className="text-3xl font-mono font-bold text-[#14213D] dark:text-white mt-1 tabular-nums">
+                          {liveHeat.agora.ic_rede_c !== null ? `${liveHeat.agora.ic_rede_c.toFixed(1)}°C` : '--'}
+                        </div>
+                        <div
+                          className="text-[11px] font-semibold mt-1"
+                          style={{ color: liveHeat.agora.faixa_instantanea.cor }}
+                        >
+                          {liveHeat.agora.faixa_instantanea.faixa}
+                        </div>
+                      </div>
+
+                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                        <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
+                          Temp. / UR Média Rede
+                        </div>
+                        <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white mt-1 tabular-nums">
+                          {liveHeat.agora.temp_rede_c !== null && liveHeat.agora.temp_rede_c !== undefined
+                            ? `${Number(liveHeat.agora.temp_rede_c).toFixed(1)}°C`
+                            : '--'}
+                        </div>
+                        <div className="text-xs font-mono text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
+                          Umidade: {liveHeat.agora.ur_rede_pct ?? '--'}%
+                        </div>
+                      </div>
+
+                      <div className="col-span-2 sm:col-span-1 p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                        <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
+                          EHF Oficial (Clima Saúde MS)
+                        </div>
+                        <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white mt-1 tabular-nums">
+                          {liveHeat.clima_saude_ms?.profile?.ehf !== undefined
+                            ? Number(liveHeat.clima_saude_ms.profile.ehf).toFixed(2)
+                            : '--'}
+                        </div>
+                        <div className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1">
+                          {liveHeat.clima_saude_ms?.profile?.classification || 'Sem excesso'} · Risco {liveHeat.clima_saude_ms?.risco?.risco_classe || 'Normal'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Estações de Rio das Ostras em Tempo Real (atualização a cada 20s) */}
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h3 className="text-sm font-display font-semibold text-[#14213D] dark:text-white">
+                        Índice de Calor Instantâneo por Estação (Tempo Real · 20s)
+                      </h3>
+                      <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                        Open-Meteo Atual: {liveHeat.agora.ic_openmeteo_c !== null && liveHeat.agora.ic_openmeteo_c !== undefined ? `${liveHeat.agora.ic_openmeteo_c.toFixed(1)}°C` : '--'}
+                      </span>
+                    </div>
+                    {liveHeat.agora.estacoes_tempo_real.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        {liveHeat.agora.estacoes_tempo_real.map((st) => (
+                          <div
+                            key={st.codigo}
+                            className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5"
+                            style={{ borderTopWidth: '3px', borderTopColor: st.cor_hex }}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-xs font-semibold text-[#14213D] dark:text-white truncate">{st.nome}</span>
+                              <span className="text-[10px] font-mono text-slate-400">{st.codigo}</span>
+                            </div>
+                            <div className="flex items-baseline justify-between">
+                              <span className="text-xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums">
+                                {st.ic_c !== null ? `${st.ic_c.toFixed(1)}°C` : '--'}
+                              </span>
+                              <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
+                                {st.temp_c}°C · {st.ur_pct}%
+                              </span>
+                            </div>
+                            <div className="text-[10px] font-semibold" style={{ color: st.cor_hex }}>
+                              {st.faixa}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                        Aguardando leituras termohigrométricas instantâneas das estações locais.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {showSub('previsao') && liveHeat && (
+                <div className="space-y-3 pt-4 border-t border-[#E5E5E5] dark:border-[#233354]">
+                  <div>
+                    <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                      Projeção Diária 8 Dias — Índice de Calor &amp; Nível COR-Rio (NC1 a NC5)
+                    </h2>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                      Calculado hora a hora (NOAA Rothfusz) combinando temperatura do ar, umidade relativa e persistência em dias consecutivos conforme padrão oficial COR.
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {liveHeat.previsao_8dias_calor.map((d) => (
+                      <div
+                        key={d.data_iso}
+                        className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2"
+                        style={{ borderLeftWidth: '4px', borderLeftColor: d.cor_hex }}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-mono text-xs font-bold text-[#14213D] dark:text-white">
+                            {d.data_br.slice(0, 5)}
+                          </span>
+                          <span
+                            className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold text-white"
+                            style={{ backgroundColor: d.cor_hex }}
+                          >
+                            {d.cor_nivel}
+                          </span>
+                        </div>
+                        <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums">
+                          {d.ic_max_c !== null ? `${d.ic_max_c.toFixed(1)}°C` : '--'}
+                        </div>
+                        <div className="text-[11px] font-medium" style={{ color: d.faixa_pico_cor }}>
+                          {d.faixa_pico}
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/75 space-y-0.5 pt-1 border-t border-[#E5E5E5] dark:border-[#233354]">
+                          <div>Temp: {d.t_min_c}° a {d.t_max_c}°C</div>
+                          <div>Pico IC: {d.hora_pico_ic} · {d.horas_ge_36}h ≥ 36°C</div>
+                          {d.ehf_local !== undefined && (
+                            <div>EHF local: {d.ehf_local.toFixed(2)}</div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {showSub('oficiais') && liveHeat && (
+                <div className="space-y-4 pt-4 border-t border-[#E5E5E5] dark:border-[#233354]">
+                  <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                    Monitoramento Oficial de Excesso de Calor (EHF — Clima e Saúde MS &amp; SES-RJ)
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
+                          Painel Nacional Clima e Saúde (MS · IBGE 3304524)
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          {liveHeat.clima_saude_ms?.profile?.dataDate || '--'}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">EHF Oficial</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.clima_saude_ms?.profile?.ehf ?? '--'} ({liveHeat.clima_saude_ms?.profile?.classification || '--'})
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">IMEC / Risco MS</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.clima_saude_ms?.risco?.risco_combinado !== undefined
+                              ? `${Number(liveHeat.clima_saude_ms.risco.risco_combinado).toFixed(2)} (${liveHeat.clima_saude_ms.risco.risco_classe})`
+                              : '--'}
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">T95 Climatológica</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.clima_saude_ms?.profile?.tmean_p95 !== undefined
+                              ? `${Number(liveHeat.clima_saude_ms.profile.tmean_p95).toFixed(2)}°C`
+                              : '28.79°C'}
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">Limiar EHF99 / P75 Máx</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.clima_saude_ms?.profile?.ehf99 !== undefined
+                              ? `${Number(liveHeat.clima_saude_ms.profile.ehf99).toFixed(2)} / ${Number(liveHeat.clima_saude_ms.profile.tmax_pico_p75 ?? 31.05).toFixed(1)}°C`
+                              : '9.34 / 31.1°C'}
+                          </strong>
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75">
+                        Vulnerabilidade socioambiental MS (GeoSES): {liveHeat.clima_saude_ms?.risco?.vulnerabilidade !== undefined ? Number(liveHeat.clima_saude_ms.risco.vulnerabilidade).toFixed(3) : '0.405'}.
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold uppercase tracking-wider text-[#14213D] dark:text-white">
+                          Cálculo Local SES-RJ (Estações Rio das Ostras)
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          Base {liveHeat.ses_rj_ehf_local.dias_observados_base}d locais
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">Média 30d Estações</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.ses_rj_ehf_local.t30d_estacoes_media_c ?? '--'}°C
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">Média 3 Dias (T_i..i+2)</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.ses_rj_ehf_local.hoje?.t3d_media_c ?? '--'}°C (Tmáx {liveHeat.ses_rj_ehf_local.hoje?.tmax_3d_media_c ?? '--'}°C)
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">EHI sig / EHI accl</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.ses_rj_ehf_local.hoje?.ehi_sig ?? '--'} / {liveHeat.ses_rj_ehf_local.hoje?.ehi_accl ?? '--'}
+                          </strong>
+                        </div>
+                        <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                          <span className="text-[10px] text-slate-400 block">Status SES-RJ (&gt;35°C)</span>
+                          <strong className="text-[#14213D] dark:text-white">
+                            {liveHeat.ses_rj_ehf_local.hoje?.ses_rj_alerta || '--'}
+                          </strong>
+                        </div>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75">
+                        Fórmula SES-RJ: EHF = EHI_sig × max(1, EHI_accl), com alerta estadual se Tmáx média de 3 dias &gt; 35°C e EHF Severo/Extremo.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {showSub('protocolo') && (
+                <div className="space-y-3 pt-4 border-t border-[#E5E5E5] dark:border-[#233354]">
+                  <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                    Tabela Oficial do Protocolo COR-Rio (NC1 a NC5)
+                  </h2>
+                  <div className="space-y-2">
+                    {(liveHeat?.cor_niveis_referencia || [1, 2, 3, 4, 5].map((k) => COR_HEAT_LEVELS[k])).map((lvl) => (
+                      <div
+                        key={lvl.nivel}
+                        className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        style={{ borderLeftWidth: '4px', borderLeftColor: lvl.cor_hex }}
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="px-2 py-0.5 rounded font-mono text-xs font-bold text-white"
+                              style={{ backgroundColor: lvl.cor_hex }}
+                            >
+                              {lvl.nivel}
+                            </span>
+                            <strong className="text-sm text-[#14213D] dark:text-white">{lvl.nome}</strong>
+                          </div>
+                          <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85">
+                            <strong>Critério:</strong> {lvl.criterio}
+                          </p>
+                          <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                            <strong>Ações:</strong> {lvl.acao}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </section>
           </div>
         )}
 

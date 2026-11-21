@@ -1,7 +1,9 @@
 import { enrichAcumuladosWithLiveTelemetry } from './liveTelemetry';
 import { reconcileLiveRainConsensus } from './liveRainConsensus';
+import type { HeatIndicesDataset } from './heatIndex';
 
 export { enrichAcumuladosWithLiveTelemetry };
+export type { HeatIndicesDataset };
 
 export const SITE_BASE = '.';
 
@@ -598,6 +600,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     balneabilidade,
     tabuaMares,
     historico,
+    heatIndices,
     openMeteo,
     liveGlobalNwp,
     liveInmetForecastPayload,
@@ -622,6 +625,9 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     ),
     fetchLatestRepoJson<HistoricoEstacoesDataset>('data/historico_estacoes.json', (item) =>
       parseIsoMs(item.atualizacao_iso || item.atualizacao)
+    ),
+    fetchLatestRepoJson<HeatIndicesDataset>('data/heat_indices.json', (item) =>
+      parseIsoMs(item.atualizacao_iso)
     ),
     fetchJsonSafe<OpenMeteoData>(
       'https://api.open-meteo.com/v1/forecast?latitude=-22.5269&longitude=-41.945&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,apparent_temperature,surface_pressure,relative_humidity_2m,wind_speed_10m,wind_direction_10m,wind_gusts_10m&daily=temperature_2m_max,temperature_2m_min,wind_speed_10m_max,uv_index_max&timezone=America%2FSao_Paulo&forecast_days=8'
@@ -741,6 +747,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     balneabilidade,
     tabuaMares,
     historico,
+    heatIndices,
     openMeteo: harmonizedOpenMeteo,
   };
 }

@@ -1572,6 +1572,7 @@ def run_auto_bulletin_pipeline():
             pass
 
     # Carrega dados observados das estações (CEMADEN PCD 18789, INEA Rio Jundiá, PWS)
+    raw_st = None
     estacoes_obs = []
     estacoes_path = DATA_DIR / "acumulados_estacoes.json"
     if estacoes_path.exists():
@@ -3200,6 +3201,21 @@ def run_auto_bulletin_pipeline():
             inmet_meteograma['rodada'] = r_code
             inmet_meteograma['data'] = cosmo_ext.get('data_rodada_utc', inmet_meteograma.get('data'))
 
+    try:
+        try:
+            from scripts.heat_indices_service import compute_and_save_heat_indices
+        except ImportError:
+            from heat_indices_service import compute_and_save_heat_indices
+        heat_indices_data = compute_and_save_heat_indices(
+            DATA_DIR,
+            hourly_om=hourly,
+            dias_prev=dias_3,
+            acumulados=raw_st if isinstance(raw_st, dict) else {"estacoes": estacoes_obs},
+        )
+    except Exception as e:
+        print(f"[Índices Calor] Aviso: {e}")
+        heat_indices_data = {}
+
     metadata = {
         "municipio": "Rio das Ostras - RJ",
         "periodo": periodo_str,
@@ -3224,6 +3240,7 @@ def run_auto_bulletin_pipeline():
         "inmet_meteograma": inmet_meteograma,
         "vime_inmet": official_extractions.get('inmet_vime', {}),
         "atividade_raios": official_extractions.get('atividade_raios', {}),
+        "indices_calor": heat_indices_data,
         "inea_radartool": official_extractions.get('inea_radartool', {}),
         "inea_boletim_hidrometeorologico": inea_boletim_data,
         "inea_macae_ostras": inea_macae_ostras_data,
