@@ -1,13 +1,13 @@
 {
-  "atualizacao_brt": "20/11/2026 23:41",
-  "atualizacao_iso": "2026-11-20T23:41:18.283871-03:00",
+  "atualizacao_brt": "20/11/2026 23:52",
+  "atualizacao_iso": "2026-11-20T23:52:31.606211-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 27.9,
+    "ic_rede_c": 27.6,
     "faixa_instantanea": {
       "faixa": "Atenção / Cuidado (27–32°C)",
       "cor": "#0EA5E9"
@@ -26,42 +26,42 @@
       {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 25.5,
+        "temp_c": 25.2,
         "ur_pct": 94,
-        "ic_c": 26.6,
+        "ic_c": 26.2,
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-20 23:02:17"
+        "ultima_leitura": "2026-11-20 23:47:57"
       },
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
         "temp_c": 25.8,
-        "ur_pct": 93,
+        "ur_pct": 94,
         "ic_c": 26.9,
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-20 23:02:18"
+        "ultima_leitura": "2026-11-20 23:47:58"
       },
       {
         "codigo": "IRIODA17",
         "nome": "Praia da Tartaruga",
-        "temp_c": 26.5,
-        "ur_pct": 88,
-        "ic_c": 29.2,
+        "temp_c": 26.3,
+        "ur_pct": 89,
+        "ic_c": 28.8,
         "faixa": "Atenção / Cuidado (27–32°C)",
         "cor_hex": "#0EA5E9",
-        "ultima_leitura": "2026-11-20 23:02:13"
+        "ultima_leitura": "2026-11-20 23:47:52"
       },
       {
         "codigo": "ICASIM5",
         "nome": "Barra de São João / Praiamar",
-        "temp_c": 26.3,
+        "temp_c": 26.2,
         "ur_pct": 92,
-        "ic_c": 28.9,
+        "ic_c": 28.7,
         "faixa": "Atenção / Cuidado (27–32°C)",
         "cor_hex": "#0EA5E9",
-        "ultima_leitura": "2026-11-20 23:02:09"
+        "ultima_leitura": "2026-11-20 23:47:48"
       }
     ]
   },
@@ -739,7 +739,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-20 23:41"
+    "captura_brt": "2026-11-20 23:52"
   },
   "previsao_8dias_calor": [
     {
