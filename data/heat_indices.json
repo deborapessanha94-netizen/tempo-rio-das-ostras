@@ -1,16 +1,16 @@
 {
-  "atualizacao_brt": "21/11/2026 12:54",
-  "atualizacao_iso": "2026-11-21T12:54:56.265148-03:00",
+  "atualizacao_brt": "21/11/2026 13:28",
+  "atualizacao_iso": "2026-11-21T13:28:45.196692-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 35.1,
-    "temp_rede_c": 29.1,
-    "ur_rede_pct": 82,
-    "sensacao_rede_c": 34.0,
+    "ic_rede_c": 35.7,
+    "temp_rede_c": 29.3,
+    "ur_rede_pct": 81,
+    "sensacao_rede_c": 34.4,
     "faixa_instantanea": {
       "faixa": "Cuidado Extremo (32–36°C)",
       "cor": "#F97316"
@@ -40,10 +40,10 @@
       {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 31.1,
-        "ur_pct": 73,
-        "sensacao_c": 36.3,
-        "ic_c": 38.8,
+        "temp_c": 30.9,
+        "ur_pct": 75,
+        "sensacao_c": 36.9,
+        "ic_c": 38.9,
         "ic_max_hoje": 43.6,
         "hora_ic_max_hoje": "11:54",
         "temp_max_hoje": 33.8,
@@ -54,17 +54,17 @@
         "cor_pico_hoje": "#DC2626",
         "faixa": "Alto · COR (36–40°C)",
         "cor_hex": "#EA580C",
-        "ultima_leitura": "2026-11-21 12:50:12",
+        "ultima_leitura": "2026-11-21 13:23:51",
         "lat": -22.426845,
         "lon": -42.020862
       },
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
-        "temp_c": 29.8,
-        "ur_pct": 79,
-        "sensacao_c": 35.4,
-        "ic_c": 36.8,
+        "temp_c": 30.6,
+        "ur_pct": 77,
+        "sensacao_c": 37.1,
+        "ic_c": 38.6,
         "ic_max_hoje": 41.4,
         "hora_ic_max_hoje": "10:49",
         "temp_max_hoje": 31.7,
@@ -75,38 +75,38 @@
         "cor_pico_hoje": "#DC2626",
         "faixa": "Alto · COR (36–40°C)",
         "cor_hex": "#EA580C",
-        "ultima_leitura": "2026-11-21 12:50:18",
+        "ultima_leitura": "2026-11-21 13:23:49",
         "lat": -22.440357,
         "lon": -41.953913
       },
       {
         "codigo": "IRIODA17",
         "nome": "Praia da Tartaruga",
-        "temp_c": 27.3,
-        "ur_pct": 87,
-        "sensacao_c": 31.5,
-        "ic_c": 31.4,
-        "ic_max_hoje": 32.5,
-        "hora_ic_max_hoje": "11:29",
-        "temp_max_hoje": 27.9,
-        "hora_temp_max_hoje": "11:29",
-        "temp_pico_ic_hoje": 27.9,
-        "ur_pico_ic_hoje": 84,
+        "temp_c": 28.2,
+        "ur_pct": 83,
+        "sensacao_c": 32.1,
+        "ic_c": 33.1,
+        "ic_max_hoje": 33.1,
+        "hora_ic_max_hoje": "13:23",
+        "temp_max_hoje": 28.2,
+        "hora_temp_max_hoje": "13:23",
+        "temp_pico_ic_hoje": 28.2,
+        "ur_pico_ic_hoje": 83,
         "faixa_pico_hoje": "Cuidado Extremo (32–36°C)",
         "cor_pico_hoje": "#F97316",
-        "faixa": "Cuidado (27–32°C)",
-        "cor_hex": "#CA8A04",
-        "ultima_leitura": "2026-11-21 12:50:20",
+        "faixa": "Cuidado Extremo (32–36°C)",
+        "cor_hex": "#F97316",
+        "ultima_leitura": "2026-11-21 13:23:42",
         "lat": -22.531291,
         "lon": -41.957444
       },
       {
         "codigo": "ICASIM5",
         "nome": "Barra de São João / Praiamar",
-        "temp_c": 28.0,
-        "ur_pct": 87,
-        "sensacao_c": 32.7,
-        "ic_c": 33.3,
+        "temp_c": 27.5,
+        "ur_pct": 88,
+        "sensacao_c": 31.5,
+        "ic_c": 32.1,
         "ic_max_hoje": 33.9,
         "hora_ic_max_hoje": "11:59",
         "temp_max_hoje": 28.1,
@@ -117,7 +117,7 @@
         "cor_pico_hoje": "#F97316",
         "faixa": "Cuidado Extremo (32–36°C)",
         "cor_hex": "#F97316",
-        "ultima_leitura": "2026-11-21 12:50:13",
+        "ultima_leitura": "2026-11-21 13:23:35",
         "lat": -22.573707,
         "lon": -41.985545
       }
@@ -807,7 +807,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-21 12:54"
+    "captura_brt": "2026-11-21 13:28"
   },
   "previsao_8dias_calor": [
     {
