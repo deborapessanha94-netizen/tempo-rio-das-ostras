@@ -6400,6 +6400,14 @@ export default function App() {
                               {liveHeat.agora.ur_rede_pct ?? '--'}%
                             </strong>
                           </div>
+                          <div className="flex items-center justify-between gap-2 whitespace-nowrap">
+                            <span className="text-slate-500 dark:text-[#E5E5E5]/70">Sensação:</span>
+                            <strong className="text-[#FF8244] tabular-nums">
+                              {liveHeat.agora.sensacao_rede_c !== null && liveHeat.agora.sensacao_rede_c !== undefined
+                                ? `${Number(liveHeat.agora.sensacao_rede_c).toFixed(1)}°C`
+                                : '--'}
+                            </strong>
+                          </div>
                           <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#E5E5E5]/70 dark:border-[#233354] whitespace-nowrap">
                             <span className="font-semibold text-slate-600 dark:text-[#E5E5E5]/85">Índice de Calor:</span>
                             <strong className="tabular-nums" style={{ color: liveHeat.agora.faixa_instantanea.cor }}>
@@ -6522,6 +6530,14 @@ export default function App() {
                                 <span className="text-slate-500 dark:text-[#E5E5E5]/70">Umidade:</span>
                                 <span className="font-semibold text-[#14213D] dark:text-white tabular-nums">
                                   {st.ur_pct}%
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between gap-3">
+                                <span className="text-slate-500 dark:text-[#E5E5E5]/70">Sensação Térmica:</span>
+                                <span className="font-semibold text-[#FF8244] tabular-nums">
+                                  {st.sensacao_c !== null && st.sensacao_c !== undefined
+                                    ? `${st.sensacao_c.toFixed(1)}°C`
+                                    : '--'}
                                 </span>
                               </div>
                               <div className="flex items-center justify-between gap-3 pt-1 border-t border-[#E5E5E5]/70 dark:border-[#233354]">

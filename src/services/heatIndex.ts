@@ -81,6 +81,7 @@ export interface HeatStationReading {
   nome: string;
   temp_c: number;
   ur_pct: number;
+  sensacao_c?: number | null;
   ic_c: number | null;
   ic_max_hoje?: number | null;
   hora_ic_max_hoje?: string | null;
@@ -128,6 +129,7 @@ export interface HeatIndicesDataset {
     ic_rede_c: number | null;
     temp_rede_c?: number | null;
     ur_rede_pct?: number | null;
+    sensacao_rede_c?: number | null;
     ic_openmeteo_c?: number | null;
     faixa_instantanea: { faixa: string; cor: string };
     cor_nivel: string;
@@ -202,6 +204,24 @@ export function computeRothfuszHeatIndexC(tempC?: number | null, rhPct?: number 
   return Math.round(hiC * 10) / 10;
 }
 
+/** Sensação Térmica (Temperatura Aparente de Steadman / OMM com temperatura, umidade e vento). */
+export function computeSteadmanSensacaoC(
+  tempC?: number | null,
+  rhPct?: number | null,
+  windKmh?: number | null
+): number | null {
+  if (tempC === null || tempC === undefined || rhPct === null || rhPct === undefined) return null;
+  const tc = Number(tempC);
+  const rh = Math.max(0, Math.min(100, Number(rhPct)));
+  const windMs = windKmh !== null && windKmh !== undefined && Number.isFinite(Number(windKmh))
+    ? Math.max(0, Number(windKmh)) / 3.6
+    : 0;
+  if (!Number.isFinite(tc) || !Number.isFinite(rh)) return null;
+  const e = (rh / 100) * 6.105 * Math.exp((17.27 * tc) / (237.7 + tc));
+  const at = tc + 0.33 * e - 0.70 * windMs - 4.0;
+  return Math.round(at * 10) / 10;
+}
+
 export function classifyInstantHeatBand(icC?: number | null): { faixa: string; cor: string } {
   if (icC === null || icC === undefined || !Number.isFinite(icC)) {
     return { faixa: 'Indisponível', cor: '#64748B' };
@@ -252,6 +272,10 @@ export function recomputeLiveHeatIndices(params: {
     const tc = Number(st.temp_atual);
     const ur = Math.round(Number(st.umidade_atual));
     if (!Number.isFinite(tc) || !Number.isFinite(ur)) continue;
+    const windVal = st.vento_atual !== null && st.vento_atual !== undefined && Number.isFinite(Number(st.vento_atual))
+      ? Number(st.vento_atual)
+      : 0;
+    const sensacao = computeSteadmanSensacaoC(tc, ur, windVal);
     const ic = computeRothfuszHeatIndexC(tc, ur);
     const band = classifyInstantHeatBand(ic);
     const coords = KNOWN_HEAT_STATION_COORDS[st.codigo];
@@ -288,6 +312,7 @@ export function recomputeLiveHeatIndices(params: {
       nome: st.nome_curto || st.nome,
       temp_c: Math.round(tc * 10) / 10,
       ur_pct: ur,
+      sensacao_c: sensacao,
       ic_c: ic,
       ic_max_hoje: icMaxHoje,
       hora_ic_max_hoje: horaIcMaxHoje,
@@ -441,6 +466,10 @@ export function recomputeLiveHeatIndices(params: {
   const urRede = validStations.length
     ? Math.round(validStations.reduce((acc, s) => acc + s.ur_pct, 0) / validStations.length)
     : params.openMeteo?.current?.relative_humidity_2m ?? null;
+  const validSens = estRows.filter((s) => s.sensacao_c !== null && s.sensacao_c !== undefined);
+  const sensacaoRede = validSens.length
+    ? Math.round((validSens.reduce((acc, s) => acc + (s.sensacao_c || 0), 0) / validSens.length) * 10) / 10
+    : params.openMeteo?.current?.apparent_temperature ?? null;
 
   const hojeRow = baseDays[0];
   const lvlHoje = hojeRow?.cor_nivel_num || 1;
@@ -467,6 +496,7 @@ export function recomputeLiveHeatIndices(params: {
       ic_rede_c: icRede,
       temp_rede_c: tempRede,
       ur_rede_pct: urRede,
+      sensacao_rede_c: sensacaoRede,
       ic_openmeteo_c: omIcNow,
       faixa_instantanea: classifyInstantHeatBand(icRede),
       cor_nivel: specHoje.nivel,

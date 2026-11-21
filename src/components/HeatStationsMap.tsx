@@ -124,6 +124,7 @@ export const HeatStationsMap: React.FC<HeatStationsMapProps> = ({ stations, isDa
       latLngs.push([lat, lon]);
 
       const icText = st.ic_c !== null && Number.isFinite(st.ic_c) ? `${st.ic_c.toFixed(1)}°C` : '--';
+      const sensText = st.sensacao_c !== null && st.sensacao_c !== undefined && Number.isFinite(st.sensacao_c) ? `${st.sensacao_c.toFixed(1)}°C` : '--';
       const peakVal = st.ic_max_hoje ?? st.ic_c;
       const peakText = peakVal !== null && peakVal !== undefined && Number.isFinite(peakVal)
         ? `${Number(peakVal).toFixed(1)}°C${st.hora_ic_max_hoje ? ` (${st.hora_ic_max_hoje})` : ''}`
@@ -142,6 +143,10 @@ export const HeatStationsMap: React.FC<HeatStationsMapProps> = ({ stations, isDa
             <div style="display:flex;justify-content:space-between;gap:12px;">
               <span style="color:#475569;">Umidade:</span>
               <strong>${st.ur_pct}%</strong>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:12px;">
+              <span style="color:#475569;">Sensação Térmica:</span>
+              <strong style="color:#FF8244;">${escapeHtml(sensText)}</strong>
             </div>
             <div style="display:flex;justify-content:space-between;gap:12px;">
               <span style="color:#475569;">Índice de Calor:</span>

@@ -104,6 +104,21 @@ def compute_heat_index_c(temp_c, rh_pct):
     return round(hi_c, 1)
 
 
+def compute_steadman_sensacao_c(temp_c, rh_pct, wind_kmh=0.0):
+    """Sensação Térmica (Temperatura Aparente de Steadman / OMM com T, UR e vento)."""
+    if temp_c is None or rh_pct is None:
+        return None
+    try:
+        tc = float(temp_c)
+        rh = max(0.0, min(100.0, float(rh_pct)))
+        ws = max(0.0, float(wind_kmh or 0.0)) / 3.6
+    except (TypeError, ValueError):
+        return None
+    e = (rh / 100.0) * 6.105 * math.exp((17.27 * tc) / (237.7 + tc))
+    at = tc + 0.33 * e - 0.70 * ws - 4.0
+    return round(at, 1)
+
+
 KNOWN_HEAT_STATION_COORDS = {
     "IRIODA17": (-22.531291, -41.957444),
     "IRIODA16": (-22.440357, -41.953913),
@@ -412,6 +427,8 @@ def compute_and_save_heat_indices(
             ur = st.get("umidade_atual")
             if tc is None or ur is None:
                 continue
+            wind_val = st.get("vento_atual") if st.get("vento_atual") is not None else 0.0
+            sens_now = compute_steadman_sensacao_c(tc, ur, wind_val)
             ic_now = compute_heat_index_c(tc, ur)
             band = classify_instant_heat_band(ic_now)
             fb_coords = KNOWN_HEAT_STATION_COORDS.get(st.get("codigo"))
@@ -439,6 +456,7 @@ def compute_and_save_heat_indices(
                 "nome": st.get("nome_curto") or st.get("nome"),
                 "temp_c": round(float(tc), 1),
                 "ur_pct": int(round(float(ur))),
+                "sensacao_c": sens_now,
                 "ic_c": ic_now,
                 "ic_max_hoje": ic_max_hoje,
                 "hora_ic_max_hoje": hora_ic_max,
@@ -486,6 +504,8 @@ def compute_and_save_heat_indices(
     ic_rede_agora = round(sum(e["ic_c"] for e in est_rows if e["ic_c"] is not None) / len(est_rows), 1) if est_rows else (daily_rows[0]["ic_max_c"] if daily_rows else None)
     temp_rede_agora = round(sum(e["temp_c"] for e in est_rows) / len(est_rows), 1) if est_rows else None
     ur_rede_agora = int(round(sum(e["ur_pct"] for e in est_rows) / len(est_rows))) if est_rows else None
+    sens_vals = [e["sensacao_c"] for e in est_rows if e.get("sensacao_c") is not None]
+    sensacao_rede_agora = round(sum(sens_vals) / len(sens_vals), 1) if sens_vals else None
     cor_hoje = daily_rows[0] if daily_rows else {}
 
     now_b = datetime.now(BRT)
@@ -501,6 +521,7 @@ def compute_and_save_heat_indices(
             "ic_rede_c": ic_rede_agora,
             "temp_rede_c": temp_rede_agora,
             "ur_rede_pct": ur_rede_agora,
+            "sensacao_rede_c": sensacao_rede_agora,
             "faixa_instantanea": classify_instant_heat_band(ic_rede_agora),
             "cor_nivel": cor_hoje.get("cor_nivel", "NC1"),
             "cor_nivel_num": cor_hoje.get("cor_nivel_num", 1),
