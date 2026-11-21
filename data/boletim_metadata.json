@@ -1,16 +1,16 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "20/11 (Sexta-feira) a 27/11 (Sexta-feira)",
-  "emissao": "20/11/2026 às 22:20h",
-  "emissao_iso": "2026-11-20T22:20:08-03:00",
-  "generation_epoch_ms": 1795224008862,
+  "emissao": "20/11/2026 às 22:28h",
+  "emissao_iso": "2026-11-20T22:28:06-03:00",
+  "generation_epoch_ms": 1795224486676,
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.62 m. Alerta Amarelo de Tempestade do INMET (nº 56469 e nº 56462 e nº 56466) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Avisos da Marinha do Brasil para a Área Delta: VENTO FORTE (nº 808/2026) válidos a partir de 20/11 às 15:00h até 22/11 às 03:00h. Acumulado total de chuva previsto para os próximos 4 dias: 20.3 mm (e 79.8 mm nos 8 dias), com máxima alcançando 33°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "20/11/2026 às 22:22h",
+    "atualizacao_hora": "20/11/2026 às 22:30h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -587,9 +587,9 @@
     "sintese_tecnica_precisao": "Atenção para Alerta Amarelo de Tempestade nº 56469 na janela 00:00 às 24:00h: média contínua estimada em 5.0 mm com teto convectivo de até 50 mm e rajadas de 40 a 60 km/h."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "20/11/2026 às 22:20h",
-    "emissao_iso": "2026-11-20T22:20:08-03:00",
-    "generation_epoch_ms": 1795224008862,
+    "emissao": "20/11/2026 às 22:28h",
+    "emissao_iso": "2026-11-20T22:28:06-03:00",
+    "generation_epoch_ms": 1795224486676,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
       "media_mm": 0.5,
@@ -1516,8 +1516,8 @@
     "atividade_raios": {
       "disponivel": true,
       "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-      "captura_utc": "2026-11-21T01:22:31Z",
-      "captura_brt": "2026-11-20 22:22",
+      "captura_utc": "2026-11-21T01:30:35Z",
+      "captura_brt": "2026-11-20 22:30",
       "janela_minutos": 20,
       "raio_busca_km": 50,
       "raios_25km": 0,
@@ -1530,7 +1530,7 @@
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-20T22:22:31-03:00",
+      "atualizado_em": "2026-11-20T22:30:35-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -5566,7 +5566,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-21T01:20:38.258728"
+    "atualizado_em": "2026-11-21T01:28:35.454988"
   },
   "vime_inmet": {
     "vime_schema_version": 3,
@@ -6487,8 +6487,8 @@
   "atividade_raios": {
     "disponivel": true,
     "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-    "captura_utc": "2026-11-21T01:22:31Z",
-    "captura_brt": "2026-11-20 22:22",
+    "captura_utc": "2026-11-21T01:30:35Z",
+    "captura_brt": "2026-11-20 22:30",
     "janela_minutos": 20,
     "raio_busca_km": 50,
     "raios_25km": 0,
@@ -6513,7 +6513,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-20 22:21:24 BRT",
+    "data_coleta": "2026-11-20 22:29:25 BRT",
     "publicado_em": "20/11/2026 às 06h30",
     "fonte_pdf_sha256": "f82debd25531bd5a",
     "pdf_bytes": 793762,
@@ -7020,7 +7020,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-20 00z",
-    "atualizacao": "20/11/2026 22:20",
+    "atualizacao": "20/11/2026 22:28",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -7106,7 +7106,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "20/11/2026",
-    "atualizacao": "20/11/2026 22:20",
+    "atualizacao": "20/11/2026 22:28",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -7284,7 +7284,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-21T01:22:07.811740",
+    "atualizado_em": "2026-11-21T01:30:09.563385",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "05:57",
