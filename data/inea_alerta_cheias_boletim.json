@@ -4,7 +4,7 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-11-20 21:59:34 BRT",
+  "data_coleta": "2026-11-20 22:11:24 BRT",
   "publicado_em": "20/11/2026 às 06h30",
   "fonte_pdf_sha256": "f82debd25531bd5a",
   "pdf_bytes": 793762,
@@ -52,8 +52,8 @@
       "tem_chuva_icone": true,
       "temp_max": 34,
       "temp_min": 23,
-      "condicao": "No sábado, áreas de instabilidade devido à disponibilidade de calor e umidade seguem influenciando o tempo no estado do Rio de Janeiro. O céu varia de parcialmente nublado a nublado e, a partir da tarde, há previsão de pancadas de chuva com raios para todas as regiões hidrográficas do estado. Devido às chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão estáveis no estado.",
-      "comportamento_rios": "Devido às chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados.",
+      "condicao": "No sábado, áreas de instabilidade devido à disponibilidade de calor e umidade seguem influenciando o tempo no estado do Rio de Janeiro. O céu varia de parcialmente nublado a nublado e, a partir da tarde, há previsão de pancadas de chuva com raios para todas as regiões hidrográficas do estado. Devido ás chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados. As temperaturas estarão estáveis no estado.",
+      "comportamento_rios": "Devido ás chuvas, são esperadas elevações pontuais nos níveis dos rios monitorados.",
       "modelo_meteorologico": "COSMO / INMET adaptado pela Sala de Situação INEA",
       "extraido_pdf": true
     }
