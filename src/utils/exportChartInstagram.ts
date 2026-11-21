@@ -112,6 +112,7 @@ function getMetricMeta(metric: ChartMetric) {
         subRowLabel: '',
       };
     case 'humidity':
+    default:
       return {
         title: 'Umidade do Ar',
         unit: '%',
@@ -337,9 +338,9 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, W, H);
 
-  const padX = 96;
-  const topSafe = isStory ? 210 : 88;
-  const botSafe = isStory ? 200 : 72;
+  const padX = 84;
+  const topSafe = isStory ? 186 : 76;
+  const botSafe = isStory ? 184 : 74;
   const contentW = W - padX * 2;
 
   // ============================================================================
@@ -348,29 +349,29 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   let cursorY = topSafe;
 
   // Linha superior: Logo + @tempoemriodasostras
+  const logoTargetH = isStory ? 132 : 106;
   if (logoImg) {
-    const targetH = isStory ? 116 : 92;
     const ratio = logoImg.width / Math.max(1, logoImg.height);
-    const targetW = targetH * ratio;
-    ctx.drawImage(logoImg, padX, cursorY, targetW, targetH);
+    const targetW = logoTargetH * ratio;
+    ctx.drawImage(logoImg, padX, cursorY, targetW, logoTargetH);
   } else {
     ctx.fillStyle = textMain;
-    ctx.font = '800 44px Inter, system-ui, sans-serif';
-    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + 54);
+    ctx.font = '800 54px Inter, system-ui, sans-serif';
+    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + 66);
   }
 
   const tagText = '@tempoemriodasostras';
-  ctx.font = '700 28px "JetBrains Mono", monospace';
+  ctx.font = '700 38px "JetBrains Mono", monospace';
   const tagMetrics = ctx.measureText(tagText);
-  const tagPadX = 30;
+  const tagPadX = 38;
   const tagW = tagMetrics.width + tagPadX * 2;
-  const tagH = 56;
+  const tagH = 72;
   const tagX = W - padX - tagW;
-  const tagY = cursorY + 12;
-  roundRectPath(ctx, tagX, tagY, tagW, tagH, 28);
+  const tagY = cursorY + Math.round((logoTargetH - tagH) / 2);
+  roundRectPath(ctx, tagX, tagY, tagW, tagH, 36);
   ctx.fillStyle = 'rgba(255, 130, 68, 0.14)';
   ctx.fill();
-  ctx.lineWidth = 2.5;
+  ctx.lineWidth = 3;
   ctx.strokeStyle = '#FF8244';
   ctx.stroke();
   ctx.fillStyle = '#FF8244';
@@ -378,25 +379,27 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.fillText(tagText, tagX + tagPadX, tagY + tagH / 2 + 1);
   ctx.textBaseline = 'alphabetic';
 
-  cursorY += isStory ? 192 : 158;
+  cursorY += isStory ? 216 : 182;
 
   // Título + Pílula de Período na MESMA linha limpa
   const cleanPeriod = periodLabel.replace(' · 00:00–23:59', '');
-  ctx.fillStyle = textMain;
-  ctx.font = `800 ${isStory ? 66 : 58}px Inter, system-ui, sans-serif`;
-  ctx.fillText(meta.title, padX, cursorY);
-
-  ctx.font = '700 26px "JetBrains Mono", monospace';
+  ctx.font = '700 38px "JetBrains Mono", monospace';
   const perText = cleanPeriod.toUpperCase();
-  const perW = ctx.measureText(perText).width + 44;
-  const perH = 50;
+  const perW = ctx.measureText(perText).width + 56;
+  const perH = 68;
   const perX = W - padX - perW;
-  const perY = cursorY - 40;
-  roundRectPath(ctx, perX, perY, perW, perH, 14);
+  const perY = cursorY - 54;
+
+  ctx.fillStyle = textMain;
+  ctx.font = `800 ${isStory ? 78 : 68}px Inter, system-ui, sans-serif`;
+  ctx.fillText(meta.title, padX, cursorY, Math.max(400, perX - padX - 28));
+
+  ctx.font = '700 38px "JetBrains Mono", monospace';
+  roundRectPath(ctx, perX, perY, perW, perH, 16);
   ctx.fillStyle = darkTheme ? '#14213D' : '#E2E8F0';
   ctx.fill();
   ctx.strokeStyle = borderCol;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.stroke();
   ctx.fillStyle = '#FF8244';
   ctx.textAlign = 'center';
@@ -405,7 +408,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 
-  cursorY += isStory ? 52 : 38;
+  cursorY += isStory ? 54 : 44;
 
   // Pré-cálculo dos extremos para destacar na curva
   let minTIdx = 0;
@@ -442,7 +445,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   // ============================================================================
   // CARD PRINCIPAL DO GRÁFICO (~80% DA IMAGEM DEDICADA AO GRÁFICO!)
   // ============================================================================
-  const footerH = 74;
+  const footerH = 98;
   const chartCardH = H - botSafe - footerH - cursorY;
   roundRectPath(ctx, padX, cursorY, contentW, chartCardH, 34);
   ctx.fillStyle = cardBg;
@@ -451,36 +454,36 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.strokeStyle = borderCol;
   ctx.stroke();
 
-  const innerPadX = 56;
-  const legendY = cursorY + 52;
+  const innerPadX = 52;
+  const legendY = cursorY + 62;
 
   // Legenda minimalista no topo esquerdo do gráfico
   let legX = padX + innerPadX;
   ctx.strokeStyle = meta.line;
-  ctx.lineWidth = 7;
+  ctx.lineWidth = 9;
   ctx.beginPath();
   ctx.moveTo(legX, legendY);
-  ctx.lineTo(legX + 42, legendY);
+  ctx.lineTo(legX + 50, legendY);
   ctx.stroke();
-  legX += 56;
+  legX += 66;
   ctx.fillStyle = textMain;
-  ctx.font = '700 27px "JetBrains Mono", monospace';
+  ctx.font = '700 38px "JetBrains Mono", monospace';
   ctx.textBaseline = 'middle';
   ctx.fillText(meta.primLabel, legX, legendY + 1);
-  legX += ctx.measureText(meta.primLabel).width + 44;
+  legX += ctx.measureText(meta.primLabel).width + 52;
 
   if (meta.secLabel) {
     ctx.strokeStyle = meta.secColor;
-    ctx.lineWidth = 6;
-    ctx.setLineDash([12, 8]);
+    ctx.lineWidth = 7;
+    ctx.setLineDash([14, 10]);
     ctx.beginPath();
     ctx.moveTo(legX, legendY);
-    ctx.lineTo(legX + 42, legendY);
+    ctx.lineTo(legX + 50, legendY);
     ctx.stroke();
     ctx.setLineDash([]);
-    legX += 56;
+    legX += 66;
     ctx.fillStyle = textMuted;
-    ctx.font = '600 26px "JetBrains Mono", monospace';
+    ctx.font = '600 36px "JetBrains Mono", monospace';
     ctx.fillText(meta.secLabel, legX, legendY + 1);
   }
   ctx.textBaseline = 'alphabetic';
@@ -497,17 +500,17 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     }
   });
   const isMultiDay = daySegments.length > 1;
-  const dayHeaderH = isMultiDay ? 64 : 16;
+  const dayHeaderH = isMultiDay ? 86 : 16;
 
   // Área de plotagem ampla e arejada
-  const yAxisW = metric === 'pressure' ? 132 : 112;
+  const yAxisW = metric === 'pressure' || metric === 'rain' ? 202 : 182;
   const plotFrameX = padX + innerPadX + yAxisW;
-  const plotFrameY = legendY + 42;
+  const plotFrameY = legendY + 48;
   const plotFrameW = contentW - innerPadX * 2 - yAxisW;
 
   const hasSubRow = Boolean(meta.subRowLabel);
-  const axisBottomH = hasSubRow ? 104 : 62;
-  const plotFrameH = chartCardH - (plotFrameY - cursorY) - axisBottomH - 22;
+  const axisBottomH = hasSubRow ? 142 : 90;
+  const plotFrameH = chartCardH - (plotFrameY - cursorY) - axisBottomH - 20;
 
   roundRectPath(ctx, plotFrameX, plotFrameY, plotFrameW, plotFrameH, 24);
   ctx.fillStyle = innerBg;
@@ -516,13 +519,13 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  const plotSideMargin = points.length <= 28 ? 62 : 46;
+  const plotSideMargin = points.length <= 28 ? 64 : 48;
   const dataLeftX = plotFrameX + plotSideMargin;
   const dataRightX = plotFrameX + plotFrameW - plotSideMargin;
   const dataW = Math.max(100, dataRightX - dataLeftX);
 
-  const dataTopY = plotFrameY + dayHeaderH + 54;
-  const dataBotY = plotFrameY + plotFrameH - 28;
+  const dataTopY = plotFrameY + dayHeaderH + 104;
+  const dataBotY = plotFrameY + plotFrameH - 56;
   const dataH = Math.max(150, dataBotY - dataTopY);
 
   const getPxX = (i: number) =>
@@ -563,15 +566,16 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       const centerSegX = segLeft + segW / 2;
       if (segW >= 95) {
         ctx.fillStyle = darkTheme ? 'rgba(20, 33, 61, 0.88)' : 'rgba(226, 232, 240, 0.92)';
-        ctx.font = '700 24px "JetBrains Mono", monospace';
+        const segFontPx = segW < 235 ? 30 : 34;
+        ctx.font = `700 ${segFontPx}px "JetBrains Mono", monospace`;
         const dTxt = seg.label;
-        const dTxtW = Math.min(segW - 18, ctx.measureText(dTxt).width + 32);
-        roundRectPath(ctx, centerSegX - dTxtW / 2, plotFrameY + 14, dTxtW, 40, 12);
+        const dTxtW = Math.min(segW - 18, ctx.measureText(dTxt).width + 36);
+        roundRectPath(ctx, centerSegX - dTxtW / 2, plotFrameY + 14, dTxtW, 56, 14);
         ctx.fill();
         ctx.fillStyle = '#FF8244';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(dTxt, centerSegX, plotFrameY + 35, dTxtW - 14);
+        ctx.fillText(dTxt, centerSegX, plotFrameY + 43, dTxtW - 16);
       }
     });
     ctx.textAlign = 'left';
@@ -631,19 +635,19 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
               : `${Math.round(tickVal)}`;
 
     ctx.fillStyle = textMuted;
-    ctx.font = '700 26px "JetBrains Mono", monospace';
+    ctx.font = '700 44px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-    ctx.fillText(tickLabel, plotFrameX - 20, gy);
+    ctx.fillText(tickLabel, plotFrameX - 22, gy);
   });
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
 
   if (metric === 'wind' || metric === 'pressure') {
     ctx.fillStyle = textSoft;
-    ctx.font = '600 22px "JetBrains Mono", monospace';
+    ctx.font = '700 32px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(metric === 'wind' ? 'km/h' : 'hPa', plotFrameX - 20, plotFrameY + 30);
+    ctx.fillText(metric === 'wind' ? 'km/h' : 'hPa', plotFrameX - 22, plotFrameY + 42);
     ctx.textAlign = 'left';
   }
 
@@ -683,7 +687,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
   const tickIndices = showDailyAxisMode
     ? dailySummaryIndices
-    : pickCleanHourTickIndices(points, getPxX, 155);
+    : pickCleanHourTickIndices(points, getPxX, 195);
   const tickSet = new Set(tickIndices);
 
   if (!showDailyAxisMode) {
@@ -714,12 +718,12 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     return false;
   };
 
-  const canPlace = (rect: Rect, checkCurve = true, gapX = 24, gapY = 14): boolean => {
+  const canPlace = (rect: Rect, checkCurve = true, gapX = 28, gapY = 18): boolean => {
     if (
       rect.x < plotFrameX + 12 ||
       rect.x + rect.w > plotFrameX + plotFrameW - 12 ||
-      rect.y < plotFrameY + dayHeaderH - 6 ||
-      rect.y + rect.h > dataBotY - 6
+      rect.y < plotFrameY + dayHeaderH - 4 ||
+      rect.y + rect.h > plotFrameY + plotFrameH - 8
     ) {
       return false;
     }
@@ -737,44 +741,56 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     accent: string,
     preferBelow = false
   ): boolean => {
-    ctx.font = '800 27px "JetBrains Mono", monospace';
+    ctx.font = '800 40px "JetBrains Mono", monospace';
     const tw = ctx.measureText(text).width;
-    const pw = tw + 38;
-    const ph = 48;
+    const pw = tw + 52;
+    const ph = 68;
 
-    const offsets = preferBelow ? [48, -70, 78, -98] : [-70, 46, -98, 78];
     const minLeft = plotFrameX + 14;
     const maxLeft = plotFrameX + plotFrameW - 14 - pw;
-    const clampedX = Math.max(minLeft, Math.min(maxLeft, cx - pw / 2));
+    const baseClampedX = Math.max(minLeft, Math.min(maxLeft, cx - pw / 2));
 
-    for (const offY of offsets) {
-      const topY = offY < 0 ? anchorY + offY : anchorY + offY - ph / 2;
-      const cand: Rect = { x: clampedX, y: topY, w: pw, h: ph };
-      if (canPlace(cand, true, 26, 16)) {
-        placedBoxes.push(cand);
+    // topY offsets relativos ao ponto âncora (ph = 68 -> acima = -(ph + 26) = -94, abaixo = +26)
+    const topYOffsets = preferBelow ? [26, -94, 62, -128] : [-94, 26, -128, 62];
+    const xNudges = [0, -56, 56];
 
-        const stemStartY = topY + ph / 2 < anchorY ? topY + ph : topY;
-        ctx.strokeStyle = accent;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(cx, anchorY);
-        ctx.lineTo(cx, stemStartY);
-        ctx.stroke();
+    const placeAt = (cand: Rect) => {
+      placedBoxes.push(cand);
 
-        roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 15);
-        ctx.fillStyle = darkTheme ? '#0D1526' : '#FFFFFF';
-        ctx.fill();
-        ctx.lineWidth = 3.5;
-        ctx.strokeStyle = accent;
-        ctx.stroke();
+      const stemTargetX = Math.max(cand.x + 14, Math.min(cand.x + cand.w - 14, cx));
+      const stemStartY = cand.y + ph / 2 < anchorY ? cand.y + ph : cand.y;
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 3.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, anchorY);
+      ctx.lineTo(stemTargetX, stemStartY);
+      ctx.stroke();
 
-        ctx.fillStyle = accent;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, cand.x + cand.w / 2, cand.y + cand.h / 2 + 1);
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'alphabetic';
-        return true;
+      roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 20);
+      ctx.fillStyle = darkTheme ? '#0D1526' : '#FFFFFF';
+      ctx.fill();
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = accent;
+      ctx.stroke();
+
+      ctx.fillStyle = accent;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, cand.x + cand.w / 2, cand.y + cand.h / 2 + 1);
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+    };
+
+    for (const checkCurve of [true, false]) {
+      for (const offY of topYOffsets) {
+        for (const dx of xNudges) {
+          const candX = Math.max(minLeft, Math.min(maxLeft, baseClampedX + dx));
+          const cand: Rect = { x: candX, y: anchorY + offY, w: pw, h: ph };
+          if (canPlace(cand, checkCurve, 28, 18)) {
+            placeAt(cand);
+            return true;
+          }
+        }
       }
     }
     return false;
@@ -804,12 +820,13 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
     if (totalRain <= 0.01) {
       ctx.fillStyle = textSoft;
-      ctx.font = '600 32px Inter, system-ui, sans-serif';
+      ctx.font = '700 46px Inter, system-ui, sans-serif';
       ctx.textAlign = 'center';
       ctx.fillText(
         'Sem precipitação prevista neste período',
         plotFrameX + plotFrameW / 2,
-        dataTopY + dataH * 0.48
+        dataTopY + dataH * 0.48,
+        plotFrameW - 80
       );
       ctx.textAlign = 'left';
     } else {
@@ -818,27 +835,43 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
         .slice()
         .sort((a, b) => b.val - a.val);
 
+      const hitsOtherRainBar = (rect: Rect, selfPt: PlotPt): boolean => {
+        for (const other of plotPts) {
+          if (other === selfPt || other.val <= 0) continue;
+          const bLeft = other.x - barW / 2 - 4;
+          const bRight = other.x + barW / 2 + 4;
+          const bTop = other.y - 4;
+          const overlapsX = rect.x < bRight && rect.x + rect.w > bLeft;
+          const overlapsY = rect.y + rect.h > bTop;
+          if (overlapsX && overlapsY) return true;
+        }
+        return false;
+      };
+
       rainySorted.forEach((pt, rank) => {
         const txt = `${pt.val.toFixed(1)} mm`;
         if (rank === 0) {
           drawCalloutPill(pt.x, pt.y, txt, '#60A5FA', false);
         } else {
-          ctx.font = '700 24px "JetBrains Mono", monospace';
+          ctx.font = '700 36px "JetBrains Mono", monospace';
           const tw = ctx.measureText(pt.val.toFixed(1)).width;
-          const pw = tw + 18;
-          const ph = 32;
+          const pw = tw + 26;
+          const ph = 48;
           const cand: Rect = {
             x: Math.max(plotFrameX + 14, Math.min(plotFrameX + plotFrameW - 14 - pw, pt.x - pw / 2)),
-            y: Math.max(plotFrameY + dayHeaderH + 4, pt.y - 42),
+            y: Math.max(plotFrameY + dayHeaderH + 4, pt.y - 58),
             w: pw,
             h: ph,
           };
-          if (canPlace(cand, false, 32, 16)) {
+          if (!hitsOtherRainBar(cand, pt) && canPlace(cand, false, 36, 20)) {
             placedBoxes.push(cand);
+            roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 12);
+            ctx.fillStyle = darkTheme ? 'rgba(7, 14, 28, 0.88)' : 'rgba(248, 250, 252, 0.94)';
+            ctx.fill();
             ctx.fillStyle = darkTheme ? '#93C5FD' : '#1D4ED8';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(pt.val.toFixed(1), cand.x + cand.w / 2, cand.y + cand.h / 2);
+            ctx.fillText(pt.val.toFixed(1), cand.x + cand.w / 2, cand.y + cand.h / 2 + 1);
             ctx.textAlign = 'left';
             ctx.textBaseline = 'alphabetic';
           }
@@ -858,7 +891,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     ctx.fill();
 
     ctx.strokeStyle = meta.line;
-    ctx.lineWidth = 8;
+    ctx.lineWidth = 9;
     ctx.lineJoin = 'round';
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -870,8 +903,8 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       .map((pt) => ({ x: pt.x, y: pt.secY }));
     if (secCurvePts.length > 1) {
       ctx.strokeStyle = meta.secColor;
-      ctx.lineWidth = 5.5;
-      ctx.setLineDash([15, 11]);
+      ctx.lineWidth = 6.5;
+      ctx.setLineDash([16, 12]);
       ctx.beginPath();
       traceMonotoneSpline(ctx, secCurvePts, true);
       ctx.stroke();
@@ -896,11 +929,11 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
 
       if (pt.secY !== null && (tickSet.has(i) || (metric === 'wind' && i === maxGIdx))) {
         ctx.beginPath();
-        ctx.arc(pt.x, pt.secY, i === maxGIdx && metric === 'wind' ? 11 : 6.5, 0, Math.PI * 2);
+        ctx.arc(pt.x, pt.secY, i === maxGIdx && metric === 'wind' ? 13 : 8, 0, Math.PI * 2);
         ctx.fillStyle = meta.secColor;
         ctx.fill();
         if (i === maxGIdx && metric === 'wind') {
-          ctx.lineWidth = 3.5;
+          ctx.lineWidth = 4;
           ctx.strokeStyle = '#FFFFFF';
           ctx.stroke();
         }
@@ -914,7 +947,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
         (metric !== 'temp' && metric !== 'wind' && i === maxGenIdx);
 
       ctx.beginPath();
-      ctx.arc(pt.x, pt.y, isKey ? 11.5 : 7, 0, Math.PI * 2);
+      ctx.arc(pt.x, pt.y, isKey ? 14 : 8.5, 0, Math.PI * 2);
       ctx.fillStyle = isMinHighlight
         ? '#38BDF8'
         : isMaxHighlight
@@ -923,7 +956,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
             : '#FF8244'
           : cardBg;
       ctx.fill();
-      ctx.lineWidth = isKey ? 4 : 3.5;
+      ctx.lineWidth = isKey ? 4.5 : 4;
       ctx.strokeStyle = isMinHighlight || (isMaxHighlight && metric === 'wind') ? '#FFFFFF' : meta.line;
       ctx.stroke();
     });
@@ -980,7 +1013,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     const tooCloseToKey = (px: number) => {
       if (showDailyAxisMode) return false;
       for (const k of keyIndices) {
-        if (Math.abs(px - plotPts[k].x) < 145) return true;
+        if (Math.abs(px - plotPts[k].x) < 205) return true;
       }
       return false;
     };
@@ -1000,20 +1033,20 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       const anchorY = metric === 'wind' && pt.secY !== null ? pt.secY : pt.y;
       const col = metric === 'wind' ? '#F59E0B' : textMain;
 
-      ctx.font = '700 25px "JetBrains Mono", monospace';
+      ctx.font = '700 38px "JetBrains Mono", monospace';
       const tw = ctx.measureText(labelVal).width;
-      const pw = tw + 20;
-      const ph = 34;
+      const pw = tw + 30;
+      const ph = 52;
       const clampedX = Math.max(
         plotFrameX + 14,
         Math.min(plotFrameX + plotFrameW - 14 - pw, pt.x - pw / 2)
       );
 
-      for (const yOff of [-44, 22, -70]) {
+      for (const yOff of [-74, 24, -106, 56]) {
         const cand: Rect = { x: clampedX, y: anchorY + yOff, w: pw, h: ph };
-        if (canPlace(cand, true, 32, 16)) {
+        if (canPlace(cand, true, 36, 20)) {
           placedBoxes.push(cand);
-          roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 9);
+          roundRectPath(ctx, cand.x, cand.y, cand.w, cand.h, 13);
           ctx.fillStyle = darkTheme ? 'rgba(7, 14, 28, 0.86)' : 'rgba(248, 250, 252, 0.92)';
           ctx.fill();
 
@@ -1030,19 +1063,35 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   }
 
   // Eixo X limpo e espaçado
-  const axisHourY = plotFrameY + plotFrameH + 42;
-  const axisSubY = axisHourY + 38;
+  const axisHourY = plotFrameY + plotFrameH + 56;
+  const axisSubY = axisHourY + 54;
 
   if (hasSubRow) {
     ctx.fillStyle = textSoft;
-    ctx.font = '600 21px "JetBrains Mono", monospace';
+    ctx.font = '700 30px "JetBrains Mono", monospace';
     ctx.textAlign = 'right';
-    ctx.fillText(showDailyAxisMode && metric === 'temp' ? 'Sens. máx' : meta.subRowLabel, plotFrameX - 20, axisSubY);
+    ctx.fillText(
+      showDailyAxisMode && metric === 'temp' ? 'Sens. máx' : meta.subRowLabel,
+      plotFrameX - 22,
+      axisSubY,
+      yAxisW + innerPadX - 42
+    );
     ctx.textAlign = 'left';
   }
 
   ctx.textAlign = 'center';
   if (showDailyAxisMode) {
+    const daySlotW = Math.max(110, plotFrameW / Math.max(1, daySegments.length) - 28);
+    const drawFittedDayText = (txt: string, x: number, y: number, basePx: number) => {
+      let px = basePx;
+      ctx.font = `700 ${px}px "JetBrains Mono", monospace`;
+      while (px > 24 && ctx.measureText(txt).width > daySlotW) {
+        px -= 2;
+        ctx.font = `700 ${px}px "JetBrains Mono", monospace`;
+      }
+      ctx.fillText(txt, x, y, daySlotW);
+    };
+
     daySegments.forEach((seg) => {
       const cx = (getPxX(seg.start) + getPxX(seg.end)) / 2;
       let dayMax = -Infinity;
@@ -1068,24 +1117,21 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       }
 
       ctx.fillStyle = textMain;
-      ctx.font = '700 26px "JetBrains Mono", monospace';
       if (metric === 'temp') {
-        ctx.fillText(`${Math.round(dayMin)}° / ${Math.round(dayMax)}°`, cx, axisHourY);
+        drawFittedDayText(`${Math.round(dayMin)}° / ${Math.round(dayMax)}°`, cx, axisHourY, 36);
         ctx.fillStyle = '#F43F5E';
-        ctx.font = '700 23px "JetBrains Mono", monospace';
-        ctx.fillText(`${Math.round(daySecMax)}°`, cx, axisSubY);
+        drawFittedDayText(`${Math.round(daySecMax)}°`, cx, axisSubY, 33);
       } else if (metric === 'wind') {
-        ctx.fillText(`${Math.round(daySecMax)} km/h`, cx, axisHourY);
+        drawFittedDayText(`${Math.round(daySecMax)} km/h`, cx, axisHourY, 36);
         ctx.fillStyle = '#10B981';
-        ctx.font = '700 23px "JetBrains Mono", monospace';
-        ctx.fillText(`${Math.round(dayMaxWind)} ${dayMaxWindDir}`, cx, axisSubY);
+        drawFittedDayText(`${Math.round(dayMaxWind)} ${dayMaxWindDir}`, cx, axisSubY, 33);
       } else if (metric === 'rain') {
-        ctx.fillText(`${dayRain.toFixed(1)} mm`, cx, axisHourY);
+        drawFittedDayText(`${dayRain.toFixed(1)} mm`, cx, axisHourY, 36);
         ctx.fillStyle = dayProb > 0 ? '#60A5FA' : textSoft;
-        ctx.font = '700 22px "JetBrains Mono", monospace';
-        ctx.fillText(`${dayProb}%`, cx, axisSubY);
+        drawFittedDayText(`${dayProb}%`, cx, axisSubY, 33);
       } else {
-        ctx.fillText(`${Math.round(dayMin)}–${Math.round(dayMax)}${meta.shortUnit}`, cx, axisHourY);
+        const dailyUnit = metric === 'humidity' ? '%' : '';
+        drawFittedDayText(`${Math.round(dayMin)}–${Math.round(dayMax)}${dailyUnit}`, cx, axisHourY, 36);
       }
     });
   } else {
@@ -1094,20 +1140,20 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
       const hourNumStr = `${pt.p.hour.slice(0, 2)}h`;
 
       ctx.fillStyle = textMain;
-      ctx.font = '700 26px "JetBrains Mono", monospace';
+      ctx.font = '700 42px "JetBrains Mono", monospace';
       ctx.fillText(hourNumStr, pt.x, axisHourY);
 
       if (metric === 'temp' && pt.secVal !== null) {
         ctx.fillStyle = '#F43F5E';
-        ctx.font = '700 23px "JetBrains Mono", monospace';
+        ctx.font = '700 36px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(pt.secVal)}°`, pt.x, axisSubY);
       } else if (metric === 'wind') {
         ctx.fillStyle = '#10B981';
-        ctx.font = '700 23px "JetBrains Mono", monospace';
+        ctx.font = '700 36px "JetBrains Mono", monospace';
         ctx.fillText(`${Math.round(pt.val)} ${pt.p.windDir}`, pt.x, axisSubY);
       } else if (metric === 'rain') {
         ctx.fillStyle = pt.p.rainProb > 0 ? '#60A5FA' : textSoft;
-        ctx.font = '700 22px "JetBrains Mono", monospace';
+        ctx.font = '700 35px "JetBrains Mono", monospace';
         ctx.fillText(`${pt.p.rainProb}%`, pt.x, axisSubY);
       }
     });
@@ -1115,9 +1161,9 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
   ctx.textAlign = 'left';
 
   // Assinatura discreta de rodapé em 1 linha
-  const footY = H - botSafe - 16;
+  const footY = H - botSafe - 18;
   ctx.fillStyle = textMuted;
-  ctx.font = '600 24px "JetBrains Mono", monospace';
+  ctx.font = '600 36px "JetBrains Mono", monospace';
   ctx.fillText('Rio das Ostras · RJ  ·  @tempoemriodasostras', padX, footY);
 
   ctx.textAlign = 'right';
@@ -1130,7 +1176,7 @@ export async function exportChartToInstagramPng(opts: ExportChartOptions): Promi
     minute: '2-digit',
   }).format(new Date());
   ctx.fillStyle = textSoft;
-  ctx.font = '500 24px "JetBrains Mono", monospace';
+  ctx.font = '500 36px "JetBrains Mono", monospace';
   ctx.fillText(nowStr, W - padX, footY);
   ctx.textAlign = 'left';
 
