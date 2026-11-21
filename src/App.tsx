@@ -2537,10 +2537,12 @@ export default function App() {
                                 const srcBits: string[] = [];
                                 if (fontesDia?.inmet_cosmo_meteograma_mm !== undefined && fontesDia?.inmet_cosmo_meteograma_mm !== null) srcBits.push(`COSMO ${Number(fontesDia.inmet_cosmo_meteograma_mm).toFixed(1)}`);
                                 if (fontesDia?.inmet_vime_cosmo28_mm !== undefined && fontesDia?.inmet_vime_cosmo28_mm !== null) srcBits.push(`VIME2.8 ${Number(fontesDia.inmet_vime_cosmo28_mm).toFixed(1)}`);
+                                if (fontesDia?.inmet_vime_cosmo7_mm !== undefined && fontesDia?.inmet_vime_cosmo7_mm !== null) srcBits.push(`VIME7 ${Number(fontesDia.inmet_vime_cosmo7_mm).toFixed(1)}`);
                                 if (fontesDia?.cptec_wrf_mm !== undefined && fontesDia?.cptec_wrf_mm !== null) srcBits.push(`WRF ${Number(fontesDia.cptec_wrf_mm).toFixed(1)}`);
                                 if (fontesDia?.cptec_multimodel_mm !== undefined && fontesDia?.cptec_multimodel_mm !== null) srcBits.push(`Multi ${Number(fontesDia.cptec_multimodel_mm).toFixed(1)}`);
                                 if (fontesDia?.ecmwf_ifs_mm !== undefined && fontesDia?.ecmwf_ifs_mm !== null) srcBits.push(`ECMWF ${Number(fontesDia.ecmwf_ifs_mm).toFixed(1)}`);
                                 if (fontesDia?.gfs_mm !== undefined && fontesDia?.gfs_mm !== null) srcBits.push(`GFS ${Number(fontesDia.gfs_mm).toFixed(1)}`);
+                                if (fontesDia?.icon_mm !== undefined && fontesDia?.icon_mm !== null) srcBits.push(`ICON ${Number(fontesDia.icon_mm).toFixed(1)}`);
                                 if (fontesDia?.inea_faixa_municipio_mm) srcBits.push(`INEA ${fontesDia.inea_faixa_municipio_mm}`);
                                 return (
                                   <div className="p-2.5 rounded-lg border bg-[#F7F8FA] dark:bg-[#14213D] border-[#E5E5E5] dark:border-[#233354]">
@@ -6884,7 +6886,7 @@ export default function App() {
                                 <div className="text-[9px] uppercase text-slate-400">CPTEC Multimodel / Mun.</div>
                                 <div className="font-semibold text-[#14213D] dark:text-white truncate">
                                   {fn.cptec_multimodel_mm !== null && fn.cptec_multimodel_mm !== undefined ? `${Number(fn.cptec_multimodel_mm).toFixed(1)} mm` : '--'}
-                                  {fn.cptec_municipal_prob_pct !== null && fn.cptec_municipal_prob_pct !== undefined ? ` · ${fn.cptec_municipal_prob_pct}%` : ''}
+                                  {(fn.cptec_municipal_prob_pct ?? fn.cptec_multimodel_prob_pct) !== null && (fn.cptec_municipal_prob_pct ?? fn.cptec_multimodel_prob_pct) !== undefined ? ` · ${fn.cptec_municipal_prob_pct ?? fn.cptec_multimodel_prob_pct}%` : ''}
                                 </div>
                               </div>
                               <div className="p-2 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">

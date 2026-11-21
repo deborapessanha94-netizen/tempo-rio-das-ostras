@@ -1645,9 +1645,14 @@ def run_auto_bulletin_pipeline():
             except: pass
         else:
             target_day_str = dt.strftime("%d")
-            c_item = next((item for item in cptec_proximos if str(item.get('data_atual', '')).zfill(2) == target_day_str), None)
-            if not c_item and (day_idx - 1) < len(cptec_proximos):
-                c_item = cptec_proximos[day_idx - 1]
+            wd_clean = dia_semana_nome[:3].lower().replace('á', 'a').replace('é', 'e').replace('ê', 'e')
+            c_item = None
+            for item in cptec_proximos:
+                if str(item.get('data_atual', '')).zfill(2) == target_day_str:
+                    sem_raw = str(item.get('semana_dia', '') or '')[:3].lower().replace('á', 'a').replace('é', 'e').replace('ê', 'e')
+                    if not sem_raw or sem_raw == wd_clean:
+                        c_item = item
+                        break
             if c_item:
                 try: t_min_cptec = float(c_item.get('temperatura_min'))
                 except: pass

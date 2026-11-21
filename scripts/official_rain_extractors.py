@@ -993,6 +993,96 @@ def extract_inmet_vime_data(data_dir):
     return result
 
 
+_GRADS_GLYPHS_8X6 = {
+    "0": ["011110", "110011", "110011", "110011", "110011", "110011", "110011", "011110"],
+    "1": ["001100", "011100", "001100", "001100", "001100", "001100", "001100", "001100"],
+    "2": ["011110", "110010", "000010", "000110", "001100", "011000", "110000", "111111"],
+    "3": ["011110", "000011", "000010", "001110", "000011", "000011", "100011", "011110"],
+    "4": ["001100", "001100", "001100", "011100", "110100", "111111", "000110", "000110"],
+    "5": ["011110", "110000", "111100", "111110", "000011", "000011", "110011", "011110"],
+    "6": ["011100", "111100", "110010", "111100", "111110", "110011", "110011", "010010"],
+    "7": ["111111", "011111", "000010", "000110", "000100", "001100", "001100", "001000"],
+    "8": ["011110", "110110", "110010", "011110", "011110", "110011", "110010", "011110"],
+    "9": ["011110", "110110", "110010", "110010", "011110", "000110", "010010", "011110"],
+}
+
+
+def _read_wrf_y_max_bitmap(pil_img, yt, xl):
+    """Lê determinísticamente o valor numérico do topo do eixo Y do meteograma GrADS WRF (CPTEC)."""
+    gray = np.array(pil_img.convert("L"))
+    y0 = max(0, yt - 3)
+    y1 = min(gray.shape[0], yt + 5)
+    x0 = max(0, xl - 36)
+    x1 = max(x0 + 6, xl - 4)
+    band_m = gray[y0:y1, x0:x1] < 165
+    r_any = np.where(band_m.any(axis=1))[0]
+    if len(r_any) == 0:
+        return None
+    band_m = band_m[r_any[0]:r_any[-1] + 1, :]
+    c_active = np.where(band_m.any(axis=0))[0]
+    if len(c_active) == 0:
+        return None
+
+    col_segs = []
+    cs = int(c_active[0])
+    cp = cs
+    for c in c_active[1:]:
+        ci = int(c)
+        if ci > cp + 1:
+            col_segs.append((cs, cp))
+            cs = ci
+        cp = ci
+    col_segs.append((cs, cp))
+
+    digits = []
+    for cx0, cx1 in col_segs:
+        seg_w = cx1 - cx0 + 1
+        if seg_w >= 14:
+            step = seg_w / 3.0
+            sub_segs = [(int(round(cx0 + k * step)), int(round(cx0 + (k + 1) * step - 1))) for k in range(3)]
+        elif seg_w >= 10:
+            mid = cx0 + seg_w // 2
+            sub_segs = [(cx0, mid - 1), (mid, cx1)]
+        else:
+            sub_segs = [(cx0, cx1)]
+        for sx0, sx1 in sub_segs:
+            g = band_m[:, sx0:sx1 + 1]
+            ra = np.where(g.any(axis=1))[0]
+            if len(ra) == 0:
+                continue
+            g = g[ra[0]:ra[-1] + 1, :]
+            gh, gw = g.shape
+            norm = np.zeros((8, 6), dtype=float)
+            for rr in range(8):
+                sr = min(gh - 1, int(round(rr * (gh - 1) / 7.0))) if gh > 1 else 0
+                for cc in range(6):
+                    sc = min(gw - 1, int(round(cc * (gw - 1) / 5.0))) if gw > 1 else 0
+                    norm[rr, cc] = 1.0 if g[sr, sc] else 0.0
+            best_d, best_score = None, -1e9
+            for dig, rows_t in _GRADS_GLYPHS_8X6.items():
+                tmpl = np.array([[1.0 if ch == "1" else 0.0 for ch in r_s] for r_s in rows_t])
+                inter = float((norm * tmpl).sum())
+                union = float(np.maximum(norm, tmpl).sum()) or 1.0
+                score = inter / union
+                if dig == "1" and gw <= 3:
+                    score += 0.25
+                elif dig != "1" and gw <= 3:
+                    score -= 0.15
+                if score > best_score:
+                    best_score = score
+                    best_d = dig
+            if best_d is not None and best_score >= 0.45:
+                digits.append(best_d)
+    if digits:
+        try:
+            val = float(int("".join(digits)))
+            if 1.0 <= val <= 300.0:
+                return val
+        except ValueError:
+            pass
+    return None
+
+
 # ==============================================================================
 # 3. CPTEC/INPE WRF (3866.png) + PROBABILÍSTICA (P >= 5 mm)
 # ==============================================================================
@@ -1020,27 +1110,40 @@ def extract_cptec_wrf_and_prob(img_dir):
                 yb_cands = [int(r) for r in hlw if r >= yt + 65]
                 if yb_cands:
                     yb = yb_cands[0]
-                    vlw = np.where(bw[yt:yb + 1, :].sum(axis=0) > max(40, (yb - yt) * 0.65))[0]
-                    xl, xr = int(vlw[0]), int(vlw[-1])
+                    col_sums = bw[yt:yb + 1, :].sum(axis=0)
+                    vlw = [
+                        int(c) for c in np.where(col_sums > max(40, (yb - yt) * 0.78))[0]
+                        if bw[yt:yt + 3, c].any() and bw[yb - 2:yb + 1, c].any()
+                    ]
+                    if len(vlw) >= 2:
+                        xl, xr = vlw[0], vlw[-1]
+                    else:
+                        fb = np.where(col_sums > max(40, (yb - yt) * 0.65))[0]
+                        xl, xr = (int(fb[0]), int(fb[-1])) if len(fb) >= 2 else (0, 0)
                 else:
                     xl, xr, yb = 0, 0, 0
                 if xr > xl + 100:
-                    ocr_w = _ocr_stitched([
-                        im_w.crop((24, max(0, yt - 8), xl - 1, yt + 10)),
-                        im_w.crop((190, 16, 400, 38)),
-                    ])
-                    m_ym = re.match(r"\s*(\d{1,3})\b", ocr_w)
-                    y_max_w = float(int(m_ym.group(1))) if m_ym else 3.0
-                    if y_max_w <= 0 or y_max_w > 200:
+                    y_bmp_w = _read_wrf_y_max_bitmap(im_w, yt, xl)
+                    hdr_txt = _ocr_stitched([im_w.crop((180, 14, 420, 40))])
+                    if y_bmp_w is not None:
+                        y_max_w = y_bmp_w
+                    else:
+                        ym_txt = _ocr_stitched([im_w.crop((max(0, xl - 36), max(0, yt - 3), max(12, xl - 4), yt + 5))])
+                        m_ym = re.search(r"\b(\d{1,3})\b", ym_txt)
+                        y_max_w = float(int(m_ym.group(1))) if m_ym else 3.0
+                    if y_max_w <= 0 or y_max_w > 300:
                         y_max_w = 3.0
 
-                    # Identifica data inicial do WRF (padrão 00Z ou 12Z de hoje)
+                    # Identifica data e hora inicial real do WRF (00Z ou 12Z)
                     now_utc = datetime.now(timezone.utc)
                     start_wrf = now_utc.replace(hour=0 if now_utc.hour < 14 else 12, minute=0, second=0, microsecond=0)
-                    m_dt = re.search(r"(\d{2})[/.-](\d{2})[/.-](20\d{2})", ocr_w)
+                    m_dt = re.search(r"(\d{2})[/.-](\d{2})[/.-](20\d{2})", hdr_txt)
                     if m_dt:
                         try:
-                            start_wrf = datetime(int(m_dt.group(3)), int(m_dt.group(2)), int(m_dt.group(1)), 0, 0, tzinfo=timezone.utc)
+                            m_hz = re.search(r"20\d{2}\D+(\d{2}|[oO]{2})\s*[zZ]?", hdr_txt)
+                            hz_raw = m_hz.group(1).lower() if m_hz else "00"
+                            wrf_hr = 12 if hz_raw == "12" else 0
+                            start_wrf = datetime(int(m_dt.group(3)), int(m_dt.group(2)), int(m_dt.group(1)), wrf_hr, 0, tzinfo=timezone.utc)
                         except ValueError:
                             pass
 
@@ -1080,16 +1183,29 @@ def extract_cptec_wrf_and_prob(img_dir):
         except Exception as e:
             print(f"[CPTEC WRF Parser] Aviso: {e}")
 
-    # Previsão Probabilística P >= 5 mm (24h, 48h, 72h)
+    # Previsão Probabilística P >= 5 mm (024h = D+1, 048h = D+2, 072h = D+3; validado pela data impressa no mapa)
     prob_p05_by_day = {}
     today_brt = datetime.now(BRT).date()
     for d_off, fcode in [(0, "024"), (1, "048"), (2, "072")]:
-        d_iso = (today_brt + timedelta(days=d_off)).strftime("%Y-%m-%d")
         try:
             u = f"https://s1.cptec.inpe.br/grafico/Modelos/Multimodel/prob_diaria/figuras/prec/pro_bra_p05_{fcode}.png"
             out_m = Path(img_dir) / "cptec" / f"mapa_prob_p05_{fcode}.png"
             out_m.write_bytes(_fetch_bytes(u, headers=CPTEC_HEADERS, timeout=14))
-            p5 = np.array(Image.open(out_m).convert("RGB"))
+            im_p5 = Image.open(out_m).convert("RGB")
+            d_iso = (today_brt + timedelta(days=d_off + 1)).strftime("%Y-%m-%d")
+            try:
+                hdr_p5 = _ocr_stitched([im_p5.crop((0, 0, min(im_p5.width, 760), 72))])
+                m_prev = re.search(r"previs\w*\s+para\s+(\d{2})[/.-](\d{2})[/.-](20\d{2})", hdr_p5, re.I)
+                if m_prev:
+                    d_iso = f"{m_prev.group(3)}-{m_prev.group(2)}-{m_prev.group(1)}"
+                else:
+                    dates_p5 = re.findall(r"(\d{2})[/.-](\d{2})[/.-](20\d{2})", hdr_p5)
+                    if len(dates_p5) >= 2:
+                        d_last = dates_p5[-1]
+                        d_iso = f"{d_last[2]}-{d_last[1]}-{d_last[0]}"
+            except Exception:
+                pass
+            p5 = np.array(im_p5)
             # Colorbar x span: 56..989 at row 1515 -> 10% a 90%
             bar_cols = p5[1515, 56:990].astype(float)
             samples = []

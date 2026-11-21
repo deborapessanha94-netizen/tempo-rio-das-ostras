@@ -29,6 +29,7 @@ export interface RainSourceDayBreakdown {
   vime_dia?: Record<string, any> | null;
   cptec_wrf_mm?: number | null;
   cptec_multimodel_mm?: number | null;
+  cptec_multimodel_prob_pct?: number | null;
   cptec_multimodel_horas?: number | null;
   cptec_municipal_mm?: number | null;
   cptec_municipal_prob_pct?: number | null;
@@ -591,9 +592,11 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     } else if (dIdx > 0 && inputs.liveCptecNext?.length) {
       const dayNum = dateIso.slice(8, 10);
       const item = inputs.liveCptecNext.find((it) => String(it?.data_atual || '').padStart(2, '0') === dayNum);
-      if (item && item.probabilidade_chuva !== undefined) {
+      if (item && item.probabilidade_chuva !== undefined && item.probabilidade_chuva !== null) {
         const pLive = Number(item.probabilidade_chuva);
-        if (Number.isFinite(pLive)) cptecProb = pLive;
+        cptecProb = Number.isFinite(pLive) ? pLive : null;
+      } else {
+        cptecProb = null;
       }
     }
 
@@ -746,8 +749,13 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     p75 = round1(Math.max(p50, p75));
     p90 = round1(Math.max(p75, p90));
 
-    // Probabilidade condicional combinada
+    // Probabilidade condicional combinada (mesmos pesos do backend rain_consensus.py)
+    const mmProbPct =
+      prevFontes.cptec_multimodel_prob_pct !== undefined && prevFontes.cptec_multimodel_prob_pct !== null
+        ? Number(prevFontes.cptec_multimodel_prob_pct)
+        : null;
     const probSignals: Array<[number, number]> = [];
+    if (mmProbPct !== null && Number.isFinite(mmProbPct)) probSignals.push([mmProbPct, 0.26]);
     if (cptecProb !== null) probSignals.push([cptecProb, 0.2]);
     if (p05Pct !== null) probSignals.push([p05Pct, 0.2]);
     if (ecmwfProb !== null) probSignals.push([ecmwfProb, 0.14]);
@@ -850,22 +858,70 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     };
 
     const card = meta.dias_resumo?.[dIdx];
+    const rainPlancon = classifyRainPlancon(p50);
     if (card) {
       card.intensidade_chuva = rainIntensityLabel;
+      const rajTxt = String(card.pilares?.vento?.val || '');
+      const rajM = rajTxt.match(/Rajadas\s+(\d+)/i);
+      const dayGust = rajM ? Number(rajM[1]) : 0;
+      const hadRioAlert = String(card.badge || '').toUpperCase().includes('CHEIAS');
+      if (p50 > 130 || dayGust > 75 || (dIdx === 0 && hadRioAlert)) {
+        card.badge = 'ALERTA MÁXIMO / CHEIAS';
+        card.badge_tipo = 'danger';
+      } else if (p50 >= 100) {
+        card.badge = 'ALERTA / CHUVAS INTENSAS';
+        card.badge_tipo = 'danger';
+      } else if (dayGust >= 56) {
+        card.badge = 'ALERTA / VENTO ALTO';
+        card.badge_tipo = 'danger';
+      } else if (p50 >= 70 || Boolean(activeAlert) || dayGust >= 41) {
+        card.badge = 'AVISO / ATENÇÃO';
+        card.badge_tipo = 'warning';
+      } else if (p50 >= 20) {
+        card.badge = 'OBSERVAÇÃO';
+        card.badge_tipo = 'info';
+      } else {
+        card.badge = 'NORMALIDADE';
+        card.badge_tipo = 'info';
+      }
     }
     if (card?.pilares?.chuva) {
       card.pilares.chuva.val = activeAlert
         ? `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm • Teto ${newPicoMax.toFixed(0)} mm)`
         : `${p50.toFixed(1)} mm (${probPct}% • P25–P90: ${p25.toFixed(1)}–${p90.toFixed(1)} mm)`;
     }
-    if (card && Array.isArray(card.informe_populacao) && card.informe_populacao.length >= 2 && Math.abs(p50 - oldDayMm) >= 0.2) {
-      const oldP2 = String(card.informe_populacao[1] || '');
-      const updatedP2 = oldP2
-        .replace(
+    if (card && Array.isArray(card.informe_populacao) && card.informe_populacao.length >= 2) {
+      let updatedP2 = String(card.informe_populacao[1] || '');
+      if (Math.abs(p50 - oldDayMm) >= 0.2) {
+        updatedP2 = updatedP2.replace(
           /\((?:consenso(?: P50)? de|m[eé]dia de|acumulado (?:estimado|previsto) de)\s+\d+(?:[.,]\d+)?\s*mm(?:[^)]*)\)/i,
           `(consenso de ${p50.toFixed(1)} mm no dia; probabilidade de ${probPct}%)`
         );
+      }
+      if (p50 >= 0.2) {
+        updatedP2 = updatedP2.replace(
+          /chuva\s+(?:muito\s+forte|extrema\s*\/\s*muito\s+forte|significativa\s+a\s+forte|forte|moderada|muito\s+fraca|fraca)/i,
+          rainPlancon.titulo.toLowerCase()
+        );
+      }
       card.informe_populacao[1] = updatedP2;
+    }
+    const sinEv = meta.sinopse_estruturada?.evolucao_3_dias?.[dIdx];
+    if (sinEv && card) {
+      sinEv.badge = card.badge;
+      sinEv.badge_tipo = card.badge_tipo;
+      sinEv.informe_populacao = Array.isArray(card.informe_populacao) ? [...card.informe_populacao] : sinEv.informe_populacao;
+      if (sinEv.pilares?.chuva && card.pilares?.chuva) {
+        sinEv.pilares.chuva.val = card.pilares.chuva.val;
+      }
+    }
+    const inspDia = meta.inspecao_minuciosa_tempo_severo?.dias_inspecionados?.[dIdx];
+    if (inspDia?.chuva) {
+      inspDia.chuva.media_continua_modelos_mm = p50;
+      inspDia.chuva.teto_tempestade_alerta_mm = newPicoMax;
+      inspDia.chuva.faixa_completa_txt = activeAlert
+        ? `${p50.toFixed(1)} mm (Média) • Até ${newPicoMax.toFixed(0)} mm (Teto Alerta)`
+        : `${p50.toFixed(1)} mm`;
     }
 
     // Rebalanceia os 4 turnos em boletimOficial combinando perfil oficial + globais ao vivo

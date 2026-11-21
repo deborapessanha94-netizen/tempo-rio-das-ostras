@@ -290,7 +290,7 @@ def compute_daily_rain_consensus(
 
     vime7_eff = None
     if vime7_mm is not None and vime7_6h_mm is not None:
-        vime7_eff = round(0.5 * float(vime7_mm) + 0.5 * float(vime7_6h_mm), 1)
+        vime7_eff = round(0.70 * float(vime7_mm) + 0.30 * float(vime7_6h_mm), 1)
     elif vime7_mm is not None:
         vime7_eff = float(vime7_mm)
     elif vime7_6h_mm is not None:
@@ -544,7 +544,7 @@ def compute_daily_rain_consensus(
             "inmet_vime_cosmo28_faixa": vime28_faixa,
             "inmet_vime_cosmo7_mm": round(float(vime7_eff), 1) if vime7_eff is not None else None,
             "inmet_vime_cosmo7_6h_mm": round(float(vime7_6h_mm), 1) if vime7_6h_mm is not None else None,
-            "inmet_vime_cosmo7_faixa": vime7_faixa,
+            "inmet_vime_cosmo7_faixa": vime7_faixa or (f"~{round(float(vime7_6h_mm))} mm (6h)" if vime7_6h_mm is not None else None),
             "inmet_vime_pwat_mm": vime_pwat,
             "inmet_vime_pwat_faixa": vime_pwat_faixa,
             "inmet_vime_cape_jkg": vime_cape,
@@ -552,6 +552,7 @@ def compute_daily_rain_consensus(
             "vime_dia": vime_day if vime_day else None,
             "cptec_wrf_mm": round(float(wrf_mm), 1) if wrf_mm is not None else None,
             "cptec_multimodel_mm": mm_sum,
+            "cptec_multimodel_prob_pct": int(round(mm_prob_day)) if mm_prob_day is not None else None,
             "cptec_multimodel_horas": mm_hours_count,
             "cptec_municipal_mm": cptec_mun_mm if cptec_hoje_valido else None,
             "cptec_municipal_prob_pct": int(round(cptec_prob)) if cptec_prob is not None else None,
