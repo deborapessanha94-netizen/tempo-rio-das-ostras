@@ -3,7 +3,7 @@
   "status_geral_cor": "danger",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": true,
-  "atualizacao_hora": "22/11/2026 às 02:01h",
+  "atualizacao_hora": "22/11/2026 às 05:11h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -50,12 +50,12 @@
       },
       "vento": {
         "rajada_faixa": "40 a 60 km/h",
-        "rajada_pico_modelado_kmh": 22.6,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
+        "rajada_pico_modelado_kmh": 26.8,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
         "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
-        "impacto_maritimo": "Avisos da Marinha vigentes para Área Delta: VENTO FORTE com rajadas de até 62 a 74 km/h (Força 7/8) e ondas de 2,0 a 2,5 m (Agitado)."
+        "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
       },
       "instrucoes_seguranca": [
         "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
@@ -107,9 +107,9 @@
       },
       "vento": {
         "rajada_faixa": "40 a 60 km/h",
-        "rajada_pico_modelado_kmh": 21.2,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
-        "direcao_pico": "Oeste-Sudoeste (WSW)",
+        "rajada_pico_modelado_kmh": 19.8,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
+        "direcao_pico": "Sul-Sudoeste (SSW)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -163,10 +163,10 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 28 km/h",
-        "rajada_pico_modelado_kmh": 28.5,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 12:00)",
-        "direcao_pico": "Leste-Sudeste (ESE)",
+        "rajada_faixa": "Até 30 km/h",
+        "rajada_pico_modelado_kmh": 30.2,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
+        "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -189,25 +189,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 11.9,
+        "media_continua_modelos_mm": 12.2,
         "teto_tempestade_alerta_mm": 40.0,
-        "faixa_completa_txt": "11.9 mm",
+        "faixa_completa_txt": "12.2 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "8.9 a 13.1 mm",
+            "volume_estimado": "9.1 a 13.4 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "11.9 a 40.0 mm",
+            "volume_estimado": "12.2 a 40.0 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "14.9 a 17.9 mm",
+            "volume_estimado": "15.2 a 18.3 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -220,10 +220,10 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 19 km/h",
-        "rajada_pico_modelado_kmh": 18.9,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 17:00)",
-        "direcao_pico": "Sul-Sudoeste (SSW)",
+        "rajada_faixa": "Até 23 km/h",
+        "rajada_pico_modelado_kmh": 23.2,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+        "direcao_pico": "Sul-Sudeste (SSE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -246,25 +246,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 21.6,
+        "media_continua_modelos_mm": 21.7,
         "teto_tempestade_alerta_mm": 47.5,
-        "faixa_completa_txt": "21.6 mm",
+        "faixa_completa_txt": "21.7 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "16.2 a 23.8 mm",
+            "volume_estimado": "16.3 a 23.9 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "21.6 a 47.5 mm",
+            "volume_estimado": "21.7 a 47.5 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "27.0 a 32.4 mm",
+            "volume_estimado": "27.1 a 32.5 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -277,9 +277,9 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 43 km/h",
-        "rajada_pico_modelado_kmh": 43.4,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
+        "rajada_faixa": "Até 37 km/h",
+        "rajada_pico_modelado_kmh": 37.4,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
         "direcao_pico": "Sul (S)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
@@ -303,25 +303,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 10.4,
-        "teto_tempestade_alerta_mm": 41.7,
-        "faixa_completa_txt": "10.4 mm",
+        "media_continua_modelos_mm": 12.0,
+        "teto_tempestade_alerta_mm": 39.8,
+        "faixa_completa_txt": "12.0 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "7.8 a 11.4 mm",
+            "volume_estimado": "9.0 a 13.2 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "10.4 a 41.7 mm",
+            "volume_estimado": "12.0 a 39.8 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "13.0 a 15.6 mm",
+            "volume_estimado": "15.0 a 18.0 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -334,10 +334,10 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 25 km/h",
-        "rajada_pico_modelado_kmh": 25.1,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
-        "direcao_pico": "Sudeste (SE)",
+        "rajada_faixa": "Até 24 km/h",
+        "rajada_pico_modelado_kmh": 24.4,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
+        "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -360,25 +360,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 8.0,
-        "teto_tempestade_alerta_mm": 20.0,
-        "faixa_completa_txt": "8.0 mm",
+        "media_continua_modelos_mm": 14.2,
+        "teto_tempestade_alerta_mm": 41.7,
+        "faixa_completa_txt": "14.2 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "6.0 a 8.8 mm",
+            "volume_estimado": "10.6 a 15.6 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "8.0 a 20.0 mm",
+            "volume_estimado": "14.2 a 41.7 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "10.0 a 12.0 mm",
+            "volume_estimado": "17.8 a 21.3 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -391,10 +391,10 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 28 km/h",
-        "rajada_pico_modelado_kmh": 27.9,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
-        "direcao_pico": "Leste-Nordeste (ENE)",
+        "rajada_faixa": "Até 25 km/h",
+        "rajada_pico_modelado_kmh": 25.4,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
+        "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -417,25 +417,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 5.5,
-        "teto_tempestade_alerta_mm": 9.9,
-        "faixa_completa_txt": "5.5 mm",
+        "media_continua_modelos_mm": 16.4,
+        "teto_tempestade_alerta_mm": 16.6,
+        "faixa_completa_txt": "16.4 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "4.1 a 6.1 mm",
+            "volume_estimado": "12.3 a 18.0 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "5.5 a 9.9 mm",
-            "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
+            "volume_estimado": "16.4 a 16.6 mm",
+            "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "6.9 a 8.2 mm",
+            "volume_estimado": "20.5 a 24.6 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -448,10 +448,10 @@
         }
       },
       "vento": {
-        "rajada_faixa": "Até 40 km/h",
-        "rajada_pico_modelado_kmh": 39.9,
+        "rajada_faixa": "Até 25 km/h",
+        "rajada_pico_modelado_kmh": 24.9,
         "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
-        "direcao_pico": "Leste-Sudeste (ESE)",
+        "direcao_pico": "Sudeste (SE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -507,12 +507,12 @@
     },
     "vento": {
       "rajada_faixa": "40 a 60 km/h",
-      "rajada_pico_modelado_kmh": 22.6,
-      "horario_pico": "Entre 14h e 18h (pico por volta das 13:00)",
+      "rajada_pico_modelado_kmh": 26.8,
+      "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
       "direcao_pico": "Leste-Sudeste (ESE)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
       "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
-      "impacto_maritimo": "Avisos da Marinha vigentes para Área Delta: VENTO FORTE com rajadas de até 62 a 74 km/h (Força 7/8) e ondas de 2,0 a 2,5 m (Agitado)."
+      "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
     },
     "instrucoes_seguranca": [
       "Em caso de rajadas de vento intensas, não se abrigue sob árvores nem estacione veículos próximos a torres de transmissão e outdoors.",
@@ -564,9 +564,9 @@
     },
     "vento": {
       "rajada_faixa": "40 a 60 km/h",
-      "rajada_pico_modelado_kmh": 21.2,
-      "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
-      "direcao_pico": "Oeste-Sudoeste (WSW)",
+      "rajada_pico_modelado_kmh": 19.8,
+      "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
+      "direcao_pico": "Sul-Sudoeste (SSW)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
       "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
       "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
