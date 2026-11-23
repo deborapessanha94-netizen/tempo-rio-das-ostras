@@ -1178,6 +1178,23 @@ export default function App() {
     [inmetAvisosDoDia]
   );
 
+  const inmetAvisosFuturosOstras = useMemo(
+    () =>
+      inmetAvisosNaoExpirados
+        .filter((av) => {
+          if ((av as any).eh_direto_ostras !== true) return false;
+          const { iniIso } = parseInmetAvisoRangeBrt(av as any);
+          return Boolean(iniIso && iniIso > todayBrtIso);
+        })
+        .slice()
+        .sort((a, b) => {
+          const rA = parseInmetAvisoRangeBrt(a as any);
+          const rB = parseInmetAvisoRangeBrt(b as any);
+          return (Number.isNaN(rA.startMs) ? 0 : rA.startMs) - (Number.isNaN(rB.startMs) ? 0 : rB.startMs);
+        }),
+    [inmetAvisosNaoExpirados, todayBrtIso]
+  );
+
   const inmetOstrasAtivoAgora = useMemo(() => {
     const nowMs = Date.now();
     return inmetOstrasVigentesHoje.some((av) => {
@@ -1747,7 +1764,7 @@ export default function App() {
                             </span>
                             {(prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva) && (
                               <span
-                                className="text-[11px] font-sans font-semibold text-[#FF8244] whitespace-nowrap"
+                                className="text-[11px] font-sans font-semibold text-[#FF8244] break-words leading-snug"
                                 title="Classificação oficial PLANCON Rio das Ostras: Normalidade ≤ 20/30 mm · Moderada 20–70 mm · Forte 70–100 mm · Muito forte > 100 mm"
                               >
                                 ({prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva})
@@ -1757,13 +1774,17 @@ export default function App() {
                           <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
                             {probHoje
                               ? `Probabilidade: ${probHoje.probabilidade_pct ?? prevHoje?.chuva_prob_pct ?? '--'}%`
-                              : hojeInspecao?.alerta_ativo && hojeInspecao.chuva?.taxa_horaria_pico
-                                ? `Pico: ${hojeInspecao.chuva.taxa_horaria_pico}`
-                                : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
+                              : `Rede 24h: ${acumulados ? acumulados.resumo.media_chuva_24h.toFixed(1) : '--'} mm`}
                           </div>
+                          {(hojeInspecao?.alerta_ativo || prevHoje?.tem_alerta_inmet || inmetOstrasVigentesHoje.length > 0) && (
+                            <div className="text-[10.5px] font-mono font-semibold text-[#FF8244] leading-snug">
+                              {`${inmetOstrasVigentesHoje[0]?.descricao || prevHoje?.fontes?.inmet_aviso_desc || 'Alerta INMET'}: ${hojeInspecao?.chuva?.taxa_horaria_pico || prevHoje?.taxa_horaria_pico || '20 a 30 mm/h'} · Teto ${Number(prevHoje?.chuva_pico_convectivo_mm ?? hojeInspecao?.chuva?.teto_tempestade_alerta_mm ?? 50).toFixed(0)} mm`}
+                            </div>
+                          )}
                           <div className="text-[10px] font-mono text-slate-400 dark:text-[#E5E5E5]/55 leading-snug break-words">
                             {ineaHojeValido ? `INEA: ${ineaHoje.faixa_municipio_mm || ineaHoje.faixa_chuva_mm} · ` : ''}
                             {qtdFontes} fontes integradas (BR + ECMWF/GFS/ICON)
+                            {inmetAvisosFuturosOstras.length > 0 ? ` · Próx. ${inmetAvisosFuturosOstras.length} dia(s): ${inmetAvisosFuturosOstras[0]?.descricao}` : ''}
                           </div>
                         </div>
                       );
@@ -2570,8 +2591,15 @@ export default function App() {
                                         : d.pilares.chuva.val}
                                     </span>
                                     {(prevDiaObj?.intensidade_chuva || (d as any)?.intensidade_chuva) && (
-                                      <span className="text-[9.5px] font-semibold text-[#14213D]/80 dark:text-[#E5E5E5]/85 block mt-0.5">
+                                      <span className={`text-[9.5px] font-semibold block mt-0.5 ${prevDiaObj?.tem_alerta_inmet ? 'text-[#FF8244]' : 'text-[#14213D]/80 dark:text-[#E5E5E5]/85'}`}>
                                         {prevDiaObj?.intensidade_chuva || (d as any)?.intensidade_chuva}
+                                      </span>
+                                    )}
+                                    {(prevDiaObj?.tem_alerta_inmet || probObj) && (
+                                      <span className="text-[9px] font-medium text-slate-600 dark:text-[#E5E5E5]/80 block mt-0.5 leading-snug">
+                                        {prevDiaObj?.tem_alerta_inmet
+                                          ? `Alerta ${prevDiaObj?.fontes?.inmet_aviso_desc || (d as any)?.alerta_inmet_desc || 'INMET'} nº ${prevDiaObj?.alerta_inmet_id || '--'} · Teto ${Number(prevDiaObj?.chuva_pico_convectivo_mm ?? 50).toFixed(0)} mm (${prevDiaObj?.taxa_horaria_pico || '20 a 30 mm/h'})`
+                                          : `P25–P90: ${Number(probObj?.p25_mm ?? 0).toFixed(1)}–${Number(probObj?.p90_teto_mm ?? 0).toFixed(1)} mm`}
                                       </span>
                                     )}
                                     {srcBits.length > 0 && (
@@ -6062,10 +6090,89 @@ export default function App() {
                   );
                 })() : (
                   <div className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-6 text-sm">
-                    Sem avisos ativos no INMET no momento.
+                    Sem avisos ativos no INMET para hoje no momento.
                   </div>
                 )}
                 </div>
+
+                {inmetAvisosFuturosOstras.length > 0 && alertaFiltroLocal !== 'outros' && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-[#FF8244]" />
+                        <h2 className="font-display text-base sm:text-lg font-semibold text-[#14213D] dark:text-white">
+                          INMET — Alertas Programados para os Próximos Dias (Rio das Ostras)
+                        </h2>
+                      </div>
+                      <span className="text-[11px] font-mono text-[#FF8244] font-semibold">
+                        {inmetAvisosFuturosOstras.length} aviso{inmetAvisosFuturosOstras.length === 1 ? '' : 's'} futuro{inmetAvisosFuturosOstras.length === 1 ? '' : 's'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {inmetAvisosFuturosOstras.map((av) => {
+                        const { iniIso, iniHm } = parseInmetAvisoRangeBrt(av as any);
+                        const dataCurta = iniIso ? `${iniIso.slice(8, 10)}/${iniIso.slice(5, 7)}` : '';
+                        return (
+                          <article
+                            key={`fut-${av.id}`}
+                            className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] border-l-4 border-l-[#FF8244] rounded-xl p-4 flex flex-col justify-between gap-2.5 shadow-xs"
+                          >
+                            <div className="space-y-2">
+                              <div className="flex flex-wrap items-center justify-between gap-1.5 pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
+                                <div className="flex flex-wrap items-center gap-1.5">
+                                  <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-semibold uppercase bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white">
+                                    INMET
+                                  </span>
+                                  <span className="font-mono text-xs text-[#FF8244] font-semibold">
+                                    Nº {av.id}
+                                  </span>
+                                  <span className="px-1.5 py-0.5 rounded font-mono text-[10px] font-bold bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354] inline-flex items-center gap-1">
+                                    <MapPin className="w-3 h-3 text-[#FF8244] shrink-0" />
+                                    Rio das Ostras
+                                  </span>
+                                  <span className="px-1.5 py-0.5 rounded font-mono text-[10px] border bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] font-medium">
+                                    Programado p/ {dataCurta} · {iniHm}h
+                                  </span>
+                                </div>
+                                <span className="font-mono text-[11px] font-semibold text-slate-600 dark:text-[#FF8244] shrink-0">
+                                  {av.cor_badge || 'Alerta Oficial'}
+                                </span>
+                              </div>
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h3 className="font-display text-base font-semibold leading-snug text-[#14213D] dark:text-white">
+                                  {av.descricao} — {av.severidade}
+                                </h3>
+                                <span className="inline-flex items-center gap-1 font-mono text-[11px] text-slate-600 dark:text-[#E5E5E5]/80 bg-[#F7F8FA] dark:bg-[#0B1324] px-2 py-0.5 rounded border border-[#E5E5E5] dark:border-[#233354] shrink-0">
+                                  <Clock className="w-3 h-3 text-[#FF8244]" />
+                                  <span>{av.inicio_formatado || av.inicio}</span>
+                                  <span className="text-slate-400">→</span>
+                                  <span>{av.fim_formatado || av.fim}</span>
+                                </span>
+                              </div>
+                              {(av.riscos || []).length > 0 && (
+                                <p className="text-xs text-slate-600 dark:text-[#E5E5E5]/85 leading-snug">
+                                  <strong className="text-[#14213D] dark:text-white">Riscos:</strong>{' '}
+                                  {(av.riscos || []).join(' ')}
+                                </p>
+                              )}
+                            </div>
+                            <div className="pt-1.5 border-t border-[#E5E5E5] dark:border-[#233354] flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                              <span>Polígono oficial abrange Rio das Ostras</span>
+                              <a
+                                href={`https://alertas2.inmet.gov.br/${av.id}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-[#14213D] dark:text-[#FF8244] hover:underline shrink-0"
+                              >
+                                Ver detalhes no INMET <ExternalLink className="w-3 h-3 text-[#FF8244]" />
+                              </a>
+                            </div>
+                          </article>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {boletimMeta?.alertas_estruturados && (
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">

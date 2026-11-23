@@ -38,6 +38,7 @@ export interface RainSourceDayBreakdown {
   inmet_resumo?: string | null;
   inmet_aviso_id?: string | number | null;
   inmet_aviso_cor?: string | null;
+  inmet_aviso_desc?: string | null;
   inea_faixa_municipio_mm?: string | null;
   inea_faixa_bacia_mm?: string | null;
   inea_referencia_mm?: number | null;
@@ -233,8 +234,26 @@ export function classifyWindPlancon(windKmh?: number | null, gustKmh?: number | 
   return { windTitulo, gustTitulo, riscoLabel: 'Risco Baixo (PLANCON)', beaufort: 'Beaufort 0–5', tone: 'baixo' };
 }
 
-function classifyRainIntensityLabel(chuvaMm: number, _hasAlert?: boolean, _alertColor?: string | null): string {
-  return classifyRainPlancon(chuvaMm).titulo;
+function classifyRainIntensityLabel(
+  chuvaMm: number,
+  hasAlert?: boolean,
+  alertColor?: string | null,
+  alertDesc?: string | null
+): string {
+  const mm = Number.isFinite(chuvaMm) ? Math.max(0, chuvaMm) : 0;
+  if (mm >= 70 || !hasAlert) {
+    return classifyRainPlancon(mm).titulo;
+  }
+  const corL = String(alertColor || 'Amarelo').toLowerCase();
+  const descL = String(alertDesc || '').toLowerCase();
+  const isTemp = descL.includes('tempestad');
+  if (corL.includes('vermelho')) {
+    return isTemp ? 'Tempestade Severa (Alerta)' : 'Chuvas Intensas / Extrema';
+  }
+  if (corL.includes('laranja')) {
+    return isTemp ? 'Tempestade / Chuva Forte' : 'Chuvas Intensas / Forte';
+  }
+  return isTemp ? 'Tempestade / Pancadas' : 'Chuvas Intensas / Pancadas';
 }
 
 function weightedQuantiles(samples: Array<[number, number]>): {
@@ -728,11 +747,25 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       p90 = Math.max(p90, Number(ineaPrev.chuva_max_mm));
     }
 
+    let alertP75Floor = 0;
     if (dayAlerts.length > 0) {
       const sev = String((dayAlerts[0] as any).cor_nome || 'Amarelo');
-      const floor = sev === 'Vermelho' ? 30.0 : sev === 'Laranja' ? 15.0 : 5.0;
+      const strongConv =
+        (pwatVal !== null && pwatVal >= 55 && capeVal !== null && capeVal >= 1500) ||
+        samples.some(([v]) => v >= 8.0);
+      let floor = 5.0;
+      if (sev === 'Vermelho') {
+        floor = 30.0;
+        alertP75Floor = 60.0;
+      } else if (sev === 'Laranja') {
+        floor = 18.0;
+        alertP75Floor = 45.0;
+      } else {
+        floor = strongConv ? 10.0 : 5.0;
+        alertP75Floor = strongConv ? 25.0 : 15.0;
+      }
       p50 = Math.max(p50, floor);
-      p75 = Math.max(p75, p50);
+      p75 = Math.max(p75, p50, alertP75Floor);
       const alertLimits = extractAlertMaxRain(dayAlerts[0]);
       p90 = Math.max(p90, alertLimits.diaMax);
     }
@@ -746,7 +779,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
 
     p25 = round1(Math.min(p25, p50));
     p50 = round1(Math.max(0, p50));
-    p75 = round1(Math.max(p50, p75));
+    p75 = round1(Math.max(p50, alertP75Floor, p75));
     p90 = round1(Math.max(p75, p90));
 
     // Probabilidade condicional combinada (mesmos pesos do backend rain_consensus.py)
@@ -819,7 +852,8 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       qtd_fontes_numericas: samples.length,
     };
 
-    const rainIntensityLabel = classifyRainIntensityLabel(p50, Boolean(activeAlert), activeAlert?.cor_nome);
+    const alertDescStr = activeAlert?.descricao || prevDia.alerta_inmet_desc || prevFontes.inmet_aviso_desc || null;
+    const rainIntensityLabel = classifyRainIntensityLabel(p50, Boolean(activeAlert), activeAlert?.cor_nome, alertDescStr);
     prevDia.intensidade_chuva = rainIntensityLabel;
     prevDia.chuva_media_modelos_mm = p50;
     prevDia.chuva_p25_mm = p25;
@@ -832,6 +866,8 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     prevDia.chuva_prob_pct = probPct;
     prevDia.tem_alerta_inmet = Boolean(activeAlert);
     prevDia.alerta_inmet_id = activeAlert ? activeAlert.id : null;
+    prevDia.alerta_inmet_desc = alertDescStr;
+    prevDia.alerta_inmet_cor = activeAlert ? activeAlert.cor_nome : null;
     prevDia.taxa_horaria_pico = alertLimits ? `${alertLimits.taxaMin} a ${alertLimits.taxaMax} mm/h` : p50 > 0 ? '< 5 mm/h' : '0 mm/h';
     prevDia.fontes = {
       ...prevFontes,
@@ -852,6 +888,7 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       inmet_resumo: inmetResumoStr,
       inmet_aviso_id: activeAlert ? activeAlert.id : null,
       inmet_aviso_cor: activeAlert ? activeAlert.cor_nome : null,
+      inmet_aviso_desc: alertDescStr,
       inea_referencia_mm: ineaTargetMm !== null ? round1(ineaTargetMm) : prevFontes.inea_referencia_mm ?? null,
       observado_hoje_media_mm: dIdx === 0 ? obsHoje.mediaMm : null,
       observado_hoje_max_mm: dIdx === 0 ? obsHoje.maxMm : null,
@@ -861,6 +898,9 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     const rainPlancon = classifyRainPlancon(p50);
     if (card) {
       card.intensidade_chuva = rainIntensityLabel;
+      card.alerta_inmet_id = activeAlert ? activeAlert.id : null;
+      card.alerta_inmet_desc = alertDescStr;
+      card.alerta_inmet_cor = activeAlert ? activeAlert.cor_nome : null;
       const rajTxt = String(card.pilares?.vento?.val || '');
       const rajM = rajTxt.match(/Rajadas\s+(\d+)/i);
       const dayGust = rajM ? Number(rajM[1]) : 0;
@@ -899,9 +939,14 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
         );
       }
       if (p50 >= 0.2) {
+        const phraseLabel = activeAlert
+          ? (String(alertDescStr || '').toLowerCase().includes('tempestad')
+              ? 'pancadas de chuva com risco de tempestade e trovoadas'
+              : 'chuvas intensas em forma de pancadas')
+          : rainPlancon.titulo.toLowerCase();
         updatedP2 = updatedP2.replace(
-          /chuva\s+(?:muito\s+forte|extrema\s*\/\s*muito\s+forte|significativa\s+a\s+forte|forte|moderada|muito\s+fraca|fraca)/i,
-          rainPlancon.titulo.toLowerCase()
+          /chuva\s+(?:muito\s+forte|extrema\s*\/\s*muito\s+forte|significativa\s+a\s+forte|forte|moderada|muito\s+fraca|fraca)(?:\s*\(com possibilidade[^)]*\))?/i,
+          phraseLabel
         );
       }
       card.informe_populacao[1] = updatedP2;

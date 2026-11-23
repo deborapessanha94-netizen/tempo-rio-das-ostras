@@ -2022,6 +2022,7 @@ def run_auto_bulletin_pipeline():
             card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm ({d_prob_pct}% • P25–P90: {d_p25:.1f}–{d_p90:.1f} mm • Teto {pico_max:.0f} mm)"
             alerta_id_dia = a_first.get('id')
             alerta_cor_dia = a_first.get('cor_nome', 'Amarelo')
+            alerta_desc_dia = a_first.get('descricao', 'Tempestade')
             taxa_pico_dia = f"{a_limits['taxa_h_min']} a {a_limits['taxa_h_max']} mm/h"
         else:
             pico_max = d_p90
@@ -2029,6 +2030,7 @@ def run_auto_bulletin_pipeline():
             card_pill = f"{dias_3[d_idx]['chuva_tot']:.1f} mm ({d_prob_pct}% • P25–P90: {d_p25:.1f}–{d_p90:.1f} mm)"
             alerta_id_dia = None
             alerta_cor_dia = None
+            alerta_desc_dia = None
             taxa_pico_dia = "< 5 mm/h"
 
         dias_3[d_idx]['chuva_pico_max'] = pico_max
@@ -2037,6 +2039,7 @@ def run_auto_bulletin_pipeline():
         dias_3[d_idx]['tem_alerta_inmet'] = tem_alert
         dias_3[d_idx]['alerta_id'] = alerta_id_dia
         dias_3[d_idx]['alerta_cor'] = alerta_cor_dia
+        dias_3[d_idx]['alerta_desc'] = alerta_desc_dia
         dias_3[d_idx]['taxa_horaria_pico'] = taxa_pico_dia
 
     # Salva os 12 turnos em data/boletim_oficial.json
@@ -2115,21 +2118,35 @@ def run_auto_bulletin_pipeline():
     alert_ids_str = " e ".join(f"nº {a['id']}" for a in direct_alerts_sorted) if direct_alerts_sorted else ""
 
     today_iso = dias_3[0]['date_iso'] if dias_3 else ""
-    today_alerts = [a for a in direct_alerts if str(a.get('inicio', ''))[:10] <= today_iso <= str(a.get('fim', ''))[:10]]
-    future_alerts = [a for a in direct_alerts if a not in today_alerts]
+    today_alerts = [a for a in direct_alerts_sorted if str(a.get('inicio', ''))[:10] <= today_iso <= str(a.get('fim', ''))[:10]]
+    future_alerts = [a for a in direct_alerts_sorted if a not in today_alerts]
+
+    today_ids_str = " e ".join(f"nº {a['id']}" for a in today_alerts) if today_alerts else ""
+    future_ids_str = " e ".join(f"nº {a['id']}" for a in future_alerts) if future_alerts else ""
 
     if today_alerts:
-        alerta_partes.append(f"Alerta Amarelo de Tempestade do INMET ({alert_ids_str}) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde")
-    elif future_alerts:
+        t_cor = today_alerts[0].get('cor_nome', 'Amarelo')
+        t_descs = " e ".join(dict.fromkeys(str(a.get('descricao', 'Chuvas Intensas')) for a in today_alerts))
+        alerta_partes.append(
+            f"Alerta {t_cor} de {t_descs} do INMET ({today_ids_str}) vigente hoje com previsão de pancadas de chuva e trovoadas"
+        )
+    else:
+        alerta_partes.append("Sem avisos meteorológicos severos do INMET vigentes para hoje" if not future_alerts else "Tempo sem alertas severos do INMET para hoje")
+
+    if future_alerts:
         fut_dias = []
         for fa in future_alerts:
             dia_str = str(fa.get('inicio', ''))[:10]
             dia_match = next((d['dia_semana'] for d in dias_3 if d['date_iso'] == dia_str), dia_str)
-            fut_dias.append(f"{dia_match} ({dia_str[8:10]}/{dia_str[5:7]})")
-        dias_txt = ", ".join(fut_dias)
-        alerta_partes.append(f"Tempo sem alertas severos para hoje; atenção prevista para {dias_txt}, sob Alerta Amarelo de Tempestade do INMET ({alert_ids_str})")
-    else:
-        alerta_partes.append("Sem avisos meteorológicos severos vigentes para hoje")
+            d_label = f"{dia_match} ({dia_str[8:10]}/{dia_str[5:7]})"
+            if d_label not in fut_dias:
+                fut_dias.append(d_label)
+        dias_txt = " e ".join(fut_dias) if len(fut_dias) <= 2 else ", ".join(fut_dias)
+        f_cor = future_alerts[0].get('cor_nome', 'Amarelo')
+        f_descs = " e ".join(dict.fromkeys(str(a.get('descricao', 'Tempestade')) for a in future_alerts))
+        alerta_partes.append(
+            f"Para {dias_txt}, há Alerta {f_cor} de {f_descs} do INMET ({future_ids_str}) para Rio das Ostras"
+        )
 
     if tem_aviso_marinha:
         alerta_partes.append(f"Avisos da Marinha do Brasil para a Área Delta: {m_data.get('tipo', 'Vento Forte')} (nº {m_data.get('numero')}) válidos a partir de {m_data.get('inicio_formatado', '24/10 às 21h')} até {m_data.get('fim_formatado', '26/10 às 00h')}")
@@ -2300,8 +2317,8 @@ def run_auto_bulletin_pipeline():
             return "durante a madrugada"
         return "entre " + " e ".join(names_lc[t] for t in sig[:2])
 
-    def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False):
-        """Classifica precipitação diária (mm/24h) estritamente conforme PLANCON Rio das Ostras (Tabelas 8 e 9 / El Niño Tabelas 4 e 5)."""
+    def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False, alert_desc=None):
+        """Classifica precipitação diária (mm/24h) integrando limiares PLANCON e vigência convectiva de Alertas INMET."""
         mm = float(chuva_mm or 0.0)
         extra = " (com possibilidade de pancadas pontuais e trovoadas)" if (has_thunder or has_alert) else ""
         if mm > 130.0:
@@ -2310,6 +2327,33 @@ def run_auto_bulletin_pipeline():
             return {"titulo": "Chuva muito forte", "frase": f"chuva muito forte{extra}", "curto": "muito forte"}
         if mm >= 70.0:
             return {"titulo": "Chuva forte", "frase": f"chuva significativa a forte{extra}", "curto": "forte"}
+        if has_alert:
+            cor_l = str(alert_color or "Amarelo").lower()
+            desc_l = str(alert_desc or "").lower()
+            is_temp = "tempestad" in desc_l
+            if "vermelho" in cor_l:
+                return {
+                    "titulo": "Tempestade Severa (Alerta)" if is_temp else "Chuvas Intensas / Extrema",
+                    "frase": "tempestade severa com chuvas intensas, raios, rajadas fortes e risco de granizo" if is_temp else "chuvas muito intensas em forma de pancadas fortes e volumosas",
+                    "curto": "tempestade severa" if is_temp else "muito intensa",
+                }
+            if "laranja" in cor_l:
+                return {
+                    "titulo": "Tempestade / Chuva Forte" if is_temp else "Chuvas Intensas / Forte",
+                    "frase": "pancadas fortes com risco de tempestade, raios, rajadas e granizo" if is_temp else "chuvas intensas em forma de pancadas fortes com raios e rajadas",
+                    "curto": "tempestade" if is_temp else "intensa",
+                }
+            if is_temp:
+                return {
+                    "titulo": "Tempestade / Pancadas",
+                    "frase": "chuva moderada a forte em forma de pancadas com risco de tempestade, raios e trovoadas" if mm >= 20.0 else "pancadas de chuva com risco de tempestade, raios e granizo isolado",
+                    "curto": "tempestade/pancadas",
+                }
+            return {
+                "titulo": "Chuvas Intensas / Pancadas",
+                "frase": "chuvas moderadas a intensas em forma de pancadas com trovoadas" if mm >= 20.0 else "chuvas intensas localizadas em forma de pancadas com raios e trovoadas",
+                "curto": "chuvas intensas",
+            }
         if mm >= 20.0:
             return {"titulo": "Chuva moderada", "frase": f"chuva moderada{extra}", "curto": "moderada"}
         if mm >= 1.0:
@@ -2484,7 +2528,7 @@ def run_auto_bulletin_pipeline():
         elif codigo == 'cavado_frontal_fraco':
             t1 = f"{pron} {dia_nome}, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste ({vento_faixa}), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado."
         else:
-            r_t1 = _classify_rain_nomenclature(chuva_tot, len(alerts_d) > 0, (alerts_d[0].get('cor_nome') if alerts_d else None), has_thunder)
+            r_t1 = _classify_rain_nomenclature(chuva_tot, len(alerts_d) > 0, (alerts_d[0].get('cor_nome') if alerts_d else None), has_thunder, (alerts_d[0].get('descricao') if alerts_d else None))
             w_t1 = _classify_wind_nomenclature(day_turnos, d.get('rajada_max', 25.0))
             if chuva_tot < 0.2 and len(alerts_d) == 0:
                 chuva_t1_clause = "predomínio de sol entre poucas nuvens, sem chuva significativa"
@@ -2568,7 +2612,8 @@ def run_auto_bulletin_pipeline():
 
         tem_alerta_dia = len(day_alerts) > 0
         alerta_cor_dia = d.get('alerta_cor', 'Amarelo')
-        rain_info = _classify_rain_nomenclature(chuva_tot, tem_alerta_dia, alerta_cor_dia, has_thunder)
+        alerta_desc_card = (day_alerts[0].get('descricao') if day_alerts else d.get('alerta_desc'))
+        rain_info = _classify_rain_nomenclature(chuva_tot, tem_alerta_dia, alerta_cor_dia, has_thunder, alerta_desc_card)
         prob_d = int(d.get('chuva_prob_dia', 25))
         prob_clause = f"consenso de {chuva_tot:.1f} mm no dia; probabilidade de {prob_d}%"
 
@@ -2669,8 +2714,8 @@ def run_auto_bulletin_pipeline():
     prep2 = prep_dia(d2['dia_semana'])
     prep3 = prep_dia(d3['dia_semana'])
 
-    d0_r_info = _classify_rain_nomenclature(d0['chuva_tot'], d0.get('tem_alerta_inmet', False), d0.get('alerta_cor'))
-    d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'))
+    d0_r_info = _classify_rain_nomenclature(d0['chuva_tot'], d0.get('tem_alerta_inmet', False), d0.get('alerta_cor'), True if d0_alerts else False, d0.get('alerta_desc'))
+    d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'), True if d1_alerts else False, d1.get('alerta_desc'))
     d0_turnos_syn = [r for r in records_12_turnos if r['data_iso'] == d0['date_iso']]
     d0_w_info = _classify_wind_nomenclature(d0_turnos_syn, d0.get('rajada_max', 25.0))
     d0_vol_txt = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
@@ -2712,7 +2757,7 @@ def run_auto_bulletin_pipeline():
             f"(Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e "
             f"rajadas de vento descendentes convectivas (downbursts de até {max_rajada_geral:.0f} km/h na orla marítima). O Boletim Hidrometeorológico "
             f"Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais "
-            f"de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. {jundia_frase_sinopse}"
+            f"de {' e '.join(dict.fromkeys(str(a.get('descricao', 'Chuvas Intensas')) for a in direct_alerts_sorted)) or 'Tempestade'} do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. {jundia_frase_sinopse}"
         )
         d1_desc_sinopse = (
             "consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica"
@@ -2813,7 +2858,7 @@ def run_auto_bulletin_pipeline():
 
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
         faixa_sub = d.get('chuva_faixa_txt') or f"{dia_chuva:.1f} mm"
-        card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'))
+        card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'), d.get('wmo') in (95, 96, 99), (d_alerts[0].get('descricao') if d_alerts else d.get('alerta_desc')))
         card_wind_info = _classify_wind_nomenclature(day_turnos, dia_rajada)
         card_prob_obj = d.get('probabilistico') or {}
         d_p25_c = float(card_prob_obj.get('p25_mm', 0.0))
@@ -2846,6 +2891,10 @@ def run_auto_bulletin_pipeline():
         d_inspecao = inspecao_tempo_severo['dias_inspecionados'][d_idx] if d_idx < len(inspecao_tempo_severo.get('dias_inspecionados', [])) else {}
         dias_resumo.append({
             "dia": f"{d['dia_semana'].upper()} – {d['date_br']}",
+            "data_iso": d['date_iso'],
+            "alerta_inmet_id": d.get('alerta_id'),
+            "alerta_inmet_desc": (d_alerts[0].get('descricao') if d_alerts else d.get('alerta_desc')),
+            "alerta_inmet_cor": d.get('alerta_cor'),
             "subtitulo": sub_desc,
             "badge": badge,
             "badge_tipo": badge_tipo,
@@ -3083,23 +3132,42 @@ def run_auto_bulletin_pipeline():
             "tipo": "meteorologico",
             "titulo": "Avisos Meteorológicos (INMET)",
             "status": (
-                f"ALERTA {today_alerts[0].get('cor_nome', 'AMARELO').upper()} • {today_alerts[0].get('descricao', 'TEMPESTADE').upper()} (HOJE)"
+                f"ALERTA {today_alerts[0].get('cor_nome', 'AMARELO').upper()} • {today_alerts[0].get('descricao', 'CHUVAS INTENSAS').upper()} (HOJE)"
+                + (f" + {future_alerts[0].get('descricao', 'TEMPESTADE').upper()} ({len(future_alerts)} DIAS)" if len(future_alerts) > 0 else "")
                 if len(today_alerts) > 0
                 else (
                     f"AVISO PROGRAMADO P/ {str(future_alerts[0].get('inicio', ''))[8:10]}/{str(future_alerts[0].get('inicio', ''))[5:7]}"
                     if len(future_alerts) > 0 else "SEM AVISOS VIGENTES HOJE"
                 )
             ),
-            "badge": "warning" if len(today_alerts) > 0 else ("info" if len(future_alerts) > 0 else "success"),
+            "badge": (
+                "danger" if any(a.get('cor_nome') in ('Laranja', 'Vermelho') for a in today_alerts)
+                else ("warning" if len(today_alerts) > 0 else ("info" if len(future_alerts) > 0 else "success"))
+            ),
             "detalhe": (
-                f"Alerta {alert_ids_str} (A partir de {future_alerts[0].get('inicio_formatado', '')})"
+                f"Alerta {future_ids_str} (A partir de {future_alerts[0].get('inicio_formatado', '')})"
                 if (len(today_alerts) == 0 and len(future_alerts) > 0)
-                else (f"Alerta {alert_ids_str} ({today_alerts[0].get('severidade', 'Perigo Potencial')})" if len(today_alerts) > 0 else "Sem avisos vigentes para o município")
+                else (
+                    (
+                        f"Hoje: {today_ids_str} ({today_alerts[0].get('descricao', 'Chuvas Intensas')})"
+                        + (f" · Próx. dias: {future_ids_str} ({' / '.join(dict.fromkeys(str(fa.get('descricao', 'Tempestade')) for fa in future_alerts))})" if future_alerts else "")
+                    )
+                    if len(today_alerts) > 0 else "Sem avisos vigentes para o município"
+                )
             ),
             "impacto": (
                 f"Aviso {future_alerts[0].get('cor_nome', 'Amarelo')} ({future_alerts[0].get('descricao', 'Tempestade')}) programado para {str(future_alerts[0].get('inicio', ''))[8:10]}/{str(future_alerts[0].get('inicio', ''))[5:7]}. Hoje a previsão consensual é de {dias_3[0]['chuva_tot']:.1f} mm."
                 if (len(today_alerts) == 0 and len(future_alerts) > 0)
-                else ("Possibilidade de pancadas de chuva e trovoadas isoladas com acompanhamento contínuo." if len(today_alerts) > 0 else "Sem riscos meteorológicos severos previstos para hoje.")
+                else (
+                    (
+                        f"Hoje sob Alerta {today_alerts[0].get('cor_nome', 'Amarelo')} de {today_alerts[0].get('descricao', 'Chuvas Intensas')} (20–30 mm/h ou até 50 mm/dia)."
+                        + (
+                            f" Próximos dias com Alerta de {' e '.join(dict.fromkeys(str(fa.get('descricao', 'Tempestade')) for fa in future_alerts))} ({future_ids_str})."
+                            if future_alerts else ""
+                        )
+                    )
+                    if len(today_alerts) > 0 else "Sem riscos meteorológicos severos previstos para hoje."
+                )
             )
         }
     ]
@@ -3157,7 +3225,7 @@ def run_auto_bulletin_pipeline():
                 "data_iso": d['date_iso'],
                 "data_br": d['date_br'],
                 "dia_semana": d['dia_semana'],
-                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'))['titulo'],
+                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'), False, d.get('alerta_desc'))['titulo'],
                 "chuva_media_modelos_mm": d['chuva_tot'],
                 "chuva_p25_mm": (d.get('probabilistico') or {}).get('p25_mm', 0.0),
                 "chuva_p50_mm": (d.get('probabilistico') or {}).get('p50_mm', d['chuva_tot']),
@@ -3169,6 +3237,8 @@ def run_auto_bulletin_pipeline():
                 "chuva_prob_pct": d.get('chuva_prob_dia'),
                 "tem_alerta_inmet": d.get('tem_alerta_inmet', False),
                 "alerta_inmet_id": d.get('alerta_id'),
+                "alerta_inmet_desc": d.get('alerta_desc'),
+                "alerta_inmet_cor": d.get('alerta_cor'),
                 "taxa_horaria_pico": d.get('taxa_horaria_pico', '< 5 mm/h'),
                 "fontes": d.get('fontes_chuva') or day_rain_sources.get(d['date_iso'], {})
             } for d in dias_3

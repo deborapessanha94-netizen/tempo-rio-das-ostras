@@ -388,9 +388,22 @@ def compute_daily_rain_consensus(
 
     # Alertas oficiais INMET ativos para 3304524 (Rio das Ostras)
     alert_ceil_mm = None
+    alert_p75_floor = 0.0
     if day_alerts:
         sev = day_alerts[0].get("cor_nome", "Amarelo")
-        alert_floor = 30.0 if sev == "Vermelho" else (15.0 if sev == "Laranja" else 5.0)
+        strong_conv = (
+            (vime_pwat is not None and float(vime_pwat) >= 55.0 and vime_cape is not None and float(vime_cape) >= 1500.0)
+            or max([float(v) for v, _w in model_pairs] or [0.0]) >= 8.0
+        )
+        if sev == "Vermelho":
+            alert_floor = 30.0
+            alert_p75_floor = 60.0
+        elif sev == "Laranja":
+            alert_floor = 18.0
+            alert_p75_floor = 45.0
+        else:
+            alert_floor = 10.0 if strong_conv else 5.0
+            alert_p75_floor = 25.0 if strong_conv else 15.0
         consensus_mm = max(consensus_mm, alert_floor)
         # Extrai teto do alerta (ex: "até 50 mm/dia")
         import re
@@ -406,7 +419,7 @@ def compute_daily_rain_consensus(
     p25_val = round(min(consensus_day_mm, _weighted_quantile(model_pairs, 0.25)), 1)
     if day_idx == 0 and obs_today_info.get("media_mm", 0.0) > 0:
         p25_val = max(p25_val, float(obs_today_info["media_mm"]))
-    p75_val = round(max(consensus_day_mm, _weighted_quantile(model_pairs, 0.75)), 1)
+    p75_val = round(max(consensus_day_mm, alert_p75_floor, _weighted_quantile(model_pairs, 0.75)), 1)
 
     upper_cands = [v for v, _w in model_pairs] + [consensus_day_mm]
     if inea_valid and inea_ro_max is not None:
@@ -561,6 +574,8 @@ def compute_daily_rain_consensus(
             "inmet_resumo": inmet_resumo_dia,
             "inmet_aviso_id": day_alerts[0].get("id") if day_alerts else None,
             "inmet_aviso_cor": day_alerts[0].get("cor_nome") if day_alerts else None,
+            "inmet_aviso_desc": day_alerts[0].get("descricao") if day_alerts else None,
+            "inmet_aviso_desc": day_alerts[0].get("descricao") if day_alerts else None,
             "inea_faixa_municipio_mm": inea_prev_dia.get("faixa_municipio_mm") if inea_valid else None,
             "inea_faixa_bacia_mm": inea_prev_dia.get("faixa_chuva_mm") if inea_valid else None,
             "inea_referencia_mm": inea_prev_dia.get("chuva_referencia_mm") if inea_valid else None,
