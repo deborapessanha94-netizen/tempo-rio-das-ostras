@@ -1,16 +1,16 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "22/11 (Domingo) a 29/11 (Domingo)",
-  "emissao": "22/11/2026 às 21:49h",
-  "emissao_iso": "2026-11-22T21:49:29-03:00",
-  "generation_epoch_ms": 1795394969287,
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.47 m. Alerta Amarelo de Tempestade do INMET (nº 56475 e nº 56476 e nº 56480) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para os próximos 4 dias: 24.1 mm (e 79.6 mm nos 8 dias), com máxima alcançando 34°C.",
+  "emissao": "22/11/2026 às 23:12h",
+  "emissao_iso": "2026-11-22T23:12:37-03:00",
+  "generation_epoch_ms": 1795399957327,
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.46 m. Alerta Amarelo de Tempestade do INMET (nº 56475 e nº 56476 e nº 56480) vigente hoje com previsão de pancadas isoladas com trovoadas no período da tarde. Acumulado total de chuva previsto para os próximos 4 dias: 24.1 mm (e 79.6 mm nos 8 dias), com máxima alcançando 34°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "22/11/2026 às 21:51h",
+    "atualizacao_hora": "22/11/2026 às 23:15h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -48,9 +48,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -105,9 +105,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -162,9 +162,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -219,9 +219,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -276,9 +276,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -333,9 +333,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -390,9 +390,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -447,9 +447,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -505,9 +505,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.47",
+          "cota_atual_m": "1.46",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.37 m",
+          "margem_segura_m": "1.38 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -562,9 +562,9 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.47",
+          "cota_atual_m": "1.46",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.37 m",
+          "margem_segura_m": "1.38 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
@@ -587,13 +587,13 @@
     "sintese_tecnica_precisao": "Atenção para Alerta Amarelo de Tempestade nº 56475 na janela 12:00 às 24:00h: média contínua estimada em 5.0 mm com teto convectivo de até 50 mm e rajadas de 40 a 60 km/h."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "22/11/2026 às 21:49h",
-    "emissao_iso": "2026-11-22T21:49:29-03:00",
-    "generation_epoch_ms": 1795394969287,
+    "emissao": "22/11/2026 às 23:12h",
+    "emissao_iso": "2026-11-22T23:12:37-03:00",
+    "generation_epoch_ms": 1795399957327,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
-      "media_mm": 1.1,
-      "max_mm": 4.0,
+      "media_mm": 1.4,
+      "max_mm": 4.3,
       "estacoes_ativas": 5
     },
     "inea_boletim_publicado_em": "20/11/2026 às 06h30",
@@ -1516,21 +1516,21 @@
     "atividade_raios": {
       "disponivel": true,
       "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-      "captura_utc": "2026-11-23T00:51:54Z",
-      "captura_brt": "2026-11-22 21:51",
+      "captura_utc": "2026-11-23T02:15:12Z",
+      "captura_brt": "2026-11-22 23:15",
       "janela_minutos": 20,
       "raio_busca_km": 50,
       "raios_25km": 0,
-      "raios_50km": 0,
-      "dist_min_km": null,
-      "dir_min": null,
-      "ultimo_raio_brt": null,
-      "ultimo_raio_iso": null,
+      "raios_50km": 1,
+      "dist_min_km": 46.2,
+      "dir_min": "NE",
+      "ultimo_raio_brt": "23:06",
+      "ultimo_raio_iso": "2026-11-22T23:06:20-03:00",
       "atividade_ativa": false
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-22T21:51:54-03:00",
+      "atualizado_em": "2026-11-22T23:15:12-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -2964,16 +2964,16 @@
       "cemaden_pcd_18789": {
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.2,
-        "chuva_24h": 0.6,
-        "chuva_96h": 16.2,
-        "leitura": "2026-11-22 21:10:00"
+        "chuva_24h": 1.0,
+        "chuva_96h": 16.6,
+        "leitura": "2026-11-22 23:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_m": "1.47",
+        "nivel_m": "1.46",
         "status": "Vigilância"
       }
     },
@@ -2984,12 +2984,12 @@
         "dia_semana": "Domingo",
         "intensidade_chuva": "Chuva fraca",
         "chuva_media_modelos_mm": 5.0,
-        "chuva_p25_mm": 1.1,
+        "chuva_p25_mm": 1.4,
         "chuva_p50_mm": 5.0,
         "chuva_p75_mm": 6.6,
         "chuva_p90_teto_mm": 50.0,
         "probabilistico": {
-          "p25_mm": 1.1,
+          "p25_mm": 1.4,
           "p50_mm": 5.0,
           "p75_mm": 6.6,
           "p90_teto_mm": 50.0,
@@ -2997,7 +2997,7 @@
           "qtd_fontes_numericas": 7
         },
         "chuva_pico_convectivo_mm": 50.0,
-        "faixa_oficial": "5.0 mm (P50) • Faixa 1.1–50.0 mm • Até 50 mm (Alerta INMET)",
+        "faixa_oficial": "5.0 mm (P50) • Faixa 1.4–50.0 mm • Até 50 mm (Alerta INMET)",
         "chuva_prob_pct": 85,
         "tem_alerta_inmet": true,
         "alerta_inmet_id": 56475,
@@ -3091,8 +3091,8 @@
           "gfs_prob_pct": 100,
           "icon_mm": 8.5,
           "icon_prob_pct": 13,
-          "observado_hoje_media_mm": 1.1,
-          "observado_hoje_max_mm": 4.0
+          "observado_hoje_media_mm": 1.4,
+          "observado_hoje_max_mm": 4.3
         }
       },
       {
@@ -3824,7 +3824,7 @@
       "titulo": "Rio Jundiá (INEA)",
       "status": "Vigilância",
       "badge": "success",
-      "detalhe": "Cota: 1.47 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.46 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -3844,7 +3844,7 @@
       "impacto": "Possibilidade de pancadas de chuva e trovoadas isoladas com acompanhamento contínuo."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 22/11 (Domingo) a 29/11 (Domingo) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C no domingo (22/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.1–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56475 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 40 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,47 m (Status: Vigilância, ocupação de calha em 52% e ampla margem de segurança de 1,37 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na segunda-feira (23/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (25°C a 34°C) e precipitação estimada em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.0–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56476 do INMET). Na terça-feira (24/11) e na quarta-feira (25/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56480 do INMET) e 9.1 mm (P50) • P25–P90: 0.8–40.0 mm (87%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.7 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 22/11 (Domingo) a 29/11 (Domingo) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C no domingo (22/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.4–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56475 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 40 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,46 m (Status: Vigilância, ocupação de calha em 51% e ampla margem de segurança de 1,38 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na segunda-feira (23/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (25°C a 34°C) e precipitação estimada em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.0–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56476 do INMET). Na terça-feira (24/11) e na quarta-feira (25/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 5.0 mm (P50) • Faixa 0.0–50.0 mm • Até 50 mm (Alerta INMET) (sob Alerta Amarelo de Tempestade nº 56480 do INMET) e 9.1 mm (P50) • P25–P90: 0.8–40.0 mm (87%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 0.7 a 0.7 m sem avisos severos de vento costeiro, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "22/11 (Domingo) a 29/11 (Domingo)",
     "evolucao_3_dias": [
@@ -3894,7 +3894,7 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "5.0 mm (85% • P25–P90: 1.1–50.0 mm • Teto 50 mm)",
+            "val": "5.0 mm (85% • P25–P90: 1.4–50.0 mm • Teto 50 mm)",
             "icon": "cloud-rain"
           },
           "mar": {
@@ -4116,7 +4116,7 @@
     "ordem_1_atmosfera": {
       "titulo": "1. Configuração Sinótica Regional & Dinâmica Atmosférica",
       "badge": "MASSA TROPICAL ÚMIDA • CONVECÇÃO DIURNA",
-      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 22/11 (Domingo) a 29/11 (Domingo) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C no domingo (22/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.1–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56475 do INMET).",
+      "texto": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 22/11 (Domingo) a 29/11 (Domingo) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 31°C no domingo (22/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuva fraca (com possibilidade de pancadas pontuais e trovoadas) (5.0 mm (P50) • Faixa 1.4–50.0 mm • Até 50 mm (Alerta INMET)) (sob Alerta Amarelo de Tempestade nº 56475 do INMET).",
       "pilares": [
         {
           "label": "Modelos BR + Globais (96h)",
@@ -4134,27 +4134,27 @@
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,47 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,46 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.47 m",
+      "cota": "1.46 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 40 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,47 m (Status: Vigilância, ocupação de calha em 52% e ampla margem de segurança de 1,37 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 40 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Tempestade do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,46 m (Status: Vigilância, ocupação de calha em 51% e ampla margem de segurança de 1,38 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1,47 m (0,0 mm 24h)"
+          "valor": "1,46 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital (CEMADEN)",
-          "valor": "0,6 mm (24h)"
+          "valor": "1,0 mm (24h)"
         },
         {
           "nome": "Rocha Leão / REBIO",
-          "valor": "4,0 mm (24h)"
+          "valor": "4,3 mm (24h)"
         },
         {
           "nome": "Tartaruga / Orla",
-          "valor": "0,3 mm (24h)"
+          "valor": "0,5 mm (24h)"
         }
       ]
     },
@@ -4249,9 +4249,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4312,7 +4312,7 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "5.0 mm (85% • P25–P90: 1.1–50.0 mm • Teto 50 mm)",
+          "val": "5.0 mm (85% • P25–P90: 1.4–50.0 mm • Teto 50 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -4375,9 +4375,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4501,9 +4501,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4627,9 +4627,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4753,9 +4753,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4879,9 +4879,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5005,9 +5005,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5131,9 +5131,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.47",
+            "cota_atual_m": "1.46",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.37 m",
+            "margem_segura_m": "1.38 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -5243,7 +5243,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAZCAYAAAAv3j5gAAAKN2lDQ1BzUkdCIElFQzYxOTY2LTIuMQAAeJydlndUU9kWh8+9N71QkhCKlNBraFICSA29SJEuKjEJEErAkAAiNkRUcERRkaYIMijggKNDkbEiioUBUbHrBBlE1HFwFBuWSWStGd+8ee/Nm98f935rn73P3Wfvfda6AJD8gwXCTFgJgAyhWBTh58WIjYtnYAcBDPAAA2wA4HCzs0IW+EYCmQJ82IxsmRP4F726DiD5+yrTP4zBAP+flLlZIjEAUJiM5/L42VwZF8k4PVecJbdPyZi2NE3OMErOIlmCMlaTc/IsW3z2mWUPOfMyhDwZy3PO4mXw5Nwn4405Er6MkWAZF+cI+LkyviZjg3RJhkDGb+SxGXxONgAoktwu5nNTZGwtY5IoMoIt43kA4EjJX/DSL1jMzxPLD8XOzFouEiSniBkmXFOGjZMTi+HPz03ni8XMMA43jSPiMdiZGVkc4XIAZs/8WRR5bRmyIjvYODk4MG0tbb4o1H9d/JuS93aWXoR/7hlEH/jD9ld+mQ0AsKZltdn6h21pFQBd6wFQu/2HzWAvAIqyvnUOfXEeunxeUsTiLGcrq9zcXEsBn2spL+jv+p8Of0NffM9Svt3v5WF485M4knQxQ143bmZ6pkTEyM7icPkM5p+H+B8H/nUeFhH8JL6IL5RFRMumTCBMlrVbyBOIBZlChkD4n5r4D8P+pNm5lona+BHQllgCpSEaQH4eACgqESAJe2Qr0O99C8ZHA/nNi9GZmJ37z4L+fVe4TP7IFiR/jmNHRDK4ElHO7Jr8WgI0IABFQAPqQBvoAxPABLbAEbgAD+ADAkEoiARxYDHgghSQAUQgFxSAtaAYlIKtYCeoBnWgETSDNnAYdIFj4DQ4By6By2AE3AFSMA6egCnwCsxAEISFyBAVUod0IEPIHLKFWJAb5AMFQxFQHJQIJUNCSAIVQOugUqgcqobqoWboW+godBq6AA1Dt6BRaBL6FXoHIzAJpsFasBFsBbNgTzgIjoQXwcnwMjgfLoK3wJVwA3wQ7oRPw5fgEVgKP4GnEYAQETqiizARFsJGQpF4JAkRIauQEqQCaUDakB6kH7mKSJGnyFsUBkVFMVBMlAvKHxWF4qKWoVahNqOqUQdQnag+1FXUKGoK9RFNRmuizdHO6AB0LDoZnYsuRlegm9Ad6LPoEfQ4+hUGg6FjjDGOGH9MHCYVswKzGbMb0445hRnGjGGmsVisOtYc64oNxXKwYmwxtgp7EHsSewU7jn2DI+J0cLY4X1w8TogrxFXgWnAncFdwE7gZvBLeEO+MD8Xz8MvxZfhGfA9+CD+OnyEoE4wJroRIQiphLaGS0EY4S7hLeEEkEvWITsRwooC4hlhJPEQ8TxwlviVRSGYkNimBJCFtIe0nnSLdIr0gk8lGZA9yPFlM3kJuJp8h3ye/UaAqWCoEKPAUVivUKHQqXFF4pohXNFT0VFysmK9YoXhEcUjxqRJeyUiJrcRRWqVUo3RU6YbStDJV2UY5VDlDebNyi/IF5UcULMWI4kPhUYoo+yhnKGNUhKpPZVO51HXURupZ6jgNQzOmBdBSaaW0b2iDtCkVioqdSrRKnkqNynEVKR2hG9ED6On0Mvph+nX6O1UtVU9Vvuom1TbVK6qv1eaoeajx1UrU2tVG1N6pM9R91NPUt6l3qd/TQGmYaYRr5Grs0Tir8XQObY7LHO6ckjmH59zWhDXNNCM0V2ju0xzQnNbS1vLTytKq0jqj9VSbru2hnaq9Q/uE9qQOVcdNR6CzQ+ekzmOGCsOTkc6oZPQxpnQ1df11Jbr1uoO6M3rGelF6hXrtevf0Cfos/ST9Hfq9+lMGOgYhBgUGrQa3DfGGLMMUw12G/YavjYyNYow2GHUZPTJWMw4wzjduNb5rQjZxN1lm0mByzRRjyjJNM91tetkMNrM3SzGrMRsyh80dzAXmu82HLdAWThZCiwaLG0wS05OZw2xljlrSLYMtCy27LJ9ZGVjFW22z6rf6aG1vnW7daH3HhmITaFNo02Pzq62ZLde2xvbaXPJc37mr53bPfW5nbse322N3055qH2K/wb7X/oODo4PIoc1h0tHAMdGx1vEGi8YKY21mnXdCO3k5rXY65vTW2cFZ7HzY+RcXpkuaS4vLo3nG8/jzGueNueq5clzrXaVuDLdEt71uUnddd457g/sDD30PnkeTx4SnqWeq50HPZ17WXiKvDq/XbGf2SvYpb8Tbz7vEe9CH4hPlU+1z31fPN9m31XfKz95vhd8pf7R/kP82/xsBWgHcgOaAqUDHwJWBfUGkoAVB1UEPgs2CRcE9IXBIYMj2kLvzDecL53eFgtCA0O2h98KMw5aFfR+OCQ8Lrwl/GGETURDRv4C6YMmClgWvIr0iyyLvRJlESaJ6oxWjE6Kbo1/HeMeUx0hjrWJXxl6K04gTxHXHY+Oj45vipxf6LNy5cDzBPqE44foi40V5iy4s1licvvj4EsUlnCVHEtGJMYktie85oZwGzvTSgKW1S6e4bO4u7hOeB28Hb5Lvyi/nTyS5JpUnPUp2Td6ePJninlKR8lTAFlQLnqf6p9alvk4LTduf9ik9Jr09A5eRmHFUSBGmCfsytTPzMoezzLOKs6TLnJftXDYlChI1ZUPZi7K7xTTZz9SAxESyXjKa45ZTk/MmNzr3SJ5ynjBvYLnZ8k3LJ/J9879egVrBXdFboFuwtmB0pefK+lXQqqWrelfrry5aPb7Gb82BtYS1aWt/KLQuLC98uS5mXU+RVtGaorH1futbixWKRcU3NrhsqNuI2ijYOLhp7qaqTR9LeCUXS61LK0rfb+ZuvviVzVeVX33akrRlsMyhbM9WzFbh1uvb3LcdKFcuzy8f2x6yvXMHY0fJjpc7l+y8UGFXUbeLsEuyS1oZXNldZVC1tep9dUr1SI1XTXutZu2m2te7ebuv7PHY01anVVda926vYO/Ner/6zgajhop9mH05+x42Rjf2f836urlJo6m06cN+4X7pgYgDfc2Ozc0tmi1lrXCrpHXyYMLBy994f9Pdxmyrb6e3lx4ChySHHn+b+O31w0GHe4+wjrR9Z/hdbQe1o6QT6lzeOdWV0iXtjusePhp4tLfHpafje8vv9x/TPVZzXOV42QnCiaITn07mn5w+lXXq6enk02O9S3rvnIk9c60vvG/wbNDZ8+d8z53p9+w/ed71/LELzheOXmRd7LrkcKlzwH6g4wf7HzoGHQY7hxyHui87Xe4Znjd84or7ldNXva+euxZw7dLI/JHh61HXb95IuCG9ybv56Fb6ree3c27P3FlzF3235J7SvYr7mvcbfjT9sV3qID0+6j068GDBgztj3LEnP2X/9H686CH5YcWEzkTzI9tHxyZ9Jy8/Xvh4/EnWk5mnxT8r/1z7zOTZd794/DIwFTs1/lz0/NOvm1+ov9j/0u5l73TY9P1XGa9mXpe8UX9z4C3rbf+7mHcTM7nvse8rP5h+6PkY9PHup4xPn34D94Tz+49wZioAAAAJcEhZcwAALiMAAC4jAXilP3YAAAE1SURBVHic7ZTNToNAFEY/kDRNFKNduDYxxk37BMYHsBuXPpxbH0CbNLr1AbowTUiMXdhFQyKtSPmZMsCMzK1xhZEquOKQm2EB9wwzw2d0b7omgMu8DNSDzOtBNe/r7b0rrbVTj0ZkyAL7Wol0c/8I54en0DStcs+j+wLradii5eq0d3F2cFKpwF25mLgTHG93YKHifRFSwIkc2IFNIsIw18NfGsv8CpMQXuzBW3lYsAVSkRY+W0rEBUfIQ7CUUUVJtL5PGH1FGQpFcRZjzuY0Qz/2wTNeqllpkWo8XU5pKej0VwiJHPaO4WwEXX52181vX9j0B7CWr2qQSpSEb8+492e/mumPqMMhUqZEA8mDfl5b9ZiIkTG+GKudvqtRQhi9214TqhvRhGohTah+0YRqKf47VD8A8OwDZarTwy8AAAAASUVORK5CYII=",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h13",
           "fonte": "prevmet"
@@ -5269,7 +5269,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h13",
           "fonte": "prevmet"
@@ -5295,7 +5295,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h13",
           "fonte": "prevmet"
@@ -5323,7 +5323,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h14",
           "fonte": "prevmet"
@@ -5349,7 +5349,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h14",
           "fonte": "prevmet"
@@ -5375,7 +5375,7 @@
           "cod_temp_min_tende_icone": "74",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "21",
+          "hora": "23",
           "nascer": "04h56",
           "ocaso": "18h14",
           "fonte": "prevmet"
@@ -5402,7 +5402,7 @@
         "cod_temp_min_tende_icone": "74",
         "temp_min_tende_icone": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAZCAYAAAAv3j5gAAAKN2lDQ1BzUkdCIElFQzYxOTY2LTIuMQAAeJydlndUU9kWh8+9N71QkhCKlNBraFICSA29SJEuKjEJEErAkAAiNkRUcERRkaYIMijggKNDkbEiioUBUbHrBBlE1HFwFBuWSWStGd+8ee/Nm98f935rn73P3Wfvfda6AJD8gwXCTFgJgAyhWBTh58WIjYtnYAcBDPAAA2wA4HCzs0IW+EYCmQJ82IxsmRP4F726DiD5+yrTP4zBAP+flLlZIjEAUJiM5/L42VwZF8k4PVecJbdPyZi2NE3OMErOIlmCMlaTc/IsW3z2mWUPOfMyhDwZy3PO4mXw5Nwn4405Er6MkWAZF+cI+LkyviZjg3RJhkDGb+SxGXxONgAoktwu5nNTZGwtY5IoMoIt43kA4EjJX/DSL1jMzxPLD8XOzFouEiSniBkmXFOGjZMTi+HPz03ni8XMMA43jSPiMdiZGVkc4XIAZs/8WRR5bRmyIjvYODk4MG0tbb4o1H9d/JuS93aWXoR/7hlEH/jD9ld+mQ0AsKZltdn6h21pFQBd6wFQu/2HzWAvAIqyvnUOfXEeunxeUsTiLGcrq9zcXEsBn2spL+jv+p8Of0NffM9Svt3v5WF485M4knQxQ143bmZ6pkTEyM7icPkM5p+H+B8H/nUeFhH8JL6IL5RFRMumTCBMlrVbyBOIBZlChkD4n5r4D8P+pNm5lona+BHQllgCpSEaQH4eACgqESAJe2Qr0O99C8ZHA/nNi9GZmJ37z4L+fVe4TP7IFiR/jmNHRDK4ElHO7Jr8WgI0IABFQAPqQBvoAxPABLbAEbgAD+ADAkEoiARxYDHgghSQAUQgFxSAtaAYlIKtYCeoBnWgETSDNnAYdIFj4DQ4By6By2AE3AFSMA6egCnwCsxAEISFyBAVUod0IEPIHLKFWJAb5AMFQxFQHJQIJUNCSAIVQOugUqgcqobqoWboW+godBq6AA1Dt6BRaBL6FXoHIzAJpsFasBFsBbNgTzgIjoQXwcnwMjgfLoK3wJVwA3wQ7oRPw5fgEVgKP4GnEYAQETqiizARFsJGQpF4JAkRIauQEqQCaUDakB6kH7mKSJGnyFsUBkVFMVBMlAvKHxWF4qKWoVahNqOqUQdQnag+1FXUKGoK9RFNRmuizdHO6AB0LDoZnYsuRlegm9Ad6LPoEfQ4+hUGg6FjjDGOGH9MHCYVswKzGbMb0445hRnGjGGmsVisOtYc64oNxXKwYmwxtgp7EHsSewU7jn2DI+J0cLY4X1w8TogrxFXgWnAncFdwE7gZvBLeEO+MD8Xz8MvxZfhGfA9+CD+OnyEoE4wJroRIQiphLaGS0EY4S7hLeEEkEvWITsRwooC4hlhJPEQ8TxwlviVRSGYkNimBJCFtIe0nnSLdIr0gk8lGZA9yPFlM3kJuJp8h3ye/UaAqWCoEKPAUVivUKHQqXFF4pohXNFT0VFysmK9YoXhEcUjxqRJeyUiJrcRRWqVUo3RU6YbStDJV2UY5VDlDebNyi/IF5UcULMWI4kPhUYoo+yhnKGNUhKpPZVO51HXURupZ6jgNQzOmBdBSaaW0b2iDtCkVioqdSrRKnkqNynEVKR2hG9ED6On0Mvph+nX6O1UtVU9Vvuom1TbVK6qv1eaoeajx1UrU2tVG1N6pM9R91NPUt6l3qd/TQGmYaYRr5Grs0Tir8XQObY7LHO6ckjmH59zWhDXNNCM0V2ju0xzQnNbS1vLTytKq0jqj9VSbru2hnaq9Q/uE9qQOVcdNR6CzQ+ekzmOGCsOTkc6oZPQxpnQ1df11Jbr1uoO6M3rGelF6hXrtevf0Cfos/ST9Hfq9+lMGOgYhBgUGrQa3DfGGLMMUw12G/YavjYyNYow2GHUZPTJWMw4wzjduNb5rQjZxN1lm0mByzRRjyjJNM91tetkMNrM3SzGrMRsyh80dzAXmu82HLdAWThZCiwaLG0wS05OZw2xljlrSLYMtCy27LJ9ZGVjFW22z6rf6aG1vnW7daH3HhmITaFNo02Pzq62ZLde2xvbaXPJc37mr53bPfW5nbse322N3055qH2K/wb7X/oODo4PIoc1h0tHAMdGx1vEGi8YKY21mnXdCO3k5rXY65vTW2cFZ7HzY+RcXpkuaS4vLo3nG8/jzGueNueq5clzrXaVuDLdEt71uUnddd457g/sDD30PnkeTx4SnqWeq50HPZ17WXiKvDq/XbGf2SvYpb8Tbz7vEe9CH4hPlU+1z31fPN9m31XfKz95vhd8pf7R/kP82/xsBWgHcgOaAqUDHwJWBfUGkoAVB1UEPgs2CRcE9IXBIYMj2kLvzDecL53eFgtCA0O2h98KMw5aFfR+OCQ8Lrwl/GGETURDRv4C6YMmClgWvIr0iyyLvRJlESaJ6oxWjE6Kbo1/HeMeUx0hjrWJXxl6K04gTxHXHY+Oj45vipxf6LNy5cDzBPqE44foi40V5iy4s1licvvj4EsUlnCVHEtGJMYktie85oZwGzvTSgKW1S6e4bO4u7hOeB28Hb5Lvyi/nTyS5JpUnPUp2Td6ePJninlKR8lTAFlQLnqf6p9alvk4LTduf9ik9Jr09A5eRmHFUSBGmCfsytTPzMoezzLOKs6TLnJftXDYlChI1ZUPZi7K7xTTZz9SAxESyXjKa45ZTk/MmNzr3SJ5ynjBvYLnZ8k3LJ/J9879egVrBXdFboFuwtmB0pefK+lXQqqWrelfrry5aPb7Gb82BtYS1aWt/KLQuLC98uS5mXU+RVtGaorH1futbixWKRcU3NrhsqNuI2ijYOLhp7qaqTR9LeCUXS61LK0rfb+ZuvviVzVeVX33akrRlsMyhbM9WzFbh1uvb3LcdKFcuzy8f2x6yvXMHY0fJjpc7l+y8UGFXUbeLsEuyS1oZXNldZVC1tep9dUr1SI1XTXutZu2m2te7ebuv7PHY01anVVda926vYO/Ner/6zgajhop9mH05+x42Rjf2f836urlJo6m06cN+4X7pgYgDfc2Ozc0tmi1lrXCrpHXyYMLBy994f9Pdxmyrb6e3lx4ChySHHn+b+O31w0GHe4+wjrR9Z/hdbQe1o6QT6lzeOdWV0iXtjusePhp4tLfHpafje8vv9x/TPVZzXOV42QnCiaITn07mn5w+lXXq6enk02O9S3rvnIk9c60vvG/wbNDZ8+d8z53p9+w/ed71/LELzheOXmRd7LrkcKlzwH6g4wf7HzoGHQY7hxyHui87Xe4Znjd84or7ldNXva+euxZw7dLI/JHh61HXb95IuCG9ybv56Fb6ree3c27P3FlzF3235J7SvYr7mvcbfjT9sV3qID0+6j068GDBgztj3LEnP2X/9H686CH5YcWEzkTzI9tHxyZ9Jy8/Xvh4/EnWk5mnxT8r/1z7zOTZd794/DIwFTs1/lz0/NOvm1+ov9j/0u5l73TY9P1XGa9mXpe8UX9z4C3rbf+7mHcTM7nvse8rP5h+6PkY9PHup4xPn34D94Tz+49wZioAAAAJcEhZcwAALiMAAC4jAXilP3YAAAE1SURBVHic7ZTNToNAFEY/kDRNFKNduDYxxk37BMYHsBuXPpxbH0CbNLr1AbowTUiMXdhFQyKtSPmZMsCMzK1xhZEquOKQm2EB9wwzw2d0b7omgMu8DNSDzOtBNe/r7b0rrbVTj0ZkyAL7Wol0c/8I54en0DStcs+j+wLradii5eq0d3F2cFKpwF25mLgTHG93YKHifRFSwIkc2IFNIsIw18NfGsv8CpMQXuzBW3lYsAVSkRY+W0rEBUfIQ7CUUUVJtL5PGH1FGQpFcRZjzuY0Qz/2wTNeqllpkWo8XU5pKej0VwiJHPaO4WwEXX52181vX9j0B7CWr2qQSpSEb8+492e/mumPqMMhUqZEA8mDfl5b9ZiIkTG+GKudvqtRQhi9214TqhvRhGohTah+0YRqKf47VD8A8OwDZarTwy8AAAAASUVORK5CYII=",
         "estacao": "Primavera",
-        "hora": "21",
+        "hora": "23",
         "nascer": "04h56",
         "ocaso": "18h14",
         "fonte": "prevmet"
@@ -5428,7 +5428,7 @@
         "cod_temp_min_tende_icone": "10",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "21",
+        "hora": "23",
         "nascer": "04h56",
         "ocaso": "18h15",
         "fonte": "prevmet"
@@ -5454,7 +5454,7 @@
         "cod_temp_min_tende_icone": "86",
         "temp_min_tende_icone": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAfCAYAAADjuz3zAAAKN2lDQ1BzUkdCIElFQzYxOTY2LTIuMQAAeJydlndUU9kWh8+9N71QkhCKlNBraFICSA29SJEuKjEJEErAkAAiNkRUcERRkaYIMijggKNDkbEiioUBUbHrBBlE1HFwFBuWSWStGd+8ee/Nm98f935rn73P3Wfvfda6AJD8gwXCTFgJgAyhWBTh58WIjYtnYAcBDPAAA2wA4HCzs0IW+EYCmQJ82IxsmRP4F726DiD5+yrTP4zBAP+flLlZIjEAUJiM5/L42VwZF8k4PVecJbdPyZi2NE3OMErOIlmCMlaTc/IsW3z2mWUPOfMyhDwZy3PO4mXw5Nwn4405Er6MkWAZF+cI+LkyviZjg3RJhkDGb+SxGXxONgAoktwu5nNTZGwtY5IoMoIt43kA4EjJX/DSL1jMzxPLD8XOzFouEiSniBkmXFOGjZMTi+HPz03ni8XMMA43jSPiMdiZGVkc4XIAZs/8WRR5bRmyIjvYODk4MG0tbb4o1H9d/JuS93aWXoR/7hlEH/jD9ld+mQ0AsKZltdn6h21pFQBd6wFQu/2HzWAvAIqyvnUOfXEeunxeUsTiLGcrq9zcXEsBn2spL+jv+p8Of0NffM9Svt3v5WF485M4knQxQ143bmZ6pkTEyM7icPkM5p+H+B8H/nUeFhH8JL6IL5RFRMumTCBMlrVbyBOIBZlChkD4n5r4D8P+pNm5lona+BHQllgCpSEaQH4eACgqESAJe2Qr0O99C8ZHA/nNi9GZmJ37z4L+fVe4TP7IFiR/jmNHRDK4ElHO7Jr8WgI0IABFQAPqQBvoAxPABLbAEbgAD+ADAkEoiARxYDHgghSQAUQgFxSAtaAYlIKtYCeoBnWgETSDNnAYdIFj4DQ4By6By2AE3AFSMA6egCnwCsxAEISFyBAVUod0IEPIHLKFWJAb5AMFQxFQHJQIJUNCSAIVQOugUqgcqobqoWboW+godBq6AA1Dt6BRaBL6FXoHIzAJpsFasBFsBbNgTzgIjoQXwcnwMjgfLoK3wJVwA3wQ7oRPw5fgEVgKP4GnEYAQETqiizARFsJGQpF4JAkRIauQEqQCaUDakB6kH7mKSJGnyFsUBkVFMVBMlAvKHxWF4qKWoVahNqOqUQdQnag+1FXUKGoK9RFNRmuizdHO6AB0LDoZnYsuRlegm9Ad6LPoEfQ4+hUGg6FjjDGOGH9MHCYVswKzGbMb0445hRnGjGGmsVisOtYc64oNxXKwYmwxtgp7EHsSewU7jn2DI+J0cLY4X1w8TogrxFXgWnAncFdwE7gZvBLeEO+MD8Xz8MvxZfhGfA9+CD+OnyEoE4wJroRIQiphLaGS0EY4S7hLeEEkEvWITsRwooC4hlhJPEQ8TxwlviVRSGYkNimBJCFtIe0nnSLdIr0gk8lGZA9yPFlM3kJuJp8h3ye/UaAqWCoEKPAUVivUKHQqXFF4pohXNFT0VFysmK9YoXhEcUjxqRJeyUiJrcRRWqVUo3RU6YbStDJV2UY5VDlDebNyi/IF5UcULMWI4kPhUYoo+yhnKGNUhKpPZVO51HXURupZ6jgNQzOmBdBSaaW0b2iDtCkVioqdSrRKnkqNynEVKR2hG9ED6On0Mvph+nX6O1UtVU9Vvuom1TbVK6qv1eaoeajx1UrU2tVG1N6pM9R91NPUt6l3qd/TQGmYaYRr5Grs0Tir8XQObY7LHO6ckjmH59zWhDXNNCM0V2ju0xzQnNbS1vLTytKq0jqj9VSbru2hnaq9Q/uE9qQOVcdNR6CzQ+ekzmOGCsOTkc6oZPQxpnQ1df11Jbr1uoO6M3rGelF6hXrtevf0Cfos/ST9Hfq9+lMGOgYhBgUGrQa3DfGGLMMUw12G/YavjYyNYow2GHUZPTJWMw4wzjduNb5rQjZxN1lm0mByzRRjyjJNM91tetkMNrM3SzGrMRsyh80dzAXmu82HLdAWThZCiwaLG0wS05OZw2xljlrSLYMtCy27LJ9ZGVjFW22z6rf6aG1vnW7daH3HhmITaFNo02Pzq62ZLde2xvbaXPJc37mr53bPfW5nbse322N3055qH2K/wb7X/oODo4PIoc1h0tHAMdGx1vEGi8YKY21mnXdCO3k5rXY65vTW2cFZ7HzY+RcXpkuaS4vLo3nG8/jzGueNueq5clzrXaVuDLdEt71uUnddd457g/sDD30PnkeTx4SnqWeq50HPZ17WXiKvDq/XbGf2SvYpb8Tbz7vEe9CH4hPlU+1z31fPN9m31XfKz95vhd8pf7R/kP82/xsBWgHcgOaAqUDHwJWBfUGkoAVB1UEPgs2CRcE9IXBIYMj2kLvzDecL53eFgtCA0O2h98KMw5aFfR+OCQ8Lrwl/GGETURDRv4C6YMmClgWvIr0iyyLvRJlESaJ6oxWjE6Kbo1/HeMeUx0hjrWJXxl6K04gTxHXHY+Oj45vipxf6LNy5cDzBPqE44foi40V5iy4s1licvvj4EsUlnCVHEtGJMYktie85oZwGzvTSgKW1S6e4bO4u7hOeB28Hb5Lvyi/nTyS5JpUnPUp2Td6ePJninlKR8lTAFlQLnqf6p9alvk4LTduf9ik9Jr09A5eRmHFUSBGmCfsytTPzMoezzLOKs6TLnJftXDYlChI1ZUPZi7K7xTTZz9SAxESyXjKa45ZTk/MmNzr3SJ5ynjBvYLnZ8k3LJ/J9879egVrBXdFboFuwtmB0pefK+lXQqqWrelfrry5aPb7Gb82BtYS1aWt/KLQuLC98uS5mXU+RVtGaorH1futbixWKRcU3NrhsqNuI2ijYOLhp7qaqTR9LeCUXS61LK0rfb+ZuvviVzVeVX33akrRlsMyhbM9WzFbh1uvb3LcdKFcuzy8f2x6yvXMHY0fJjpc7l+y8UGFXUbeLsEuyS1oZXNldZVC1tep9dUr1SI1XTXutZu2m2te7ebuv7PHY01anVVda926vYO/Ner/6zgajhop9mH05+x42Rjf2f836urlJo6m06cN+4X7pgYgDfc2Ozc0tmi1lrXCrpHXyYMLBy994f9Pdxmyrb6e3lx4ChySHHn+b+O31w0GHe4+wjrR9Z/hdbQe1o6QT6lzeOdWV0iXtjusePhp4tLfHpafje8vv9x/TPVZzXOV42QnCiaITn07mn5w+lXXq6enk02O9S3rvnIk9c60vvG/wbNDZ8+d8z53p9+w/ed71/LELzheOXmRd7LrkcKlzwH6g4wf7HzoGHQY7hxyHui87Xe4Znjd84or7ldNXva+euxZw7dLI/JHh61HXb95IuCG9ybv56Fb6ree3c27P3FlzF3235J7SvYr7mvcbfjT9sV3qID0+6j068GDBgztj3LEnP2X/9H686CH5YcWEzkTzI9tHxyZ9Jy8/Xvh4/EnWk5mnxT8r/1z7zOTZd794/DIwFTs1/lz0/NOvm1+ov9j/0u5l73TY9P1XGa9mXpe8UX9z4C3rbf+7mHcTM7nvse8rP5h+6PkY9PHup4xPn34D94Tz+49wZioAAAAJcEhZcwAALiMAAC4jAXilP3YAAAJ5SURBVHic7ZZPaNNwFMdfuqbrimILTspAZLjpwYOIE8GLehQFRQTZUdwcQw8FFXoYyEC8TAS9yA7irROZgsJE2RBRlJ02BAfrZJvazYJl/ZOlW9c0id9flsyYpGlmb7IH3/7e78/7/F6SX17qV1WVrMYNfu1Ac8I24Wyf1Z72Ueugv8ri49CAR/Ag5BmsGcdxtI33Oc6tVBSSFfvVegIz6O1jLY5z9yd/0Vxh7d/A9dgWeAv8X4BRcAJore/tZjZkjKBlTGWAq9C9OpK7rMtsDxn4AXQROloH3GwpKO5HLZVxKV3oTEB8c4inM607tBW8j6safRprREnR/PeLIs3mS8ZUL5iCdi/hfAH8DtxbmRUJ5ZLo4M4m17Tawo1auyhKNP+nyiXAGmGO+SEx8AXowPBMjtrDQQr5q2fMjJXjRDKLVqvLGShmzG2AsVNZvyUfhbLsezGbp879EVfw29QyLSyXjW4MjIwNrMPHAWcPMzaeFunwrhDtizQ6QjOrFXr9rWB0RxCbMM87ndc+6CzU+mQmS/EjUQpYHiK78KFkjqT1T5MA9VohNjB2LiLrK3BHl5DVq/kCndsb/mvNp59F8ymIIyZVE6zDxwB/DPfSuwWRDuGW7Nke0ObyazK9nMsbSz/Q+lfaZm6v7nXoFP53RIems3SzI0oNuCNPcWJKFe38spS7kYSyKTACcsj6GtzhdFGisR8CNTfxNLW0aizpx5pktXjXYoPAZ4A/h3v+zXeBgg0btWoSuusW66WKsaxP4s9JpKjIrM9+urBppS4wAGlkfQPuI31oAGMTteK81l12Qjqh3VC/lwBPYGSoIuseuC3wSzUDYL8BUfDj3i9SscgAAAAASUVORK5CYII=",
         "estacao": "Primavera",
-        "hora": "21",
+        "hora": "23",
         "nascer": "04h56",
         "ocaso": "18h16",
         "fonte": "prevmet"
@@ -5469,7 +5469,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-23T00:49:58.317279"
+    "atualizado_em": "2026-11-23T02:13:08.048575"
   },
   "vime_inmet": {
     "vime_schema_version": 3,
@@ -6390,31 +6390,31 @@
   "atividade_raios": {
     "disponivel": true,
     "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-    "captura_utc": "2026-11-23T00:51:54Z",
-    "captura_brt": "2026-11-22 21:51",
+    "captura_utc": "2026-11-23T02:15:12Z",
+    "captura_brt": "2026-11-22 23:15",
     "janela_minutos": 20,
     "raio_busca_km": 50,
     "raios_25km": 0,
-    "raios_50km": 0,
-    "dist_min_km": null,
-    "dir_min": null,
-    "ultimo_raio_brt": null,
-    "ultimo_raio_iso": null,
+    "raios_50km": 1,
+    "dist_min_km": 46.2,
+    "dir_min": "NE",
+    "ultimo_raio_brt": "23:06",
+    "ultimo_raio_iso": "2026-11-22T23:06:20-03:00",
     "atividade_ativa": false
   },
   "indices_calor": {
-    "atualizacao_brt": "22/11/2026 21:51",
-    "atualizacao_iso": "2026-11-22T21:51:58.493668-03:00",
+    "atualizacao_brt": "22/11/2026 23:15",
+    "atualizacao_iso": "2026-11-22T23:15:21.345492-03:00",
     "fontes_oficiais": {
       "cor_rio": "https://cor.rio/niveis-de-calor/",
       "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
       "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
     },
     "agora": {
-      "ic_rede_c": 27.8,
-      "temp_rede_c": 25.7,
-      "ur_rede_pct": 92,
-      "sensacao_rede_c": 31.0,
+      "ic_rede_c": 27.1,
+      "temp_rede_c": 25.4,
+      "ur_rede_pct": 91,
+      "sensacao_rede_c": 30.3,
       "faixa_instantanea": {
         "faixa": "Cuidado (27–32°C)",
         "cor": "#CA8A04"
@@ -6446,7 +6446,7 @@
           "nome": "Rocha Leão / REBIO União",
           "temp_c": 24.0,
           "ur_pct": 95,
-          "sensacao_c": 29.1,
+          "sensacao_c": 29.2,
           "ic_c": 24.9,
           "ic_max_hoje": 43.5,
           "hora_ic_max_hoje": "10:49",
@@ -6458,17 +6458,17 @@
           "cor_pico_hoje": "#DC2626",
           "faixa": "Conforto Térmico (< 27°C)",
           "cor_hex": "#10B981",
-          "ultima_leitura": "2026-11-22 21:47:22",
+          "ultima_leitura": "2026-11-22 23:10:28",
           "lat": -22.426845,
           "lon": -42.020862
         },
         {
           "codigo": "IRIODA16",
           "nome": "Cantagalo / Extensão do Bosque",
-          "temp_c": 25.6,
-          "ur_pct": 92,
-          "sensacao_c": 31.3,
-          "ic_c": 27.1,
+          "temp_c": 25.2,
+          "ur_pct": 93,
+          "sensacao_c": 30.7,
+          "ic_c": 26.1,
           "ic_max_hoje": 42.6,
           "hora_ic_max_hoje": "10:54",
           "temp_max_hoje": 33.4,
@@ -6477,19 +6477,19 @@
           "ur_pico_ic_hoje": 74,
           "faixa_pico_hoje": "Muito Alto · COR (40–44°C)",
           "cor_pico_hoje": "#DC2626",
-          "faixa": "Cuidado (27–32°C)",
-          "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-22 21:47:25",
+          "faixa": "Conforto Térmico (< 27°C)",
+          "cor_hex": "#10B981",
+          "ultima_leitura": "2026-11-22 23:10:32",
           "lat": -22.440357,
           "lon": -41.953913
         },
         {
           "codigo": "IRIODA17",
           "nome": "Praia da Tartaruga",
-          "temp_c": 26.7,
+          "temp_c": 26.1,
           "ur_pct": 87,
-          "sensacao_c": 32.2,
-          "ic_c": 29.8,
+          "sensacao_c": 31.1,
+          "ic_c": 28.2,
           "ic_max_hoje": 33.4,
           "hora_ic_max_hoje": "08:04",
           "temp_max_hoje": 28.4,
@@ -6500,17 +6500,17 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-22 21:47:18",
+          "ultima_leitura": "2026-11-22 23:10:22",
           "lat": -22.531291,
           "lon": -41.957444
         },
         {
           "codigo": "ICASIM5",
           "nome": "Barra de São João / Praiamar",
-          "temp_c": 26.5,
-          "ur_pct": 92,
-          "sensacao_c": 31.4,
-          "ic_c": 29.5,
+          "temp_c": 26.4,
+          "ur_pct": 88,
+          "sensacao_c": 30.3,
+          "ic_c": 29.0,
           "ic_max_hoje": 37.4,
           "hora_ic_max_hoje": "08:59",
           "temp_max_hoje": 30.4,
@@ -6521,7 +6521,7 @@
           "cor_pico_hoje": "#EA580C",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-22 21:47:30",
+          "ultima_leitura": "2026-11-22 23:10:25",
           "lat": -22.573707,
           "lon": -41.985545
         }
@@ -7201,7 +7201,7 @@
           "fonte": "ecmwf-forecast"
         }
       ],
-      "captura_brt": "2026-11-22 21:51"
+      "captura_brt": "2026-11-22 23:15"
     },
     "previsao_8dias_calor": [
       {
@@ -7489,7 +7489,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-22 21:50:46 BRT",
+    "data_coleta": "2026-11-22 23:14:00 BRT",
     "publicado_em": "20/11/2026 às 06h30",
     "fonte_pdf_sha256": "f82debd25531bd5a",
     "pdf_bytes": 793762,
@@ -7941,10 +7941,10 @@
       "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
       "data": "2026-11-23",
       "proxima_mare": {
-        "tipo": "PREAMAR",
-        "hora": "01:25",
-        "altura": 1.44,
-        "rotulo": "Preia-mar (1.4 m)"
+        "tipo": "BAIXA-MAR",
+        "hora": "07:38",
+        "altura": 0.16,
+        "rotulo": "Baixa-mar (0.2 m)"
       },
       "mares_do_dia": [
         {
@@ -8002,7 +8002,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-22 00z",
-    "atualizacao": "22/11/2026 21:50",
+    "atualizacao": "22/11/2026 23:13",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -8088,7 +8088,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "22/11/2026",
-    "atualizacao": "22/11/2026 21:50",
+    "atualizacao": "22/11/2026 23:13",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -8118,8 +8118,8 @@
           "total_municipios": 92,
           "contagens": {
             "MUITO ALTO": 10,
-            "ALTO": 66,
-            "MODERADO": 15,
+            "ALTO": 69,
+            "MODERADO": 12,
             "SEM DADOS": 1
           }
         },
@@ -8127,8 +8127,8 @@
           "total_municipios": 92,
           "contagens": {
             "MUITO ALTO": 2,
-            "ALTO": 15,
-            "MODERADO": 74,
+            "ALTO": 16,
+            "MODERADO": 73,
             "SEM DADOS": 1
           }
         }
@@ -8267,12 +8267,12 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-23T00:51:30.149188",
+    "atualizado_em": "2026-11-23T02:14:45.605573",
     "proxima_mare": {
-      "tipo": "PREAMAR",
-      "hora": "01:25",
-      "altura": 1.44,
-      "rotulo": "Preia-mar (1.4 m)"
+      "tipo": "BAIXA-MAR",
+      "hora": "07:38",
+      "altura": 0.16,
+      "rotulo": "Baixa-mar (0.2 m)"
     },
     "dias": [
       {
@@ -8508,8 +8508,8 @@
       "vento": "4",
       "umidade": 81,
       "temperatura_prev": "25",
-      "sensacao_termica": "24",
-      "hora_atual": "2026-11-23T00:00:00.000Z"
+      "sensacao_termica": "23",
+      "hora_atual": "2026-11-23T02:00:00.000Z"
     },
     "proximos_dias": [
       {
@@ -8575,7 +8575,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.47 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.46 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
@@ -8625,7 +8625,7 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.47 m",
+    "jundia_nivel": "1.46 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "15.0 mm",
     "chuva_4d": "24.1 mm",
