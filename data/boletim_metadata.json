@@ -1,16 +1,16 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "23/11 (Segunda-feira) a 30/11 (Segunda-feira)",
-  "emissao": "23/11/2026 às 19:05h",
-  "emissao_iso": "2026-11-23T19:05:11-03:00",
-  "generation_epoch_ms": 1795471511139,
+  "emissao": "23/11/2026 às 19:21h",
+  "emissao_iso": "2026-11-23T19:21:14-03:00",
+  "generation_epoch_ms": 1795472474149,
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.42 m. Alerta Amarelo de Chuvas Intensas do INMET (nº 56489) vigente hoje com previsão de pancadas de chuva e trovoadas. Para Terça-feira (24/11) e Quarta-feira (25/11), há Alerta Amarelo de Tempestade do INMET (nº 56490 e nº 56496) para Rio das Ostras. Acumulado total de chuva previsto para os próximos 4 dias: 74.5 mm (e 114.7 mm nos 8 dias), com máxima alcançando 35°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "23/11/2026 às 19:07h",
+    "atualizacao_hora": "23/11/2026 às 19:23h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -587,9 +587,9 @@
     "sintese_tecnica_precisao": "Atenção para Alerta Amarelo de Chuvas Intensas nº 56489 na janela 00:00 às 24:00h: média contínua estimada em 10.0 mm com teto convectivo de até 50 mm e rajadas de 40 a 60 km/h."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "23/11/2026 às 19:05h",
-    "emissao_iso": "2026-11-23T19:05:11-03:00",
-    "generation_epoch_ms": 1795471511139,
+    "emissao": "23/11/2026 às 19:21h",
+    "emissao_iso": "2026-11-23T19:21:14-03:00",
+    "generation_epoch_ms": 1795472474149,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
       "media_mm": 0.2,
@@ -1516,21 +1516,21 @@
     "atividade_raios": {
       "disponivel": true,
       "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-      "captura_utc": "2026-11-23T22:07:52Z",
-      "captura_brt": "2026-11-23 19:07",
+      "captura_utc": "2026-11-23T22:23:52Z",
+      "captura_brt": "2026-11-23 19:23",
       "janela_minutos": 20,
       "raio_busca_km": 50,
       "raios_25km": 0,
-      "raios_50km": 106,
-      "dist_min_km": 34.6,
+      "raios_50km": 80,
+      "dist_min_km": 40.7,
       "dir_min": "NO",
-      "ultimo_raio_brt": "19:07",
-      "ultimo_raio_iso": "2026-11-23T19:07:20-03:00",
+      "ultimo_raio_brt": "19:22",
+      "ultimo_raio_iso": "2026-11-23T19:22:00-03:00",
       "atividade_ativa": true
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-23T19:07:52-03:00",
+      "atualizado_em": "2026-11-23T19:23:52-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -2966,7 +2966,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.6,
         "chuva_96h": 1.2,
-        "leitura": "2026-11-23 18:10:00"
+        "leitura": "2026-11-23 19:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -5471,7 +5471,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-23T22:05:43.016789"
+    "atualizado_em": "2026-11-23T22:21:47.520063"
   },
   "vime_inmet": {
     "vime_schema_version": 3,
@@ -6392,21 +6392,21 @@
   "atividade_raios": {
     "disponivel": true,
     "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-    "captura_utc": "2026-11-23T22:07:52Z",
-    "captura_brt": "2026-11-23 19:07",
+    "captura_utc": "2026-11-23T22:23:52Z",
+    "captura_brt": "2026-11-23 19:23",
     "janela_minutos": 20,
     "raio_busca_km": 50,
     "raios_25km": 0,
-    "raios_50km": 106,
-    "dist_min_km": 34.6,
+    "raios_50km": 80,
+    "dist_min_km": 40.7,
     "dir_min": "NO",
-    "ultimo_raio_brt": "19:07",
-    "ultimo_raio_iso": "2026-11-23T19:07:20-03:00",
+    "ultimo_raio_brt": "19:22",
+    "ultimo_raio_iso": "2026-11-23T19:22:00-03:00",
     "atividade_ativa": true
   },
   "indices_calor": {
-    "atualizacao_brt": "23/11/2026 19:08",
-    "atualizacao_iso": "2026-11-23T19:08:02.115682-03:00",
+    "atualizacao_brt": "23/11/2026 19:23",
+    "atualizacao_iso": "2026-11-23T19:23:58.798089-03:00",
     "fontes_oficiais": {
       "cor_rio": "https://cor.rio/niveis-de-calor/",
       "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
@@ -6415,8 +6415,8 @@
     "agora": {
       "ic_rede_c": 30.3,
       "temp_rede_c": 26.8,
-      "ur_rede_pct": 89,
-      "sensacao_rede_c": 32.3,
+      "ur_rede_pct": 90,
+      "sensacao_rede_c": 32.6,
       "faixa_instantanea": {
         "faixa": "Cuidado (27–32°C)",
         "cor": "#CA8A04"
@@ -6447,9 +6447,9 @@
           "codigo": "IRIODA15",
           "nome": "Rocha Leão / REBIO União",
           "temp_c": 26.4,
-          "ur_pct": 89,
-          "sensacao_c": 32.4,
-          "ic_c": 29.0,
+          "ur_pct": 90,
+          "sensacao_c": 32.6,
+          "ic_c": 29.1,
           "ic_max_hoje": 43.0,
           "hora_ic_max_hoje": "12:49",
           "temp_max_hoje": 34.0,
@@ -6460,17 +6460,17 @@
           "cor_pico_hoje": "#DC2626",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-23 19:02:44",
+          "ultima_leitura": "2026-11-23 19:19:02",
           "lat": -22.426845,
           "lon": -42.020862
         },
         {
           "codigo": "IRIODA16",
           "nome": "Cantagalo / Extensão do Bosque",
-          "temp_c": 26.9,
+          "temp_c": 27.0,
           "ur_pct": 88,
-          "sensacao_c": 33.2,
-          "ic_c": 30.5,
+          "sensacao_c": 33.3,
+          "ic_c": 30.7,
           "ic_max_hoje": 43.4,
           "hora_ic_max_hoje": "13:49",
           "temp_max_hoje": 33.3,
@@ -6481,17 +6481,17 @@
           "cor_pico_hoje": "#DC2626",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-23 19:03:06",
+          "ultima_leitura": "2026-11-23 19:19:02",
           "lat": -22.440357,
           "lon": -41.953913
         },
         {
           "codigo": "IRIODA17",
           "nome": "Praia da Tartaruga",
-          "temp_c": 27.1,
-          "ur_pct": 87,
-          "sensacao_c": 32.8,
-          "ic_c": 30.8,
+          "temp_c": 27.0,
+          "ur_pct": 88,
+          "sensacao_c": 32.7,
+          "ic_c": 30.7,
           "ic_max_hoje": 35.5,
           "hora_ic_max_hoje": "12:14",
           "temp_max_hoje": 29.7,
@@ -6502,7 +6502,7 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-23 19:03:03",
+          "ultima_leitura": "2026-11-23 19:18:54",
           "lat": -22.531291,
           "lon": -41.957444
         },
@@ -6511,7 +6511,7 @@
           "nome": "Barra de São João / Praiamar",
           "temp_c": 26.7,
           "ur_pct": 93,
-          "sensacao_c": 30.9,
+          "sensacao_c": 31.7,
           "ic_c": 30.8,
           "ic_max_hoje": 34.2,
           "hora_ic_max_hoje": "10:54",
@@ -6523,7 +6523,7 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Cuidado (27–32°C)",
           "cor_hex": "#CA8A04",
-          "ultima_leitura": "2026-11-23 19:02:55",
+          "ultima_leitura": "2026-11-23 19:19:12",
           "lat": -22.573707,
           "lon": -41.985545
         }
@@ -7213,7 +7213,7 @@
           "fonte": "ecmwf-forecast"
         }
       ],
-      "captura_brt": "2026-11-23 19:07"
+      "captura_brt": "2026-11-23 19:23"
     },
     "previsao_8dias_calor": [
       {
@@ -7501,7 +7501,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-23 19:06:38 BRT",
+    "data_coleta": "2026-11-23 19:22:42 BRT",
     "publicado_em": "20/11/2026 às 06h30",
     "fonte_pdf_sha256": "f82debd25531bd5a",
     "pdf_bytes": 793762,
@@ -8014,7 +8014,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-23 00z",
-    "atualizacao": "23/11/2026 19:05",
+    "atualizacao": "23/11/2026 19:21",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -8100,7 +8100,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "23/11/2026",
-    "atualizacao": "23/11/2026 19:06",
+    "atualizacao": "23/11/2026 19:22",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -8138,9 +8138,9 @@
         "geologico": {
           "total_municipios": 92,
           "contagens": {
-            "ALTO": 30,
+            "ALTO": 31,
             "MUITO ALTO": 1,
-            "MODERADO": 60,
+            "MODERADO": 59,
             "SEM DADOS": 1
           }
         }
@@ -8279,7 +8279,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-23T22:07:23.189491",
+    "atualizado_em": "2026-11-23T22:23:27.019951",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "02:16",
