@@ -1,9 +1,27 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-23 10:48:16",
+  "coleta_iso": "2026-11-23 20:33:08",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Previsão para terça-feira (24), quarta-feira (25) e quinta-feira (26)",
+      "data": "23/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-24-quarta-feira-25-e-quinta-feira-26",
+      "relevancia_sudeste": false
+    },
+    {
+      "titulo": "INMET emite aviso vermelho para tempestades no Sul e explica condições atmosféricas que favoreceram tempestades em Tupanciretã (RS) e Foz do Iguaçu (PR)",
+      "data": "23/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-emite-aviso-vermelho-para-tempestades-no-sul-e-explica-condições-atmosféricas-que-favoreceram-tempestades-em-tupanciretã-rs-e-foz-do-iguaçu-pr",
+      "relevancia_sudeste": true
+    },
+    {
+      "titulo": "INMET divulga previsão para semana de 23 a 30 de novembro de 2026",
+      "data": "23/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-23-a-30-de-novembro-de-2026",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para sexta-feira (20), sábado (21), domingo (22) e segunda-feira (23)",
       "data": "19/11/2026",
@@ -44,24 +62,6 @@
       "titulo": "INMET divulga previsão para semana de 16 a 23 de novembro de 2026",
       "data": "16/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-16-a-23-de-novembro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET participa de encontro internacional sobre calor extremo e saúde na Bolívia",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-participa-de-encontro-internacional-sobre-calor-extremo-e-saúde-na-bolívia",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "El Niño deve perder força a partir do início de 2027 e chegar ao fim no outono",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/el-niño-deve-atingir-sua-intensidade-máxima-no-trimestre-novembro-dezembro-janeiro-e-deve-persistir-até-o-outono-de-2027",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sábado (14), domingo (15) e segunda-feira (16)",
-      "data": "13/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sábado-14-domingo-15-e-segunda-feira-16",
       "relevancia_sudeste": false
     }
   ]
