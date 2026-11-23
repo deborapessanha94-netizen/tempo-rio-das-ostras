@@ -1,16 +1,16 @@
 {
-  "atualizacao_brt": "23/11/2026 17:35",
-  "atualizacao_iso": "2026-11-23T17:35:44.665258-03:00",
+  "atualizacao_brt": "23/11/2026 18:07",
+  "atualizacao_iso": "2026-11-23T18:07:30.642196-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 30.9,
-    "temp_rede_c": 27.1,
-    "ur_rede_pct": 88,
-    "sensacao_rede_c": 32.2,
+    "ic_rede_c": 30.6,
+    "temp_rede_c": 26.9,
+    "ur_rede_pct": 89,
+    "sensacao_rede_c": 32.5,
     "faixa_instantanea": {
       "faixa": "Cuidado (27–32°C)",
       "cor": "#CA8A04"
@@ -40,10 +40,10 @@
       {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 27.3,
-        "ur_pct": 84,
-        "sensacao_c": 32.9,
-        "ic_c": 30.9,
+        "temp_c": 27.0,
+        "ur_pct": 87,
+        "sensacao_c": 33.1,
+        "ic_c": 30.6,
         "ic_max_hoje": 43.0,
         "hora_ic_max_hoje": "12:49",
         "temp_max_hoje": 34.0,
@@ -54,17 +54,17 @@
         "cor_pico_hoje": "#DC2626",
         "faixa": "Cuidado (27–32°C)",
         "cor_hex": "#CA8A04",
-        "ultima_leitura": "2026-11-23 17:30:59",
+        "ultima_leitura": "2026-11-23 18:02:33",
         "lat": -22.426845,
         "lon": -42.020862
       },
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
-        "temp_c": 27.4,
-        "ur_pct": 86,
-        "sensacao_c": 32.9,
-        "ic_c": 31.4,
+        "temp_c": 27.0,
+        "ur_pct": 88,
+        "sensacao_c": 33.2,
+        "ic_c": 30.7,
         "ic_max_hoje": 43.4,
         "hora_ic_max_hoje": "13:49",
         "temp_max_hoje": 33.3,
@@ -75,17 +75,17 @@
         "cor_pico_hoje": "#DC2626",
         "faixa": "Cuidado (27–32°C)",
         "cor_hex": "#CA8A04",
-        "ultima_leitura": "2026-11-23 17:31:05",
+        "ultima_leitura": "2026-11-23 18:02:48",
         "lat": -22.440357,
         "lon": -41.953913
       },
       {
         "codigo": "IRIODA17",
         "nome": "Praia da Tartaruga",
-        "temp_c": 26.9,
+        "temp_c": 26.8,
         "ur_pct": 89,
-        "sensacao_c": 31.8,
-        "ic_c": 30.6,
+        "sensacao_c": 32.3,
+        "ic_c": 30.4,
         "ic_max_hoje": 35.5,
         "hora_ic_max_hoje": "12:14",
         "temp_max_hoje": 29.7,
@@ -96,17 +96,17 @@
         "cor_pico_hoje": "#F97316",
         "faixa": "Cuidado (27–32°C)",
         "cor_hex": "#CA8A04",
-        "ultima_leitura": "2026-11-23 17:30:55",
+        "ultima_leitura": "2026-11-23 18:02:47",
         "lat": -22.531291,
         "lon": -41.957444
       },
       {
         "codigo": "ICASIM5",
         "nome": "Barra de São João / Praiamar",
-        "temp_c": 26.8,
+        "temp_c": 26.7,
         "ur_pct": 92,
-        "sensacao_c": 31.1,
-        "ic_c": 30.9,
+        "sensacao_c": 31.2,
+        "ic_c": 30.6,
         "ic_max_hoje": 34.2,
         "hora_ic_max_hoje": "10:54",
         "temp_max_hoje": 28.7,
@@ -117,7 +117,7 @@
         "cor_pico_hoje": "#F97316",
         "faixa": "Cuidado (27–32°C)",
         "cor_hex": "#CA8A04",
-        "ultima_leitura": "2026-11-23 17:30:42",
+        "ultima_leitura": "2026-11-23 18:02:54",
         "lat": -22.573707,
         "lon": -41.985545
       }
@@ -807,7 +807,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-23 17:35"
+    "captura_brt": "2026-11-23 18:07"
   },
   "previsao_8dias_calor": [
     {
