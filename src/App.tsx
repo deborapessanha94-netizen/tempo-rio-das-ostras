@@ -60,6 +60,7 @@ import {
   OrlaDataset,
   SITE_BASE,
   TabuaMares,
+  WindRoseDataset,
   degToCompass,
   enrichAcumuladosWithLiveTelemetry,
   fetchMarinhaAvisosLive,
@@ -82,14 +83,17 @@ import {
 import { ChartMetric, HourlyChart, HourlyPoint } from './components/HourlyChart';
 import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartInstagram';
 import { exportHeatIndicesToInstagramPng } from './utils/exportHeatInstagram';
+import { exportWindRoseToInstagramPng } from './utils/exportWindRoseInstagram';
 import { RiverChart } from './components/RiverChart';
 import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex';
+import { recomputeLiveWindRose, type WindRosePeriodKey } from './services/windRose';
 import { classifyRainPlancon, classifyWindPlancon } from './services/liveRainConsensus';
 import { SocialExportModal } from './components/SocialExportModal';
 import { PwaInstallModal } from './components/PwaInstallModal';
 import { HeatStationsMap } from './components/HeatStationsMap';
+import { WindRoseChart } from './components/WindRoseChart';
 
-type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'calor' | 'boletim' | 'panorama';
+type SectionTab = 'previsao' | 'chuva' | 'rio' | 'orla' | 'alertas' | 'calor' | 'vento' | 'boletim' | 'panorama';
 type PlanconSubTab = 'limiares' | 'bairros' | 'niveis' | 'resposta' | 'elnino';
 
 const NAV_ITEMS: { id: SectionTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
@@ -99,6 +103,7 @@ const NAV_ITEMS: { id: SectionTab; label: string; icon: React.ComponentType<{ cl
   { id: 'orla', label: 'Orla & Praias', icon: Umbrella },
   { id: 'alertas', label: 'Alertas & Sinótico', icon: ShieldAlert },
   { id: 'calor', label: 'Índices de Calor', icon: Flame },
+  { id: 'vento', label: 'Rosa dos Ventos', icon: Compass },
   { id: 'boletim', label: 'Boletim 16 Turnos', icon: CalendarClock },
   { id: 'panorama', label: 'Panorama Mensal', icon: Film },
 ];
@@ -141,6 +146,13 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string; shortLabe
     { id: 'previsao', label: 'Projeção 8 Dias (COR-Rio NC1–NC5)', shortLabel: '8 Dias COR' },
     { id: 'oficiais', label: 'Painel Oficial EHF (Clima & Saúde / SES-RJ)', shortLabel: 'EHF MS/RJ' },
     { id: 'protocolo', label: 'Critérios Oficiais COR-Rio (NC1–NC5)', shortLabel: 'Protocolo' },
+    { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
+  ],
+  vento: [
+    { id: 'rosa', label: 'Rosa dos Ventos (Estações & Rede)', shortLabel: 'Rosa Ao Vivo' },
+    { id: 'diario', label: 'Tendência Diária & Giro dos Ventos', shortLabel: 'Diário' },
+    { id: 'previsao', label: 'Rosa Prevista (7 Dias NWP)', shortLabel: 'Previsão 7d' },
+    { id: 'quadrantes', label: 'Interpretação Costeira & Critérios', shortLabel: 'Critérios' },
     { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
   ],
   boletim: [
@@ -217,7 +229,7 @@ export default function App() {
     try {
       const p = new URLSearchParams(window.location.search);
       const t = p.get('tab') as SectionTab;
-      if (t && ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'calor', 'boletim', 'panorama'].includes(t)) return t;
+      if (t && ['previsao', 'chuva', 'rio', 'orla', 'alertas', 'calor', 'vento', 'boletim', 'panorama'].includes(t)) return t;
     } catch {}
     return 'previsao';
   });
@@ -229,6 +241,7 @@ export default function App() {
       orla: 'mar',
       alertas: 'avisos',
       calor: 'agora',
+      vento: 'rosa',
       boletim: 'turnos',
       panorama: 'video',
     };
@@ -294,6 +307,7 @@ export default function App() {
   const [tabuaMares, setTabuaMares] = useState<TabuaMares | null>(null);
   const [historico, setHistorico] = useState<HistoricoEstacoesDataset | null>(null);
   const [heatIndices, setHeatIndices] = useState<HeatIndicesDataset | null>(null);
+  const [windRoseData, setWindRoseData] = useState<WindRoseDataset | null>(null);
   const [openMeteo, setOpenMeteo] = useState<OpenMeteoData | null>(null);
 
   // Inner controls
@@ -332,8 +346,18 @@ export default function App() {
   const [heatExportDone, setHeatExportDone] = useState<string | null>(null);
   const heatExportMenuRef = useRef<HTMLDivElement | null>(null);
 
+  const [windRosePeriod, setWindRosePeriod] = useState<WindRosePeriodKey>('hoje');
+  const [windRoseStation, setWindRoseStation] = useState<string>('REDE');
+  const [windRoseForecastHorizon, setWindRoseForecastHorizon] = useState<'hoje' | 'prox_3d' | 'prox_7d'>('prox_7d');
+  const [windRoseShowAllDays, setWindRoseShowAllDays] = useState<boolean>(false);
+  const [windExportMenuOpen, setWindExportMenuOpen] = useState(false);
+  const [windExportTheme, setWindExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
+  const [windExportingFmt, setWindExportingFmt] = useState<InstagramFormat | null>(null);
+  const [windExportDone, setWindExportDone] = useState<string | null>(null);
+  const windExportMenuRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    if (!openChartMenu && !heatExportMenuOpen) return;
+    if (!openChartMenu && !heatExportMenuOpen && !windExportMenuOpen) return;
     const onDown = (ev: MouseEvent) => {
       const target = ev.target as Node;
       if (openChartMenu && chartToolbarRef.current && !chartToolbarRef.current.contains(target)) {
@@ -342,11 +366,15 @@ export default function App() {
       if (heatExportMenuOpen && heatExportMenuRef.current && !heatExportMenuRef.current.contains(target)) {
         setHeatExportMenuOpen(false);
       }
+      if (windExportMenuOpen && windExportMenuRef.current && !windExportMenuRef.current.contains(target)) {
+        setWindExportMenuOpen(false);
+      }
     };
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key === 'Escape') {
         setOpenChartMenu(null);
         setHeatExportMenuOpen(false);
+        setWindExportMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', onDown);
@@ -355,7 +383,7 @@ export default function App() {
       document.removeEventListener('mousedown', onDown);
       window.removeEventListener('keydown', onKey);
     };
-  }, [openChartMenu, heatExportMenuOpen]);
+  }, [openChartMenu, heatExportMenuOpen, windExportMenuOpen]);
 
   const [planconTab, setPlanconTab] = useState<PlanconSubTab>('limiares');
 
@@ -467,6 +495,7 @@ export default function App() {
       if (res.tabuaMares) setTabuaMares(res.tabuaMares);
       if (res.historico) setHistorico(res.historico);
       if (res.heatIndices) setHeatIndices(res.heatIndices);
+      if (res.windRose) setWindRoseData(res.windRose);
       if (res.openMeteo) setOpenMeteo(res.openMeteo);
     } finally {
       setLoading(false);
@@ -1284,6 +1313,18 @@ export default function App() {
     [heatIndices, acumulados, openMeteo, boletimMeta]
   );
 
+  const liveWindRose = useMemo(
+    () => recomputeLiveWindRose(windRoseData, acumulados, openMeteo),
+    [windRoseData, acumulados, openMeteo]
+  );
+
+  const windGustMaxHoje = useMemo(() => {
+    const vals = (liveWindRose?.estacoes || [])
+      .map((st) => st.rajada_max_hoje_kmh ?? st.rajada_atual_kmh ?? 0)
+      .filter((v) => Number.isFinite(v));
+    return vals.length ? Math.max(...vals) : 0;
+  }, [liveWindRose]);
+
   const todayDateFull = useMemo(() => {
     const raw = new Intl.DateTimeFormat('pt-BR', {
       weekday: 'long',
@@ -1535,6 +1576,19 @@ export default function App() {
                             }`}
                           >
                             {liveHeat?.agora?.cor_nivel}
+                          </span>
+                        )}
+                        {item.id === 'vento' && (liveWindRose?.rede?.periodos?.hoje?.dir_predominante || '') && liveWindRose?.rede?.periodos?.hoje?.dir_predominante !== 'N/D' && (
+                          <span
+                            className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono font-bold tabular-nums shrink-0 ${
+                              isActive
+                                ? 'bg-white/20 text-white dark:bg-[#000000]/15 dark:text-[#000000]'
+                                : windGustMaxHoje >= 40
+                                  ? 'bg-[#FF8244]/20 text-[#FF8244]'
+                                  : 'bg-sky-500/15 text-sky-600 dark:text-sky-300'
+                            }`}
+                          >
+                            {liveWindRose?.rede?.periodos?.hoje?.dir_predominante}
                           </span>
                         )}
                       </span>
@@ -7022,6 +7076,760 @@ export default function App() {
             </section>
           </div>
         )}
+
+        {/* ================= ABA 5.6: ROSA DOS VENTOS (TEMPO REAL + ATUALIZAÇÃO DIÁRIA + PREVISÃO) ================= */}
+        {activeTab === 'vento' && (() => {
+          const periodLabels: Record<WindRosePeriodKey, string> = {
+            hoje: 'Hoje (Ao Vivo · 5 min)',
+            '7d': 'Últimos 7 Dias',
+            '30d': 'Últimos 30 Dias',
+            mes_atual: liveWindRose?.mes_referencia || 'Mês Atual',
+            historico: `Série (${liveWindRose?.total_dias_serie || '--'} dias)`,
+          };
+          const selectedStationObj =
+            windRoseStation === 'REDE'
+              ? null
+              : (liveWindRose?.estacoes || []).find((s) => s.codigo === windRoseStation) || null;
+          const activeDist =
+            (selectedStationObj ? selectedStationObj.periodos?.[windRosePeriod] : liveWindRose?.rede?.periodos?.[windRosePeriod]) ||
+            liveWindRose?.rede?.periodos?.hoje;
+          const activeLabel = selectedStationObj ? selectedStationObj.nome : 'Rede Municipal (5 Estações)';
+          const activePeriodLabel = periodLabels[windRosePeriod];
+          const topSectors = (activeDist?.setores || [])
+            .filter((s) => s.total_count > 0)
+            .slice()
+            .sort((a, b) => b.pct - a.pct || b.vel_media_kmh - a.vel_media_kmh)
+            .slice(0, 5);
+          const windPlancon = classifyWindPlancon(activeDist?.vel_media_kmh, activeDist?.rajada_max_kmh);
+          const windPlanconColor =
+            windPlancon.tone === 'muito_alto'
+              ? 'text-purple-600 dark:text-purple-400'
+              : windPlancon.tone === 'alto'
+                ? 'text-red-600 dark:text-red-400'
+                : windPlancon.tone === 'moderado'
+                  ? 'text-[#FF8244]'
+                  : 'text-emerald-600 dark:text-emerald-400';
+          const outrosQuadrantesPct = activeDist
+            ? Math.max(0, Math.round((100 - activeDist.quadrante_norte_leste_pct - activeDist.quadrante_sul_pct) * 10) / 10)
+            : 0;
+          const serieDiariaDesc = (liveWindRose?.serie_diaria || []).slice().reverse();
+          const serieDiariaVisible = windRoseShowAllDays ? serieDiariaDesc : serieDiariaDesc.slice(0, 14);
+          const forecastDist =
+            liveWindRose?.previsao?.[windRoseForecastHorizon] || liveWindRose?.previsao?.prox_7d;
+
+          return (
+            <div className="min-w-0 space-y-8">
+              <section className="min-w-0 bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-4 sm:p-8 space-y-6">
+                {/* Cabeçalho */}
+                <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#E5E5E5] dark:border-[#233354]">
+                  <div className="min-w-0">
+                    <h1 className="font-display text-2xl font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
+                      <Compass className="w-6 h-6 text-[#FF8244]" />
+                      Rosa dos Ventos — Rio das Ostras
+                    </h1>
+                    <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75 mt-1">
+                      Atualização diária automática ({liveWindRose?.periodo_inicio || '--'} → {liveWindRose?.periodo_fim || '--'}) + leituras ao vivo das estações e previsão 7 dias (ECMWF/GFS/ICON).
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                    {liveWindRose && activeDist && (
+                      <div ref={windExportMenuRef} className="relative">
+                        <button
+                          type="button"
+                          onClick={() => setWindExportMenuOpen((v) => !v)}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer whitespace-nowrap ${
+                            windExportMenuOpen
+                              ? 'bg-[#FF8244] text-[#000000] border-[#FF8244]'
+                              : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                          }`}
+                        >
+                          <Camera className={`w-3.5 h-3.5 ${windExportMenuOpen ? 'text-[#000000]' : 'text-[#FF8244]'}`} />
+                          <span>Salvar Instagram</span>
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform ${windExportMenuOpen ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {windExportMenuOpen && (
+                          <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 z-30 w-80 max-w-[90vw] rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-3 space-y-2.5">
+                            <div className="pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                Exportar Rosa dos Ventos em Ultra HD
+                              </div>
+                              <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                PNG sem perda · 2160px (@tempoemriodasostras)
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
+                              <span className="text-slate-500 dark:text-[#E5E5E5]/70">Fundo da imagem:</span>
+                              <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                                {(['auto', 'dark', 'light'] as const).map((t) => (
+                                  <button
+                                    key={t}
+                                    type="button"
+                                    onClick={() => setWindExportTheme(t)}
+                                    className={`px-2 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                                      windExportTheme === t
+                                        ? 'bg-[#FF8244] text-[#000000]'
+                                        : 'text-slate-600 dark:text-[#E5E5E5]/75'
+                                    }`}
+                                  >
+                                    {t === 'auto' ? 'Site' : t === 'dark' ? 'Escuro' : 'Claro'}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {(() => {
+                              const runWindExport = async (fmt: InstagramFormat) => {
+                                setWindExportingFmt(fmt);
+                                setWindExportDone(null);
+                                try {
+                                  const useDark = windExportTheme === 'auto' ? isDark : windExportTheme === 'dark';
+                                  await exportWindRoseToInstagramPng({
+                                    distribution: activeDist,
+                                    stationLabel: activeLabel,
+                                    periodLabel: activePeriodLabel,
+                                    stations: liveWindRose.estacoes,
+                                    binsMeta: liveWindRose.faixas_velocidade,
+                                    format: fmt,
+                                    darkTheme: useDark,
+                                    siteBase: SITE_BASE,
+                                  });
+                                  setWindExportDone(
+                                    fmt === 'story' ? 'Stories 9:16 salvo em 2160×3840!' : 'Post 4:5 salvo em 2160×2700!'
+                                  );
+                                  window.setTimeout(() => setWindExportDone(null), 3500);
+                                } catch (err) {
+                                  console.error('Erro ao exportar rosa dos ventos:', err);
+                                } finally {
+                                  setWindExportingFmt(null);
+                                }
+                              };
+                              return (
+                                <div className="space-y-1.5 pt-0.5">
+                                  <button
+                                    type="button"
+                                    disabled={windExportingFmt !== null}
+                                    onClick={() => runWindExport('story')}
+                                    className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <Smartphone className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                      <div>
+                                        <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                          {windExportingFmt === 'story' ? 'Gerando Stories...' : 'Stories Instagram (9:16)'}
+                                        </div>
+                                        <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                          2160 × 3840 px · Alta Resolução PNG
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    disabled={windExportingFmt !== null}
+                                    onClick={() => runWindExport('post')}
+                                    className="w-full flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <Square className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                      <div>
+                                        <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                          {windExportingFmt === 'post' ? 'Gerando Post...' : 'Post Feed Instagram (4:5)'}
+                                        </div>
+                                        <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                          2160 × 2700 px · Alta Resolução PNG
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                                  </button>
+                                </div>
+                              );
+                            })()}
+                            {windExportDone && (
+                              <div className="text-[11px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                                {windExportDone}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <span className="font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                      Atualizado: <strong className="text-[#14213D] dark:text-white">{liveWindRose?.atualizacao_brt || '--'}</strong>
+                    </span>
+                  </div>
+                </div>
+
+                {showSub('rosa') && (
+                  <div className="space-y-6">
+                    {/* Controles de Período e Estação */}
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65 mr-1">
+                          Período:
+                        </span>
+                        {(['hoje', '7d', '30d', 'mes_atual', 'historico'] as WindRosePeriodKey[]).map((pk) => (
+                          <button
+                            key={pk}
+                            type="button"
+                            onClick={() => setWindRosePeriod(pk)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+                              windRosePeriod === pk
+                                ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244] font-semibold'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                            }`}
+                          >
+                            {periodLabels[pk]}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-500 dark:text-[#E5E5E5]/65 mr-1">
+                          Estação:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setWindRoseStation('REDE')}
+                          className={`px-2.5 py-1 rounded-md text-xs font-mono border transition-colors cursor-pointer ${
+                            windRoseStation === 'REDE'
+                              ? 'bg-[#FF8244]/15 text-[#FF8244] border-[#FF8244] font-bold'
+                              : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                          }`}
+                        >
+                          Rede Municipal (Geral)
+                        </button>
+                        {(liveWindRose?.estacoes || []).map((st) => (
+                          <button
+                            key={st.codigo}
+                            type="button"
+                            onClick={() => setWindRoseStation(st.codigo)}
+                            className={`px-2.5 py-1 rounded-md text-xs font-mono border transition-colors cursor-pointer inline-flex items-center gap-1.5 ${
+                              windRoseStation === st.codigo
+                                ? 'bg-[#FF8244]/15 text-[#FF8244] border-[#FF8244] font-bold'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                            }`}
+                          >
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${st.online ? 'bg-emerald-500' : 'bg-slate-400'}`}
+                            />
+                            <span>{st.nome}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {activeDist ? (
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                        {/* Gráfico Polar */}
+                        <div className="lg:col-span-7 p-4 sm:p-5 rounded-xl bg-[#F7F8FA]/70 dark:bg-[#0B1324]/80 border border-[#E5E5E5] dark:border-[#233354] space-y-4">
+                          <WindRoseChart
+                            distribution={activeDist}
+                            binsMeta={liveWindRose?.faixas_velocidade}
+                            isDark={isDark}
+                            title={`${activeLabel} · ${activePeriodLabel}`}
+                            subtitle={`${activeDist.total_amostras} leituras · Calmarias (<5 km/h): ${activeDist.calmo_pct}%`}
+                          />
+
+                          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E5E5E5] dark:border-[#233354]">
+                            <div className="flex flex-wrap items-center gap-3">
+                              {(liveWindRose?.faixas_velocidade || []).map((bm) => (
+                                <span
+                                  key={bm.id}
+                                  className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80"
+                                >
+                                  <span
+                                    className="w-2.5 h-2.5 rounded-xs shrink-0"
+                                    style={{ backgroundColor: bm.cor_hex }}
+                                  />
+                                  <span>{bm.short_label} km/h</span>
+                                </span>
+                              ))}
+                            </div>
+                            <span className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                              Seta = vetor médio resultante (de onde o vento sopra)
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Painel Lateral de Análise */}
+                        <div className="lg:col-span-5 space-y-4">
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/65">
+                                Predominância
+                              </div>
+                              <div className="text-2xl font-mono font-bold text-[#FF8244] mt-1">
+                                {activeDist.dir_predominante}
+                              </div>
+                              <div className="text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80 mt-0.5">
+                                {activeDist.dir_predominante_pct}% no setor ({activeDist.dir_predominante_deg ?? '--'}°)
+                              </div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/65">
+                                Vetor Resultante
+                              </div>
+                              <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white mt-1">
+                                {activeDist.dir_vetorial_cardeal}{' '}
+                                <span className="text-sm font-normal text-slate-500">
+                                  ({activeDist.dir_vetorial_graus ?? '--'}°)
+                                </span>
+                              </div>
+                              <div className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                Persistência: {activeDist.persistencia_pct}%
+                              </div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/65">
+                                Vento Sustentado
+                              </div>
+                              <div className="text-2xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums mt-1">
+                                {activeDist.vel_media_kmh.toFixed(1)}{' '}
+                                <span className="text-xs font-normal text-slate-500">km/h</span>
+                              </div>
+                              <div className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 mt-0.5">
+                                Máx sustentado: {activeDist.vel_max_kmh.toFixed(1)} km/h
+                              </div>
+                            </div>
+
+                            <div className="p-3.5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354]">
+                              <div className="text-[10px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/65">
+                                Rajada Máxima
+                              </div>
+                              <div className="text-2xl font-mono font-bold text-[#FF8244] tabular-nums mt-1">
+                                {activeDist.rajada_max_kmh.toFixed(1)}{' '}
+                                <span className="text-xs font-normal text-slate-500">km/h</span>
+                              </div>
+                              <div className={`text-[11px] font-semibold mt-0.5 ${windPlanconColor}`}>
+                                {windPlancon.riscoLabel} · {windPlancon.beaufort}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Divisão por Quadrantes */}
+                          <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
+                            <div className="flex items-center justify-between text-xs font-semibold text-[#14213D] dark:text-white">
+                              <span>Regimes por Quadrante</span>
+                              <span className="text-[10px] font-mono text-slate-500">
+                                {activeDist.amostras_validas_dir} amostras direcionais
+                              </span>
+                            </div>
+                            {[
+                              {
+                                label: 'Alísios / ASAS (N–NE–ENE–L)',
+                                pct: activeDist.quadrante_norte_leste_pct,
+                                color: '#10B981',
+                              },
+                              {
+                                label: 'Frentes / Marítimo Sul (SE–S–SO)',
+                                pct: activeDist.quadrante_sul_pct,
+                                color: '#FF8244',
+                              },
+                              {
+                                label: 'Brisa Terrestre / Oeste (OSO–ONO–NNO–ESE)',
+                                pct: outrosQuadrantesPct,
+                                color: '#0EA5E9',
+                              },
+                            ].map((q) => (
+                              <div key={q.label} className="space-y-1">
+                                <div className="flex justify-between text-[11px] font-mono">
+                                  <span className="text-slate-600 dark:text-[#E5E5E5]/80">{q.label}</span>
+                                  <strong className="text-[#14213D] dark:text-white tabular-nums">{q.pct.toFixed(1)}%</strong>
+                                </div>
+                                <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-[#14213D] overflow-hidden">
+                                  <div
+                                    className="h-full rounded-full transition-all"
+                                    style={{ width: `${Math.min(100, q.pct)}%`, backgroundColor: q.color }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Top 5 Setores */}
+                          <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-2.5">
+                            <div className="text-xs font-semibold text-[#14213D] dark:text-white">
+                              Top 5 Direções no Período
+                            </div>
+                            {topSectors.length > 0 ? (
+                              topSectors.map((sec) => (
+                                <div key={sec.idx} className="flex items-center justify-between gap-3 text-xs font-mono">
+                                  <span className="w-10 font-bold text-[#14213D] dark:text-white">{sec.cardeal}</span>
+                                  <div className="flex-1 h-2 rounded-full bg-slate-200 dark:bg-[#14213D] overflow-hidden">
+                                    <div
+                                      className="h-full rounded-full bg-[#FF8244]"
+                                      style={{
+                                        width: `${Math.min(100, (sec.pct / Math.max(1, topSectors[0].pct)) * 100)}%`,
+                                      }}
+                                    />
+                                  </div>
+                                  <span className="w-12 text-right font-semibold text-[#14213D] dark:text-white tabular-nums">
+                                    {sec.pct.toFixed(1)}%
+                                  </span>
+                                  <span className="w-24 text-right text-[10.5px] text-slate-500 dark:text-[#E5E5E5]/70 tabular-nums">
+                                    {sec.vel_media_kmh.toFixed(1)} · raj {sec.rajada_max_kmh.toFixed(0)}
+                                  </span>
+                                </div>
+                              ))
+                            ) : (
+                              <div className="text-xs text-slate-500">Sem registros direcionais suficientes neste filtro.</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-6 rounded-xl border border-[#E5E5E5] dark:border-[#233354] text-sm text-slate-500">
+                        Carregando distribuição dos ventos...
+                      </div>
+                    )}
+
+                    {/* Comparativo por Estação ao Vivo */}
+                    {(liveWindRose?.estacoes || []).length > 0 && (
+                      <div className="space-y-3 pt-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <h3 className="text-sm font-display font-semibold text-[#14213D] dark:text-white">
+                            Vento Agora e Predominância por Estação (Tempo Real)
+                          </h3>
+                          <span className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                            Clique em uma estação para focar a Rosa dos Ventos
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                          {liveWindRose!.estacoes.map((st) => {
+                            const isSel = windRoseStation === st.codigo;
+                            const distSt = st.periodos?.[windRosePeriod];
+                            return (
+                              <button
+                                key={st.codigo}
+                                type="button"
+                                onClick={() => setWindRoseStation(isSel ? 'REDE' : st.codigo)}
+                                className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer space-y-2 ${
+                                  isSel
+                                    ? 'bg-[#FF8244]/10 border-[#FF8244] shadow-xs'
+                                    : 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]/70'
+                                }`}
+                              >
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-bold text-[#14213D] dark:text-white truncate">
+                                      {st.nome}
+                                    </div>
+                                    <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                                      {st.codigo} · {st.costeira ? 'Orla' : 'Interior'}
+                                    </div>
+                                  </div>
+                                  <span
+                                    className={`px-1.5 py-0.5 rounded text-[9.5px] font-mono font-bold ${
+                                      st.online
+                                        ? 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'
+                                        : 'bg-slate-200 dark:bg-[#14213D] text-slate-500'
+                                    }`}
+                                  >
+                                    {st.online ? 'ONLINE' : 'HIST.'}
+                                  </span>
+                                </div>
+
+                                <div className="flex items-center gap-2.5 pt-1">
+                                  <div
+                                    className="w-8 h-8 rounded-full bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] flex items-center justify-center shrink-0"
+                                    title="Seta aponta o fluxo para onde o vento sopra"
+                                  >
+                                    <ArrowUp
+                                      className="w-4 h-4 text-[#FF8244]"
+                                      style={{
+                                        transform: `rotate(${((st.dir_atual_graus ?? distSt?.dir_vetorial_graus ?? 0) + 180) % 360}deg)`,
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="text-sm font-mono font-bold text-[#14213D] dark:text-white">
+                                      {st.dir_atual_cardeal || distSt?.dir_predominante || '--'}{' '}
+                                      <span className="text-[11px] font-normal text-slate-500">
+                                        {st.vento_atual_kmh !== null ? `${st.vento_atual_kmh.toFixed(1)} km/h` : '--'}
+                                      </span>
+                                    </div>
+                                    <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                                      Raj máx hoje: {st.rajada_max_hoje_kmh !== null ? `${st.rajada_max_hoje_kmh.toFixed(1)}` : '--'} km/h
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {distSt && (
+                                  <div className="pt-1.5 border-t border-[#E5E5E5]/70 dark:border-[#233354] text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/75 flex justify-between">
+                                    <span>Pred ({windRosePeriod}): <strong className="text-[#FF8244]">{distSt.dir_predominante}</strong></span>
+                                    <span>{distSt.vel_media_kmh.toFixed(1)} km/h</span>
+                                  </div>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {showSub('diario') && (
+                  <div className="space-y-4 pt-6 border-t border-[#E5E5E5] dark:border-[#233354]">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-[#FF8244]" />
+                          Evolução Diária e Giro dos Ventos
+                        </h2>
+                        <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                          Fechamento diário automático consolidando direção predominante, vetor resultante, persistência, rajadas e entradas de Quadrante Sul.
+                        </p>
+                      </div>
+                      {serieDiariaDesc.length > 14 && (
+                        <button
+                          type="button"
+                          onClick={() => setWindRoseShowAllDays((v) => !v)}
+                          className="px-3 py-1.5 rounded-lg text-xs font-mono border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white hover:border-[#FF8244] cursor-pointer"
+                        >
+                          {windRoseShowAllDays ? 'Mostrar últimos 14 dias' : `Ver todos (${serieDiariaDesc.length} dias)`}
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="overflow-x-auto rounded-xl border border-[#E5E5E5] dark:border-[#233354]">
+                      <table className="w-full text-xs text-left">
+                        <thead className="bg-[#F7F8FA] dark:bg-[#0B1324] text-[10.5px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70 border-b border-[#E5E5E5] dark:border-[#233354]">
+                          <tr>
+                            <th className="px-3 py-2.5">Data</th>
+                            <th className="px-3 py-2.5">Predominante</th>
+                            <th className="px-3 py-2.5">Vetor / Persist.</th>
+                            <th className="px-3 py-2.5">Vel. Média</th>
+                            <th className="px-3 py-2.5">Rajada Máx</th>
+                            <th className="px-3 py-2.5">Quad. Sul</th>
+                            <th className="px-3 py-2.5">Regime Diário</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#233354]">
+                          {serieDiariaVisible.map((row, idx) => {
+                            const isToday = row.data_iso === liveWindRose?.data_referencia_iso || idx === 0;
+                            const isSul = row.quadrante_sul_pct >= 35;
+                            return (
+                              <tr
+                                key={row.data_iso}
+                                className={
+                                  isToday
+                                    ? 'bg-[#FF8244]/5 dark:bg-[#FF8244]/10'
+                                    : 'bg-white dark:bg-[#14213D] hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60'
+                                }
+                              >
+                                <td className="px-3 py-2.5 font-mono font-semibold text-[#14213D] dark:text-white whitespace-nowrap">
+                                  {row.data_br}
+                                  {isToday && (
+                                    <span className="ml-1.5 px-1.5 py-0.5 rounded bg-[#FF8244] text-[#000000] text-[9px] font-bold">
+                                      HOJE
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="px-3 py-2.5 font-mono font-bold text-[#FF8244] whitespace-nowrap">
+                                  <span className="inline-flex items-center gap-1.5">
+                                    <ArrowUp
+                                      className="w-3.5 h-3.5"
+                                      style={{
+                                        transform: `rotate(${((row.dir_vetorial_graus ?? 0) + 180) % 360}deg)`,
+                                      }}
+                                    />
+                                    {row.dir_predominante}
+                                  </span>
+                                </td>
+                                <td className="px-3 py-2.5 font-mono text-slate-600 dark:text-[#E5E5E5]/85 whitespace-nowrap">
+                                  {row.dir_vetorial_cardeal} ({row.dir_vetorial_graus ?? '--'}°) · {row.persistencia_pct}%
+                                </td>
+                                <td className="px-3 py-2.5 font-mono tabular-nums text-[#14213D] dark:text-white">
+                                  {row.vel_media_kmh.toFixed(1)} km/h
+                                </td>
+                                <td className="px-3 py-2.5 font-mono font-semibold tabular-nums text-[#14213D] dark:text-white">
+                                  {row.rajada_max_kmh.toFixed(1)} km/h
+                                </td>
+                                <td className="px-3 py-2.5 font-mono tabular-nums">
+                                  <span className={isSul ? 'text-[#FF8244] font-bold' : 'text-slate-500'}>
+                                    {row.quadrante_sul_pct.toFixed(0)}%
+                                  </span>
+                                </td>
+                                <td className="px-3 py-2.5 text-[11px] text-slate-600 dark:text-[#E5E5E5]/85">
+                                  {row.regime}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {showSub('previsao') && liveWindRose?.previsao && (
+                  <div className="space-y-5 pt-6 border-t border-[#E5E5E5] dark:border-[#233354]">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
+                          <Wind className="w-4 h-4 text-[#FF8244]" />
+                          Rosa dos Ventos Prevista (7 Dias à Frente)
+                        </h2>
+                        <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/75">
+                          Projeção direcional e de rajadas em 10 metros · {liveWindRose.previsao.fontes}
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {(
+                          [
+                            { id: 'hoje', label: 'Hoje' },
+                            { id: 'prox_3d', label: 'Próx. 3 Dias' },
+                            { id: 'prox_7d', label: 'Próx. 7 Dias' },
+                          ] as const
+                        ).map((hOpt) => (
+                          <button
+                            key={hOpt.id}
+                            type="button"
+                            onClick={() => setWindRoseForecastHorizon(hOpt.id)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-colors cursor-pointer ${
+                              windRoseForecastHorizon === hOpt.id
+                                ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#000000] border-[#14213D] dark:border-[#FF8244] font-semibold'
+                                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-600 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354]'
+                            }`}
+                          >
+                            {hOpt.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                      <div className="lg:col-span-5 p-4 rounded-xl bg-[#F7F8FA]/70 dark:bg-[#0B1324]/80 border border-[#E5E5E5] dark:border-[#233354]">
+                        {forecastDist && (
+                          <WindRoseChart
+                            distribution={forecastDist}
+                            binsMeta={liveWindRose.faixas_velocidade}
+                            isDark={isDark}
+                            compact
+                            title={
+                              windRoseForecastHorizon === 'hoje'
+                                ? 'Rosa Prevista · Hoje'
+                                : windRoseForecastHorizon === 'prox_3d'
+                                  ? 'Rosa Prevista · Próximos 3 Dias'
+                                  : 'Rosa Prevista · 7 Dias'
+                            }
+                            subtitle={`Vetorial ${forecastDist.dir_vetorial_cardeal} · Persist. ${forecastDist.persistencia_pct}%`}
+                          />
+                        )}
+                      </div>
+
+                      <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {liveWindRose.previsao.dias.map((fd) => {
+                          const hasShift = fd.quadrante_sul_pct >= 35 || fd.rajada_max_kmh >= 35;
+                          return (
+                            <div
+                              key={fd.data_iso}
+                              className={`p-3.5 rounded-xl border space-y-2 ${
+                                hasShift
+                                  ? 'bg-[#FF8244]/5 dark:bg-[#FF8244]/10 border-[#FF8244]/60'
+                                  : 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354]'
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <div>
+                                  <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                                    {fd.dia_semana} · {fd.data_br.slice(0, 5)}
+                                  </div>
+                                  <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/70">
+                                    Persistência: {fd.persistencia_pct}% · Quad. Sul: {fd.quadrante_sul_pct}%
+                                  </div>
+                                </div>
+                                <span
+                                  className={`px-2 py-0.5 rounded font-mono text-[10px] font-bold whitespace-nowrap shrink-0 ${
+                                    fd.rajada_max_kmh >= 40
+                                      ? 'bg-[#FF8244] text-[#000000]'
+                                      : 'bg-white dark:bg-[#14213D] text-[#14213D] dark:text-white border border-[#E5E5E5] dark:border-[#233354]'
+                                  }`}
+                                >
+                                  {fd.plancon_risco}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center justify-between pt-1">
+                                <div className="flex items-center gap-2">
+                                  <ArrowUp
+                                    className="w-4 h-4 text-[#FF8244]"
+                                    style={{
+                                      transform: `rotate(${((fd.dir_vetorial_graus ?? 0) + 180) % 360}deg)`,
+                                    }}
+                                  />
+                                  <span className="font-mono text-sm font-bold text-[#14213D] dark:text-white">
+                                    {fd.dir_predominante}{' '}
+                                    <span className="text-[11px] font-normal text-slate-500">
+                                      ({fd.dir_vetorial_graus ?? '--'}°)
+                                    </span>
+                                  </span>
+                                </div>
+                                <div className="text-right font-mono text-xs">
+                                  <div className="font-semibold text-[#14213D] dark:text-white">
+                                    {fd.vel_min_kmh.toFixed(0)}–{fd.vel_max_kmh.toFixed(0)} km/h
+                                  </div>
+                                  <div className="text-[10.5px] text-[#FF8244]">
+                                    Rajadas até {fd.rajada_max_kmh.toFixed(1)} km/h
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {showSub('quadrantes') && (
+                  <div className="space-y-3 pt-6 border-t border-[#E5E5E5] dark:border-[#233354]">
+                    <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white flex items-center gap-2">
+                      <Info className="w-4 h-4 text-[#FF8244]" />
+                      Leitura Costeira dos Quadrantes em Rio das Ostras
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-xs">
+                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
+                        <div className="font-bold text-emerald-600 dark:text-emerald-400">
+                          Quadrante Norte–Leste (N · NNE · NE · ENE · L)
+                        </div>
+                        <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                          Escoamento clássico da Alta Subtropical do Atlântico Sul (ASAS) e brisa marítima diurna. Mantém tempo mais aberto/quente; quando persistente por vários dias, favorece a ressurgência e água do mar mais fria nas praias.
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
+                        <div className="font-bold text-[#FF8244]">
+                          Quadrante Sul–Sudeste (SE · SSE · S · SSO · SO)
+                        </div>
+                        <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                          Assinatura de entrada ou retaguarda de frentes frias e cavados oceânicos. Costuma acompanhar aumento de nebulosidade, chuva orográfica/frontal, queda térmica e elevação das ondas em Costazul e Mar do Norte.
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5">
+                        <div className="font-bold text-sky-600 dark:text-sky-400">
+                          Brisa Continental (O · ONO · NO) &amp; Persistência
+                        </div>
+                        <p className="text-slate-600 dark:text-[#E5E5E5]/80 leading-relaxed">
+                          Frequente nas madrugadas (escoamento continente→mar) ou em aquecimento pré-frontal antes da virada do tempo. Persistência alta (&gt;70%) indica regime firme; baixa (&lt;45%) sinaliza giro de ventos no dia.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </section>
+            </div>
+          );
+        })()}
 
         {/* ================= ABA 6: BOLETIM 16 TURNOS ================= */}
         {activeTab === 'boletim' && (

@@ -1,9 +1,10 @@
 import { enrichAcumuladosWithLiveTelemetry } from './liveTelemetry';
 import { reconcileLiveRainConsensus } from './liveRainConsensus';
 import type { HeatIndicesDataset } from './heatIndex';
+import type { WindRoseDataset, WindSampleRaw } from './windRose';
 
 export { enrichAcumuladosWithLiveTelemetry };
-export type { HeatIndicesDataset };
+export type { HeatIndicesDataset, WindRoseDataset, WindSampleRaw };
 
 export const SITE_BASE = '.';
 
@@ -42,6 +43,7 @@ export interface EstacaoPluvio {
   hora_rajada_max_hoje?: string | null;
   vento_max_24h?: number | null;
   rajada_max_24h?: number | null;
+  vento_hoje_amostras?: WindSampleRaw[];
   chuva_hoje?: number | null;
   chuva_taxa_atual?: number | null;
   inicio_chuva_hoje?: string | null;
@@ -609,6 +611,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     tabuaMares,
     historico,
     heatIndices,
+    windRose,
     openMeteo,
     liveGlobalNwp,
     liveInmetForecastPayload,
@@ -635,6 +638,9 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
       parseIsoMs(item.atualizacao_iso || item.atualizacao)
     ),
     fetchLatestRepoJson<HeatIndicesDataset>('data/heat_indices.json', (item) =>
+      parseIsoMs(item.atualizacao_iso)
+    ),
+    fetchLatestRepoJson<WindRoseDataset>('data/wind_rose.json', (item) =>
       parseIsoMs(item.atualizacao_iso)
     ),
     fetchJsonSafe<OpenMeteoData>(
@@ -756,6 +762,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
     tabuaMares,
     historico,
     heatIndices,
+    windRose,
     openMeteo: harmonizedOpenMeteo,
   };
 }

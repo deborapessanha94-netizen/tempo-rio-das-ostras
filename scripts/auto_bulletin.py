@@ -3304,6 +3304,20 @@ def run_auto_bulletin_pipeline():
         print(f"[Índices Calor] Aviso: {e}")
         heat_indices_data = {}
 
+    try:
+        try:
+            from scripts.wind_rose_service import compute_and_save_wind_rose
+        except ImportError:
+            from wind_rose_service import compute_and_save_wind_rose
+        compute_and_save_wind_rose(
+            DATA_DIR,
+            open_meteo_hourly=ens_hourly,
+            acumulados=raw_st if isinstance(raw_st, dict) else {"estacoes": estacoes_obs},
+            global_nwp=official_extractions.get('global_nwp'),
+        )
+    except Exception as e:
+        print(f"[Rosa dos Ventos] Aviso: {e}")
+
     metadata = {
         "municipio": "Rio das Ostras - RJ",
         "periodo": periodo_str,

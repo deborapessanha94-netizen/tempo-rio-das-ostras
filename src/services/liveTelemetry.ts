@@ -1,4 +1,4 @@
-import type { AcumuladosDataset, EstacaoPluvio } from './siteData';
+import type { AcumuladosDataset, EstacaoPluvio, WindSampleRaw } from './siteData';
 import { computeRothfuszHeatIndexC } from './heatIndex';
 
 const KNOWN_WU_KEYS = [
@@ -233,6 +233,7 @@ interface WuStationCache {
   lastNonZeroWind: number;
   lastNonZeroGust: number;
   lastNonZeroMs: number;
+  windTodaySamples: WindSampleRaw[];
 }
 
 const wuCache: Record<string, WuStationCache> = {};
@@ -468,6 +469,9 @@ async function fetchWuStationLive(
   let lastNonZeroWind = prev?.lastNonZeroWind ?? 0;
   let lastNonZeroGust = prev?.lastNonZeroGust ?? 0;
   let lastNonZeroMs = prev?.lastNonZeroMs ?? 0;
+  let windTodaySamples: WindSampleRaw[] = canUseQuickWindow && Array.isArray(prev?.windTodaySamples)
+    ? [...prev!.windTodaySamples]
+    : [];
   if (rawWind > 0) {
     lastNonZeroWind = rawWind;
     lastNonZeroGust = Math.max(rawGust, rawWind);
@@ -573,6 +577,19 @@ async function fetchWuStationLive(
         if (gHi !== null && (rajadaMaxHoje === null || gHi > rajadaMaxHoje)) {
           rajadaMaxHoje = gHi;
           horaRajadaMaxHoje = tStr.length >= 16 ? tStr.slice(11, 16) : null;
+        }
+
+        const dir5Raw = rec?.winddirAvg ?? rec?.winddir;
+        if (dir5Raw !== undefined && dir5Raw !== null && Number.isFinite(Number(dir5Raw)) && tStr.length >= 16) {
+          const v5 = round1(mr.windspeedAvg ?? mr.windSpeed, 0);
+          const g5 = round1(mr.windgustHigh ?? mr.windGust, v5);
+          windTodaySamples.push({
+            dt_iso: todayIso,
+            hora_min: tStr.slice(11, 16),
+            dir_graus: ((Math.round(Number(dir5Raw)) % 360) + 360) % 360,
+            vel_kmh: v5,
+            rajada_kmh: Math.max(v5, g5),
+          });
         }
 
         const t5Hi = round1(mr.tempHigh ?? mr.tempAvg ?? mr.temp);
@@ -743,6 +760,22 @@ async function fetchWuStationLive(
   if (ventoMaxHoje !== null && (ventoMax24h === null || ventoMaxHoje > ventoMax24h)) ventoMax24h = ventoMaxHoje;
   if (rajadaMaxHoje !== null && (rajadaMax24h === null || rajadaMaxHoje > rajadaMax24h)) rajadaMax24h = rajadaMaxHoje;
 
+  if (obsLocal.startsWith(todayIso) && ventoDirGraus !== null && currHhmm) {
+    const curPt: WindSampleRaw = {
+      dt_iso: todayIso,
+      hora_min: currHhmm,
+      dir_graus: ((ventoDirGraus % 360) + 360) % 360,
+      vel_kmh: ventoAtual,
+      rajada_kmh: rajadaAtual,
+    };
+    const lastIdx = windTodaySamples.length - 1;
+    if (lastIdx >= 0 && windTodaySamples[lastIdx].hora_min === currHhmm) {
+      windTodaySamples[lastIdx] = curPt;
+    } else {
+      windTodaySamples.push(curPt);
+    }
+  }
+
   const fullSucceeded = !canUseQuickWindow && (dayRes.kind === 'ok' || dayRes.kind === 'empty');
   const hourlySucceeded = !canUseQuickWindow && !canReuseHourly && (histRes.kind === 'ok' || histRes.kind === 'empty');
 
@@ -773,6 +806,7 @@ async function fetchWuStationLive(
     lastNonZeroWind,
     lastNonZeroGust,
     lastNonZeroMs,
+    windTodaySamples,
   };
 
   const obsLat = Number(obs?.lat);
@@ -814,6 +848,7 @@ async function fetchWuStationLive(
     hora_rajada_max_hoje: horaRajadaMaxHoje,
     vento_max_24h: ventoMax24h,
     rajada_max_24h: rajadaMax24h,
+    vento_hoje_amostras: windTodaySamples,
     chuva_1h: round1(chuva1h, 0),
     chuva_4h: round1(chuva4h, 0),
     chuva_6h: round1(chuva6h, 0),
