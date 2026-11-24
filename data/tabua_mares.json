@@ -7,45 +7,14 @@
   "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
   "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
   "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "atualizado_em": "2026-11-23T23:27:44.591159",
+  "atualizado_em": "2026-11-24T06:09:27.069760",
   "proxima_mare": {
-    "tipo": "PREAMAR",
-    "hora": "02:16",
-    "altura": 1.39,
-    "rotulo": "Preia-mar (1.4 m)"
+    "tipo": "BAIXA-MAR",
+    "hora": "08:28",
+    "altura": 0.19,
+    "rotulo": "Baixa-mar (0.2 m)"
   },
   "dias": [
-    {
-      "data_iso": "2026-11-23",
-      "data_br": "23/11/2026",
-      "dia_semana": "Segunda",
-      "eventos": [
-        {
-          "tipo": "PREAMAR",
-          "hora": "01:25",
-          "altura": 1.44,
-          "rotulo": "Preia-mar (1.4 m)"
-        },
-        {
-          "tipo": "BAIXA-MAR",
-          "hora": "07:38",
-          "altura": 0.16,
-          "rotulo": "Baixa-mar (0.2 m)"
-        },
-        {
-          "tipo": "PREAMAR",
-          "hora": "13:50",
-          "altura": 1.42,
-          "rotulo": "Preia-mar (1.4 m)"
-        },
-        {
-          "tipo": "BAIXA-MAR",
-          "hora": "20:03",
-          "altura": 0.17,
-          "rotulo": "Baixa-mar (0.2 m)"
-        }
-      ]
-    },
     {
       "data_iso": "2026-11-24",
       "data_br": "24/11/2026",
@@ -223,6 +192,37 @@
           "hora": "18:53",
           "altura": 0.85,
           "rotulo": "Preia-mar (0.8 m)"
+        }
+      ]
+    },
+    {
+      "data_iso": "2026-11-30",
+      "data_br": "30/11/2026",
+      "dia_semana": "Segunda",
+      "eventos": [
+        {
+          "tipo": "BAIXA-MAR",
+          "hora": "01:06",
+          "altura": 0.45,
+          "rotulo": "Baixa-mar (0.5 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "07:18",
+          "altura": 0.85,
+          "rotulo": "Preia-mar (0.8 m)"
+        },
+        {
+          "tipo": "BAIXA-MAR",
+          "hora": "13:31",
+          "altura": 0.45,
+          "rotulo": "Baixa-mar (0.5 m)"
+        },
+        {
+          "tipo": "PREAMAR",
+          "hora": "19:44",
+          "altura": 0.87,
+          "rotulo": "Preia-mar (0.9 m)"
         }
       ]
     }
