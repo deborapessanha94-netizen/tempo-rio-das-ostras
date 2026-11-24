@@ -1,16 +1,16 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "24/11 (Terça-feira) a 01/12 (Terça-feira)",
-  "emissao": "24/11/2026 às 12:07h",
-  "emissao_iso": "2026-11-24T12:07:51-03:00",
-  "generation_epoch_ms": 1795532871485,
+  "emissao": "24/11/2026 às 12:35h",
+  "emissao_iso": "2026-11-24T12:35:24-03:00",
+  "generation_epoch_ms": 1795534524847,
   "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.39 m. Alerta Amarelo de Tempestade do INMET (nº 56497) vigente hoje com previsão de pancadas de chuva e trovoadas. Para Quarta-feira (25/11) e Quinta-feira (26/11), há Alerta Laranja de Tempestade e Chuvas Intensas do INMET (nº 56501 e nº 56499 e nº 56503 e nº 56502) para Rio das Ostras. Acumulado total de chuva previsto para os próximos 4 dias: 57.4 mm (e 117.7 mm nos 8 dias), com máxima alcançando 34°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "24/11/2026 às 12:10h",
+    "atualizacao_hora": "24/11/2026 às 12:38h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -587,9 +587,9 @@
     "sintese_tecnica_precisao": "Atenção para Alerta Amarelo de Tempestade nº 56497 na janela 00:00 às 24:00h: média contínua estimada em 10.0 mm com teto convectivo de até 50 mm e rajadas de 40 a 60 km/h."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "24/11/2026 às 12:07h",
-    "emissao_iso": "2026-11-24T12:07:51-03:00",
-    "generation_epoch_ms": 1795532871485,
+    "emissao": "24/11/2026 às 12:35h",
+    "emissao_iso": "2026-11-24T12:35:24-03:00",
+    "generation_epoch_ms": 1795534524847,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
       "media_mm": 0.0,
@@ -1516,8 +1516,8 @@
     "atividade_raios": {
       "disponivel": true,
       "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-      "captura_utc": "2026-11-24T15:10:34Z",
-      "captura_brt": "2026-11-24 12:10",
+      "captura_utc": "2026-11-24T15:38:10Z",
+      "captura_brt": "2026-11-24 12:38",
       "janela_minutos": 20,
       "raio_busca_km": 50,
       "raios_25km": 0,
@@ -1530,7 +1530,7 @@
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-24T12:10:34-03:00",
+      "atualizado_em": "2026-11-24T12:38:10-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -2965,7 +2965,7 @@
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 1.2,
-        "leitura": "2026-11-24 11:10:00"
+        "leitura": "2026-11-24 12:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
@@ -5417,7 +5417,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-24T15:08:22.610501"
+    "atualizado_em": "2026-11-24T15:35:58.217397"
   },
   "vime_inmet": {
     "vime_schema_version": 3,
@@ -6338,8 +6338,8 @@
   "atividade_raios": {
     "disponivel": true,
     "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-    "captura_utc": "2026-11-24T15:10:34Z",
-    "captura_brt": "2026-11-24 12:10",
+    "captura_utc": "2026-11-24T15:38:10Z",
+    "captura_brt": "2026-11-24 12:38",
     "janela_minutos": 20,
     "raio_busca_km": 50,
     "raios_25km": 0,
@@ -6351,18 +6351,18 @@
     "atividade_ativa": false
   },
   "indices_calor": {
-    "atualizacao_brt": "24/11/2026 12:10",
-    "atualizacao_iso": "2026-11-24T12:10:39.701929-03:00",
+    "atualizacao_brt": "24/11/2026 12:38",
+    "atualizacao_iso": "2026-11-24T12:38:19.514805-03:00",
     "fontes_oficiais": {
       "cor_rio": "https://cor.rio/niveis-de-calor/",
       "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
       "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
     },
     "agora": {
-      "ic_rede_c": 37.4,
-      "temp_rede_c": 29.7,
-      "ur_rede_pct": 82,
-      "sensacao_rede_c": 35.3,
+      "ic_rede_c": 37.0,
+      "temp_rede_c": 29.4,
+      "ur_rede_pct": 85,
+      "sensacao_rede_c": 35.1,
       "faixa_instantanea": {
         "faixa": "Alto · COR (36–40°C)",
         "cor": "#EA580C"
@@ -6373,16 +6373,16 @@
       "cor_hex": "#EAB308",
       "cor_criterio": "Índices de calor altos (36°C a 40°C) por 1 ou 2 dias consecutivos.",
       "cor_acao": "Coordenação e disseminação de informações sobre sintomas de exposição ao calor e hidratação; rotina sem alterações.",
-      "ic_pico_hoje_c": 42.7,
-      "hora_pico_hoje": "12:05",
+      "ic_pico_hoje_c": 43.6,
+      "hora_pico_hoje": "12:24",
       "maior_pico_hoje": {
-        "ic_max_c": 42.7,
-        "hora": "12:05",
+        "ic_max_c": 43.6,
+        "hora": "12:24",
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 32.0,
-        "ur_pct": 76,
-        "temp_max_c": 32.1,
+        "temp_c": 32.4,
+        "ur_pct": 75,
+        "temp_max_c": 32.6,
         "faixa": "Muito Alto · COR (40–44°C)",
         "cor_hex": "#DC2626"
       },
@@ -6392,52 +6392,52 @@
         {
           "codigo": "IRIODA15",
           "nome": "Rocha Leão / REBIO União",
-          "temp_c": 32.0,
-          "ur_pct": 76,
-          "sensacao_c": 39.5,
-          "ic_c": 42.7,
-          "ic_max_hoje": 42.7,
-          "hora_ic_max_hoje": "12:05",
-          "temp_max_hoje": 32.1,
-          "hora_temp_max_hoje": "11:59",
-          "temp_pico_ic_hoje": 32.0,
-          "ur_pico_ic_hoje": 76,
+          "temp_c": 31.3,
+          "ur_pct": 79,
+          "sensacao_c": 39.1,
+          "ic_c": 41.5,
+          "ic_max_hoje": 43.6,
+          "hora_ic_max_hoje": "12:24",
+          "temp_max_hoje": 32.6,
+          "hora_temp_max_hoje": "12:19",
+          "temp_pico_ic_hoje": 32.4,
+          "ur_pico_ic_hoje": 75,
           "faixa_pico_hoje": "Muito Alto · COR (40–44°C)",
           "cor_pico_hoje": "#DC2626",
           "faixa": "Muito Alto · COR (40–44°C)",
           "cor_hex": "#DC2626",
-          "ultima_leitura": "2026-11-24 12:05:53",
+          "ultima_leitura": "2026-11-24 12:33:26",
           "lat": -22.426845,
           "lon": -42.020862
         },
         {
           "codigo": "IRIODA16",
           "nome": "Cantagalo / Extensão do Bosque",
-          "temp_c": 30.7,
-          "ur_pct": 79,
-          "sensacao_c": 37.0,
-          "ic_c": 39.6,
-          "ic_max_hoje": 40.2,
-          "hora_ic_max_hoje": "11:49",
-          "temp_max_hoje": 31.0,
-          "hora_temp_max_hoje": "11:49",
-          "temp_pico_ic_hoje": 30.9,
-          "ur_pico_ic_hoje": 79,
+          "temp_c": 30.8,
+          "ur_pct": 81,
+          "sensacao_c": 37.1,
+          "ic_c": 40.6,
+          "ic_max_hoje": 41.5,
+          "hora_ic_max_hoje": "12:29",
+          "temp_max_hoje": 31.5,
+          "hora_temp_max_hoje": "12:29",
+          "temp_pico_ic_hoje": 31.4,
+          "ur_pico_ic_hoje": 78,
           "faixa_pico_hoje": "Muito Alto · COR (40–44°C)",
           "cor_pico_hoje": "#DC2626",
-          "faixa": "Alto · COR (36–40°C)",
-          "cor_hex": "#EA580C",
-          "ultima_leitura": "2026-11-24 12:05:42",
+          "faixa": "Muito Alto · COR (40–44°C)",
+          "cor_hex": "#DC2626",
+          "ultima_leitura": "2026-11-24 12:33:27",
           "lat": -22.440357,
           "lon": -41.953913
         },
         {
           "codigo": "IRIODA17",
           "nome": "Praia da Tartaruga",
-          "temp_c": 28.4,
-          "ur_pct": 85,
-          "sensacao_c": 33.3,
-          "ic_c": 34.0,
+          "temp_c": 27.9,
+          "ur_pct": 88,
+          "sensacao_c": 33.2,
+          "ic_c": 33.3,
           "ic_max_hoje": 34.9,
           "hora_ic_max_hoje": "11:49",
           "temp_max_hoje": 28.7,
@@ -6448,17 +6448,17 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Cuidado Extremo (32–36°C)",
           "cor_hex": "#F97316",
-          "ultima_leitura": "2026-11-24 12:05:43",
+          "ultima_leitura": "2026-11-24 12:33:20",
           "lat": -22.531291,
           "lon": -41.957444
         },
         {
           "codigo": "ICASIM5",
           "nome": "Barra de São João / Praiamar",
-          "temp_c": 27.7,
-          "ur_pct": 90,
-          "sensacao_c": 31.3,
-          "ic_c": 33.1,
+          "temp_c": 27.4,
+          "ur_pct": 91,
+          "sensacao_c": 31.0,
+          "ic_c": 32.4,
           "ic_max_hoje": 33.6,
           "hora_ic_max_hoje": "11:49",
           "temp_max_hoje": 27.9,
@@ -6469,7 +6469,7 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Cuidado Extremo (32–36°C)",
           "cor_hex": "#F97316",
-          "ultima_leitura": "2026-11-24 12:05:50",
+          "ultima_leitura": "2026-11-24 12:33:18",
           "lat": -22.573707,
           "lon": -41.985545
         }
@@ -6487,9 +6487,9 @@
         "t_min_c": 24.0,
         "t_max_c": 30.0,
         "t_mean_c": 27.0,
-        "ic_max_c": 42.7,
+        "ic_max_c": 43.6,
         "ic_min_c": 25.3,
-        "hora_pico_ic": "12:05",
+        "hora_pico_ic": "12:24",
         "horas_ge_36": 3,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
@@ -6530,9 +6530,9 @@
         "ehf99": 9.338525981132218,
         "tmean_30d": null,
         "tmax_pico_p75": 31.05,
-        "tmax": 28.8,
-        "tmean": 24.25,
-        "tmin": 19.7,
+        "tmax": 28.6,
+        "tmean": 24,
+        "tmin": 19.4,
         "ehf": 0,
         "classification": "Normal",
         "diarioAvailable": true,
@@ -6616,9 +6616,9 @@
           "classification": "Normal",
           "isToday": true,
           "isForecast": true,
-          "tmax": 28.8,
-          "tmean": 24.25,
-          "tmin": 19.7
+          "tmax": 28.6,
+          "tmean": 24,
+          "tmin": 19.4
         },
         {
           "date": "2026-11-25",
@@ -6626,9 +6626,9 @@
           "classification": "Normal",
           "isToday": false,
           "isForecast": true,
-          "tmax": 27,
-          "tmean": 23.55,
-          "tmin": 20.1
+          "tmax": 26.7,
+          "tmean": 23.45,
+          "tmin": 20.2
         },
         {
           "date": "2026-11-26",
@@ -6636,9 +6636,9 @@
           "classification": "Normal",
           "isToday": false,
           "isForecast": true,
-          "tmax": 25.8,
-          "tmean": 22.450000000000003,
-          "tmin": 19.1
+          "tmax": 26.9,
+          "tmean": 22.25,
+          "tmin": 17.6
         },
         {
           "date": "2026-11-27",
@@ -6646,19 +6646,19 @@
           "classification": "Normal",
           "isToday": false,
           "isForecast": true,
-          "tmax": 23,
-          "tmean": 20.2,
-          "tmin": 17.4
+          "tmax": 23.4,
+          "tmean": 19.95,
+          "tmin": 16.5
         },
         {
           "date": "2026-11-28",
-          "ehf": null,
-          "classification": null,
+          "ehf": 0,
+          "classification": "Normal",
           "isToday": false,
           "isForecast": true,
-          "tmax": null,
-          "tmean": null,
-          "tmin": null
+          "tmax": 24.8,
+          "tmean": 21.15,
+          "tmin": 17.5
         }
       ],
       "series_30d": [
@@ -7147,19 +7147,19 @@
           "nm_mun": "Rio das Ostras",
           "sigla_uf": "RJ",
           "data": "2026-11-24",
-          "tmean": 24.25,
-          "tmin": 19.7,
-          "tmax": 28.8,
-          "t3d_prev": 24.03333333333333,
-          "ehi_sig": -4.754746136865339,
-          "ehi_accl": 2.563333333333329,
+          "tmean": 24,
+          "tmin": 19.4,
+          "tmax": 28.6,
+          "t3d_prev": 23.916666666666668,
+          "ehi_sig": -4.871412803532003,
+          "ehi_accl": 2.4550000000000054,
           "ehf": 0,
           "ratio": 0,
           "classification": "Normal",
           "fonte": "ecmwf-forecast"
         }
       ],
-      "captura_brt": "2026-11-24 12:10"
+      "captura_brt": "2026-11-24 12:38"
     },
     "previsao_8dias_calor": [
       {
@@ -7168,9 +7168,9 @@
         "t_min_c": 24.0,
         "t_max_c": 30.0,
         "t_mean_c": 27.0,
-        "ic_max_c": 42.7,
+        "ic_max_c": 43.6,
         "ic_min_c": 25.3,
-        "hora_pico_ic": "12:05",
+        "hora_pico_ic": "12:24",
         "horas_ge_36": 3,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
@@ -7447,7 +7447,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-24 12:09:17 BRT",
+    "data_coleta": "2026-11-24 12:36:56 BRT",
     "publicado_em": "20/11/2026 às 06h30",
     "fonte_pdf_sha256": "f82debd25531bd5a",
     "pdf_bytes": 793762,
@@ -7960,7 +7960,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-24 00z",
-    "atualizacao": "24/11/2026 12:08",
+    "atualizacao": "24/11/2026 12:36",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -8046,7 +8046,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "24/11/2026",
-    "atualizacao": "24/11/2026 12:08",
+    "atualizacao": "24/11/2026 12:36",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -8223,7 +8223,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-24T15:10:03.316845",
+    "atualizado_em": "2026-11-24T15:37:40.936207",
     "proxima_mare": {
       "tipo": "BAIXA-MAR",
       "hora": "20:54",
