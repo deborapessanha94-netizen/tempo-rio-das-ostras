@@ -348,7 +348,12 @@ def collect_stations_network():
                     elif heat_idx is not None:
                         sens_calc = heat_idx
                     elif t_val_now is not None:
-                        sens_calc = t_val_now
+                        hum_now_fb = obs.get("humidity")
+                        sens_calc = (
+                            compute_heat_index_c(t_val_now, hum_now_fb)
+                            if t_val_now >= 20.0 and hum_now_fb is not None
+                            else t_val_now
+                        )
                     if sens_calc is not None:
                         entry["sensacao_atual"] = round(sens_calc, 1)
                     if m.get("windSpeed") is not None:
@@ -397,7 +402,13 @@ def collect_stations_network():
                             if h_last is not None:
                                 entry["sensacao_atual"] = round(safe_float(h_last), 1)
                             elif entry.get("temp_atual") is not None:
-                                entry["sensacao_atual"] = entry["temp_atual"]
+                                hum_fb = last_rec.get("humidityAvg") if last_rec.get("humidityAvg") is not None else last_rec.get("humidity")
+                                t_fb = entry["temp_atual"]
+                                entry["sensacao_atual"] = (
+                                    compute_heat_index_c(t_fb, hum_fb)
+                                    if t_fb >= 20.0 and hum_fb is not None
+                                    else t_fb
+                                )
                             w_val = m_last.get("windspeedAvg") if m_last.get("windspeedAvg") is not None else m_last.get("windSpeed")
                             if w_val is not None:
                                 entry["vento_atual"] = round(safe_float(w_val), 1)

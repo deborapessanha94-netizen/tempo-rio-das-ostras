@@ -85,7 +85,13 @@ import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartI
 import { exportHeatIndicesToInstagramPng } from './utils/exportHeatInstagram';
 import { exportWindRoseToInstagramPng } from './utils/exportWindRoseInstagram';
 import { RiverChart } from './components/RiverChart';
-import { COR_HEAT_LEVELS, recomputeLiveHeatIndices } from './services/heatIndex';
+import {
+  COR_HEAT_LEVELS,
+  ROTHFUSZ_COEFFICIENTS,
+  classifyInstantHeatBand,
+  computeHeatIndexBreakdown,
+  recomputeLiveHeatIndices,
+} from './services/heatIndex';
 import { recomputeLiveWindRose, type WindRosePeriodKey } from './services/windRose';
 import { classifyRainPlancon, classifyWindPlancon } from './services/liveRainConsensus';
 import { SocialExportModal } from './components/SocialExportModal';
@@ -145,7 +151,7 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string; shortLabe
     { id: 'agora', label: 'Nível COR & Estações Agora (Tempo Real)', shortLabel: 'Agora' },
     { id: 'previsao', label: 'Projeção 8 Dias (COR-Rio NC1–NC5)', shortLabel: '8 Dias COR' },
     { id: 'oficiais', label: 'Painel Oficial EHF (Clima & Saúde / SES-RJ)', shortLabel: 'EHF MS/RJ' },
-    { id: 'protocolo', label: 'Critérios Oficiais COR-Rio (NC1–NC5)', shortLabel: 'Protocolo' },
+    { id: 'protocolo', label: 'Equação Rothfusz, Calculadora & Protocolo COR', shortLabel: 'Fórmula & COR' },
     { id: 'all', label: 'Ver Todas as Seções', shortLabel: 'Ver Tudo' },
   ],
   vento: [
@@ -340,6 +346,8 @@ export default function App() {
   const [chartExportDone, setChartExportDone] = useState<string | null>(null);
   const chartToolbarRef = useRef<HTMLDivElement | null>(null);
 
+  const [simTempC, setSimTempC] = useState<string>('32.0');
+  const [simRhPct, setSimRhPct] = useState<string>('76');
   const [heatExportMenuOpen, setHeatExportMenuOpen] = useState(false);
   const [heatExportTheme, setHeatExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
   const [heatExportingFmt, setHeatExportingFmt] = useState<InstagramFormat | null>(null);
@@ -7039,11 +7047,164 @@ export default function App() {
                 </div>
               )}
 
-              {showSub('protocolo') && (
-                <div className="space-y-3 pt-4 border-t border-[#E5E5E5] dark:border-[#233354]">
-                  <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
-                    Tabela Oficial do Protocolo COR-Rio (NC1 a NC5)
-                  </h2>
+              {showSub('protocolo') && (() => {
+                const parsedSimT = Number(simTempC.replace(',', '.'));
+                const parsedSimR = Number(simRhPct.replace(',', '.'));
+                const simBreakdown =
+                  Number.isFinite(parsedSimT) && Number.isFinite(parsedSimR)
+                    ? computeHeatIndexBreakdown(parsedSimT, parsedSimR)
+                    : null;
+                const simWpcBand = classifyInstantHeatBand(simBreakdown?.officialWpcC);
+                const simPureBand = classifyInstantHeatBand(simBreakdown?.pureRothfuszC);
+                return (
+                  <div className="space-y-6 pt-4 border-t border-[#E5E5E5] dark:border-[#233354]">
+                    {/* Equação Padrão NWS / Rothfusz + Integração com Calculadora NOAA WPC + Simulador ao Vivo */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+                      <div className="lg:col-span-7 p-4 sm:p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <h2 className="font-display text-base sm:text-lg font-semibold text-[#14213D] dark:text-white">
+                            Equação Oficial do Índice de Calor (NWS / Rothfusz + NOAA WPC)
+                          </h2>
+                          <a
+                            href="https://www.wpc.ncep.noaa.gov/html/heatindex.shtml"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-[11px] font-mono text-[#FF8244] hover:underline"
+                          >
+                            Calculadora NOAA <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+
+                        <div className="p-3 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] font-mono text-xs sm:text-sm text-[#14213D] dark:text-white overflow-x-auto">
+                          IC = c₁ + c₂T + c₃R + c₄TR + c₅T² + c₆R² + c₇T²R + c₈TR² + c₉T²R²
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/85">
+                          <div className="px-2.5 py-1.5 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                            1. Entrada: <strong>T(°F) = T(°C) × 1,8 + 32</strong> · R em %
+                          </div>
+                          <div className="px-2.5 py-1.5 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                            2. Saída: <strong>IC(°C) = (IC(°F) − 32) / 1,8</strong>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-1.5 text-[10.5px] font-mono">
+                          {ROTHFUSZ_COEFFICIENTS.map((c) => (
+                            <div
+                              key={c.id}
+                              className="px-2 py-1 rounded bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-slate-700 dark:text-[#E5E5E5]/90 flex items-center justify-between gap-1"
+                            >
+                              <span className="font-bold text-[#FF8244]">{c.id}</span>
+                              <span className="tabular-nums">{c.display}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <p className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75 leading-relaxed">
+                          O cálculo do portal aplica exatamente os 9 coeficientes da equação de Rothfusz combinados às regras oficiais da calculadora do National Weather Service (NOAA WPC): quando o índice preliminar de Steadman supera <strong>79°F (~26,1°C)</strong>, entra a regressão polinomial completa com os ajustes oficiais para umidade extrema (&gt; 85% entre 80–87°F ou ≤ 13% entre 80–112°F).
+                        </p>
+                      </div>
+
+                      <div className="lg:col-span-5 p-4 sm:p-5 rounded-xl bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
+                        <div>
+                          <h3 className="font-display text-base font-semibold text-[#14213D] dark:text-white">
+                            Calculadora ao Vivo (Rothfusz &amp; NOAA)
+                          </h3>
+                          <p className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/75">
+                            Confira qualquer temperatura e umidade ou carregue uma estação agora.
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2.5">
+                          <label className="block text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80">
+                            <span>Temperatura (°C)</span>
+                            <input
+                              type="number"
+                              step="0.1"
+                              min="0"
+                              max="55"
+                              value={simTempC}
+                              onChange={(e) => setSimTempC(e.target.value)}
+                              className="mt-1 w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] font-mono text-sm font-bold text-[#14213D] dark:text-white focus:outline-none focus:border-[#FF8244]"
+                            />
+                          </label>
+                          <label className="block text-[11px] font-mono text-slate-600 dark:text-[#E5E5E5]/80">
+                            <span>Umidade Relativa (%)</span>
+                            <input
+                              type="number"
+                              step="1"
+                              min="0"
+                              max="100"
+                              value={simRhPct}
+                              onChange={(e) => setSimRhPct(e.target.value)}
+                              className="mt-1 w-full px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] font-mono text-sm font-bold text-[#14213D] dark:text-white focus:outline-none focus:border-[#FF8244]"
+                            />
+                          </label>
+                        </div>
+
+                        {(liveHeat?.agora?.estacoes_tempo_real || []).length > 0 && (
+                          <div className="flex flex-wrap gap-1.5">
+                            {liveHeat!.agora.estacoes_tempo_real.map((st) => (
+                              <button
+                                key={`sim-${st.codigo}`}
+                                type="button"
+                                onClick={() => {
+                                  setSimTempC(st.temp_c.toFixed(1));
+                                  setSimRhPct(String(st.ur_pct));
+                                }}
+                                className="px-2 py-1 rounded-md text-[10px] font-mono bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] text-[#14213D] dark:text-white hover:border-[#FF8244] cursor-pointer"
+                              >
+                                {st.codigo}: {st.temp_c.toFixed(1)}° / {st.ur_pct}%
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {simBreakdown && (
+                          <div className="space-y-2 pt-1">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div
+                                className="p-2.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]"
+                                style={{ borderLeftWidth: '4px', borderLeftColor: simWpcBand.cor }}
+                              >
+                                <div className="text-[9.5px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
+                                  NOAA WPC (Portal)
+                                </div>
+                                <div className="text-xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums">
+                                  {simBreakdown.officialWpcC.toFixed(1)}°C
+                                </div>
+                                <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
+                                  {simBreakdown.officialWpcF.toFixed(1)}°F · <span style={{ color: simWpcBand.cor }}>{simWpcBand.faixa.split(' (')[0]}</span>
+                                </div>
+                              </div>
+
+                              <div
+                                className="p-2.5 rounded-lg bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]"
+                                style={{ borderLeftWidth: '4px', borderLeftColor: simPureBand.cor }}
+                              >
+                                <div className="text-[9.5px] font-mono uppercase text-slate-500 dark:text-[#E5E5E5]/70">
+                                  Equação c₁..c₉ Direta
+                                </div>
+                                <div className="text-xl font-mono font-bold text-[#14213D] dark:text-white tabular-nums">
+                                  {simBreakdown.pureRothfuszC.toFixed(1)}°C
+                                </div>
+                                <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/75">
+                                  {simBreakdown.pureRothfuszF.toFixed(1)}°F · T = {simBreakdown.tempF.toFixed(1)}°F
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/75 leading-snug">
+                              {simBreakdown.adjustmentNote}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h2 className="font-display text-lg font-semibold text-[#14213D] dark:text-white">
+                        Tabela Oficial do Protocolo COR-Rio (NC1 a NC5)
+                      </h2>
                   <div className="space-y-2">
                     {(liveHeat?.cor_niveis_referencia || [1, 2, 3, 4, 5].map((k) => COR_HEAT_LEVELS[k])).map((lvl) => (
                       <div
@@ -7071,8 +7232,10 @@ export default function App() {
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                  </div>
+                  </div>
+                );
+              })()}
             </section>
           </div>
         )}

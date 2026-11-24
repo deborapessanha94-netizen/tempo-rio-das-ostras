@@ -169,39 +169,99 @@ export interface HeatIndicesDataset {
   cor_niveis_referencia: CorHeatLevelSpec[];
 }
 
-export function computeRothfuszHeatIndexC(tempC?: number | null, rhPct?: number | null): number | null {
+export const ROTHFUSZ_COEFFICIENTS = [
+  { id: 'c₁', val: -42.379, display: '-42,379' },
+  { id: 'c₂', val: 2.04901523, display: '2,04901523' },
+  { id: 'c₃', val: 10.14333127, display: '10,14333127' },
+  { id: 'c₄', val: -0.22475541, display: '-0,22475541' },
+  { id: 'c₅', val: -0.00683783, display: '-6,83783 × 10⁻³' },
+  { id: 'c₆', val: -0.05481717, display: '-5,481717 × 10⁻²' },
+  { id: 'c₇', val: 0.00122874, display: '1,22874 × 10⁻³' },
+  { id: 'c₈', val: 0.00085282, display: '8,5282 × 10⁻⁴' },
+  { id: 'c₉', val: -0.00000199, display: '-1,99 × 10⁻⁶' },
+] as const;
+
+export interface HeatIndexBreakdown {
+  tempC: number;
+  tempF: number;
+  rhPct: number;
+  hiSimpleF: number;
+  pureRothfuszF: number;
+  pureRothfuszC: number;
+  adjustmentF: number;
+  officialWpcF: number;
+  officialWpcC: number;
+  methodUsed: 'temp_abaixo_20' | 'steadman_simples' | 'rothfusz_direto' | 'rothfusz_ajustado';
+  adjustmentNote: string;
+}
+
+/** Calcula o passo a passo completo do Índice de Calor: equação de Rothfusz (c₁..c₉) + critérios NOAA WPC. */
+export function computeHeatIndexBreakdown(tempC?: number | null, rhPct?: number | null): HeatIndexBreakdown | null {
   if (tempC === null || tempC === undefined || rhPct === null || rhPct === undefined) return null;
   const tc = Number(tempC);
   const rh = Math.max(0, Math.min(100, Number(rhPct)));
   if (!Number.isFinite(tc) || !Number.isFinite(rh)) return null;
-  if (tc < 20) return Math.round(tc * 10) / 10;
 
-  const tf = (tc * 9) / 5 + 32;
-  const hiSimple = 0.5 * (tf + 61 + (tf - 68) * 1.2 + rh * 0.094);
-  let hiF: number;
+  const tf = tc * 1.8 + 32;
+  const hiSimpleF = 0.5 * (tf + 61 + (tf - 68) * 1.2 + rh * 0.094);
+  const [c1, c2, c3, c4, c5, c6, c7, c8, c9] = ROTHFUSZ_COEFFICIENTS.map((c) => c.val);
 
-  if (hiSimple <= 79) {
-    hiF = hiSimple;
-  } else {
-    hiF =
-      -42.379 +
-      2.04901523 * tf +
-      10.14333127 * rh -
-      0.22475541 * tf * rh -
-      0.00683783 * tf * tf -
-      0.05481717 * rh * rh +
-      0.00122874 * tf * tf * rh +
-      0.00085282 * tf * rh * rh -
-      0.00000199 * tf * tf * rh * rh;
+  const pureRothfuszF =
+    c1 +
+    c2 * tf +
+    c3 * rh +
+    c4 * tf * rh +
+    c5 * tf * tf +
+    c6 * rh * rh +
+    c7 * tf * tf * rh +
+    c8 * tf * rh * rh +
+    c9 * tf * tf * rh * rh;
+  const pureRothfuszC = Math.round(((pureRothfuszF - 32) / 1.8) * 10) / 10;
 
-    if (rh <= 13 && tf >= 80 && tf <= 112) {
-      hiF -= ((13 - rh) / 4) * Math.sqrt(Math.max(0, (17 - Math.abs(tf - 95)) / 17));
-    } else if (rh > 85 && tf >= 80 && tf <= 87) {
-      hiF += ((rh - 85) / 10) * ((87 - tf) / 5);
-    }
+  let adjustmentF = 0;
+  let officialWpcF = pureRothfuszF;
+  let methodUsed: HeatIndexBreakdown['methodUsed'] = 'rothfusz_direto';
+  let adjustmentNote = 'Regressão completa de Rothfusz (c₁..c₉) aplicada diretamente.';
+
+  if (tc < 20) {
+    officialWpcF = tf;
+    methodUsed = 'temp_abaixo_20';
+    adjustmentNote = 'Temperatura < 20°C: índice acompanha a temperatura do ar.';
+  } else if (hiSimpleF <= 79) {
+    officialWpcF = hiSimpleF;
+    methodUsed = 'steadman_simples';
+    adjustmentNote = 'IC preliminar (Steadman simples) ≤ 79°F (~26,1°C): calculadora NOAA utiliza equação linear simples.';
+  } else if (rh <= 13 && tf >= 80 && tf <= 112) {
+    adjustmentF = -((13 - rh) / 4) * Math.sqrt(Math.max(0, (17 - Math.abs(tf - 95)) / 17));
+    officialWpcF = pureRothfuszF + adjustmentF;
+    methodUsed = 'rothfusz_ajustado';
+    adjustmentNote = 'Equação de Rothfusz (c₁..c₉) com subtração oficial NOAA para baixa umidade (UR ≤ 13% e 80–112°F).';
+  } else if (rh > 85 && tf >= 80 && tf <= 87) {
+    adjustmentF = ((rh - 85) / 10) * ((87 - tf) / 5);
+    officialWpcF = pureRothfuszF + adjustmentF;
+    methodUsed = 'rothfusz_ajustado';
+    adjustmentNote = 'Equação de Rothfusz (c₁..c₉) com acréscimo oficial NOAA para alta umidade (UR > 85% e 80–87°F).';
   }
-  const hiC = ((hiF - 32) * 5) / 9;
-  return Math.round(hiC * 10) / 10;
+
+  const officialWpcC = tc < 20 ? Math.round(tc * 10) / 10 : Math.round(((officialWpcF - 32) / 1.8) * 10) / 10;
+  return {
+    tempC: Math.round(tc * 10) / 10,
+    tempF: Math.round(tf * 10) / 10,
+    rhPct: Math.round(rh),
+    hiSimpleF: Math.round(hiSimpleF * 10) / 10,
+    pureRothfuszF: Math.round(pureRothfuszF * 10) / 10,
+    pureRothfuszC,
+    adjustmentF: Math.round(adjustmentF * 100) / 100,
+    officialWpcF: Math.round(officialWpcF * 10) / 10,
+    officialWpcC,
+    methodUsed,
+    adjustmentNote,
+  };
+}
+
+export function computeRothfuszHeatIndexC(tempC?: number | null, rhPct?: number | null): number | null {
+  const b = computeHeatIndexBreakdown(tempC, rhPct);
+  return b ? b.officialWpcC : null;
 }
 
 /** Sensação Térmica (Temperatura Aparente de Steadman / OMM com temperatura, umidade e vento). */

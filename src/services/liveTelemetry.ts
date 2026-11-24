@@ -449,7 +449,11 @@ async function fetchWuStationLive(
   } else if (heatIdx !== null) {
     sensacaoAtual = heatIdx;
   } else if (tempAtual !== null) {
-    sensacaoAtual = tempAtual;
+    const humFb = obs.humidity ?? obs.humidityAvg;
+    sensacaoAtual =
+      tempAtual >= 20.0 && humFb !== undefined && humFb !== null && Number.isFinite(Number(humFb))
+        ? computeRothfuszHeatIndexC(tempAtual, Number(humFb))
+        : tempAtual;
   }
 
   const rawWind = round1(currObs ? m.windSpeed : m.windspeedAvg ?? m.windSpeed, 0);
