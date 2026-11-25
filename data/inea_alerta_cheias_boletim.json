@@ -4,21 +4,21 @@
   "sala_situacao": "Sala de Situação INEA",
   "titulo": "Boletim Hidrometeorológico Oficial",
   "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-  "data_coleta": "2026-11-24 22:45:35 BRT",
+  "data_coleta": "2026-11-25 03:56:26 BRT",
   "publicado_em": "20/11/2026 às 06h30",
   "fonte_pdf_sha256": "f82debd25531bd5a",
   "pdf_bytes": 793762,
   "bulletin_info": {
     "disponivel": true,
-    "arquivo": "BoletimHidrometeorologico_24-11-2026.pdf",
-    "data_boletim": "24/11/2026",
-    "label": "Boletim Hidrometeorológico 24/11/2026",
-    "url_pdf": "https://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_24-11-2026.pdf",
+    "arquivo": "BoletimHidrometeorologico_25-11-2026.pdf",
+    "data_boletim": "25/11/2026",
+    "label": "Boletim Hidrometeorológico 25/11/2026",
+    "url_pdf": "https://alertadecheias.inea.rj.gov.br/alertadecheias/boletim/BoletimHidrometeorologico_25-11-2026.pdf",
     "fonte_pagina": "https://alertadecheias.inea.rj.gov.br/analise.php"
   },
   "previsao_rh8": {
     "hoje": {
-      "data": "24/11/2026",
+      "data": "25/11/2026",
       "intensidade": "Chuva Fraca com Pancadas Isoladas com Raios",
       "faixa_chuva_mm": "1 a 10 mm",
       "faixa_municipio_mm": "1 a 10 mm",
@@ -38,7 +38,7 @@
       "extraido_pdf": true
     },
     "amanha": {
-      "data": "25/11/2026",
+      "data": "26/11/2026",
       "intensidade": "Chuva Fraca com Pancadas Isoladas com Raios",
       "faixa_chuva_mm": "1 a 10 mm",
       "faixa_municipio_mm": "1 a 10 mm",
