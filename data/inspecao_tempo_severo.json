@@ -3,7 +3,7 @@
   "status_geral_cor": "danger",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": true,
-  "atualizacao_hora": "24/11/2026 às 19:01h",
+  "atualizacao_hora": "24/11/2026 às 22:47h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
@@ -41,16 +41,16 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "40 a 60 km/h",
-        "rajada_pico_modelado_kmh": 31.6,
+        "rajada_pico_modelado_kmh": 31.5,
         "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
         "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -98,18 +98,18 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "60 a 100 km/h",
-        "rajada_pico_modelado_kmh": 24.0,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
-        "direcao_pico": "Oeste-Sudoeste (WSW)",
+        "rajada_pico_modelado_kmh": 23.6,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
+        "direcao_pico": "Norte-Nordeste (NNE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -132,41 +132,41 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 26.0,
+        "media_continua_modelos_mm": 24.6,
         "teto_tempestade_alerta_mm": 100.0,
-        "faixa_completa_txt": "26.0 mm (Média) • Até 100 mm (Teto Alerta)",
+        "faixa_completa_txt": "24.6 mm (Média) • Até 100 mm (Teto Alerta)",
         "taxa_horaria_pico": "30 a 60 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "19.5 a 85.0 mm",
+            "volume_estimado": "18.5 a 85.0 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "26.0 a 100.0 mm",
+            "volume_estimado": "24.6 a 100.0 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "32.5 a 135.0 mm",
+            "volume_estimado": "30.8 a 135.0 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "60 a 100 km/h",
-        "rajada_pico_modelado_kmh": 39.3,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 12:00)",
-        "direcao_pico": "Sudoeste (SW)",
+        "rajada_pico_modelado_kmh": 36.2,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 19:00)",
+        "direcao_pico": "Sul (S)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -189,39 +189,39 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 4.4,
-        "teto_tempestade_alerta_mm": 11.7,
-        "faixa_completa_txt": "4.4 mm",
+        "media_continua_modelos_mm": 7.4,
+        "teto_tempestade_alerta_mm": 26.6,
+        "faixa_completa_txt": "7.4 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "3.3 a 4.8 mm",
+            "volume_estimado": "5.6 a 8.1 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "4.4 a 11.7 mm",
-            "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
+            "volume_estimado": "7.4 a 26.6 mm",
+            "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "5.5 a 6.6 mm",
+            "volume_estimado": "9.2 a 11.1 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 25 km/h",
-        "rajada_pico_modelado_kmh": 25.0,
+        "rajada_faixa": "Até 27 km/h",
+        "rajada_pico_modelado_kmh": 26.6,
         "horario_pico": "Entre 14h e 18h (pico por volta das 12:00)",
         "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -246,41 +246,41 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 8.8,
-        "teto_tempestade_alerta_mm": 24.5,
-        "faixa_completa_txt": "8.8 mm",
+        "media_continua_modelos_mm": 5.8,
+        "teto_tempestade_alerta_mm": 13.1,
+        "faixa_completa_txt": "5.8 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "6.6 a 9.7 mm",
+            "volume_estimado": "4.3 a 6.4 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "8.8 a 24.5 mm",
-            "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
+            "volume_estimado": "5.8 a 13.1 mm",
+            "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "11.0 a 13.2 mm",
+            "volume_estimado": "7.2 a 8.7 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 33 km/h",
-        "rajada_pico_modelado_kmh": 33.4,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
-        "direcao_pico": "Leste-Nordeste (ENE)",
+        "rajada_faixa": "Até 32 km/h",
+        "rajada_pico_modelado_kmh": 31.6,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 19:00)",
+        "direcao_pico": "Nordeste (NE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -303,41 +303,41 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 22.5,
-        "teto_tempestade_alerta_mm": 54.8,
-        "faixa_completa_txt": "22.5 mm",
+        "media_continua_modelos_mm": 15.5,
+        "teto_tempestade_alerta_mm": 29.2,
+        "faixa_completa_txt": "15.5 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "16.9 a 24.8 mm",
+            "volume_estimado": "11.6 a 17.1 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "22.5 a 54.8 mm",
+            "volume_estimado": "15.5 a 29.2 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "28.1 a 33.8 mm",
+            "volume_estimado": "19.4 a 23.2 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 28 km/h",
-        "rajada_pico_modelado_kmh": 27.7,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
-        "direcao_pico": "Sul-Sudoeste (SSW)",
+        "rajada_faixa": "Até 31 km/h",
+        "rajada_pico_modelado_kmh": 31.0,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 12:00)",
+        "direcao_pico": "Leste (E)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -360,41 +360,41 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 2.8,
-        "teto_tempestade_alerta_mm": 5.6,
-        "faixa_completa_txt": "2.8 mm",
+        "media_continua_modelos_mm": 10.0,
+        "teto_tempestade_alerta_mm": 33.5,
+        "faixa_completa_txt": "10.0 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "2.1 a 3.1 mm",
+            "volume_estimado": "7.5 a 11.0 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "2.8 a 5.6 mm",
-            "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
+            "volume_estimado": "10.0 a 33.5 mm",
+            "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "3.5 a 4.2 mm",
+            "volume_estimado": "12.5 a 15.0 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
-        "rajada_faixa": "Até 30 km/h",
-        "rajada_pico_modelado_kmh": 29.9,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
-        "direcao_pico": "Sul-Sudeste (SSE)",
+        "rajada_faixa": "Até 33 km/h",
+        "rajada_pico_modelado_kmh": 32.7,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
+        "direcao_pico": "Sul (S)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -417,41 +417,41 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 3.6,
-        "teto_tempestade_alerta_mm": 12.4,
-        "faixa_completa_txt": "3.6 mm",
+        "media_continua_modelos_mm": 2.2,
+        "teto_tempestade_alerta_mm": 7.2,
+        "faixa_completa_txt": "2.2 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "2.7 a 4.0 mm",
+            "volume_estimado": "1.7 a 2.4 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "3.6 a 12.4 mm",
+            "volume_estimado": "2.2 a 7.2 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "4.5 a 5.4 mm",
+            "volume_estimado": "2.8 a 3.3 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.37",
+          "cota_atual_m": "1.34",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.47 m",
+          "margem_segura_m": "1.5 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "Até 28 km/h",
-        "rajada_pico_modelado_kmh": 27.8,
-        "horario_pico": "Entre 14h e 18h (pico por volta das 17:00)",
-        "direcao_pico": "Leste (E)",
+        "rajada_pico_modelado_kmh": 27.5,
+        "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
+        "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
         "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
@@ -498,16 +498,16 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.37",
+        "cota_atual_m": "1.34",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.47 m",
+        "margem_segura_m": "1.5 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }
     },
     "vento": {
       "rajada_faixa": "40 a 60 km/h",
-      "rajada_pico_modelado_kmh": 31.6,
+      "rajada_pico_modelado_kmh": 31.5,
       "horario_pico": "Entre 14h e 18h (pico por volta das 16:00)",
       "direcao_pico": "Leste (E)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -555,18 +555,18 @@
         }
       },
       "hidrologia_jundia": {
-        "cota_atual_m": "1.37",
+        "cota_atual_m": "1.34",
         "cota_transbordo_m": "2.84",
-        "margem_segura_m": "1.47 m",
+        "margem_segura_m": "1.5 m",
         "status": "Vigilância",
         "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
       }
     },
     "vento": {
       "rajada_faixa": "60 a 100 km/h",
-      "rajada_pico_modelado_kmh": 24.0,
-      "horario_pico": "Entre 14h e 18h (pico por volta das 18:00)",
-      "direcao_pico": "Oeste-Sudoeste (WSW)",
+      "rajada_pico_modelado_kmh": 23.6,
+      "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
+      "direcao_pico": "Norte-Nordeste (NNE)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
       "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
       "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
