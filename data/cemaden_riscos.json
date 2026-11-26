@@ -2,7 +2,7 @@
   "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
   "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
   "data_boletim": "26/11/2026",
-  "atualizacao": "26/11/2026 17:39",
+  "atualizacao": "26/11/2026 17:59",
   "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
   "cemaden_rj_tempo_real": {
     "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -10,7 +10,7 @@
     "municipio_id": 20,
     "municipio_nome": "Rio das Ostras",
     "risco_hidrologico": {
-      "nivel": "MUITO ALTO",
+      "nivel": "ALTO",
       "status": "Atenção Hidrológica / Escoamento Pluvial",
       "badge": "warning",
       "cor_hex": "#d97706",
@@ -31,8 +31,8 @@
       "hidrologico": {
         "total_municipios": 92,
         "contagens": {
-          "MUITO ALTO": 25,
-          "ALTO": 65,
+          "MUITO ALTO": 22,
+          "ALTO": 68,
           "OUTRO": 1,
           "SEM DADOS": 1
         }
@@ -40,8 +40,8 @@
       "geologico": {
         "total_municipios": 92,
         "contagens": {
-          "MODERADO": 62,
-          "ALTO": 21,
+          "MODERADO": 70,
+          "ALTO": 13,
           "MUITO ALTO": 8,
           "SEM DADOS": 1
         }
@@ -50,19 +50,19 @@
     "vizinhos_redec1": {
       "rio-das-ostras": {
         "nome": "RIO DAS OSTRAS",
-        "fill": "#dc3545",
-        "nivel": "MUITO ALTO",
-        "status": "Alerta Máximo",
-        "badge": "danger-extreme",
-        "cor_hex": "#dc2626"
+        "fill": "#fd7e14",
+        "nivel": "ALTO",
+        "status": "Alerta",
+        "badge": "danger",
+        "cor_hex": "#ea580c"
       },
       "macae": {
         "nome": "MACAÉ",
-        "fill": "#dc3545",
-        "nivel": "MUITO ALTO",
-        "status": "Alerta Máximo",
-        "badge": "danger-extreme",
-        "cor_hex": "#dc2626"
+        "fill": "#fd7e14",
+        "nivel": "ALTO",
+        "status": "Alerta",
+        "badge": "danger",
+        "cor_hex": "#ea580c"
       },
       "casimiro-de-abreu": {
         "nome": "CASIMIRO DE ABREU",
@@ -130,11 +130,11 @@
       },
       "campos-dos-goytacazes": {
         "nome": "CAMPOS DOS GOYTACAZES",
-        "fill": "#dc3545",
-        "nivel": "MUITO ALTO",
-        "status": "Alerta Máximo",
-        "badge": "danger-extreme",
-        "cor_hex": "#dc2626"
+        "fill": "#fd7e14",
+        "nivel": "ALTO",
+        "status": "Alerta",
+        "badge": "danger",
+        "cor_hex": "#ea580c"
       }
     }
   },
