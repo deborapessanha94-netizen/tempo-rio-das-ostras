@@ -1083,6 +1083,38 @@ def _read_wrf_y_max_bitmap(pil_img, yt, xl):
     return None
 
 
+def _detect_wrf_grid_run_hour(sub_rgb):
+    """Infere deterministicamente 00Z vs 12Z pela posição das grades verticais diárias 00Z no gráfico GrADS."""
+    _h, w, _ = sub_rgb.shape
+    if w < 140:
+        return None
+    dots = ((sub_rgb[:, :, 0] < 210) & (np.abs(sub_rgb[:, :, 0].astype(int) - sub_rgb[:, :, 2].astype(int)) < 20)).sum(axis=0)
+    d00 = [int(dots[max(0, c - 2):min(w, c + 3)].max()) for hh in (24, 48, 72, 96, 120, 144) for c in [int(round((hh / 168.0) * w))]]
+    d12 = [int(dots[max(0, c - 2):min(w, c + 3)].max()) for hh in (12, 36, 60, 84, 108, 132, 156) for c in [int(round((hh / 168.0) * w))]]
+    med00 = float(np.median(d00)) if d00 else 0.0
+    med12 = float(np.median(d12)) if d12 else 0.0
+    if med00 - med12 >= 5.0:
+        return 0
+    if med12 - med00 >= 5.0:
+        return 12
+    return None
+
+
+def _read_wrf_header_text(im_rgb):
+    """Binariza apenas a linha 1 laranja ('DD/MM/YYYY HHZ') para OCR limpo em Linux/Windows."""
+    arr = np.array(im_rgb.convert("RGB"))
+    band = arr[12:30, 200:365]
+    ink = (band[:, :, 0] > 150) & (band[:, :, 0].astype(int) - band[:, :, 2].astype(int) > 65)
+    txt = ""
+    if ink.any():
+        bw_arr = np.where(ink, 0, 255).astype(np.uint8)
+        bin_im = Image.fromarray(np.stack([bw_arr, bw_arr, bw_arr], axis=-1))
+        txt = _ocr_stitched([bin_im])
+    if not re.search(r"\d{2}[/.-]\d{2}[/.-]20\d{2}", txt):
+        txt = _ocr_stitched([im_rgb.crop((200, 12, 365, 30))])
+    return txt
+
+
 # ==============================================================================
 # 3. CPTEC/INPE WRF (3866.png) + PROBABILÍSTICA (P >= 5 mm)
 # ==============================================================================
@@ -1124,7 +1156,7 @@ def extract_cptec_wrf_and_prob(img_dir):
                     xl, xr, yb = 0, 0, 0
                 if xr > xl + 100:
                     y_bmp_w = _read_wrf_y_max_bitmap(im_w, yt, xl)
-                    hdr_txt = _ocr_stitched([im_w.crop((180, 14, 420, 40))])
+                    hdr_txt = _read_wrf_header_text(im_w)
                     if y_bmp_w is not None:
                         y_max_w = y_bmp_w
                     else:
@@ -1134,20 +1166,26 @@ def extract_cptec_wrf_and_prob(img_dir):
                     if y_max_w <= 0 or y_max_w > 300:
                         y_max_w = 3.0
 
-                    # Identifica data e hora inicial real do WRF (00Z ou 12Z)
+                    sub_w = top_w[yt + 1:yb, xl + 1:xr]
+                    grid_hr = _detect_wrf_grid_run_hour(sub_w)
+
+                    # Identifica data e hora inicial real do WRF (00Z ou 12Z) com âncora geométrica das grades 00Z
                     now_utc = datetime.now(timezone.utc)
-                    start_wrf = now_utc.replace(hour=0 if now_utc.hour < 14 else 12, minute=0, second=0, microsecond=0)
+                    fb_hr = grid_hr if grid_hr is not None else (0 if now_utc.hour < 14 else 12)
+                    cands_wrf = [
+                        now_utc.replace(hour=fb_hr, minute=0, second=0, microsecond=0),
+                        (now_utc - timedelta(days=1)).replace(hour=fb_hr, minute=0, second=0, microsecond=0),
+                    ]
+                    start_wrf = next((c for c in cands_wrf if c <= now_utc + timedelta(hours=1)), cands_wrf[-1])
                     m_dt = re.search(r"(\d{2})[/.-](\d{2})[/.-](20\d{2})", hdr_txt)
                     if m_dt:
                         try:
                             m_hz = re.search(r"20\d{2}\D+(\d{2}|[oO]{2})\s*[zZ]?", hdr_txt)
-                            hz_raw = m_hz.group(1).lower() if m_hz else "00"
-                            wrf_hr = 12 if hz_raw == "12" else 0
+                            hz_raw = m_hz.group(1).lower() if m_hz else None
+                            wrf_hr = grid_hr if grid_hr is not None else (12 if hz_raw == "12" else 0)
                             start_wrf = datetime(int(m_dt.group(3)), int(m_dt.group(2)), int(m_dt.group(1)), wrf_hr, 0, tzinfo=timezone.utc)
                         except ValueError:
                             pass
-
-                    sub_w = top_w[yt + 1:yb, xl + 1:xr]
                     Hw, Ww, _ = sub_w.shape
                     col_mm = []
                     for col in range(Ww):
@@ -1176,6 +1214,7 @@ def extract_cptec_wrf_and_prob(img_dir):
                     wrf_res = {
                         "disponivel": True,
                         "fonte": "CPTEC/INPE Modelo Regional WRF (3866)",
+                        "rodada": start_wrf.strftime("%Y-%m-%d %HZ"),
                         "y_max_mmh": y_max_w,
                         "daily_mm": {d: round(v, 1) for d, v in sorted(daily_mm.items()) if daily_hours.get(d, 0) >= 12},
                         "hourly_brt": hourly_brt,

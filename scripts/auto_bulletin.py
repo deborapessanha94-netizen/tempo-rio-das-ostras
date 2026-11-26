@@ -2866,7 +2866,8 @@ def run_auto_bulletin_pipeline():
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
         faixa_sub = d.get('chuva_faixa_txt') or f"{dia_chuva:.1f} mm"
         card_prob_obj = d.get('probabilistico') or {}
-        d_has_thunder_c = bool(d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower())
+        sys_info_c = sistemas_8dias.get(d_idx) or classificar_sistema_dia(d_idx)
+        d_has_thunder_c = bool(sys_info_c.get('has_thunder') or d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower())
         card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'), d_has_thunder_c, (d_alerts[0].get('descricao') if d_alerts else d.get('alerta_desc')), card_prob_obj.get('p90_teto_mm'))
         card_wind_info = _classify_wind_nomenclature(day_turnos, dia_rajada)
         d_p25_c = float(card_prob_obj.get('p25_mm', 0.0))
@@ -3233,7 +3234,7 @@ def run_auto_bulletin_pipeline():
                 "data_iso": d['date_iso'],
                 "data_br": d['date_br'],
                 "dia_semana": d['dia_semana'],
-                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'), bool(d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower()), d.get('alerta_desc'), (d.get('probabilistico') or {}).get('p90_teto_mm'))['titulo'],
+                "intensidade_chuva": (dias_resumo[idx_p]['intensidade_chuva'] if idx_p < len(dias_resumo) else _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'), bool(d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower()), d.get('alerta_desc'), (d.get('probabilistico') or {}).get('p90_teto_mm'))['titulo']),
                 "chuva_media_modelos_mm": d['chuva_tot'],
                 "chuva_p25_mm": (d.get('probabilistico') or {}).get('p25_mm', 0.0),
                 "chuva_p50_mm": (d.get('probabilistico') or {}).get('p50_mm', d['chuva_tot']),
@@ -3249,7 +3250,7 @@ def run_auto_bulletin_pipeline():
                 "alerta_inmet_cor": d.get('alerta_cor'),
                 "taxa_horaria_pico": d.get('taxa_horaria_pico', '< 5 mm/h'),
                 "fontes": d.get('fontes_chuva') or day_rain_sources.get(d['date_iso'], {})
-            } for d in dias_3
+            } for idx_p, d in enumerate(dias_3)
         ],
         "acumulado_3dias_media": round(sum(d['chuva_tot'] for d in dias_3[:3]), 1),
         "acumulado_4dias_media": round(sum(d['chuva_tot'] for d in dias_3[:4]), 1),
