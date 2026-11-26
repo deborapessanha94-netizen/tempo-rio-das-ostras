@@ -1,16 +1,16 @@
 {
-  "atualizacao_brt": "26/11/2026 19:14",
-  "atualizacao_iso": "2026-11-26T19:14:45.309686-03:00",
+  "atualizacao_brt": "26/11/2026 19:40",
+  "atualizacao_iso": "2026-11-26T19:40:57.525739-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 22.9,
+    "ic_rede_c": 23.0,
     "temp_rede_c": 22.3,
     "ur_rede_pct": 93,
-    "sensacao_rede_c": 24.3,
+    "sensacao_rede_c": 24.2,
     "faixa_instantanea": {
       "faixa": "Conforto Térmico (< 27°C)",
       "cor": "#10B981"
@@ -40,10 +40,10 @@
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
-        "temp_c": 21.4,
+        "temp_c": 21.3,
         "ur_pct": 97,
-        "sensacao_c": 25.5,
-        "ic_c": 22.1,
+        "sensacao_c": 25.3,
+        "ic_c": 22.0,
         "ic_max_hoje": 32.9,
         "hora_ic_max_hoje": "12:09",
         "temp_max_hoje": 28.3,
@@ -54,38 +54,17 @@
         "cor_pico_hoje": "#F97316",
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-26 19:09:40",
+        "ultima_leitura": "2026-11-26 19:35:57",
         "lat": -22.440357,
         "lon": -41.953913
       },
       {
-        "codigo": "IRIODA17",
-        "nome": "Praia da Tartaruga",
-        "temp_c": 24.0,
-        "ur_pct": 87,
-        "sensacao_c": 22.7,
-        "ic_c": 24.7,
-        "ic_max_hoje": 30.5,
-        "hora_ic_max_hoje": "11:44",
-        "temp_max_hoje": 27.3,
-        "hora_temp_max_hoje": "11:49",
-        "temp_pico_ic_hoje": 27.2,
-        "ur_pico_ic_hoje": 83,
-        "faixa_pico_hoje": "Cuidado (27–32°C)",
-        "cor_pico_hoje": "#CA8A04",
-        "faixa": "Conforto Térmico (< 27°C)",
-        "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-26 19:09:34",
-        "lat": -22.531291,
-        "lon": -41.957444
-      },
-      {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 21.4,
-        "ur_pct": 94,
-        "sensacao_c": 24.7,
-        "ic_c": 22.0,
+        "temp_c": 21.2,
+        "ur_pct": 95,
+        "sensacao_c": 24.6,
+        "ic_c": 21.9,
         "ic_max_hoje": 33.3,
         "hora_ic_max_hoje": "12:09",
         "temp_max_hoje": 28.8,
@@ -96,9 +75,30 @@
         "cor_pico_hoje": "#F97316",
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-26 19:09:36",
+        "ultima_leitura": "2026-11-26 19:35:59",
         "lat": -22.426845,
         "lon": -42.020862
+      },
+      {
+        "codigo": "IRIODA17",
+        "nome": "Praia da Tartaruga",
+        "temp_c": 24.3,
+        "ur_pct": 86,
+        "sensacao_c": 22.7,
+        "ic_c": 25.0,
+        "ic_max_hoje": 30.5,
+        "hora_ic_max_hoje": "11:44",
+        "temp_max_hoje": 27.3,
+        "hora_temp_max_hoje": "11:49",
+        "temp_pico_ic_hoje": 27.2,
+        "ur_pico_ic_hoje": 83,
+        "faixa_pico_hoje": "Cuidado (27–32°C)",
+        "cor_pico_hoje": "#CA8A04",
+        "faixa": "Conforto Térmico (< 27°C)",
+        "cor_hex": "#10B981",
+        "ultima_leitura": "2026-11-26 19:36:05",
+        "lat": -22.531291,
+        "lon": -41.957444
       }
     ]
   },
@@ -786,7 +786,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-26 19:14"
+    "captura_brt": "2026-11-26 19:40"
   },
   "previsao_8dias_calor": [
     {
