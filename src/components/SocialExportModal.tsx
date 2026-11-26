@@ -19,6 +19,7 @@ import {
   Eye,
   Download,
 } from 'lucide-react';
+import { selectLiveWindStation } from '../services/siteData';
 import type { OpenMeteoData, AcumuladosDataset, BoletimMetadata } from '../services/siteData';
 
 interface SocialExportModalProps {
@@ -78,8 +79,9 @@ export const SocialExportModal: React.FC<SocialExportModalProps> = ({
   const curTemp = openMeteo?.current?.temperature_2m;
   const curSensacao = openMeteo?.current?.apparent_temperature ?? curTemp;
   const curHum = openMeteo?.current?.relative_humidity_2m;
-  const curWind = openMeteo?.current?.wind_speed_10m;
-  const curGust = openMeteo?.current?.wind_gusts_10m ?? curWind;
+  const liveWindSt = selectLiveWindStation(acumulados?.estacoes);
+  const curWind = liveWindSt?.vento_atual ?? openMeteo?.current?.wind_speed_10m;
+  const curGust = liveWindSt?.rajada_atual ?? openMeteo?.current?.wind_gusts_10m ?? curWind;
   const curPress = openMeteo?.current?.surface_pressure;
 
   return (

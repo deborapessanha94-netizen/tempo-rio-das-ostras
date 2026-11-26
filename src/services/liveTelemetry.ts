@@ -718,11 +718,11 @@ async function fetchWuStationLive(
     };
   }
 
-  // Reconciliação anti-lacuna 16s Ecowitt / EasyWeatherPro
+  // Reconciliação anti-lacuna 16s Ecowitt / EasyWeatherPro sem travar rajadas ao vivo quando o anemômetro já enviou nova leitura
   const isFresh5m =
     Number.isFinite(last5mMs) && Number.isFinite(obsMs)
-      ? Math.abs(obsMs - last5mMs) <= 12 * 60 * 1000
-      : Number.isFinite(last5mMs) && nowMs - last5mMs <= 15 * 60 * 1000;
+      ? Math.abs(obsMs - last5mMs) <= 6 * 60 * 1000
+      : Number.isFinite(last5mMs) && nowMs - last5mMs <= 8 * 60 * 1000;
   const hasRecent90s = lastNonZeroMs > 0 && nowMs - lastNonZeroMs <= 90 * 1000;
 
   let ventoAtual = rawWind;
@@ -734,7 +734,12 @@ async function fetchWuStationLive(
 
   const active5mGust = isFresh5m ? gHi5m : 0;
   const recent90sGust = hasRecent90s ? lastNonZeroGust : 0;
-  const rajadaAtual = round1(Math.max(rawGust, active5mGust, recent90sGust, ventoAtual), ventoAtual);
+  const rajadaAtual = round1(
+    currObs && rawGust > 0
+      ? Math.max(rawGust, ventoAtual)
+      : Math.max(rawGust, active5mGust, recent90sGust, ventoAtual),
+    ventoAtual
+  );
 
   const currHhmm = obsLocal.length >= 16 ? obsLocal.slice(11, 16) : null;
   const currHumNum = obs.humidity !== undefined && obs.humidity !== null && Number.isFinite(Number(obs.humidity))
@@ -1023,6 +1028,33 @@ function buildStationSkeleton(meta: StationSeedMeta): EstacaoPluvio {
     ultima_leitura: 'Carregando...',
     online: false,
   };
+}
+
+/**
+ * Seleciona a estação anemométrica online mais representativa da cidade em tempo real
+ * (priorizando IRIODA17 na orla da Praia da Tartaruga e, na falta desta, a estação online de maior exposição).
+ */
+export function selectLiveWindStation(
+  estacoes?: EstacaoPluvio[] | null
+): EstacaoPluvio | undefined {
+  if (!Array.isArray(estacoes) || estacoes.length === 0) return undefined;
+  const onlineWithWind = estacoes.filter(
+    (s) =>
+      s &&
+      s.online !== false &&
+      ((s.rajada_atual !== undefined && s.rajada_atual !== null) ||
+        (s.vento_atual !== undefined && s.vento_atual !== null))
+  );
+  if (onlineWithWind.length === 0) return undefined;
+  const coastalRef = onlineWithWind.find((s) => s.codigo === 'IRIODA17');
+  if (coastalRef) return coastalRef;
+  return onlineWithWind
+    .slice()
+    .sort(
+      (a, b) =>
+        Number(b.rajada_atual ?? b.vento_atual ?? 0) -
+        Number(a.rajada_atual ?? a.vento_atual ?? 0)
+    )[0];
 }
 
 let inFlightLiveSync: Promise<AcumuladosDataset | null> | null = null;

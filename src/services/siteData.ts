@@ -1,9 +1,9 @@
-import { enrichAcumuladosWithLiveTelemetry } from './liveTelemetry';
+import { enrichAcumuladosWithLiveTelemetry, selectLiveWindStation } from './liveTelemetry';
 import { reconcileLiveRainConsensus } from './liveRainConsensus';
 import type { HeatIndicesDataset } from './heatIndex';
 import type { WindRoseDataset, WindSampleRaw } from './windRose';
 
-export { enrichAcumuladosWithLiveTelemetry };
+export { enrichAcumuladosWithLiveTelemetry, selectLiveWindStation };
 export type { HeatIndicesDataset, WindRoseDataset, WindSampleRaw };
 
 export const SITE_BASE = '.';

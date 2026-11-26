@@ -65,6 +65,7 @@ import {
   enrichAcumuladosWithLiveTelemetry,
   fetchMarinhaAvisosLive,
   loadAllLiveSiteData,
+  selectLiveWindStation,
   wmoToPtBr,
 } from './services/siteData';
 import {
@@ -1114,8 +1115,12 @@ export default function App() {
   const currentTempVal = liveStationTemp?.temp_atual ?? openMeteo?.current?.temperature_2m;
   const currentSensacaoVal = openMeteo?.current?.apparent_temperature ?? currentTempVal;
   const currentHumVal = liveStationTemp?.umidade_atual ?? openMeteo?.current?.relative_humidity_2m;
-  const currentWindVal = openMeteo?.current?.wind_speed_10m ?? liveStationTemp?.vento_atual;
-  const currentGustVal = openMeteo?.current?.wind_gusts_10m ?? liveStationTemp?.rajada_atual;
+  const liveWindStation = selectLiveWindStation(acumulados?.estacoes);
+  const currentWindVal = liveWindStation?.vento_atual ?? openMeteo?.current?.wind_speed_10m ?? liveStationTemp?.vento_atual;
+  const currentGustVal = liveWindStation?.rajada_atual ?? openMeteo?.current?.wind_gusts_10m ?? liveStationTemp?.rajada_atual;
+  const currentWindDirLabel =
+    liveWindStation?.vento_dir_cardinal ||
+    (openMeteo?.current ? degToCompass(openMeteo.current.wind_direction_10m) : '');
   const currentPressVal = openMeteo?.current?.surface_pressure;
 
   const uvVal = acumulados?.uv_tempo_real?.uv ?? 0;
@@ -1854,12 +1859,16 @@ export default function App() {
 
                     {/* 2. Vento / Rajadas */}
                     {(() => {
-                      const liveWindPlancon = classifyWindPlancon(
-                        currentWindVal,
+                      const effGustNow =
                         currentGustVal !== undefined && currentGustVal !== null
                           ? Math.max(currentGustVal, currentWindVal ?? 0)
-                          : currentWindVal
-                      );
+                          : currentWindVal;
+                      const liveWindPlancon = classifyWindPlancon(currentWindVal, effGustNow);
+                      const windClock =
+                        liveWindStation?.ultima_leitura && String(liveWindStation.ultima_leitura).length >= 16
+                          ? String(liveWindStation.ultima_leitura).slice(11, 16)
+                          : null;
+                      const gustPeakHoje = liveWindStation?.rajada_max_hoje ?? (windGustMaxHoje > 0 ? windGustMaxHoje : null);
                       return (
                         <div className="p-3.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                           <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
@@ -1868,9 +1877,7 @@ export default function App() {
                           </div>
                           <div className="font-mono text-sm sm:text-base font-semibold text-[#14213D] dark:text-white tabular-nums leading-snug">
                             {currentWindVal !== undefined && currentWindVal !== null
-                              ? `Vento: ${Math.round(currentWindVal)} km/h ${
-                                  openMeteo?.current ? degToCompass(openMeteo.current.wind_direction_10m) : ''
-                                }`
+                              ? `Vento: ${Math.round(currentWindVal)} km/h ${currentWindDirLabel}`
                               : '--'}
                           </div>
                           <div className="font-mono text-xs sm:text-sm font-semibold text-[#FF8244] tabular-nums leading-snug">
@@ -1886,6 +1893,13 @@ export default function App() {
                               {liveWindPlancon.windTitulo} · Rajadas {liveWindPlancon.gustTitulo.toLowerCase()} ({liveWindPlancon.riscoLabel})
                             </div>
                           )}
+                          <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/60 leading-snug">
+                            {liveWindStation
+                              ? `Ao vivo: ${liveWindStation.codigo}${windClock ? ` (${windClock})` : ''}${
+                                  gustPeakHoje !== null ? ` · Máx hoje ${Number(gustPeakHoje).toFixed(0)} km/h` : ''
+                                }`
+                              : 'Ref. Open-Meteo (15 min)'}
+                          </div>
                           {hojeInspecao?.alerta_ativo && hojeInspecao.vento?.rajada_faixa && (
                             <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
                               Pico prev.: {hojeInspecao.vento.rajada_faixa}
