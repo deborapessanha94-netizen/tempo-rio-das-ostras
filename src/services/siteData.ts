@@ -372,6 +372,7 @@ export interface HistoricoDiaEstacao {
   nome: string;
   chuva_mm: number;
   rajada_max_kmh?: number;
+  vento_max_kmh?: number;
 }
 
 export interface HistoricoResumoDiario {
@@ -391,6 +392,8 @@ export interface HistoricoResumoDiario {
   estacoes_totais_dia?: Record<string, HistoricoDiaEstacao>;
   vento_vel_media_kmh?: number;
   vento_vel_max_kmh?: number;
+  vento_vel_max_horario?: string;
+  vento_vel_max_estacao?: string;
   vento_dir_predominante?: string;
   giro_quadrante_sul?: boolean;
   vento_rajada_max_kmh?: number;

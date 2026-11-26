@@ -150,6 +150,30 @@ export function resolveDayMaxGustRecord(entry?: HistoricoResumoDiario | null): {
 }
 
 /**
+ * Percorre todas as estações do dia para garantir o maior vento sustentado registrado no dia.
+ */
+export function resolveDayMaxSustainedRecord(entry?: HistoricoResumoDiario | null): {
+  kmh: number;
+  stationName: string;
+} {
+  if (!entry) return { kmh: 0, stationName: 'Rede Municipal' };
+  let maxKmh = Math.max(0, Number(entry.vento_vel_max_kmh ?? 0));
+  let stationName = entry.vento_vel_max_estacao || entry.vento_rajada_max_estacao || 'Rede Municipal';
+  const ests = entry.estacoes_totais_dia || {};
+  for (const [code, st] of Object.entries(ests)) {
+    const val = Number(st?.vento_max_kmh ?? 0);
+    if (Number.isFinite(val) && val > maxKmh) {
+      maxKmh = val;
+      stationName = st?.nome || code;
+    }
+  }
+  return {
+    kmh: Math.round(maxKmh * 10) / 10,
+    stationName,
+  };
+}
+
+/**
  * Consolida a série histórica diária (resumo_diario) e concilia o dia atual (todayIso)
  * com as estações ao vivo de `acumulados` e `liveWindRose`.
  */
@@ -159,28 +183,49 @@ export function buildMergedDailyHistoryMap(
   liveWindRose?: WindRoseDataset | null,
   todayIsoOverride?: string
 ): Map<string, MergedDailyHistoryEntry> {
+  const windRoseDailyByIso = new Map<string, NonNullable<WindRoseDataset['serie_diaria']>[number]>();
+  for (const wrRow of liveWindRose?.serie_diaria ?? []) {
+    if (wrRow?.data_iso) {
+      windRoseDailyByIso.set(wrRow.data_iso, wrRow);
+    }
+  }
+
+  const todayIso = todayIsoOverride || getTodayBrtIso();
+
   const map = new Map<string, MergedDailyHistoryEntry>();
   const rows = historico?.resumo_diario ?? [];
   for (const row of rows) {
     if (!row?.data_iso) continue;
     const bestRain = resolveDayMaxRainRecord(row);
     const bestGust = resolveDayMaxGustRecord(row);
+    const bestSust = resolveDayMaxSustainedRecord(row);
+    const wrDay = row.data_iso !== todayIso ? windRoseDailyByIso.get(row.data_iso) : undefined;
+    if (wrDay) {
+      const wrGust = Number(wrDay.rajada_max_kmh ?? 0);
+      if (Number.isFinite(wrGust) && wrGust > bestGust.kmh) {
+        bestGust.kmh = Math.round(wrGust * 10) / 10;
+      }
+      const wrSust = Number(wrDay.vel_max_kmh ?? 0);
+      if (Number.isFinite(wrSust) && wrSust > bestSust.kmh) {
+        bestSust.kmh = Math.round(wrSust * 10) / 10;
+      }
+    }
     map.set(row.data_iso, {
       ...row,
       chuva_maior_estacao_mm: bestRain.mm,
       chuva_maior_estacao_nome: bestRain.stationName,
+      vento_vel_max_kmh: bestSust.kmh,
+      vento_vel_max_estacao: bestSust.stationName,
       vento_rajada_max_kmh: bestGust.kmh,
       vento_rajada_max_estacao: bestGust.stationName,
     });
   }
-
-  const todayIso = todayIsoOverride || getTodayBrtIso();
   const onlineGauges = (acumulados?.estacoes ?? []).filter(
     (s) => s && s.categoria !== 'inea' && s.online !== false
   );
   const existingToday = map.get(todayIso);
 
-  if (existingToday || onlineGauges.length > 0) {
+  if (existingToday || onlineGauges.length > 0 || liveWindRose?.rede?.periodos?.hoje) {
     const [ty, tm, td] = todayIso.split('-').map(Number);
     const baseToday: MergedDailyHistoryEntry = existingToday
       ? {
@@ -206,6 +251,8 @@ export function buildMergedDailyHistoryMap(
           estacoes_totais_dia: {},
           vento_vel_media_kmh: 0,
           vento_vel_max_kmh: 0,
+          vento_vel_max_horario: '--',
+          vento_vel_max_estacao: 'Rede Municipal',
           vento_dir_predominante: '--',
           giro_quadrante_sul: false,
           vento_rajada_max_kmh: 0,
@@ -222,6 +269,8 @@ export function buildMergedDailyHistoryMap(
     let bestGustHr = baseToday.vento_rajada_max_horario || '--';
     let bestGustSt = baseToday.vento_rajada_max_estacao || 'Rede Municipal';
     let bestSustVal = Number(baseToday.vento_vel_max_kmh ?? 0);
+    let bestSustHr = baseToday.vento_vel_max_horario || '--';
+    let bestSustSt = baseToday.vento_vel_max_estacao || 'Rede Municipal';
 
     for (const st of acumulados?.estacoes ?? []) {
       if (!st || st.categoria === 'inea') continue;
@@ -247,25 +296,61 @@ export function buildMergedDailyHistoryMap(
 
       const mergedRain = Math.round(Math.max(Number(prevSt?.chuva_mm ?? 0), liveRain ?? 0) * 10) / 10;
       const mergedGust = Math.round(Math.max(Number(prevSt?.rajada_max_kmh ?? 0), liveGust ?? 0) * 10) / 10;
+      const mergedSust = Math.round(Math.max(Number(prevSt?.vento_max_kmh ?? 0), liveSust ?? 0) * 10) / 10;
 
-      if (prevSt || liveRain !== null || liveGust !== null) {
+      if (prevSt || liveRain !== null || liveGust !== null || liveSust !== null) {
         stTotals[key] = {
           nome: prevSt?.nome || st.nome_curto || st.nome,
           chuva_mm: mergedRain,
           rajada_max_kmh: mergedGust,
+          vento_max_kmh: mergedSust,
         };
       }
 
       if (liveRain !== null) {
         liveRainSamples.push(mergedRain);
       }
-      if (liveGust !== null && liveGust > bestGustVal) {
+      if (liveGust !== null && (liveGust > bestGustVal || (liveGust === bestGustVal && st.hora_rajada_max_hoje))) {
         bestGustVal = Math.round(liveGust * 10) / 10;
         bestGustHr = st.hora_rajada_max_hoje || bestGustHr;
         bestGustSt = st.nome_curto || st.nome;
       }
-      if (liveSust !== null && liveSust > bestSustVal) {
+      if (liveSust !== null && (liveSust > bestSustVal || (liveSust === bestSustVal && st.hora_vento_max_hoje))) {
         bestSustVal = Math.round(liveSust * 10) / 10;
+        bestSustHr = st.hora_vento_max_hoje || bestSustHr;
+        bestSustSt = st.nome_curto || st.nome;
+      }
+    }
+
+    for (const wrSt of liveWindRose?.estacoes ?? []) {
+      const key = normalizeHistStationKey(wrSt?.codigo);
+      if (!key) continue;
+      const prevSt = stTotals[key];
+      const wrGust = Math.max(
+        Number(wrSt.rajada_max_hoje_kmh ?? 0),
+        Number(wrSt.periodos?.hoje?.rajada_max_kmh ?? 0)
+      );
+      const wrSust = Math.max(
+        Number(wrSt.vento_max_hoje_kmh ?? 0),
+        Number(wrSt.periodos?.hoje?.vel_max_kmh ?? 0)
+      );
+      const mergedGust = Math.round(Math.max(Number(prevSt?.rajada_max_kmh ?? 0), wrGust) * 10) / 10;
+      const mergedSust = Math.round(Math.max(Number(prevSt?.vento_max_kmh ?? 0), wrSust) * 10) / 10;
+      if (prevSt || wrGust > 0 || wrSust > 0) {
+        stTotals[key] = {
+          nome: prevSt?.nome || wrSt.nome || key,
+          chuva_mm: Number(prevSt?.chuva_mm ?? 0),
+          rajada_max_kmh: mergedGust,
+          vento_max_kmh: mergedSust,
+        };
+      }
+      if (wrGust > bestGustVal) {
+        bestGustVal = Math.round(wrGust * 10) / 10;
+        bestGustSt = wrSt.nome || prevSt?.nome || bestGustSt;
+      }
+      if (wrSust > bestSustVal) {
+        bestSustVal = Math.round(wrSust * 10) / 10;
+        bestSustSt = wrSt.nome || prevSt?.nome || bestSustSt;
       }
     }
 
@@ -274,11 +359,24 @@ export function buildMergedDailyHistoryMap(
       if (redeHoje.rajada_max_kmh > bestGustVal) {
         bestGustVal = Math.round(redeHoje.rajada_max_kmh * 10) / 10;
       }
+      if (redeHoje.vel_max_kmh > bestSustVal) {
+        bestSustVal = Math.round(redeHoje.vel_max_kmh * 10) / 10;
+      }
       if (redeHoje.vel_media_kmh > 0 && (!baseToday.vento_vel_media_kmh || baseToday.vento_vel_media_kmh <= 0)) {
         baseToday.vento_vel_media_kmh = redeHoje.vel_media_kmh;
       }
       if (redeHoje.dir_predominante && (!baseToday.vento_dir_predominante || baseToday.vento_dir_predominante === '--')) {
         baseToday.vento_dir_predominante = redeHoje.dir_predominante;
+      }
+    }
+
+    const wrTodayRow = windRoseDailyByIso.get(todayIso);
+    if (wrTodayRow) {
+      if (Number(wrTodayRow.rajada_max_kmh ?? 0) > bestGustVal) {
+        bestGustVal = Math.round(Number(wrTodayRow.rajada_max_kmh) * 10) / 10;
+      }
+      if (Number(wrTodayRow.vel_max_kmh ?? 0) > bestSustVal) {
+        bestSustVal = Math.round(Number(wrTodayRow.vel_max_kmh) * 10) / 10;
       }
     }
 
@@ -306,6 +404,8 @@ export function buildMergedDailyHistoryMap(
     baseToday.vento_rajada_max_horario = bestGustHr;
     baseToday.vento_rajada_max_estacao = bestGustSt;
     baseToday.vento_vel_max_kmh = Math.round(bestSustVal * 10) / 10;
+    baseToday.vento_vel_max_horario = bestSustHr;
+    baseToday.vento_vel_max_estacao = bestSustSt;
     baseToday.is_live_today = true;
     baseToday.live_atualizacao = acumulados?.atualizacao;
 
@@ -314,8 +414,8 @@ export function buildMergedDailyHistoryMap(
         ? `${classifyRainPlancon(Math.max(baseToday.chuva_total_media_mm, baseToday.chuva_maior_estacao_mm)).titulo}: média na rede de ${baseToday.chuva_total_media_mm.toFixed(1)} mm e maior acumulado de ${baseToday.chuva_maior_estacao_mm.toFixed(1)} mm (${baseToday.chuva_maior_estacao_nome})`
         : 'Sem registro de chuva até o momento';
     const liveWindDesc =
-      baseToday.vento_rajada_max_kmh > 0
-        ? `vento predominante ${baseToday.vento_dir_predominante || '--'} e rajada máxima de ${baseToday.vento_rajada_max_kmh.toFixed(1)} km/h${
+      baseToday.vento_rajada_max_kmh > 0 || baseToday.vento_vel_max_kmh > 0
+        ? `vento predominante ${baseToday.vento_dir_predominante || '--'}, sustentado máx. ${baseToday.vento_vel_max_kmh.toFixed(1)} km/h e rajada máxima de ${baseToday.vento_rajada_max_kmh.toFixed(1)} km/h${
             baseToday.vento_rajada_max_horario && baseToday.vento_rajada_max_horario !== '--'
               ? ` às ${baseToday.vento_rajada_max_horario}`
               : ''
@@ -473,6 +573,7 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
         nome: st.nome || code,
         chuva_mm: Number(st.chuva_mm ?? 0),
         rajada_max_kmh: Number(st.rajada_max_kmh ?? 0),
+        vento_max_kmh: Number(st.vento_max_kmh ?? 0),
       }))
       .sort((a, b) => b.chuva_mm - a.chuva_mm || b.rajada_max_kmh - a.rajada_max_kmh);
   }, [selectedDay]);
@@ -489,10 +590,12 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
   const rainMean = Number(selectedDay?.chuva_total_media_mm ?? 0);
   const maxRainRec = resolveDayMaxRainRecord(selectedDay);
   const rainMaxSt = maxRainRec.mm;
+  const maxSustRec = resolveDayMaxSustainedRecord(selectedDay);
+  const sustMaxDay = maxSustRec.kmh;
   const maxGustRec = resolveDayMaxGustRecord(selectedDay);
   const gustMaxDay = maxGustRec.kmh;
   const rainPlancon = classifyRainPlancon(rainMaxSt);
-  const windPlancon = classifyWindPlancon(selectedDay?.vento_vel_media_kmh, gustMaxDay);
+  const windPlancon = classifyWindPlancon(Math.max(Number(selectedDay?.vento_vel_media_kmh ?? 0), sustMaxDay), gustMaxDay);
   const maxStationRainInDay = Math.max(0.1, ...selectedStations.map((s) => s.chuva_mm));
 
   return (
@@ -820,23 +923,30 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                 </div>
               </div>
 
-              {/* 3. Comportamento do Vento */}
+              {/* 3. Maior Vento Sustentado no Dia */}
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                 <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                   <Compass className="w-3.5 h-3.5 text-[#FF8244]" />
-                  <span>Comportamento do Vento</span>
+                  <span>Vento Máximo (Sust.)</span>
                 </div>
-                <div className="font-mono text-base sm:text-lg font-bold text-[#14213D] dark:text-white tabular-nums flex flex-wrap items-center gap-2">
-                  <span>Predom.: {selectedDay.vento_dir_predominante || '--'}</span>
+                <div className="font-mono text-2xl font-bold text-[#14213D] dark:text-white tabular-nums flex flex-wrap items-center gap-2">
+                  <span>{sustMaxDay > 0 ? `${sustMaxDay.toFixed(1)} km/h` : '--'}</span>
                   {selectedDay.giro_quadrante_sul && (
                     <span className="text-[10px] font-sans font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-400/40">
                       Giro Quadrante Sul
                     </span>
                   )}
                 </div>
-                <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 tabular-nums">
-                  Média {Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)} km/h · Sustentado máx{' '}
-                  {Number(selectedDay.vento_vel_max_kmh ?? 0).toFixed(1)} km/h
+                <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 tabular-nums leading-snug">
+                  {maxSustRec.stationName && sustMaxDay > 0
+                    ? `${maxSustRec.stationName}${
+                        selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
+                          ? ` às ${selectedDay.vento_vel_max_horario}`
+                          : ''
+                      } · `
+                    : ''}
+                  Predom.: {selectedDay.vento_dir_predominante || '--'} · Méd.:{' '}
+                  {Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)} km/h
                 </div>
               </div>
 
@@ -898,7 +1008,7 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
             {selectedStations.length > 0 && (
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
                 <div className="flex items-center justify-between text-xs font-semibold text-[#14213D] dark:text-white">
-                  <span>Acumulado e Rajada Máxima por Estação ({selectedDay.data_br || formatDateBrFromIso(selectedDay.data_iso)})</span>
+                  <span>Acumulado, Vento &amp; Rajada Máxima por Estação ({selectedDay.data_br || formatDateBrFromIso(selectedDay.data_iso)})</span>
                   <span className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
                     {selectedStations.length} estações
                   </span>
@@ -925,10 +1035,19 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
-                          <span>{st.code}</span>
-                          <span>
-                            {st.rajada_max_kmh > 0 ? `Rajada máx: ${st.rajada_max_kmh.toFixed(1)} km/h` : 'Pluviômetro'}
+                        <div className="flex items-center justify-between text-[9.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 gap-1.5">
+                          <span className="shrink-0">{st.code}</span>
+                          <span
+                            className="text-right truncate"
+                            title={
+                              st.rajada_max_kmh > 0 || st.vento_max_kmh > 0
+                                ? `Vento máx: ${st.vento_max_kmh.toFixed(1)} km/h | Rajada máx: ${st.rajada_max_kmh.toFixed(1)} km/h`
+                                : 'Pluviômetro'
+                            }
+                          >
+                            {st.rajada_max_kmh > 0 || st.vento_max_kmh > 0
+                              ? `${st.vento_max_kmh > 0 ? `Vento ${st.vento_max_kmh.toFixed(1)} · ` : ''}Raj. ${st.rajada_max_kmh.toFixed(1)} km/h`
+                              : 'Pluviômetro'}
                           </span>
                         </div>
                       </div>

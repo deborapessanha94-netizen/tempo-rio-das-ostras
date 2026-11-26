@@ -156,56 +156,53 @@ def get_active_wu_key():
     return WU_KEYS[0]
 
 
-def fetch_station_day_hourly(station_id, day_date, wu_key):
-    """
-    Busca as 24 leituras horárias de uma estação PWS para uma data específica (YYYYMMDD).
-    Converte precipTotal cumulativo em chuva horária (mm/h) para cada hora (00 a 23).
-    """
-    ymd = day_date.strftime("%Y%m%d")
-    url = (
-        f"https://api.weather.com/v2/pws/history/hourly?"
-        f"stationId={station_id}&format=json&units=m&date={ymd}&numericPrecision=decimal&apiKey={wu_key}"
-    )
-    try:
-        data = fetch_json(url, timeout=12)
-    except Exception:
-        return {}
+def _apply_wind_qc(w_avg, w_high, g_high):
+    """Garante g_high >= w_high e filtra picos espúrios eletrônicos de RF."""
+    w_a = float(w_avg or 0.0)
+    w_h = float(w_high if w_high is not None else w_a)
+    g_h = float(g_high if g_high is not None else w_h)
+    if g_h < w_h:
+        g_h = w_h
+    if g_h > 105.0 or w_h > 90.0 or (w_a < 25.0 and g_h > 80.0):
+        w_h = round(max(w_a * 1.4, 18.0), 1)
+        g_h = round(max(w_a * 1.75, 24.0), 1)
+    return round(w_h, 1), round(g_h, 1)
 
-    if not data or "observations" not in data:
-        return {}
 
-    obs_list = sorted(data.get("observations", []), key=lambda x: x.get("obsTimeLocal", ""))
-    hours_map = {}
+def _aggregate_wu_1day_observations(obs_list, target_iso):
+    """
+    Agrega leituras de 5 minutos do endpoint `/v2/pws/observations/all/1day` em blocos horários,
+    preservando os picos reais de vento sustentado e rajada antes do rollup horário oficial da WU.
+    """
+    filtered = [
+        o for o in obs_list
+        if isinstance(o, dict) and str(o.get("obsTimeLocal", "")).startswith(target_iso)
+    ]
+    filtered.sort(key=lambda x: x.get("obsTimeLocal", ""))
+    buckets = {}
     prev_cum_rain = 0.0
 
-    for obs in obs_list:
+    for obs in filtered:
         t_local = obs.get("obsTimeLocal", "")
         if len(t_local) < 13:
             continue
         try:
-            hr = int(t_local[11:13])
+            hr_key = f"{int(t_local[11:13]):02d}"
         except ValueError:
             continue
 
-        m = obs.get("metric", {})
-        cum_rain = safe_float(m.get("precipTotal"), 0.0)
-        # Se por algum motivo houve reset parcial, garante não-negativo
+        m = obs.get("metric", {}) or {}
+        cum_rain = safe_float(m.get("precipTotal"), 0.0) or 0.0
         if cum_rain < prev_cum_rain and cum_rain > 0:
-            hr_rain = cum_rain
+            delta_rain = cum_rain
         else:
-            hr_rain = max(0.0, round(cum_rain - prev_cum_rain, 2))
+            delta_rain = max(0.0, round(cum_rain - prev_cum_rain, 2))
         prev_cum_rain = max(prev_cum_rain, cum_rain)
 
-        w_avg = safe_float(m.get("windspeedAvg"), 0.0)
-        w_high = safe_float(m.get("windspeedHigh"), w_avg)
-        g_high = safe_float(m.get("windgustHigh"), w_high)
-        if g_high < w_high:
-            g_high = w_high
-
-        # Filtro de Controle de Qualidade (QC) contra espúrios eletrônicos de RF (>105 km/h isolado com média baixa)
-        if g_high > 105.0 or w_high > 90.0 or (w_avg < 25.0 and g_high > 80.0):
-            w_high = round(max(w_avg * 1.4, 18.0), 1)
-            g_high = round(max(w_avg * 1.75, 24.0), 1)
+        w_avg = safe_float(m.get("windspeedAvg"), 0.0) or 0.0
+        w_high_raw = safe_float(m.get("windspeedHigh"), w_avg)
+        g_high_raw = safe_float(m.get("windgustHigh"), w_high_raw)
+        w_high, g_high = _apply_wind_qc(w_avg, w_high_raw, g_high_raw)
 
         w_dir = safe_float(obs.get("winddirAvg"), None)
         temp_avg = safe_float(m.get("tempAvg"), None)
@@ -216,19 +213,163 @@ def fetch_station_day_hourly(station_id, day_date, wu_key):
         press_min = safe_float(m.get("pressureMin"), press_max)
         press_avg = round((press_max + press_min) / 2.0, 1) if (press_max and press_min) else press_max
 
-        hours_map[f"{hr:02d}"] = {
-            "rain_mm": round(hr_rain, 2),
-            "cum_rain_mm": round(cum_rain, 2),
-            "wind_avg": round(w_avg, 1) if w_avg is not None else 0.0,
-            "wind_high": round(w_high, 1) if w_high is not None else 0.0,
-            "gust_high": round(g_high, 1) if g_high is not None else 0.0,
-            "wind_dir": int(round(w_dir)) if w_dir is not None else None,
-            "temp": round(temp_avg, 1) if temp_avg is not None else None,
-            "temp_high": round(temp_high, 1) if temp_high is not None else None,
-            "temp_low": round(temp_low, 1) if temp_low is not None else None,
-            "humidity": round(hum_avg, 1) if hum_avg is not None else None,
-            "pressure": press_avg,
+        b = buckets.setdefault(hr_key, {
+            "rain_mm": 0.0,
+            "cum_rain_mm": 0.0,
+            "w_avgs": [],
+            "wind_high": 0.0,
+            "gust_high": -1.0,
+            "peak_w_dir": None,
+            "last_w_dir": None,
+            "temps": [],
+            "temp_highs": [],
+            "temp_lows": [],
+            "hums": [],
+            "presses": [],
+        })
+        b["rain_mm"] += delta_rain
+        b["cum_rain_mm"] = max(b["cum_rain_mm"], cum_rain)
+        b["w_avgs"].append(w_avg)
+        b["wind_high"] = max(b["wind_high"], w_high)
+        if g_high >= b["gust_high"]:
+            b["gust_high"] = g_high
+            if w_dir is not None:
+                b["peak_w_dir"] = int(round(w_dir))
+        if w_dir is not None:
+            b["last_w_dir"] = int(round(w_dir))
+        if temp_avg is not None:
+            b["temps"].append(temp_avg)
+        if temp_high is not None:
+            b["temp_highs"].append(temp_high)
+        if temp_low is not None:
+            b["temp_lows"].append(temp_low)
+        if hum_avg is not None:
+            b["hums"].append(hum_avg)
+        if press_avg is not None:
+            b["presses"].append(press_avg)
+
+    out = {}
+    for hr_key, b in buckets.items():
+        w_av = round(sum(b["w_avgs"]) / len(b["w_avgs"]), 1) if b["w_avgs"] else 0.0
+        g_hi = round(max(0.0, b["gust_high"]), 1)
+        out[hr_key] = {
+            "rain_mm": round(b["rain_mm"], 2),
+            "cum_rain_mm": round(b["cum_rain_mm"], 2),
+            "wind_avg": w_av,
+            "wind_high": round(b["wind_high"], 1),
+            "gust_high": max(g_hi, round(b["wind_high"], 1)),
+            "wind_dir": b["peak_w_dir"] if b["peak_w_dir"] is not None else b["last_w_dir"],
+            "temp": round(sum(b["temps"]) / len(b["temps"]), 1) if b["temps"] else None,
+            "temp_high": round(max(b["temp_highs"]), 1) if b["temp_highs"] else None,
+            "temp_low": round(min(b["temp_lows"]), 1) if b["temp_lows"] else None,
+            "humidity": round(sum(b["hums"]) / len(b["hums"]), 1) if b["hums"] else None,
+            "pressure": round(sum(b["presses"]) / len(b["presses"]), 1) if b["presses"] else None,
         }
+    return out
+
+
+def fetch_station_day_hourly(station_id, day_date, wu_key, today_brt=None):
+    """
+    Busca as 24 leituras horárias de uma estação PWS para uma data específica (YYYYMMDD).
+    Converte precipTotal cumulativo em chuva horária (mm/h) para cada hora (00 a 23).
+    Para o dia atual/ontem, complementa com `/observations/all/1day` (5 min) para evitar atraso de rollup.
+    """
+    ymd = day_date.strftime("%Y%m%d")
+    url = (
+        f"https://api.weather.com/v2/pws/history/hourly?"
+        f"stationId={station_id}&format=json&units=m&date={ymd}&numericPrecision=decimal&apiKey={wu_key}"
+    )
+    hours_map = {}
+    try:
+        data = fetch_json(url, timeout=12)
+    except Exception:
+        data = None
+
+    if data and "observations" in data:
+        obs_list = sorted(data.get("observations", []), key=lambda x: x.get("obsTimeLocal", ""))
+        prev_cum_rain = 0.0
+
+        for obs in obs_list:
+            t_local = obs.get("obsTimeLocal", "")
+            if len(t_local) < 13:
+                continue
+            try:
+                hr = int(t_local[11:13])
+            except ValueError:
+                continue
+
+            m = obs.get("metric", {})
+            cum_rain = safe_float(m.get("precipTotal"), 0.0)
+            # Se por algum motivo houve reset parcial, garante não-negativo
+            if cum_rain < prev_cum_rain and cum_rain > 0:
+                hr_rain = cum_rain
+            else:
+                hr_rain = max(0.0, round(cum_rain - prev_cum_rain, 2))
+            prev_cum_rain = max(prev_cum_rain, cum_rain)
+
+            w_avg = safe_float(m.get("windspeedAvg"), 0.0)
+            w_high = safe_float(m.get("windspeedHigh"), w_avg)
+            g_high = safe_float(m.get("windgustHigh"), w_high)
+            w_high, g_high = _apply_wind_qc(w_avg, w_high, g_high)
+
+            w_dir = safe_float(obs.get("winddirAvg"), None)
+            temp_avg = safe_float(m.get("tempAvg"), None)
+            temp_high = safe_float(m.get("tempHigh"), temp_avg)
+            temp_low = safe_float(m.get("tempLow"), temp_avg)
+            hum_avg = safe_float(obs.get("humidityAvg"), None)
+            press_max = safe_float(m.get("pressureMax"), None)
+            press_min = safe_float(m.get("pressureMin"), press_max)
+            press_avg = round((press_max + press_min) / 2.0, 1) if (press_max and press_min) else press_max
+
+            hours_map[f"{hr:02d}"] = {
+                "rain_mm": round(hr_rain, 2),
+                "cum_rain_mm": round(cum_rain, 2),
+                "wind_avg": round(w_avg, 1) if w_avg is not None else 0.0,
+                "wind_high": round(w_high, 1) if w_high is not None else 0.0,
+                "gust_high": round(g_high, 1) if g_high is not None else 0.0,
+                "wind_dir": int(round(w_dir)) if w_dir is not None else None,
+                "temp": round(temp_avg, 1) if temp_avg is not None else None,
+                "temp_high": round(temp_high, 1) if temp_high is not None else None,
+                "temp_low": round(temp_low, 1) if temp_low is not None else None,
+                "humidity": round(hum_avg, 1) if hum_avg is not None else None,
+                "pressure": press_avg,
+            }
+
+    ref_today = today_brt if today_brt is not None else datetime.now(BRT).date()
+    if day_date >= ref_today - timedelta(days=1):
+        live_url = (
+            f"https://api.weather.com/v2/pws/observations/all/1day?"
+            f"stationId={station_id}&format=json&units=m&numericPrecision=decimal&apiKey={wu_key}"
+        )
+        try:
+            live_data = fetch_json(live_url, timeout=12)
+        except Exception:
+            live_data = None
+        if live_data and "observations" in live_data:
+            live_hours = _aggregate_wu_1day_observations(
+                live_data.get("observations", []),
+                day_date.strftime("%Y-%m-%d"),
+            )
+            for hr_key, live_rec in live_hours.items():
+                cur = hours_map.get(hr_key)
+                if cur is None:
+                    hours_map[hr_key] = live_rec
+                    continue
+                prev_gust = cur.get("gust_high", 0.0)
+                cur["rain_mm"] = round(max(cur.get("rain_mm", 0.0), live_rec.get("rain_mm", 0.0)), 2)
+                cur["cum_rain_mm"] = round(max(cur.get("cum_rain_mm", 0.0), live_rec.get("cum_rain_mm", 0.0)), 2)
+                cur["wind_avg"] = round(max(cur.get("wind_avg", 0.0), live_rec.get("wind_avg", 0.0)), 1)
+                cur["wind_high"] = round(max(cur.get("wind_high", 0.0), live_rec.get("wind_high", 0.0)), 1)
+                cur["gust_high"] = round(max(prev_gust, live_rec.get("gust_high", 0.0)), 1)
+                if (live_rec.get("gust_high", 0.0) >= prev_gust and live_rec.get("wind_dir") is not None) or cur.get("wind_dir") is None:
+                    cur["wind_dir"] = live_rec.get("wind_dir", cur.get("wind_dir"))
+                for fld in ("temp", "humidity", "pressure"):
+                    if cur.get(fld) is None:
+                        cur[fld] = live_rec.get(fld)
+                if live_rec.get("temp_high") is not None:
+                    cur["temp_high"] = max(cur["temp_high"], live_rec["temp_high"]) if cur.get("temp_high") is not None else live_rec["temp_high"]
+                if live_rec.get("temp_low") is not None:
+                    cur["temp_low"] = min(cur["temp_low"], live_rec["temp_low"]) if cur.get("temp_low") is not None else live_rec["temp_low"]
 
     return hours_map
 
@@ -1204,6 +1345,7 @@ def update_historical_spreadsheet(force_refresh_all=False):
         day_hourly_records = []
         st_day_rain_totals = {s["id"]: 0.0 for s in STATIONS_META}
         st_day_max_gust = {s["id"]: 0.0 for s in STATIONS_META}
+        st_day_max_wind = {s["id"]: 0.0 for s in STATIONS_META}
 
         for hr in range(0, max_hr + 1):
             hr_key = f"{hr:02d}"
@@ -1241,13 +1383,8 @@ def update_historical_spreadsheet(force_refresh_all=False):
                 sid = st["id"]
                 st_hr = day_st_data.get(sid, {}).get(hr_key)
                 if st_hr and (st_hr.get("wind_high", 0.0) > 0 or st_hr.get("gust_high", 0.0) > 0):
-                    w_hi = float(st_hr.get("wind_high") or 0.0)
                     w_av = float(st_hr.get("wind_avg") or 0.0)
-                    g_hi = float(st_hr.get("gust_high") or w_hi)
-                    # Controle de qualidade (QC) contra pico espúrio de RF
-                    if g_hi > 105.0 or w_hi > 90.0 or (w_av < 25.0 and g_hi > 80.0):
-                        w_hi = round(max(w_av * 1.4, 18.0), 1)
-                        g_hi = round(max(w_av * 1.75, 24.0), 1)
+                    w_hi, g_hi = _apply_wind_qc(w_av, float(st_hr.get("wind_high") or 0.0), float(st_hr.get("gust_high") or 0.0))
                     w_dr = st_hr.get("wind_dir")
                     wind_candidates.append({
                         "sid": sid,
@@ -1258,21 +1395,25 @@ def update_historical_spreadsheet(force_refresh_all=False):
                         "gust_high": g_hi,
                         "wind_dir": w_dr,
                     })
+                    if w_hi > st_day_max_wind[sid]:
+                        st_day_max_wind[sid] = w_hi
                     if g_hi > st_day_max_gust[sid]:
                         st_day_max_gust[sid] = g_hi
 
             if wind_candidates:
-                # Seleciona estação costeira principal (IRIODA17 ou IRIODA6) se ativa, ou a de maior vento/rajada registrada na hora
-                best_w = max(wind_candidates, key=lambda x: (x["gust_high"], x["wind_high"]))
+                # Seleciona os maiores registros horários entre todas as estações ativas (rajada máx e sustentado máx)
+                best_g = max(wind_candidates, key=lambda x: (x["gust_high"], x["wind_high"]))
+                best_w = max(wind_candidates, key=lambda x: (x["wind_high"], x["gust_high"]))
                 w_vel = round(best_w["wind_high"], 1)
                 w_avg_all = round(sum(x["wind_avg"] for x in wind_candidates) / len(wind_candidates), 1)
                 if w_avg_all <= 0 and w_vel > 0:
                     w_avg_all = round(w_vel * 0.65, 1)
-                g_vel = round(best_w["gust_high"], 1)
-                w_deg = best_w["wind_dir"]
+                g_vel = round(best_g["gust_high"], 1)
+                w_deg = best_g["wind_dir"]
                 if w_deg is None:
                     w_deg = next((x["wind_dir"] for x in wind_candidates if x["wind_dir"] is not None), om_hr.get("wind_dir"))
-                w_st_name = best_w["nome"]
+                w_st_name = best_g["nome"]
+                w_max_st_name = best_w["nome"]
             else:
                 # Fallback se todas as estações tiveram pacote de vento 0.0 naquela hora
                 w_vel = round(float(om_hr.get("wind_speed") or 0.0), 1)
@@ -1280,6 +1421,7 @@ def update_historical_spreadsheet(force_refresh_all=False):
                 g_vel = round(max(w_vel, float(om_hr.get("wind_gust") or 0.0)), 1)
                 w_deg = om_hr.get("wind_dir")
                 w_st_name = "Praia da Tartaruga / Rede Municipal"
+                w_max_st_name = w_st_name
 
             w_card = deg_to_cardinal_pt(w_deg)
             w_dir_full = f"{w_card} ({int(round(w_deg))}°)" if w_deg is not None else w_card
@@ -1326,6 +1468,7 @@ def update_historical_spreadsheet(force_refresh_all=False):
                 "vento_rajada_kmh": g_vel,
                 "vento_resumo_hora": w_resumo,
                 "vento_estacao_nome": w_st_name,
+                "vento_max_estacao_nome": w_max_st_name,
                 "temperatura_c": temp_hr,
                 "umidade_pct": hum_hr,
                 "pressao_hpa": press_hr,
@@ -1352,6 +1495,12 @@ def update_historical_spreadsheet(force_refresh_all=False):
         ) if day_hourly_records else 0.0
         max_w_rec = max(day_hourly_records, key=lambda r: r["vento_velocidade_kmh"]) if day_hourly_records else None
         vento_vel_max_dia = max_w_rec["vento_velocidade_kmh"] if max_w_rec else 0.0
+        vento_vel_max_horario = max_w_rec["horario"] if max_w_rec else "00:00"
+        vento_vel_max_estacao = (
+            max_w_rec.get("vento_max_estacao_nome") or max_w_rec.get("vento_estacao_nome", "Praia da Tartaruga")
+            if max_w_rec
+            else "Praia da Tartaruga"
+        )
 
         max_g_rec = max(day_hourly_records, key=lambda r: r["vento_rajada_kmh"]) if day_hourly_records else None
         vento_rajada_max_dia = max_g_rec["vento_rajada_kmh"] if max_g_rec else 0.0
@@ -1380,6 +1529,7 @@ def update_historical_spreadsheet(force_refresh_all=False):
                 "nome": s["nome"],
                 "chuva_mm": round(st_day_rain_totals[s["id"]], 1),
                 "rajada_max_kmh": round(st_day_max_gust[s["id"]], 1),
+                "vento_max_kmh": round(st_day_max_wind[s["id"]], 1),
             }
             for s in STATIONS_META
         }
@@ -1401,6 +1551,8 @@ def update_historical_spreadsheet(force_refresh_all=False):
             "estacoes_totais_dia": estacoes_totais_dia,
             "vento_vel_media_kmh": vento_vel_media_dia,
             "vento_vel_max_kmh": vento_vel_max_dia,
+            "vento_vel_max_horario": vento_vel_max_horario,
+            "vento_vel_max_estacao": vento_vel_max_estacao,
             "vento_dir_predominante": dir_pred_dia,
             "giro_quadrante_sul": giro_sul,
             "vento_rajada_max_kmh": vento_rajada_max_dia,

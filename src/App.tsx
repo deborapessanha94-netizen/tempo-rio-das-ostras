@@ -86,7 +86,7 @@ import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartI
 import { exportHeatIndicesToInstagramPng } from './utils/exportHeatInstagram';
 import { exportWindRoseToInstagramPng } from './utils/exportWindRoseInstagram';
 import { RiverChart } from './components/RiverChart';
-import { HistoricoCalendarSection } from './components/HistoricoCalendarSection';
+import { buildMergedDailyHistoryMap, HistoricoCalendarSection } from './components/HistoricoCalendarSection';
 import {
   COR_HEAT_LEVELS,
   ROTHFUSZ_COEFFICIENTS,
@@ -788,19 +788,22 @@ export default function App() {
   }, [historico]);
 
   const filteredHistDaily = useMemo(() => {
-    const list = historico?.resumo_diario ?? [];
+    const mergedMap = buildMergedDailyHistoryMap(historico, acumulados, windRoseData);
+    const list = Array.from(mergedMap.values()).sort((a, b) => a.data_iso.localeCompare(b.data_iso));
     const filtered = list.filter((d) => {
       const iso = d.data_iso || '';
       const br = d.data_br || '';
-      const ym = d.ano_mes || iso.slice(0, 7) || `${br.slice(6, 10)}-${br.slice(3, 5)}`;
+      const ym = (d as any).ano_mes || iso.slice(0, 7) || `${br.slice(6, 10)}-${br.slice(3, 5)}`;
       if (histMonthFilter !== 'all' && ym !== histMonthFilter) return false;
       const q = histDateFilter.trim().toLowerCase();
       if (q && !br.toLowerCase().includes(q) && !iso.toLowerCase().includes(q)) return false;
-      if (histRainOnly && d.chuva_total_media_mm <= 0) return false;
+      if (histRainOnly && Number(d.chuva_total_media_mm ?? 0) <= 0 && Number(d.chuva_maior_estacao_mm ?? 0) <= 0) {
+        return false;
+      }
       return true;
     });
     return histSortOrder === 'desc' ? filtered.slice().reverse() : filtered;
-  }, [historico, histMonthFilter, histDateFilter, histRainOnly, histSortOrder]);
+  }, [historico, acumulados, windRoseData, histMonthFilter, histDateFilter, histRainOnly, histSortOrder]);
 
   const filteredHistHourly = useMemo(() => {
     const list = historico?.registros_horarios ?? [];
@@ -887,13 +890,14 @@ export default function App() {
   };
 
   const handleDownloadFilteredHistCsv = () => {
-    const headers = ['Data', 'Horas_Chuva', 'Media_mm', 'Maior_mm', 'Estacao_Maior', 'Rajada_Max_kmh', 'Sistema_Atuante'];
+    const headers = ['Data', 'Horas_Chuva', 'Media_mm', 'Maior_mm', 'Estacao_Maior', 'Vento_Max_Sust_kmh', 'Rajada_Max_kmh', 'Sistema_Atuante'];
     const rows = filteredHistDaily.map((d) => [
       d.data_br,
       d.horas_com_chuva,
-      d.chuva_total_media_mm.toFixed(1),
-      d.chuva_maior_estacao_mm.toFixed(1),
-      `"${d.chuva_maior_estacao_nome}"`,
+      Number(d.chuva_total_media_mm ?? 0).toFixed(1),
+      Number(d.chuva_maior_estacao_mm ?? 0).toFixed(1),
+      `"${d.chuva_maior_estacao_nome || 'Rede Municipal'}"`,
+      d.vento_vel_max_kmh?.toFixed(1) ?? '',
       d.vento_rajada_max_kmh?.toFixed(1) ?? '',
       `"${d.sistema_atuante_dia || ''}"`,
     ]);
@@ -4525,7 +4529,7 @@ export default function App() {
                           <th className="py-3 pr-4 font-medium min-w-[115px]">Data</th>
                           <th className="py-3 px-3 font-medium text-right whitespace-nowrap">Média</th>
                           <th className="py-3 px-3 font-medium text-right min-w-[165px]">Pico Rede</th>
-                          <th className="py-3 px-3 font-medium text-right whitespace-nowrap">Rajada Máx</th>
+                          <th className="py-3 px-3 font-medium text-right whitespace-nowrap">Vento / Rajada Máx</th>
                           <th className="py-3 px-3 font-medium text-right whitespace-nowrap">Temp (Mín/Máx)</th>
                           <th className="py-3 pl-4 font-medium min-w-[220px]">Sistema Sinótico Atuante</th>
                         </tr>
@@ -4564,10 +4568,13 @@ export default function App() {
                             </td>
                             <td className="py-3.5 px-3 text-right font-mono whitespace-nowrap align-top">
                               <div className="space-y-0.5">
-                                <div>{d.vento_rajada_max_kmh ? `${d.vento_rajada_max_kmh.toFixed(1)} km/h` : '--'}</div>
-                                {d.vento_dir_predominante && (
-                                  <div className="text-[10px] text-slate-500">{d.vento_dir_predominante}</div>
-                                )}
+                                <div className="font-semibold text-[#14213D] dark:text-white">
+                                  {d.vento_rajada_max_kmh ? `${d.vento_rajada_max_kmh.toFixed(1)} km/h` : '--'}
+                                </div>
+                                <div className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/65">
+                                  {d.vento_vel_max_kmh ? `Máx sust.: ${d.vento_vel_max_kmh.toFixed(1)} km/h · ` : ''}
+                                  {d.vento_dir_predominante || '--'}
+                                </div>
                               </div>
                             </td>
                             <td className="py-3.5 px-3 text-right font-mono whitespace-nowrap align-top">
@@ -7826,7 +7833,7 @@ export default function App() {
                             <th className="px-3 py-2.5">Data</th>
                             <th className="px-3 py-2.5">Predominante</th>
                             <th className="px-3 py-2.5">Vetor / Persist.</th>
-                            <th className="px-3 py-2.5">Vel. Média</th>
+                            <th className="px-3 py-2.5">Vel. Máx / Méd.</th>
                             <th className="px-3 py-2.5">Rajada Máx</th>
                             <th className="px-3 py-2.5">Quad. Sul</th>
                             <th className="px-3 py-2.5">Regime Diário</th>
@@ -7875,8 +7882,11 @@ export default function App() {
                                 <td className="px-3 py-2.5 font-mono text-slate-600 dark:text-[#E5E5E5]/85 whitespace-nowrap">
                                   {row.dir_vetorial_cardeal} ({row.dir_vetorial_graus ?? '--'}°) · {row.persistencia_pct}%
                                 </td>
-                                <td className="px-3 py-2.5 font-mono tabular-nums text-[#14213D] dark:text-white">
-                                  {row.vel_media_kmh.toFixed(1)} km/h
+                                <td className="px-3 py-2.5 font-mono tabular-nums text-[#14213D] dark:text-white whitespace-nowrap">
+                                  <div className="font-semibold">{row.vel_max_kmh.toFixed(1)} km/h</div>
+                                  <div className="text-[10px] text-slate-500 dark:text-[#E5E5E5]/65">
+                                    Méd.: {row.vel_media_kmh.toFixed(1)} km/h
+                                  </div>
                                 </td>
                                 <td className="px-3 py-2.5 font-mono font-semibold tabular-nums text-[#14213D] dark:text-white">
                                   {row.rajada_max_kmh.toFixed(1)} km/h
