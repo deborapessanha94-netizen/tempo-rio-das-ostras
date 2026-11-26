@@ -86,6 +86,7 @@ import { exportChartToInstagramPng, InstagramFormat } from './utils/exportChartI
 import { exportHeatIndicesToInstagramPng } from './utils/exportHeatInstagram';
 import { exportWindRoseToInstagramPng } from './utils/exportWindRoseInstagram';
 import { RiverChart } from './components/RiverChart';
+import { HistoricoCalendarSection } from './components/HistoricoCalendarSection';
 import {
   COR_HEAT_LEVELS,
   ROTHFUSZ_COEFFICIENTS,
@@ -126,6 +127,7 @@ const TAB_SUBSECTIONS: Record<SectionTab, { id: string; label: string; shortLabe
   ],
   chuva: [
     { id: 'resumo', label: 'Resumo & KPIs de Chuva', shortLabel: 'Resumo' },
+    { id: 'calendario', label: 'Calendário Diário (Chuva & Vento)', shortLabel: 'Calendário' },
     { id: 'cards', label: '8 Estações da Rede', shortLabel: '8 Estações' },
     { id: 'tabela', label: 'Tabela Comparativa', shortLabel: 'Tabela' },
     { id: 'planilha', label: 'Histórico em Planilha', shortLabel: 'Planilha' },
@@ -410,6 +412,7 @@ export default function App() {
   const [histDateFilter, setHistDateFilter] = useState<string>('');
   const [histRainOnly, setHistRainOnly] = useState<boolean>(false);
   const [histSortOrder, setHistSortOrder] = useState<'desc' | 'asc'>('desc');
+  const [selectedCalendarIso, setSelectedCalendarIso] = useState<string | null>(null);
 
   const [riverInterval, setRiverInterval] = useState<'hourly' | 'all'>('all');
   const [riverDateFilter, setRiverDateFilter] = useState<string>('all');
@@ -933,6 +936,11 @@ export default function App() {
 
   const mensalOutubro = historico?.resumo_mensal?.find((m) => m.ano_mes === '2026-10') || historico?.resumo_mensal?.[0];
   const mensalNovembro = historico?.resumo_mensal?.find((m) => m.ano_mes === '2026-11');
+  const novMaxIso = useMemo(() => {
+    const nov = (historico?.resumo_diario ?? []).filter((d) => d.data_iso?.startsWith('2026-11'));
+    return nov.length > 0 ? nov[nov.length - 1].data_iso : '2026-11-30';
+  }, [historico]);
+  const novMaxDayNum = Math.max(14, Number(novMaxIso.slice(8, 10)) || 30);
   const bannerMes = mensalNovembro || mensalOutubro;
 
   const panoramaData = useMemo(() => {
@@ -3567,6 +3575,17 @@ export default function App() {
               </section>
             )}
 
+            {/* Sub-aba / Painel Interativo: Calendário Diário de Chuva, Vento & Rajadas */}
+            {(showSub('resumo') || showSub('calendario')) && (
+              <HistoricoCalendarSection
+                historico={historico}
+                acumulados={acumulados}
+                liveWindRose={liveWindRose}
+                selectedIso={selectedCalendarIso}
+                onSelectIso={setSelectedCalendarIso}
+              />
+            )}
+
             {/* Seção Oficial: Exportar Imagens de Acumulados de Chuva e Vento */}
             {showSub('resumo') && (
               <section className="bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] rounded-xl p-5 sm:p-6 space-y-4 shadow-xs">
@@ -4513,7 +4532,17 @@ export default function App() {
                       </thead>
                       <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#233354]">
                         {filteredHistDaily.slice(0, 45).map((d) => (
-                          <tr key={d.data_br} className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60">
+                          <tr
+                            key={d.data_br}
+                            onClick={() => {
+                              if (d.data_iso) {
+                                setSelectedCalendarIso(d.data_iso);
+                                setSubForTab('chuva', 'calendario');
+                              }
+                            }}
+                            title="Clique para abrir este dia no Calendário Diário"
+                            className="hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60 cursor-pointer"
+                          >
                             <td className="py-3.5 pr-4 font-mono whitespace-nowrap align-top">
                               <div className="space-y-0.5">
                                 <div className="font-semibold text-[#14213D] dark:text-white">{d.data_br}</div>
@@ -7766,15 +7795,28 @@ export default function App() {
                           Fechamento diário automático consolidando direção predominante, vetor resultante, persistência, rajadas e entradas de Quadrante Sul.
                         </p>
                       </div>
-                      {serieDiariaDesc.length > 14 && (
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => setWindRoseShowAllDays((v) => !v)}
-                          className="px-3 py-1.5 rounded-lg text-xs font-mono border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white hover:border-[#FF8244] cursor-pointer"
+                          onClick={() => {
+                            setActiveTab('chuva');
+                            setSubForTab('chuva', 'calendario');
+                          }}
+                          className="px-3 py-1.5 rounded-lg text-xs font-medium border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-[#FF8244] hover:border-[#FF8244] cursor-pointer inline-flex items-center gap-1.5"
                         >
-                          {windRoseShowAllDays ? 'Mostrar últimos 14 dias' : `Ver todos (${serieDiariaDesc.length} dias)`}
+                          <Calendar className="w-3.5 h-3.5" />
+                          <span>Abrir Calendário (Chuva &amp; Vento)</span>
                         </button>
-                      )}
+                        {serieDiariaDesc.length > 14 && (
+                          <button
+                            type="button"
+                            onClick={() => setWindRoseShowAllDays((v) => !v)}
+                            className="px-3 py-1.5 rounded-lg text-xs font-mono border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white hover:border-[#FF8244] cursor-pointer"
+                          >
+                            {windRoseShowAllDays ? 'Mostrar últimos 14 dias' : `Ver todos (${serieDiariaDesc.length} dias)`}
+                          </button>
+                        )}
+                      </div>
                     </div>
 
                     <div className="overflow-x-auto rounded-xl border border-[#E5E5E5] dark:border-[#233354]">
@@ -7797,10 +7839,18 @@ export default function App() {
                             return (
                               <tr
                                 key={row.data_iso}
+                                onClick={() => {
+                                  if (row.data_iso) {
+                                    setSelectedCalendarIso(row.data_iso);
+                                    setActiveTab('chuva');
+                                    setSubForTab('chuva', 'calendario');
+                                  }
+                                }}
+                                title="Clique para ver acumulado de chuva e comportamento completo do vento neste dia"
                                 className={
                                   isToday
-                                    ? 'bg-[#FF8244]/5 dark:bg-[#FF8244]/10'
-                                    : 'bg-white dark:bg-[#14213D] hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60'
+                                    ? 'bg-[#FF8244]/5 dark:bg-[#FF8244]/10 cursor-pointer'
+                                    : 'bg-white dark:bg-[#14213D] hover:bg-[#F7F8FA] dark:hover:bg-[#0B1324]/60 cursor-pointer'
                                 }
                               >
                                 <td className="px-3 py-2.5 font-mono font-semibold text-[#14213D] dark:text-white whitespace-nowrap">
@@ -8758,7 +8808,7 @@ export default function App() {
                         onClick={() => {
                           setPanoramaPreset('custom');
                           setPanoramaStart('2026-11-01');
-                          setPanoramaEnd('2026-11-14');
+                          setPanoramaEnd(novMaxIso);
                         }}
                         className={`py-2 px-3 text-xs font-semibold rounded-lg border transition cursor-pointer text-center ${
                           panoramaStart.startsWith('2026-11')
@@ -8799,7 +8849,7 @@ export default function App() {
                           setPanoramaPreset('custom');
                           if (panoramaStart.startsWith('2026-11')) {
                             setPanoramaStart('2026-11-01');
-                            setPanoramaEnd('2026-11-14');
+                            setPanoramaEnd(novMaxIso);
                           } else {
                             setPanoramaStart('2026-10-01');
                             setPanoramaEnd('2026-10-31');
@@ -8817,7 +8867,7 @@ export default function App() {
                           type="date"
                           value={panoramaStart}
                           min={panoramaStart.startsWith('2026-11') ? '2026-11-01' : '2026-10-01'}
-                          max={panoramaStart.startsWith('2026-11') ? '2026-11-14' : '2026-10-31'}
+                          max={panoramaStart.startsWith('2026-11') ? novMaxIso : '2026-10-31'}
                           onChange={(e) => {
                             setPanoramaPreset('custom');
                             setPanoramaStart(e.target.value);
@@ -8831,7 +8881,7 @@ export default function App() {
                           type="date"
                           value={panoramaEnd}
                           min={panoramaStart.startsWith('2026-11') ? '2026-11-01' : '2026-10-01'}
-                          max={panoramaStart.startsWith('2026-11') ? '2026-11-14' : '2026-10-31'}
+                          max={panoramaStart.startsWith('2026-11') ? novMaxIso : '2026-10-31'}
                           onChange={(e) => {
                             setPanoramaPreset('custom');
                             setPanoramaEnd(e.target.value);
@@ -8856,7 +8906,7 @@ export default function App() {
                   </div>
                   <div className="flex flex-wrap items-center gap-1">
                     {(panoramaStart.startsWith('2026-11')
-                      ? Array.from({ length: 14 }, (_, i) => i + 1)
+                      ? Array.from({ length: novMaxDayNum }, (_, i) => i + 1)
                       : Array.from({ length: 31 }, (_, i) => i + 1)
                     ).map((diaNum) => {
                       const monthPrefix = panoramaStart.startsWith('2026-11') ? '2026-11' : '2026-10';
