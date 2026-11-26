@@ -3,40 +3,40 @@
   "status_geral_cor": "danger",
   "tem_alerta_severo": true,
   "tem_alerta_hoje": true,
-  "atualizacao_hora": "25/11/2026 às 23:53h",
+  "atualizacao_hora": "26/11/2026 às 00:01h",
   "cidade": "Rio das Ostras - RJ",
   "dias_inspecionados": [
     {
       "data_iso": "2026-11-25",
       "data_br": "25/11/2026",
       "dia_semana": "Quarta-feira",
-      "alerta_ativo": true,
-      "alerta_rotulo": "Alerta Laranja de Tempestade nº 56501",
-      "alerta_id": 56501,
-      "alerta_cor": "Laranja",
-      "alerta_riscos": "Chuva entre 30 e 60 mm/h ou 50 e 100 mm/dia, ventos intensos (60-100 km/h), e queda de granizo. Risco de corte de energia elétrica, estragos em plantações,  queda de árvores e de alagamentos.",
-      "granizo": true,
-      "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
+      "alerta_ativo": false,
+      "alerta_rotulo": "Sem alertas severos vigentes",
+      "alerta_id": null,
+      "alerta_cor": null,
+      "alerta_riscos": null,
+      "granizo": false,
+      "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
         "media_continua_modelos_mm": 18.4,
-        "teto_tempestade_alerta_mm": 100.0,
-        "faixa_completa_txt": "18.4 mm (Média) • Até 100 mm (Teto Alerta)",
-        "taxa_horaria_pico": "30 a 60 mm/h",
+        "teto_tempestade_alerta_mm": 40.0,
+        "faixa_completa_txt": "18.4 mm",
+        "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "13.8 a 85.0 mm",
+            "volume_estimado": "13.8 a 20.2 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "18.4 a 100.0 mm",
+            "volume_estimado": "18.4 a 40.0 mm",
             "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "23.0 a 135.0 mm",
+            "volume_estimado": "23.0 a 27.6 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -49,12 +49,12 @@
         }
       },
       "vento": {
-        "rajada_faixa": "60 a 100 km/h",
-        "rajada_pico_modelado_kmh": 28.7,
+        "rajada_faixa": "Até 31 km/h",
+        "rajada_pico_modelado_kmh": 31.3,
         "horario_pico": "Entre 14h e 18h (pico por volta das 20:00)",
-        "direcao_pico": "Oeste-Sudoeste (WSW)",
+        "direcao_pico": "Oeste (W)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
-        "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
+        "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
         "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
       },
       "instrucoes_seguranca": [
@@ -132,25 +132,25 @@
       "granizo": false,
       "granizo_detalhe": "Sem previsão de granizo.",
       "chuva": {
-        "media_continua_modelos_mm": 5.0,
+        "media_continua_modelos_mm": 4.8,
         "teto_tempestade_alerta_mm": 10.0,
-        "faixa_completa_txt": "5.0 mm",
+        "faixa_completa_txt": "4.8 mm",
         "taxa_horaria_pico": "< 5 mm/h",
         "janela_critica_horaria": "00:00 às 24:00h",
         "distribuicao_geografica": {
           "orla_costeira": {
             "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-            "volume_estimado": "3.8 a 5.5 mm",
+            "volume_estimado": "3.6 a 5.3 mm",
             "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
           },
           "centro_urbano": {
             "regiao": "Centro Urbano & Baixadas",
-            "volume_estimado": "5.0 a 10.0 mm",
+            "volume_estimado": "4.8 a 10.0 mm",
             "caracteristica": "Volume baixo a moderado sem sobrecarga esperada na drenagem urbana."
           },
           "regiao_rural": {
             "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-            "volume_estimado": "6.2 a 7.5 mm",
+            "volume_estimado": "6.0 a 7.2 mm",
             "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
           }
         },
@@ -467,33 +467,33 @@
     "data_iso": "2026-11-25",
     "data_br": "25/11/2026",
     "dia_semana": "Quarta-feira",
-    "alerta_ativo": true,
-    "alerta_rotulo": "Alerta Laranja de Tempestade nº 56501",
-    "alerta_id": 56501,
-    "alerta_cor": "Laranja",
-    "alerta_riscos": "Chuva entre 30 e 60 mm/h ou 50 e 100 mm/dia, ventos intensos (60-100 km/h), e queda de granizo. Risco de corte de energia elétrica, estragos em plantações,  queda de árvores e de alagamentos.",
-    "granizo": true,
-    "granizo_detalhe": "Possibilidade de granizo miúdo e pontual em células convectivas de tempestade.",
+    "alerta_ativo": false,
+    "alerta_rotulo": "Sem alertas severos vigentes",
+    "alerta_id": null,
+    "alerta_cor": null,
+    "alerta_riscos": null,
+    "granizo": false,
+    "granizo_detalhe": "Sem previsão de granizo.",
     "chuva": {
       "media_continua_modelos_mm": 18.4,
-      "teto_tempestade_alerta_mm": 100.0,
-      "faixa_completa_txt": "18.4 mm (Média) • Até 100 mm (Teto Alerta)",
-      "taxa_horaria_pico": "30 a 60 mm/h",
+      "teto_tempestade_alerta_mm": 40.0,
+      "faixa_completa_txt": "18.4 mm",
+      "taxa_horaria_pico": "< 5 mm/h",
       "janela_critica_horaria": "00:00 às 24:00h",
       "distribuicao_geografica": {
         "orla_costeira": {
           "regiao": "Orla e Praias (Costazul, Tartaruga, Bosque)",
-          "volume_estimado": "13.8 a 85.0 mm",
+          "volume_estimado": "13.8 a 20.2 mm",
           "caracteristica": "Chuva passageira com brisa marítima; menor retenção superficial."
         },
         "centro_urbano": {
           "regiao": "Centro Urbano & Baixadas",
-          "volume_estimado": "18.4 a 100.0 mm",
+          "volume_estimado": "18.4 a 40.0 mm",
           "caracteristica": "Atenção preventiva a pontos de drenagem lenta durante pancadas localizadas."
         },
         "regiao_rural": {
           "regiao": "Região Rural (Cantagalo, Palmital, Rocha Leão)",
-          "volume_estimado": "23.0 a 135.0 mm",
+          "volume_estimado": "23.0 a 27.6 mm",
           "caracteristica": "Maior potencial convectivo pela proximidade com a serra e aquecimento continental."
         }
       },
@@ -506,12 +506,12 @@
       }
     },
     "vento": {
-      "rajada_faixa": "60 a 100 km/h",
-      "rajada_pico_modelado_kmh": 28.7,
+      "rajada_faixa": "Até 31 km/h",
+      "rajada_pico_modelado_kmh": 31.3,
       "horario_pico": "Entre 14h e 18h (pico por volta das 20:00)",
-      "direcao_pico": "Oeste-Sudoeste (WSW)",
+      "direcao_pico": "Oeste (W)",
       "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
-      "impacto_infraestrutura": "Baixo risco de corte de energia elétrica, oscilação na rede e queda isolada de pequenos galhos sob rajadas de 40 a 60 km/h.",
+      "impacto_infraestrutura": "Ventos em padrão operacional regular sem riscos estruturais.",
       "impacto_maritimo": "Mar moderado com ondas de 1,2 a 1,6 m na orla e marola de vento na faixa oceânica."
     },
     "instrucoes_seguranca": [
@@ -577,5 +577,5 @@
       "Em caso de emergência ou alagamentos pontuais, acione a Defesa Civil Municipal pelo telefone 199 ou o Corpo de Bombeiros pelo 193."
     ]
   },
-  "sintese_tecnica_precisao": "Atenção para Alerta Laranja de Tempestade nº 56501 na janela 00:00 às 24:00h: média contínua estimada em 18.4 mm com teto convectivo de até 100 mm e rajadas de 60 a 100 km/h."
+  "sintese_tecnica_precisao": "Atenção para Sem alertas severos vigentes na janela 00:00 às 24:00h: média contínua estimada em 18.4 mm com teto convectivo de até 40 mm e rajadas de Até 31 km/h."
 }
