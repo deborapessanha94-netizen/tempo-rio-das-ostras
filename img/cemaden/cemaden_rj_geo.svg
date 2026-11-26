@@ -20,7 +20,7 @@
     <!-- barra-do-pirai -->
     <g id="barra-do-pirai">
         <title>BARRA DO PIRAÍ</title>
-        <path id="68" style="fill: #FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 61039,128088 -1466,-1187 -140,-629 -419,-628 -628,-210 1396,-1012 873,-1083 664,-349 1537,-1118 -105,-140 -5239,-1711 0,-489 559,-1292 489,-314 314,-1222 2689,-2200 -139,-559 104,-70 420,733 523,315 1327,-105 908,244 524,2235 489,-314 489,314 70,419 628,-34 245,-280 454,454 -175,489 -349,-140 -629,734 489,349 -35,559 1712,-2061 1362,-384 558,-1117 1013,-280 943,-768 419,70 419,873 -524,663 -489,2515 664,-280 174,1048 524,140 0,-803 629,-105 1152,-1467 419,314 489,0 -35,489 839,-174 244,454 279,35 35,523 594,978 1117,1013 -384,279 -489,1118 -663,908 -419,105 35,209 768,175 105,349 349,70 -105,489 384,244 -698,-70 -279,4121 -524,1013 -908,209 -384,1188 -699,139 -244,-384 -349,0 34,-873 -209,-139 1013,-874 -454,-663 -804,349 -1047,-454 -280,-489 -663,245 35,663 -699,524 -35,349 -3108,-593 -1990,-385 -559,315 -1851,-280 -768,105 -419,-209 -279,-350 -70,-628 -1083,-1118 -419,140 -245,768 z" class="mapsvg-region"></path>
+        <path id="68" style="fill: #fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 61039,128088 -1466,-1187 -140,-629 -419,-628 -628,-210 1396,-1012 873,-1083 664,-349 1537,-1118 -105,-140 -5239,-1711 0,-489 559,-1292 489,-314 314,-1222 2689,-2200 -139,-559 104,-70 420,733 523,315 1327,-105 908,244 524,2235 489,-314 489,314 70,419 628,-34 245,-280 454,454 -175,489 -349,-140 -629,734 489,349 -35,559 1712,-2061 1362,-384 558,-1117 1013,-280 943,-768 419,70 419,873 -524,663 -489,2515 664,-280 174,1048 524,140 0,-803 629,-105 1152,-1467 419,314 489,0 -35,489 839,-174 244,454 279,35 35,523 594,978 1117,1013 -384,279 -489,1118 -663,908 -419,105 35,209 768,175 105,349 349,70 -105,489 384,244 -698,-70 -279,4121 -524,1013 -908,209 -384,1188 -699,139 -244,-384 -349,0 34,-873 -209,-139 1013,-874 -454,-663 -804,349 -1047,-454 -280,-489 -663,245 35,663 -699,524 -35,349 -3108,-593 -1990,-385 -559,315 -1851,-280 -768,105 -419,-209 -279,-350 -70,-628 -1083,-1118 -419,140 -245,768 z" class="mapsvg-region"></path>
     </g>
 
     <!-- barra-mansa -->
@@ -76,7 +76,7 @@
     <!-- vassouras -->
     <g id="vassouras">
         <title>VASSOURAS</title>
-        <path id="81" style="fill:#FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 79024,125469 -384,-244 105,-489 -349,-70 -105,-349 -768,-175 -35,-209 419,-105 663,-908 489,-1118 384,-279 454,-314 734,-943 -105,-524 698,-175 1118,734 629,-838 69,-873 210,-140 838,-35 -35,-664 105,-454 768,-34 175,-245 0,-209 -454,-175 35,-699 733,-733 210,-35 942,245 559,-594 769,-384 488,349 385,-105 1117,-1327 1816,-1571 2270,803 594,-1153 -175,-1222 349,-489 2130,908 664,-1257 0,-978 279,-174 699,105 1641,1466 699,-454 174,-454 978,-558 3527,4120 -10232,2549 -524,1293 35,314 384,-105 594,2270 209,384 454,245 -70,384 -873,908 -349,663 1013,1257 -1048,524 210,559 -803,838 -873,-279 -594,628 -978,5239 -384,-1502 -803,-3073 -699,-314 -8695,2793 -1572,-977 -698,-1118 174,-244 -384,-210 z" class="mapsvg-region"></path>
+        <path id="81" style="fill:#fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 79024,125469 -384,-244 105,-489 -349,-70 -105,-349 -768,-175 -35,-209 419,-105 663,-908 489,-1118 384,-279 454,-314 734,-943 -105,-524 698,-175 1118,734 629,-838 69,-873 210,-140 838,-35 -35,-664 105,-454 768,-34 175,-245 0,-209 -454,-175 35,-699 733,-733 210,-35 942,245 559,-594 769,-384 488,349 385,-105 1117,-1327 1816,-1571 2270,803 594,-1153 -175,-1222 349,-489 2130,908 664,-1257 0,-978 279,-174 699,105 1641,1466 699,-454 174,-454 978,-558 3527,4120 -10232,2549 -524,1293 35,314 384,-105 594,2270 209,384 454,245 -70,384 -873,908 -349,663 1013,1257 -1048,524 210,559 -803,838 -873,-279 -594,628 -978,5239 -384,-1502 -803,-3073 -699,-314 -8695,2793 -1572,-977 -698,-1118 174,-244 -384,-210 z" class="mapsvg-region"></path>
     </g>
 
     <!-- paty-do-alferes -->
@@ -395,7 +395,7 @@
     <!-- mendes -->
     <g id="mendes">
         <title>MENDES</title>
-        <path id="86" style="fill: #FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 76231,131930 384,-1188 908,-209 524,-1013 279,-4121 698,70 384,210 -174,244 698,1118 1572,977 1257,3213 -978,594 -70,803 -1012,175 -2410,2130 -314,105 -70,768 -210,-664 245,-488 -419,-629 104,-1013 -384,-174 -384,-978 -628,70 z" class="mapsvg-region"></path>
+        <path id="86" style="fill: #fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 76231,131930 384,-1188 908,-209 524,-1013 279,-4121 698,70 384,210 -174,244 698,1118 1572,977 1257,3213 -978,594 -70,803 -1012,175 -2410,2130 -314,105 -70,768 -210,-664 245,-488 -419,-629 104,-1013 -384,-174 -384,-978 -628,70 z" class="mapsvg-region"></path>
     </g>
 
     <!-- PARACAMBI -->
@@ -431,7 +431,7 @@
     <!-- nilopolis -->
     <g id="nilopolis">
         <title>NILÓPOLIS</title>
-        <path id="6" style="fill: #FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 97638,152289 1397,-1117 733,-1153 803,-524 908,-628 1362,1536 -1606,489 -699,943 -2130,1048 -768,-594 z" class="mapsvg-region"></path>
+        <path id="6" style="fill: #fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 97638,152289 1397,-1117 733,-1153 803,-524 908,-628 1362,1536 -1606,489 -699,943 -2130,1048 -768,-594 z" class="mapsvg-region"></path>
     </g>
 
 
@@ -450,13 +450,13 @@
     <!-- mesquita -->
     <g id="mesquita">
         <title>MESQUITA</title>
-        <path id="5" style="fill: #FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 96031,150578 140,-978 1641,-209 1362,-1118 -139,-209 279,-454 768,-594 315,105 733,-210 1292,908 -943,1048 -908,628 -803,524 -733,1153 -1397,1117 -908,-768 -419,-978 -280,35 z" class="mapsvg-region"></path>
+        <path id="5" style="fill: #fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 96031,150578 140,-978 1641,-209 1362,-1118 -139,-209 279,-454 768,-594 315,105 733,-210 1292,908 -943,1048 -908,628 -803,524 -733,1153 -1397,1117 -908,-768 -419,-978 -280,35 z" class="mapsvg-region"></path>
     </g>
 
     <!-- sao-joao-de-meriti -->
     <g id="sao-joao-de-meriti">
         <title>SÃO JOÃO DE MERITI</title>
-        <path id="8" style="fill: #FFE510; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 101479,148867 943,-1048 768,-768 3527,-699 0,3178 -1850,105 -2026,768 -1362,-1536 z" class="mapsvg-region"></path>
+        <path id="8" style="fill: #fd7e14; fill-opacity: 1; stroke: #ffffff; stroke-width: 1.2px; stroke-miterlimit: 4; stroke-dasharray: none; stroke-opacity: 0.9; vector-effect: non-scaling-stroke;" d="m 101479,148867 943,-1048 768,-768 3527,-699 0,3178 -1850,105 -2026,768 -1362,-1536 z" class="mapsvg-region"></path>
     </g>
 
     <!-- belford-roxo -->

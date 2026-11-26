@@ -1,6 +1,6 @@
 {
   "chuva_diaria": {
-    "2026-10-17": 2.0,
+    "2026-10-17": 1.6,
     "2026-10-18": 1.8,
     "2026-10-19": 1.4,
     "2026-10-20": 2.4,
@@ -39,105 +39,10 @@
     "2026-11-22": 0.0,
     "2026-11-23": 0.0,
     "2026-11-24": 0.0,
-    "2026-11-25": 8.6
+    "2026-11-25": 8.6,
+    "2026-11-26": 1.0
   },
   "dados": [
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.2,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160300,
-      "datetime_brt": "2026-11-16T00:00:00-03:00",
-      "nivel": 1.26
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.2,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160330,
-      "datetime_brt": "2026-11-16T00:30:00-03:00",
-      "nivel": 1.26
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.2,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160400,
-      "datetime_brt": "2026-11-16T01:00:00-03:00",
-      "nivel": 1.25
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.2,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160430,
-      "datetime_brt": "2026-11-16T01:30:00-03:00",
-      "nivel": 1.25
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160500,
-      "datetime_brt": "2026-11-16T02:00:00-03:00",
-      "nivel": 1.25
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160530,
-      "datetime_brt": "2026-11-16T02:30:00-03:00",
-      "nivel": 1.24
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160600,
-      "datetime_brt": "2026-11-16T03:00:00-03:00",
-      "nivel": 1.24
-    },
-    {
-      "chuva": 0.0,
-      "chuva_15min": 0.0,
-      "chuva_1h": 0.0,
-      "chuva_24h": 0.0,
-      "chuva_30d": 51.0,
-      "chuva_4h": 0.0,
-      "chuva_96h": 0.0,
-      "datai": 202611160630,
-      "datetime_brt": "2026-11-16T03:30:00-03:00",
-      "nivel": 1.24
-    },
     {
       "chuva": 0.0,
       "chuva_15min": 0.0,
@@ -5729,8 +5634,104 @@
       "datai": 202611252330,
       "datetime_brt": "2026-11-25T20:30:00-03:00",
       "nivel": 1.5
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260000,
+      "datetime_brt": "2026-11-25T21:00:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260030,
+      "datetime_brt": "2026-11-25T21:30:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260100,
+      "datetime_brt": "2026-11-25T22:00:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260130,
+      "datetime_brt": "2026-11-25T22:30:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260200,
+      "datetime_brt": "2026-11-25T23:00:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.0,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.0,
+      "chuva_24h": 0.0,
+      "chuva_30d": 50.8,
+      "chuva_4h": 0.0,
+      "chuva_96h": 0.0,
+      "datai": 202611260230,
+      "datetime_brt": "2026-11-25T23:30:00-03:00",
+      "nivel": 1.49
+    },
+    {
+      "chuva": 0.6,
+      "chuva_15min": 0.6,
+      "chuva_1h": 0.6,
+      "chuva_24h": 0.6,
+      "chuva_30d": 51.4,
+      "chuva_4h": 0.6,
+      "chuva_96h": 0.6,
+      "datai": 202611260300,
+      "datetime_brt": "2026-11-26T00:00:00-03:00",
+      "nivel": 1.5
+    },
+    {
+      "chuva": 0.4,
+      "chuva_15min": 0.0,
+      "chuva_1h": 0.4,
+      "chuva_24h": 0.4,
+      "chuva_30d": 51.8,
+      "chuva_4h": 0.4,
+      "chuva_96h": 0.4,
+      "datai": 202611260330,
+      "datetime_brt": "2026-11-26T00:30:00-03:00",
+      "nivel": 1.5
     }
   ],
   "estacao": "2241036",
-  "total_30d": 73.8
+  "total_30d": 74.4
 }
