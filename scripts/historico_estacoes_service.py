@@ -420,14 +420,34 @@ def classify_day_synoptic_and_characteristics(day_summary, prev_day_summary=None
             f"Chuva forte/significativa registrada (PLANCON Nível III Atenção): média municipal de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}), "
             f"distribuída em {rain_hours}h do dia (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
+    elif rain_max_st >= 50.0:
+        partes_carac.append(
+            f"Chuva moderada a forte registrada (PLANCON Nível II Observação): média na rede de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}) "
+            f"em {rain_hours}h com registro (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+        )
     elif rain_max_st >= 20.0:
         partes_carac.append(
             f"Chuva moderada registrada (PLANCON Nível II Observação): média na rede de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm ({rain_max_st_name}) "
             f"em {rain_hours}h com registro (máxima horária de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
-    elif rain_max_st > 0.0:
+    elif rain_max_st >= 15.0:
+        partes_carac.append(
+            f"Chuva moderada registrada (PLANCON Normalidade — limítrofe): média de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm em {rain_max_st_name} "
+            f"(pico horário de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+        )
+    elif rain_max_st >= 10.0:
+        partes_carac.append(
+            f"Chuva fraca a moderada registrada (PLANCON Normalidade): média de {rain_mean:.1f} mm e pico de {rain_max_st:.1f} mm em {rain_max_st_name} "
+            f"(pico horário de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+        )
+    elif rain_max_st >= 1.0:
         partes_carac.append(
             f"Chuva fraca/isolada (PLANCON Normalidade): média de {rain_mean:.1f} mm e máx de {rain_max_st:.1f} mm em {rain_max_st_name} "
+            f"(pico horário de {peak_hr_rain:.1f} mm às {peak_hr_time})"
+        )
+    elif rain_max_st > 0.0:
+        partes_carac.append(
+            f"Chuva muito fraca/garoa (PLANCON Normalidade): média de {rain_mean:.1f} mm e máx de {rain_max_st:.1f} mm em {rain_max_st_name} "
             f"(pico horário de {peak_hr_rain:.1f} mm às {peak_hr_time})"
         )
     else:

@@ -113,10 +113,10 @@ export interface PlanconRainClassification {
 }
 
 /**
- * Classifica o volume diário (mm/24h) estritamente pelos limiares oficiais do PLANCON
+ * Classifica o volume diário (mm/24h) integrando os níveis operacionais do PLANCON
  * de Rio das Ostras (Tabelas 8 e 9, págs. 22–23; PLANCON El Niño Tabelas 4 e 5, págs. 32–38):
- * - Até 20 mm (Geo) / 30 mm (Hidro): Nível I • Normalidade (Chuva fraca / muito fraca / sem chuva)
- * - 20 a < 70 mm (Geo 20–70 / Hidro 30–70): Nível II • Observação (Volume moderado -> Chuva moderada)
+ * - Até 20 mm (Geo) / 30 mm (Hidro): Nível I • Normalidade (< 0,2 sem chuva · 0,2–1 muito fraca · 1–10 fraca · 10–15 fraca a moderada · 15–20 moderada)
+ * - 20 a < 70 mm (Geo 20–70 / Hidro 30–70): Nível II • Observação (20–50 moderada · 50–70 moderada a forte)
  * - 70 a < 100 mm: Nível III • Atenção (Chuva significativa / intensa -> Chuva forte)
  * - 100 a 130 mm: Nível IV • Alerta (Chuva muito forte)
  * - > 130 mm: Nível V • Alerta Máximo (Chuva muito forte / extrema)
@@ -150,6 +150,15 @@ export function classifyRainPlancon(chuvaMm: number): PlanconRainClassification 
       regra: '70 a 100 mm/24h (PLANCON)',
     };
   }
+  if (mm >= 50) {
+    return {
+      titulo: 'Chuva moderada a forte',
+      curto: 'Moderada a Forte',
+      nivel: 'Nível II — Observação',
+      tone: 'observacao',
+      regra: '50 a < 70 mm/24h (PLANCON Hidro/Geo)',
+    };
+  }
   if (mm >= 20) {
     return {
       titulo: 'Chuva moderada',
@@ -159,13 +168,31 @@ export function classifyRainPlancon(chuvaMm: number): PlanconRainClassification 
       regra: mm >= 30 ? '30 a 70 mm/24h (PLANCON Hidro/Geo)' : '20 a 30 mm/24h (PLANCON Geo)',
     };
   }
+  if (mm >= 15) {
+    return {
+      titulo: 'Chuva moderada',
+      curto: 'Moderada',
+      nivel: 'Nível I — Normalidade',
+      tone: 'normal',
+      regra: '15 a < 20 mm/24h (limítrofe ao Nível II PLANCON Geo)',
+    };
+  }
+  if (mm >= 10) {
+    return {
+      titulo: 'Chuva fraca a moderada',
+      curto: 'Fraca a Moderada',
+      nivel: 'Nível I — Normalidade',
+      tone: 'normal',
+      regra: '10 a < 15 mm/24h (PLANCON Normalidade)',
+    };
+  }
   if (mm >= 1.0) {
     return {
       titulo: 'Chuva fraca',
       curto: 'Fraca',
       nivel: 'Nível I — Normalidade',
       tone: 'normal',
-      regra: 'Até 20/30 mm/24h (PLANCON)',
+      regra: '1 a < 10 mm/24h (PLANCON Normalidade)',
     };
   }
   if (mm >= 0.2) {
@@ -234,14 +261,22 @@ export function classifyWindPlancon(windKmh?: number | null, gustKmh?: number | 
   return { windTitulo, gustTitulo, riscoLabel: 'Risco Baixo (PLANCON)', beaufort: 'Beaufort 0–5', tone: 'baixo' };
 }
 
-function classifyRainIntensityLabel(
+export function classifyRainIntensityLabel(
   chuvaMm: number,
   hasAlert?: boolean,
   alertColor?: string | null,
-  alertDesc?: string | null
+  alertDesc?: string | null,
+  hasThunder?: boolean,
+  p90Mm?: number | null
 ): string {
   const mm = Number.isFinite(chuvaMm) ? Math.max(0, chuvaMm) : 0;
   if (mm >= 70 || !hasAlert) {
+    const p90 = p90Mm !== null && p90Mm !== undefined && Number.isFinite(Number(p90Mm)) ? Number(p90Mm) : 0;
+    if (mm < 70) {
+      if (mm >= 35 && (hasThunder || p90 >= 70)) return 'Chuva moderada a forte';
+      if (mm >= 10 && mm < 15 && (hasThunder || p90 >= 30)) return 'Chuva moderada';
+      if (mm >= 6 && mm < 10 && (hasThunder || p90 >= 25)) return 'Chuva fraca a moderada';
+    }
     return classifyRainPlancon(mm).titulo;
   }
   const corL = String(alertColor || 'Amarelo').toLowerCase();
@@ -852,8 +887,12 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
       qtd_fontes_numericas: samples.length,
     };
 
+    const cardPre = meta.dias_resumo?.[dIdx];
+    const hasThunderDay = /trovoad|tempestad/i.test(
+      `${inmetResumoStr || ''} ${cardPre?.subtitulo || ''} ${cardPre?.pilares?.ceu?.val || ''}`
+    );
     const alertDescStr = activeAlert?.descricao || prevDia.alerta_inmet_desc || prevFontes.inmet_aviso_desc || null;
-    const rainIntensityLabel = classifyRainIntensityLabel(p50, Boolean(activeAlert), activeAlert?.cor_nome, alertDescStr);
+    const rainIntensityLabel = classifyRainIntensityLabel(p50, Boolean(activeAlert), activeAlert?.cor_nome, alertDescStr, hasThunderDay, p90);
     prevDia.intensidade_chuva = rainIntensityLabel;
     prevDia.chuva_media_modelos_mm = p50;
     prevDia.chuva_p25_mm = p25;
@@ -932,22 +971,39 @@ export function reconcileLiveRainConsensus(inputs: LiveConsensusInputs): LiveCon
     }
     if (card && Array.isArray(card.informe_populacao) && card.informe_populacao.length >= 2) {
       let updatedP2 = String(card.informe_populacao[1] || '');
-      if (Math.abs(p50 - oldDayMm) >= 0.2) {
+      if (Math.abs(p50 - oldDayMm) >= 0.05) {
         updatedP2 = updatedP2.replace(
           /\((?:consenso(?: P50)? de|m[eé]dia de|acumulado (?:estimado|previsto) de)\s+\d+(?:[.,]\d+)?\s*mm(?:[^)]*)\)/i,
           `(consenso de ${p50.toFixed(1)} mm no dia; probabilidade de ${probPct}%)`
         );
       }
       if (p50 >= 0.2) {
+        const adjShort = rainIntensityLabel.replace(/^Chuva\s+/i, '').toLowerCase();
         const phraseLabel = activeAlert
           ? (String(alertDescStr || '').toLowerCase().includes('tempestad')
               ? 'pancadas de chuva com risco de tempestade e trovoadas'
               : 'chuvas intensas em forma de pancadas')
-          : rainPlancon.titulo.toLowerCase();
-        updatedP2 = updatedP2.replace(
-          /chuva\s+(?:muito\s+forte|extrema\s*\/\s*muito\s+forte|significativa\s+a\s+forte|forte|moderada|muito\s+fraca|fraca)(?:\s*\(com possibilidade[^)]*\))?/i,
-          phraseLabel
-        );
+          : `${rainIntensityLabel.toLowerCase()}${hasThunderDay ? ' (com possibilidade de pancadas pontuais e trovoadas)' : ''}`;
+
+        if (/(chuva\s+p[oó]s-frontal\s+)(?:extrema\s*\/\s*muito\s+forte|muito\s+forte|significativa\s+a\s+forte|moderada\s+a\s+forte|fraca\s+a\s+moderada|muito\s+fraca|forte|moderada|fraca)/i.test(updatedP2) && !activeAlert) {
+          updatedP2 = updatedP2.replace(
+            /(chuva\s+p[oó]s-frontal\s+)(?:extrema\s*\/\s*muito\s+forte|muito\s+forte|significativa\s+a\s+forte|moderada\s+a\s+forte|fraca\s+a\s+moderada|muito\s+fraca|forte|moderada|fraca)/i,
+            `$1${adjShort}`
+          );
+        } else if (/sem\s+chuva\s+significativa|tempo\s+seco/i.test(updatedP2) && p50 >= 1.0) {
+          updatedP2 = `Previsão de ${phraseLabel} ao longo do dia (consenso de ${p50.toFixed(1)} mm no dia; probabilidade de ${probPct}%).`;
+        } else {
+          updatedP2 = updatedP2.replace(
+            /chuva\s+(?:extrema\s*\/\s*muito\s+forte|muito\s+forte|significativa\s+a\s+forte|moderada\s+a\s+forte|fraca\s+a\s+moderada|muito\s+fraca\s+ou\s+chuvisco|muito\s+fraca|forte|moderada|fraca)(?:\s+e\s+(?:muito\s+isolada|isolada|passageira))?(?:\s*\(com possibilidade[^)]*\))?/i,
+            phraseLabel
+          );
+        }
+        if (typeof card.descricao === 'string' && card.descricao) {
+          card.descricao = String(card.descricao).replace(
+            /Previsão de\s+(?:chuva\s+(?:extrema\s*\/\s*muito\s+forte|muito\s+forte|significativa\s+a\s+forte|moderada\s+a\s+forte|fraca\s+a\s+moderada|muito\s+fraca\s+ou\s+chuvisco|muito\s+fraca|forte|moderada|fraca)|sem\s+chuva\s+significativa)(?:\s*\(com possibilidade[^)]*\))?/i,
+            `Previsão de ${phraseLabel}`
+          );
+        }
       }
       card.informe_populacao[1] = updatedP2;
     }

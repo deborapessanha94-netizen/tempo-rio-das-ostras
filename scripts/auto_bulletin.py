@@ -2317,9 +2317,10 @@ def run_auto_bulletin_pipeline():
             return "durante a madrugada"
         return "entre " + " e ".join(names_lc[t] for t in sig[:2])
 
-    def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False, alert_desc=None):
-        """Classifica precipitação diária (mm/24h) integrando limiares PLANCON e vigência convectiva de Alertas INMET."""
+    def _classify_rain_nomenclature(chuva_mm, has_alert=False, alert_color=None, has_thunder=False, alert_desc=None, p90_mm=None):
+        """Classifica precipitação diária (mm/24h) condizente com volume, envelope P90, trovoadas, PLANCON e Alertas INMET."""
         mm = float(chuva_mm or 0.0)
+        p90 = float(p90_mm or 0.0)
         extra = " (com possibilidade de pancadas pontuais e trovoadas)" if (has_thunder or has_alert) else ""
         if mm > 130.0:
             return {"titulo": "Chuva muito forte", "frase": f"chuva extrema / muito forte{extra}", "curto": "muito forte"}
@@ -2354,8 +2355,12 @@ def run_auto_bulletin_pipeline():
                 "frase": "chuvas moderadas a intensas em forma de pancadas com trovoadas" if mm >= 20.0 else "chuvas intensas localizadas em forma de pancadas com raios e trovoadas",
                 "curto": "chuvas intensas",
             }
-        if mm >= 20.0:
+        if mm >= 50.0 or (mm >= 35.0 and (has_thunder or p90 >= 70.0)):
+            return {"titulo": "Chuva moderada a forte", "frase": f"chuva moderada a forte{extra}", "curto": "moderada a forte"}
+        if mm >= 15.0 or (mm >= 10.0 and (has_thunder or p90 >= 30.0)):
             return {"titulo": "Chuva moderada", "frase": f"chuva moderada{extra}", "curto": "moderada"}
+        if mm >= 10.0 or (mm >= 6.0 and (has_thunder or p90 >= 25.0)):
+            return {"titulo": "Chuva fraca a moderada", "frase": f"chuva fraca a moderada{extra}", "curto": "fraca a moderada"}
         if mm >= 1.0:
             return {"titulo": "Chuva fraca", "frase": f"chuva fraca{extra}", "curto": "fraca"}
         if mm >= 0.2:
@@ -2528,7 +2533,8 @@ def run_auto_bulletin_pipeline():
         elif codigo == 'cavado_frontal_fraco':
             t1 = f"{pron} {dia_nome}, a passagem de um cavado costeiro induz rotação dos ventos do quadrante Norte para Sul/Sudoeste ({vento_faixa}), elevando a umidade relativa ao longo do dia com nebulosidade variável e calor abafado."
         else:
-            r_t1 = _classify_rain_nomenclature(chuva_tot, len(alerts_d) > 0, (alerts_d[0].get('cor_nome') if alerts_d else None), has_thunder, (alerts_d[0].get('descricao') if alerts_d else None))
+            d_p90_t1 = (d.get('probabilistico') or {}).get('p90_teto_mm')
+            r_t1 = _classify_rain_nomenclature(chuva_tot, len(alerts_d) > 0, (alerts_d[0].get('cor_nome') if alerts_d else None), has_thunder, (alerts_d[0].get('descricao') if alerts_d else None), d_p90_t1)
             w_t1 = _classify_wind_nomenclature(day_turnos, d.get('rajada_max', 25.0))
             if chuva_tot < 0.2 and len(alerts_d) == 0:
                 chuva_t1_clause = "predomínio de sol entre poucas nuvens, sem chuva significativa"
@@ -2613,7 +2619,8 @@ def run_auto_bulletin_pipeline():
         tem_alerta_dia = len(day_alerts) > 0
         alerta_cor_dia = d.get('alerta_cor', 'Amarelo')
         alerta_desc_card = (day_alerts[0].get('descricao') if day_alerts else d.get('alerta_desc'))
-        rain_info = _classify_rain_nomenclature(chuva_tot, tem_alerta_dia, alerta_cor_dia, has_thunder, alerta_desc_card)
+        d_p90_inf = (d.get('probabilistico') or {}).get('p90_teto_mm')
+        rain_info = _classify_rain_nomenclature(chuva_tot, tem_alerta_dia, alerta_cor_dia, has_thunder, alerta_desc_card, d_p90_inf)
         prob_d = int(d.get('chuva_prob_dia', 25))
         prob_clause = f"consenso de {chuva_tot:.1f} mm no dia; probabilidade de {prob_d}%"
 
@@ -2714,8 +2721,8 @@ def run_auto_bulletin_pipeline():
     prep2 = prep_dia(d2['dia_semana'])
     prep3 = prep_dia(d3['dia_semana'])
 
-    d0_r_info = _classify_rain_nomenclature(d0['chuva_tot'], d0.get('tem_alerta_inmet', False), d0.get('alerta_cor'), True if d0_alerts else False, d0.get('alerta_desc'))
-    d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'), True if d1_alerts else False, d1.get('alerta_desc'))
+    d0_r_info = _classify_rain_nomenclature(d0['chuva_tot'], d0.get('tem_alerta_inmet', False), d0.get('alerta_cor'), True if d0_alerts else False, d0.get('alerta_desc'), (d0.get('probabilistico') or {}).get('p90_teto_mm'))
+    d1_r_info = _classify_rain_nomenclature(d1['chuva_tot'], d1.get('tem_alerta_inmet', False), d1.get('alerta_cor'), True if d1_alerts else False, d1.get('alerta_desc'), (d1.get('probabilistico') or {}).get('p90_teto_mm'))
     d0_turnos_syn = [r for r in records_12_turnos if r['data_iso'] == d0['date_iso']]
     d0_w_info = _classify_wind_nomenclature(d0_turnos_syn, d0.get('rajada_max', 25.0))
     d0_vol_txt = d0.get('chuva_faixa_txt') or f"{d0['chuva_tot']:.1f} mm"
@@ -2858,9 +2865,10 @@ def run_auto_bulletin_pipeline():
 
         ch_card_val = d.get('chuva_card_pill', f"{dia_chuva:.1f} mm")
         faixa_sub = d.get('chuva_faixa_txt') or f"{dia_chuva:.1f} mm"
-        card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'), d.get('wmo') in (95, 96, 99), (d_alerts[0].get('descricao') if d_alerts else d.get('alerta_desc')))
-        card_wind_info = _classify_wind_nomenclature(day_turnos, dia_rajada)
         card_prob_obj = d.get('probabilistico') or {}
+        d_has_thunder_c = bool(d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower())
+        card_rain_info = _classify_rain_nomenclature(dia_chuva, tem_alerta_card, d.get('alerta_cor'), d_has_thunder_c, (d_alerts[0].get('descricao') if d_alerts else d.get('alerta_desc')), card_prob_obj.get('p90_teto_mm'))
+        card_wind_info = _classify_wind_nomenclature(day_turnos, dia_rajada)
         d_p25_c = float(card_prob_obj.get('p25_mm', 0.0))
         d_p90_c = float(card_prob_obj.get('p90_teto_mm', dia_chuva))
 
@@ -3225,7 +3233,7 @@ def run_auto_bulletin_pipeline():
                 "data_iso": d['date_iso'],
                 "data_br": d['date_br'],
                 "dia_semana": d['dia_semana'],
-                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'), False, d.get('alerta_desc'))['titulo'],
+                "intensidade_chuva": _classify_rain_nomenclature(d['chuva_tot'], d.get('tem_alerta_inmet', False), d.get('alerta_cor'), bool(d.get('wmo') in (95, 96, 99) or 'trovoad' in str(d.get('resumo', '')).lower()), d.get('alerta_desc'), (d.get('probabilistico') or {}).get('p90_teto_mm'))['titulo'],
                 "chuva_media_modelos_mm": d['chuva_tot'],
                 "chuva_p25_mm": (d.get('probabilistico') or {}).get('p25_mm', 0.0),
                 "chuva_p50_mm": (d.get('probabilistico') or {}).get('p50_mm', d['chuva_tot']),

@@ -1827,7 +1827,7 @@ export default function App() {
                             {(prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva) && (
                               <span
                                 className="text-[11px] font-sans font-semibold text-[#FF8244] break-words leading-snug"
-                                title="Classificação oficial PLANCON Rio das Ostras: Normalidade ≤ 20/30 mm · Moderada 20–70 mm · Forte 70–100 mm · Muito forte > 100 mm"
+                                title="Intensidade por volume 24h: Muito fraca < 1 · Fraca 1–10 · Fraca a moderada 10–15 · Moderada 15–50 · Moderada a forte 50–70 · Forte 70–100 · Muito forte > 100 mm | Nível PLANCON: Normalidade ≤ 20/30 mm · Observação 20–70 mm · Atenção 70–100 mm · Alerta > 100 mm"
                               >
                                 ({prevHoje?.intensidade_chuva || (hojeDiaResumo as any)?.intensidade_chuva})
                               </span>
