@@ -313,13 +313,12 @@ function drawCalendarGridPanel(
   ctx.fillText(monthLabel.toUpperCase(), innerX + innerW / 2, cy + Math.round(42 * uiScale));
 
   const mMaxTotal = Number(monthStats?.monthMaxStationTotalMm ?? 0);
-  const mMeanTotal = Number(monthStats?.monthMeanTotalMm ?? 0);
   const mMaxStShort = shortenStationLabel(monthStats?.monthMaxStationName);
   const totalTxt = monthStats
-    ? `Acumulado mês: ${mMaxTotal.toFixed(1)} mm máx (${mMaxStShort}) · Méd.: ${mMeanTotal.toFixed(1)} mm`
-    : 'Acumulado no mês: --';
+    ? `Acumulado total no mês: ${mMaxTotal.toFixed(1)} mm (${mMaxStShort})`
+    : 'Acumulado total no mês: --';
   ctx.fillStyle = pal.accent;
-  ctx.font = `800 ${Math.round(23.5 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.font = `800 ${Math.round(25 * uiScale)}px Inter, system-ui, sans-serif`;
   ctx.fillText(fitText(ctx, totalTxt, innerW - 24), innerX + innerW / 2, cy + Math.round(80 * uiScale));
 
   const wetStShort = shortenStationLabel(monthStats?.wettestStation);
@@ -327,10 +326,10 @@ function drawCalendarGridPanel(
     ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${wetStShort})`
     : '--';
   const wetSummary = monthStats
-    ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays}/${monthStats.totalDays}d c/ chuva`
+    ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays} de ${monthStats.totalDays} dias com chuva`
     : 'Série Contínua Diária';
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `700 ${Math.round(22 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.font = `700 ${Math.round(21.5 * uiScale)}px Inter, system-ui, sans-serif`;
   ctx.fillText(fitText(ctx, wetSummary, innerW - 24), innerX + innerW / 2, cy + Math.round(115 * uiScale));
   ctx.textAlign = 'left';
 
@@ -844,8 +843,10 @@ export async function exportCalendarToHighResPng(
   const hs = is4k ? 1.48 : isStory ? 1.08 : 1.04;
 
   const padX = is4k ? 96 : 68;
-  const topSafe = isStory ? 148 : is4k ? 58 : 56;
-  const botSafe = isStory ? 116 : is4k ? 54 : 52;
+  const topSafe = isStory ? 148 : is4k ? 54 : 52;
+  const botSafe = isStory ? 84 : is4k ? 34 : 32;
+  const footerH = is4k ? 114 : isStory ? 116 : 108;
+  const footerTop = H - botSafe - footerH;
   const contentW = W - padX * 2;
   let cursorY = topSafe;
 
@@ -905,7 +906,7 @@ export async function exportCalendarToHighResPng(
 
   if (is4k) {
     // Painel 4K (3840x2160) com escalas maiores e leitura imediata
-    const bodyH = H - botSafe - 62 - cursorY;
+    const bodyH = footerTop - 22 - cursorY;
     const leftW = Math.round(contentW * 0.46);
     const colGap = 42;
     const rightX = padX + leftW + colGap;
@@ -914,17 +915,17 @@ export async function exportCalendarToHighResPng(
     drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: leftW, h: bodyH }, opts, pal, 1.38);
 
     let ry = cursorY;
-    const bannerH = 148;
-    drawSelectedDayBanner(ctx, { x: rightX, y: ry, w: rightW, h: bannerH }, opts, pal, 1.36);
-    ry += bannerH + 24;
+    const bannerH = 144;
+    drawSelectedDayBanner(ctx, { x: rightX, y: ry, w: rightW, h: bannerH }, opts, pal, 1.34);
+    ry += bannerH + 22;
 
-    const kpiH = 510;
-    drawDayKpisGrid(ctx, { x: rightX, y: ry, w: rightW, h: kpiH }, opts, pal, 2, 1.34);
-    ry += kpiH + 24;
+    const kpiH = 496;
+    drawDayKpisGrid(ctx, { x: rightX, y: ry, w: rightW, h: kpiH }, opts, pal, 2, 1.32);
+    ry += kpiH + 22;
 
-    const synH = 266;
-    drawSynopticCard(ctx, { x: rightX, y: ry, w: rightW, h: synH }, selectedDay, pal, 1.32);
-    ry += synH + 24;
+    const synH = 256;
+    drawSynopticCard(ctx, { x: rightX, y: ry, w: rightW, h: synH }, selectedDay, pal, 1.30);
+    ry += synH + 22;
 
     const stH = cursorY + bodyH - ry;
     drawStationsPanel(
@@ -934,27 +935,27 @@ export async function exportCalendarToHighResPng(
       pal,
       2,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.32
+      1.30
     );
   } else if (isStory) {
     // Stories Vertical 9:16 (2160x3840)
-    const calH = 1380;
+    const calH = 1360;
     drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.24);
-    cursorY += calH + 28;
+    cursorY += calH + 26;
 
-    const bannerH = 134;
+    const bannerH = 132;
     drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.2);
-    cursorY += bannerH + 24;
+    cursorY += bannerH + 22;
 
-    const kpiH = 530;
+    const kpiH = 524;
     drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.22);
-    cursorY += kpiH + 24;
+    cursorY += kpiH + 22;
 
-    const synH = 290;
+    const synH = 286;
     drawSynopticCard(ctx, { x: padX, y: cursorY, w: contentW, h: synH }, selectedDay, pal, 1.18);
-    cursorY += synH + 24;
+    cursorY += synH + 22;
 
-    const stH = H - botSafe - 56 - cursorY;
+    const stH = footerTop - 22 - cursorY;
     drawStationsPanel(
       ctx,
       { x: padX, y: cursorY, w: contentW, h: stH },
@@ -966,19 +967,19 @@ export async function exportCalendarToHighResPng(
     );
   } else if (isPost) {
     // Feed Instagram 4:5 (2160x2700)
-    const calH = 1130;
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.12);
-    cursorY += calH + 22;
+    const calH = 1096;
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.11);
+    cursorY += calH + 20;
 
-    const bannerH = 118;
-    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.08);
-    cursorY += bannerH + 20;
+    const bannerH = 114;
+    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.06);
+    cursorY += bannerH + 18;
 
-    const kpiH = 446;
-    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.1);
-    cursorY += kpiH + 20;
+    const kpiH = 434;
+    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.08);
+    cursorY += kpiH + 18;
 
-    const stH = H - botSafe - 50 - cursorY;
+    const stH = footerTop - 20 - cursorY;
     drawStationsPanel(
       ctx,
       { x: padX, y: cursorY, w: contentW, h: stH },
@@ -986,14 +987,14 @@ export async function exportCalendarToHighResPng(
       pal,
       3,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.04
+      1.02
     );
   } else {
     // 'calendar_only' — Calendário Mensal Ampliado Ultra-HD (2160x2700)
-    const sumH = 340;
-    const calH = H - botSafe - 56 - sumH - 28 - cursorY;
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.38);
-    cursorY += calH + 28;
+    const sumH = 330;
+    const calH = footerTop - 22 - sumH - 24 - cursorY;
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.36);
+    cursorY += calH + 24;
 
     const sumCols = 4;
     const gap = 20;
@@ -1002,7 +1003,7 @@ export async function exportCalendarToHighResPng(
       {
         label: 'ACUMULADO NO MÊS',
         val: `${(monthStats?.monthMaxStationTotalMm ?? 0).toFixed(1)} mm`,
-        sub: `${shortenStationLabel(monthStats?.monthMaxStationName)} · Méd.: ${(monthStats?.monthMeanTotalMm ?? 0).toFixed(1)} mm`,
+        sub: monthStats?.monthMaxStationName || 'Rede Municipal',
         accentVal: true,
       },
       {
@@ -1020,9 +1021,9 @@ export async function exportCalendarToHighResPng(
         accentVal: false,
       },
       {
-        label: `DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'} (${monthStats?.rainyDays ?? 0}/${monthStats?.totalDays ?? 0}d)`,
+        label: `DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'}`,
         val: `${opts.selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
-        sub: `Sust ${opts.selectedDayMetrics.sustMaxKmh.toFixed(1)} · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
+        sub: `${monthStats?.rainyDays ?? 0} de ${monthStats?.totalDays ?? 0} dias com chuva · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
         accentVal: true,
       },
     ];
@@ -1039,26 +1040,41 @@ export async function exportCalendarToHighResPng(
       const cpad = 24;
       ctx.fillStyle = pal.textMuted;
       ctx.font = '800 24px "JetBrains Mono", monospace';
-      ctx.fillText(fitText(ctx, sc.label, sw - cpad * 2), cx + cpad, cursorY + 56);
+      ctx.fillText(fitText(ctx, sc.label, sw - cpad * 2), cx + cpad, cursorY + 54);
 
       ctx.fillStyle = sc.accentVal ? pal.accent : pal.textMain;
       ctx.font = '800 58px "JetBrains Mono", monospace';
-      ctx.fillText(fitText(ctx, sc.val, sw - cpad * 2), cx + cpad, cursorY + 174);
+      ctx.fillText(fitText(ctx, sc.val, sw - cpad * 2), cx + cpad, cursorY + 170);
 
       ctx.fillStyle = pal.textMuted;
-      ctx.font = '700 25px Inter, system-ui, sans-serif';
+      ctx.font = '700 24px Inter, system-ui, sans-serif';
       const lines = wrapText(ctx, sc.sub, sw - cpad * 2, 2);
       lines.forEach((l, li) => {
-        ctx.fillText(l, cx + cpad, cursorY + 246 + li * 34);
+        ctx.fillText(l, cx + cpad, cursorY + 240 + li * 34);
       });
     });
   }
 
-  // Rodapé grande e nítido com crédito oficial
-  ctx.fillStyle = pal.textMuted;
-  ctx.font = `700 ${is4k ? 38 : 28}px Inter, system-ui, sans-serif`;
-  const footerTxt = `Fonte: Dados retirados das estações meteorológicas da Defesa Civil de Rio das Ostras · Atualizado em ${formatNowBrt()} BRT`;
-  ctx.fillText(fitText(ctx, footerTxt, contentW), padX, H - botSafe);
+  // Barra oficial de Fonte em destaque e tamanho grande para leitura fácil
+  roundRectPath(ctx, padX, footerTop, contentW, footerH, 20);
+  ctx.fillStyle = pal.cardBg;
+  ctx.fill();
+  ctx.lineWidth = 2.2;
+  ctx.strokeStyle = pal.border;
+  ctx.stroke();
+
+  const sourceLine = 'Fonte: Dados retirados das estações meteorológicas da Defesa Civil de Rio das Ostras';
+  const metaLine = `TEMPO EM RIO DAS OSTRAS · ATUALIZADO EM ${formatNowBrt()} BRT`;
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = pal.textMain;
+  ctx.font = `800 ${is4k ? 48 : 38}px Inter, system-ui, sans-serif`;
+  ctx.fillText(fitText(ctx, sourceLine, contentW - 44), W / 2, footerTop + (is4k ? 52 : 48));
+
+  ctx.fillStyle = pal.accent;
+  ctx.font = `700 ${is4k ? 30 : 25}px "JetBrains Mono", monospace`;
+  ctx.fillText(fitText(ctx, metaLine, contentW - 44), W / 2, footerTop + (is4k ? 96 : 88));
+  ctx.textAlign = 'left';
 
   const monthSlug = `${opts.year}-${String(opts.month1to12).padStart(2, '0')}`;
   const daySlug = selectedDay?.data_iso || monthSlug;

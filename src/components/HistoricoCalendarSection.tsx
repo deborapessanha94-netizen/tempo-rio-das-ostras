@@ -948,9 +948,9 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
               </div>
               {monthStats && (
                 <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
-                  Acum. mês: <strong className="text-[#FF8244]">{monthStats.monthMaxStationTotalMm.toFixed(1)} mm</strong> (méd. {monthStats.monthMeanTotalMm.toFixed(1)} mm) · + chuvoso:{' '}
+                  Acumulado mês: <strong className="text-[#FF8244]">{monthStats.monthMaxStationTotalMm.toFixed(1)} mm</strong> · + chuvoso:{' '}
                   {formatDateBrFromIso(monthStats.wettestDay.data_iso).slice(0, 5)} ({monthStats.wettestMaxMm.toFixed(1)} mm) ·{' '}
-                  {monthStats.rainyDays}/{monthStats.totalDays}d
+                  {monthStats.rainyDays} de {monthStats.totalDays} dias com chuva
                 </div>
               )}
             </div>
