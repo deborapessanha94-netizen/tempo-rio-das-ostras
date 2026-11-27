@@ -577,15 +577,47 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
       monthDays[0]
     );
     const windiestMaxKmh = resolveDayMaxGustRecord(windiestDay).kmh;
+
+    const liveMeanSum = monthDays.reduce((acc, d) => acc + Number(d.chuva_total_media_mm ?? 0), 0);
+    const stSumMap = new Map<string, { nome: string; total: number }>();
+    for (const d of monthDays) {
+      for (const [code, st] of Object.entries(d.estacoes_totais_dia || {})) {
+        const cur = stSumMap.get(code) || { nome: st?.nome || code, total: 0 };
+        cur.total += Number(st?.chuva_mm ?? 0);
+        if (!cur.nome && st?.nome) cur.nome = st.nome;
+        stSumMap.set(code, cur);
+      }
+    }
+    let liveMaxStTotal = 0;
+    let liveMaxStName = 'Rede Municipal';
+    for (const v of stSumMap.values()) {
+      if (v.total > liveMaxStTotal) {
+        liveMaxStTotal = v.total;
+        liveMaxStName = v.nome;
+      }
+    }
+    const resumoMes = (historico?.resumo_mensal ?? []).find((m) => m.ano_mes === viewMonthYm);
+    const monthMeanTotalMm =
+      Math.round(Math.max(Number(resumoMes?.chuva_total_media_mm ?? 0), liveMeanSum) * 10) / 10;
+    const resMaxSt = Number(resumoMes?.chuva_maior_estacao_mm ?? 0);
+    const useLiveSt = liveMaxStTotal >= resMaxSt;
+    const monthMaxStationTotalMm = Math.round((useLiveSt ? liveMaxStTotal : resMaxSt) * 10) / 10;
+    const monthMaxStationName = useLiveSt
+      ? liveMaxStName
+      : resumoMes?.chuva_maior_estacao_nome || liveMaxStName;
+
     return {
       rainyDays,
       totalDays: monthDays.length,
+      monthMeanTotalMm,
+      monthMaxStationTotalMm,
+      monthMaxStationName,
       wettestDay,
       wettestMaxMm,
       windiestDay,
       windiestMaxKmh,
     };
-  }, [monthDays]);
+  }, [monthDays, historico, viewMonthYm]);
 
   const selectedDay = dailyMap.get(activeSelectedIso) || null;
   const selectedMonthIdx = availableMonths.indexOf(viewMonthYm);
@@ -773,6 +805,9 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                           ? {
                               rainyDays: monthStats.rainyDays,
                               totalDays: monthStats.totalDays,
+                              monthMeanTotalMm: monthStats.monthMeanTotalMm,
+                              monthMaxStationTotalMm: monthStats.monthMaxStationTotalMm,
+                              monthMaxStationName: monthStats.monthMaxStationName,
                               wettestDayIso: monthStats.wettestDay.data_iso,
                               wettestMaxMm: monthStats.wettestMaxMm,
                               wettestStation: resolveDayMaxRainRecord(monthStats.wettestDay).stationName,
@@ -912,8 +947,10 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                 {MONTHS_PT[viewMonth - 1]} {viewYear}
               </div>
               {monthStats && (
-                <div className="text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
-                  Pico diário: {monthStats.wettestMaxMm.toFixed(1)} mm · {monthStats.rainyDays}/{monthStats.totalDays} dias c/ chuva
+                <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
+                  Acum. mês: <strong className="text-[#FF8244]">{monthStats.monthMaxStationTotalMm.toFixed(1)} mm</strong> (méd. {monthStats.monthMeanTotalMm.toFixed(1)} mm) · + chuvoso:{' '}
+                  {formatDateBrFromIso(monthStats.wettestDay.data_iso).slice(0, 5)} ({monthStats.wettestMaxMm.toFixed(1)} mm) ·{' '}
+                  {monthStats.rainyDays}/{monthStats.totalDays}d
                 </div>
               )}
             </div>

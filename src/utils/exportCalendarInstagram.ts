@@ -35,6 +35,9 @@ export interface CalendarExportDayMetrics {
 export interface CalendarMonthSummaryMetrics {
   rainyDays: number;
   totalDays: number;
+  monthMeanTotalMm: number;
+  monthMaxStationTotalMm: number;
+  monthMaxStationName: string;
   wettestDayIso?: string;
   wettestMaxMm: number;
   wettestStation?: string;
@@ -284,8 +287,8 @@ function drawCalendarGridPanel(
   const innerW = box.w - pad * 2;
   let cy = box.y + pad;
 
-  // Cabeçalho do Mês
-  const monthH = Math.round(78 * scaleFactor);
+  // Cabeçalho do Mês (com Acumulado Total no Mês e Dia Mais Chuvoso)
+  const monthH = Math.round(112 * scaleFactor);
   roundRectPath(ctx, innerX, cy, innerW, monthH, 16 * scaleFactor);
   ctx.fillStyle = pal.innerBg;
   ctx.fill();
@@ -294,19 +297,32 @@ function drawCalendarGridPanel(
   ctx.stroke();
 
   ctx.fillStyle = pal.textMain;
-  ctx.font = `800 ${Math.round(30 * scaleFactor)}px Inter, system-ui, sans-serif`;
+  ctx.font = `800 ${Math.round(28 * scaleFactor)}px Inter, system-ui, sans-serif`;
   ctx.textAlign = 'center';
   ctx.fillText(monthLabel.toUpperCase(), innerX + innerW / 2, cy + Math.round(34 * scaleFactor));
 
-  ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(20 * scaleFactor)}px "JetBrains Mono", monospace`;
-  const mSummary = monthStats
-    ? `Pico diário: ${monthStats.wettestMaxMm.toFixed(1)} mm · ${monthStats.rainyDays}/${monthStats.totalDays} dias c/ chuva`
+  const mMaxTotal = Number(monthStats?.monthMaxStationTotalMm ?? 0);
+  const mMeanTotal = Number(monthStats?.monthMeanTotalMm ?? 0);
+  const mMaxSt = monthStats?.monthMaxStationName || 'Rede';
+  const totalTxt = monthStats
+    ? `Acumulado no mês: ${mMaxTotal.toFixed(1)} mm máx (${mMaxSt}) · Média rede: ${mMeanTotal.toFixed(1)} mm`
+    : 'Acumulado no mês: --';
+  ctx.fillStyle = pal.accent;
+  ctx.font = `700 ${Math.round(17.5 * scaleFactor)}px "JetBrains Mono", monospace`;
+  ctx.fillText(fitText(ctx, totalTxt, innerW - 28), innerX + innerW / 2, cy + Math.round(66 * scaleFactor));
+
+  const wetDayTxt = monthStats?.wettestDayIso
+    ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${monthStats.wettestStation || 'Rede'})`
+    : '--';
+  const wetSummary = monthStats
+    ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays}/${monthStats.totalDays} dias c/ chuva`
     : 'Série Contínua Diária';
-  ctx.fillText(fitText(ctx, mSummary, innerW - 36), innerX + innerW / 2, cy + Math.round(62 * scaleFactor));
+  ctx.fillStyle = pal.textMuted;
+  ctx.font = `600 ${Math.round(17 * scaleFactor)}px "JetBrains Mono", monospace`;
+  ctx.fillText(fitText(ctx, wetSummary, innerW - 28), innerX + innerW / 2, cy + Math.round(94 * scaleFactor));
   ctx.textAlign = 'left';
 
-  cy += monthH + Math.round(22 * scaleFactor);
+  cy += monthH + Math.round(18 * scaleFactor);
 
   // Cabeçalho dias da semana
   const gapX = Math.round(12 * scaleFactor);
@@ -934,12 +950,16 @@ export async function exportCalendarToHighResPng(
     const sw = (contentW - gap * (sumCols - 1)) / sumCols;
     const summaryCards = [
       {
-        label: 'PICO CHUVA NO MÊS',
-        val: `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm`,
-        sub: monthStats?.wettestDayIso
-          ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} · ${monthStats.wettestStation || 'Rede'}`
-          : '--',
+        label: 'ACUMULADO TOTAL NO MÊS',
+        val: `${(monthStats?.monthMaxStationTotalMm ?? 0).toFixed(1)} mm`,
+        sub: `${monthStats?.monthMaxStationName || 'Rede'} · Média: ${(monthStats?.monthMeanTotalMm ?? 0).toFixed(1)} mm`,
         accentVal: true,
+      },
+      {
+        label: 'DIA MAIS CHUVOSO DO MÊS',
+        val: monthStats?.wettestDayIso ? formatBrDate(monthStats.wettestDayIso).slice(0, 5) : '--',
+        sub: `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${monthStats?.wettestStation || 'Rede'}`,
+        accentVal: false,
       },
       {
         label: 'MAIOR RAJADA NO MÊS',
@@ -950,15 +970,9 @@ export async function exportCalendarToHighResPng(
         accentVal: false,
       },
       {
-        label: 'FREQUÊNCIA DE CHUVA',
-        val: `${monthStats?.rainyDays ?? 0} / ${monthStats?.totalDays ?? 0}`,
-        sub: 'dias com chuva registrada',
-        accentVal: false,
-      },
-      {
-        label: `DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'}`,
+        label: `CHUVA MÊS · DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'}`,
         val: `${opts.selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
-        sub: `Sust ${opts.selectedDayMetrics.sustMaxKmh.toFixed(1)} · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
+        sub: `${monthStats?.rainyDays ?? 0}/${monthStats?.totalDays ?? 0}d c/ chuva · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
         accentVal: true,
       },
     ];
@@ -990,14 +1004,11 @@ export async function exportCalendarToHighResPng(
     });
   }
 
-  // Rodapé padrão
+  // Rodapé padrão com crédito oficial solicitado
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(24 * (is4k ? 1.15 : 1.0))}px "JetBrains Mono", monospace`;
-  ctx.fillText(
-    `Atualizado em ${formatNowBrt()} BRT · Maiores registros das estações (PWS/CEMADEN/INMET) · Tempo em Rio das Ostras`,
-    padX,
-    H - botSafe
-  );
+  ctx.font = `600 ${Math.round(22 * (is4k ? 1.18 : 1.0))}px "JetBrains Mono", monospace`;
+  const footerTxt = `Fonte: Dados retirados das estações meteorológicas da Defesa Civil de Rio das Ostras · Atualizado em ${formatNowBrt()} BRT`;
+  ctx.fillText(fitText(ctx, footerTxt, contentW), padX, H - botSafe);
 
   const monthSlug = `${opts.year}-${String(opts.month1to12).padStart(2, '0')}`;
   const daySlug = selectedDay?.data_iso || monthSlug;
