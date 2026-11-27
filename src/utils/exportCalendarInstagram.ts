@@ -113,7 +113,7 @@ function createPalette(dark: boolean): Palette {
         innerBg: '#09101E',
         border: '#233354',
         textMain: '#FFFFFF',
-        textMuted: '#94A3B8',
+        textMuted: '#CBD5E1',
         accent: '#FF8244',
         rainBlue: '#38BDF8',
         gridBorder: '#1E2D4A',
@@ -125,11 +125,22 @@ function createPalette(dark: boolean): Palette {
         innerBg: '#F8FAFC',
         border: '#CBD5E1',
         textMain: '#14213D',
-        textMuted: '#475569',
+        textMuted: '#334155',
         accent: '#FF8244',
         rainBlue: '#0284C7',
-        gridBorder: '#E2E8F0',
+        gridBorder: '#CBD5E1',
       };
+}
+
+function shortenStationLabel(name?: string): string {
+  if (!name) return 'Rede';
+  return name
+    .replace(/\s*\([^)]*\)/g, '')
+    .replace(/\s*\/\s*REBIO União/i, '')
+    .replace(/\s*\/\s*Extensão do Bosque/i, '')
+    .replace(/\s*\/\s*Divisa Sul/i, '')
+    .replace(/\s*\/\s*Escola Jacinto/i, '')
+    .trim();
 }
 
 function fitText(ctx: CanvasRenderingContext2D, text: string, maxW: number): string {
@@ -214,45 +225,45 @@ function resolveCellColors(
           dayCol: '#09101E',
           mmCol: '#09101E',
           gustCol: '#14213D',
-          strokeW: 4,
+          strokeW: 5,
         }
       : {
           fill: '#14213D',
           stroke: '#FF8244',
           dayCol: '#FFFFFF',
           mmCol: '#FFB38A',
-          gustCol: '#E2E8F0',
-          strokeW: 4,
+          gustCol: '#F1F5F9',
+          strokeW: 5,
         };
   }
   if (mm >= 50) {
     return {
-      fill: pal.dark ? 'rgba(244,63,94,0.22)' : 'rgba(244,63,94,0.14)',
-      stroke: pal.dark ? 'rgba(251,113,133,0.65)' : 'rgba(225,29,72,0.55)',
+      fill: pal.dark ? 'rgba(244,63,94,0.24)' : 'rgba(244,63,94,0.14)',
+      stroke: pal.dark ? 'rgba(251,113,133,0.72)' : 'rgba(225,29,72,0.58)',
       dayCol: pal.textMain,
       mmCol: pal.dark ? '#FDA4AF' : '#BE123C',
       gustCol: pal.textMuted,
-      strokeW: 2,
+      strokeW: 2.2,
     };
   }
   if (mm >= 15) {
     return {
-      fill: pal.dark ? 'rgba(255,130,68,0.20)' : 'rgba(255,130,68,0.15)',
-      stroke: pal.dark ? 'rgba(255,130,68,0.62)' : 'rgba(234,88,12,0.55)',
+      fill: pal.dark ? 'rgba(255,130,68,0.22)' : 'rgba(255,130,68,0.16)',
+      stroke: pal.dark ? 'rgba(255,130,68,0.68)' : 'rgba(234,88,12,0.58)',
       dayCol: pal.textMain,
       mmCol: pal.dark ? '#FFA16C' : '#C2410C',
       gustCol: pal.textMuted,
-      strokeW: 2,
+      strokeW: 2.2,
     };
   }
   if (mm >= 1) {
     return {
-      fill: pal.dark ? 'rgba(14,165,233,0.16)' : 'rgba(14,165,233,0.11)',
-      stroke: pal.dark ? 'rgba(56,189,248,0.48)' : 'rgba(14,165,233,0.45)',
+      fill: pal.dark ? 'rgba(14,165,233,0.18)' : 'rgba(14,165,233,0.12)',
+      stroke: pal.dark ? 'rgba(56,189,248,0.55)' : 'rgba(14,165,233,0.48)',
       dayCol: pal.textMain,
       mmCol: pal.rainBlue,
       gustCol: pal.textMuted,
-      strokeW: 1.8,
+      strokeW: 2,
     };
   }
   return {
@@ -261,7 +272,7 @@ function resolveCellColors(
     dayCol: pal.textMain,
     mmCol: pal.textMuted,
     gustCol: pal.textMuted,
-    strokeW: 1.5,
+    strokeW: 1.8,
   };
 }
 
@@ -270,81 +281,87 @@ function drawCalendarGridPanel(
   box: Rect,
   opts: ExportCalendarOptions,
   pal: Palette,
-  scaleFactor = 1
+  uiScale = 1
 ) {
   const { monthLabel, cells, dailyMap, selectedDay, monthStats, todayIso, resolveDayMetrics } = opts;
   const activeIso = selectedDay?.data_iso || '';
 
-  roundRectPath(ctx, box.x, box.y, box.w, box.h, 28 * scaleFactor);
+  roundRectPath(ctx, box.x, box.y, box.w, box.h, Math.round(28 * uiScale));
   ctx.fillStyle = pal.cardBg;
   ctx.fill();
-  ctx.lineWidth = 2.5;
+  ctx.lineWidth = 2.8;
   ctx.strokeStyle = pal.border;
   ctx.stroke();
 
-  const pad = Math.round(32 * scaleFactor);
+  const pad = Math.round(24 * uiScale);
   const innerX = box.x + pad;
   const innerW = box.w - pad * 2;
   let cy = box.y + pad;
 
-  // Cabeçalho do Mês (com Acumulado Total no Mês e Dia Mais Chuvoso)
-  const monthH = Math.round(112 * scaleFactor);
-  roundRectPath(ctx, innerX, cy, innerW, monthH, 16 * scaleFactor);
+  // Cabeçalho do Mês com Acumulado Total e Dia Mais Chuvoso em fontes grandes
+  const monthH = Math.round(134 * uiScale);
+  roundRectPath(ctx, innerX, cy, innerW, monthH, Math.round(16 * uiScale));
   ctx.fillStyle = pal.innerBg;
   ctx.fill();
-  ctx.lineWidth = 1.8;
+  ctx.lineWidth = 2;
   ctx.strokeStyle = pal.border;
   ctx.stroke();
 
   ctx.fillStyle = pal.textMain;
-  ctx.font = `800 ${Math.round(28 * scaleFactor)}px Inter, system-ui, sans-serif`;
+  ctx.font = `800 ${Math.round(34 * uiScale)}px Inter, system-ui, sans-serif`;
   ctx.textAlign = 'center';
-  ctx.fillText(monthLabel.toUpperCase(), innerX + innerW / 2, cy + Math.round(34 * scaleFactor));
+  ctx.fillText(monthLabel.toUpperCase(), innerX + innerW / 2, cy + Math.round(42 * uiScale));
 
   const mMaxTotal = Number(monthStats?.monthMaxStationTotalMm ?? 0);
   const mMeanTotal = Number(monthStats?.monthMeanTotalMm ?? 0);
-  const mMaxSt = monthStats?.monthMaxStationName || 'Rede';
+  const mMaxStShort = shortenStationLabel(monthStats?.monthMaxStationName);
   const totalTxt = monthStats
-    ? `Acumulado no mês: ${mMaxTotal.toFixed(1)} mm máx (${mMaxSt}) · Média rede: ${mMeanTotal.toFixed(1)} mm`
+    ? `Acumulado mês: ${mMaxTotal.toFixed(1)} mm máx (${mMaxStShort}) · Méd.: ${mMeanTotal.toFixed(1)} mm`
     : 'Acumulado no mês: --';
   ctx.fillStyle = pal.accent;
-  ctx.font = `700 ${Math.round(17.5 * scaleFactor)}px "JetBrains Mono", monospace`;
-  ctx.fillText(fitText(ctx, totalTxt, innerW - 28), innerX + innerW / 2, cy + Math.round(66 * scaleFactor));
+  ctx.font = `800 ${Math.round(23.5 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.fillText(fitText(ctx, totalTxt, innerW - 24), innerX + innerW / 2, cy + Math.round(80 * uiScale));
 
+  const wetStShort = shortenStationLabel(monthStats?.wettestStation);
   const wetDayTxt = monthStats?.wettestDayIso
-    ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${monthStats.wettestStation || 'Rede'})`
+    ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${wetStShort})`
     : '--';
   const wetSummary = monthStats
-    ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays}/${monthStats.totalDays} dias c/ chuva`
+    ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays}/${monthStats.totalDays}d c/ chuva`
     : 'Série Contínua Diária';
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(17 * scaleFactor)}px "JetBrains Mono", monospace`;
-  ctx.fillText(fitText(ctx, wetSummary, innerW - 28), innerX + innerW / 2, cy + Math.round(94 * scaleFactor));
+  ctx.font = `700 ${Math.round(22 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.fillText(fitText(ctx, wetSummary, innerW - 24), innerX + innerW / 2, cy + Math.round(115 * uiScale));
   ctx.textAlign = 'left';
 
-  cy += monthH + Math.round(18 * scaleFactor);
+  cy += monthH + Math.round(18 * uiScale);
 
   // Cabeçalho dias da semana
-  const gapX = Math.round(12 * scaleFactor);
-  const gapY = Math.round(12 * scaleFactor);
+  const gapX = Math.round(10 * uiScale);
+  const gapY = Math.round(10 * uiScale);
   const cellW = (innerW - gapX * 6) / 7;
-  const weekdayH = Math.round(28 * scaleFactor);
+  const weekdayH = Math.round(32 * uiScale);
 
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `700 ${Math.round(18 * scaleFactor)}px "JetBrains Mono", monospace`;
+  ctx.font = `800 ${Math.round(22 * uiScale)}px "JetBrains Mono", monospace`;
   ctx.textAlign = 'center';
   WEEKDAYS_PT.forEach((wd, i) => {
     const cx = innerX + i * (cellW + gapX) + cellW / 2;
-    ctx.fillText(wd, cx, cy + Math.round(18 * scaleFactor));
+    ctx.fillText(wd, cx, cy + Math.round(22 * uiScale));
   });
   ctx.textAlign = 'left';
 
-  cy += weekdayH + Math.round(8 * scaleFactor);
+  cy += weekdayH + Math.round(8 * uiScale);
 
-  const legendH = Math.round(44 * scaleFactor);
-  const gridAvailH = box.y + box.h - pad - legendH - cy - Math.round(12 * scaleFactor);
+  const legendH = Math.round(44 * uiScale);
+  const gridAvailH = box.y + box.h - pad - legendH - cy - Math.round(10 * uiScale);
   const numRows = Math.max(4, Math.ceil(cells.length / 7));
   const cellH = Math.floor((gridAvailH - gapY * (numRows - 1)) / numRows);
+
+  // Escala responsiva da célula de calendário
+  const dayFont = Math.min(Math.round(cellH * 0.24), Math.round(cellW * 0.23), Math.round(36 * uiScale));
+  const mmFont = Math.min(Math.round(cellH * 0.22), Math.round(cellW * 0.20), Math.round(33 * uiScale));
+  const gustFont = Math.min(Math.round(cellH * 0.175), Math.round(cellW * 0.165), Math.round(25 * uiScale));
 
   for (let idx = 0; idx < cells.length; idx++) {
     const cell = cells[idx];
@@ -354,7 +371,7 @@ function drawCalendarGridPanel(
     const y = cy + row * (cellH + gapY);
 
     if (!cell) {
-      roundRectPath(ctx, x, y, cellW, cellH, 14 * scaleFactor);
+      roundRectPath(ctx, x, y, cellW, cellH, Math.round(14 * uiScale));
       ctx.fillStyle = pal.dark ? 'rgba(9,16,30,0.22)' : 'rgba(241,245,249,0.55)';
       ctx.fill();
       continue;
@@ -366,36 +383,37 @@ function drawCalendarGridPanel(
     const hasData = Boolean(rec);
     const colors = resolveCellColors(metrics.rainMm, isSel, hasData, pal);
 
-    roundRectPath(ctx, x, y, cellW, cellH, 14 * scaleFactor);
+    roundRectPath(ctx, x, y, cellW, cellH, Math.round(14 * uiScale));
     ctx.fillStyle = colors.fill;
     ctx.fill();
     ctx.lineWidth = colors.strokeW;
     ctx.strokeStyle = colors.stroke;
     ctx.stroke();
 
-    // Número do dia
-    const innerPadX = Math.round(12 * scaleFactor);
+    const innerPadX = Math.round(11 * uiScale);
+    const textMaxW = cellW - innerPadX * 1.4;
     ctx.fillStyle = colors.dayCol;
-    ctx.font = `800 ${Math.round(24 * scaleFactor)}px "JetBrains Mono", monospace`;
-    ctx.fillText(String(cell.dayNum), x + innerPadX, y + Math.round(30 * scaleFactor));
+    ctx.font = `800 ${dayFont}px "JetBrains Mono", monospace`;
+    ctx.fillText(String(cell.dayNum), x + innerPadX, y + dayFont + Math.round(8 * uiScale));
 
     if (cell.dateIso === todayIso) {
       ctx.beginPath();
-      ctx.arc(x + cellW - Math.round(16 * scaleFactor), y + Math.round(20 * scaleFactor), Math.round(6 * scaleFactor), 0, Math.PI * 2);
+      ctx.arc(
+        x + cellW - Math.round(16 * uiScale),
+        y + Math.round(dayFont * 0.55 + 8 * uiScale),
+        Math.round(7 * uiScale),
+        0,
+        Math.PI * 2
+      );
       ctx.fillStyle = pal.accent;
       ctx.fill();
     }
 
     if (hasData) {
-      const mmText = `${metrics.rainMm.toFixed(metrics.rainMm >= 10 || metrics.rainMm === 0 ? 1 : 1)} mm`;
-      const mmFont = Math.round((cellH >= 150 ? 22 : 19) * scaleFactor);
+      const mmText = `${metrics.rainMm.toFixed(1)} mm`;
       ctx.fillStyle = colors.mmCol;
       ctx.font = `800 ${mmFont}px "JetBrains Mono", monospace`;
-      ctx.fillText(
-        fitText(ctx, mmText, cellW - innerPadX * 1.6),
-        x + innerPadX,
-        y + Math.round(cellH * 0.62)
-      );
+      ctx.fillText(fitText(ctx, mmText, textMaxW), x + innerPadX, y + Math.round(cellH * 0.65));
 
       if (metrics.gustKmh > 0) {
         const gustCol =
@@ -405,22 +423,22 @@ function drawCalendarGridPanel(
               : '#C2410C'
             : colors.gustCol;
         ctx.fillStyle = gustCol;
-        ctx.font = `700 ${Math.round((cellH >= 150 ? 18 : 16) * scaleFactor)}px "JetBrains Mono", monospace`;
+        ctx.font = `700 ${gustFont}px "JetBrains Mono", monospace`;
         ctx.fillText(
-          fitText(ctx, `${Math.round(metrics.gustKmh)} km/h`, cellW - innerPadX * 1.6),
+          fitText(ctx, `${Math.round(metrics.gustKmh)} km/h`, textMaxW),
           x + innerPadX,
-          y + Math.round(cellH * 0.85)
+          y + Math.round(cellH * 0.89)
         );
       }
     } else {
       ctx.fillStyle = colors.mmCol;
-      ctx.font = `600 ${Math.round(18 * scaleFactor)}px "JetBrains Mono", monospace`;
+      ctx.font = `700 ${mmFont}px "JetBrains Mono", monospace`;
       ctx.fillText('--', x + innerPadX, y + Math.round(cellH * 0.68));
     }
   }
 
-  // Legenda inferior
-  const legY = box.y + box.h - pad - Math.round(14 * scaleFactor);
+  // Legenda inferior maior e mais nítida
+  const legY = box.y + box.h - pad - Math.round(10 * uiScale);
   const legItems = [
     { label: '0 mm (seco)', fill: pal.dark ? '#0F172A' : '#F8FAFC', stroke: pal.gridBorder },
     { label: '1–14,9 mm', fill: 'rgba(14,165,233,0.28)', stroke: 'rgba(14,165,233,0.75)' },
@@ -428,19 +446,19 @@ function drawCalendarGridPanel(
     { label: '≥ 50 mm', fill: 'rgba(244,63,94,0.28)', stroke: 'rgba(244,63,94,0.85)' },
   ];
   let lx = innerX;
-  const sw = Math.round(18 * scaleFactor);
-  ctx.font = `600 ${Math.round(18 * scaleFactor)}px Inter, system-ui, sans-serif`;
+  const sw = Math.round(22 * uiScale);
+  ctx.font = `700 ${Math.round(21 * uiScale)}px Inter, system-ui, sans-serif`;
   for (const item of legItems) {
-    roundRectPath(ctx, lx, legY - sw + Math.round(3 * scaleFactor), sw, sw, Math.round(4 * scaleFactor));
+    roundRectPath(ctx, lx, legY - sw + Math.round(3 * uiScale), sw, sw, Math.round(5 * uiScale));
     ctx.fillStyle = item.fill;
     ctx.fill();
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = item.stroke;
     ctx.stroke();
 
     ctx.fillStyle = pal.textMuted;
-    ctx.fillText(item.label, lx + sw + Math.round(8 * scaleFactor), legY);
-    lx += sw + Math.round(28 * scaleFactor) + ctx.measureText(item.label).width;
+    ctx.fillText(item.label, lx + sw + Math.round(8 * uiScale), legY);
+    lx += sw + Math.round(24 * uiScale) + ctx.measureText(item.label).width;
   }
 }
 
@@ -449,23 +467,47 @@ function drawSelectedDayBanner(
   box: Rect,
   opts: ExportCalendarOptions,
   pal: Palette,
-  scaleFactor = 1
+  uiScale = 1
 ) {
   const { selectedDay, selectedDayMetrics } = opts;
   if (!selectedDay) return;
 
-  roundRectPath(ctx, box.x, box.y, box.w, box.h, 22 * scaleFactor);
+  roundRectPath(ctx, box.x, box.y, box.w, box.h, Math.round(22 * uiScale));
   ctx.fillStyle = pal.cardBg;
   ctx.fill();
-  ctx.lineWidth = 2.2;
+  ctx.lineWidth = 2.4;
   ctx.strokeStyle = pal.border;
   ctx.stroke();
 
-  const px = box.x + Math.round(28 * scaleFactor);
+  const rainPlancon = classifyRainPlancon(selectedDayMetrics.rainMaxMm);
+  const badgeText =
+    selectedDayMetrics.rainMaxMm <= 0.1 && selectedDayMetrics.rainMean <= 0.1
+      ? 'Sem chuva'
+      : rainPlancon.titulo;
+  ctx.font = `800 ${Math.round(23 * uiScale)}px Inter, system-ui, sans-serif`;
+  const bW = Math.min(Math.round(340 * uiScale), ctx.measureText(badgeText).width + Math.round(44 * uiScale));
+  const bH = Math.round(54 * uiScale);
+  const bX = box.x + box.w - Math.round(24 * uiScale) - bW;
+  const bY = box.y + Math.round((box.h - bH) / 2);
+
+  roundRectPath(ctx, bX, bY, bW, bH, bH / 2);
+  ctx.fillStyle = pal.dark ? 'rgba(255,130,68,0.18)' : 'rgba(255,130,68,0.14)';
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = pal.accent;
+  ctx.stroke();
+
+  ctx.fillStyle = pal.accent;
+  ctx.textAlign = 'center';
+  ctx.fillText(fitText(ctx, badgeText, bW - 20), bX + bW / 2, bY + Math.round(35 * uiScale));
+  ctx.textAlign = 'left';
+
+  const px = box.x + Math.round(28 * uiScale);
+  const availLeftW = bX - px - Math.round(18 * uiScale);
   const titleTxt = `${formatWeekdayFull(selectedDay.data_iso)} — ${selectedDay.data_br || formatBrDate(selectedDay.data_iso)}`;
   ctx.fillStyle = pal.textMain;
-  ctx.font = `800 ${Math.round(30 * scaleFactor)}px Inter, system-ui, sans-serif`;
-  ctx.fillText(fitText(ctx, titleTxt, box.w - Math.round(320 * scaleFactor)), px, box.y + Math.round(42 * scaleFactor));
+  ctx.font = `800 ${Math.round(36 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.fillText(fitText(ctx, titleTxt, availLeftW), px, box.y + Math.round(50 * uiScale));
 
   const subParts = [
     selectedDay.horas_registradas ? `${selectedDay.horas_registradas}h monitoradas` : 'Monitoramento contínuo',
@@ -473,32 +515,8 @@ function drawSelectedDayBanner(
     selectedDay.is_live_today ? 'AO VIVO HOJE' : '',
   ].filter(Boolean);
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(18 * scaleFactor)}px "JetBrains Mono", monospace`;
-  ctx.fillText(fitText(ctx, subParts.join(' · '), box.w - Math.round(320 * scaleFactor)), px, box.y + Math.round(74 * scaleFactor));
-
-  // Badge PLANCON à direita
-  const rainPlancon = classifyRainPlancon(selectedDayMetrics.rainMaxMm);
-  const badgeText =
-    selectedDayMetrics.rainMaxMm <= 0.1 && selectedDayMetrics.rainMean <= 0.1
-      ? 'Sem chuva'
-      : rainPlancon.titulo;
-  ctx.font = `700 ${Math.round(18 * scaleFactor)}px Inter, system-ui, sans-serif`;
-  const bW = Math.min(Math.round(280 * scaleFactor), ctx.measureText(badgeText).width + Math.round(36 * scaleFactor));
-  const bH = Math.round(44 * scaleFactor);
-  const bX = box.x + box.w - Math.round(24 * scaleFactor) - bW;
-  const bY = box.y + Math.round((box.h - bH) / 2);
-
-  roundRectPath(ctx, bX, bY, bW, bH, bH / 2);
-  ctx.fillStyle = pal.dark ? 'rgba(255,130,68,0.16)' : 'rgba(255,130,68,0.12)';
-  ctx.fill();
-  ctx.lineWidth = 1.8;
-  ctx.strokeStyle = pal.accent;
-  ctx.stroke();
-
-  ctx.fillStyle = pal.accent;
-  ctx.textAlign = 'center';
-  ctx.fillText(fitText(ctx, badgeText, bW - 18), bX + bW / 2, bY + Math.round(29 * scaleFactor));
-  ctx.textAlign = 'left';
+  ctx.font = `700 ${Math.round(22 * uiScale)}px "JetBrains Mono", monospace`;
+  ctx.fillText(fitText(ctx, subParts.join(' · '), availLeftW), px, box.y + Math.round(86 * uiScale));
 }
 
 function drawDayKpisGrid(
@@ -507,13 +525,13 @@ function drawDayKpisGrid(
   opts: ExportCalendarOptions,
   pal: Palette,
   cols: 2 | 4,
-  scaleFactor = 1
+  uiScale = 1
 ) {
   const { selectedDay, selectedDayMetrics } = opts;
   if (!selectedDay) return;
 
   const rows = cols === 4 ? 1 : 2;
-  const gap = Math.round(18 * scaleFactor);
+  const gap = Math.round(16 * uiScale);
   const cardW = (box.w - gap * (cols - 1)) / cols;
   const cardH = (box.h - gap * (rows - 1)) / rows;
 
@@ -531,7 +549,7 @@ function drawDayKpisGrid(
       label: 'MAIOR REGISTRO NO DIA',
       val: `${selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
       valColor: pal.accent,
-      sub: `${selectedDayMetrics.rainMaxMm > 0 ? selectedDayMetrics.rainMaxStation : 'Sem registro de chuva na rede'}${picoHoraStr}`,
+      sub: `${selectedDayMetrics.rainMaxMm > 0 ? selectedDayMetrics.rainMaxStation : 'Sem registro na rede'}${picoHoraStr}`,
     },
     {
       label: 'MÉDIA MUNICIPAL DA REDE',
@@ -548,13 +566,13 @@ function drawDayKpisGrid(
       valColor: pal.textMain,
       sub: `${
         selectedDayMetrics.sustMaxKmh > 0
-          ? `${selectedDayMetrics.sustMaxStation}${
+          ? `${shortenStationLabel(selectedDayMetrics.sustMaxStation)}${
               selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
                 ? ` às ${selectedDay.vento_vel_max_horario}`
                 : ''
             } · `
           : ''
-      }Predom.: ${selectedDay.vento_dir_predominante || '--'} · Méd.: ${Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)} km/h`,
+      }Pred.: ${selectedDay.vento_dir_predominante || '--'} · Méd.: ${Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)}`,
     },
     {
       label: 'RAJADA MÁXIMA DO DIA',
@@ -562,14 +580,18 @@ function drawDayKpisGrid(
       valColor: selectedDayMetrics.gustMaxKmh >= 41 ? pal.accent : pal.textMain,
       sub:
         selectedDayMetrics.gustMaxKmh > 0
-          ? `${selectedDayMetrics.gustMaxStation}${
+          ? `${shortenStationLabel(selectedDayMetrics.gustMaxStation)}${
               selectedDay.vento_rajada_max_horario && selectedDay.vento_rajada_max_horario !== '--'
                 ? ` às ${selectedDay.vento_rajada_max_horario}`
                 : ''
-            } · ${windPlancon.gustTitulo} (${windPlancon.riscoLabel})`
+            } · ${windPlancon.gustTitulo}`
           : 'Sem rajada registrada',
     },
   ];
+
+  const lblFont = Math.round(21 * uiScale);
+  const valFont = Math.min(Math.round(cardH * 0.27), Math.round(54 * uiScale));
+  const subFont = Math.round(21 * uiScale);
 
   cards.forEach((c, idx) => {
     const colIdx = idx % cols;
@@ -577,29 +599,29 @@ function drawDayKpisGrid(
     const x = box.x + colIdx * (cardW + gap);
     const y = box.y + rowIdx * (cardH + gap);
 
-    roundRectPath(ctx, x, y, cardW, cardH, 20 * scaleFactor);
+    roundRectPath(ctx, x, y, cardW, cardH, Math.round(20 * uiScale));
     ctx.fillStyle = pal.cardBg;
     ctx.fill();
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.2;
     ctx.strokeStyle = pal.border;
     ctx.stroke();
 
-    const px = x + Math.round(24 * scaleFactor);
-    const innerW = cardW - Math.round(48 * scaleFactor);
+    const px = x + Math.round(24 * uiScale);
+    const innerW = cardW - Math.round(48 * uiScale);
 
     ctx.fillStyle = pal.textMuted;
-    ctx.font = `700 ${Math.round(17 * scaleFactor)}px "JetBrains Mono", monospace`;
-    ctx.fillText(fitText(ctx, c.label, innerW), px, y + Math.round(36 * scaleFactor));
+    ctx.font = `800 ${lblFont}px "JetBrains Mono", monospace`;
+    ctx.fillText(fitText(ctx, c.label, innerW), px, y + Math.round(cardH * 0.22));
 
     ctx.fillStyle = c.valColor;
-    ctx.font = `800 ${Math.round((cardH >= 200 ? 44 : 36) * scaleFactor)}px "JetBrains Mono", monospace`;
+    ctx.font = `800 ${valFont}px "JetBrains Mono", monospace`;
     ctx.fillText(fitText(ctx, c.val, innerW), px, y + Math.round(cardH * 0.56));
 
     ctx.fillStyle = pal.textMuted;
-    ctx.font = `500 ${Math.round(17 * scaleFactor)}px Inter, system-ui, sans-serif`;
+    ctx.font = `600 ${subFont}px Inter, system-ui, sans-serif`;
     const subLines = wrapText(ctx, c.sub, innerW, 2);
     subLines.forEach((line, li) => {
-      ctx.fillText(line, px, y + Math.round(cardH * 0.77) + li * Math.round(21 * scaleFactor));
+      ctx.fillText(line, px, y + Math.round(cardH * 0.77) + li * Math.round(subFont * 1.22));
     });
   });
 }
@@ -609,56 +631,58 @@ function drawSynopticCard(
   box: Rect,
   selectedDay: HistoricoResumoDiario | null,
   pal: Palette,
-  scaleFactor = 1
+  uiScale = 1
 ) {
   if (!selectedDay) return;
-  roundRectPath(ctx, box.x, box.y, box.w, box.h, 20 * scaleFactor);
+  roundRectPath(ctx, box.x, box.y, box.w, box.h, Math.round(20 * uiScale));
   ctx.fillStyle = pal.cardBg;
   ctx.fill();
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.2;
   ctx.strokeStyle = pal.border;
   ctx.stroke();
 
-  const px = box.x + Math.round(26 * scaleFactor);
-  const innerW = box.w - Math.round(52 * scaleFactor);
-  let cy = box.y + Math.round(38 * scaleFactor);
+  const px = box.x + Math.round(26 * uiScale);
+  const innerW = box.w - Math.round(52 * uiScale);
+  const lineH = Math.round(30 * uiScale);
+  let cy = box.y + Math.round(38 * uiScale);
 
   const metrics: string[] = [];
   if (selectedDay.temp_min_c !== undefined && selectedDay.temp_max_c !== undefined) {
-    metrics.push(`Temp.: ${Number(selectedDay.temp_min_c).toFixed(1)}° – ${Number(selectedDay.temp_max_c).toFixed(1)}°C`);
+    metrics.push(`Temp.: ${Number(selectedDay.temp_min_c).toFixed(1)}°–${Number(selectedDay.temp_max_c).toFixed(1)}°C`);
   }
   if (selectedDay.umidade_media_pct !== undefined) {
-    metrics.push(`Umid. méd.: ${Math.round(Number(selectedDay.umidade_media_pct))}%`);
+    metrics.push(`Umid.: ${Math.round(Number(selectedDay.umidade_media_pct))}%`);
   }
   if (selectedDay.pressao_min_hpa !== undefined && selectedDay.pressao_max_hpa !== undefined) {
-    metrics.push(`Pressão: ${Number(selectedDay.pressao_min_hpa).toFixed(1)}–${Number(selectedDay.pressao_max_hpa).toFixed(1)} hPa`);
+    metrics.push(`Press.: ${Number(selectedDay.pressao_min_hpa).toFixed(1)}–${Number(selectedDay.pressao_max_hpa).toFixed(1)} hPa`);
   }
   if (metrics.length > 0) {
     ctx.fillStyle = pal.textMain;
-    ctx.font = `700 ${Math.round(19 * scaleFactor)}px "JetBrains Mono", monospace`;
-    ctx.fillText(fitText(ctx, metrics.join('   ·   '), innerW), px, cy);
-    cy += Math.round(34 * scaleFactor);
+    ctx.font = `700 ${Math.round(23 * uiScale)}px "JetBrains Mono", monospace`;
+    ctx.fillText(fitText(ctx, metrics.join(' · '), innerW), px, cy);
+    cy += Math.round(36 * uiScale);
   }
 
   if (selectedDay.sistema_atuante_dia) {
     ctx.fillStyle = pal.accent;
-    ctx.font = `700 ${Math.round(19 * scaleFactor)}px Inter, system-ui, sans-serif`;
-    const sysLines = wrapText(ctx, `Sistema atuante: ${selectedDay.sistema_atuante_dia}`, innerW, 2);
+    ctx.font = `700 ${Math.round(23 * uiScale)}px Inter, system-ui, sans-serif`;
+    const sysLines = wrapText(ctx, `Sistema: ${selectedDay.sistema_atuante_dia}`, innerW, 2);
     sysLines.forEach((line) => {
       ctx.fillText(line, px, cy);
-      cy += Math.round(25 * scaleFactor);
+      cy += lineH;
     });
-    cy += Math.round(6 * scaleFactor);
+    cy += Math.round(4 * uiScale);
   }
 
   if (selectedDay.caracteristicas_dia) {
     ctx.fillStyle = pal.textMuted;
-    ctx.font = `500 ${Math.round(18 * scaleFactor)}px Inter, system-ui, sans-serif`;
-    const maxLines = Math.max(1, Math.floor((box.y + box.h - 20 - cy) / Math.round(24 * scaleFactor)));
+    ctx.font = `500 ${Math.round(21 * uiScale)}px Inter, system-ui, sans-serif`;
+    const bodyLH = Math.round(28 * uiScale);
+    const maxLines = Math.max(1, Math.floor((box.y + box.h - 14 - cy) / bodyLH));
     const descLines = wrapText(ctx, selectedDay.caracteristicas_dia, innerW, Math.min(3, maxLines));
     descLines.forEach((line) => {
       ctx.fillText(line, px, cy);
-      cy += Math.round(24 * scaleFactor);
+      cy += bodyLH;
     });
   }
 }
@@ -670,38 +694,46 @@ function drawStationsPanel(
   pal: Palette,
   cols: 2 | 3,
   dateBr: string,
-  scaleFactor = 1
+  uiScale = 1
 ) {
-  roundRectPath(ctx, box.x, box.y, box.w, box.h, 22 * scaleFactor);
+  roundRectPath(ctx, box.x, box.y, box.w, box.h, Math.round(22 * uiScale));
   ctx.fillStyle = pal.cardBg;
   ctx.fill();
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.2;
   ctx.strokeStyle = pal.border;
   ctx.stroke();
 
-  const pad = Math.round(24 * scaleFactor);
+  const pad = Math.round(22 * uiScale);
   const innerW = box.w - pad * 2;
   const px = box.x + pad;
-  const titleY = box.y + Math.round(36 * scaleFactor);
+  const titleY = box.y + Math.round(38 * uiScale);
 
   ctx.fillStyle = pal.textMain;
-  ctx.font = `700 ${Math.round(21 * scaleFactor)}px Inter, system-ui, sans-serif`;
-  ctx.fillText(`Acumulado, Vento & Rajada Máxima por Estação (${dateBr})`, px, titleY);
+  ctx.font = `800 ${Math.round(25 * uiScale)}px Inter, system-ui, sans-serif`;
+  ctx.fillText(
+    fitText(ctx, `Maiores Registros por Estação (${dateBr})`, innerW - 180 * uiScale),
+    px,
+    titleY
+  );
 
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(17 * scaleFactor)}px "JetBrains Mono", monospace`;
+  ctx.font = `700 ${Math.round(21 * uiScale)}px "JetBrains Mono", monospace`;
   ctx.textAlign = 'right';
   ctx.fillText(`${stations.length} estações`, box.x + box.w - pad, titleY);
   ctx.textAlign = 'left';
 
   const visible = stations.slice(0, 6);
   const rows = Math.max(1, Math.ceil(visible.length / cols));
-  const gap = Math.round(14 * scaleFactor);
-  const gridY = box.y + Math.round(54 * scaleFactor);
+  const gap = Math.round(14 * uiScale);
+  const gridY = box.y + Math.round(58 * uiScale);
   const gridH = box.y + box.h - pad - gridY;
   const cardW = (innerW - gap * (cols - 1)) / cols;
   const cardH = (gridH - gap * (rows - 1)) / rows;
   const maxRain = Math.max(0.1, ...visible.map((s) => s.chuva_mm));
+
+  const nameFont = cols === 3 ? Math.round(22 * uiScale) : Math.round(25 * uiScale);
+  const valFont = cols === 3 ? Math.round(23 * uiScale) : Math.round(26 * uiScale);
+  const metaFont = cols === 3 ? Math.round(19 * uiScale) : Math.round(22 * uiScale);
 
   visible.forEach((st, idx) => {
     const col = idx % cols;
@@ -709,35 +741,35 @@ function drawStationsPanel(
     const sx = px + col * (cardW + gap);
     const sy = gridY + row * (cardH + gap);
 
-    roundRectPath(ctx, sx, sy, cardW, cardH, 14 * scaleFactor);
+    roundRectPath(ctx, sx, sy, cardW, cardH, Math.round(14 * uiScale));
     ctx.fillStyle = pal.innerBg;
     ctx.fill();
-    ctx.lineWidth = 1.6;
+    ctx.lineWidth = 1.8;
     ctx.strokeStyle = pal.gridBorder;
     ctx.stroke();
 
-    const sp = Math.round(16 * scaleFactor);
+    const sp = Math.round(16 * uiScale);
     const sw = cardW - sp * 2;
 
     const rainLabel = `${st.chuva_mm.toFixed(1)} mm`;
-    ctx.font = `800 ${Math.round(20 * scaleFactor)}px "JetBrains Mono", monospace`;
+    ctx.font = `800 ${valFont}px "JetBrains Mono", monospace`;
     const rLblW = ctx.measureText(rainLabel).width;
     ctx.fillStyle = pal.accent;
     ctx.textAlign = 'right';
-    ctx.fillText(rainLabel, sx + cardW - sp, sy + Math.round(cardH * 0.34));
+    ctx.fillText(rainLabel, sx + cardW - sp, sy + Math.round(cardH * 0.36));
     ctx.textAlign = 'left';
 
     ctx.fillStyle = pal.textMain;
-    ctx.font = `700 ${Math.round(19 * scaleFactor)}px Inter, system-ui, sans-serif`;
+    ctx.font = `700 ${nameFont}px Inter, system-ui, sans-serif`;
     ctx.fillText(
-      fitText(ctx, st.nome, sw - rLblW - Math.round(14 * scaleFactor)),
+      fitText(ctx, st.nome, sw - rLblW - Math.round(12 * uiScale)),
       sx + sp,
-      sy + Math.round(cardH * 0.34)
+      sy + Math.round(cardH * 0.36)
     );
 
     // Barra proporcional
-    const barY = sy + Math.round(cardH * 0.48);
-    const barH = Math.round(9 * scaleFactor);
+    const barY = sy + Math.round(cardH * 0.50);
+    const barH = Math.round(11 * uiScale);
     roundRectPath(ctx, sx + sp, barY, sw, barH, barH / 2);
     ctx.fillStyle = pal.dark ? '#1E293B' : '#E2E8F0';
     ctx.fill();
@@ -748,18 +780,23 @@ function drawStationsPanel(
       ctx.fill();
     }
 
-    // Linha inferior: Código esquerda + Vento/Rajada direita
-    const metaY = sy + Math.round(cardH * 0.82);
+    // Linha inferior com fonte ampla e nítida
+    const metaY = sy + Math.round(cardH * 0.85);
     ctx.fillStyle = pal.textMuted;
-    ctx.font = `600 ${Math.round(16 * scaleFactor)}px "JetBrains Mono", monospace`;
+    ctx.font = `700 ${metaFont}px "JetBrains Mono", monospace`;
+    const codeW = ctx.measureText(st.code).width;
     ctx.fillText(st.code, sx + sp, metaY);
 
     const windMeta =
       st.rajada_max_kmh > 0 || st.vento_max_kmh > 0
-        ? `${st.vento_max_kmh > 0 ? `Vento ${st.vento_max_kmh.toFixed(1)} · ` : ''}Raj. ${st.rajada_max_kmh.toFixed(1)} km/h`
+        ? `${st.vento_max_kmh > 0 ? `V:${st.vento_max_kmh.toFixed(1)} · ` : ''}R:${st.rajada_max_kmh.toFixed(1)} km/h`
         : 'Pluviômetro';
     ctx.textAlign = 'right';
-    ctx.fillText(fitText(ctx, windMeta, sw - 90 * scaleFactor), sx + cardW - sp, metaY);
+    ctx.fillText(
+      fitText(ctx, windMeta, sw - codeW - Math.round(10 * uiScale)),
+      sx + cardW - sp,
+      metaY
+    );
     ctx.textAlign = 'left';
   });
 }
@@ -802,78 +839,92 @@ export async function exportCalendarToHighResPng(
   const is4k = format === '4k';
   const isStory = format === 'story';
   const isPost = format === 'post';
-  const s = is4k ? 1.25 : isStory ? 1.05 : 1.0;
 
-  const padX = is4k ? 110 : isStory ? 84 : 78;
-  const topSafe = isStory ? 156 : is4k ? 66 : 64;
-  const botSafe = isStory ? 132 : is4k ? 62 : 58;
+  // Escala proporcional real à largura de destino (3840px ~ 1.48x, 2160px ~ 1.0x)
+  const hs = is4k ? 1.48 : isStory ? 1.08 : 1.04;
+
+  const padX = is4k ? 96 : 68;
+  const topSafe = isStory ? 148 : is4k ? 58 : 56;
+  const botSafe = isStory ? 116 : is4k ? 54 : 52;
   const contentW = W - padX * 2;
   let cursorY = topSafe;
 
-  // Cabeçalho unificado
-  const logoH = is4k ? 112 : isStory ? 116 : 98;
+  // Cabeçalho principal com letras grandes
+  const logoH = is4k ? 136 : isStory ? 124 : 108;
   if (logoImg) {
     const ratio = logoImg.width / Math.max(1, logoImg.height);
     ctx.drawImage(logoImg, padX, cursorY, logoH * ratio, logoH);
   } else {
     ctx.fillStyle = pal.textMain;
-    ctx.font = `800 ${Math.round(44 * s)}px Inter, system-ui, sans-serif`;
-    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + Math.round(62 * s));
+    ctx.font = `800 ${Math.round(52 * hs)}px Inter, system-ui, sans-serif`;
+    ctx.fillText('TEMPO EM RIO DAS OSTRAS', padX, cursorY + Math.round(72 * hs));
   }
 
   const tagText = '@tempoemriodasostras';
-  ctx.font = `700 ${Math.round(30 * s)}px "JetBrains Mono", monospace`;
-  const tagPadX = Math.round(30 * s);
+  ctx.font = `700 ${Math.round(32 * hs)}px "JetBrains Mono", monospace`;
+  const tagPadX = Math.round(28 * hs);
   const tagW = ctx.measureText(tagText).width + tagPadX * 2;
-  const tagH = Math.round(58 * s);
+  const tagH = Math.round(62 * hs);
   const tagX = W - padX - tagW;
   const tagY = cursorY + Math.round((logoH - tagH) / 2);
   roundRectPath(ctx, tagX, tagY, tagW, tagH, tagH / 2);
   ctx.fillStyle = darkTheme ? 'rgba(255,130,68,0.16)' : 'rgba(255,130,68,0.12)';
   ctx.fill();
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.4;
   ctx.strokeStyle = pal.accent;
   ctx.stroke();
   ctx.fillStyle = pal.accent;
-  ctx.fillText(tagText, tagX + tagPadX, tagY + Math.round(39 * s));
+  ctx.fillText(tagText, tagX + tagPadX, tagY + Math.round(42 * hs));
 
-  cursorY += logoH + Math.round(24 * s);
+  cursorY += logoH + Math.round(20 * hs);
 
   ctx.fillStyle = pal.textMain;
-  ctx.font = `800 ${Math.round((is4k ? 48 : 54) * (is4k ? 1.15 : 1.0))}px Inter, system-ui, sans-serif`;
-  ctx.fillText('CALENDÁRIO DIÁRIO — CHUVA, VENTO & RAJADAS', padX, cursorY + Math.round(42 * s));
-  cursorY += Math.round(62 * s);
+  ctx.font = `800 ${Math.round(54 * hs)}px Inter, system-ui, sans-serif`;
+  ctx.fillText(
+    fitText(ctx, 'CALENDÁRIO DIÁRIO — CHUVA, VENTO & RAJADAS', contentW),
+    padX,
+    cursorY + Math.round(44 * hs)
+  );
+  cursorY += Math.round(62 * hs);
 
   const selDateLabel = selectedDay
     ? ` · DIA SELECIONADO: ${(selectedDay.data_br || formatBrDate(selectedDay.data_iso)).toUpperCase()}`
     : '';
   ctx.fillStyle = pal.accent;
-  ctx.font = `700 ${Math.round(28 * (is4k ? 1.15 : 1.0))}px "JetBrains Mono", monospace`;
-  ctx.fillText(`${monthLabel.toUpperCase()}${format === 'calendar_only' ? ' · MAIORES REGISTROS DAS ESTAÇÕES' : selDateLabel}`, padX, cursorY + Math.round(24 * s));
-  cursorY += Math.round(50 * s);
+  ctx.font = `800 ${Math.round(30 * hs)}px "JetBrains Mono", monospace`;
+  ctx.fillText(
+    fitText(
+      ctx,
+      `${monthLabel.toUpperCase()}${format === 'calendar_only' ? ' · MAIORES REGISTROS DAS ESTAÇÕES' : selDateLabel}`,
+      contentW
+    ),
+    padX,
+    cursorY + Math.round(26 * hs)
+  );
+  cursorY += Math.round(48 * hs);
 
   if (is4k) {
-    // Layout 4K Widescreen lado a lado (3840x2160)
-    const bodyH = H - botSafe - Math.round(42 * s) - cursorY;
-    const leftW = Math.round(contentW * 0.42);
-    const colGap = 44;
+    // Painel 4K (3840x2160) com escalas maiores e leitura imediata
+    const bodyH = H - botSafe - 62 - cursorY;
+    const leftW = Math.round(contentW * 0.46);
+    const colGap = 42;
     const rightX = padX + leftW + colGap;
     const rightW = contentW - leftW - colGap;
 
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: leftW, h: bodyH }, opts, pal, 1.24);
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: leftW, h: bodyH }, opts, pal, 1.38);
 
     let ry = cursorY;
-    const bannerH = 128;
-    drawSelectedDayBanner(ctx, { x: rightX, y: ry, w: rightW, h: bannerH }, opts, pal, 1.18);
-    ry += bannerH + 26;
+    const bannerH = 148;
+    drawSelectedDayBanner(ctx, { x: rightX, y: ry, w: rightW, h: bannerH }, opts, pal, 1.36);
+    ry += bannerH + 24;
 
-    const kpiH = 500;
-    drawDayKpisGrid(ctx, { x: rightX, y: ry, w: rightW, h: kpiH }, opts, pal, 2, 1.18);
-    ry += kpiH + 26;
+    const kpiH = 510;
+    drawDayKpisGrid(ctx, { x: rightX, y: ry, w: rightW, h: kpiH }, opts, pal, 2, 1.34);
+    ry += kpiH + 24;
 
-    const synH = 264;
-    drawSynopticCard(ctx, { x: rightX, y: ry, w: rightW, h: synH }, selectedDay, pal, 1.16);
-    ry += synH + 26;
+    const synH = 266;
+    drawSynopticCard(ctx, { x: rightX, y: ry, w: rightW, h: synH }, selectedDay, pal, 1.32);
+    ry += synH + 24;
 
     const stH = cursorY + bodyH - ry;
     drawStationsPanel(
@@ -883,27 +934,27 @@ export async function exportCalendarToHighResPng(
       pal,
       2,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.16
+      1.32
     );
   } else if (isStory) {
     // Stories Vertical 9:16 (2160x3840)
-    const calH = 1300;
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.15);
-    cursorY += calH + 34;
+    const calH = 1380;
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.24);
+    cursorY += calH + 28;
 
-    const bannerH = 120;
-    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.12);
-    cursorY += bannerH + 26;
+    const bannerH = 134;
+    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.2);
+    cursorY += bannerH + 24;
 
-    const kpiH = 520;
-    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.12);
-    cursorY += kpiH + 26;
+    const kpiH = 530;
+    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.22);
+    cursorY += kpiH + 24;
 
-    const synH = 300;
-    drawSynopticCard(ctx, { x: padX, y: cursorY, w: contentW, h: synH }, selectedDay, pal, 1.1);
-    cursorY += synH + 26;
+    const synH = 290;
+    drawSynopticCard(ctx, { x: padX, y: cursorY, w: contentW, h: synH }, selectedDay, pal, 1.18);
+    cursorY += synH + 24;
 
-    const stH = H - botSafe - 46 - cursorY;
+    const stH = H - botSafe - 56 - cursorY;
     drawStationsPanel(
       ctx,
       { x: padX, y: cursorY, w: contentW, h: stH },
@@ -911,23 +962,23 @@ export async function exportCalendarToHighResPng(
       pal,
       2,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.1
+      1.18
     );
   } else if (isPost) {
     // Feed Instagram 4:5 (2160x2700)
-    const calH = 1140;
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.08);
-    cursorY += calH + 26;
+    const calH = 1130;
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.12);
+    cursorY += calH + 22;
 
-    const bannerH = 104;
-    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.0);
-    cursorY += bannerH + 22;
+    const bannerH = 118;
+    drawSelectedDayBanner(ctx, { x: padX, y: cursorY, w: contentW, h: bannerH }, opts, pal, 1.08);
+    cursorY += bannerH + 20;
 
-    const kpiH = 440;
-    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.0);
-    cursorY += kpiH + 22;
+    const kpiH = 446;
+    drawDayKpisGrid(ctx, { x: padX, y: cursorY, w: contentW, h: kpiH }, opts, pal, 2, 1.1);
+    cursorY += kpiH + 20;
 
-    const stH = H - botSafe - 40 - cursorY;
+    const stH = H - botSafe - 50 - cursorY;
     drawStationsPanel(
       ctx,
       { x: padX, y: cursorY, w: contentW, h: stH },
@@ -935,78 +986,77 @@ export async function exportCalendarToHighResPng(
       pal,
       3,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      0.95
+      1.04
     );
   } else {
     // 'calendar_only' — Calendário Mensal Ampliado Ultra-HD (2160x2700)
-    const sumH = 290;
-    const calH = H - botSafe - 48 - sumH - 32 - cursorY;
-    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.32);
-    cursorY += calH + 32;
+    const sumH = 340;
+    const calH = H - botSafe - 56 - sumH - 28 - cursorY;
+    drawCalendarGridPanel(ctx, { x: padX, y: cursorY, w: contentW, h: calH }, opts, pal, 1.38);
+    cursorY += calH + 28;
 
-    // Resumo mensal em 4 blocos horizontais
     const sumCols = 4;
     const gap = 20;
     const sw = (contentW - gap * (sumCols - 1)) / sumCols;
     const summaryCards = [
       {
-        label: 'ACUMULADO TOTAL NO MÊS',
+        label: 'ACUMULADO NO MÊS',
         val: `${(monthStats?.monthMaxStationTotalMm ?? 0).toFixed(1)} mm`,
-        sub: `${monthStats?.monthMaxStationName || 'Rede'} · Média: ${(monthStats?.monthMeanTotalMm ?? 0).toFixed(1)} mm`,
+        sub: `${shortenStationLabel(monthStats?.monthMaxStationName)} · Méd.: ${(monthStats?.monthMeanTotalMm ?? 0).toFixed(1)} mm`,
         accentVal: true,
       },
       {
-        label: 'DIA MAIS CHUVOSO DO MÊS',
+        label: 'DIA MAIS CHUVOSO',
         val: monthStats?.wettestDayIso ? formatBrDate(monthStats.wettestDayIso).slice(0, 5) : '--',
-        sub: `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${monthStats?.wettestStation || 'Rede'}`,
+        sub: `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${shortenStationLabel(monthStats?.wettestStation)}`,
         accentVal: false,
       },
       {
-        label: 'MAIOR RAJADA NO MÊS',
+        label: 'MAIOR RAJADA MÊS',
         val: `${(monthStats?.windiestMaxKmh ?? 0).toFixed(1)} km/h`,
         sub: monthStats?.windiestDayIso
-          ? `${formatBrDate(monthStats.windiestDayIso).slice(0, 5)} · ${monthStats.windiestStation || 'Rede'}`
+          ? `${formatBrDate(monthStats.windiestDayIso).slice(0, 5)} · ${shortenStationLabel(monthStats.windiestStation)}`
           : '--',
         accentVal: false,
       },
       {
-        label: `CHUVA MÊS · DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'}`,
+        label: `DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'} (${monthStats?.rainyDays ?? 0}/${monthStats?.totalDays ?? 0}d)`,
         val: `${opts.selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
-        sub: `${monthStats?.rainyDays ?? 0}/${monthStats?.totalDays ?? 0}d c/ chuva · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
+        sub: `Sust ${opts.selectedDayMetrics.sustMaxKmh.toFixed(1)} · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
         accentVal: true,
       },
     ];
 
     summaryCards.forEach((sc, idx) => {
       const cx = padX + idx * (sw + gap);
-      roundRectPath(ctx, cx, cursorY, sw, sumH, 22);
+      roundRectPath(ctx, cx, cursorY, sw, sumH, 24);
       ctx.fillStyle = pal.cardBg;
       ctx.fill();
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.4;
       ctx.strokeStyle = pal.border;
       ctx.stroke();
 
       const cpad = 24;
       ctx.fillStyle = pal.textMuted;
-      ctx.font = '700 20px "JetBrains Mono", monospace';
-      ctx.fillText(fitText(ctx, sc.label, sw - cpad * 2), cx + cpad, cursorY + 52);
+      ctx.font = '800 24px "JetBrains Mono", monospace';
+      ctx.fillText(fitText(ctx, sc.label, sw - cpad * 2), cx + cpad, cursorY + 56);
 
       ctx.fillStyle = sc.accentVal ? pal.accent : pal.textMain;
-      ctx.font = '800 44px "JetBrains Mono", monospace';
-      ctx.fillText(fitText(ctx, sc.val, sw - cpad * 2), cx + cpad, cursorY + 148);
+      ctx.font = '800 58px "JetBrains Mono", monospace';
+      ctx.fillText(fitText(ctx, sc.val, sw - cpad * 2), cx + cpad, cursorY + 174);
 
       ctx.fillStyle = pal.textMuted;
-      ctx.font = '600 20px Inter, system-ui, sans-serif';
+      ctx.font = '700 25px Inter, system-ui, sans-serif';
       const lines = wrapText(ctx, sc.sub, sw - cpad * 2, 2);
       lines.forEach((l, li) => {
-        ctx.fillText(l, cx + cpad, cursorY + 208 + li * 28);
+        ctx.fillText(l, cx + cpad, cursorY + 246 + li * 34);
       });
     });
   }
 
-  // Rodapé padrão com crédito oficial solicitado
+  // Rodapé grande e nítido com crédito oficial
   ctx.fillStyle = pal.textMuted;
-  ctx.font = `600 ${Math.round(22 * (is4k ? 1.18 : 1.0))}px "JetBrains Mono", monospace`;
+  ctx.font = `700 ${is4k ? 38 : 28}px Inter, system-ui, sans-serif`;
   const footerTxt = `Fonte: Dados retirados das estações meteorológicas da Defesa Civil de Rio das Ostras · Atualizado em ${formatNowBrt()} BRT`;
   ctx.fillText(fitText(ctx, footerTxt, contentW), padX, H - botSafe);
 
