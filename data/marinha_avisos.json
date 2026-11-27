@@ -15,10 +15,10 @@
   "validade": "Avisos nº 819/2026 válidos a partir de 27/11 às 18:00h até 28/11 às 15:00h",
   "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
   "restricao": "Atenção a pescadores, navegantes e banhistas na Área Delta: força 4-5 beaufort (Até 45 km/h) e ondas de 3,0 a 3,5 m (Mar Grosso), válidos de 27/11 às 18:00h até 28/11 às 15:00h.",
-  "atualizacao_brt": "27/11/2026 às 13:19h BRT",
-  "atualizacao_utc": "2026-11-27T16:19:18.898162+00:00",
+  "atualizacao_brt": "27/11/2026 às 16:24h BRT",
+  "atualizacao_utc": "2026-11-27T19:24:47.317976+00:00",
   "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-  "total_avisos_brasil": 7,
+  "total_avisos_brasil": 6,
   "avisos_ativos": [
     {
       "numero": "819/2026",
@@ -108,28 +108,6 @@
       "validade": "Aviso nº 811/2026 válido até 27/11 às 18:00h",
       "restricao": "Atenção a pescadores, navegantes e banhistas: SW/S FORÇA 8 COM RAJADAS FORÇA 9 (75 a 88 km/h) e ondas estimadas em 2,0 a 2,5 m (Agitado).",
       "texto": "AVISO NR 811/2026 AVISO DE VENTO MUITO FORTE EMITIDO ÀS 1300Z - TER - 24/NOV/2026 ÁREA OCEÂNICA ENTRE 29.7S041.7W, 36S048.1W, 36S020W E 29.6S020W A PARTIR DE 260600Z. VENTO SW/S FORÇA 8 COM RAJADAS FORÇA 9. VÁLIDO ATÉ 272100Z.",
-      "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
-    },
-    {
-      "numero": "813/2026",
-      "tipo": "MAR GROSSO",
-      "area_grupo": "Área Alfa",
-      "area": "Área Alfa (Setor Oceânico)",
-      "eh_area_delta": false,
-      "forca": "FORÇA 4-5 BEAUFORT",
-      "rajadas": "Até 45 km/h",
-      "mar_ondas": "S/SE 3,0 a 4,5 m (Mar Grosso)",
-      "ondas": "S/SE 3,0 a 4,5 m (Mar Grosso)",
-      "emissao": "1300Z - TER - 24/NOV/2026",
-      "inicio_utc": "2026-11-26T06:00:00Z",
-      "fim_utc": "2026-11-27T18:00:00Z",
-      "inicio_br": "26/11 às 03:00h",
-      "fim_br": "27/11 às 15:00h",
-      "status_vigencia": "Em Vigor",
-      "periodo": "De 26/11 às 03:00h até 27/11 às 15:00h",
-      "validade": "Aviso nº 813/2026 válido até 27/11 às 15:00h",
-      "restricao": "Mar agitado com ondas de S/SE 3,0 a 4,5 m (Mar Grosso) e força 4-5 beaufort. Evite navegação de pequeno porte.",
-      "texto": "AVISO NR 813/2026 AVISO DE MAR GROSSO/MUITO GROSSO EMITIDO ÀS 1300Z - TER - 24/NOV/2026 ÁREA OCEÂNICA ENTRE 33.9S052.7W, 29.2S047.9W, 31.1S043W E 35.8S048W A PARTIR DE 260600Z. ONDAS DE S/SE 3.0/4.5 METROS. VÁLIDO ATÉ 271800Z.",
       "fonte_url": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo"
     },
     {
