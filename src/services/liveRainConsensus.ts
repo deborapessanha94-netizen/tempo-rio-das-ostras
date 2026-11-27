@@ -327,7 +327,7 @@ function weightedQuantiles(samples: Array<[number, number]>): {
   };
 }
 
-function normalizeLiveInmetAlerts(raw: { hoje?: any[]; futuro?: any[] } | null): InmetAviso[] | null {
+export function normalizeLiveInmetAlerts(raw: { hoje?: any[]; futuro?: any[] } | null): InmetAviso[] | null {
   if (!raw || (!Array.isArray(raw.hoje) && !Array.isArray(raw.futuro))) return null;
   const seen = new Set<string>();
   const list: InmetAviso[] = [];

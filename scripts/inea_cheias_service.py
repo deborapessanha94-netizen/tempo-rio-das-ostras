@@ -119,25 +119,30 @@ def fetch_latest_bulletin_info():
 
 
 def download_bulletin_pdf(pdf_url, target_path):
-    """Faz download do PDF oficial para análise local."""
+    """Faz download do PDF oficial para análise local com retentativa."""
     urls_to_try = [pdf_url]
     if pdf_url.startswith("https://"):
         urls_to_try.append("http://" + pdf_url[len("https://"):])
-    for u in urls_to_try:
-        try:
-            req = urllib.request.Request(
-                u,
-                headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
-            )
-            with urllib.request.urlopen(req, context=SSL_CTX, timeout=20) as response:
-                pdf_bytes = response.read()
-                if len(pdf_bytes) > 5000 and pdf_bytes[:4] == b"%PDF":
-                    os.makedirs(os.path.dirname(target_path), exist_ok=True)
-                    with open(target_path, "wb") as f:
-                        f.write(pdf_bytes)
-                    return len(pdf_bytes)
-        except Exception as e:
-            print(f"[AVISO] Falha ao baixar PDF ({u}): {e}")
+    for _attempt in range(2):
+        for u in urls_to_try:
+            try:
+                req = urllib.request.Request(
+                    u,
+                    headers={
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+                        "Referer": "https://alertadecheias.inea.rj.gov.br/analise.php",
+                        "Cache-Control": "no-cache",
+                    },
+                )
+                with urllib.request.urlopen(req, context=SSL_CTX, timeout=22) as response:
+                    pdf_bytes = response.read()
+                    if len(pdf_bytes) > 5000 and pdf_bytes[:4] == b"%PDF":
+                        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                        with open(target_path, "wb") as f:
+                            f.write(pdf_bytes)
+                        return len(pdf_bytes)
+            except Exception as e:
+                print(f"[AVISO] Falha ao baixar PDF ({u}): {e}")
     return 0
 
 
@@ -486,7 +491,15 @@ def get_hydro_forecast_summary():
 
     pdf_sha = None
     parsed = None
-    if os.path.exists(OUTPUT_PDF) and os.path.getsize(OUTPUT_PDF) > 5000:
+    prev_arquivo = None
+    if os.path.exists(OUTPUT_JSON):
+        try:
+            prev_json_check = json.loads(Path(OUTPUT_JSON).read_text(encoding="utf-8"))
+            prev_arquivo = prev_json_check.get("bulletin_info", {}).get("arquivo")
+        except Exception:
+            prev_arquivo = None
+    can_use_disk_pdf = (pdf_size > 0) or (prev_arquivo and prev_arquivo == info.get("arquivo"))
+    if can_use_disk_pdf and os.path.exists(OUTPUT_PDF) and os.path.getsize(OUTPUT_PDF) > 5000:
         raw_pdf = Path(OUTPUT_PDF).read_bytes()
         pdf_sha = hashlib.sha256(raw_pdf).hexdigest()[:16]
         parsed = parse_inea_bulletin_pdf(OUTPUT_PDF, d0_str)

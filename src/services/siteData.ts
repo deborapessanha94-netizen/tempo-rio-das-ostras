@@ -1,5 +1,5 @@
 import { enrichAcumuladosWithLiveTelemetry, selectLiveWindStation } from './liveTelemetry';
-import { reconcileLiveRainConsensus } from './liveRainConsensus';
+import { normalizeLiveInmetAlerts, reconcileLiveRainConsensus } from './liveRainConsensus';
 import type { HeatIndicesDataset } from './heatIndex';
 import type { WindRoseDataset, WindSampleRaw } from './windRose';
 
@@ -206,8 +206,20 @@ export interface InmetAviso {
   tipo: string;
   titulo?: string;
   descricao: string;
+  cor_nome?: string;
+  cor_badge?: string;
+  cor_hex?: string;
+  eh_direto_ostras?: boolean;
   inicio: string;
   fim: string;
+  inicio_formatado?: string;
+  fim_formatado?: string;
+  data_inicio?: string;
+  hora_inicio?: string;
+  data_fim?: string;
+  hora_fim?: string;
+  estados?: string;
+  municipios?: string;
   riscos?: string[];
   instrucoes?: string[];
 }
@@ -216,6 +228,7 @@ export interface MarinhaAvisoItem {
   numero: string;
   tipo: string;
   area_grupo?: string;
+  areas_abrangidas?: string[];
   area: string;
   eh_area_delta?: boolean;
   forca?: string;
@@ -571,6 +584,28 @@ export async function fetchMarinhaAvisosLive(): Promise<MarinhaAvisos | null> {
   });
 }
 
+export async function fetchInmetAvisosLive(): Promise<InmetAviso[] | null> {
+  const ts = Date.now();
+  const liveRaw = await fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>(
+    `https://apiprevmet3.inmet.gov.br/avisos/ativos?t=${ts}`,
+    5000
+  );
+  const normalized = normalizeLiveInmetAlerts(liveRaw);
+  if (normalized !== null) return normalized;
+
+  const [rawRes, localRes] = await Promise.all([
+    fetchJsonSafe<InmetAviso[]>(`${RAW_REPO_DATA_BASE}/data/inmet_avisos.json?t=${ts}`),
+    fetchJsonSafe<InmetAviso[]>(`${SITE_BASE}/data/inmet_avisos.json?t=${ts}`),
+  ]);
+  return rawRes || localRes;
+}
+
+export async function fetchBoletimMetaLive(): Promise<BoletimMetadata | null> {
+  return fetchLatestRepoJson<BoletimMetadata>('data/boletim_metadata.json', (item) =>
+    Number(item.generation_epoch_ms || parseIsoMs(item.emissao_iso) || 0)
+  );
+}
+
 export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean } = {}) {
   const ts = Date.now();
   const acumuladosLivePromise = fetchLatestRepoJson<AcumuladosDataset>(
@@ -654,7 +689,7 @@ export async function loadAllLiveSiteData(options: { forceFullHistory?: boolean 
       5000
     ),
     fetchJsonSafe<Record<string, any>>('https://apiprevmet3.inmet.gov.br/previsao/3304524', 4500),
-    fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>('https://apiprevmet3.inmet.gov.br/avisos/ativos', 4500),
+    fetchJsonSafe<{ hoje?: any[]; futuro?: any[] }>(`https://apiprevmet3.inmet.gov.br/avisos/ativos?t=${ts}`, 4500),
     fetchJsonSafe<Record<string, any>>('https://www.cptec.inpe.br/api/forecast-input?city=Rio%20das%20Ostras,%20RJ', 4500),
     fetchJsonSafe<Array<Record<string, any>>>('https://www.cptec.inpe.br/api/forecast-input-next-days?city=Rio%20das%20Ostras,%20RJ', 4500),
   ]);

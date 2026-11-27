@@ -255,11 +255,12 @@ def _build_area_description(clean_text, group_area):
         if "DELTA" in group_area.upper():
             return "Área Oceânica Delta (Bacia de Campos)"
         return f"{group_area} (Setor Oceânico)" if group_area else "Área Oceânica METAREA V"
-    if "COSTEIRA" in up:
-        m_trecho = re.search(r'ENTRE\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ/\s.,0-9-]+?)(?:\s+(?:ATÉ|ATE|A PARTIR DE|COM|VENTO)|\.|$)', up)
+    if "RESSACA" in up or "COSTEIRA" in up:
+        m_trecho = re.search(r'ENTRE\s+([A-ZÁÉÍÓÚÂÊÔÃÕÇ/\s.,0-9-]+?)(?:\s+(?:ATÉ|ATE|A PARTIR DE|COM|VENTO|EMITIDO|VALIDO|VÁLIDO)|\.|$)', up)
         if m_trecho:
             trecho = _format_pt_trecho(m_trecho.group(1))
-            return f"{group_area} — Costeira ({trecho})" if group_area else f"Área Costeira ({trecho})"
+            lbl = "Litoral" if "RESSACA" in up else "Costeira"
+            return f"{group_area} — {lbl} ({trecho})" if group_area else f"Área Costeira ({trecho})"
     return group_area or "Área DELTA"
 
 
@@ -315,13 +316,11 @@ def fetch_marinha_avisos():
             html = res.read().decode("utf-8", errors="replace")
 
         groups = re.split(r'<div[^>]*class=["\']grupo-area-avisos', html)
-        avisos_delta = []
-        todos_avisos_raw = []
-        numeros_vistos = set()
+        consolidated_by_key = {}
 
         for g in groups:
             group_area = _detect_group_area(g)
-            is_delta_group = 'DELTA' in group_area.upper() or bool(re.search(r'REA DELTA', g[:500], re.I))
+            is_delta_group = 'DELTA' in group_area.upper() or bool(re.search(r'(?:ÁREA|AREA)\s+DELTA', g[:500], re.I))
             divs = re.finditer(r'<div[^>]*class=["\']aviso-texto["\'][^>]*>(.*?)</div>', g, re.S)
 
             for m in divs:
@@ -344,9 +343,7 @@ def fetch_marinha_avisos():
                 fim_m = re.search(r'data-fim-utc=["\']([^"\']+)["\']', tag)
                 fim_utc = fim_m.group(1).strip() if fim_m else ""
 
-                dedup_key = f"{num}|{up_text[:60]}"
-                if dedup_key in numeros_vistos or (num and num in numeros_vistos):
-                    continue
+                con_key = num or f"{up_text[:60]}|{ini_utc}|{fim_utc}"
 
                 dt_fim = None
                 dt_ini = None
@@ -364,16 +361,28 @@ def fetch_marinha_avisos():
                 if dt_fim is not None and dt_fim <= now_utc:
                     continue
 
-                if num:
-                    numeros_vistos.add(num)
-                numeros_vistos.add(dedup_key)
+                eh_area_delta = bool(
+                    is_delta_group
+                    or any(k in up_text for k in [
+                        'DELTA', 'MACAÉ', 'MACAE', 'CABO FRIO', 'ARRAIAL DO CABO',
+                        'BÚZIOS', 'BUZIOS', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS',
+                        'BACIA DE CAMPOS', 'SÃO JOÃO DA BARRA', 'SAO JOAO DA BARRA',
+                        'LITORAL FLUMINENSE', 'LITORAL DO RIO DE JANEIRO'
+                    ])
+                    or ('CAMPOS DOS GOYTACAZES' in up_text and ('ILHABELA' in up_text or 'SANTOS' in up_text or 'PARATY' in up_text))
+                )
 
-                eh_area_delta = bool(is_delta_group or any(k in up_text for k in [
-                    'DELTA', 'MACAÉ', 'MACAE', 'CABO FRIO', 'ARRAIAL DO CABO',
-                    'BÚZIOS', 'BUZIOS', 'SÃO TOMÉ', 'SAO TOME', 'RIO DAS OSTRAS',
-                    'BACIA DE CAMPOS', 'SÃO JOÃO DA BARRA', 'SAO JOAO DA BARRA',
-                    'LITORAL FLUMINENSE', 'LITORAL DO RIO DE JANEIRO'
-                ]))
+                # Consolida avisos presentes em múltiplas áreas (ex.: Charlie/Bravo + Delta)
+                # mantendo uma única entrada e promovendo para Área Delta quando aplicável.
+                if con_key in consolidated_by_key:
+                    prev = consolidated_by_key[con_key]
+                    if group_area and group_area not in prev["areas_abrangidas"]:
+                        prev["areas_abrangidas"].append(group_area)
+                    if eh_area_delta and not prev["eh_area_delta"]:
+                        prev["eh_area_delta"] = True
+                        prev["area_grupo"] = "Área Delta"
+                        prev["area"] = _build_area_description(clean_text, "Área Delta")
+                    continue
 
                 if 'RESSACA' in up_text:
                     tipo_aviso = "RESSACA"
@@ -396,7 +405,7 @@ def fetch_marinha_avisos():
                 emissao_txt = emissao_m.group(1).strip() if emissao_m else None
 
                 forca_txt, rajadas_txt, ondas_txt = _parse_marinha_wind_and_waves(clean_text, tipo_aviso)
-                area_aviso = _build_area_description(clean_text, group_area or ("Área DELTA" if eh_area_delta else "METAREA V"))
+                area_aviso = _build_area_description(clean_text, "Área Delta" if eh_area_delta else (group_area or "METAREA V"))
 
                 ini_br = (dt_ini - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h" if dt_ini else ""
                 fim_br = (dt_fim - timedelta(hours=3)).strftime("%d/%m às %H:%M") + "h" if dt_fim else ""
@@ -412,10 +421,11 @@ def fetch_marinha_avisos():
                 else:
                     restricao_item = "Condições adversas de tempo no setor marítimo monitorado pelo CHM/Marinha do Brasil."
 
-                item = {
+                consolidated_by_key[con_key] = {
                     "numero": num,
                     "tipo": tipo_aviso,
-                    "area_grupo": group_area or ("Área Delta" if eh_area_delta else "METAREA V"),
+                    "area_grupo": "Área Delta" if eh_area_delta else (group_area or "METAREA V"),
+                    "areas_abrangidas": [group_area] if group_area else [],
                     "area": area_aviso,
                     "eh_area_delta": eh_area_delta,
                     "forca": forca_txt,
@@ -436,9 +446,9 @@ def fetch_marinha_avisos():
                     "texto": clean_text,
                     "fonte_url": url_portal,
                 }
-                todos_avisos_raw.append(item)
-                if eh_area_delta:
-                    avisos_delta.append(item)
+
+        todos_avisos_raw = list(consolidated_by_key.values())
+        avisos_delta = [a for a in todos_avisos_raw if a.get("eh_area_delta")]
 
         def _sort_key(a):
             return (0 if a["eh_area_delta"] else 1, a["dt_ini"].timestamp() if a["dt_ini"] else 0, a["numero"])

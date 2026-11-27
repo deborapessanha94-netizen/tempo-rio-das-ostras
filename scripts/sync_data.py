@@ -58,24 +58,27 @@ def sync_inmet_forecast():
     except Exception as e:
         print(f"Aviso ao sincronizar previsão INMET: {e}")
 
+def _parse_inmet_fim_brt(item):
+    from datetime import datetime, timedelta, timezone
+    fim_str = str(item.get('fim') or item.get('data_fim') or '').replace('T', ' ').replace('h', '').strip()
+    if len(fim_str) < 10:
+        return None
+    d_part = fim_str[:10]
+    t_part = fim_str[11:16] if len(fim_str) >= 16 and ':' in fim_str[11:16] else '23:59'
+    try:
+        dt = datetime.strptime(f"{d_part} {t_part}", "%Y-%m-%d %H:%M")
+        return dt.replace(tzinfo=timezone(timedelta(hours=-3)))
+    except Exception:
+        return None
+
 def sync_inmet_alerts():
+    from datetime import datetime, timedelta, timezone
     url = "https://apiprevmet3.inmet.gov.br/avisos/ativos"
     try:
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req, timeout=10) as res:
+        ctx = ssl._create_unverified_context()
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0', 'Cache-Control': 'no-cache'})
+        with urllib.request.urlopen(req, context=ctx, timeout=15) as res:
             data = json.loads(res.read().decode('utf-8'))
-        
-        # Load existing alerts to merge recent past alerts
-        existing_path = os.path.join(DATA_DIR, 'inmet_avisos.json')
-        existing_map = {}
-        if os.path.exists(existing_path):
-            try:
-                with open(existing_path, 'r', encoding='utf-8') as f:
-                    for old_a in json.load(f):
-                        if old_a.get('id'):
-                            existing_map[old_a['id']] = old_a
-            except Exception:
-                pass
 
         seen = set()
         active_list = []
@@ -86,26 +89,25 @@ def sync_inmet_alerts():
                 estados = str(a.get('estados', '') or '')
                 geocodes = str(a.get('geocodes', '') or '')
                 municipios = str(a.get('municipios', '') or '')
-                
+
                 eh_direto = ('3304524' in geocodes) or ('Rio das Ostras' in municipios)
                 eh_rj = ('Rio de Janeiro' in estados) or ('RJ' in estados)
 
                 if eh_direto or eh_rj:
                     seen.add(aid)
-                    
-                    # Strictly preserve exact hours and minutes from official feed
+
                     raw_h_ini = str(a.get('hora_inicio', '00:00')).strip()
                     raw_h_fim = str(a.get('hora_fim', '23:59')).strip()
-                    
+
                     raw_d_ini = str(a.get('data_inicio', '')).split('T')[0]
                     raw_d_fim = str(a.get('data_fim', '')).split('T')[0]
-                    
+
                     dt_inicio_fmt = format_date_br(raw_d_ini, raw_h_ini)
                     dt_fim_fmt = format_date_br(raw_d_fim, raw_h_fim)
-                    
+
                     clean_h_ini = raw_h_ini.replace('h', '').strip()
                     clean_h_fim = raw_h_fim.replace('h', '').strip()
-                    
+
                     inicio_iso = f"{raw_d_ini} {clean_h_ini}".strip()
                     fim_iso = f"{raw_d_fim} {clean_h_fim}".strip()
 
@@ -144,22 +146,51 @@ def sync_inmet_alerts():
                         'estados': estados
                     }
                     active_list.append(alert_obj)
-                    existing_map[aid] = alert_obj
 
-        # Combine active and recent existing alerts (keeping up to 6 most relevant)
-        all_alerts = list(existing_map.values())
-        
-        def alert_rank(item):
-            ini = str(item.get('inicio', '') or item.get('data_inicio', ''))
-            fim = str(item.get('fim', '') or item.get('data_fim', ''))
-            return (ini, fim, item.get('id', 0))
+        now_brt = datetime.now(timezone(timedelta(hours=-3)))
+        cutoff = now_brt - timedelta(hours=6)
+        existing_path = os.path.join(DATA_DIR, 'inmet_avisos.json')
+        merged_by_id = {}
+        if os.path.exists(existing_path):
+            try:
+                with open(existing_path, 'r', encoding='utf-8') as f:
+                    for old_a in json.load(f):
+                        oid = old_a.get('id')
+                        fim_dt = _parse_inmet_fim_brt(old_a)
+                        if oid and fim_dt and cutoff < fim_dt <= now_brt and str(old_a.get('estados', '')).strip():
+                            merged_by_id[oid] = old_a
+            except Exception:
+                pass
+        for item in active_list:
+            merged_by_id[item['id']] = item
 
-        all_alerts.sort(key=alert_rank)
-        final_list = all_alerts[:8]
+        dedup_map = {}
+        for it in merged_by_id.values():
+            d_fim = str(it.get('fim', '') or it.get('data_fim', '')).split('T')[0].split(' ')[0].strip()
+            d_key = (
+                bool(it.get('eh_direto_ostras')),
+                str(it.get('descricao', '')).strip().lower(),
+                str(it.get('severidade', '')).strip().lower(),
+                d_fim,
+            )
+            cur = dedup_map.get(d_key)
+            if cur is None or (str(it.get('inicio', '')), int(it.get('id', 0) or 0)) > (str(cur.get('inicio', '')), int(cur.get('id', 0) or 0)):
+                dedup_map[d_key] = it
+
+        all_alerts = list(dedup_map.values())
+        all_alerts.sort(
+            key=lambda x: (
+                not bool(x.get('eh_direto_ostras')),
+                0 if x.get('cor_nome') == 'Vermelho' else 1 if x.get('cor_nome') == 'Laranja' else 2,
+                str(x.get('inicio', '') or x.get('data_inicio', '')),
+                -(int(x.get('id', 0) or 0)),
+            )
+        )
+        final_list = all_alerts[:20]
 
         with open(os.path.join(DATA_DIR, 'inmet_avisos.json'), 'w', encoding='utf-8') as f:
             json.dump(final_list, f, ensure_ascii=False, indent=2)
-        print(f"OK: inmet_avisos.json atualizado ({len(active_list)} ativos, {len(final_list)} total com histórico recente)")
+        print(f"OK: inmet_avisos.json atualizado ({len(active_list)} ativos no feed, {len(final_list)} salvos)")
     except Exception as e:
         print(f"Aviso ao sincronizar avisos INMET: {e}")
 
@@ -376,6 +407,9 @@ def sync_inmet_meteograma():
             print(f"Aviso ao sincronizar meteograma INMET {rodada} UTC: {e}")
 
 if __name__ == '__main__':
+    if '--alerts-only' in sys.argv:
+        sync_inmet_alerts()
+        sys.exit(0)
     print("Iniciando sincronização de telemetria oficial para a nuvem 24/7...")
     sync_inmet_forecast()
     sync_inmet_meteograma()

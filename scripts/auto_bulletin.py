@@ -563,7 +563,7 @@ def get_inmet_color_info(sev, raw_color=None):
 def fetch_inmet_alerts():
     url = "https://apiprevmet3.inmet.gov.br/avisos/ativos"
     try:
-        data = fetch_json(url, timeout=8)
+        data = fetch_json(url, timeout=12)
         seen = set()
         unique = []
         for cat in ['hoje', 'futuro']:
@@ -616,7 +616,7 @@ def fetch_inmet_alerts():
         return dedup_list
     except Exception as e:
         print(f"[INMET] Erro avisos: {e}")
-        return []
+        return None
 
 
 def extract_alert_precipitation_limits(alert):
@@ -1224,34 +1224,87 @@ def fetch_cemaden_riscos():
         }
 
     # -------------------------------------------------------------
-    # 2. Coleta CEMADEN Nacional / MCTI (Boletim e Mapas)
+    # 2. Coleta CEMADEN Nacional / MCTI (Boletim e Mapas Dinâmicos)
     # -------------------------------------------------------------
+    hidro_ro = rj_monitoring.get('hidrologico', {}).get('rio_das_ostras', {}) or {}
+    geo_ro = rj_monitoring.get('geologico', {}).get('rio_das_ostras', {}) or {}
+    hidro_nivel = hidro_ro.get('nivel', 'MODERADO')
+    geo_nivel = geo_ro.get('nivel', 'BAIXO')
+    hidro_meta_lbl = {
+        'BAIXO': ('Normalidade Hidrológica', 'success', '#16a34a', 'Risco Hidrológico Baixo no painel estadual CEMADEN-RJ para Rio das Ostras, com escoamento normalizado nas bacias de drenagem.'),
+        'MODERADO': ('Atenção Hidrológica / Escoamento Pluvial', 'warning', '#d97706', 'Risco Hidrológico Moderado no painel estadual CEMADEN-RJ para Rio das Ostras e Baixadas Litorâneas devido à umidade do solo e possibilidade de pancadas de chuva.'),
+        'ALTO': ('Alerta Hidrológico Estadual (CEMADEN-RJ)', 'danger', '#ea580c', 'Risco Hidrológico ALTO no painel estadual CEMADEN-RJ para Rio das Ostras — atenção redobrada para alagamentos urbanos, enxurradas e resposta rápida do Rio Jundiá.'),
+        'MUITO ALTO': ('Alerta Máximo Hidrológico (CEMADEN-RJ)', 'danger-extreme', '#dc2626', 'Risco Hidrológico MUITO ALTO no painel estadual CEMADEN-RJ para Rio das Ostras — risco elevado de enxurradas e alagamentos severos.'),
+    }.get(hidro_nivel, (hidro_ro.get('status', 'Atenção'), hidro_ro.get('badge', 'warning'), hidro_ro.get('cor_hex', '#d97706'), f"Risco Hidrológico {hidro_nivel} no painel estadual CEMADEN-RJ para Rio das Ostras."))
+    geo_meta_lbl = {
+        'BAIXO': ('Normalidade / Estabilidade Predominante', 'success', '#16a34a', 'Risco Geológico Baixo / Normalidade na malha urbana de Rio das Ostras no painel estadual CEMADEN-RJ, com relevo predominantemente plano da baixada litorânea.'),
+        'MODERADO': ('Atenção Geológica / Encostas e Costões', 'warning', '#d97706', 'Risco Geológico Moderado no painel estadual CEMADEN-RJ para Rio das Ostras devido aos acumulados recentes e umidade do solo em taludes e costões.'),
+        'ALTO': ('Alerta Geológico Estadual (CEMADEN-RJ)', 'danger', '#ea580c', 'Risco Geológico ALTO no painel estadual CEMADEN-RJ para Rio das Ostras — risco de escorregamentos pontuais em encostas, taludes da RJ-106 e falésias.'),
+        'MUITO ALTO': ('Alerta Máximo Geológico (CEMADEN-RJ)', 'danger-extreme', '#dc2626', 'Risco Geológico MUITO ALTO no painel estadual CEMADEN-RJ para Rio das Ostras — acione a Defesa Civil (199) diante de qualquer sinal de instabilidade.'),
+    }.get(geo_nivel, (geo_ro.get('status', 'Normalidade'), geo_ro.get('badge', 'success'), geo_ro.get('cor_hex', '#16a34a'), f"Risco Geológico {geo_nivel} no painel estadual CEMADEN-RJ para Rio das Ostras."))
+
+    portal_cemaden_url = "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos"
+    latest_boletim_url = portal_cemaden_url
+    boletim_data_str = today_str
+    img_urls = {}
+    prev_cemaden_json = {}
+    try:
+        prev_p = DATA_DIR / "cemaden_riscos.json"
+        if prev_p.exists():
+            prev_cemaden_json = json.loads(prev_p.read_text(encoding="utf-8"))
+    except Exception:
+        prev_cemaden_json = {}
+
+    try:
+        ctx_c = ssl.create_default_context()
+        ctx_c.check_hostname = False
+        ctx_c.verify_mode = ssl.CERT_NONE
+        portal_html = urllib.request.urlopen(urllib.request.Request(portal_cemaden_url, headers=headers), context=ctx_c, timeout=14).read().decode('utf-8', errors='ignore')
+        bol_links = re.findall(r'href="(https://www\.gov\.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/(\d{2}-\d{2}-\d{4})-previsao-de-riscos-geo-hidrologicos[^"]*)"', portal_html)
+        if bol_links:
+            latest_boletim_url, d_slug = bol_links[0]
+            boletim_data_str = d_slug.replace('-', '/')
+            bol_html = urllib.request.urlopen(urllib.request.Request(latest_boletim_url, headers=headers), context=ctx_c, timeout=14).read().decode('utf-8', errors='ignore')
+            all_imgs = re.findall(r'src="([^"]+@@images/[^"]+)"', bol_html, re.I)
+            for im_u in all_imgs:
+                im_l = im_u.lower()
+                if 'hidro' in im_l and 'hidrologico' not in img_urls:
+                    img_urls['hidrologico'] = im_u
+                elif 'geo' in im_l and 'geologico' not in img_urls:
+                    img_urls['geologico'] = im_u
+        print(f"[CEMADEN Nacional] Boletim mais recente: {latest_boletim_url} (mapas={len(img_urls)})")
+    except Exception as e_cn:
+        print(f"[CEMADEN Nacional] Aviso ao consultar portal nacional: {e_cn}")
+        if prev_cemaden_json.get("url_boletim_hoje"):
+            latest_boletim_url = prev_cemaden_json["url_boletim_hoje"]
+            boletim_data_str = prev_cemaden_json.get("data_boletim") or today_str
+
     cemaden_info = {
         "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
-        "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
-        "data_boletim": today_str,
+        "url_portal": portal_cemaden_url,
+        "data_boletim": boletim_data_str,
         "atualizacao": today_dt.strftime("%d/%m/%Y %H:%M"),
-        "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
+        "url_boletim_hoje": latest_boletim_url,
         "cemaden_rj_tempo_real": {
             "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
             "redec": "REDEC 1 - Baixadas Litorâneas",
             "municipio_id": 20,
             "municipio_nome": "Rio das Ostras",
             "risco_hidrologico": {
-                "nivel": rj_monitoring.get('hidrologico', {}).get('rio_das_ostras', {}).get('nivel', 'MODERADO'),
-                "status": "Atenção Hidrológica / Escoamento Pluvial",
-                "badge": "warning",
-                "cor_hex": "#d97706",
-                "diagnostico": "Risco Hidrológico Moderado no painel estadual CEMADEN-RJ para Rio das Ostras e Baixadas Litorâneas devido à saturação do solo e teto convectivo de chuvas pontualmente intensas.",
+                "nivel": hidro_nivel,
+                "status": hidro_meta_lbl[0],
+                "badge": hidro_meta_lbl[1],
+                "cor_hex": hidro_meta_lbl[2],
+                "diagnostico": hidro_meta_lbl[3],
                 "foco_municipal": "Bacia do Rio Jundiá (estação INEA 2241036), calhas de drenagem nos bairros Cidade Beira-Mar, Âncora, Recanto, Nova Aliança e Periperi.",
                 "mapa_svg": "img/cemaden/cemaden_rj_hidro.svg"
             },
             "risco_geologico": {
-                "nivel": rj_monitoring.get('geologico', {}).get('rio_das_ostras', {}).get('nivel', 'BAIXO'),
-                "status": "Normalidade / Estabilidade Predominante",
-                "badge": "success",
-                "cor_hex": "#16a34a",
-                "diagnostico": "Risco Geológico Baixo / Normalidade na malha urbana de Rio das Ostras no painel estadual CEMADEN-RJ, com relevo predominantemente plano da baixada litorânea.",
+                "nivel": geo_nivel,
+                "status": geo_meta_lbl[0],
+                "badge": geo_meta_lbl[1],
+                "cor_hex": geo_meta_lbl[2],
+                "diagnostico": geo_meta_lbl[3],
                 "foco_municipal": "Atenção localizada restrita a costões rochosos da orla (Praia da Joana, Costazul) e taludes de corte na Rodovia Amaral Peixoto (RJ-106).",
                 "mapa_svg": "img/cemaden/cemaden_rj_geo.svg"
             },
@@ -1262,12 +1315,12 @@ def fetch_cemaden_riscos():
             "vizinhos_redec1": rj_monitoring.get('hidrologico', {}).get('vizinhos_redec1', {})
         },
         "alerta_rj_geologico": {
-            "nivel": "MODERADA",
-            "badge": "warning",
-            "cor": "#f59e0b",
-            "titulo": "Risco Geológico Moderado no Estado do Rio de Janeiro",
+            "nivel": geo_nivel,
+            "badge": geo_meta_lbl[1],
+            "cor": geo_meta_lbl[2],
+            "titulo": f"Risco Geológico {geo_nivel.title()} — Estado do RJ & Rio das Ostras",
             "processo": "Movimentos de Massa / Deslizamentos de Encosta",
-            "descricao_oficial": "Considera-se MODERADA a possibilidade de ocorrência de eventos de movimentos de massa nas Regiões Geográficas Intermediárias de Rio de Janeiro (RJ), devido à presença de áreas com alta suscetibilidade a estes processos, aos acumulados registrados nos últimos dias e à previsão de chuvas que podem gerar acumulados suficientes para deflagrar deslizamentos pontuais em encostas.",
+            "descricao_oficial": geo_meta_lbl[3],
             "setores_rio_das_ostras": [
                 "Costões rochosos e falésias da orla: Praia da Joana, Costazul e Praiamar (risco de queda de blocos e escorregamentos superficiais sob ação de intemperismo e arrebentação)",
                 "Taludes de corte e aterro viário: Trechos da Rodovia Amaral Peixoto (RJ-106) e vias de expansão",
@@ -1276,12 +1329,12 @@ def fetch_cemaden_riscos():
             "acoes_recomendadas": "Atenção a sinais precursores de instabilidade de encosta: trincas em paredes ou no solo, estalos em rochas, inclinação de postes ou árvores e surgimento de água barrenta na base do talude. Acione imediatamente a Defesa Civil Municipal pelo 199."
         },
         "alerta_rj_hidrologico": {
-            "nivel": "BAIXO A MODERADO LOCAL",
-            "badge": "info",
-            "cor": "#0284c7",
-            "titulo": "Atenção Hidrológica para Enxurradas e Alagamentos Urbanos",
+            "nivel": hidro_nivel,
+            "badge": hidro_meta_lbl[1],
+            "cor": hidro_meta_lbl[2],
+            "titulo": f"Risco Hidrológico {hidro_nivel.title()} — Enxurradas e Alagamentos Urbanos",
             "processo": "Enxurradas e Extravasamento de Canais de Drenagem",
-            "descricao_oficial": "Sem risco de inundações de grande porte na macrorregião da Bacia do Rio São João / Rio das Ostras, porém com atenção municipal para extravasamento pontual de córregos e alagamentos urbanos em áreas rebaixadas e bacias de drenagem lenta devido ao teto convectivo de chuva intensa (até 30 mm/h).",
+            "descricao_oficial": hidro_meta_lbl[3],
             "setores_rio_das_ostras": [
                 "Bacia Hidrográfica do Rio Jundiá (monitoramento contínuo da cota na régua INEA estação 2241036)",
                 "Áreas urbanas rebaixadas e canais de drenagem: Cidade Beira-Mar, Âncora, Recanto, Nova Aliança e Periperi"
@@ -1295,21 +1348,21 @@ def fetch_cemaden_riscos():
             "painel_rj_geo": "img/cemaden/cemaden_rj_geo.svg"
         }
     }
-    
-    img_urls = {
-        "geologico": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1/20261026_geo_t1.png/@@images/cb30cd09-8f8b-4772-93ed-90059e6a6278.png",
-        "hidrologico": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1/20261026_hidro_t1.png/@@images/df3c5d08-bb0d-4eaf-9963-c10eabc4bce6.png"
-    }
-    
+
+    url_changed = (latest_boletim_url != portal_cemaden_url and prev_cemaden_json.get("url_boletim_hoje") != latest_boletim_url)
     for k, u in img_urls.items():
         fname = f"cemaden_risco_{k}.png"
         out_file = cemaden_dir / fname
-        if not out_file.exists() or out_file.stat().st_size == 0:
+        if url_changed or not out_file.exists() or out_file.stat().st_size == 0:
             try:
+                ctx_c = ssl.create_default_context()
+                ctx_c.check_hostname = False
+                ctx_c.verify_mode = ssl.CERT_NONE
                 r = urllib.request.Request(u, headers=headers)
-                data = urllib.request.urlopen(r, timeout=10).read()
-                out_file.write_bytes(data)
-                print(f"[CEMADEN Service] Mapa {fname} sincronizado ({len(data)} bytes)")
+                data = urllib.request.urlopen(r, context=ctx_c, timeout=14).read()
+                if len(data) > 5000:
+                    out_file.write_bytes(data)
+                    print(f"[CEMADEN Service] Mapa {fname} sincronizado ({len(data)} bytes)")
             except Exception as e:
                 print(f"[CEMADEN Service] Erro download {fname}: {e}")
                 
@@ -1460,8 +1513,18 @@ def run_auto_bulletin_pipeline():
         with open(DATA_DIR / "inea_macae_ostras.json", 'w', encoding='utf-8') as f:
             json.dump(inea_macae_ostras_data, f, ensure_ascii=False, indent=2)
 
-    with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:
-        json.dump(inmet_alerts or [], f, ensure_ascii=False, indent=2)
+    if inmet_alerts is not None:
+        with open(DATA_DIR / "inmet_avisos.json", 'w', encoding='utf-8') as f:
+            json.dump(inmet_alerts, f, ensure_ascii=False, indent=2)
+    else:
+        existing_inmet = DATA_DIR / "inmet_avisos.json"
+        if existing_inmet.exists():
+            try:
+                inmet_alerts = json.loads(existing_inmet.read_text(encoding='utf-8'))
+            except Exception:
+                inmet_alerts = []
+        else:
+            inmet_alerts = []
 
     # 2. Constrói os 12 Turnos Operacionais (3 Dias x 4 Turnos)
     hourly = om['hourly']

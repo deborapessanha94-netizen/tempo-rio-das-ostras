@@ -1,0 +1,56 @@
+name: Sincronização Rápida de Alertas Oficiais (Marinha CHM & INMET)
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/marinha_service.py'
+      - 'scripts/sync_data.py'
+      - '.github/workflows/sync_alerts.yml'
+
+concurrency:
+  group: sync-alerts-fast
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  sync-alerts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Coletar Alertas Vigentes & Programados (Marinha CHM + INMET)
+        run: |
+          python scripts/marinha_service.py || true
+          python scripts/sync_data.py --alerts-only || true
+
+      - name: Publicar Alertas Atualizados no Repositório
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/marinha_avisos.json data/orla_condicoes.json data/tabua_mares.json data/inmet_avisos.json
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(alerts): sincronizacao rapida Marinha CHM e INMET [skip ci]"
+            for attempt in 1 2 3; do
+              if git push origin main; then
+                exit 0
+              fi
+              git fetch origin main
+              git rebase origin/main -X theirs || (git rebase --abort || true; git merge -X ours origin/main --no-edit)
+            done
+          fi
