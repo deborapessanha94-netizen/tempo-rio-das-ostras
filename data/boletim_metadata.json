@@ -4,7 +4,7 @@
   "emissao": "27/11/2026 às 17:51h",
   "emissao_iso": "2026-11-27T17:51:17-03:00",
   "generation_epoch_ms": 1795812677499,
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.64 m. Tempo sem alertas severos do INMET para hoje. Para Sábado (28/11) e Segunda-feira (30/11), há Alerta Amarelo de Chuvas Intensas e Tempestade do INMET (nº 56528 e nº 56527) para Rio das Ostras. Avisos da Marinha do Brasil para a Área Delta: RESSACA E MAR GROSSO E VENTO FORTE (nº 814/2026 e 819/2026 e 821/2026) válidos a partir de 27/11 às 18:00h até 29/11 às 21:00h. Acumulado total de chuva previsto para os próximos 4 dias: 45.4 mm (e 64.7 mm nos 8 dias), com máxima alcançando 30°C.",
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.64 m (Status: Vigilância). Tempo sem alertas severos do INMET para hoje. Para Sábado (28/11) e Segunda-feira (30/11), há Alerta Amarelo de Chuvas Intensas e Tempestade do INMET (nº 56528 e nº 56527) para Rio das Ostras. Avisos da Marinha do Brasil para a Área Delta: RESSACA E MAR GROSSO E VENTO FORTE (nº 814/2026 e 819/2026 e 821/2026) válidos a partir de 27/11 às 18:00h até 29/11 às 21:00h. Acumulado total de chuva previsto para os próximos 4 dias: 45.4 mm (e 64.7 mm nos 8 dias), com máxima alcançando 30°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA PROGRAMADO (Sábado, Segunda-feira) • VIGILÂNCIA PREVENTIVA",
     "status_geral_cor": "warning",
@@ -3993,10 +3993,10 @@
     {
       "tipo": "hidrologico",
       "titulo": "Rio Jundiá (INEA)",
-      "status": "Vigilância",
+      "status": "VIGILÂNCIA",
       "badge": "success",
-      "detalhe": "Cota: 1.64 m (Calha a 2,84 m)",
-      "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
+      "detalhe": "Cota: 1,64 m (58% da calha • Transbordo: 2,84 m)",
+      "impacto": "Calha em regime seguro (estável), com margem de 1,20 m abaixo do transbordo. Escoamento normalizado."
     },
     {
       "tipo": "maritimo",
@@ -9077,7 +9077,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.64 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1,64 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
