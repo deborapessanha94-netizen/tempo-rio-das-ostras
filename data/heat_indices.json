@@ -1,16 +1,16 @@
 {
-  "atualizacao_brt": "27/11/2026 17:53",
-  "atualizacao_iso": "2026-11-27T17:53:12.601995-03:00",
+  "atualizacao_brt": "27/11/2026 18:51",
+  "atualizacao_iso": "2026-11-27T18:51:40.295421-03:00",
   "fontes_oficiais": {
     "cor_rio": "https://cor.rio/niveis-de-calor/",
     "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
     "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
   },
   "agora": {
-    "ic_rede_c": 20.5,
-    "temp_rede_c": 20.1,
+    "ic_rede_c": 19.8,
+    "temp_rede_c": 19.6,
     "ur_rede_pct": 93,
-    "sensacao_rede_c": 23.1,
+    "sensacao_rede_c": 22.4,
     "faixa_instantanea": {
       "faixa": "Conforto Térmico (< 27°C)",
       "cor": "#10B981"
@@ -40,10 +40,10 @@
       {
         "codigo": "IRIODA15",
         "nome": "Rocha Leão / REBIO União",
-        "temp_c": 20.2,
+        "temp_c": 19.4,
         "ur_pct": 94,
-        "sensacao_c": 23.5,
-        "ic_c": 20.7,
+        "sensacao_c": 22.2,
+        "ic_c": 19.4,
         "ic_max_hoje": 25.2,
         "hora_ic_max_hoje": "10:59",
         "temp_max_hoje": 25.0,
@@ -54,17 +54,17 @@
         "cor_pico_hoje": "#10B981",
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-27 17:41:34",
+        "ultima_leitura": "2026-11-27 18:44:48",
         "lat": -22.426845,
         "lon": -42.020862
       },
       {
         "codigo": "IRIODA16",
         "nome": "Cantagalo / Extensão do Bosque",
-        "temp_c": 19.4,
+        "temp_c": 19.0,
         "ur_pct": 96,
-        "sensacao_c": 22.4,
-        "ic_c": 19.4,
+        "sensacao_c": 21.7,
+        "ic_c": 19.0,
         "ic_max_hoje": 24.8,
         "hora_ic_max_hoje": "12:09",
         "temp_max_hoje": 24.5,
@@ -75,17 +75,17 @@
         "cor_pico_hoje": "#10B981",
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-27 17:41:31",
+        "ultima_leitura": "2026-11-27 18:44:50",
         "lat": -22.440357,
         "lon": -41.953913
       },
       {
         "codigo": "IRIODA17",
         "nome": "Praia da Tartaruga",
-        "temp_c": 20.8,
-        "ur_pct": 90,
-        "sensacao_c": 23.3,
-        "ic_c": 21.3,
+        "temp_c": 20.5,
+        "ur_pct": 89,
+        "sensacao_c": 23.4,
+        "ic_c": 20.9,
         "ic_max_hoje": 24.8,
         "hora_ic_max_hoje": "06:54",
         "temp_max_hoje": 24.4,
@@ -96,7 +96,7 @@
         "cor_pico_hoje": "#10B981",
         "faixa": "Conforto Térmico (< 27°C)",
         "cor_hex": "#10B981",
-        "ultima_leitura": "2026-11-27 17:41:28",
+        "ultima_leitura": "2026-11-27 18:44:47",
         "lat": -22.531291,
         "lon": -41.957444
       }
@@ -786,7 +786,7 @@
         "fonte": "ecmwf-forecast"
       }
     ],
-    "captura_brt": "2026-11-27 17:53"
+    "captura_brt": "2026-11-27 18:51"
   },
   "previsao_8dias_calor": [
     {
@@ -1004,10 +1004,10 @@
       "horas_ge_36": 0,
       "horas_ge_40": 0,
       "horas_ge_44": 0,
-      "t3d_media_c": 22.0,
-      "tmax_3d_media_c": 24.0,
-      "ehi_sig": -6.79,
-      "ehi_accl": -2.95,
+      "t3d_media_c": 23.5,
+      "tmax_3d_media_c": 25.0,
+      "ehi_sig": -5.29,
+      "ehi_accl": -1.45,
       "ehf_local": 0.0,
       "ehf_classificacao": "Sem excesso (Normal)",
       "ses_rj_alerta": "Verde — Sem excesso de calor",
