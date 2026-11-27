@@ -3361,9 +3361,9 @@
           "cptec_municipal_valido_hoje": null,
           "cptec_prob_p05_pct": 81,
           "inmet_resumo": "Nublado com pancadas de chuva e trovoadas isoladas",
-          "inmet_aviso_id": null,
-          "inmet_aviso_cor": null,
-          "inmet_aviso_desc": null,
+          "inmet_aviso_id": 56527,
+          "inmet_aviso_cor": "Amarelo",
+          "inmet_aviso_desc": "Tempestade",
           "inea_faixa_municipio_mm": null,
           "inea_faixa_bacia_mm": null,
           "inea_referencia_mm": null,
@@ -4175,7 +4175,7 @@
           },
           "temp": {
             "label": "TEMPERATURA",
-            "val": "22° a 28°C",
+            "val": "22° a 26°C",
             "icon": "thermometer"
           },
           "sensacao": {
@@ -4855,7 +4855,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 27°C",
+          "val": "22° a 28°C",
           "icon": "thermometer"
         },
         "sensacao": {
@@ -5375,7 +5375,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "22° a 25°C",
+          "val": "20° a 24°C",
           "icon": "thermometer"
         },
         "sensacao": {
@@ -7660,10 +7660,10 @@
         "horas_ge_36": 0,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
-        "t3d_media_c": 23.5,
-        "tmax_3d_media_c": 25.0,
-        "ehi_sig": -5.29,
-        "ehi_accl": -1.45,
+        "t3d_media_c": 22.0,
+        "tmax_3d_media_c": 24.0,
+        "ehi_sig": -6.79,
+        "ehi_accl": -2.95,
         "ehf_local": 0.0,
         "ehf_classificacao": "Sem excesso (Normal)",
         "ses_rj_alerta": "Verde — Sem excesso de calor",
@@ -9133,7 +9133,7 @@
     "chuva_4d": "45.4 mm",
     "chuva_8d": "64.7 mm",
     "aviso_marinha": "FORÇA 7",
-    "pico_calor": "30°C",
+    "pico_calor": "31°C",
     "plancon_status": "NORMALIDADE"
   },
   "contatos_emergencia": {
