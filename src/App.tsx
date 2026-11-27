@@ -3587,6 +3587,8 @@ export default function App() {
                 liveWindRose={liveWindRose}
                 selectedIso={selectedCalendarIso}
                 onSelectIso={setSelectedCalendarIso}
+                darkTheme={isDark}
+                siteBase={SITE_BASE}
               />
             )}
 

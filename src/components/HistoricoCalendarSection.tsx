@@ -1,6 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Calendar,
+  Camera,
+  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -8,9 +10,13 @@ import {
   Clock,
   CloudRain,
   Compass,
+  Download,
   Droplets,
   Gauge,
   MapPin,
+  Monitor,
+  Smartphone,
+  Square,
   Thermometer,
   Wind,
 } from 'lucide-react';
@@ -22,6 +28,10 @@ import type {
   WindRoseDataset,
 } from '../services/siteData';
 import { classifyRainPlancon, classifyWindPlancon } from '../services/liveRainConsensus';
+import {
+  exportCalendarToHighResPng,
+  type CalendarExportFormat,
+} from '../utils/exportCalendarInstagram';
 
 export interface MergedDailyHistoryEntry extends HistoricoResumoDiario {
   is_live_today?: boolean;
@@ -466,6 +476,8 @@ interface HistoricoCalendarSectionProps {
   liveWindRose?: WindRoseDataset | null;
   selectedIso?: string | null;
   onSelectIso?: (iso: string) => void;
+  darkTheme?: boolean;
+  siteBase?: string;
 }
 
 export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> = ({
@@ -474,7 +486,25 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
   liveWindRose,
   selectedIso: controlledIso,
   onSelectIso,
+  darkTheme,
+  siteBase = '.',
 }) => {
+  const [exportMenuOpen, setExportMenuOpen] = useState(false);
+  const [exportTheme, setExportTheme] = useState<'auto' | 'dark' | 'light'>('auto');
+  const [exportingFmt, setExportingFmt] = useState<CalendarExportFormat | null>(null);
+  const [exportDone, setExportDone] = useState<string | null>(null);
+  const exportMenuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!exportMenuOpen) return;
+    const handleOutside = (ev: MouseEvent) => {
+      if (exportMenuRef.current && !exportMenuRef.current.contains(ev.target as Node)) {
+        setExportMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutside);
+    return () => document.removeEventListener('mousedown', handleOutside);
+  }, [exportMenuOpen]);
   const todayIso = useMemo(() => getTodayBrtIso(), []);
   const dailyMap = useMemo(
     () => buildMergedDailyHistoryMap(historico, acumulados, liveWindRose, todayIso),
@@ -661,6 +691,199 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
               {monthStats.windiestMaxKmh.toFixed(0)} km/h)
             </button>
           )}
+
+          {/* Exportação Ultra-HD em PNG */}
+          <div ref={exportMenuRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setExportMenuOpen((v) => !v)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer whitespace-nowrap ${
+                exportMenuOpen
+                  ? 'bg-[#FF8244] text-[#000000] border-[#FF8244]'
+                  : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-[#14213D] dark:text-white border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+              }`}
+              title="Gerar e baixar imagem PNG em resolução Ultra HD / 4K deste calendário"
+            >
+              <Camera className={`w-3.5 h-3.5 ${exportMenuOpen ? 'text-[#000000]' : 'text-[#FF8244]'}`} />
+              <span>Salvar Imagem HD</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${exportMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {exportMenuOpen && (
+              <div className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 z-30 w-[336px] max-w-[92vw] rounded-xl bg-white dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] shadow-xl p-3 space-y-2.5">
+                <div className="pb-2 border-b border-[#E5E5E5] dark:border-[#233354]">
+                  <div className="text-xs font-bold text-[#14213D] dark:text-white">
+                    Gerar Imagem do Calendário em Ultra HD
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
+                    PNG vetorial sem perda · até 4K (3840 × 2160 px)
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
+                  <span className="text-slate-500 dark:text-[#E5E5E5]/70">Fundo da imagem:</span>
+                  <div className="flex items-center gap-1 p-0.5 rounded-lg bg-[#F7F8FA] dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354]">
+                    {(['auto', 'dark', 'light'] as const).map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setExportTheme(t)}
+                        className={`px-2 py-1 rounded text-[10px] font-semibold cursor-pointer transition-colors ${
+                          exportTheme === t
+                            ? 'bg-[#FF8244] text-[#000000]'
+                            : 'text-slate-600 dark:text-[#E5E5E5]/75'
+                        }`}
+                      >
+                        {t === 'auto' ? 'Site' : t === 'dark' ? 'Escuro' : 'Claro'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {(() => {
+                  const runCalendarExport = async (fmt: CalendarExportFormat) => {
+                    setExportingFmt(fmt);
+                    setExportDone(null);
+                    try {
+                      const docDark =
+                        typeof document !== 'undefined' && document.documentElement.classList.contains('dark');
+                      const siteIsDark = darkTheme ?? docDark;
+                      const useDark = exportTheme === 'auto' ? siteIsDark : exportTheme === 'dark';
+
+                      await exportCalendarToHighResPng({
+                        format: fmt,
+                        darkTheme: useDark,
+                        year: viewYear,
+                        month1to12: viewMonth,
+                        monthLabel: `${MONTHS_PT[viewMonth - 1]} ${viewYear}`,
+                        cells: calendarCells,
+                        dailyMap,
+                        selectedDay,
+                        selectedDayMetrics: {
+                          rainMean,
+                          rainMaxMm: rainMaxSt,
+                          rainMaxStation: maxRainRec.stationName,
+                          sustMaxKmh: sustMaxDay,
+                          sustMaxStation: maxSustRec.stationName,
+                          gustMaxKmh: gustMaxDay,
+                          gustMaxStation: maxGustRec.stationName,
+                        },
+                        selectedStations,
+                        monthStats: monthStats
+                          ? {
+                              rainyDays: monthStats.rainyDays,
+                              totalDays: monthStats.totalDays,
+                              wettestDayIso: monthStats.wettestDay.data_iso,
+                              wettestMaxMm: monthStats.wettestMaxMm,
+                              wettestStation: resolveDayMaxRainRecord(monthStats.wettestDay).stationName,
+                              windiestDayIso: monthStats.windiestDay.data_iso,
+                              windiestMaxKmh: monthStats.windiestMaxKmh,
+                              windiestStation: resolveDayMaxGustRecord(monthStats.windiestDay).stationName,
+                            }
+                          : null,
+                        todayIso,
+                        resolveDayMetrics: (rec) => ({
+                          rainMm: resolveDayMaxRainRecord(rec).mm,
+                          gustKmh: resolveDayMaxGustRecord(rec).kmh,
+                        }),
+                        siteBase,
+                      });
+
+                      const msgMap: Record<CalendarExportFormat, string> = {
+                        '4k': 'Painel 4K salvo em 3840×2160!',
+                        story: 'Stories 9:16 salvo em 2160×3840!',
+                        post: 'Post 4:5 salvo em 2160×2700!',
+                        calendar_only: 'Calendário Mensal salvo em 2160×2700!',
+                      };
+                      setExportDone(msgMap[fmt]);
+                      window.setTimeout(() => setExportDone(null), 3500);
+                    } catch (err) {
+                      console.error('Erro ao gerar imagem do calendário:', err);
+                    } finally {
+                      setExportingFmt(null);
+                    }
+                  };
+
+                  const options: Array<{
+                    fmt: CalendarExportFormat;
+                    title: string;
+                    loading: string;
+                    sub: string;
+                    icon: React.ReactNode;
+                    badge?: string;
+                  }> = [
+                    {
+                      fmt: '4k',
+                      title: 'Painel Completo 4K (16:9)',
+                      loading: 'Gerando Painel 4K...',
+                      sub: '3840 × 2160 px · Calendário + Dia + Estações',
+                      icon: <Monitor className="w-4 h-4 text-[#FF8244] shrink-0" />,
+                      badge: 'MAX HD',
+                    },
+                    {
+                      fmt: 'story',
+                      title: 'Stories Instagram (9:16)',
+                      loading: 'Gerando Stories...',
+                      sub: '2160 × 3840 px · Alta Resolução PNG',
+                      icon: <Smartphone className="w-4 h-4 text-[#FF8244] shrink-0" />,
+                    },
+                    {
+                      fmt: 'post',
+                      title: 'Post Feed Instagram (4:5)',
+                      loading: 'Gerando Post...',
+                      sub: '2160 × 2700 px · Alta Resolução PNG',
+                      icon: <Square className="w-4 h-4 text-[#FF8244] shrink-0" />,
+                    },
+                    {
+                      fmt: 'calendar_only',
+                      title: 'Só Calendário Mensal (4:5)',
+                      loading: 'Gerando Calendário...',
+                      sub: '2160 × 2700 px · Grade Ampliada do Mês',
+                      icon: <Calendar className="w-4 h-4 text-[#FF8244] shrink-0" />,
+                    },
+                  ];
+
+                  return (
+                    <div className="space-y-1.5 pt-0.5">
+                      {options.map((opt) => (
+                        <button
+                          key={opt.fmt}
+                          type="button"
+                          disabled={exportingFmt !== null}
+                          onClick={() => runCalendarExport(opt.fmt)}
+                          className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-[#E5E5E5] dark:border-[#233354] bg-[#F7F8FA] dark:bg-[#14213D] hover:border-[#FF8244] text-left transition-colors cursor-pointer disabled:opacity-60"
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            {opt.icon}
+                            <div className="min-w-0">
+                              <div className="text-xs font-bold text-[#14213D] dark:text-white flex items-center gap-1.5">
+                                <span className="truncate">{exportingFmt === opt.fmt ? opt.loading : opt.title}</span>
+                                {opt.badge && (
+                                  <span className="px-1.5 py-0.5 rounded bg-[#FF8244] text-[#000000] text-[9px] font-mono font-extrabold shrink-0">
+                                    {opt.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65 truncate">
+                                {opt.sub}
+                              </div>
+                            </div>
+                          </div>
+                          <Download className="w-4 h-4 text-[#FF8244] shrink-0" />
+                        </button>
+                      ))}
+                      {exportDone && (
+                        <div className="flex items-center gap-1.5 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 pt-1">
+                          <Check className="w-3.5 h-3.5 shrink-0" />
+                          <span>{exportDone}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
