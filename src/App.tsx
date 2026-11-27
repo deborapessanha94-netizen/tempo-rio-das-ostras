@@ -3580,7 +3580,7 @@ export default function App() {
             )}
 
             {/* Sub-aba / Painel Interativo: Calendário Diário de Chuva, Vento & Rajadas */}
-            {(showSub('resumo') || showSub('calendario')) && (
+            {showSub('calendario') && (
               <HistoricoCalendarSection
                 historico={historico}
                 acumulados={acumulados}
