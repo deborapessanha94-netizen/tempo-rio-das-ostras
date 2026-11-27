@@ -1,16 +1,16 @@
 {
   "municipio": "Rio das Ostras - RJ",
   "periodo": "26/11 (Quinta-feira) a 03/12 (Quinta-feira)",
-  "emissao": "26/11/2026 às 20:39h",
-  "emissao_iso": "2026-11-26T20:39:31-03:00",
-  "generation_epoch_ms": 1795736371112,
-  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.58 m. Alerta Amarelo de Chuvas Intensas do INMET (nº 56508 e nº 56510) vigente hoje com previsão de pancadas de chuva e trovoadas. Avisos da Marinha do Brasil para a Área Delta: MAR GROSSO (nº 819/2026) válidos a partir de 27/11 às 18:00h até 28/11 às 15:00h. Acumulado total de chuva previsto para os próximos 4 dias: 59.8 mm (e 96.3 mm nos 8 dias), com máxima alcançando 30°C.",
+  "emissao": "26/11/2026 às 21:14h",
+  "emissao_iso": "2026-11-26T21:14:18-03:00",
+  "generation_epoch_ms": 1795738458950,
+  "informe_alerta": "Rio Jundiá em regime seguro de vazante contínua com cota de 1.59 m. Alerta Amarelo de Chuvas Intensas do INMET (nº 56508 e nº 56510) vigente hoje com previsão de pancadas de chuva e trovoadas. Avisos da Marinha do Brasil para a Área Delta: MAR GROSSO (nº 819/2026) válidos a partir de 27/11 às 18:00h até 28/11 às 15:00h. Acumulado total de chuva previsto para os próximos 4 dias: 59.8 mm (e 96.3 mm nos 8 dias), com máxima alcançando 30°C.",
   "inspecao_minuciosa_tempo_severo": {
     "status_geral_badge": "ALERTA ATIVO HOJE • INSPEÇÃO MINUCIOSA ATIVADA",
     "status_geral_cor": "danger",
     "tem_alerta_severo": true,
     "tem_alerta_hoje": true,
-    "atualizacao_hora": "26/11/2026 às 20:42h",
+    "atualizacao_hora": "26/11/2026 às 21:17h",
     "cidade": "Rio das Ostras - RJ",
     "dias_inspecionados": [
       {
@@ -48,16 +48,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "60 a 100 km/h",
-          "rajada_pico_modelado_kmh": 45.2,
+          "rajada_pico_modelado_kmh": 45.5,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Sul-Sudoeste (SSW)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -105,16 +105,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 23 km/h",
-          "rajada_pico_modelado_kmh": 23.4,
+          "rajada_pico_modelado_kmh": 23.1,
           "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
           "direcao_pico": "Leste-Sudeste (ESE)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -162,16 +162,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 40 km/h",
-          "rajada_pico_modelado_kmh": 40.0,
+          "rajada_pico_modelado_kmh": 39.7,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Leste (E)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -219,9 +219,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -276,16 +276,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 23 km/h",
-          "rajada_pico_modelado_kmh": 22.8,
+          "rajada_pico_modelado_kmh": 22.6,
           "horario_pico": "Entre 14h e 18h (pico por volta das 11:00)",
           "direcao_pico": "Sul (S)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -333,9 +333,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -390,16 +390,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 34 km/h",
-          "rajada_pico_modelado_kmh": 34.2,
+          "rajada_pico_modelado_kmh": 33.7,
           "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
           "direcao_pico": "Leste-Nordeste (ENE)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -447,16 +447,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
-          "rajada_faixa": "Até 27 km/h",
-          "rajada_pico_modelado_kmh": 27.1,
+          "rajada_faixa": "Até 25 km/h",
+          "rajada_pico_modelado_kmh": 25.2,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Sul-Sudoeste (SSW)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -505,16 +505,16 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.58",
+          "cota_atual_m": "1.59",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.26 m",
+          "margem_segura_m": "1.25 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "60 a 100 km/h",
-        "rajada_pico_modelado_kmh": 45.2,
+        "rajada_pico_modelado_kmh": 45.5,
         "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
         "direcao_pico": "Sul-Sudoeste (SSW)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -562,16 +562,16 @@
           }
         },
         "hidrologia_jundia": {
-          "cota_atual_m": "1.58",
+          "cota_atual_m": "1.59",
           "cota_transbordo_m": "2.84",
-          "margem_segura_m": "1.26 m",
+          "margem_segura_m": "1.25 m",
           "status": "Vigilância",
           "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
         }
       },
       "vento": {
         "rajada_faixa": "Até 23 km/h",
-        "rajada_pico_modelado_kmh": 23.4,
+        "rajada_pico_modelado_kmh": 23.1,
         "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
         "direcao_pico": "Leste-Sudeste (ESE)",
         "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -587,9 +587,9 @@
     "sintese_tecnica_precisao": "Atenção para Alerta Laranja de Chuvas Intensas nº 56510 na janela 00:00 às 24:00h: média contínua estimada em 25.7 mm com teto convectivo de até 100 mm e rajadas de 60 a 100 km/h."
   },
   "analise_precipitacao_multifonte": {
-    "emissao": "26/11/2026 às 20:39h",
-    "emissao_iso": "2026-11-26T20:39:31-03:00",
-    "generation_epoch_ms": 1795736371112,
+    "emissao": "26/11/2026 às 21:14h",
+    "emissao_iso": "2026-11-26T21:14:18-03:00",
+    "generation_epoch_ms": 1795738458950,
     "metodologia": "Consenso probabilístico híbrido atualizado continuamente: fontes oficiais brasileiras com peso principal — INMET (COSMO 7x7km, VIME COSMO 2,8km/7km, Água Precipitável, CAPE, Previsão 3304524 e Avisos), CPTEC/INPE (WRF 3866, Multimodel, Municipal/6D e Probabilístico P≥5mm), INEA (Boletim Hidrometeorológico RH-VIII e RadarTool RJ), pluviômetros CEMADEN/INEA/PWS — integradas aos modelos globais ECMWF IFS (9km), NOAA GFS e DWD ICON (13km).",
     "observado_hoje_estacoes": {
       "media_mm": 22.4,
@@ -1516,8 +1516,8 @@
     "atividade_raios": {
       "disponivel": true,
       "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-      "captura_utc": "2026-11-26T23:42:17Z",
-      "captura_brt": "2026-11-26 20:42",
+      "captura_utc": "2026-11-27T00:16:58Z",
+      "captura_brt": "2026-11-26 21:16",
       "janela_minutos": 20,
       "raio_busca_km": 50,
       "raios_25km": 0,
@@ -1530,7 +1530,7 @@
     },
     "global_nwp_info": {
       "disponivel": true,
-      "atualizado_em": "2026-11-26T20:42:17-03:00",
+      "atualizado_em": "2026-11-26T21:16:58-03:00",
       "modelos": {
         "ecmwf_ifs": {
           "nome": "ECMWF IFS (9 km)",
@@ -1599,9 +1599,9 @@
         "2026-12-02": 0.0
       },
       "prob_p05_pct": {
-        "2026-11-26": 89,
         "2026-11-27": 6,
-        "2026-11-28": 68
+        "2026-11-28": 68,
+        "2026-11-29": 89
       }
     },
     "inea_radartool": {
@@ -1899,103 +1899,103 @@
       },
       "2026-11-26T15": {
         "vel_kmh": 20.5,
-        "rajada_kmh": 45.2,
+        "rajada_kmh": 45.5,
         "dir_graus": 205.5,
         "dir": "SSW"
       },
       "2026-11-26T16": {
         "vel_kmh": 18.8,
-        "rajada_kmh": 44.8,
+        "rajada_kmh": 45.3,
         "dir_graus": 196.5,
         "dir": "SSW"
       },
       "2026-11-26T17": {
         "vel_kmh": 17.3,
-        "rajada_kmh": 40.5,
+        "rajada_kmh": 41.0,
         "dir_graus": 198.4,
         "dir": "SSW"
       },
       "2026-11-26T18": {
         "vel_kmh": 15.6,
-        "rajada_kmh": 37.8,
+        "rajada_kmh": 38.7,
         "dir_graus": 203.8,
         "dir": "SSW"
       },
       "2026-11-26T19": {
         "vel_kmh": 14.1,
-        "rajada_kmh": 32.8,
+        "rajada_kmh": 33.4,
         "dir_graus": 204.1,
         "dir": "SSW"
       },
       "2026-11-26T20": {
         "vel_kmh": 12.2,
-        "rajada_kmh": 29.3,
+        "rajada_kmh": 30.2,
         "dir_graus": 209.6,
         "dir": "SSW"
       },
       "2026-11-26T21": {
         "vel_kmh": 10.3,
-        "rajada_kmh": 25.3,
+        "rajada_kmh": 25.4,
         "dir_graus": 210.8,
         "dir": "SSW"
       },
       "2026-11-26T22": {
         "vel_kmh": 9.0,
-        "rajada_kmh": 21.0,
+        "rajada_kmh": 21.2,
         "dir_graus": 213.6,
         "dir": "SSW"
       },
       "2026-11-26T23": {
         "vel_kmh": 8.3,
-        "rajada_kmh": 16.6,
+        "rajada_kmh": 17.5,
         "dir_graus": 217.0,
         "dir": "SW"
       },
       "2026-11-27T00": {
         "vel_kmh": 7.0,
-        "rajada_kmh": 14.7,
+        "rajada_kmh": 15.0,
         "dir_graus": 215.9,
         "dir": "SW"
       },
       "2026-11-27T01": {
         "vel_kmh": 6.5,
-        "rajada_kmh": 12.0,
+        "rajada_kmh": 12.5,
         "dir_graus": 216.9,
         "dir": "SW"
       },
       "2026-11-27T02": {
         "vel_kmh": 6.4,
-        "rajada_kmh": 10.9,
+        "rajada_kmh": 11.3,
         "dir_graus": 221.2,
         "dir": "SW"
       },
       "2026-11-27T03": {
         "vel_kmh": 6.5,
-        "rajada_kmh": 11.6,
+        "rajada_kmh": 11.7,
         "dir_graus": 212.1,
         "dir": "SSW"
       },
       "2026-11-27T04": {
         "vel_kmh": 6.5,
-        "rajada_kmh": 12.9,
+        "rajada_kmh": 12.8,
         "dir_graus": 208.8,
         "dir": "SSW"
       },
       "2026-11-27T05": {
         "vel_kmh": 6.1,
-        "rajada_kmh": 12.6,
+        "rajada_kmh": 12.5,
         "dir_graus": 206.1,
         "dir": "SSW"
       },
       "2026-11-27T06": {
         "vel_kmh": 5.0,
-        "rajada_kmh": 12.2,
+        "rajada_kmh": 12.1,
         "dir_graus": 190.4,
         "dir": "S"
       },
       "2026-11-27T07": {
         "vel_kmh": 6.2,
-        "rajada_kmh": 15.2,
+        "rajada_kmh": 15.1,
         "dir_graus": 145.2,
         "dir": "SE"
       },
@@ -2007,7 +2007,7 @@
       },
       "2026-11-27T09": {
         "vel_kmh": 8.9,
-        "rajada_kmh": 19.2,
+        "rajada_kmh": 19.0,
         "dir_graus": 117.9,
         "dir": "ESE"
       },
@@ -2019,7 +2019,7 @@
       },
       "2026-11-27T11": {
         "vel_kmh": 11.2,
-        "rajada_kmh": 22.5,
+        "rajada_kmh": 22.4,
         "dir_graus": 112.1,
         "dir": "ESE"
       },
@@ -2031,43 +2031,43 @@
       },
       "2026-11-27T13": {
         "vel_kmh": 11.8,
-        "rajada_kmh": 23.1,
+        "rajada_kmh": 22.8,
         "dir_graus": 110.4,
         "dir": "ESE"
       },
       "2026-11-27T14": {
         "vel_kmh": 12.0,
-        "rajada_kmh": 23.4,
+        "rajada_kmh": 23.1,
         "dir_graus": 106.6,
         "dir": "ESE"
       },
       "2026-11-27T15": {
         "vel_kmh": 11.6,
-        "rajada_kmh": 23.4,
+        "rajada_kmh": 23.0,
         "dir_graus": 102.9,
         "dir": "ESE"
       },
       "2026-11-27T16": {
         "vel_kmh": 11.5,
-        "rajada_kmh": 23.1,
+        "rajada_kmh": 22.8,
         "dir_graus": 93.1,
         "dir": "E"
       },
       "2026-11-27T17": {
         "vel_kmh": 11.0,
-        "rajada_kmh": 22.5,
+        "rajada_kmh": 22.1,
         "dir_graus": 85.8,
         "dir": "E"
       },
       "2026-11-27T18": {
         "vel_kmh": 9.5,
-        "rajada_kmh": 20.6,
+        "rajada_kmh": 20.0,
         "dir_graus": 78.2,
         "dir": "ENE"
       },
       "2026-11-27T19": {
         "vel_kmh": 9.6,
-        "rajada_kmh": 16.3,
+        "rajada_kmh": 16.2,
         "dir_graus": 67.3,
         "dir": "ENE"
       },
@@ -2079,235 +2079,235 @@
       },
       "2026-11-27T21": {
         "vel_kmh": 9.1,
-        "rajada_kmh": 15.4,
+        "rajada_kmh": 14.2,
         "dir_graus": 46.8,
         "dir": "NE"
       },
       "2026-11-27T22": {
         "vel_kmh": 8.8,
-        "rajada_kmh": 15.4,
+        "rajada_kmh": 13.8,
         "dir_graus": 42.8,
         "dir": "NE"
       },
       "2026-11-27T23": {
         "vel_kmh": 8.4,
-        "rajada_kmh": 15.9,
+        "rajada_kmh": 14.7,
         "dir_graus": 35.6,
         "dir": "NE"
       },
       "2026-11-28T00": {
         "vel_kmh": 8.2,
-        "rajada_kmh": 13.8,
+        "rajada_kmh": 12.2,
         "dir_graus": 33.2,
         "dir": "NNE"
       },
       "2026-11-28T01": {
         "vel_kmh": 9.5,
-        "rajada_kmh": 18.9,
+        "rajada_kmh": 17.3,
         "dir_graus": 30.7,
         "dir": "NNE"
       },
       "2026-11-28T02": {
         "vel_kmh": 9.1,
-        "rajada_kmh": 19.5,
+        "rajada_kmh": 18.4,
         "dir_graus": 29.1,
         "dir": "NNE"
       },
       "2026-11-28T03": {
         "vel_kmh": 9.0,
-        "rajada_kmh": 18.0,
+        "rajada_kmh": 17.4,
         "dir_graus": 33.3,
         "dir": "NNE"
       },
       "2026-11-28T04": {
         "vel_kmh": 9.2,
-        "rajada_kmh": 18.9,
+        "rajada_kmh": 18.4,
         "dir_graus": 39.9,
         "dir": "NE"
       },
       "2026-11-28T05": {
         "vel_kmh": 9.3,
-        "rajada_kmh": 19.9,
+        "rajada_kmh": 18.8,
         "dir_graus": 43.6,
         "dir": "NE"
       },
       "2026-11-28T06": {
         "vel_kmh": 11.4,
-        "rajada_kmh": 23.6,
+        "rajada_kmh": 23.3,
         "dir_graus": 40.0,
         "dir": "NE"
       },
       "2026-11-28T07": {
         "vel_kmh": 11.4,
-        "rajada_kmh": 25.7,
+        "rajada_kmh": 25.2,
         "dir_graus": 42.5,
         "dir": "NE"
       },
       "2026-11-28T08": {
         "vel_kmh": 12.5,
-        "rajada_kmh": 27.6,
+        "rajada_kmh": 27.4,
         "dir_graus": 49.7,
         "dir": "NE"
       },
       "2026-11-28T09": {
         "vel_kmh": 13.0,
-        "rajada_kmh": 28.7,
+        "rajada_kmh": 28.9,
         "dir_graus": 52.4,
         "dir": "NE"
       },
       "2026-11-28T10": {
         "vel_kmh": 12.4,
-        "rajada_kmh": 29.1,
+        "rajada_kmh": 28.7,
         "dir_graus": 59.2,
         "dir": "ENE"
       },
       "2026-11-28T11": {
         "vel_kmh": 14.6,
-        "rajada_kmh": 29.7,
+        "rajada_kmh": 29.9,
         "dir_graus": 69.5,
         "dir": "ENE"
       },
       "2026-11-28T12": {
         "vel_kmh": 15.2,
-        "rajada_kmh": 31.9,
+        "rajada_kmh": 32.4,
         "dir_graus": 70.7,
         "dir": "ENE"
       },
       "2026-11-28T13": {
         "vel_kmh": 17.3,
-        "rajada_kmh": 34.9,
+        "rajada_kmh": 35.4,
         "dir_graus": 75.2,
         "dir": "ENE"
       },
       "2026-11-28T14": {
         "vel_kmh": 15.9,
-        "rajada_kmh": 36.5,
+        "rajada_kmh": 36.2,
         "dir_graus": 80.4,
         "dir": "E"
       },
       "2026-11-28T15": {
         "vel_kmh": 15.7,
-        "rajada_kmh": 40.0,
+        "rajada_kmh": 39.7,
         "dir_graus": 82.3,
         "dir": "E"
       },
       "2026-11-28T16": {
         "vel_kmh": 15.3,
-        "rajada_kmh": 39.6,
+        "rajada_kmh": 38.9,
         "dir_graus": 77.9,
         "dir": "ENE"
       },
       "2026-11-28T17": {
         "vel_kmh": 15.9,
-        "rajada_kmh": 39.0,
+        "rajada_kmh": 37.7,
         "dir_graus": 76.2,
         "dir": "ENE"
       },
       "2026-11-28T18": {
         "vel_kmh": 15.5,
-        "rajada_kmh": 37.3,
+        "rajada_kmh": 35.7,
         "dir_graus": 72.3,
         "dir": "ENE"
       },
       "2026-11-28T19": {
         "vel_kmh": 14.1,
-        "rajada_kmh": 34.4,
+        "rajada_kmh": 32.5,
         "dir_graus": 77.2,
         "dir": "ENE"
       },
       "2026-11-28T20": {
         "vel_kmh": 13.6,
-        "rajada_kmh": 33.0,
+        "rajada_kmh": 31.1,
         "dir_graus": 48.0,
         "dir": "NE"
       },
       "2026-11-28T21": {
         "vel_kmh": 13.0,
-        "rajada_kmh": 32.8,
+        "rajada_kmh": 30.3,
         "dir_graus": 35.7,
         "dir": "NE"
       },
       "2026-11-28T22": {
         "vel_kmh": 13.4,
-        "rajada_kmh": 31.8,
+        "rajada_kmh": 29.4,
         "dir_graus": 48.7,
         "dir": "NE"
       },
       "2026-11-28T23": {
         "vel_kmh": 11.7,
-        "rajada_kmh": 31.7,
+        "rajada_kmh": 29.6,
         "dir_graus": 50.7,
         "dir": "NE"
       },
       "2026-11-29T00": {
         "vel_kmh": 11.3,
-        "rajada_kmh": 30.7,
+        "rajada_kmh": 29.0,
         "dir_graus": 48.5,
         "dir": "NE"
       },
       "2026-11-29T01": {
         "vel_kmh": 10.1,
-        "rajada_kmh": 28.7,
+        "rajada_kmh": 27.4,
         "dir_graus": 50.9,
         "dir": "NE"
       },
       "2026-11-29T02": {
         "vel_kmh": 9.4,
-        "rajada_kmh": 26.3,
+        "rajada_kmh": 24.6,
         "dir_graus": 40.3,
         "dir": "NE"
       },
       "2026-11-29T03": {
         "vel_kmh": 8.8,
-        "rajada_kmh": 22.8,
+        "rajada_kmh": 21.7,
         "dir_graus": 31.8,
         "dir": "NNE"
       },
       "2026-11-29T04": {
         "vel_kmh": 7.6,
-        "rajada_kmh": 20.1,
+        "rajada_kmh": 19.4,
         "dir_graus": 26.5,
         "dir": "NNE"
       },
       "2026-11-29T05": {
         "vel_kmh": 7.2,
-        "rajada_kmh": 17.4,
+        "rajada_kmh": 16.2,
         "dir_graus": 43.7,
         "dir": "NE"
       },
       "2026-11-29T06": {
         "vel_kmh": 6.8,
-        "rajada_kmh": 16.9,
+        "rajada_kmh": 15.3,
         "dir_graus": 19.1,
         "dir": "NNE"
       },
       "2026-11-29T07": {
         "vel_kmh": 5.5,
-        "rajada_kmh": 15.9,
+        "rajada_kmh": 14.8,
         "dir_graus": 44.7,
         "dir": "NE"
       },
       "2026-11-29T08": {
         "vel_kmh": 5.0,
-        "rajada_kmh": 14.7,
+        "rajada_kmh": 13.8,
         "dir_graus": 60.6,
         "dir": "ENE"
       },
       "2026-11-29T09": {
         "vel_kmh": 4.1,
-        "rajada_kmh": 18.5,
+        "rajada_kmh": 17.5,
         "dir_graus": 61.4,
         "dir": "ENE"
       },
       "2026-11-29T10": {
         "vel_kmh": 5.9,
-        "rajada_kmh": 17.3,
+        "rajada_kmh": 16.7,
         "dir_graus": 87.4,
         "dir": "E"
       },
       "2026-11-29T11": {
         "vel_kmh": 7.8,
-        "rajada_kmh": 15.7,
+        "rajada_kmh": 15.2,
         "dir_graus": 74.9,
         "dir": "ENE"
       },
@@ -2319,97 +2319,97 @@
       },
       "2026-11-29T13": {
         "vel_kmh": 9.3,
-        "rajada_kmh": 17.7,
+        "rajada_kmh": 17.8,
         "dir_graus": 140.3,
         "dir": "SE"
       },
       "2026-11-29T14": {
         "vel_kmh": 8.4,
-        "rajada_kmh": 18.1,
+        "rajada_kmh": 18.5,
         "dir_graus": 142.9,
         "dir": "SE"
       },
       "2026-11-29T15": {
         "vel_kmh": 7.3,
-        "rajada_kmh": 15.2,
+        "rajada_kmh": 15.8,
         "dir_graus": 169.8,
         "dir": "S"
       },
       "2026-11-29T16": {
         "vel_kmh": 8.2,
-        "rajada_kmh": 12.8,
+        "rajada_kmh": 14.0,
         "dir_graus": 177.6,
         "dir": "S"
       },
       "2026-11-29T17": {
         "vel_kmh": 8.6,
-        "rajada_kmh": 13.7,
+        "rajada_kmh": 15.2,
         "dir_graus": 172.8,
         "dir": "S"
       },
       "2026-11-29T18": {
         "vel_kmh": 8.3,
-        "rajada_kmh": 12.8,
+        "rajada_kmh": 13.2,
         "dir_graus": 172.8,
         "dir": "S"
       },
       "2026-11-29T19": {
         "vel_kmh": 8.4,
-        "rajada_kmh": 12.8,
+        "rajada_kmh": 13.5,
         "dir_graus": 196.6,
         "dir": "SSW"
       },
       "2026-11-29T20": {
         "vel_kmh": 10.0,
-        "rajada_kmh": 17.1,
+        "rajada_kmh": 17.7,
         "dir_graus": 193.2,
         "dir": "SSW"
       },
       "2026-11-29T21": {
         "vel_kmh": 8.9,
-        "rajada_kmh": 17.6,
+        "rajada_kmh": 19.0,
         "dir_graus": 196.0,
         "dir": "SSW"
       },
       "2026-11-29T22": {
         "vel_kmh": 7.6,
-        "rajada_kmh": 12.0,
+        "rajada_kmh": 13.2,
         "dir_graus": 196.8,
         "dir": "SSW"
       },
       "2026-11-29T23": {
         "vel_kmh": 6.9,
-        "rajada_kmh": 9.6,
+        "rajada_kmh": 11.0,
         "dir_graus": 193.6,
         "dir": "SSW"
       },
       "2026-11-30T00": {
         "vel_kmh": 5.3,
-        "rajada_kmh": 9.2,
+        "rajada_kmh": 9.7,
         "dir_graus": 217.1,
         "dir": "SW"
       },
       "2026-11-30T01": {
         "vel_kmh": 6.2,
-        "rajada_kmh": 13.3,
+        "rajada_kmh": 13.2,
         "dir_graus": 337.3,
         "dir": "NNW"
       },
       "2026-11-30T02": {
         "vel_kmh": 7.0,
-        "rajada_kmh": 14.9,
+        "rajada_kmh": 15.1,
         "dir_graus": 288.9,
         "dir": "WNW"
       },
       "2026-11-30T03": {
         "vel_kmh": 6.8,
-        "rajada_kmh": 15.5,
+        "rajada_kmh": 15.9,
         "dir_graus": 317.7,
         "dir": "NW"
       },
       "2026-11-30T04": {
         "vel_kmh": 5.9,
-        "rajada_kmh": 16.9,
+        "rajada_kmh": 15.4,
         "dir_graus": 307.6,
         "dir": "NW"
       },
@@ -2421,19 +2421,19 @@
       },
       "2026-11-30T06": {
         "vel_kmh": 6.0,
-        "rajada_kmh": 15.2,
+        "rajada_kmh": 15.6,
         "dir_graus": 306.3,
         "dir": "NW"
       },
       "2026-11-30T07": {
         "vel_kmh": 5.8,
-        "rajada_kmh": 16.8,
+        "rajada_kmh": 17.0,
         "dir_graus": 252.2,
         "dir": "WSW"
       },
       "2026-11-30T08": {
         "vel_kmh": 5.9,
-        "rajada_kmh": 19.3,
+        "rajada_kmh": 19.1,
         "dir_graus": 244.4,
         "dir": "WSW"
       },
@@ -2445,103 +2445,103 @@
       },
       "2026-11-30T10": {
         "vel_kmh": 5.4,
-        "rajada_kmh": 22.3,
+        "rajada_kmh": 21.9,
         "dir_graus": 191.3,
         "dir": "SSW"
       },
       "2026-11-30T11": {
         "vel_kmh": 6.0,
-        "rajada_kmh": 22.8,
+        "rajada_kmh": 22.6,
         "dir_graus": 175.4,
         "dir": "S"
       },
       "2026-11-30T12": {
         "vel_kmh": 6.9,
-        "rajada_kmh": 22.6,
+        "rajada_kmh": 22.4,
         "dir_graus": 164.1,
         "dir": "SSE"
       },
       "2026-11-30T13": {
         "vel_kmh": 7.3,
-        "rajada_kmh": 21.6,
+        "rajada_kmh": 21.4,
         "dir_graus": 158.0,
         "dir": "SSE"
       },
       "2026-11-30T14": {
         "vel_kmh": 8.1,
-        "rajada_kmh": 20.8,
+        "rajada_kmh": 19.7,
         "dir_graus": 157.1,
         "dir": "SSE"
       },
       "2026-11-30T15": {
         "vel_kmh": 8.1,
-        "rajada_kmh": 19.5,
+        "rajada_kmh": 18.7,
         "dir_graus": 155.9,
         "dir": "SSE"
       },
       "2026-11-30T16": {
         "vel_kmh": 7.8,
-        "rajada_kmh": 18.2,
+        "rajada_kmh": 18.1,
         "dir_graus": 161.1,
         "dir": "SSE"
       },
       "2026-11-30T17": {
         "vel_kmh": 6.7,
-        "rajada_kmh": 17.1,
+        "rajada_kmh": 17.3,
         "dir_graus": 169.6,
         "dir": "S"
       },
       "2026-11-30T18": {
         "vel_kmh": 5.6,
-        "rajada_kmh": 15.5,
+        "rajada_kmh": 16.1,
         "dir_graus": 175.9,
         "dir": "S"
       },
       "2026-11-30T19": {
         "vel_kmh": 5.6,
-        "rajada_kmh": 13.6,
+        "rajada_kmh": 14.3,
         "dir_graus": 180.8,
         "dir": "S"
       },
       "2026-11-30T20": {
         "vel_kmh": 4.4,
-        "rajada_kmh": 11.8,
+        "rajada_kmh": 11.7,
         "dir_graus": 192.1,
         "dir": "SSW"
       },
       "2026-11-30T21": {
         "vel_kmh": 4.2,
-        "rajada_kmh": 9.9,
+        "rajada_kmh": 9.8,
         "dir_graus": 216.8,
         "dir": "SW"
       },
       "2026-11-30T22": {
         "vel_kmh": 4.2,
-        "rajada_kmh": 9.1,
+        "rajada_kmh": 8.9,
         "dir_graus": 248.6,
         "dir": "WSW"
       },
       "2026-11-30T23": {
         "vel_kmh": 4.6,
-        "rajada_kmh": 8.2,
+        "rajada_kmh": 8.1,
         "dir_graus": 253.9,
         "dir": "WSW"
       },
       "2026-12-01T00": {
         "vel_kmh": 4.9,
-        "rajada_kmh": 7.6,
+        "rajada_kmh": 7.3,
         "dir_graus": 246.4,
         "dir": "WSW"
       },
       "2026-12-01T01": {
         "vel_kmh": 4.8,
-        "rajada_kmh": 7.5,
+        "rajada_kmh": 7.2,
         "dir_graus": 249.3,
         "dir": "WSW"
       },
       "2026-12-01T02": {
         "vel_kmh": 4.0,
-        "rajada_kmh": 7.2,
+        "rajada_kmh": 7.0,
         "dir_graus": 262.7,
         "dir": "W"
       },
@@ -2559,7 +2559,7 @@
       },
       "2026-12-01T05": {
         "vel_kmh": 4.1,
-        "rajada_kmh": 8.7,
+        "rajada_kmh": 8.6,
         "dir_graus": 285.6,
         "dir": "WNW"
       },
@@ -2571,25 +2571,25 @@
       },
       "2026-12-01T07": {
         "vel_kmh": 3.5,
-        "rajada_kmh": 9.9,
+        "rajada_kmh": 10.2,
         "dir_graus": 274.9,
         "dir": "W"
       },
       "2026-12-01T08": {
         "vel_kmh": 3.7,
-        "rajada_kmh": 10.8,
+        "rajada_kmh": 11.4,
         "dir_graus": 194.0,
         "dir": "SSW"
       },
       "2026-12-01T09": {
         "vel_kmh": 4.2,
-        "rajada_kmh": 12.0,
+        "rajada_kmh": 12.3,
         "dir_graus": 149.5,
         "dir": "SSE"
       },
       "2026-12-01T10": {
         "vel_kmh": 4.8,
-        "rajada_kmh": 14.0,
+        "rajada_kmh": 14.2,
         "dir_graus": 145.4,
         "dir": "SE"
       },
@@ -2601,19 +2601,19 @@
       },
       "2026-12-01T12": {
         "vel_kmh": 7.8,
-        "rajada_kmh": 18.8,
+        "rajada_kmh": 18.5,
         "dir_graus": 135.8,
         "dir": "SE"
       },
       "2026-12-01T13": {
         "vel_kmh": 8.8,
-        "rajada_kmh": 20.7,
+        "rajada_kmh": 20.4,
         "dir_graus": 133.1,
         "dir": "SE"
       },
       "2026-12-01T14": {
         "vel_kmh": 9.6,
-        "rajada_kmh": 22.7,
+        "rajada_kmh": 22.5,
         "dir_graus": 123.7,
         "dir": "ESE"
       },
@@ -2643,181 +2643,181 @@
       },
       "2026-12-01T19": {
         "vel_kmh": 5.6,
-        "rajada_kmh": 16.9,
+        "rajada_kmh": 17.0,
         "dir_graus": 69.9,
         "dir": "ENE"
       },
       "2026-12-01T20": {
         "vel_kmh": 5.4,
-        "rajada_kmh": 13.2,
+        "rajada_kmh": 13.5,
         "dir_graus": 49.4,
         "dir": "NE"
       },
       "2026-12-01T21": {
         "vel_kmh": 5.1,
-        "rajada_kmh": 10.4,
+        "rajada_kmh": 10.8,
         "dir_graus": 35.3,
         "dir": "NE"
       },
       "2026-12-01T22": {
         "vel_kmh": 5.7,
-        "rajada_kmh": 10.1,
+        "rajada_kmh": 9.9,
         "dir_graus": 34.2,
         "dir": "NE"
       },
       "2026-12-01T23": {
         "vel_kmh": 5.7,
-        "rajada_kmh": 10.8,
+        "rajada_kmh": 10.0,
         "dir_graus": 36.0,
         "dir": "NE"
       },
       "2026-12-02T00": {
         "vel_kmh": 5.7,
-        "rajada_kmh": 11.8,
+        "rajada_kmh": 10.5,
         "dir_graus": 40.2,
         "dir": "NE"
       },
       "2026-12-02T01": {
         "vel_kmh": 6.1,
-        "rajada_kmh": 12.5,
+        "rajada_kmh": 11.5,
         "dir_graus": 40.8,
         "dir": "NE"
       },
       "2026-12-02T02": {
         "vel_kmh": 6.9,
-        "rajada_kmh": 13.0,
+        "rajada_kmh": 12.8,
         "dir_graus": 39.2,
         "dir": "NE"
       },
       "2026-12-02T03": {
         "vel_kmh": 7.0,
-        "rajada_kmh": 13.7,
+        "rajada_kmh": 14.0,
         "dir_graus": 39.2,
         "dir": "NE"
       },
       "2026-12-02T04": {
         "vel_kmh": 6.7,
-        "rajada_kmh": 13.9,
+        "rajada_kmh": 14.1,
         "dir_graus": 37.8,
         "dir": "NE"
       },
       "2026-12-02T05": {
         "vel_kmh": 6.4,
-        "rajada_kmh": 14.0,
+        "rajada_kmh": 13.9,
         "dir_graus": 40.4,
         "dir": "NE"
       },
       "2026-12-02T06": {
         "vel_kmh": 6.6,
-        "rajada_kmh": 15.3,
+        "rajada_kmh": 15.0,
         "dir_graus": 42.9,
         "dir": "NE"
       },
       "2026-12-02T07": {
         "vel_kmh": 8.5,
-        "rajada_kmh": 20.9,
+        "rajada_kmh": 20.7,
         "dir_graus": 46.0,
         "dir": "NE"
       },
       "2026-12-02T08": {
         "vel_kmh": 10.0,
-        "rajada_kmh": 24.7,
+        "rajada_kmh": 24.9,
         "dir_graus": 50.0,
         "dir": "NE"
       },
       "2026-12-02T09": {
         "vel_kmh": 11.3,
-        "rajada_kmh": 27.9,
+        "rajada_kmh": 28.2,
         "dir_graus": 52.7,
         "dir": "NE"
       },
       "2026-12-02T10": {
         "vel_kmh": 12.6,
-        "rajada_kmh": 30.1,
+        "rajada_kmh": 30.3,
         "dir_graus": 56.1,
         "dir": "NE"
       },
       "2026-12-02T11": {
         "vel_kmh": 13.4,
-        "rajada_kmh": 31.8,
+        "rajada_kmh": 31.7,
         "dir_graus": 60.4,
         "dir": "ENE"
       },
       "2026-12-02T12": {
         "vel_kmh": 13.9,
-        "rajada_kmh": 33.2,
+        "rajada_kmh": 32.7,
         "dir_graus": 65.7,
         "dir": "ENE"
       },
       "2026-12-02T13": {
         "vel_kmh": 13.7,
-        "rajada_kmh": 33.9,
+        "rajada_kmh": 33.4,
         "dir_graus": 71.2,
         "dir": "ENE"
       },
       "2026-12-02T14": {
         "vel_kmh": 13.1,
-        "rajada_kmh": 34.2,
+        "rajada_kmh": 33.7,
         "dir_graus": 73.9,
         "dir": "ENE"
       },
       "2026-12-02T15": {
         "vel_kmh": 13.2,
-        "rajada_kmh": 33.7,
+        "rajada_kmh": 33.1,
         "dir_graus": 105.7,
         "dir": "ESE"
       },
       "2026-12-02T16": {
         "vel_kmh": 12.6,
-        "rajada_kmh": 32.1,
+        "rajada_kmh": 31.2,
         "dir_graus": 102.0,
         "dir": "ESE"
       },
       "2026-12-02T17": {
         "vel_kmh": 11.4,
-        "rajada_kmh": 30.1,
+        "rajada_kmh": 28.8,
         "dir_graus": 87.3,
         "dir": "E"
       },
       "2026-12-02T18": {
         "vel_kmh": 9.8,
-        "rajada_kmh": 28.1,
+        "rajada_kmh": 26.7,
         "dir_graus": 58.4,
         "dir": "ENE"
       },
       "2026-12-02T19": {
         "vel_kmh": 9.1,
-        "rajada_kmh": 26.3,
+        "rajada_kmh": 25.2,
         "dir_graus": 42.1,
         "dir": "NE"
       },
       "2026-12-02T20": {
         "vel_kmh": 9.1,
-        "rajada_kmh": 25.2,
+        "rajada_kmh": 24.6,
         "dir_graus": 38.9,
         "dir": "NE"
       },
       "2026-12-02T21": {
         "vel_kmh": 8.0,
-        "rajada_kmh": 23.5,
+        "rajada_kmh": 23.3,
         "dir_graus": 34.7,
         "dir": "NE"
       },
       "2026-12-02T22": {
         "vel_kmh": 7.2,
-        "rajada_kmh": 21.3,
+        "rajada_kmh": 21.0,
         "dir_graus": 34.7,
         "dir": "NE"
       },
       "2026-12-02T23": {
         "vel_kmh": 5.9,
-        "rajada_kmh": 18.4,
+        "rajada_kmh": 18.0,
         "dir_graus": 38.6,
         "dir": "NE"
       },
       "2026-12-03T00": {
         "vel_kmh": 4.7,
-        "rajada_kmh": 15.8,
+        "rajada_kmh": 15.4,
         "dir_graus": 47.0,
         "dir": "NE"
       },
@@ -2829,133 +2829,133 @@
       },
       "2026-12-03T02": {
         "vel_kmh": 3.9,
-        "rajada_kmh": 11.6,
+        "rajada_kmh": 12.0,
         "dir_graus": 5.7,
         "dir": "N"
       },
       "2026-12-03T03": {
         "vel_kmh": 4.0,
-        "rajada_kmh": 10.3,
+        "rajada_kmh": 10.9,
         "dir_graus": 330.5,
         "dir": "NNW"
       },
       "2026-12-03T04": {
         "vel_kmh": 2.9,
-        "rajada_kmh": 9.3,
+        "rajada_kmh": 9.6,
         "dir_graus": 310.2,
         "dir": "NW"
       },
       "2026-12-03T05": {
         "vel_kmh": 1.4,
-        "rajada_kmh": 8.5,
+        "rajada_kmh": 8.3,
         "dir_graus": 293.6,
         "dir": "WNW"
       },
       "2026-12-03T06": {
         "vel_kmh": 2.4,
-        "rajada_kmh": 8.3,
+        "rajada_kmh": 7.6,
         "dir_graus": 281.8,
         "dir": "WNW"
       },
       "2026-12-03T07": {
         "vel_kmh": 2.7,
-        "rajada_kmh": 8.9,
+        "rajada_kmh": 7.9,
         "dir_graus": 253.0,
         "dir": "WSW"
       },
       "2026-12-03T08": {
         "vel_kmh": 2.5,
-        "rajada_kmh": 9.9,
+        "rajada_kmh": 8.7,
         "dir_graus": 222.0,
         "dir": "SW"
       },
       "2026-12-03T09": {
         "vel_kmh": 3.3,
-        "rajada_kmh": 11.4,
+        "rajada_kmh": 10.4,
         "dir_graus": 217.3,
         "dir": "SW"
       },
       "2026-12-03T10": {
         "vel_kmh": 4.9,
-        "rajada_kmh": 14.0,
+        "rajada_kmh": 13.6,
         "dir_graus": 218.5,
         "dir": "SW"
       },
       "2026-12-03T11": {
         "vel_kmh": 6.7,
-        "rajada_kmh": 17.4,
+        "rajada_kmh": 17.8,
         "dir_graus": 218.4,
         "dir": "SW"
       },
       "2026-12-03T12": {
         "vel_kmh": 8.3,
-        "rajada_kmh": 20.6,
+        "rajada_kmh": 21.3,
         "dir_graus": 215.3,
         "dir": "SW"
       },
       "2026-12-03T13": {
         "vel_kmh": 9.3,
-        "rajada_kmh": 23.7,
+        "rajada_kmh": 23.6,
         "dir_graus": 211.9,
         "dir": "SSW"
       },
       "2026-12-03T14": {
         "vel_kmh": 10.1,
-        "rajada_kmh": 26.3,
+        "rajada_kmh": 24.9,
         "dir_graus": 206.0,
         "dir": "SSW"
       },
       "2026-12-03T15": {
         "vel_kmh": 10.3,
-        "rajada_kmh": 27.1,
+        "rajada_kmh": 25.2,
         "dir_graus": 201.4,
         "dir": "SSW"
       },
       "2026-12-03T16": {
         "vel_kmh": 10.0,
-        "rajada_kmh": 25.2,
+        "rajada_kmh": 24.4,
         "dir_graus": 196.0,
         "dir": "SSW"
       },
       "2026-12-03T17": {
         "vel_kmh": 9.2,
-        "rajada_kmh": 21.9,
+        "rajada_kmh": 22.8,
         "dir_graus": 191.9,
         "dir": "SSW"
       },
       "2026-12-03T18": {
         "vel_kmh": 8.5,
-        "rajada_kmh": 19.2,
+        "rajada_kmh": 21.5,
         "dir_graus": 185.5,
         "dir": "S"
       },
       "2026-12-03T19": {
         "vel_kmh": 8.0,
-        "rajada_kmh": 18.4,
+        "rajada_kmh": 21.4,
         "dir_graus": 183.8,
         "dir": "S"
       },
       "2026-12-03T20": {
         "vel_kmh": 7.8,
-        "rajada_kmh": 18.4,
+        "rajada_kmh": 21.6,
         "dir_graus": 199.3,
         "dir": "SSW"
       },
       "2026-12-03T21": {
         "vel_kmh": 7.6,
-        "rajada_kmh": 18.6,
+        "rajada_kmh": 21.5,
         "dir_graus": 210.2,
         "dir": "SSW"
       },
       "2026-12-03T22": {
         "vel_kmh": 10.5,
-        "rajada_kmh": 26.2,
+        "rajada_kmh": 28.8,
         "dir_graus": 217.8,
         "dir": "SW"
       },
       "2026-12-03T23": {
         "vel_kmh": 9.9,
-        "rajada_kmh": 26.8,
+        "rajada_kmh": 26.5,
         "dir_graus": 226.9,
         "dir": "SW"
       }
@@ -2964,16 +2964,16 @@
       "cemaden_pcd_18789": {
         "estacao": "CEMADEN Palmital / Rio das Ostras (18789)",
         "chuva_1h": 0.0,
-        "chuva_24h": 17.8,
+        "chuva_24h": 17.4,
         "chuva_96h": 32.4,
-        "leitura": "2026-11-26 20:10:00"
+        "leitura": "2026-11-26 21:10:00"
       },
       "inea_rio_jundia": {
         "estacao": "INEA 224103620 (Rio Jundiá Ponte)",
         "chuva_1h": 0.0,
         "chuva_24h": 0.0,
         "chuva_96h": 0.0,
-        "nivel_m": "1.58",
+        "nivel_m": "1.59",
         "status": "Vigilância"
       }
     },
@@ -3077,7 +3077,7 @@
           "cptec_municipal_mm": 44.0,
           "cptec_municipal_prob_pct": 95,
           "cptec_municipal_valido_hoje": true,
-          "cptec_prob_p05_pct": 89,
+          "cptec_prob_p05_pct": null,
           "inmet_resumo": "Muitas nuvens com pancadas de chuva isoladas / Nublado com pancadas de chuva e trovoadas / Muitas nuvens com pancadas de chuva e trovoadas isoladas",
           "inmet_aviso_id": 56510,
           "inmet_aviso_cor": "Laranja",
@@ -3193,7 +3193,7 @@
           "cptec_multimodel_prob_pct": 23,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": null,
-          "cptec_municipal_prob_pct": 5,
+          "cptec_municipal_prob_pct": null,
           "cptec_municipal_valido_hoje": null,
           "cptec_prob_p05_pct": 6,
           "inmet_resumo": "Muitas nuvens com pancadas de chuva isoladas / Muitas nuvens",
@@ -3207,7 +3207,7 @@
           "ecmwf_ifs_mm": 0.2,
           "ecmwf_ifs_prob_pct": 11,
           "gfs_mm": 0.7,
-          "gfs_prob_pct": 97,
+          "gfs_prob_pct": 100,
           "icon_mm": 1.6,
           "icon_prob_pct": 45,
           "observado_hoje_media_mm": null,
@@ -3229,12 +3229,12 @@
           "p50_mm": 12.4,
           "p75_mm": 16.9,
           "p90_teto_mm": 27.3,
-          "probabilidade_pct": 75,
+          "probabilidade_pct": 74,
           "qtd_fontes_numericas": 6
         },
         "chuva_pico_convectivo_mm": 27.3,
-        "faixa_oficial": "12.4 mm (P50) • P25–P90: 8.6–27.3 mm (75%)",
-        "chuva_prob_pct": 75,
+        "faixa_oficial": "12.4 mm (P50) • P25–P90: 8.6–27.3 mm (74%)",
+        "chuva_prob_pct": 74,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "alerta_inmet_desc": null,
@@ -3259,7 +3259,7 @@
           "cptec_multimodel_prob_pct": 93,
           "cptec_multimodel_horas": 24,
           "cptec_municipal_mm": null,
-          "cptec_municipal_prob_pct": 70,
+          "cptec_municipal_prob_pct": null,
           "cptec_municipal_valido_hoje": null,
           "cptec_prob_p05_pct": 68,
           "inmet_resumo": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
@@ -3273,7 +3273,7 @@
           "ecmwf_ifs_mm": 8.6,
           "ecmwf_ifs_prob_pct": 69,
           "gfs_mm": 2.3,
-          "gfs_prob_pct": 85,
+          "gfs_prob_pct": 72,
           "icon_mm": 4.5,
           "icon_prob_pct": 43,
           "observado_hoje_media_mm": null,
@@ -3295,12 +3295,12 @@
           "p50_mm": 19.9,
           "p75_mm": 25.8,
           "p90_teto_mm": 26.5,
-          "probabilidade_pct": 91,
+          "probabilidade_pct": 90,
           "qtd_fontes_numericas": 6
         },
         "chuva_pico_convectivo_mm": 26.5,
-        "faixa_oficial": "19.9 mm (P50) • P25–P90: 14.8–26.5 mm (91%)",
-        "chuva_prob_pct": 91,
+        "faixa_oficial": "19.9 mm (P50) • P25–P90: 14.8–26.5 mm (90%)",
+        "chuva_prob_pct": 90,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "alerta_inmet_desc": null,
@@ -3327,7 +3327,7 @@
           "cptec_municipal_mm": null,
           "cptec_municipal_prob_pct": 95,
           "cptec_municipal_valido_hoje": null,
-          "cptec_prob_p05_pct": null,
+          "cptec_prob_p05_pct": 89,
           "inmet_resumo": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
           "inmet_aviso_id": null,
           "inmet_aviso_cor": null,
@@ -3361,12 +3361,12 @@
           "p50_mm": 16.8,
           "p75_mm": 24.3,
           "p90_teto_mm": 31.4,
-          "probabilidade_pct": 92,
+          "probabilidade_pct": 91,
           "qtd_fontes_numericas": 6
         },
         "chuva_pico_convectivo_mm": 31.4,
-        "faixa_oficial": "16.8 mm (P50) • P25–P90: 8.1–31.4 mm (92%)",
-        "chuva_prob_pct": 92,
+        "faixa_oficial": "16.8 mm (P50) • P25–P90: 8.1–31.4 mm (91%)",
+        "chuva_prob_pct": 91,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "alerta_inmet_desc": null,
@@ -3405,7 +3405,7 @@
           "ecmwf_ifs_mm": 8.1,
           "ecmwf_ifs_prob_pct": 98,
           "gfs_mm": 1.0,
-          "gfs_prob_pct": 95,
+          "gfs_prob_pct": 93,
           "icon_mm": 23.8,
           "icon_prob_pct": 91,
           "observado_hoje_media_mm": null,
@@ -3471,7 +3471,7 @@
           "ecmwf_ifs_mm": 17.5,
           "ecmwf_ifs_prob_pct": 88,
           "gfs_mm": 3.2,
-          "gfs_prob_pct": 93,
+          "gfs_prob_pct": 91,
           "icon_mm": 8.4,
           "icon_prob_pct": 65,
           "observado_hoje_media_mm": null,
@@ -3493,12 +3493,12 @@
           "p50_mm": 2.8,
           "p75_mm": 3.5,
           "p90_teto_mm": 9.7,
-          "probabilidade_pct": 35,
+          "probabilidade_pct": 32,
           "qtd_fontes_numericas": 6
         },
         "chuva_pico_convectivo_mm": 9.7,
-        "faixa_oficial": "2.8 mm (P50) • P25–P90: 0.0–9.7 mm (35%)",
-        "chuva_prob_pct": 35,
+        "faixa_oficial": "2.8 mm (P50) • P25–P90: 0.0–9.7 mm (32%)",
+        "chuva_prob_pct": 32,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "alerta_inmet_desc": null,
@@ -3537,7 +3537,7 @@
           "ecmwf_ifs_mm": 1.2,
           "ecmwf_ifs_prob_pct": 67,
           "gfs_mm": 3.5,
-          "gfs_prob_pct": 99,
+          "gfs_prob_pct": 77,
           "icon_mm": 0.0,
           "icon_prob_pct": 56,
           "observado_hoje_media_mm": null,
@@ -3559,12 +3559,12 @@
           "p50_mm": 9.4,
           "p75_mm": 18.2,
           "p90_teto_mm": 18.2,
-          "probabilidade_pct": 93,
+          "probabilidade_pct": 95,
           "qtd_fontes_numericas": 3
         },
         "chuva_pico_convectivo_mm": 18.2,
-        "faixa_oficial": "9.4 mm (P50) • P25–P90: 0.0–18.2 mm (93%)",
-        "chuva_prob_pct": 93,
+        "faixa_oficial": "9.4 mm (P50) • P25–P90: 0.0–18.2 mm (95%)",
+        "chuva_prob_pct": 95,
         "tem_alerta_inmet": false,
         "alerta_inmet_id": null,
         "alerta_inmet_desc": null,
@@ -3603,7 +3603,7 @@
           "ecmwf_ifs_mm": 18.2,
           "ecmwf_ifs_prob_pct": 96,
           "gfs_mm": 15.8,
-          "gfs_prob_pct": 89,
+          "gfs_prob_pct": 93,
           "icon_mm": null,
           "icon_prob_pct": null,
           "observado_hoje_media_mm": null,
@@ -3635,7 +3635,7 @@
       "titulo": "Rio Jundiá (INEA)",
       "status": "Vigilância",
       "badge": "success",
-      "detalhe": "Cota: 1.58 m (Calha a 2,84 m)",
+      "detalhe": "Cota: 1.59 m (Calha a 2,84 m)",
       "impacto": "Calha em vazante contínua com escoamento normalizado. Sem risco imediato de transbordamento."
     },
     {
@@ -3655,7 +3655,7 @@
       "impacto": "Hoje sob Alerta Amarelo de Chuvas Intensas (20–30 mm/h ou até 50 mm/dia)."
     }
   ],
-  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 26/11 (Quinta-feira) a 03/12 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 27°C na quinta-feira (26/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuvas intensas em forma de pancadas fortes com raios e rajadas (25.7 mm (P50) • Faixa 22.4–100.0 mm • Até 100 mm (Alerta INMET)) (sob Alerta Laranja de Chuvas Intensas nº 56510 do INMET e Alerta Amarelo de Chuvas Intensas nº 56508 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 60 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Chuvas Intensas do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,58 m (Status: Vigilância, ocupação de calha em 56% e ampla margem de segurança de 1,26 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (27/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (21°C a 25°C) e precipitação estimada em chuva fraca (1.8 mm (P50) • P25–P90: 0.0–10.0 mm (50%)) (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 819/2026 da Marinha). No sábado (28/11) e no domingo (29/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 12.4 mm (P50) • P25–P90: 8.6–27.3 mm (75%) (sem avisos meteorológicos vigentes) e 19.9 mm (P50) • P25–P90: 14.8–26.5 mm (91%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 3,0 a 3,5 m (Mar Grosso) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+  "sinopse_geral": "A configuração sinótica regional sobre o município de Rio das Ostras e o litoral da Bacia de Campos para o período de 26/11 (Quinta-feira) a 03/12 (Quinta-feira) é determinada pela aproximação e passagem de um sistema frontal (frente fria) associado a um ciclone extratropical no Atlântico Sul, que organiza um canal de umidade sobre o Sudeste brasileiro. Esse avanço frontal quebra o bloqueio anterior e estabelece convergência de ventos de quadrante Sul/Sudeste em superfície, provocando choques de massas de ar com a massa tropical quente que elevou as temperaturas diurnas a até 27°C na quinta-feira (26/11). Em médios (500 hPa) e altos níveis (250 hPa), a propagação de cavados de onda curta e a difluência associada ao ramo polar/subtropical do jato intensificam a instabilidade dinâmica, promovendo convecção profunda com precipitação diária prevista em chuvas intensas em forma de pancadas fortes com raios e rajadas (25.7 mm (P50) • Faixa 22.4–100.0 mm • Até 100 mm (Alerta INMET)) (sob Alerta Laranja de Chuvas Intensas nº 56510 do INMET e Alerta Amarelo de Chuvas Intensas nº 56508 do INMET).\n\nO forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 60 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Chuvas Intensas do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,59 m (Status: Vigilância, ocupação de calha em 56% e ampla margem de segurança de 1,25 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.\n\nNa evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (27/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (21°C a 24°C) e precipitação estimada em chuva fraca (1.8 mm (P50) • P25–P90: 0.0–10.0 mm (50%)) (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 819/2026 da Marinha). No sábado (28/11) e no domingo (29/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 12.4 mm (P50) • P25–P90: 8.6–27.3 mm (74%) (sem avisos meteorológicos vigentes) e 19.9 mm (P50) • P25–P90: 14.8–26.5 mm (90%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 3,0 a 3,5 m (Mar Grosso) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
   "sinopse_estruturada": {
     "periodo": "26/11 (Quinta-feira) a 03/12 (Quinta-feira)",
     "evolucao_3_dias": [
@@ -3668,7 +3668,7 @@
         "badge_tipo": "danger",
         "descricao": "Previsão de chuvas intensas em forma de pancadas fortes com raios e rajadas sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 21°C e máxima de 27°C. Consenso de 25.7 mm no dia (probabilidade de 91%) e ventos fracos com rajadas muito fortes de até 60 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas (Praia do Bosque, Tartaruga e Centro) com águas calmas; e de 1,2 a 1,6 m em praias oceânicas de mar aberto (Costazul e Mar do Norte) com arrebentação regular sob ondulação de SE/E (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
-          "Nesta quinta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria) mantém ventos persistentes do quadrante Sul/Sudoeste (de SW-W para S-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
+          "Nesta quinta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de SW-W para S-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
           "Previsão de chuvas intensas em forma de pancadas fortes com raios e rajadas entre madrugada e tarde (consenso de 25.7 mm no dia; probabilidade de 91%).",
           "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 27°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 29°C no pico do calor. Na região rural, oscilam entre 19°C e 25°C.",
           "A umidade relativa do ar oscila entre 75% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
@@ -3732,11 +3732,11 @@
         "subtitulo": "Muitas nuvens",
         "badge": "NORMALIDADE",
         "badge_tipo": "info",
-        "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 21°C e máxima de 25°C. Consenso de 1.8 mm no dia (probabilidade de 50%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+        "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 1.8 mm no dia (probabilidade de 50%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
-          "Nesta sexta-feira, a massa de ar frio e úmido na retaguarda da frente fria (sistema pós-frontal) direciona ventos marítimos (de SE-S para N-NE) para o litoral, mantendo grande variação de nuvens, chance de chuvisco isolado e temperaturas mais amenas.",
+          "Nesta sexta-feira, a massa de ar frio e úmido na retaguarda da frente fria (sistema pós-frontal associada a um ciclone extratropical em alto-mar) direciona ventos marítimos (de SE-S para N-NE) para o litoral, mantendo grande variação de nuvens, chance de chuvisco isolado e temperaturas mais amenas.",
           "Previsão de chuva pós-frontal fraca e intermitente entre madrugada e noite sustentada pela umidade oceânica (consenso de 1.8 mm no dia; probabilidade de 50%).",
-          "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 25°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 25°C no pico do calor. Na região rural, oscilam entre 19°C e 23°C.",
+          "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 24°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 25°C no pico do calor. Na região rural, oscilam entre 19°C e 22°C.",
           "A umidade relativa do ar oscila entre 65% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
           "Ventos fracos de SE-S rondando para N-NE (6 a 12 km/h), com rajadas fracas a moderadas de até 23 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
           "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
@@ -3749,7 +3749,7 @@
           },
           "temp": {
             "label": "TEMPERATURA",
-            "val": "21° a 25°C",
+            "val": "21° a 24°C",
             "icon": "thermometer"
           },
           "sensacao": {
@@ -3781,7 +3781,7 @@
           },
           "uv": {
             "label": "ÍNDICE UV (CPTEC)",
-            "val": "UV 13.0 (Extremo)",
+            "val": "UV 11 (Extremo)",
             "icon": "sun"
           },
           "agua_precipitavel": {
@@ -3798,12 +3798,12 @@
         "subtitulo": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
         "badge": "NORMALIDADE",
         "badge_tipo": "info",
-        "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas de chuva à tarde). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 12.4 mm no dia (probabilidade de 75%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+        "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas de chuva à tarde). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 12.4 mm no dia (probabilidade de 74%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
         "informe_populacao": [
           "Neste sábado, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a manhã e a noite.",
-          "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 12.4 mm no dia; probabilidade de 75%).",
+          "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 12.4 mm no dia; probabilidade de 74%).",
           "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 24°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 26°C no pico do calor. Na região rural, oscilam entre 19°C e 22°C.",
-          "A umidade relativa do ar oscila entre 79% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
+          "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
           "Ventos fracos de NE rondando para ENE (9 a 16 km/h), com rajadas moderadas de até 40 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
           "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
         ],
@@ -3827,7 +3827,7 @@
           },
           "umid": {
             "label": "UMIDADE",
-            "val": "79% a 100%",
+            "val": "80% a 100%",
             "icon": "droplets"
           },
           "vento": {
@@ -3837,22 +3837,22 @@
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "12.4 mm (75% • P25–P90: 8.6–27.3 mm)",
+            "val": "12.4 mm (74% • P25–P90: 8.6–27.3 mm)",
             "icon": "cloud-rain"
           },
           "mar": {
             "label": "MAR E PRAIA",
-            "val": "1.0 a 1.1 m",
+            "val": "1.0 a 1.0 m",
             "icon": "waves"
           },
           "uv": {
             "label": "ÍNDICE UV (CPTEC)",
-            "val": "UV 13.0 (Extremo)",
+            "val": "UV 11 (Extremo)",
             "icon": "sun"
           },
           "agua_precipitavel": {
             "label": "ÁGUA PRECIPITÁVEL / CAPE (VIME)",
-            "val": "10.7 mm",
+            "val": "10.5 mm",
             "icon": "droplets"
           }
         }
@@ -3864,13 +3864,13 @@
         "subtitulo": "Muitas nuvens com pancadas de chuva e trovoadas isoladas",
         "badge": "NORMALIDADE",
         "badge_tipo": "info",
-        "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 26°C. Consenso de 19.9 mm no dia (probabilidade de 91%) e ventos fracos com rajadas moderadas de até 31 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+        "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 26°C. Consenso de 19.9 mm no dia (probabilidade de 90%) e ventos fracos com rajadas moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
         "informe_populacao": [
           "Neste domingo, a aproximação e atuação de um novo sistema frontal na costa fluminense promove rotação dos ventos (de NE rondando para SSE/SSW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-          "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 19.9 mm no dia; probabilidade de 91%).",
+          "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 19.9 mm no dia; probabilidade de 90%).",
           "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
           "A umidade relativa do ar oscila entre 88% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
-          "Ventos fracos de NE rondando para SSE (6 a 9 km/h), com rajadas moderadas de até 31 km/h na orla.",
+          "Ventos fracos de NE rondando para SSE (6 a 9 km/h), com rajadas moderadas de até 29 km/h na orla.",
           "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
         ],
         "pilares": {
@@ -3898,12 +3898,12 @@
           },
           "vento": {
             "label": "VENTO & RAJADAS",
-            "val": "Fraco • Rajadas 31 km/h (Moderadas)",
+            "val": "Fraco • Rajadas 29 km/h (Moderadas)",
             "icon": "wind"
           },
           "chuva": {
             "label": "CHUVA",
-            "val": "19.9 mm (91% • P25–P90: 14.8–26.5 mm)",
+            "val": "19.9 mm (90% • P25–P90: 14.8–26.5 mm)",
             "icon": "cloud-rain"
           },
           "mar": {
@@ -3939,33 +3939,33 @@
         },
         {
           "label": "Evolução Sinótica Oficial",
-          "val": "QUINTA-FEIRA – 26/11/2026: Possibilidade de Chuva (27°C) ➔ SEXTA-FEIRA – 27/11/2026: Nublado/Estável (25°C) ➔ SÁBADO – 28/11/2026: Pancadas/Trovoadas (24°C) ➔ DOMINGO – 29/11/2026: Pancadas/Trovoadas (26°C)"
+          "val": "QUINTA-FEIRA – 26/11/2026: Possibilidade de Chuva (27°C) ➔ SEXTA-FEIRA – 27/11/2026: Nublado/Estável (24°C) ➔ SÁBADO – 28/11/2026: Pancadas/Trovoadas (24°C) ➔ DOMINGO – 29/11/2026: Pancadas/Trovoadas (26°C)"
         }
       ]
     },
     "ordem_2_hidrologia_costa": {
       "titulo": "2. Rede Hidrográfica Municipal (Rio Jundiá) & Condições Marítimas Costeiras na Orla",
-      "badge": "VIGILÂNCIA • COTA 1,58 M (ESTÁVEL)",
+      "badge": "VIGILÂNCIA • COTA 1,59 M (ESTÁVEL)",
       "badge_mar": "MAR MODERADO • ONDAS 1,2 A 1,6 M",
-      "cota": "1.58 m",
+      "cota": "1.59 m",
       "status": "Vigilância",
-      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 60 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Chuvas Intensas do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,58 m (Status: Vigilância, ocupação de calha em 56% e ampla margem de segurança de 1,26 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
+      "texto": "O forte aquecimento diabático pré-frontal aliado à alta disponibilidade de umidade e expressiva Energia Potencial Convectiva Disponível (índices CAPE elevados com rápida erosão de CINE à tarde) sustenta o desenvolvimento de nuvens de grande desenvolvimento vertical (Cumulonimbus - Cb), resultando em temporais com descargas elétricas atmosféricas (raios nuvem-solo), potencial de granizo localizado e rajadas de vento descendentes convectivas (downbursts de até 60 km/h na orla marítima). O Boletim Hidrometeorológico Oficial da Sala de Situação do INEA (Alerta de Cheias) para a Região Hidrográfica RH-VIII (Macaé e Rio das Ostras) e os Alertas Oficiais de Chuvas Intensas do INMET convergem na indicação de pancadas moderadas a fortes, com previsão de elevações pontuais nos rios monitorados. No monitoramento hidrometeorológico, a Bacia Hidrográfica do Rio Jundiá opera em regime fluviométrico de estabilidade, com a estação telemétrica municipal (INEA 2241036) registrando cota de 1,59 m (Status: Vigilância, ocupação de calha em 56% e ampla margem de segurança de 1,25 m abaixo da cota de transbordo de 2,84 m), garantindo escoamento pluvial pleno nos canais urbanos.",
       "estacoes": [
         {
           "nome": "Rio Jundiá (INEA)",
-          "valor": "1,58 m (0,0 mm 24h)"
+          "valor": "1,59 m (0,0 mm 24h)"
         },
         {
           "nome": "Palmital (CEMADEN)",
-          "valor": "17,8 mm (24h)"
+          "valor": "17,4 mm (24h)"
         },
         {
           "nome": "Rocha Leão / REBIO",
-          "valor": "35,8 mm (24h)"
+          "valor": "34,5 mm (24h)"
         },
         {
           "nome": "Tartaruga / Orla",
-          "valor": "16,5 mm (24h)"
+          "valor": "14,9 mm (24h)"
         }
       ]
     },
@@ -3973,7 +3973,7 @@
       "titulo": "3. Regime Operacional, Atualização Contínua em Nuvem & Telemetria 24/7",
       "badge": "SINCRONIZAÇÃO EM NUVEM 24/7",
       "badge_emergencia": "OPERAÇÃO 24/7",
-      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (27/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (21°C a 25°C) e precipitação estimada em chuva fraca (1.8 mm (P50) • P25–P90: 0.0–10.0 mm (50%)) (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 819/2026 da Marinha). No sábado (28/11) e no domingo (29/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 12.4 mm (P50) • P25–P90: 8.6–27.3 mm (75%) (sem avisos meteorológicos vigentes) e 19.9 mm (P50) • P25–P90: 14.8–26.5 mm (91%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 3,0 a 3,5 m (Mar Grosso) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
+      "texto": "Na evolução do prognóstico numérico de mesoescala para o horizonte dos próximos dias (modelos COSMO 7km/2,8km INMET/VIME, WRF/Multimodel CPTEC, Boletim INEA RH-VIII e modelos globais ECMWF 9km/GFS/ICON), na sexta-feira (27/11) consolida-se a atuação do sistema pós-frontal na retaguarda da frente fria com transporte constante de umidade oceânica, determinando contenção/declínio de temperatura (21°C a 24°C) e precipitação estimada em chuva fraca (1.8 mm (P50) • P25–P90: 0.0–10.0 mm (50%)) (sem alertas severos do INMET, sob Aviso de Mau Tempo nº 819/2026 da Marinha). No sábado (28/11) e no domingo (29/11), o padrão de cavado em médios níveis / convecção úmida mantém variação de nuvens e chuva prevista de 12.4 mm (P50) • P25–P90: 8.6–27.3 mm (74%) (sem avisos meteorológicos vigentes) e 19.9 mm (P50) • P25–P90: 14.8–26.5 mm (90%) (sem avisos meteorológicos vigentes). No domínio oceanográfico costeiro (Área Delta - CHM / Marinha do Brasil), o estado do mar é caracterizado por ondas de 3,0 a 3,5 m (Mar Grosso) e aviso de vento forte vigente, exigindo atenção na navegação e orla. A infraestrutura meteorológica opera com monitoramento e síntese contínua 24h na nuvem.",
       "pilares": [
         {
           "label": "Ciclo Sinótico Oficial",
@@ -4064,16 +4064,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "60 a 100 km/h",
-          "rajada_pico_modelado_kmh": 45.2,
+          "rajada_pico_modelado_kmh": 45.5,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Sul-Sudoeste (SSW)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -4090,7 +4090,7 @@
       "sensacao_max": 29,
       "sensacao_faixa": "24° a 29°C",
       "informe_populacao": [
-        "Nesta quinta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria) mantém ventos persistentes do quadrante Sul/Sudoeste (de SW-W para S-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
+        "Nesta quinta-feira, a atuação do sistema pós-frontal (retaguarda da frente fria associada a um ciclone extratropical em alto-mar) mantém ventos persistentes do quadrante Sul/Sudoeste (de SW-W para S-SW) transportando umidade do oceano para a costa, com predomínio de céu nublado a encoberto, chuva recorrente e declínio térmico.",
         "Previsão de chuvas intensas em forma de pancadas fortes com raios e rajadas entre madrugada e tarde (consenso de 25.7 mm no dia; probabilidade de 91%).",
         "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 27°C à tarde, com sensação térmica variando entre a menor de 24°C e a maior de 29°C no pico do calor. Na região rural, oscilam entre 19°C e 25°C.",
         "A umidade relativa do ar oscila entre 75% nas horas mais quentes da tarde e 96% na madrugada (Ar Muito Úmido).",
@@ -4158,7 +4158,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva fraca",
       "intensidade_vento": "Fraco (Fracas a moderadas)",
-      "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 21°C e máxima de 25°C. Consenso de 1.8 mm no dia (probabilidade de 50%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+      "descricao": "Previsão de chuva fraca (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 1.8 mm no dia (probabilidade de 50%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-27",
         "data_br": "27/11/2026",
@@ -4194,16 +4194,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 23 km/h",
-          "rajada_pico_modelado_kmh": 23.4,
+          "rajada_pico_modelado_kmh": 23.1,
           "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
           "direcao_pico": "Leste-Sudeste (ESE)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -4220,9 +4220,9 @@
       "sensacao_max": 25,
       "sensacao_faixa": "22° a 25°C",
       "informe_populacao": [
-        "Nesta sexta-feira, a massa de ar frio e úmido na retaguarda da frente fria (sistema pós-frontal) direciona ventos marítimos (de SE-S para N-NE) para o litoral, mantendo grande variação de nuvens, chance de chuvisco isolado e temperaturas mais amenas.",
+        "Nesta sexta-feira, a massa de ar frio e úmido na retaguarda da frente fria (sistema pós-frontal associada a um ciclone extratropical em alto-mar) direciona ventos marítimos (de SE-S para N-NE) para o litoral, mantendo grande variação de nuvens, chance de chuvisco isolado e temperaturas mais amenas.",
         "Previsão de chuva pós-frontal fraca e intermitente entre madrugada e noite sustentada pela umidade oceânica (consenso de 1.8 mm no dia; probabilidade de 50%).",
-        "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 25°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 25°C no pico do calor. Na região rural, oscilam entre 19°C e 23°C.",
+        "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 24°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 25°C no pico do calor. Na região rural, oscilam entre 19°C e 22°C.",
         "A umidade relativa do ar oscila entre 65% nas horas mais quentes da tarde e 90% na madrugada (Ar Úmido).",
         "Ventos fracos de SE-S rondando para N-NE (6 a 12 km/h), com rajadas fracas a moderadas de até 23 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
         "Condições do mar na orla: Ondas de 0,4 a 0,7 m nas enseadas abrigadas; e de 1,2 a 1,8 m em praias de mar aberto (Costazul e Mar do Norte), com mar moderado a agitado e intensificação de vento e ondulação (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
@@ -4235,7 +4235,7 @@
         },
         "temp": {
           "label": "TEMPERATURA",
-          "val": "21° a 25°C",
+          "val": "21° a 24°C",
           "icon": "thermometer"
         },
         "sensacao": {
@@ -4267,7 +4267,7 @@
         },
         "uv": {
           "label": "ÍNDICE UV (CPTEC)",
-          "val": "UV 13.0 (Extremo)",
+          "val": "UV 11 (Extremo)",
           "icon": "sun"
         },
         "agua_precipitavel": {
@@ -4288,7 +4288,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Moderadas)",
-      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas de chuva à tarde). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 12.4 mm no dia (probabilidade de 75%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
+      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas de chuva à tarde). Temperaturas variando entre mínima de 21°C e máxima de 24°C. Consenso de 12.4 mm no dia (probabilidade de 74%) e ventos fracos com rajadas moderadas de até 40 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta)).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-28",
         "data_br": "28/11/2026",
@@ -4324,16 +4324,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 40 km/h",
-          "rajada_pico_modelado_kmh": 40.0,
+          "rajada_pico_modelado_kmh": 39.7,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Leste (E)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -4351,9 +4351,9 @@
       "sensacao_faixa": "22° a 26°C",
       "informe_populacao": [
         "Neste sábado, o forte aquecimento diurno somado à passagem de um cavado em médios níveis da atmosfera e à elevada umidade favorece nuvens de desenvolvimento vertical (Cumulonimbus), com pancadas de chuva e trovoadas entre a manhã e a noite.",
-        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 12.4 mm no dia; probabilidade de 75%).",
+        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 12.4 mm no dia; probabilidade de 74%).",
         "Temperaturas em declínio térmico, variando entre mínima de 21°C ao amanhecer e máxima contida de 24°C à tarde, com sensação térmica variando entre a menor de 22°C e a maior de 26°C no pico do calor. Na região rural, oscilam entre 19°C e 22°C.",
-        "A umidade relativa do ar oscila entre 79% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
+        "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de NE rondando para ENE (9 a 16 km/h), com rajadas moderadas de até 40 km/h na orla (Aviso de Mau Tempo da Marinha do Brasil).",
         "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 1,0 a 1,4 m em praias de mar aberto (Costazul) com ondulação de E/NE e arrebentação moderada (sob Aviso de Mau Tempo da Marinha do Brasil (Área Delta))."
       ],
@@ -4377,7 +4377,7 @@
         },
         "umid": {
           "label": "UMIDADE",
-          "val": "79% a 100%",
+          "val": "80% a 100%",
           "icon": "droplets"
         },
         "vento": {
@@ -4387,22 +4387,22 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "12.4 mm (75% • P25–P90: 8.6–27.3 mm)",
+          "val": "12.4 mm (74% • P25–P90: 8.6–27.3 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "1.0 a 1.1 m",
+          "val": "1.0 a 1.0 m",
           "icon": "waves"
         },
         "uv": {
           "label": "ÍNDICE UV (CPTEC)",
-          "val": "UV 13.0 (Extremo)",
+          "val": "UV 11 (Extremo)",
           "icon": "sun"
         },
         "agua_precipitavel": {
           "label": "ÁGUA PRECIPITÁVEL / CAPE (VIME)",
-          "val": "10.7 mm",
+          "val": "10.5 mm",
           "icon": "droplets"
         }
       }
@@ -4418,7 +4418,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Moderadas)",
-      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 26°C. Consenso de 19.9 mm no dia (probabilidade de 91%) e ventos fracos com rajadas moderadas de até 31 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 26°C. Consenso de 19.9 mm no dia (probabilidade de 90%) e ventos fracos com rajadas moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-29",
         "data_br": "29/11/2026",
@@ -4454,9 +4454,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4481,10 +4481,10 @@
       "sensacao_faixa": "24° a 30°C",
       "informe_populacao": [
         "Neste domingo, a aproximação e atuação de um novo sistema frontal na costa fluminense promove rotação dos ventos (de NE rondando para SSE/SSW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 19.9 mm no dia; probabilidade de 91%).",
+        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) entre a manhã e a noite (consenso de 19.9 mm no dia; probabilidade de 90%).",
         "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 26°C à tarde em rápida elevação, com sensação térmica variando entre a menor de 24°C e a maior de 30°C no pico do calor. Na região rural, oscilam entre 20°C e 24°C.",
         "A umidade relativa do ar oscila entre 88% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de NE rondando para SSE (6 a 9 km/h), com rajadas moderadas de até 31 km/h na orla.",
+        "Ventos fracos de NE rondando para SSE (6 a 9 km/h), com rajadas moderadas de até 29 km/h na orla.",
         "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas e de 0,8 a 1,2 m em mar aberto com swell suave de E/NE e mar calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
       ],
       "pilares": {
@@ -4512,12 +4512,12 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 31 km/h (Moderadas)",
+          "val": "Fraco • Rajadas 29 km/h (Moderadas)",
           "icon": "wind"
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "19.9 mm (91% • P25–P90: 14.8–26.5 mm)",
+          "val": "19.9 mm (90% • P25–P90: 14.8–26.5 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
@@ -4548,7 +4548,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva moderada",
       "intensidade_vento": "Fraco (Fracas a moderadas)",
-      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fina e contínua). Temperaturas variando entre mínima de 22°C e máxima de 27°C. Consenso de 16.8 mm no dia (probabilidade de 92%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (chuva fina e contínua). Temperaturas variando entre mínima de 22°C e máxima de 27°C. Consenso de 16.8 mm no dia (probabilidade de 91%) e ventos fracos com rajadas fracas a moderadas de até 23 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas abrigadas e de 0,9 a 1,3 m em praias de mar aberto sob ondulação de E e mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-11-30",
         "data_br": "30/11/2026",
@@ -4584,16 +4584,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 23 km/h",
-          "rajada_pico_modelado_kmh": 22.8,
+          "rajada_pico_modelado_kmh": 22.6,
           "horario_pico": "Entre 14h e 18h (pico por volta das 11:00)",
           "direcao_pico": "Sul (S)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -4611,7 +4611,7 @@
       "sensacao_faixa": "25° a 28°C",
       "informe_populacao": [
         "Nesta segunda-feira, a atuação persistente de cavados atmosféricos acoplados a um canal de umidade tropical alimenta áreas de instabilidade contínuas, mantendo céu encoberto e chuva recorrente ao longo do dia.",
-        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) ao longo do dia (com maior intensidade entre madrugada e tarde) (consenso de 16.8 mm no dia; probabilidade de 92%).",
+        "Previsão de chuva moderada (com possibilidade de pancadas pontuais e trovoadas) ao longo do dia (com maior intensidade entre madrugada e tarde) (consenso de 16.8 mm no dia; probabilidade de 91%).",
         "Temperaturas estáveis ao longo do dia, oscilando entre mínima de 22°C ao amanhecer e máxima de 27°C à tarde, com sensação térmica variando entre a menor de 25°C e a maior de 28°C no pico do calor. Na região rural, oscilam entre 20°C e 25°C.",
         "A umidade relativa do ar oscila entre 80% nas horas mais quentes da tarde e 100% na madrugada (Ar Muito Úmido).",
         "Ventos fracos de WNW rondando para SSE (5 a 7 km/h), com rajadas fracas a moderadas de até 23 km/h na orla.",
@@ -4647,12 +4647,12 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "16.8 mm (92% • P25–P90: 8.1–31.4 mm)",
+          "val": "16.8 mm (91% • P25–P90: 8.1–31.4 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.9 a 0.9 m",
+          "val": "1.0 a 1.0 m",
           "icon": "waves"
         },
         "uv": {
@@ -4714,9 +4714,9 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
@@ -4782,7 +4782,7 @@
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.8 a 0.8 m",
+          "val": "0.9 a 0.9 m",
           "icon": "waves"
         },
         "uv": {
@@ -4808,7 +4808,7 @@
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva fraca",
       "intensidade_vento": "Fraco (Moderadas)",
-      "descricao": "Previsão de chuva fraca sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 22°C e máxima de 29°C. Consenso de 2.8 mm no dia (probabilidade de 35%) e ventos fracos com rajadas moderadas de até 34 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "descricao": "Previsão de chuva fraca sobre Rio das Ostras (chuva fraca / garoa intermitente). Temperaturas variando entre mínima de 22°C e máxima de 29°C. Consenso de 2.8 mm no dia (probabilidade de 32%) e ventos fracos com rajadas moderadas de até 34 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,4 a 0,6 m nas enseadas e de 0,8 a 1,2 m em praias de mar aberto com mar moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-12-02",
         "data_br": "02/12/2026",
@@ -4844,16 +4844,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
           "rajada_faixa": "Até 34 km/h",
-          "rajada_pico_modelado_kmh": 34.2,
+          "rajada_pico_modelado_kmh": 33.7,
           "horario_pico": "Entre 14h e 18h (pico por volta das 14:00)",
           "direcao_pico": "Leste-Nordeste (ENE)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -4871,7 +4871,7 @@
       "sensacao_faixa": "24° a 34°C",
       "informe_populacao": [
         "Nesta quarta-feira, a atuação da borda ocidental da Alta Subtropical do Atlântico Sul (ASAS) sustenta fluxo de Leste/Nordeste (de NE rondando para E/NE) com sol entre nuvens e elevação térmica, permitindo apenas chuvas muito isoladas por efeito local.",
-        "Previsão de chuva fraca entre a tarde e a noite (consenso de 2.8 mm no dia; probabilidade de 35%).",
+        "Previsão de chuva fraca entre a tarde e a noite (consenso de 2.8 mm no dia; probabilidade de 32%).",
         "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 29°C à tarde em gradual elevação, com sensação térmica variando entre a menor de 24°C e a maior de 34°C no pico do calor. Na região rural, oscilam entre 20°C e 27°C.",
         "A umidade relativa do ar oscila entre 82% nas horas mais quentes da tarde e 93% na madrugada (Ar Úmido).",
         "Ventos fracos de NE rondando para E (6 a 13 km/h), com rajadas moderadas de até 34 km/h na orla.",
@@ -4907,12 +4907,12 @@
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "2.8 mm (35% • P25–P90: 0.0–9.7 mm)",
+          "val": "2.8 mm (32% • P25–P90: 0.0–9.7 mm)",
           "icon": "cloud-drizzle"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.7 a 0.7 m",
+          "val": "0.8 a 0.9 m",
           "icon": "waves"
         },
         "uv": {
@@ -4937,8 +4937,8 @@
       "badge": "NORMALIDADE",
       "badge_tipo": "info",
       "intensidade_chuva": "Chuva fraca a moderada",
-      "intensidade_vento": "Fraco (Fracas a moderadas)",
-      "descricao": "Previsão de chuva fraca a moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 30°C. Consenso de 9.4 mm no dia (probabilidade de 93%) e ventos fracos com rajadas fracas a moderadas de até 27 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 0,7 a 1,1 m em mar aberto com mar predominantemente calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
+      "intensidade_vento": "Fraco (Moderadas)",
+      "descricao": "Previsão de chuva fraca a moderada (com possibilidade de pancadas pontuais e trovoadas) sobre Rio das Ostras (pancadas com trovoadas e rajadas). Temperaturas variando entre mínima de 22°C e máxima de 30°C. Consenso de 9.4 mm no dia (probabilidade de 95%) e ventos fracos com rajadas moderadas de até 29 km/h na faixa litorânea. Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 0,7 a 1,1 m em mar aberto com mar predominantemente calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta).",
       "inspecao_tempo_severo": {
         "data_iso": "2026-12-03",
         "data_br": "03/12/2026",
@@ -4974,16 +4974,16 @@
             }
           },
           "hidrologia_jundia": {
-            "cota_atual_m": "1.58",
+            "cota_atual_m": "1.59",
             "cota_transbordo_m": "2.84",
-            "margem_segura_m": "1.26 m",
+            "margem_segura_m": "1.25 m",
             "status": "Vigilância",
             "diagnostico": "Calha do Rio Jundiá em vazante contínua com escoamento normalizado. A bacia opera desobstruída com amortecimento suficiente para absorver os volumes previstos sem perigo imediato de extravasamento."
           }
         },
         "vento": {
-          "rajada_faixa": "Até 27 km/h",
-          "rajada_pico_modelado_kmh": 27.1,
+          "rajada_faixa": "Até 25 km/h",
+          "rajada_pico_modelado_kmh": 25.2,
           "horario_pico": "Entre 14h e 18h (pico por volta das 15:00)",
           "direcao_pico": "Sul-Sudoeste (SSW)",
           "rotacao": "Nordeste (NE) pela manhã virando para Sul/Sudoeste (S/SW) na chegada da chuva",
@@ -5001,10 +5001,10 @@
       "sensacao_faixa": "24° a 36°C",
       "informe_populacao": [
         "Nesta quinta-feira, a aproximação e atuação de um novo sistema frontal na costa fluminense promove rotação dos ventos (de N para SSW) e convergência de umidade, organizando áreas de instabilidade com céu nublado e pancadas de chuva acompanhadas de raios e trovoadas.",
-        "Previsão de chuva fraca a moderada (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 9.4 mm no dia; probabilidade de 93%).",
+        "Previsão de chuva fraca a moderada (com possibilidade de pancadas pontuais e trovoadas) entre a tarde e a noite (consenso de 9.4 mm no dia; probabilidade de 95%).",
         "Temperaturas variam entre mínima de 22°C ao amanhecer e máxima de 30°C à tarde em gradual elevação, com sensação térmica variando entre a menor de 24°C e a maior de 36°C no pico do calor. Na região rural, oscilam entre 20°C e 28°C.",
         "A umidade relativa do ar oscila entre 77% nas horas mais quentes da tarde e 99% na madrugada (Ar Muito Úmido).",
-        "Ventos fracos de N rondando para SSW (3 a 10 km/h), com rajadas fracas a moderadas de até 27 km/h na orla.",
+        "Ventos fracos de N rondando para SSW (3 a 10 km/h), com rajadas moderadas de até 29 km/h na orla.",
         "Condições do mar na orla: Ondas de 0,3 a 0,5 m nas enseadas abrigadas e de 0,7 a 1,1 m em mar aberto com mar predominantemente calmo a moderado (sem avisos de ressaca da Marinha do Brasil vigentes na Área Delta)."
       ],
       "pilares": {
@@ -5032,17 +5032,17 @@
         },
         "vento": {
           "label": "VENTO & RAJADAS",
-          "val": "Fraco • Rajadas 27 km/h (Fracas a moderadas)",
+          "val": "Fraco • Rajadas 29 km/h (Moderadas)",
           "icon": "wind"
         },
         "chuva": {
           "label": "CHUVA",
-          "val": "9.4 mm (93% • P25–P90: 0.0–18.2 mm)",
+          "val": "9.4 mm (95% • P25–P90: 0.0–18.2 mm)",
           "icon": "cloud-rain"
         },
         "mar": {
           "label": "MAR E PRAIA",
-          "val": "0.6 a 0.7 m",
+          "val": "0.7 a 0.8 m",
           "icon": "waves"
         },
         "uv": {
@@ -5086,7 +5086,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5112,7 +5112,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5138,7 +5138,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5166,7 +5166,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5192,7 +5192,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5218,7 +5218,7 @@
           "cod_temp_min_tende_icone": "86",
           "temp_min_tende_icone": "data:image/png;base64,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",
           "estacao": "Primavera",
-          "hora": "20",
+          "hora": "21",
           "nascer": "04h56",
           "ocaso": "18h16",
           "fonte": "prevmet"
@@ -5245,7 +5245,7 @@
         "cod_temp_min_tende_icone": "74",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "04h56",
         "ocaso": "18h17",
         "fonte": "prevmet"
@@ -5271,7 +5271,7 @@
         "cod_temp_min_tende_icone": "11",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "04h56",
         "ocaso": "18h18",
         "fonte": "prevmet"
@@ -5297,7 +5297,7 @@
         "cod_temp_min_tende_icone": "74",
         "temp_min_tende_icone": "data:image/png;base64,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",
         "estacao": "Primavera",
-        "hora": "20",
+        "hora": "21",
         "nascer": "04h56",
         "ocaso": "18h18",
         "fonte": "prevmet"
@@ -5312,7 +5312,7 @@
     "url_portal": "https://meteograma.inmet.gov.br/3304524/dinamico",
     "imagem_disponivel": true,
     "imagem_path": "img/meteograma_inmet.png",
-    "atualizado_em": "2026-11-26T23:40:16.639399"
+    "atualizado_em": "2026-11-27T00:14:49.745364"
   },
   "vime_inmet": {
     "vime_schema_version": 3,
@@ -6233,8 +6233,8 @@
   "atividade_raios": {
     "disponivel": true,
     "fonte": "NOAA GOES-19 GLM-L2-LCFA (Satélite Geoestacionário)",
-    "captura_utc": "2026-11-26T23:42:17Z",
-    "captura_brt": "2026-11-26 20:42",
+    "captura_utc": "2026-11-27T00:16:58Z",
+    "captura_brt": "2026-11-26 21:16",
     "janela_minutos": 20,
     "raio_busca_km": 50,
     "raios_25km": 0,
@@ -6246,18 +6246,18 @@
     "atividade_ativa": false
   },
   "indices_calor": {
-    "atualizacao_brt": "26/11/2026 20:42",
-    "atualizacao_iso": "2026-11-26T20:42:40.551009-03:00",
+    "atualizacao_brt": "26/11/2026 21:17",
+    "atualizacao_iso": "2026-11-26T21:17:27.709867-03:00",
     "fontes_oficiais": {
       "cor_rio": "https://cor.rio/niveis-de-calor/",
       "clima_saude_ms": "https://clima.saude.gov.br/RJ/rio-das-ostras?modo=ehf",
       "ses_rj_excesso_calor": "https://cisshiny.saude.rj.gov.br/excesso_calor/"
     },
     "agora": {
-      "ic_rede_c": 22.9,
+      "ic_rede_c": 22.8,
       "temp_rede_c": 22.2,
-      "ur_rede_pct": 93,
-      "sensacao_rede_c": 26.0,
+      "ur_rede_pct": 92,
+      "sensacao_rede_c": 25.3,
       "faixa_instantanea": {
         "faixa": "Conforto Térmico (< 27°C)",
         "cor": "#10B981"
@@ -6289,7 +6289,7 @@
           "nome": "Rocha Leão / REBIO União",
           "temp_c": 21.3,
           "ur_pct": 94,
-          "sensacao_c": 25.0,
+          "sensacao_c": 25.1,
           "ic_c": 21.9,
           "ic_max_hoje": 33.3,
           "hora_ic_max_hoje": "12:09",
@@ -6301,17 +6301,17 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Conforto Térmico (< 27°C)",
           "cor_hex": "#10B981",
-          "ultima_leitura": "2026-11-26 20:37:18",
+          "ultima_leitura": "2026-11-26 21:12:01",
           "lat": -22.426845,
           "lon": -42.020862
         },
         {
           "codigo": "ICASIM5",
           "nome": "Barra de São João / Praiamar",
-          "temp_c": 22.7,
+          "temp_c": 22.6,
           "ur_pct": 93,
-          "sensacao_c": 26.2,
-          "ic_c": 23.5,
+          "sensacao_c": 25.7,
+          "ic_c": 23.3,
           "ic_max_hoje": 28.8,
           "hora_ic_max_hoje": "11:49",
           "temp_max_hoje": 26.2,
@@ -6322,7 +6322,7 @@
           "cor_pico_hoje": "#CA8A04",
           "faixa": "Conforto Térmico (< 27°C)",
           "cor_hex": "#10B981",
-          "ultima_leitura": "2026-11-26 20:36:33",
+          "ultima_leitura": "2026-11-26 21:11:32",
           "lat": -22.573707,
           "lon": -41.985545
         },
@@ -6331,7 +6331,7 @@
           "nome": "Cantagalo / Extensão do Bosque",
           "temp_c": 21.5,
           "ur_pct": 97,
-          "sensacao_c": 25.6,
+          "sensacao_c": 25.3,
           "ic_c": 22.2,
           "ic_max_hoje": 32.9,
           "hora_ic_max_hoje": "12:09",
@@ -6343,17 +6343,17 @@
           "cor_pico_hoje": "#F97316",
           "faixa": "Conforto Térmico (< 27°C)",
           "cor_hex": "#10B981",
-          "ultima_leitura": "2026-11-26 20:37:25",
+          "ultima_leitura": "2026-11-26 21:12:04",
           "lat": -22.440357,
           "lon": -41.953913
         },
         {
           "codigo": "IRIODA17",
           "nome": "Praia da Tartaruga",
-          "temp_c": 23.2,
-          "ur_pct": 87,
-          "sensacao_c": 27.2,
-          "ic_c": 23.8,
+          "temp_c": 23.3,
+          "ur_pct": 84,
+          "sensacao_c": 25.0,
+          "ic_c": 23.9,
           "ic_max_hoje": 30.5,
           "hora_ic_max_hoje": "11:44",
           "temp_max_hoje": 27.3,
@@ -6364,7 +6364,7 @@
           "cor_pico_hoje": "#CA8A04",
           "faixa": "Conforto Térmico (< 27°C)",
           "cor_hex": "#10B981",
-          "ultima_leitura": "2026-11-26 20:37:21",
+          "ultima_leitura": "2026-11-26 21:12:14",
           "lat": -22.531291,
           "lon": -41.957444
         }
@@ -6388,10 +6388,10 @@
         "horas_ge_36": 0,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
-        "t3d_media_c": 23.17,
-        "tmax_3d_media_c": 25.3,
-        "ehi_sig": -5.62,
-        "ehi_accl": -1.66,
+        "t3d_media_c": 23.0,
+        "tmax_3d_media_c": 25.0,
+        "ehi_sig": -5.79,
+        "ehi_accl": -1.83,
         "ehf_local": 0.0,
         "ehf_classificacao": "Sem excesso (Normal)",
         "ses_rj_alerta": "Verde — Sem excesso de calor",
@@ -6425,19 +6425,19 @@
         "ehf99": 9.338525981132218,
         "tmean_30d": null,
         "tmax_pico_p75": 31.05,
-        "tmax": 26.9,
-        "tmean": 22.35,
-        "tmin": 17.8,
+        "tmax": 21.5,
+        "tmean": 18.6,
+        "tmin": 15.7,
         "ehf": 0,
         "classification": "Normal",
         "diarioAvailable": true,
-        "dataDate": "2026-11-26"
+        "dataDate": "2026-11-27"
       },
       "risco": {
         "cd_mun": "3304524",
         "nm_mun": "Rio das Ostras",
         "sigla_uf": "RJ",
-        "data": "2026-11-26",
+        "data": "2026-11-27",
         "classification": "Normal",
         "h_norm": 0,
         "vulnerabilidade": 0.404930874064933,
@@ -6445,16 +6445,6 @@
         "risco_classe": "Normal"
       },
       "weekly": [
-        {
-          "date": "2026-11-20",
-          "ehf": 0,
-          "classification": "Normal",
-          "isToday": false,
-          "isForecast": false,
-          "tmax": 29.8,
-          "tmean": 24.05,
-          "tmin": 18.3
-        },
         {
           "date": "2026-11-21",
           "ehf": 0,
@@ -6509,7 +6499,7 @@
           "date": "2026-11-26",
           "ehf": 0,
           "classification": "Normal",
-          "isToday": true,
+          "isToday": false,
           "isForecast": true,
           "tmax": 26.9,
           "tmean": 22.35,
@@ -6519,7 +6509,7 @@
           "date": "2026-11-27",
           "ehf": 0,
           "classification": "Normal",
-          "isToday": false,
+          "isToday": true,
           "isForecast": true,
           "tmax": 21.5,
           "tmean": 18.6,
@@ -6557,22 +6547,6 @@
         }
       ],
       "series_30d": [
-        {
-          "cd_mun": "3304524",
-          "nm_mun": "Rio das Ostras",
-          "sigla_uf": "RJ",
-          "data": "2026-10-27",
-          "tmean": 18.65,
-          "tmin": 12.4,
-          "tmax": 24.9,
-          "t3d_prev": 18.816666666666666,
-          "ehi_sig": -9.971412803532004,
-          "ehi_accl": -2.0533333333333346,
-          "ehf": 0,
-          "ratio": 0,
-          "classification": "Normal",
-          "fonte": "ecmwf-archive"
-        },
         {
           "cd_mun": "3304524",
           "nm_mun": "Rio das Ostras",
@@ -7052,9 +7026,25 @@
           "ratio": 0,
           "classification": "Normal",
           "fonte": "ecmwf-forecast"
+        },
+        {
+          "cd_mun": "3304524",
+          "nm_mun": "Rio das Ostras",
+          "sigla_uf": "RJ",
+          "data": "2026-11-27",
+          "tmean": 18.6,
+          "tmin": 15.7,
+          "tmax": 21.5,
+          "t3d_prev": 20.733333333333334,
+          "ehi_sig": -8.054746136865337,
+          "ehi_accl": -1.009999999999998,
+          "ehf": 0,
+          "ratio": 0,
+          "classification": "Normal",
+          "fonte": "ecmwf-forecast"
         }
       ],
-      "captura_brt": "2026-11-26 20:42"
+      "captura_brt": "2026-11-26 21:17"
     },
     "previsao_8dias_calor": [
       {
@@ -7069,10 +7059,10 @@
         "horas_ge_36": 0,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
-        "t3d_media_c": 23.17,
-        "tmax_3d_media_c": 25.3,
-        "ehi_sig": -5.62,
-        "ehi_accl": -1.66,
+        "t3d_media_c": 23.0,
+        "tmax_3d_media_c": 25.0,
+        "ehi_sig": -5.79,
+        "ehi_accl": -1.83,
         "ehf_local": 0.0,
         "ehf_classificacao": "Sem excesso (Normal)",
         "ses_rj_alerta": "Verde — Sem excesso de calor",
@@ -7090,18 +7080,18 @@
         "data_iso": "2026-11-27",
         "data_br": "27/11/2026",
         "t_min_c": 21.0,
-        "t_max_c": 25.0,
-        "t_mean_c": 23.0,
+        "t_max_c": 24.0,
+        "t_mean_c": 22.5,
         "ic_max_c": 25.1,
         "ic_min_c": 21.6,
         "hora_pico_ic": "12:00",
         "horas_ge_36": 0,
         "horas_ge_40": 0,
         "horas_ge_44": 0,
-        "t3d_media_c": 23.17,
-        "tmax_3d_media_c": 25.0,
-        "ehi_sig": -5.62,
-        "ehi_accl": -1.66,
+        "t3d_media_c": 23.0,
+        "tmax_3d_media_c": 24.7,
+        "ehi_sig": -5.79,
+        "ehi_accl": -1.83,
         "ehf_local": 0.0,
         "ehf_classificacao": "Sem excesso (Normal)",
         "ses_rj_alerta": "Verde — Sem excesso de calor",
@@ -7342,7 +7332,7 @@
     "sala_situacao": "Sala de Situação INEA",
     "titulo": "Boletim Hidrometeorológico Oficial",
     "regiao_hidrografica": "RH-VIII - Bacia dos Rios Macaé e Rio das Ostras",
-    "data_coleta": "2026-11-26 20:41:07 BRT",
+    "data_coleta": "2026-11-26 21:15:46 BRT",
     "publicado_em": "20/11/2026 às 06h30",
     "fonte_pdf_sha256": "f82debd25531bd5a",
     "pdf_bytes": 793762,
@@ -7415,23 +7405,23 @@
       {
         "key": "d0",
         "rotulo": "Hoje",
-        "data_iso": "2026-11-26",
-        "data_br": "26/11",
-        "dia_semana": "Quinta"
-      },
-      {
-        "key": "d1",
-        "rotulo": "Amanhã",
         "data_iso": "2026-11-27",
         "data_br": "27/11",
         "dia_semana": "Sexta"
       },
       {
-        "key": "d2",
-        "rotulo": "Depois de amanhã",
+        "key": "d1",
+        "rotulo": "Amanhã",
         "data_iso": "2026-11-28",
         "data_br": "28/11",
         "dia_semana": "Sábado"
+      },
+      {
+        "key": "d2",
+        "rotulo": "Depois de amanhã",
+        "data_iso": "2026-11-29",
+        "data_br": "29/11",
+        "dia_semana": "Domingo"
       }
     ],
     "praias_condicoes": [
@@ -7792,7 +7782,7 @@
     ],
     "tabua_resumo": {
       "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
-      "data": "2026-11-26",
+      "data": "2026-11-27",
       "proxima_mare": {
         "tipo": "PREAMAR",
         "hora": "04:47",
@@ -7802,27 +7792,27 @@
       "mares_do_dia": [
         {
           "tipo": "PREAMAR",
-          "hora": "03:57",
-          "altura": 1.16,
-          "rotulo": "Preia-mar (1.2 m)"
+          "hora": "04:47",
+          "altura": 1.03,
+          "rotulo": "Preia-mar (1.0 m)"
         },
         {
           "tipo": "BAIXA-MAR",
-          "hora": "10:09",
-          "altura": 0.31,
-          "rotulo": "Baixa-mar (0.3 m)"
+          "hora": "11:00",
+          "altura": 0.37,
+          "rotulo": "Baixa-mar (0.4 m)"
         },
         {
           "tipo": "PREAMAR",
-          "hora": "16:22",
-          "altura": 1.1,
-          "rotulo": "Preia-mar (1.1 m)"
+          "hora": "17:12",
+          "altura": 0.98,
+          "rotulo": "Preia-mar (1.0 m)"
         },
         {
           "tipo": "BAIXA-MAR",
-          "hora": "22:34",
-          "altura": 0.34,
-          "rotulo": "Baixa-mar (0.3 m)"
+          "hora": "23:25",
+          "altura": 0.4,
+          "rotulo": "Baixa-mar (0.4 m)"
         }
       ]
     },
@@ -7855,7 +7845,7 @@
     "url_portal": "https://previsaonumerica.cptec.inpe.br/wwatch/alt_onda/glo/",
     "modelo": "Wwatch",
     "rodada": "2026-11-26 00z",
-    "atualizacao": "26/11/2026 20:40",
+    "atualizacao": "26/11/2026 21:15",
     "produtos": {
       "alt_onda": "Altura Significativa e Direção das Ondas",
       "per_pico": "Período e Direção de Pico das Ondas",
@@ -7941,7 +7931,7 @@
     "fonte": "CEMADEN / MCTI & CEMADEN-RJ",
     "url_portal": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos",
     "data_boletim": "26/11/2026",
-    "atualizacao": "26/11/2026 20:40",
+    "atualizacao": "26/11/2026 21:15",
     "url_boletim_hoje": "https://www.gov.br/cemaden/pt-br/assuntos/riscos-geo-hidrologicos/26-10-2026-previsao-de-riscos-geo-hidrologicos-1",
     "cemaden_rj_tempo_real": {
       "portal_url": "https://painelcemadenrj.defesacivil.rj.gov.br/monitoramento/v2/mapa/",
@@ -8120,7 +8110,7 @@
     "orgao_oficial": "Marinha do Brasil — Centro de Hidrografia da Marinha (CHM / DHN)",
     "url_oficial": "https://www.marinha.mil.br/chm/tabuas-de-mare",
     "url_avisos": "https://www.marinha.mil.br/chm/dados-do-smm-avisos-de-mau-tempo/avisos-de-mau-tempo",
-    "atualizado_em": "2026-11-26T23:41:51.910976",
+    "atualizado_em": "2026-11-27T00:16:30.161827",
     "proxima_mare": {
       "tipo": "PREAMAR",
       "hora": "04:47",
@@ -8128,37 +8118,6 @@
       "rotulo": "Preia-mar (1.0 m)"
     },
     "dias": [
-      {
-        "data_iso": "2026-11-26",
-        "data_br": "26/11/2026",
-        "dia_semana": "Quinta",
-        "eventos": [
-          {
-            "tipo": "PREAMAR",
-            "hora": "03:57",
-            "altura": 1.16,
-            "rotulo": "Preia-mar (1.2 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "10:09",
-            "altura": 0.31,
-            "rotulo": "Baixa-mar (0.3 m)"
-          },
-          {
-            "tipo": "PREAMAR",
-            "hora": "16:22",
-            "altura": 1.1,
-            "rotulo": "Preia-mar (1.1 m)"
-          },
-          {
-            "tipo": "BAIXA-MAR",
-            "hora": "22:34",
-            "altura": 0.34,
-            "rotulo": "Baixa-mar (0.3 m)"
-          }
-        ]
-      },
       {
         "data_iso": "2026-11-27",
         "data_br": "27/11/2026",
@@ -8338,6 +8297,37 @@
             "rotulo": "Preia-mar (1.1 m)"
           }
         ]
+      },
+      {
+        "data_iso": "2026-12-03",
+        "data_br": "03/12/2026",
+        "dia_semana": "Quinta",
+        "eventos": [
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "03:37",
+            "altura": 0.33,
+            "rotulo": "Baixa-mar (0.3 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "09:50",
+            "altura": 1.12,
+            "rotulo": "Preia-mar (1.1 m)"
+          },
+          {
+            "tipo": "BAIXA-MAR",
+            "hora": "16:03",
+            "altura": 0.3,
+            "rotulo": "Baixa-mar (0.3 m)"
+          },
+          {
+            "tipo": "PREAMAR",
+            "hora": "22:15",
+            "altura": 1.19,
+            "rotulo": "Preia-mar (1.2 m)"
+          }
+        ]
       }
     ]
   },
@@ -8362,27 +8352,9 @@
       "umidade": 84,
       "temperatura_prev": "24",
       "sensacao_termica": "23",
-      "hora_atual": "2026-11-26T23:00:00.000Z"
+      "hora_atual": "2026-11-27T00:00:00.000Z"
     },
     "proximos_dias": [
-      {
-        "data_atual": "27",
-        "semana_dia": "Sex",
-        "probabilidade_chuva": 5,
-        "temperatura_max": "26",
-        "temperatura_min": "21",
-        "umidade": 70,
-        "indice_uv": 13
-      },
-      {
-        "data_atual": "28",
-        "semana_dia": "Sáb",
-        "probabilidade_chuva": 70,
-        "temperatura_max": "26",
-        "temperatura_min": "21",
-        "umidade": 79,
-        "indice_uv": 13
-      },
       {
         "data_atual": "29",
         "semana_dia": "Dom",
@@ -8418,6 +8390,24 @@
         "temperatura_min": "22",
         "umidade": 82,
         "indice_uv": 14
+      },
+      {
+        "data_atual": "03",
+        "semana_dia": "Qui",
+        "probabilidade_chuva": null,
+        "temperatura_max": null,
+        "temperatura_min": null,
+        "umidade": null,
+        "indice_uv": null
+      },
+      {
+        "data_atual": "04",
+        "semana_dia": "Sex",
+        "probabilidade_chuva": null,
+        "temperatura_max": null,
+        "temperatura_min": null,
+        "umidade": null,
+        "indice_uv": null
       }
     ],
     "tem_meteograma_multimodel": true
@@ -8428,7 +8418,7 @@
       "risco_sab": "NORMAL",
       "risco_dom": "NORMAL",
       "risco_seg": "NORMAL",
-      "impactos": "Monitoramento da calha do Rio Jundiá (1.58 m); calha em regime seguro de vazante contínua com escoamento livre.",
+      "impactos": "Monitoramento da calha do Rio Jundiá (1.59 m); calha em regime seguro de vazante contínua com escoamento livre.",
       "acoes": "Monitoramento contínuo das áreas ribeirinhas e prontidão técnica preventiva."
     },
     {
@@ -8478,7 +8468,7 @@
     "fonte": "INMET / IAG-USP (https://portal.inmet.gov.br/paginas/luas)"
   },
   "kpis": {
-    "jundia_nivel": "1.58 m",
+    "jundia_nivel": "1.59 m",
     "jundia_status": "Vigilância",
     "chuva_3d": "39.9 mm",
     "chuva_4d": "59.8 mm",

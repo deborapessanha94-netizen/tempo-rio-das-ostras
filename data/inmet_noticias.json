@@ -1,68 +1,20 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-26 23:39:30",
-  "total_noticias": 10,
+  "coleta_iso": "2026-11-27 00:14:18",
+  "total_noticias": 2,
   "noticias": [
     {
-      "titulo": "Previsão para terça-feira (24), quarta-feira (25) e quinta-feira (26)",
-      "data": "23/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-24-quarta-feira-25-e-quinta-feira-26",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET emite aviso vermelho para tempestades no Sul e explica condições atmosféricas que favoreceram tempestades em Tupanciretã (RS) e Foz do Iguaçu (PR)",
-      "data": "23/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-emite-aviso-vermelho-para-tempestades-no-sul-e-explica-condições-atmosféricas-que-favoreceram-tempestades-em-tupanciretã-rs-e-foz-do-iguaçu-pr",
+      "titulo": "Previsão aponta avanço de frente fria e temporais com queda de temperatura no Sudeste",
+      "data": "27/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias",
       "relevancia_sudeste": true
     },
     {
-      "titulo": "INMET divulga previsão para semana de 23 a 30 de novembro de 2026",
-      "data": "23/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-23-a-30-de-novembro-de-2026",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para sexta-feira (20), sábado (21), domingo (22) e segunda-feira (23)",
-      "data": "19/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-sexta-feira-20-sábado-21-domingo-22-e-segunda-feira-23",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET celebra 117 anos em cerimônia na sede do Instituto, em Brasília",
-      "data": "18/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-celebra-117-anos-em-cerimônia-na-sede-do-instituto-em-brasília",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para quinta-feira (19) e sexta-feira (20)",
-      "data": "18/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quinta-feira-19-e-sexta-feira-20",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "El Niño impõe desafios ao plantio da soja e chuvas de novembro melhoram o cenário no Tocantins e sul do Pará",
-      "data": "18/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/el-niño-impõe-desafios-ao-plantio-da-soja-e-chuvas-de-novembro-melhoram-o-cenário-no-tocantins-e-sul-do-pará",
+      "titulo": "Informativo Meteorológico Semanal: Ciclone e frente fria organizam canal de umidade",
+      "data": "27/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias",
       "relevancia_sudeste": true
-    },
-    {
-      "titulo": "Previsão para quarta-feira (18) e quinta-feira (19)",
-      "data": "17/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-quarta-feira-18-e-quinta-feira-19",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "Previsão para terça-feira (17) e quarta-feira (18)",
-      "data": "16/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-17-e-quarta-feira-18",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET divulga previsão para semana de 16 a 23 de novembro de 2026",
-      "data": "16/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-16-a-23-de-novembro-de-2026",
-      "relevancia_sudeste": false
     }
   ]
 }
