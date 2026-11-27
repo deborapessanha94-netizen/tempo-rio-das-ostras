@@ -1,9 +1,15 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-27 06:37:54",
+  "coleta_iso": "2026-11-27 12:49:22",
   "total_noticias": 10,
   "noticias": [
+    {
+      "titulo": "Dezembro: como será o clima no Brasil?",
+      "data": "27/11/2026",
+      "url": "https://portal.inmet.gov.br/noticias/dezembro-como-será-o-clima-no-brasil-5",
+      "relevancia_sudeste": false
+    },
     {
       "titulo": "Previsão para terça-feira (24), quarta-feira (25) e quinta-feira (26)",
       "data": "23/11/2026",
@@ -56,12 +62,6 @@
       "titulo": "Previsão para terça-feira (17) e quarta-feira (18)",
       "data": "16/11/2026",
       "url": "https://portal.inmet.gov.br/noticias/previsão-para-terça-feira-17-e-quarta-feira-18",
-      "relevancia_sudeste": false
-    },
-    {
-      "titulo": "INMET divulga previsão para semana de 16 a 23 de novembro de 2026",
-      "data": "16/11/2026",
-      "url": "https://portal.inmet.gov.br/noticias/inmet-divulga-previsão-para-semana-de-16-a-23-de-novembro-de-2026",
       "relevancia_sudeste": false
     }
   ]
