@@ -1,18 +1,18 @@
 {
   "orgao": "Instituto Nacional de Meteorologia - INMET",
   "portal_url": "https://portal.inmet.gov.br/noticias",
-  "coleta_iso": "2026-11-27 21:47:57",
+  "coleta_iso": "2026-11-28 02:42:17",
   "total_noticias": 2,
   "noticias": [
     {
       "titulo": "Previsão aponta avanço de frente fria e temporais com queda de temperatura no Sudeste",
-      "data": "27/11/2026",
+      "data": "28/11/2026",
       "url": "https://portal.inmet.gov.br/noticias",
       "relevancia_sudeste": true
     },
     {
       "titulo": "Informativo Meteorológico Semanal: Ciclone e frente fria organizam canal de umidade",
-      "data": "27/11/2026",
+      "data": "28/11/2026",
       "url": "https://portal.inmet.gov.br/noticias",
       "relevancia_sudeste": true
     }
