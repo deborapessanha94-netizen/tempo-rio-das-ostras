@@ -6,7 +6,7 @@
     "mapas": {
       "chuva_24h": {
         "ok": true,
-        "tamanho_bytes": 353801,
+        "tamanho_bytes": 353730,
         "arquivo": "img/cptec/mapa_prev_prob_24h_chuvaintensa.png",
         "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_chuvaintensa.png"
       },
@@ -18,7 +18,7 @@
       },
       "severo_24h": {
         "ok": true,
-        "tamanho_bytes": 328472,
+        "tamanho_bytes": 330211,
         "arquivo": "img/cptec/mapa_prev_prob_24h_temposevero.png",
         "url_oficial": "https://s1.cptec.inpe.br/nowcasting/NC/PREV/mapa_prev_prob_24h_temposevero.png"
       },
