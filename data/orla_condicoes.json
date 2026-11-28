@@ -1,10 +1,10 @@
 {
-  "status_geral": "Aviso de Ressaca Vigente da Marinha (nº 814/2026 e 819/2026 e 821/2026)",
-  "badge": "RESSACA",
+  "status_geral": "Avisos de Vento Forte e Mar Grosso Vigentes da Marinha (nº 819/2026 e 821/2026)",
+  "badge": "VENTO FORTE & MAR GROSSO",
   "badge_tipo": "danger",
   "aviso_ativo": true,
-  "aviso_numero": "814/2026 e 819/2026 e 821/2026",
-  "aviso_tipo": "RESSACA E MAR GROSSO E VENTO FORTE",
+  "aviso_numero": "819/2026 e 821/2026",
+  "aviso_tipo": "MAR GROSSO E VENTO FORTE",
   "mar_ondas": "3,0 a 3,5 m (Mar Grosso)",
   "fonte_marinha": "Marinha do Brasil (CHM / SMM - Área Delta)",
   "fonte_balneabilidade": "INEA - Instituto Estadual do Ambiente (Boletim nº 20)",
@@ -392,10 +392,10 @@
     "estacao": "Terminal de Imbetiba (Macaé / Rio das Ostras)",
     "data": "2026-11-28",
     "proxima_mare": {
-      "tipo": "BAIXA-MAR",
-      "hora": "11:50",
-      "altura": 0.42,
-      "rotulo": "Baixa-mar (0.4 m)"
+      "tipo": "PREAMAR",
+      "hora": "18:03",
+      "altura": 0.89,
+      "rotulo": "Preia-mar (0.9 m)"
     },
     "mares_do_dia": [
       {
