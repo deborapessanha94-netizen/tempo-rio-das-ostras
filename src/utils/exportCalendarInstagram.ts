@@ -59,9 +59,11 @@ export interface ExportCalendarOptions {
   selectedStations: CalendarExportStationItem[];
   monthStats: CalendarMonthSummaryMetrics | null;
   todayIso: string;
+  selectedStationCode?: string;
+  selectedStationLabel?: string;
   resolveDayMetrics: (
     entry?: (HistoricoResumoDiario & { is_live_today?: boolean }) | null
-  ) => { rainMm: number; gustKmh: number };
+  ) => { rainMm: number; gustKmh: number; hasData?: boolean };
   siteBase?: string;
 }
 
@@ -323,7 +325,9 @@ function drawCalendarGridPanel(
 
   const wetStShort = shortenStationLabel(monthStats?.wettestStation);
   const wetDayTxt = monthStats?.wettestDayIso
-    ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${wetStShort})`
+    ? opts.selectedStationCode
+      ? `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm)`
+      : `${formatBrDate(monthStats.wettestDayIso).slice(0, 5)} (${monthStats.wettestMaxMm.toFixed(1)} mm · ${wetStShort})`
     : '--';
   const wetSummary = monthStats
     ? `Dia mais chuvoso: ${wetDayTxt} · ${monthStats.rainyDays} de ${monthStats.totalDays} dias com chuva`
@@ -379,7 +383,7 @@ function drawCalendarGridPanel(
     const rec = dailyMap.get(cell.dateIso);
     const metrics = resolveDayMetrics(rec);
     const isSel = cell.dateIso === activeIso;
-    const hasData = Boolean(rec);
+    const hasData = metrics.hasData !== undefined ? metrics.hasData : Boolean(rec);
     const colors = resolveCellColors(metrics.rainMm, isSel, hasData, pal);
 
     roundRectPath(ctx, x, y, cellW, cellH, Math.round(14 * uiScale));
@@ -479,10 +483,10 @@ function drawSelectedDayBanner(
   ctx.stroke();
 
   const rainPlancon = classifyRainPlancon(selectedDayMetrics.rainMaxMm);
-  const badgeText =
-    selectedDayMetrics.rainMaxMm <= 0.1 && selectedDayMetrics.rainMean <= 0.1
-      ? 'Sem chuva'
-      : rainPlancon.titulo;
+  const isDry = opts.selectedStationCode
+    ? selectedDayMetrics.rainMaxMm <= 0.1
+    : selectedDayMetrics.rainMaxMm <= 0.1 && selectedDayMetrics.rainMean <= 0.1;
+  const badgeText = isDry ? 'Sem chuva' : rainPlancon.titulo;
   ctx.font = `800 ${Math.round(23 * uiScale)}px Inter, system-ui, sans-serif`;
   const bW = Math.min(Math.round(340 * uiScale), ctx.measureText(badgeText).width + Math.round(44 * uiScale));
   const bH = Math.round(54 * uiScale);
@@ -539,16 +543,23 @@ function drawDayKpisGrid(
     selectedDayMetrics.gustMaxKmh
   );
 
+  const isSingleStation = Boolean(opts.selectedStationCode);
   const picoHoraStr =
-    Number(selectedDay.chuva_pico_hora_mm ?? 0) > 0
+    !isSingleStation && Number(selectedDay.chuva_pico_hora_mm ?? 0) > 0
       ? ` · Pico ${Number(selectedDay.chuva_pico_hora_mm).toFixed(1)} mm às ${selectedDay.chuva_pico_horario || '--'}`
       : '';
   const cards = [
     {
-      label: 'MAIOR REGISTRO NO DIA',
+      label: isSingleStation ? 'ACUMULADO NA ESTAÇÃO' : 'MAIOR REGISTRO NO DIA',
       val: `${selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
       valColor: pal.accent,
-      sub: `${selectedDayMetrics.rainMaxMm > 0 ? selectedDayMetrics.rainMaxStation : 'Sem registro na rede'}${picoHoraStr}`,
+      sub: `${
+        selectedDayMetrics.rainMaxMm > 0
+          ? selectedDayMetrics.rainMaxStation
+          : isSingleStation
+            ? 'Sem chuva nesta estação'
+            : 'Sem registro na rede'
+      }${picoHoraStr}`,
     },
     {
       label: 'MÉDIA MUNICIPAL DA REDE',
@@ -556,35 +567,39 @@ function drawDayKpisGrid(
       valColor: pal.textMain,
       sub:
         selectedDay.horas_com_chuva !== undefined
-          ? `${selectedDay.horas_com_chuva}h com registro de chuva`
+          ? `${selectedDay.horas_com_chuva}h com registro na rede`
           : 'Média entre estações',
     },
     {
-      label: 'VENTO MÁXIMO (SUST.)',
+      label: isSingleStation ? 'VENTO MÁX. NA ESTAÇÃO' : 'VENTO MÁXIMO (SUST.)',
       val: selectedDayMetrics.sustMaxKmh > 0 ? `${selectedDayMetrics.sustMaxKmh.toFixed(1)} km/h` : '--',
       valColor: pal.textMain,
       sub: `${
         selectedDayMetrics.sustMaxKmh > 0
           ? `${shortenStationLabel(selectedDayMetrics.sustMaxStation)}${
-              selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
+              !isSingleStation && selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
                 ? ` às ${selectedDay.vento_vel_max_horario}`
                 : ''
             } · `
-          : ''
+          : isSingleStation && selectedDayMetrics.gustMaxKmh <= 0
+            ? 'Sem sensor eólico · '
+            : ''
       }Pred.: ${selectedDay.vento_dir_predominante || '--'} · Méd.: ${Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)}`,
     },
     {
-      label: 'RAJADA MÁXIMA DO DIA',
+      label: isSingleStation ? 'RAJADA MÁX. NA ESTAÇÃO' : 'RAJADA MÁXIMA DO DIA',
       val: selectedDayMetrics.gustMaxKmh > 0 ? `${selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h` : '--',
       valColor: selectedDayMetrics.gustMaxKmh >= 41 ? pal.accent : pal.textMain,
       sub:
         selectedDayMetrics.gustMaxKmh > 0
           ? `${shortenStationLabel(selectedDayMetrics.gustMaxStation)}${
-              selectedDay.vento_rajada_max_horario && selectedDay.vento_rajada_max_horario !== '--'
+              !isSingleStation && selectedDay.vento_rajada_max_horario && selectedDay.vento_rajada_max_horario !== '--'
                 ? ` às ${selectedDay.vento_rajada_max_horario}`
                 : ''
             } · ${windPlancon.gustTitulo}`
-          : 'Sem rajada registrada',
+          : isSingleStation
+            ? 'Estação sem rajada / pluviômetro'
+            : 'Sem rajada registrada',
     },
   ];
 
@@ -693,7 +708,8 @@ function drawStationsPanel(
   pal: Palette,
   cols: 2 | 3,
   dateBr: string,
-  uiScale = 1
+  uiScale = 1,
+  highlightCode?: string
 ) {
   roundRectPath(ctx, box.x, box.y, box.w, box.h, Math.round(22 * uiScale));
   ctx.fillStyle = pal.cardBg;
@@ -740,11 +756,16 @@ function drawStationsPanel(
     const sx = px + col * (cardW + gap);
     const sy = gridY + row * (cardH + gap);
 
+    const isHighlighted = Boolean(highlightCode && st.code === highlightCode);
     roundRectPath(ctx, sx, sy, cardW, cardH, Math.round(14 * uiScale));
-    ctx.fillStyle = pal.innerBg;
+    ctx.fillStyle = isHighlighted
+      ? pal.dark
+        ? 'rgba(255,130,68,0.12)'
+        : 'rgba(255,130,68,0.08)'
+      : pal.innerBg;
     ctx.fill();
-    ctx.lineWidth = 1.8;
-    ctx.strokeStyle = pal.gridBorder;
+    ctx.lineWidth = isHighlighted ? 3.2 : 1.8;
+    ctx.strokeStyle = isHighlighted ? pal.accent : pal.gridBorder;
     ctx.stroke();
 
     const sp = Math.round(16 * uiScale);
@@ -888,20 +909,18 @@ export async function exportCalendarToHighResPng(
   );
   cursorY += Math.round(62 * hs);
 
+  const stScopeHeader = opts.selectedStationLabel
+    ? ` · ESTAÇÃO: ${shortenStationLabel(opts.selectedStationLabel).toUpperCase()}`
+    : '';
   const selDateLabel = selectedDay
     ? ` · DIA SELECIONADO: ${(selectedDay.data_br || formatBrDate(selectedDay.data_iso)).toUpperCase()}`
     : '';
+  const subHeadTxt = opts.selectedStationLabel
+    ? `${monthLabel.toUpperCase()}${stScopeHeader}${format === 'calendar_only' ? '' : selDateLabel}`
+    : `${monthLabel.toUpperCase()}${format === 'calendar_only' ? ' · MAIORES REGISTROS DAS ESTAÇÕES' : selDateLabel}`;
   ctx.fillStyle = pal.accent;
   ctx.font = `800 ${Math.round(30 * hs)}px "JetBrains Mono", monospace`;
-  ctx.fillText(
-    fitText(
-      ctx,
-      `${monthLabel.toUpperCase()}${format === 'calendar_only' ? ' · MAIORES REGISTROS DAS ESTAÇÕES' : selDateLabel}`,
-      contentW
-    ),
-    padX,
-    cursorY + Math.round(26 * hs)
-  );
+  ctx.fillText(fitText(ctx, subHeadTxt, contentW), padX, cursorY + Math.round(26 * hs));
   cursorY += Math.round(48 * hs);
 
   if (is4k) {
@@ -935,7 +954,8 @@ export async function exportCalendarToHighResPng(
       pal,
       2,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.30
+      1.30,
+      opts.selectedStationCode
     );
   } else if (isStory) {
     // Stories Vertical 9:16 (2160x3840)
@@ -963,7 +983,8 @@ export async function exportCalendarToHighResPng(
       pal,
       2,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.18
+      1.18,
+      opts.selectedStationCode
     );
   } else if (isPost) {
     // Feed Instagram 4:5 (2160x2700)
@@ -987,7 +1008,8 @@ export async function exportCalendarToHighResPng(
       pal,
       3,
       selectedDay?.data_br || formatBrDate(selectedDay?.data_iso),
-      1.02
+      1.02,
+      opts.selectedStationCode
     );
   } else {
     // 'calendar_only' — Calendário Mensal Ampliado Ultra-HD (2160x2700)
@@ -1009,21 +1031,31 @@ export async function exportCalendarToHighResPng(
       {
         label: 'DIA MAIS CHUVOSO',
         val: monthStats?.wettestDayIso ? formatBrDate(monthStats.wettestDayIso).slice(0, 5) : '--',
-        sub: `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${shortenStationLabel(monthStats?.wettestStation)}`,
+        sub: opts.selectedStationCode
+          ? `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${monthStats?.rainyDays ?? 0} de ${monthStats?.totalDays ?? 0} dias`
+          : `${(monthStats?.wettestMaxMm ?? 0).toFixed(1)} mm · ${shortenStationLabel(monthStats?.wettestStation)}`,
         accentVal: false,
       },
       {
         label: 'MAIOR RAJADA MÊS',
-        val: `${(monthStats?.windiestMaxKmh ?? 0).toFixed(1)} km/h`,
-        sub: monthStats?.windiestDayIso
-          ? `${formatBrDate(monthStats.windiestDayIso).slice(0, 5)} · ${shortenStationLabel(monthStats.windiestStation)}`
-          : '--',
+        val: (monthStats?.windiestMaxKmh ?? 0) > 0 ? `${(monthStats?.windiestMaxKmh ?? 0).toFixed(1)} km/h` : '--',
+        sub:
+          (monthStats?.windiestMaxKmh ?? 0) > 0 && monthStats?.windiestDayIso
+            ? opts.selectedStationCode
+              ? `${formatBrDate(monthStats.windiestDayIso).slice(0, 5)} (${shortenStationLabel(opts.selectedStationLabel)})`
+              : `${formatBrDate(monthStats.windiestDayIso).slice(0, 5)} · ${shortenStationLabel(monthStats.windiestStation)}`
+            : opts.selectedStationCode
+              ? 'Estação pluviométrica'
+              : '--',
         accentVal: false,
       },
       {
         label: `DIA ${selectedDay ? formatBrDate(selectedDay.data_iso).slice(0, 5) : '--'}`,
         val: `${opts.selectedDayMetrics.rainMaxMm.toFixed(1)} mm`,
-        sub: `${monthStats?.rainyDays ?? 0} de ${monthStats?.totalDays ?? 0} dias com chuva · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`,
+        sub:
+          opts.selectedDayMetrics.gustMaxKmh > 0
+            ? `${monthStats?.rainyDays ?? 0} de ${monthStats?.totalDays ?? 0} dias com chuva · Raj ${opts.selectedDayMetrics.gustMaxKmh.toFixed(1)} km/h`
+            : `${monthStats?.rainyDays ?? 0} de ${monthStats?.totalDays ?? 0} dias com chuva`,
         accentVal: true,
       },
     ];
@@ -1087,5 +1119,14 @@ export async function exportCalendarToHighResPng(
           ? 'post_4x5'
           : 'calendario_mensal_hd';
 
-  return exportCanvasToPngDownload(canvas, `calendario_chuva_vento_${daySlug}_${fmtSlug}.png`);
+  const stSlug = opts.selectedStationLabel
+    ? '_' +
+      shortenStationLabel(opts.selectedStationLabel)
+        .normalize('NFD')
+        .replace(/\p{M}/gu, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+    : '';
+  return exportCanvasToPngDownload(canvas, `calendario_chuva_vento${stSlug}_${daySlug}_${fmtSlug}.png`);
 }

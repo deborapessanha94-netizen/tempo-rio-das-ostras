@@ -100,6 +100,179 @@ function formatDateBrFromIso(iso: string): string {
   return `${iso.slice(8, 10)}/${iso.slice(5, 7)}/${iso.slice(0, 4)}`;
 }
 
+export function shortenStationChipName(name?: string, id?: string): string {
+  const base = (name || id || 'Estação').trim();
+  if (/palmital/i.test(base) || id === 'PCD18789') return 'Palmital (CEMADEN)';
+  return base
+    .replace(/\s*\([^)]*\)/g, '')
+    .replace(/\s*\/\s*REBIO União/i, '')
+    .replace(/\s*\/\s*Extensão do Bosque/i, '')
+    .replace(/\s*\/\s*Divisa Sul/i, '')
+    .trim();
+}
+
+export interface ScopedDayMetrics {
+  rainMm: number;
+  rainStation: string;
+  gustKmh: number;
+  gustStation: string;
+  sustKmh: number;
+  sustStation: string;
+  hasData: boolean;
+}
+
+export function resolveDayMetricsForScope(
+  entry?: HistoricoResumoDiario | null,
+  stationId: string = 'all',
+  stationName?: string
+): ScopedDayMetrics {
+  if (!entry) {
+    return {
+      rainMm: 0,
+      rainStation: stationName || 'Rede Municipal',
+      gustKmh: 0,
+      gustStation: stationName || 'Rede Municipal',
+      sustKmh: 0,
+      sustStation: stationName || 'Rede Municipal',
+      hasData: false,
+    };
+  }
+  if (!stationId || stationId === 'all') {
+    const rainRec = resolveDayMaxRainRecord(entry);
+    const gustRec = resolveDayMaxGustRecord(entry);
+    const sustRec = resolveDayMaxSustainedRecord(entry);
+    return {
+      rainMm: rainRec.mm,
+      rainStation: rainRec.stationName,
+      gustKmh: gustRec.kmh,
+      gustStation: gustRec.stationName,
+      sustKmh: sustRec.kmh,
+      sustStation: sustRec.stationName,
+      hasData: true,
+    };
+  }
+  const st = entry.estacoes_totais_dia?.[stationId];
+  if (!st) {
+    return {
+      rainMm: 0,
+      rainStation: stationName || stationId,
+      gustKmh: 0,
+      gustStation: stationName || stationId,
+      sustKmh: 0,
+      sustStation: stationName || stationId,
+      hasData: false,
+    };
+  }
+  const resolvedName = st.nome || stationName || stationId;
+  return {
+    rainMm: Math.round(Math.max(0, Number(st.chuva_mm ?? 0)) * 10) / 10,
+    rainStation: resolvedName,
+    gustKmh: Math.round(Math.max(0, Number(st.rajada_max_kmh ?? 0)) * 10) / 10,
+    gustStation: resolvedName,
+    sustKmh: Math.round(Math.max(0, Number(st.vento_max_kmh ?? 0)) * 10) / 10,
+    sustStation: resolvedName,
+    hasData: true,
+  };
+}
+
+export interface MonthSummaryStatsResult {
+  rainyDays: number;
+  totalDays: number;
+  monthMeanTotalMm: number;
+  monthMaxStationTotalMm: number;
+  monthMaxStationName: string;
+  wettestDay: MergedDailyHistoryEntry;
+  wettestMaxMm: number;
+  windiestDay: MergedDailyHistoryEntry;
+  windiestMaxKmh: number;
+}
+
+export function computeMonthStatsForScope(
+  monthDays: MergedDailyHistoryEntry[],
+  historico: HistoricoEstacoesDataset | null | undefined,
+  viewMonthYm: string,
+  stationId: string = 'all',
+  stationName?: string
+): MonthSummaryStatsResult | null {
+  if (monthDays.length === 0) return null;
+  const isSingleStation = Boolean(stationId && stationId !== 'all');
+  const getRain = (d: MergedDailyHistoryEntry) => resolveDayMetricsForScope(d, stationId, stationName).rainMm;
+  const getGust = (d: MergedDailyHistoryEntry) => resolveDayMetricsForScope(d, stationId, stationName).gustKmh;
+
+  const daysWithScopeData = isSingleStation
+    ? monthDays.filter((d) => resolveDayMetricsForScope(d, stationId, stationName).hasData)
+    : monthDays;
+  const activePool = daysWithScopeData.length > 0 ? daysWithScopeData : monthDays;
+
+  const rainyDays = activePool.filter((d) => getRain(d) > 0).length;
+  const wettestDay = activePool.reduce((best, cur) => (getRain(cur) > getRain(best) ? cur : best), activePool[0]);
+  const wettestMaxMm = getRain(wettestDay);
+  const windiestDay = activePool.reduce((best, cur) => (getGust(cur) > getGust(best) ? cur : best), activePool[0]);
+  const windiestMaxKmh = getGust(windiestDay);
+
+  const liveMeanSum = monthDays.reduce((acc, d) => acc + Number(d.chuva_total_media_mm ?? 0), 0);
+  const resumoMes = (historico?.resumo_mensal ?? []).find((m) => m.ano_mes === viewMonthYm);
+  const monthMeanTotalMm =
+    Math.round(Math.max(Number(resumoMes?.chuva_total_media_mm ?? 0), liveMeanSum) * 10) / 10;
+
+  if (isSingleStation) {
+    const liveStationSum = activePool.reduce((acc, d) => acc + getRain(d), 0);
+    const resStationSum = Number(resumoMes?.estacoes_totais_mes?.[stationId] ?? 0);
+    const monthMaxStationTotalMm = Math.round(Math.max(liveStationSum, resStationSum) * 10) / 10;
+    const monthMaxStationName =
+      stationName ||
+      activePool.find((d) => d.estacoes_totais_dia?.[stationId]?.nome)?.estacoes_totais_dia?.[stationId]?.nome ||
+      stationId;
+    return {
+      rainyDays,
+      totalDays: activePool.length,
+      monthMeanTotalMm,
+      monthMaxStationTotalMm,
+      monthMaxStationName,
+      wettestDay,
+      wettestMaxMm,
+      windiestDay,
+      windiestMaxKmh,
+    };
+  }
+
+  const stSumMap = new Map<string, { nome: string; total: number }>();
+  for (const d of monthDays) {
+    for (const [code, st] of Object.entries(d.estacoes_totais_dia || {})) {
+      const cur = stSumMap.get(code) || { nome: st?.nome || code, total: 0 };
+      cur.total += Number(st?.chuva_mm ?? 0);
+      if (!cur.nome && st?.nome) cur.nome = st.nome;
+      stSumMap.set(code, cur);
+    }
+  }
+  let liveMaxStTotal = 0;
+  let liveMaxStName = 'Rede Municipal';
+  for (const v of stSumMap.values()) {
+    if (v.total > liveMaxStTotal) {
+      liveMaxStTotal = v.total;
+      liveMaxStName = v.nome;
+    }
+  }
+  const resMaxSt = Number(resumoMes?.chuva_maior_estacao_mm ?? 0);
+  const useLiveSt = liveMaxStTotal >= resMaxSt;
+  const monthMaxStationTotalMm = Math.round((useLiveSt ? liveMaxStTotal : resMaxSt) * 10) / 10;
+  const monthMaxStationName = useLiveSt
+    ? liveMaxStName
+    : resumoMes?.chuva_maior_estacao_nome || liveMaxStName;
+
+  return {
+    rainyDays,
+    totalDays: monthDays.length,
+    monthMeanTotalMm,
+    monthMaxStationTotalMm,
+    monthMaxStationName,
+    wettestDay,
+    wettestMaxMm,
+    windiestDay,
+    windiestMaxKmh,
+  };
+}
+
 function formatWeekdayFullPt(iso: string): string {
   const [y, m, d] = iso.split('-').map(Number);
   if (!y || !m || !d) return iso;
@@ -528,6 +701,7 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
         : latestIso;
 
   const [viewMonthYm, setViewMonthYm] = useState<string>(activeSelectedIso.slice(0, 7));
+  const [selectedStationId, setSelectedStationId] = useState<string>('all');
   const [showHourlyRows, setShowHourlyRows] = useState<boolean>(false);
 
   useEffect(() => {
@@ -562,62 +736,51 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
     [sortedDates, viewMonthYm, dailyMap]
   );
 
-  const monthStats = useMemo(() => {
-    if (monthDays.length === 0) return null;
-    const rainyDays = monthDays.filter((d) => resolveDayMaxRainRecord(d).mm > 0).length;
-    const wettestDay = monthDays.reduce(
-      (best, cur) =>
-        resolveDayMaxRainRecord(cur).mm > resolveDayMaxRainRecord(best).mm ? cur : best,
-      monthDays[0]
-    );
-    const wettestMaxMm = resolveDayMaxRainRecord(wettestDay).mm;
-    const windiestDay = monthDays.reduce(
-      (best, cur) =>
-        resolveDayMaxGustRecord(cur).kmh > resolveDayMaxGustRecord(best).kmh ? cur : best,
-      monthDays[0]
-    );
-    const windiestMaxKmh = resolveDayMaxGustRecord(windiestDay).kmh;
-
-    const liveMeanSum = monthDays.reduce((acc, d) => acc + Number(d.chuva_total_media_mm ?? 0), 0);
-    const stSumMap = new Map<string, { nome: string; total: number }>();
-    for (const d of monthDays) {
-      for (const [code, st] of Object.entries(d.estacoes_totais_dia || {})) {
-        const cur = stSumMap.get(code) || { nome: st?.nome || code, total: 0 };
-        cur.total += Number(st?.chuva_mm ?? 0);
+  const stationOptions = useMemo(() => {
+    const countDays = new Map<string, { id: string; nome: string; days: number; tipo?: string }>();
+    for (const meta of historico?.estacoes_monitoradas ?? []) {
+      if (meta?.id) {
+        countDays.set(meta.id, { id: meta.id, nome: meta.nome || meta.id, days: 0, tipo: meta.tipo });
+      }
+    }
+    for (const row of dailyMap.values()) {
+      for (const [code, st] of Object.entries(row.estacoes_totais_dia || {})) {
+        const cur = countDays.get(code) || { id: code, nome: st?.nome || code, days: 0 };
+        cur.days += 1;
         if (!cur.nome && st?.nome) cur.nome = st.nome;
-        stSumMap.set(code, cur);
+        countDays.set(code, cur);
       }
     }
-    let liveMaxStTotal = 0;
-    let liveMaxStName = 'Rede Municipal';
-    for (const v of stSumMap.values()) {
-      if (v.total > liveMaxStTotal) {
-        liveMaxStTotal = v.total;
-        liveMaxStName = v.nome;
-      }
-    }
-    const resumoMes = (historico?.resumo_mensal ?? []).find((m) => m.ano_mes === viewMonthYm);
-    const monthMeanTotalMm =
-      Math.round(Math.max(Number(resumoMes?.chuva_total_media_mm ?? 0), liveMeanSum) * 10) / 10;
-    const resMaxSt = Number(resumoMes?.chuva_maior_estacao_mm ?? 0);
-    const useLiveSt = liveMaxStTotal >= resMaxSt;
-    const monthMaxStationTotalMm = Math.round((useLiveSt ? liveMaxStTotal : resMaxSt) * 10) / 10;
-    const monthMaxStationName = useLiveSt
-      ? liveMaxStName
-      : resumoMes?.chuva_maior_estacao_nome || liveMaxStName;
+    const metaIds = new Set((historico?.estacoes_monitoradas ?? []).map((m) => m.id));
+    return Array.from(countDays.values()).filter((s) => metaIds.has(s.id) || s.days >= 5);
+  }, [historico, dailyMap]);
 
-    return {
-      rainyDays,
-      totalDays: monthDays.length,
-      monthMeanTotalMm,
-      monthMaxStationTotalMm,
-      monthMaxStationName,
-      wettestDay,
-      wettestMaxMm,
-      windiestDay,
-      windiestMaxKmh,
-    };
-  }, [monthDays, historico, viewMonthYm]);
+  const selectableStationIds = useMemo(
+    () => new Set(stationOptions.map((s) => s.id)),
+    [stationOptions]
+  );
+
+  const activeStation = useMemo(
+    () => stationOptions.find((s) => s.id === selectedStationId) || null,
+    [stationOptions, selectedStationId]
+  );
+  const activeStationId = activeStation ? activeStation.id : 'all';
+
+  const monthTotalByStation = useMemo(() => {
+    const totals = new Map<string, number>();
+    const resumoMes = (historico?.resumo_mensal ?? []).find((m) => m.ano_mes === viewMonthYm);
+    for (const st of stationOptions) {
+      const liveSum = monthDays.reduce((acc, d) => acc + resolveDayMetricsForScope(d, st.id, st.nome).rainMm, 0);
+      const resSum = Number(resumoMes?.estacoes_totais_mes?.[st.id] ?? 0);
+      totals.set(st.id, Math.round(Math.max(liveSum, resSum) * 10) / 10);
+    }
+    return totals;
+  }, [stationOptions, monthDays, historico, viewMonthYm]);
+
+  const monthStats = useMemo(
+    () => computeMonthStatsForScope(monthDays, historico, viewMonthYm, activeStationId, activeStation?.nome),
+    [monthDays, historico, viewMonthYm, activeStationId, activeStation]
+  );
 
   const selectedDay = dailyMap.get(activeSelectedIso) || null;
   const selectedMonthIdx = availableMonths.indexOf(viewMonthYm);
@@ -650,14 +813,16 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
   }
 
   const rainMean = Number(selectedDay?.chuva_total_media_mm ?? 0);
-  const maxRainRec = resolveDayMaxRainRecord(selectedDay);
-  const rainMaxSt = maxRainRec.mm;
-  const maxSustRec = resolveDayMaxSustainedRecord(selectedDay);
-  const sustMaxDay = maxSustRec.kmh;
-  const maxGustRec = resolveDayMaxGustRecord(selectedDay);
-  const gustMaxDay = maxGustRec.kmh;
+  const isSingleStation = activeStationId !== 'all';
+  const dayScopeMetrics = resolveDayMetricsForScope(selectedDay, activeStationId, activeStation?.nome);
+  const rainMaxSt = dayScopeMetrics.rainMm;
+  const sustMaxDay = dayScopeMetrics.sustKmh;
+  const gustMaxDay = dayScopeMetrics.gustKmh;
   const rainPlancon = classifyRainPlancon(rainMaxSt);
-  const windPlancon = classifyWindPlancon(Math.max(Number(selectedDay?.vento_vel_media_kmh ?? 0), sustMaxDay), gustMaxDay);
+  const windPlancon = classifyWindPlancon(
+    isSingleStation ? sustMaxDay : Math.max(Number(selectedDay?.vento_vel_media_kmh ?? 0), sustMaxDay),
+    gustMaxDay
+  );
   const maxStationRainInDay = Math.max(0.1, ...selectedStations.map((s) => s.chuva_mm));
 
   return (
@@ -681,7 +846,7 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
-              Escolha qualquer dia no calendário para ver os maiores registros das estações naquele dia (chuva máxima, vento e rajada máxima).
+              Alterne entre toda a rede ou uma estação individual para acompanhar dia a dia a chuva, o vento e as rajadas em cada bairro monitorado.
             </p>
           </div>
         </div>
@@ -750,6 +915,9 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                   <div className="text-[10px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
                     PNG vetorial sem perda · até 4K (3840 × 2160 px)
                   </div>
+                  <div className="text-[10px] font-mono text-[#FF8244] font-semibold mt-0.5 truncate">
+                    Escopo: {activeStation ? shortenStationChipName(activeStation.nome, activeStation.id) : 'Toda a Rede Municipal'}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between gap-2 text-[11px] font-mono">
@@ -791,14 +959,16 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                         cells: calendarCells,
                         dailyMap,
                         selectedDay,
+                        selectedStationCode: isSingleStation ? activeStationId : undefined,
+                        selectedStationLabel: isSingleStation ? activeStation?.nome || activeStationId : undefined,
                         selectedDayMetrics: {
                           rainMean,
                           rainMaxMm: rainMaxSt,
-                          rainMaxStation: maxRainRec.stationName,
+                          rainMaxStation: dayScopeMetrics.rainStation,
                           sustMaxKmh: sustMaxDay,
-                          sustMaxStation: maxSustRec.stationName,
+                          sustMaxStation: dayScopeMetrics.sustStation,
                           gustMaxKmh: gustMaxDay,
-                          gustMaxStation: maxGustRec.stationName,
+                          gustMaxStation: dayScopeMetrics.gustStation,
                         },
                         selectedStations,
                         monthStats: monthStats
@@ -810,17 +980,25 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                               monthMaxStationName: monthStats.monthMaxStationName,
                               wettestDayIso: monthStats.wettestDay.data_iso,
                               wettestMaxMm: monthStats.wettestMaxMm,
-                              wettestStation: resolveDayMaxRainRecord(monthStats.wettestDay).stationName,
+                              wettestStation: resolveDayMetricsForScope(
+                                monthStats.wettestDay,
+                                activeStationId,
+                                activeStation?.nome
+                              ).rainStation,
                               windiestDayIso: monthStats.windiestDay.data_iso,
                               windiestMaxKmh: monthStats.windiestMaxKmh,
-                              windiestStation: resolveDayMaxGustRecord(monthStats.windiestDay).stationName,
+                              windiestStation: resolveDayMetricsForScope(
+                                monthStats.windiestDay,
+                                activeStationId,
+                                activeStation?.nome
+                              ).gustStation,
                             }
                           : null,
                         todayIso,
-                        resolveDayMetrics: (rec) => ({
-                          rainMm: resolveDayMaxRainRecord(rec).mm,
-                          gustKmh: resolveDayMaxGustRecord(rec).kmh,
-                        }),
+                        resolveDayMetrics: (rec) => {
+                          const m = resolveDayMetricsForScope(rec, activeStationId, activeStation?.nome);
+                          return { rainMm: m.rainMm, gustKmh: m.gustKmh, hasData: m.hasData };
+                        },
                         siteBase,
                       });
 
@@ -922,6 +1100,54 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
         </div>
       </div>
 
+      {/* Seletor de Estação do Calendário */}
+      {stationOptions.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 pb-1">
+          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 mr-1">
+            <MapPin className="w-3.5 h-3.5 text-[#FF8244]" />
+            Estação do calendário:
+          </span>
+          <button
+            type="button"
+            onClick={() => setSelectedStationId('all')}
+            className={`px-2.5 py-1.5 rounded-lg text-[11.5px] font-semibold border transition cursor-pointer ${
+              !isSingleStation
+                ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] shadow-2xs'
+                : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-700 dark:text-[#E5E5E5]/80 border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+            }`}
+          >
+            Todas (Rede)
+          </button>
+          {stationOptions.map((st) => {
+            const active = activeStationId === st.id;
+            const stMonthMm = monthTotalByStation.get(st.id) ?? 0;
+            const shortLbl = shortenStationChipName(st.nome, st.id);
+            return (
+              <button
+                key={st.id}
+                type="button"
+                onClick={() => setSelectedStationId(st.id)}
+                title={`${st.nome} (${st.id}) · Acumulado no mês: ${stMonthMm.toFixed(1)} mm`}
+                className={`px-2.5 py-1.5 rounded-lg text-[11.5px] font-medium border transition cursor-pointer inline-flex items-center gap-1.5 ${
+                  active
+                    ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244] font-semibold shadow-2xs'
+                    : 'bg-[#F7F8FA] dark:bg-[#0B1324] text-slate-700 dark:text-[#E5E5E5]/85 border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244]'
+                }`}
+              >
+                <span>{shortLbl}</span>
+                <span
+                  className={`font-mono text-[10px] tabular-nums ${
+                    active ? 'opacity-90' : 'text-[#FF8244] font-semibold'
+                  }`}
+                >
+                  {stMonthMm.toFixed(1)} mm
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Layout Principal: Calendário à esquerda (5 cols) | Painel do Dia Selecionado à direita (7 cols) */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
         {/* CALENDÁRIO MENSAL */}
@@ -945,6 +1171,11 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
             <div className="text-center">
               <div className="font-display text-sm sm:text-base font-semibold text-[#14213D] dark:text-white">
                 {MONTHS_PT[viewMonth - 1]} {viewYear}
+                {activeStation && (
+                  <span className="ml-1.5 text-xs font-mono text-[#FF8244]">
+                    · {shortenStationChipName(activeStation.nome, activeStation.id)}
+                  </span>
+                )}
               </div>
               {monthStats && (
                 <div className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
@@ -1032,10 +1263,27 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                 );
               }
 
-              const dayMaxRain = resolveDayMaxRainRecord(entry);
-              const dayMaxGust = resolveDayMaxGustRecord(entry);
-              const mm = dayMaxRain.mm;
-              const raj = dayMaxGust.kmh;
+              const cellScope = resolveDayMetricsForScope(entry, activeStationId, activeStation?.nome);
+              if (!cellScope.hasData) {
+                return (
+                  <button
+                    key={cell.dateIso}
+                    type="button"
+                    onClick={() => handlePickDay(cell.dateIso)}
+                    title={`${formatDateBrFromIso(cell.dateIso)} · Sem leitura registrada para ${activeStation?.nome || activeStationId}`}
+                    className={`min-h-[56px] sm:min-h-[62px] rounded-lg border border-dashed p-1 sm:p-1.5 flex flex-col justify-between text-left transition cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#14213D] dark:bg-[#FF8244] text-white dark:text-[#0B1324] border-[#14213D] dark:border-[#FF8244]'
+                        : 'border-[#E5E5E5]/70 dark:border-[#233354]/60 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <span className="font-mono text-xs font-bold tabular-nums leading-none">{cell.dayNum}</span>
+                    <span className="font-mono text-[9.5px] opacity-70">--</span>
+                  </button>
+                );
+              }
+              const mm = cellScope.rainMm;
+              const raj = cellScope.gustKmh;
               const toneClass = getRainCellTone(mm, isSelected);
 
               return (
@@ -1043,8 +1291,8 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                   key={cell.dateIso}
                   type="button"
                   onClick={() => handlePickDay(cell.dateIso)}
-                  title={`${formatDateBrFromIso(cell.dateIso)} · Maior chuva: ${mm.toFixed(1)} mm (${dayMaxRain.stationName}) · Rajada máx: ${raj.toFixed(1)} km/h`}
-                  aria-label={`${formatDateBrFromIso(cell.dateIso)}: maior registro ${mm.toFixed(1)} mm (${dayMaxRain.stationName}), rajada máxima ${raj.toFixed(0)} km/h`}
+                  title={`${formatDateBrFromIso(cell.dateIso)} · ${isSingleStation ? cellScope.rainStation : `Maior chuva (${cellScope.rainStation})`}: ${mm.toFixed(1)} mm${raj > 0 ? ` · Rajada máx: ${raj.toFixed(1)} km/h` : ''}`}
+                  aria-label={`${formatDateBrFromIso(cell.dateIso)}: ${cellScope.rainStation} ${mm.toFixed(1)} mm${raj > 0 ? `, rajada máxima ${raj.toFixed(0)} km/h` : ''}`}
                   aria-pressed={isSelected}
                   className={`min-h-[56px] sm:min-h-[62px] rounded-lg border p-1 sm:p-1.5 flex flex-col justify-between text-left transition cursor-pointer ${toneClass}`}
                 >
@@ -1132,10 +1380,23 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                       Ao vivo hoje
                     </span>
                   )}
+                  {activeStation && (
+                    <span className="inline-flex items-center gap-1.5 text-[10.5px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#FF8244]/15 text-[#C2410C] dark:text-[#FF8244] border border-[#FF8244]/40">
+                      <MapPin className="w-3 h-3 shrink-0" />
+                      <span>{shortenStationChipName(activeStation.nome, activeStation.id)}</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedStationId('all')}
+                        className="underline hover:opacity-80 cursor-pointer ml-0.5"
+                      >
+                        Todas
+                      </button>
+                    </span>
+                  )}
                 </div>
                 <div className="text-xs text-slate-500 dark:text-[#E5E5E5]/70 mt-1">
                   {selectedDay.horas_registradas ? `${selectedDay.horas_registradas}h monitoradas` : 'Monitoramento contínuo'}
-                  {selectedDay.horas_com_chuva !== undefined ? ` · ${selectedDay.horas_com_chuva}h com chuva` : ''}
+                  {selectedDay.horas_com_chuva !== undefined ? ` · ${selectedDay.horas_com_chuva}h com chuva na rede` : ''}
                   {selectedDay.live_atualizacao ? ` · Sync ${selectedDay.live_atualizacao}` : ''}
                 </div>
               </div>
@@ -1146,24 +1407,32 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                 )}`}
               >
                 <CloudRain className="w-3.5 h-3.5" />
-                {rainMaxSt <= 0.1 && rainMean <= 0.1 ? 'Sem chuva' : rainPlancon.titulo}
+                {(isSingleStation ? rainMaxSt <= 0.1 : rainMaxSt <= 0.1 && rainMean <= 0.1)
+                  ? 'Sem chuva'
+                  : rainPlancon.titulo}
               </span>
             </div>
 
             {/* 4 KPIs do Dia Selecionado */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {/* 1. Maior Registro no Dia (Estações) */}
+              {/* 1. Maior Registro no Dia / Acumulado na Estação */}
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                 <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                   <MapPin className="w-3.5 h-3.5 text-[#FF8244]" />
-                  <span>Maior Registro no Dia</span>
+                  <span>{isSingleStation ? 'Acumulado da Estação' : 'Maior Registro no Dia'}</span>
                 </div>
                 <div className="font-mono text-2xl font-bold text-[#FF8244] tabular-nums">
-                  {rainMaxSt.toFixed(1)} mm
+                  {dayScopeMetrics.hasData ? `${rainMaxSt.toFixed(1)} mm` : '--'}
                 </div>
-                <div className="text-[11px] text-slate-600 dark:text-[#E5E5E5]/75 leading-snug" title={maxRainRec.stationName}>
-                  {rainMaxSt > 0 ? maxRainRec.stationName : 'Sem registro de chuva na rede'}
-                  {Number(selectedDay.chuva_pico_hora_mm ?? 0) > 0
+                <div className="text-[11px] text-slate-600 dark:text-[#E5E5E5]/75 leading-snug" title={dayScopeMetrics.rainStation}>
+                  {dayScopeMetrics.hasData
+                    ? rainMaxSt > 0
+                      ? dayScopeMetrics.rainStation
+                      : isSingleStation
+                        ? `Sem chuva em ${shortenStationChipName(dayScopeMetrics.rainStation, activeStationId)}`
+                        : 'Sem registro de chuva na rede'
+                    : 'Sem leitura para esta estação neste dia'}
+                  {!isSingleStation && Number(selectedDay.chuva_pico_hora_mm ?? 0) > 0
                     ? ` · Pico ${Number(selectedDay.chuva_pico_hora_mm).toFixed(1)} mm às ${selectedDay.chuva_pico_horario || '--'}`
                     : ''}
                 </div>
@@ -1179,15 +1448,15 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                   {rainMean.toFixed(1)} mm
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70">
-                  {selectedDay.horas_com_chuva !== undefined ? `${selectedDay.horas_com_chuva}h com registro de chuva` : 'Média entre estações'}
+                  {selectedDay.horas_com_chuva !== undefined ? `${selectedDay.horas_com_chuva}h com registro na rede` : 'Média entre estações'}
                 </div>
               </div>
 
-              {/* 3. Maior Vento Sustentado no Dia */}
+              {/* 3. Maior Vento Sustentado */}
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                 <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                   <Compass className="w-3.5 h-3.5 text-[#FF8244]" />
-                  <span>Vento Máximo (Sust.)</span>
+                  <span>{isSingleStation ? 'Vento Máx. (Estação)' : 'Vento Máximo (Sust.)'}</span>
                 </div>
                 <div className="font-mono text-2xl font-bold text-[#14213D] dark:text-white tabular-nums flex flex-wrap items-center gap-2">
                   <span>{sustMaxDay > 0 ? `${sustMaxDay.toFixed(1)} km/h` : '--'}</span>
@@ -1198,33 +1467,37 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                   )}
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 tabular-nums leading-snug">
-                  {maxSustRec.stationName && sustMaxDay > 0
-                    ? `${maxSustRec.stationName}${
-                        selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
+                  {dayScopeMetrics.sustStation && sustMaxDay > 0
+                    ? `${dayScopeMetrics.sustStation}${
+                        !isSingleStation && selectedDay.vento_vel_max_horario && selectedDay.vento_vel_max_horario !== '--'
                           ? ` às ${selectedDay.vento_vel_max_horario}`
                           : ''
                       } · `
-                    : ''}
+                    : isSingleStation && activeStation?.tipo === 'pluviometrica'
+                      ? 'Pluviômetro sem sensor eólico · '
+                      : ''}
                   Predom.: {selectedDay.vento_dir_predominante || '--'} · Méd.:{' '}
                   {Number(selectedDay.vento_vel_media_kmh ?? 0).toFixed(1)} km/h
                 </div>
               </div>
 
-              {/* 4. Rajada Máxima do Dia */}
+              {/* 4. Rajada Máxima */}
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-1">
                 <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wide text-slate-500 dark:text-[#E5E5E5]/65">
                   <Wind className="w-3.5 h-3.5 text-[#FF8244]" />
-                  <span>Rajada Máxima do Dia</span>
+                  <span>{isSingleStation ? 'Rajada Máx. (Estação)' : 'Rajada Máxima do Dia'}</span>
                 </div>
                 <div className="font-mono text-2xl font-bold text-[#14213D] dark:text-white tabular-nums">
                   {gustMaxDay > 0 ? `${gustMaxDay.toFixed(1)} km/h` : '--'}
                 </div>
                 <div className="text-[11px] text-slate-500 dark:text-[#E5E5E5]/70 leading-snug">
                   {gustMaxDay > 0
-                    ? `${selectedDay.vento_rajada_max_estacao || 'Rede Municipal'}${
-                        selectedDay.vento_rajada_max_horario ? ` às ${selectedDay.vento_rajada_max_horario}` : ''
+                    ? `${dayScopeMetrics.gustStation}${
+                        !isSingleStation && selectedDay.vento_rajada_max_horario ? ` às ${selectedDay.vento_rajada_max_horario}` : ''
                       } · ${windPlancon.gustTitulo} (${windPlancon.riscoLabel})`
-                    : 'Sem rajada registrada'}
+                    : isSingleStation && activeStation?.tipo === 'pluviometrica'
+                      ? 'Estação apenas pluviométrica (CEMADEN)'
+                      : 'Sem rajada registrada'}
                 </div>
               </div>
             </div>
@@ -1267,23 +1540,39 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
             {/* Chuva & Rajada por Estação naquele Dia */}
             {selectedStations.length > 0 && (
               <div className="p-4 rounded-xl bg-white dark:bg-[#14213D] border border-[#E5E5E5] dark:border-[#233354] space-y-3">
-                <div className="flex items-center justify-between text-xs font-semibold text-[#14213D] dark:text-white">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold text-[#14213D] dark:text-white">
                   <span>Acumulado, Vento &amp; Rajada Máxima por Estação ({selectedDay.data_br || formatDateBrFromIso(selectedDay.data_iso)})</span>
                   <span className="text-[10.5px] font-mono text-slate-500 dark:text-[#E5E5E5]/65">
-                    {selectedStations.length} estações
+                    {selectedStations.length} estações · clique p/ filtrar calendário
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {selectedStations.map((st) => {
                     const pct = st.chuva_mm > 0 ? Math.max(4, Math.min(100, Math.round((st.chuva_mm / maxStationRainInDay) * 100))) : 0;
+                    const canSelect = selectableStationIds.has(st.code);
+                    const isActiveCard = activeStationId === st.code;
                     return (
-                      <div
+                      <button
                         key={st.code}
-                        className="p-2.5 rounded-lg bg-[#F7F8FA] dark:bg-[#0B1324] border border-[#E5E5E5] dark:border-[#233354] space-y-1.5"
+                        type="button"
+                        disabled={!canSelect}
+                        onClick={() => canSelect && setSelectedStationId((prev) => (prev === st.code ? 'all' : st.code))}
+                        className={`text-left p-2.5 rounded-lg border space-y-1.5 transition ${
+                          isActiveCard
+                            ? 'bg-[#FF8244]/10 dark:bg-[#FF8244]/15 border-[#FF8244] ring-1 ring-[#FF8244]/40 cursor-pointer'
+                            : canSelect
+                              ? 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] hover:border-[#FF8244] cursor-pointer'
+                              : 'bg-[#F7F8FA] dark:bg-[#0B1324] border-[#E5E5E5] dark:border-[#233354] cursor-default'
+                        }`}
                       >
                         <div className="flex items-center justify-between gap-2 text-xs">
-                          <span className="font-medium text-[#14213D] dark:text-white truncate" title={st.nome}>
-                            {st.nome}
+                          <span className="font-medium text-[#14213D] dark:text-white truncate flex items-center gap-1.5" title={st.nome}>
+                            <span className="truncate">{st.nome}</span>
+                            {isActiveCard && (
+                              <span className="px-1.5 py-0.2 rounded bg-[#FF8244] text-[#000000] text-[9px] font-mono font-bold shrink-0">
+                                NO CALENDÁRIO
+                              </span>
+                            )}
                           </span>
                           <span className="font-mono font-bold text-[#14213D] dark:text-[#FF8244] tabular-nums shrink-0">
                             {st.chuva_mm.toFixed(1)} mm
@@ -1310,7 +1599,7 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                               : 'Pluviômetro'}
                           </span>
                         </div>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -1339,7 +1628,11 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                         <tr className="border-b border-[#E5E5E5] dark:border-[#233354]">
                           <th className="py-2 px-3">Hora</th>
                           <th className="py-2 px-2 text-right">Chuva Méd.</th>
-                          <th className="py-2 px-2 text-right">Pico Est.</th>
+                          <th className="py-2 px-2 text-right">
+                            {isSingleStation
+                              ? `Chuva (${shortenStationChipName(activeStation?.nome, activeStationId).split(' ')[0]})`
+                              : 'Pico Est.'}
+                          </th>
                           <th className="py-2 px-2 text-right">Vento / Dir</th>
                           <th className="py-2 px-2 text-right">Rajada</th>
                           <th className="py-2 px-3 text-right">Temp / Umid</th>
@@ -1353,7 +1646,11 @@ export const HistoricoCalendarSection: React.FC<HistoricoCalendarSectionProps> =
                               {Number(hr.chuva_mm_hora ?? 0).toFixed(1)} mm
                             </td>
                             <td className="py-1.5 px-2 text-right tabular-nums text-[#FF8244]">
-                              {Number(hr.chuva_max_estacao_mm ?? 0).toFixed(1)} mm
+                              {isSingleStation
+                                ? hr.chuva_por_estacao && hr.chuva_por_estacao[activeStationId] !== undefined
+                                  ? `${Number(hr.chuva_por_estacao[activeStationId]).toFixed(1)} mm`
+                                  : '--'
+                                : `${Number(hr.chuva_max_estacao_mm ?? 0).toFixed(1)} mm`}
                             </td>
                             <td className="py-1.5 px-2 text-right tabular-nums">
                               {hr.vento_direcao_cardeal || '--'} {Number(hr.vento_velocidade_kmh ?? 0).toFixed(0)} km/h
